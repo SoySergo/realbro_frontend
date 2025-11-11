@@ -134,7 +134,7 @@ export function Sidebar() {
                 {/* Поисковые запросы - карточки */}
                 <div className="flex-1 flex flex-col min-h-0 relative">
                     {/* Кнопка добавления нового запроса - всегда сверху */}
-                    <div className="p-2 shrink-0 bg-background-secondary relative z-20">
+                    <div className="px-2 pt-2 pb-1 shrink-0 bg-background-secondary relative z-20">
                         <button
                             onClick={handleAddQuery}
                             className={cn(

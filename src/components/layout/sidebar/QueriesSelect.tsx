@@ -115,10 +115,10 @@ export function QueriesSelect() {
                     </div>
 
                     {/* Список queries с прокруткой */}
-                    {/* Высота: 100vh - (заголовок 56px + кнопка Add 80px + bottom nav 64px) */}
+                    {/* Высота: 100vh - (заголовок 56px + кнопка Add с padding ~76px + bottom nav 64px) */}
                     <div
-                        className="overflow-y-auto overflow-x-hidden pb-2"
-                        style={{ height: 'calc(100vh - 56px - 80px - 64px)' }}
+                        className="overflow-y-auto overflow-x-hidden"
+                        style={{ height: 'calc(100vh - 56px - 76px - 64px)' }}
                     >
                         <div className="p-4 space-y-2">
                             {queries.map((query) => {
@@ -138,8 +138,8 @@ export function QueriesSelect() {
                         </div>
                     </div>
 
-                    {/* Кнопка добавления нового запроса - всегда зафиксирована внизу */}
-                    <div className="absolute bottom-16 left-0 right-0 p-4 bg-background border-t border-border">
+                    {/* Кнопка добавления нового запроса - всегда зафиксирована внизу над bottom nav */}
+                    <div className="absolute bottom-16 left-0 right-0 px-4 pt-2 pb-3 bg-background border-t border-border">
                         <button
                             onClick={handleAddQuery}
                             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-primary text-white active:bg-brand-primary-hover transition-colors duration-150"
