@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { ChevronDown, Plus, X } from 'lucide-react';
-import { QueryItem } from './QueryItem';
+import { MobileQueryItem } from './MobileQueryItem';
 import { useTranslations } from 'next-intl';
 
 export function QueriesSelect() {
@@ -17,6 +17,7 @@ export function QueriesSelect() {
 
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations('sidebar');
+    const activeItemRef = useRef<HTMLButtonElement>(null);
 
     // Получаем активный query
     const activeQuery = queries.find(q => q.id === activeQueryId) || queries[0];
@@ -32,6 +33,19 @@ export function QueriesSelect() {
         return () => {
             document.body.style.overflow = '';
         };
+    }, [isOpen]);
+
+    // Автоматический скролл к активному элементу при открытии
+    useEffect(() => {
+        if (isOpen && activeItemRef.current) {
+            // Небольшая задержка для корректной работы после рендера
+            setTimeout(() => {
+                activeItemRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                });
+            }, 100);
+        }
     }, [isOpen]);
 
     // Обработчик добавления нового запроса
@@ -101,27 +115,34 @@ export function QueriesSelect() {
                     </div>
 
                     {/* Список queries с прокруткой */}
-                    <div className="overflow-y-auto" style={{ height: 'calc(100vh - 56px - 64px - 80px)' }}>
+                    {/* Высота: 100vh - (заголовок 56px + кнопка Add 80px + bottom nav 64px) */}
+                    <div
+                        className="overflow-y-auto overflow-x-hidden pb-2"
+                        style={{ height: 'calc(100vh - 56px - 80px - 64px)' }}
+                    >
                         <div className="p-4 space-y-2">
-                            {queries.map((query) => (
-                                <QueryItem
-                                    key={query.id}
-                                    query={query}
-                                    isActive={activeQueryId === query.id}
-                                    canDelete={queries.length > 1}
-                                    variant="full"
-                                    onSelect={() => handleSelectQuery(query.id)}
-                                    onDelete={() => removeQuery(query.id)}
-                                />
-                            ))}
+                            {queries.map((query) => {
+                                const isActive = activeQueryId === query.id;
+                                return (
+                                    <MobileQueryItem
+                                        key={query.id}
+                                        ref={isActive ? activeItemRef : null}
+                                        query={query}
+                                        isActive={isActive}
+                                        canDelete={queries.length > 1}
+                                        onSelect={() => handleSelectQuery(query.id)}
+                                        onDelete={() => removeQuery(query.id)}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
 
-                    {/* Кнопка добавления нового запроса - зафиксирована внизу */}
-                    <div className="fixed bottom-16 left-0 right-0 p-4 bg-background border-t border-border">
+                    {/* Кнопка добавления нового запроса - всегда зафиксирована внизу */}
+                    <div className="absolute bottom-16 left-0 right-0 p-4 bg-background border-t border-border">
                         <button
                             onClick={handleAddQuery}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-primary text-white hover:bg-brand-primary-hover transition-colors duration-150"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-primary text-white active:bg-brand-primary-hover transition-colors duration-150"
                         >
                             <Plus className="w-5 h-5" />
                             <span className="text-base font-medium">{t('newSearch')}</span>

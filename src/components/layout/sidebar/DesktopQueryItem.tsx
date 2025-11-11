@@ -4,27 +4,27 @@ import { MapPin, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { SearchQuery } from '@/types/sidebar';
 
-type QueryItemProps = {
+type DesktopQueryItemProps = {
     query: SearchQuery;
     isActive: boolean;
     isHovered?: boolean;
     canDelete: boolean;
-    variant: 'compact' | 'full';
+    isExpanded: boolean;
     onSelect: () => void;
     onDelete?: () => void;
 };
 
-export function QueryItem({
+export function DesktopQueryItem({
     query,
     isActive,
     isHovered = false,
     canDelete,
-    variant,
+    isExpanded,
     onSelect,
     onDelete,
-}: QueryItemProps) {
+}: DesktopQueryItemProps) {
     // Компактный вид для свёрнутого сайдбара
-    if (variant === 'compact') {
+    if (!isExpanded) {
         return (
             <div className="relative">
                 <button
@@ -53,20 +53,17 @@ export function QueryItem({
         );
     }
 
-    // Полный вид для развёрнутого сайдбара и мобильного
+    // Полный вид для развёрнутого десктопного сайдбара
     return (
         <button
             onClick={onSelect}
             className={cn(
                 'w-full flex items-center rounded-lg cursor-pointer',
                 'transition-colors duration-150 group border-2',
-                // Mobile: большие размеры
-                'gap-3 px-4 py-3',
-                // Desktop: компактные размеры
-                'md:gap-2 md:px-2 md:py-2',
+                'gap-2 px-2 py-2',
                 isActive
                     ? 'bg-brand-primary-light border-brand-primary text-text-primary'
-                    : 'border-transparent md:hover:bg-background-tertiary text-text-secondary'
+                    : 'border-transparent hover:bg-background-tertiary text-text-secondary'
             )}
         >
             <MapPin
@@ -76,8 +73,8 @@ export function QueryItem({
                 )}
             />
             <div className="flex-1 min-w-0 text-left">
-                <div className="font-medium truncate text-base md:text-sm">{query.title}</div>
-                <QueryStats query={query} className="mt-0.5 text-sm md:text-xs" />
+                <div className="font-medium truncate text-sm">{query.title}</div>
+                <QueryStats query={query} className="mt-0.5 text-xs" />
             </div>
 
             {/* Кнопка удаления */}
@@ -87,9 +84,9 @@ export function QueryItem({
                         e.stopPropagation();
                         onDelete();
                     }}
-                    className="rounded flex items-center justify-center md:hover:bg-error/10 md:hover:text-error transition-colors w-8 h-8 md:w-6 md:h-6 cursor-pointer"
+                    className="rounded flex items-center justify-center hover:bg-error/10 hover:text-error transition-colors w-6 h-6 cursor-pointer"
                 >
-                    <X className="w-5 h-5 md:w-4 md:h-4" />
+                    <X className="w-4 h-4" />
                 </button>
             )}
         </button>
@@ -126,5 +123,3 @@ function QueryStats({ query, className }: { query: SearchQuery; className?: stri
         </div>
     );
 }
-
-

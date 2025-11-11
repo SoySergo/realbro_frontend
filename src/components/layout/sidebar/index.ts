@@ -9,5 +9,6 @@ export { MobileSidebar } from './MobileSidebar';
 export { BottomNavigation } from './BottomNavigation';
 export { SidebarWrapper } from './SidebarWrapper';
 export { SidebarWrapper as Sidebar } from './SidebarWrapper'; // Дефолтный экспорт как Sidebar
-export { QueryItem } from './QueryItem';
+export { DesktopQueryItem } from './DesktopQueryItem';
+export { MobileQueryItem } from './MobileQueryItem';
 export { QueriesSelect } from './QueriesSelect';

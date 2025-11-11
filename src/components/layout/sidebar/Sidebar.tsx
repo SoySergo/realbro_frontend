@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
-import { QueryItem } from './QueryItem';
+import { DesktopQueryItem } from './DesktopQueryItem';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
@@ -151,7 +151,7 @@ export function Sidebar() {
                             className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
                         >
                             <div className="p-2 space-y-1">
-                                {/* Список запросов с использованием переиспользуемого компонента */}
+                                {/* Список запросов - десктопная версия */}
                                 {queries.map((query) => {
                                     const isActive = activeQueryId === query.id;
                                     const isHovered = hoveredQueryId === query.id;
@@ -162,12 +162,12 @@ export function Sidebar() {
                                             onMouseEnter={() => setHoveredQueryId(query.id)}
                                             onMouseLeave={() => setHoveredQueryId(null)}
                                         >
-                                            <QueryItem
+                                            <DesktopQueryItem
                                                 query={query}
                                                 isActive={isActive}
                                                 isHovered={isHovered}
                                                 canDelete={queries.length > 1}
-                                                variant={isExpanded ? 'full' : 'compact'}
+                                                isExpanded={isExpanded}
                                                 onSelect={() => setActiveQuery(query.id)}
                                                 onDelete={() => removeQuery(query.id)}
                                             />
