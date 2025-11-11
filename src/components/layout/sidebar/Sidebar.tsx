@@ -150,7 +150,7 @@ export function Sidebar() {
                             onScroll={handleScroll}
                             className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
                         >
-                            <div className="p-2 space-y-2">
+                            <div className="p-2 space-y-1">
                                 {/* Список запросов с использованием переиспользуемого компонента */}
                                 {queries.map((query) => {
                                     const isActive = activeQueryId === query.id;
@@ -192,7 +192,7 @@ export function Sidebar() {
                         <button
                             onClick={handleAddQuery}
                             className={cn(
-                                'w-full flex items-center gap-3 rounded-lg',
+                                'w-full flex items-center gap-3 rounded-lg cursor-pointer',
                                 'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light',
                                 'border border-brand-primary/10 hover:border-brand-primary',
                                 'transition-colors duration-150',
@@ -215,7 +215,7 @@ export function Sidebar() {
                         <button
                             key={item.id}
                             className={cn(
-                                'w-full flex items-center gap-3 rounded-lg',
+                                'w-full flex items-center gap-3 rounded-lg cursor-pointer',
                                 'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
                                 'transition-colors duration-150 relative',
                                 isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'

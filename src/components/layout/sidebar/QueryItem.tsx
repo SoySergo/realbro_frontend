@@ -2,8 +2,6 @@
 
 import { MapPin, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { useTranslations } from 'next-intl';
 import type { SearchQuery } from '@/types/sidebar';
 
 type QueryItemProps = {
@@ -32,7 +30,7 @@ export function QueryItem({
                 <button
                     onClick={onSelect}
                     className={cn(
-                        'w-full h-12 flex items-center justify-center rounded-lg',
+                        'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
                         'transition-colors duration-150 border-2',
                         isActive
                             ? 'bg-brand-primary-light border-brand-primary text-brand-primary'
@@ -42,13 +40,12 @@ export function QueryItem({
                     <MapPin className="w-5 h-5" />
                 </button>
 
-                {/* Tooltip с фильтрами при ховере */}
+                {/* Tooltip с информацией при ховере */}
                 {isHovered && (
                     <div className="absolute left-full ml-2 top-0 z-50 w-64 p-3 bg-background-secondary border border-border rounded-lg shadow-lg">
                         <div className="text-sm font-semibold text-text-primary mb-2">
                             {query.title}
                         </div>
-                        <QueryFilters query={query} />
                         <QueryStats query={query} />
                     </div>
                 )}
@@ -61,11 +58,15 @@ export function QueryItem({
         <button
             onClick={onSelect}
             className={cn(
-                'w-full flex items-center gap-3 px-4 py-3 rounded-lg',
+                'w-full flex items-center rounded-lg cursor-pointer',
                 'transition-colors duration-150 group border-2',
+                // Mobile: большие размеры
+                'gap-3 px-4 py-3',
+                // Desktop: компактные размеры
+                'md:gap-2 md:px-2 md:py-2',
                 isActive
                     ? 'bg-brand-primary-light border-brand-primary text-text-primary'
-                    : 'border-transparent hover:bg-background-secondary text-text-secondary'
+                    : 'border-transparent md:hover:bg-background-tertiary text-text-secondary'
             )}
         >
             <MapPin
@@ -75,9 +76,8 @@ export function QueryItem({
                 )}
             />
             <div className="flex-1 min-w-0 text-left">
-                <div className="text-base font-medium truncate">{query.title}</div>
-                <QueryStats query={query} className="text-sm mt-0.5" />
-                <QueryFilters query={query} className="mt-2" />
+                <div className="font-medium truncate text-base md:text-sm">{query.title}</div>
+                <QueryStats query={query} className="mt-0.5 text-sm md:text-xs" />
             </div>
 
             {/* Кнопка удаления */}
@@ -87,9 +87,9 @@ export function QueryItem({
                         e.stopPropagation();
                         onDelete();
                     }}
-                    className="w-8 h-8 rounded flex items-center justify-center hover:bg-error/10 hover:text-error transition-colors"
+                    className="rounded flex items-center justify-center md:hover:bg-error/10 md:hover:text-error transition-colors w-8 h-8 md:w-6 md:h-6 cursor-pointer"
                 >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 md:w-4 md:h-4" />
                 </button>
             )}
         </button>
@@ -127,29 +127,4 @@ function QueryStats({ query, className }: { query: SearchQuery; className?: stri
     );
 }
 
-// Компонент для отображения фильтров в виде badges
-function QueryFilters({ query, className }: { query: SearchQuery; className?: string }) {
-    const t = useTranslations('sidebar');
 
-    if (Object.keys(query.filters).length === 0) return null;
-
-    return (
-        <div className={cn('flex flex-wrap gap-1', className)}>
-            {query.filters.location && (
-                <Badge variant="secondary" className="text-xs h-5 px-2">
-                    {query.filters.location}
-                </Badge>
-            )}
-            {query.filters.bedrooms && (
-                <Badge variant="secondary" className="text-xs h-5 px-2">
-                    {query.filters.bedrooms} {t('bedrooms')}
-                </Badge>
-            )}
-            {(query.filters.priceMin || query.filters.priceMax) && (
-                <Badge variant="secondary" className="text-xs h-5 px-2 font-mono">
-                    {query.filters.priceMin || 0}€ - {query.filters.priceMax || '∞'}€
-                </Badge>
-            )}
-        </div>
-    );
-}
