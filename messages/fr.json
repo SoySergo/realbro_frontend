@@ -1,0 +1,98 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "apply": "Appliquer",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "notFound": "Non trouvé",
+    "showMore": "Afficher plus",
+    "showLess": "Afficher moins"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "properties": "Propriétés",
+    "favorites": "Favoris",
+    "profile": "Profil"
+  },
+  "property": {
+    "title": "Propriété",
+    "price": "Prix",
+    "area": "Surface",
+    "rooms": "Pièces",
+    "bedrooms": "Chambres",
+    "bathrooms": "Salles de bain",
+    "floor": "Étage",
+    "totalFloors": "Nombre d'étages",
+    "yearBuilt": "Année de construction",
+    "type": "Type",
+    "status": "Statut",
+    "description": "Description",
+    "features": "Caractéristiques",
+    "location": "Emplacement",
+    "contact": "Contacter",
+    "viewDetails": "Voir les détails",
+    "showOnMap": "Afficher sur la carte"
+  },
+  "propertyTypes": {
+    "apartment": "Appartement",
+    "house": "Maison",
+    "villa": "Villa",
+    "studio": "Studio",
+    "penthouse": "Penthouse",
+    "townhouse": "Maison de ville"
+  },
+  "filters": {
+    "title": "Filtres",
+    "priceRange": "Fourchette de prix",
+    "minPrice": "Min",
+    "maxPrice": "Max",
+    "areaRange": "Surface",
+    "minArea": "Min m²",
+    "maxArea": "Max m²",
+    "roomCount": "Nombre de pièces",
+    "propertyType": "Type de propriété",
+    "status": "Statut",
+    "forSale": "À vendre",
+    "forRent": "À louer"
+  },
+  "map": {
+    "showMap": "Afficher la carte",
+    "hideMap": "Masquer la carte",
+    "locateMe": "Me localiser",
+    "zoomIn": "Zoomer",
+    "zoomOut": "Dézoomer"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "signUp": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?"
+  },
+  "errors": {
+    "general": "Une erreur s'est produite. Veuillez réessayer.",
+    "notFound": "Page non trouvée",
+    "unauthorized": "Autorisation requise",
+    "serverError": "Erreur du serveur",
+    "networkError": "Problème de connexion"
+  },
+  "sidebar": {
+    "search": "Recherche",
+    "chat": "Chat",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "newSearch": "Nouvelle recherche",
+    "selectSearch": "Sélectionner la recherche",
+    "filters": "Filtres",
+    "sort": "Trier",
+    "close": "Fermer",
+    "bedrooms": "chambres"
+  }
+}

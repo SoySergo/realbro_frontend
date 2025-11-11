@@ -1,0 +1,98 @@
+{
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading...",
+    "error": "Error",
+    "notFound": "Not Found",
+    "showMore": "Show More",
+    "showLess": "Show Less"
+  },
+  "navigation": {
+    "home": "Home",
+    "properties": "Properties",
+    "favorites": "Favorites",
+    "profile": "Profile"
+  },
+  "property": {
+    "title": "Property",
+    "price": "Price",
+    "area": "Area",
+    "rooms": "Rooms",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "floor": "Floor",
+    "totalFloors": "Total Floors",
+    "yearBuilt": "Year Built",
+    "type": "Type",
+    "status": "Status",
+    "description": "Description",
+    "features": "Features",
+    "location": "Location",
+    "contact": "Contact",
+    "viewDetails": "View Details",
+    "showOnMap": "Show on Map"
+  },
+  "propertyTypes": {
+    "apartment": "Apartment",
+    "house": "House",
+    "villa": "Villa",
+    "studio": "Studio",
+    "penthouse": "Penthouse",
+    "townhouse": "Townhouse"
+  },
+  "filters": {
+    "title": "Filters",
+    "priceRange": "Price Range",
+    "minPrice": "Min",
+    "maxPrice": "Max",
+    "areaRange": "Area",
+    "minArea": "Min m²",
+    "maxArea": "Max m²",
+    "roomCount": "Number of Rooms",
+    "propertyType": "Property Type",
+    "status": "Status",
+    "forSale": "For Sale",
+    "forRent": "For Rent"
+  },
+  "map": {
+    "showMap": "Show Map",
+    "hideMap": "Hide Map",
+    "locateMe": "Locate Me",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  },
+  "errors": {
+    "general": "An error occurred. Please try again.",
+    "notFound": "Page not found",
+    "unauthorized": "Authorization required",
+    "serverError": "Server error",
+    "networkError": "Connection problem"
+  },
+  "sidebar": {
+    "search": "Search",
+    "chat": "Chat",
+    "profile": "Profile",
+    "settings": "Settings",
+    "newSearch": "New Search",
+    "selectSearch": "Select Search",
+    "filters": "Filters",
+    "sort": "Sort",
+    "close": "Close",
+    "bedrooms": "bed"
+  }
+}

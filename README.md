@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RealEstate Barcelona - MVP
 
-## Getting Started
+Сервис для поиска жилой недвижимости в аренду в провинции Барселона.
 
-First, run the development server:
+## 🚀 Быстрый старт
 
+### Предварительные требования
+
+- Node.js 18+
+- pnpm (рекомендуется)
+
+### Установка
+
+1. Установите зависимости:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Создайте файл `.env.local` на основе `.env.example`:
+```bash
+cp .env.example .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Получите Mapbox токен на [mapbox.com](https://account.mapbox.com/) и добавьте в `.env.local`:
+```
+NEXT_PUBLIC_MAPBOX_TOKEN=your_actual_token_here
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Запустите dev сервер:
+```bash
+pnpm dev
+```
 
-## Learn More
+5. Откройте браузер: [http://localhost:3000/ru](http://localhost:3000/ru)
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Структура проекта
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+my-app/
+├── src/
+│   ├── app/                    # App Router
+│   │   ├── [locale]/          # Мультиязычность
+│   │   └── api/               # API Routes
+│   ├── components/            # React компоненты
+│   ├── lib/                  # Утилиты
+│   ├── services/             # API клиенты
+│   ├── store/                # Zustand stores
+│   ├── types/                # TypeScript типы
+│   ├── hooks/                # Custom hooks
+│   ├── config/               # Конфигурация
+│   └── locales/              # Переводы (9 языков)
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🌍 Поддерживаемые языки
 
-## Deploy on Vercel
+🇷🇺 RU • 🇬🇧 EN • 🇪🇸 ES • 🇨🇦 CA • 🇺🇦 UK • 🇫🇷 FR • 🇮🇹 IT • 🇵🇹 PT • 🇩🇪 DE
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+URL: `/{locale}/...` (например `/ru/property/123`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠 Технологии
+
+- Next.js 15 + TypeScript
+- Tailwind CSS + shadcn/ui
+- Zustand + Zod
+- Mapbox GL + react-map-gl
+- next-intl
+
+## 📚 Документация
+
+См. `/docs`:
+- `01-project-structure.md`
+- `02-development-guidelines.md`
+- `03-tech-stack.md`

@@ -1,0 +1,98 @@
+{
+  "common": {
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "reset": "Сбросить",
+    "apply": "Применить",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "notFound": "Не найдено",
+    "showMore": "Показать ещё",
+    "showLess": "Скрыть"
+  },
+  "navigation": {
+    "home": "Главная",
+    "properties": "Недвижимость",
+    "favorites": "Избранное",
+    "profile": "Профиль"
+  },
+  "property": {
+    "title": "Недвижимость",
+    "price": "Цена",
+    "area": "Площадь",
+    "rooms": "Комнаты",
+    "bedrooms": "Спальни",
+    "bathrooms": "Ванные",
+    "floor": "Этаж",
+    "totalFloors": "Всего этажей",
+    "yearBuilt": "Год постройки",
+    "type": "Тип",
+    "status": "Статус",
+    "description": "Описание",
+    "features": "Особенности",
+    "location": "Местоположение",
+    "contact": "Связаться",
+    "viewDetails": "Подробнее",
+    "showOnMap": "Показать на карте"
+  },
+  "propertyTypes": {
+    "apartment": "Квартира",
+    "house": "Дом",
+    "villa": "Вилла",
+    "studio": "Студия",
+    "penthouse": "Пентхаус",
+    "townhouse": "Таунхаус"
+  },
+  "filters": {
+    "title": "Фильтры",
+    "priceRange": "Диапазон цен",
+    "minPrice": "От",
+    "maxPrice": "До",
+    "areaRange": "Площадь",
+    "minArea": "От м²",
+    "maxArea": "До м²",
+    "roomCount": "Количество комнат",
+    "propertyType": "Тип недвижимости",
+    "status": "Статус",
+    "forSale": "Продажа",
+    "forRent": "Аренда"
+  },
+  "map": {
+    "showMap": "Показать карту",
+    "hideMap": "Скрыть карту",
+    "locateMe": "Моё местоположение",
+    "zoomIn": "Приблизить",
+    "zoomOut": "Отдалить"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "signUp": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "forgotPassword": "Забыли пароль?",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?"
+  },
+  "errors": {
+    "general": "Произошла ошибка. Попробуйте ещё раз.",
+    "notFound": "Страница не найдена",
+    "unauthorized": "Необходима авторизация",
+    "serverError": "Ошибка сервера",
+    "networkError": "Проблема с подключением"
+  },
+  "sidebar": {
+    "search": "Поиск",
+    "chat": "Чат",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "newSearch": "Новый поиск",
+    "selectSearch": "Выбрать поиск",
+    "filters": "Фильтры",
+    "sort": "Сортировка",
+    "close": "Закрыть",
+    "bedrooms": "спален"
+  }
+}
