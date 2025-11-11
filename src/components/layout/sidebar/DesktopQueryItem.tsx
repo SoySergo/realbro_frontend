@@ -7,7 +7,6 @@ import type { SearchQuery } from '@/types/sidebar';
 type DesktopQueryItemProps = {
     query: SearchQuery;
     isActive: boolean;
-    isHovered?: boolean;
     canDelete: boolean;
     isExpanded: boolean;
     onSelect: () => void;
@@ -17,7 +16,6 @@ type DesktopQueryItemProps = {
 export function DesktopQueryItem({
     query,
     isActive,
-    isHovered = false,
     canDelete,
     isExpanded,
     onSelect,
@@ -26,30 +24,18 @@ export function DesktopQueryItem({
     // Компактный вид для свёрнутого сайдбара
     if (!isExpanded) {
         return (
-            <div className="relative">
-                <button
-                    onClick={onSelect}
-                    className={cn(
-                        'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
-                        'transition-colors duration-150 border-2',
-                        isActive
-                            ? 'bg-brand-primary-light border-brand-primary text-brand-primary'
-                            : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
-                    )}
-                >
-                    <MapPin className="w-5 h-5" />
-                </button>
-
-                {/* Tooltip с информацией при ховере */}
-                {isHovered && (
-                    <div className="absolute left-full ml-2 top-0 z-50 w-64 p-3 bg-background-secondary border border-border rounded-lg shadow-lg">
-                        <div className="text-sm font-semibold text-text-primary mb-2">
-                            {query.title}
-                        </div>
-                        <QueryStats query={query} />
-                    </div>
+            <button
+                onClick={onSelect}
+                className={cn(
+                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
+                    'transition-colors duration-150 border-2',
+                    isActive
+                        ? 'bg-brand-primary-light border-brand-primary text-brand-primary'
+                        : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
                 )}
-            </div>
+            >
+                <MapPin className="w-5 h-5" />
+            </button>
         );
     }
 
