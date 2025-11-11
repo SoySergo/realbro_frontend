@@ -17,7 +17,7 @@ export function QueriesSelect() {
 
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations('sidebar');
-    const activeItemRef = useRef<HTMLButtonElement>(null);
+    const activeItemRef = useRef<HTMLDivElement>(null);
 
     // Получаем активный query
     const activeQuery = queries.find(q => q.id === activeQueryId) || queries[0];

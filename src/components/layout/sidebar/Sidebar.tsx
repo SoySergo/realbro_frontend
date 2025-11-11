@@ -34,19 +34,8 @@ export function Sidebar() {
     const [hoveredQueryId, setHoveredQueryId] = useState<string | null>(null);
     const [showTopFade, setShowTopFade] = useState(false);
     const [showBottomFade, setShowBottomFade] = useState(false);
+    const [hasScroll, setHasScroll] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const previousQueriesLengthRef = useRef(queries.length);
-
-    // Автоматический скролл вниз при добавлении нового элемента
-    useEffect(() => {
-        if (queries.length > previousQueriesLengthRef.current) {
-            // Новый элемент добавлен
-            if (scrollContainerRef.current) {
-                scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-            }
-        }
-        previousQueriesLengthRef.current = queries.length;
-    }, [queries.length]);
 
     // Обработчик скролла для индикаторов затемнения
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -59,13 +48,17 @@ export function Sidebar() {
         setShowBottomFade(scrollTop + clientHeight < scrollHeight - 10);
     };
 
-    // Проверка индикаторов при изменении списка
+    // Проверка наличия скролла и индикаторов при изменении списка
     useEffect(() => {
         if (scrollContainerRef.current) {
             const target = scrollContainerRef.current;
             const scrollTop = target.scrollTop;
             const scrollHeight = target.scrollHeight;
             const clientHeight = target.clientHeight;
+
+            // Определяем, есть ли скролл (контент больше контейнера)
+            const hasScrollableContent = scrollHeight > clientHeight;
+            setHasScroll(hasScrollableContent);
 
             setShowTopFade(scrollTop > 10);
             setShowBottomFade(scrollTop + clientHeight < scrollHeight - 10);
@@ -134,6 +127,29 @@ export function Sidebar() {
 
                 {/* Поисковые запросы - карточки */}
                 <div className="flex-1 flex flex-col min-h-0">
+                    {/* Кнопка добавления нового запроса - сверху (зафиксирована), если есть скролл */}
+                    {hasScroll && (
+                        <div className="p-2 shrink-0">
+                            <button
+                                onClick={handleAddQuery}
+                                className={cn(
+                                    'w-full flex items-center gap-3 rounded-lg cursor-pointer',
+                                    'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light',
+                                    'border border-brand-primary/10 hover:border-brand-primary',
+                                    'transition-colors duration-150',
+                                    isExpanded ? 'px-3 py-3' : 'h-12 justify-center'
+                                )}
+                            >
+                                <Plus className="w-5 h-5 shrink-0" />
+                                {isExpanded && (
+                                    <span className="text-sm font-medium">
+                                        {t('newSearch')}
+                                    </span>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
                     {/* Контейнер со скроллом для списка запросов */}
                     <div className="flex-1 min-h-0 relative">
                         {/* Верхний градиент */}
@@ -151,6 +167,27 @@ export function Sidebar() {
                             className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
                         >
                             <div className="p-2 space-y-1">
+                                {/* Кнопка добавления - внутри скролла, если нет скролла */}
+                                {!hasScroll && (
+                                    <button
+                                        onClick={handleAddQuery}
+                                        className={cn(
+                                            'w-full flex items-center gap-3 rounded-lg cursor-pointer',
+                                            'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light',
+                                            'border border-brand-primary/10 hover:border-brand-primary',
+                                            'transition-colors duration-150',
+                                            isExpanded ? 'px-3 py-3' : 'h-12 justify-center'
+                                        )}
+                                    >
+                                        <Plus className="w-5 h-5 shrink-0" />
+                                        {isExpanded && (
+                                            <span className="text-sm font-medium">
+                                                {t('newSearch')}
+                                            </span>
+                                        )}
+                                    </button>
+                                )}
+
                                 {/* Список запросов - десктопная версия */}
                                 {queries.map((query) => {
                                     const isActive = activeQueryId === query.id;
@@ -185,27 +222,6 @@ export function Sidebar() {
                                 showBottomFade ? 'opacity-100' : 'opacity-0'
                             )}
                         />
-                    </div>
-
-                    {/* Кнопка добавления нового запроса - вне скролла */}
-                    <div className="p-2 shrink-0">
-                        <button
-                            onClick={handleAddQuery}
-                            className={cn(
-                                'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light',
-                                'border border-brand-primary/10 hover:border-brand-primary',
-                                'transition-colors duration-150',
-                                isExpanded ? 'px-3 py-3' : 'h-12 justify-center'
-                            )}
-                        >
-                            <Plus className="w-5 h-5 shrink-0" />
-                            {isExpanded && (
-                                <span className="text-sm font-medium">
-                                    {t('newSearch')}
-                                </span>
-                            )}
-                        </button>
                     </div>
                 </div>
 

@@ -50,7 +50,7 @@ export const useSidebarStore = create<SidebarStore>()(
                     lastUpdated: new Date(),
                 };
                 set((state) => ({
-                    queries: [...state.queries, newQuery],
+                    queries: [newQuery, ...state.queries],
                     activeQueryId: newQuery.id,
                 }));
             },

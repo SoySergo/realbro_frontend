@@ -14,14 +14,13 @@ type MobileQueryItemProps = {
 };
 
 // Используем forwardRef для возможности скролла к элементу
-export const MobileQueryItem = forwardRef<HTMLButtonElement, MobileQueryItemProps>(
+export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
     function MobileQueryItem({ query, isActive, canDelete, onSelect, onDelete }, ref) {
         return (
-            <button
+            <div
                 ref={ref}
-                onClick={onSelect}
                 className={cn(
-                    'w-full flex items-center rounded-lg cursor-pointer',
+                    'w-full flex items-center rounded-lg cursor-pointer relative',
                     'transition-colors duration-150 border-2',
                     'gap-3 px-4 py-3',
                     isActive
@@ -29,13 +28,20 @@ export const MobileQueryItem = forwardRef<HTMLButtonElement, MobileQueryItemProp
                         : 'border-transparent text-text-secondary active:bg-background-tertiary'
                 )}
             >
+                {/* Кликабельная область для выбора query */}
+                <div
+                    onClick={onSelect}
+                    className="absolute inset-0 cursor-pointer"
+                    aria-label={`Select ${query.title}`}
+                />
+
                 <MapPin
                     className={cn(
-                        'w-5 h-5 shrink-0',
+                        'w-5 h-5 shrink-0 relative z-10 pointer-events-none',
                         isActive ? 'text-brand-primary' : 'text-text-tertiary'
                     )}
                 />
-                <div className="flex-1 min-w-0 text-left">
+                <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
                     <div className="font-medium truncate text-base">{query.title}</div>
                     <QueryStats query={query} className="mt-0.5 text-sm" />
                 </div>
@@ -47,12 +53,13 @@ export const MobileQueryItem = forwardRef<HTMLButtonElement, MobileQueryItemProp
                             e.stopPropagation();
                             onDelete();
                         }}
-                        className="rounded flex items-center justify-center active:bg-error/10 active:text-error transition-colors w-8 h-8 cursor-pointer"
+                        className="rounded flex items-center justify-center active:bg-error/10 active:text-error transition-colors w-8 h-8 cursor-pointer relative z-10"
+                        aria-label={`Delete ${query.title}`}
                     >
                         <X className="w-5 h-5" />
                     </button>
                 )}
-            </button>
+            </div>
         );
     }
 );
