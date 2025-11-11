@@ -159,7 +159,7 @@ export function Sidebar() {
                         {/* Верхний градиент */}
                         <div
                             className={cn(
-                                'absolute top-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300',
+                                'absolute top-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
                                 'bg-linear-to-b from-background-secondary to-transparent',
                                 showTopFade ? 'opacity-100' : 'opacity-0'
                             )}
@@ -193,7 +193,7 @@ export function Sidebar() {
                         {/* Нижний градиент */}
                         <div
                             className={cn(
-                                'absolute bottom-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300',
+                                'absolute bottom-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
                                 'bg-linear-to-t from-background-secondary to-transparent',
                                 showBottomFade ? 'opacity-100' : 'opacity-0'
                             )}
