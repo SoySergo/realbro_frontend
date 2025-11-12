@@ -2,17 +2,13 @@
  * Типы для сайдбара навигации
  */
 
+import type { SearchFilters } from './filter';
+
 // Поисковый запрос (как вкладка браузера)
 export type SearchQuery = {
     id: string;
     title: string;
-    filters: {
-        location?: string;
-        priceMin?: number;
-        priceMax?: number;
-        bedrooms?: number;
-        propertyType?: string;
-    };
+    filters: SearchFilters; // Полная структура фильтров
     resultsCount?: number;
     newResultsCount?: number; // Количество новых результатов
     isLoading?: boolean; // Флаг загрузки данных
