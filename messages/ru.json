@@ -75,7 +75,7 @@
     "markerNoView": "Не видел",
     "markerLiked": "Понравились",
     "markerDisliked": "Не понравились",
-    "locationPolygons": "Полигоны",
+    "locationSearch": "Поиск по локации",
     "locationDraw": "Нарисовать",
     "locationTimeFrom": "Время до точки",
     "locationRadius": "Радиус от точки",
@@ -86,7 +86,8 @@
     "radiusKm": "км от точки",
     "clearAll": "Очистить все",
     "quickSelect": "Быстрый выбор",
-    "presets": "Пресеты"
+    "presets": "Пресеты",
+    "apply": "Применить"
   },
   "map": {
     "showMap": "Показать карту",

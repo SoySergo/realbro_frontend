@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { MapPin, ChevronDown, Pencil, Clock, Circle } from 'lucide-react';
+import { MapPin, ChevronDown, Pencil, Clock, Circle, Search } from 'lucide-react';
 import { useFilterStore } from '@/store/filterStore';
 import { cn } from '@/lib/utils';
 import type { LocationFilterMode } from '@/types/filter';
@@ -15,14 +15,14 @@ import type { LocationFilterMode } from '@/types/filter';
  */
 export function LocationFilter() {
     const t = useTranslations('filters');
-    const { locationFilter, setLocationMode } = useFilterStore();
+    const { locationFilter, activeLocationMode, setLocationMode } = useFilterStore();
     const [open, setOpen] = useState(false);
 
     const locationModes = [
         {
-            mode: 'polygon' as LocationFilterMode,
-            icon: MapPin,
-            label: t('locationPolygons'),
+            mode: 'search' as LocationFilterMode,
+            icon: Search,
+            label: t('locationSearch'),
         },
         {
             mode: 'draw' as LocationFilterMode,
@@ -51,7 +51,33 @@ export function LocationFilter() {
         setOpen(false);
     };
 
-    const isActive = !!locationFilter;
+    const isActive = !!locationFilter || !!activeLocationMode;
+
+    // Определяем активную иконку и лейбл (приоритет activeLocationMode)
+    const currentMode = activeLocationMode || locationFilter?.mode;
+    const activeMode = currentMode ? locationModes.find(m => m.mode === currentMode) : null;
+    const ActiveIcon = activeMode?.icon || MapPin;
+    const activeLabel = activeMode?.label || t('location');
+
+    // Подсчёт выбранных параметров
+    const getSelectedCount = (): number => {
+        if (!locationFilter) return 0;
+
+        switch (locationFilter.mode) {
+            case 'search':
+                return locationFilter.selectedLocations?.length || 0;
+            case 'draw':
+                return locationFilter.polygon ? 1 : 0;
+            case 'isochrone':
+                return locationFilter.isochrone ? 1 : 0;
+            case 'radius':
+                return locationFilter.radius ? 1 : 0;
+            default:
+                return 0;
+        }
+    };
+
+    const selectedCount = getSelectedCount();
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -70,8 +96,11 @@ export function LocationFilter() {
                         isActive && 'text-text-primary'
                     )}
                 >
-                    <MapPin className="w-4 h-4" />
-                    {t('location')}
+                    <ActiveIcon className="w-4 h-4" />
+                    <span>{activeLabel}</span>
+                    {selectedCount > 0 && (
+                        <span className="text-text-tertiary">({selectedCount})</span>
+                    )}
                     <ChevronDown className={cn(
                         "w-4 h-4 opacity-50 transition-transform",
                         open && "rotate-180"

@@ -1,6 +1,7 @@
 import { Sidebar } from '@/components/layout/sidebar';
 import { PropertyMap } from '@/components/features/map/PropertyMap';
 import { FilterBar } from '@/components/features/search/FilterBar';
+import { LocationDetailsBar } from '@/components/features/search/LocationDetailsBar';
 import { setRequestLocale } from 'next-intl/server';
 
 
@@ -27,7 +28,7 @@ export default async function SearchPage({ params }: Props) {
                     {/* Панель фильтров поверх карты */}
                     <div className="absolute top-0 left-0 right-0 z-50">
                         <FilterBar />
-
+                        <LocationDetailsBar />
                     </div>
 
                     {/* Карта на всю высоту */}

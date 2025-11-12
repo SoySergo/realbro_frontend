@@ -75,7 +75,7 @@
     "markerNoView": "Pas vu",
     "markerLiked": "Aimé",
     "markerDisliked": "Pas aimé",
-    "locationPolygons": "Polygones",
+    "locationSearch": "Recherche de lieux",
     "locationDraw": "Dessiner",
     "locationTimeFrom": "Temps jusqu'au point",
     "locationRadius": "Rayon du point",
@@ -86,7 +86,8 @@
     "radiusKm": "km du point",
     "clearAll": "Tout effacer",
     "quickSelect": "Sélection rapide",
-    "presets": "Préréglages"
+    "presets": "Préréglages",
+    "apply": "Appliquer"
   },
   "map": {
     "showMap": "Afficher la carte",

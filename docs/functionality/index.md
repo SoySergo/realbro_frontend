@@ -5,6 +5,8 @@
 
 ## Поиск и фильтры
 - [SearchFilters](features/search/SearchFilters.md) - Компоненты фильтрации (цена, площадь, комнаты, категория, локация, тип маркеров)
+- [LocationFilter](features/search/LocationFilter.md) - Фильтр локации с выбором режима (полигоны, рисование, изохрон, радиус)
+- [LocationDetailsBar](features/search/LocationDetailsBar.md) - Панель детальных настроек для режима локации
 
 ## Компоненты сайдбара
 
