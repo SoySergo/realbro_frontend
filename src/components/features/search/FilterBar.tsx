@@ -15,6 +15,7 @@ import { RoomsFilter } from './filters/RoomsFilter';
 import { AreaFilter } from './filters/AreaFilter';
 import { QueryTitleEditor } from './filters/QueryTitleEditor';
 
+
 /**
  * Компонент панели фильтров поиска недвижимости
  * Горизонтальная панель с кнопками-фильтрами
@@ -47,6 +48,7 @@ export function FilterBar() {
 
                 {/* Фильтры */}
                 <MarkerTypeFilter />
+
                 <LocationFilter />
                 <CategoryFilter />
                 <PriceFilter />

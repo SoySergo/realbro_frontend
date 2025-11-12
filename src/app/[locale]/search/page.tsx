@@ -32,7 +32,7 @@ export default async function SearchPage({ params }: Props) {
 
                     {/* Карта на всю высоту */}
                     <div className="absolute z-10 inset-0">
-                        <PropertyMap />
+                        {/* <PropertyMap /> */}
                     </div>
                 </div>
             </main>

@@ -12,10 +12,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-/**
- * Фильтр типа маркеров на карте
- * Единичный выбор: все/не видел/понравились/не понравились
- */
+
 export function MarkerTypeFilter() {
     const t = useTranslations('filters');
     const { currentFilters, setFilters } = useFilterStore();
@@ -43,17 +40,54 @@ export function MarkerTypeFilter() {
             <SelectTrigger
                 size="default"
                 className={cn(
-                    'w-fit whitespace-nowrap cursor-pointer dark:bg-input/30 dark:hover:bg-input/50',
-                    isActive && 'bg-brand-primary-light text-brand-primary border-brand-primary/20 dark:bg-brand-primary/20 dark:text-brand-primary dark:border-brand-primary/30'
+                    'w-fit whitespace-nowrap cursor-pointer',
+                    // Светлая тема: белый фон
+                    'bg-background',
+                    // Тёмная тема: без бордера
+                    'border border-border dark:border-transparent',
+                    // Текст
+                    'text-text-primary hover:text-text-primary',
+                    // Переходы
+                    'transition-all duration-200',
+                    // Активное состояние
+                    isActive && 'text-text-primary'
                 )}
             >
                 <SelectValue placeholder={t('markerAll')}>
                     {selectedLabel}
                 </SelectValue>
             </SelectTrigger>
-            <SelectContent align="start">
+            <SelectContent
+                align="start"
+                className={cn(
+                    // Светлая тема: белый фон
+                    'bg-background',
+                    'border border-border dark:border-border',
+                    'shadow-lg'
+                )}
+            >
                 {markerTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value} className='cursor-pointer'>
+                    <SelectItem
+                        key={type.value}
+                        value={type.value}
+                        className={cn(
+                            'cursor-pointer',
+                            // Текст
+                            'text-text-secondary',
+                            // Ховер: синий фон в обеих темах
+                            'hover:bg-brand-primary-light hover:text-brand-primary',
+                            'dark:hover:bg-brand-primary dark:hover:text-white',
+                            // Фокус
+                            'focus:bg-brand-primary-light focus:text-brand-primary',
+                            'dark:focus:bg-brand-primary dark:focus:text-white',
+                            // Переход
+                            'transition-colors duration-150',
+                            // Выбранный элемент: синий чекер (стилизуется через data-state)
+                            'data-[state=checked]:text-brand-primary',
+                            // Иконка чекера синяя
+                            '[&_span_svg]:text-brand-primary'
+                        )}
+                    >
                         {type.label}
                     </SelectItem>
                 ))}

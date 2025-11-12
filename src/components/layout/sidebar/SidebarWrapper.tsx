@@ -12,12 +12,12 @@ export function SidebarWrapper() {
     return (
         <>
             {/* Desktop версия - видна только на md и выше */}
-            <div className="hidden md:block">
+            <div className="hidden md:block z-101">
                 <DesktopSidebar />
             </div>
 
             {/* Mobile версия - видна только на экранах меньше md */}
-            <div className="block md:hidden">
+            <div className="block md:hidden z-101">
                 <MobileSidebar />
             </div>
         </>

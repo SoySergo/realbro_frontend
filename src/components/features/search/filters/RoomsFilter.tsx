@@ -61,12 +61,16 @@ export const RoomsFilter = memo(() => {
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        'border-input focus-visible:border-ring focus-visible:ring-ring/50',
-                        'flex h-9 items-center justify-between gap-2 rounded-md border cursor-pointer',
-                        'bg-background dark:bg-input/30 dark:hover:bg-input/50',
-                        'px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]',
-                        'outline-none focus-visible:ring-[3px] hover:bg-accent/50',
-                        isActive && 'bg-brand-primary-light text-brand-primary border-brand-primary/20 dark:bg-brand-primary/20 dark:text-brand-primary dark:border-brand-primary/30'
+                        'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
+                        'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
+                        // Светлая тема: белый фон
+                        'bg-background',
+                        // Тёмная тема: без бордера
+                        'border border-border dark:border-transparent',
+                        // Текст
+                        'text-text-primary hover:text-text-primary',
+                        // Активное состояние
+                        isActive && 'text-text-primary'
                     )}
                 >
                     {buttonLabel}
@@ -99,8 +103,8 @@ export const RoomsFilter = memo(() => {
                                         handleValueChange(newValues);
                                     }}
                                     className={cn(
-                                        "relative inline-flex items-center justify-center px-3 h-9 text-sm font-semibold transition-all cursor-pointer",
-                                        "border border-border bg-background dark:bg-input/30",
+                                        "relative inline-flex items-center justify-center px-3 h-9 text-sm font-medium transition-all cursor-pointer",
+                                        "text-text-primary border border-border bg-background dark:bg-input/30",
                                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2",
                                         "disabled:pointer-events-none disabled:opacity-50",
                                         // Углы только у первого и последнего
@@ -125,7 +129,18 @@ export const RoomsFilter = memo(() => {
                             variant="outline"
                             size="sm"
                             onClick={handleReset}
-                            className="w-auto "
+                            className={cn(
+                                "w-auto cursor-pointer",
+                                // Светлая тема
+                                "bg-background text-text-secondary border-border",
+                                // Тёмная тема
+                                "dark:bg-background-secondary dark:text-text-primary dark:border-border",
+                                // Ховер: лёгкое осветление фона
+                                "hover:bg-background-secondary hover:text-text-primary",
+                                "dark:hover:bg-background-tertiary dark:hover:text-text-primary",
+                                // Переход
+                                "transition-colors duration-150"
+                            )}
                         >
                             {tCommon('reset')}
                         </Button>

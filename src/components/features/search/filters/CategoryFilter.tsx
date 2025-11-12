@@ -51,12 +51,21 @@ export function CategoryFilter() {
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        'border-input focus-visible:border-ring focus-visible:ring-ring/50',
-                        'flex h-9 items-center justify-between gap-2 rounded-md border cursor-pointer',
-                        'bg-background dark:bg-input/30 dark:hover:bg-input/50',
-                        'px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]',
-                        'outline-none focus-visible:ring-[3px] hover:bg-accent/50',
-                        selectedCount > 0 && 'bg-brand-primary-light text-brand-primary border-brand-primary/20 dark:bg-brand-primary/20 dark:text-brand-primary dark:border-brand-primary/30'
+                        'w-fit whitespace-nowrap cursor-pointer',
+                        // Светлая тема: белый фон
+                        'bg-background',
+                        // Тёмная тема: без бордера
+                        'border border-border dark:border-transparent',
+                        // Текст
+                        'text-text-primary hover:text-text-primary',
+                        // Размеры и отступы
+                        'h-9 px-3 py-2 rounded-md text-sm',
+                        // Флекс для иконки
+                        'flex items-center justify-between gap-2',
+                        // Переходы
+                        'transition-all duration-200',
+                        // Активное состояние
+                        selectedCount > 0 && 'text-text-primary'
                     )}
                 >
                     {buttonLabel}
@@ -64,7 +73,13 @@ export function CategoryFilter() {
                 </button>
             </PopoverTrigger>
             <PopoverContent
-                className="w-[280px] z-50 p-1"
+                className={cn(
+                    'w-[280px] z-50 p-1',
+                    // Светлая тема: белый фон
+                    'bg-background',
+                    'border border-border dark:border-border',
+                    'shadow-lg'
+                )}
                 align="start"
             >
                 <div className="max-h-80 overflow-y-auto">
@@ -78,17 +93,25 @@ export function CategoryFilter() {
                                 className={cn(
                                     'relative flex w-full cursor-pointer items-center gap-2.5',
                                     'rounded-sm py-2 px-2 text-sm outline-hidden select-none',
-                                    'transition-colors hover:bg-accent hover:text-accent-foreground',
-                                    isSelected && 'bg-accent/50'
+                                    // Текст
+                                    'text-text-secondary',
+                                    // Ховер: синий фон в обеих темах
+                                    'hover:bg-brand-primary-light hover:text-brand-primary',
+                                    'dark:hover:bg-brand-primary dark:hover:text-white',
+                                    // Переход
+                                    'transition-colors duration-150',
+                                    // Выбранный элемент
+                                    isSelected && 'text-brand-primary'
                                 )}
                             >
+                                {/* Чекбокс для мультиселекта */}
                                 <div
                                     className={cn(
                                         'size-4 shrink-0 rounded-[4px] border shadow-xs transition-all',
                                         'flex items-center justify-center',
                                         isSelected
                                             ? 'bg-brand-primary border-brand-primary text-white dark:text-white'
-                                            : 'border-input bg-background dark:bg-input/30'
+                                            : 'border-input bg-background dark:bg-background'
                                     )}
                                 >
                                     {isSelected && (

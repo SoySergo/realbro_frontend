@@ -226,12 +226,16 @@ export const AreaFilter = memo(() => {
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        'border-input focus-visible:border-ring focus-visible:ring-ring/50',
-                        'flex h-9 items-center justify-between gap-2 rounded-md border cursor-pointer',
-                        'bg-background dark:bg-input/30 dark:hover:bg-input/50',
-                        'px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]',
-                        'outline-none focus-visible:ring-[3px] hover:bg-accent/50',
-                        isActive && 'bg-brand-primary-light text-brand-primary border-brand-primary/20 dark:bg-brand-primary/20 dark:text-brand-primary dark:border-brand-primary/30'
+                        'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
+                        'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
+                        // Светлая тема: белый фон
+                        'bg-background',
+                        // Тёмная тема: без бордера
+                        'border border-border dark:border-transparent',
+                        // Текст
+                        'text-text-primary hover:text-text-primary',
+                        // Активное состояние
+                        isActive && 'text-text-primary'
                     )}
                 >
                     {buttonLabel}
@@ -308,7 +312,18 @@ export const AreaFilter = memo(() => {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handlePreset(preset.min, preset.max)}
-                                    className="h-8 text-xs cursor-pointer"
+                                    className={cn(
+                                        "h-8 text-xs cursor-pointer",
+                                        // Светлая тема
+                                        "bg-background text-text-secondary border-border",
+                                        // Тёмная тема
+                                        "dark:bg-background-secondary dark:text-text-primary dark:border-border",
+                                        // Ховер: лёгкое осветление фона
+                                        "hover:bg-background-secondary hover:text-text-primary",
+                                        "dark:hover:bg-background-tertiary dark:hover:text-text-primary",
+                                        // Переход
+                                        "transition-colors duration-150"
+                                    )}
                                 >
                                     {preset.label}
                                 </Button>
@@ -322,7 +337,18 @@ export const AreaFilter = memo(() => {
                             variant="outline"
                             size="sm"
                             onClick={handleReset}
-                            className="w-full cursor-pointer"
+                            className={cn(
+                                "w-full cursor-pointer",
+                                // Светлая тема
+                                "bg-background text-text-secondary border-border",
+                                // Тёмная тема
+                                "dark:bg-background-secondary dark:text-text-primary dark:border-border",
+                                // Ховер: лёгкое осветление фона
+                                "hover:bg-background-secondary hover:text-text-primary",
+                                "dark:hover:bg-background-tertiary dark:hover:text-text-primary",
+                                // Переход
+                                "transition-colors duration-150"
+                            )}
                         >
                             {tCommon('reset')}
                         </Button>

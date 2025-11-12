@@ -52,7 +52,7 @@ export interface DrawPolygon {
 }
 
 // Режимы фильтра локации
-export type LocationFilterMode = 'polygon' | 'isochrone' | 'radius';
+export type LocationFilterMode = 'polygon' | 'draw' | 'isochrone' | 'radius';
 
 // Настройки изохрона (время до точки)
 export interface IsochroneSettings {

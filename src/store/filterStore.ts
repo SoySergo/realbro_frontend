@@ -14,6 +14,9 @@ type FilterStore = {
     // Фильтр локации (отдельно, т.к. сложный)
     locationFilter: LocationFilter | null;
 
+    // Активный режим локации (для показа панели деталей)
+    activeLocationMode: LocationFilter['mode'] | null;
+
     // Действия с фильтрами
     setFilters: (filters: Partial<SearchFilters>) => void;
     resetFilters: () => void;
@@ -27,9 +30,10 @@ type FilterStore = {
 
     // Действия с локацией
     setLocationFilter: (location: LocationFilter | null) => void;
+    setLocationMode: (mode: LocationFilter['mode'] | null) => void;
 
     // Синхронизация с вкладками (из sidebarStore)
-    syncWithQuery: (queryId: string, filters: SearchFilters) => void;
+    syncWithQuery: (queryId: string) => void;
     loadFiltersFromQuery: (filters: SearchFilters) => void;
 };
 
@@ -48,6 +52,7 @@ export const useFilterStore = create<FilterStore>()(
             currentFilters: initialFilters,
             savedPolygons: [],
             locationFilter: null,
+            activeLocationMode: null,
 
             // Установка фильтров (мердж с текущими)
             setFilters: (filters) => {
@@ -137,8 +142,14 @@ export const useFilterStore = create<FilterStore>()(
                 set({ locationFilter: location });
             },
 
+            // Установка режима локации (открывает панель деталей)
+            setLocationMode: (mode) => {
+                set({ activeLocationMode: mode });
+                console.log('Location mode set:', mode);
+            },
+
             // Синхронизация с вкладкой (сохранение текущих фильтров)
-            syncWithQuery: (queryId, filters) => {
+            syncWithQuery: (queryId) => {
                 // Эта функция будет вызываться из sidebarStore
                 // при смене активной вкладки
                 console.log('Syncing filters with query:', queryId);
