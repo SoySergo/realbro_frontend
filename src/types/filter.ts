@@ -2,13 +2,22 @@ import type { PropertyType, PropertyFeature } from './property';
 
 // Структура фильтров согласно бекенду
 export interface SearchFilters {
-    // Географические фильтры
+    // Географические фильтры (старая структура - deprecated)
     countryIds?: number[];
     regionIds?: number[];
     provinceIds?: number[];
     cityIds?: number[];
     districtIds?: number[];
     neighborhoodIds?: number[];
+
+    // Географические фильтры по OSM admin_level
+    adminLevel2?: number[]; // Страны
+    adminLevel4?: number[]; // Регионы
+    adminLevel6?: number[]; // Провинции
+    adminLevel7?: number[]; // Крупные города
+    adminLevel8?: number[]; // Города
+    adminLevel9?: number[]; // Районы
+    adminLevel10?: number[]; // Кварталы/микрорайоны
 
     // Категории недвижимости
     categoryIds?: number[];
@@ -37,6 +46,13 @@ export interface SearchFilters {
     // Сортировка
     sort?: string;
     sortOrder?: 'asc' | 'desc';
+
+    // Мета-информация о локациях (для восстановления границ)
+    locationsMeta?: Array<{
+        id: number;
+        wikidata?: string;
+        adminLevel?: number;
+    }>;
 }
 
 // Типы маркеров
@@ -56,9 +72,16 @@ export type LocationFilterMode = 'search' | 'draw' | 'isochrone' | 'radius';
 
 // Локация для поиска
 export interface LocationItem {
-    id: number;
+    id: number; // Deprecated: для обратной совместимости
     name: string;
-    type: 'city' | 'province' | 'district' | 'country';
+    type: 'city' | 'province' | 'district' | 'country' | 'neighborhood';
+    adminLevel?: number; // OSM admin_level: 2, 4, 6, 7, 8, 9, 10
+    centerLat?: number;
+    centerLon?: number;
+    areaSqKm?: number;
+    // Основной идентификатор для синхронизации с картой (OSM полигонами)
+    wikidata?: string; // Например: "Q1492" для Барселоны
+    osmId?: number; // OSM ID (если доступен)
 }
 
 // Настройки изохрона (время до точки)
@@ -81,6 +104,34 @@ export interface LocationFilter {
     polygon?: DrawPolygon;
     isochrone?: IsochroneSettings;
     radius?: RadiusSettings;
+}
+
+// Локальное состояние для режима search (до применения)
+export interface LocalSearchModeState {
+    selectedLocations: LocationItem[];
+}
+
+// Локальное состояние для режима draw (до применения)
+export interface LocalDrawModeState {
+    polygon: DrawPolygon | null;
+}
+
+// Локальное состояние для режима isochrone (до применения)
+export interface LocalIsochroneModeState {
+    isochrone: IsochroneSettings | null;
+}
+
+// Локальное состояние для режима radius (до применения)
+export interface LocalRadiusModeState {
+    radius: RadiusSettings | null;
+}
+
+// Общий тип для локального состояния всех режимов
+export interface LocalLocationStates {
+    search: LocalSearchModeState;
+    draw: LocalDrawModeState;
+    isochrone: LocalIsochroneModeState;
+    radius: LocalRadiusModeState;
 }
 
 // Deprecated - старые типы для обратной совместимости

@@ -44,7 +44,9 @@ export function LocationFilter() {
     const handleModeSelect = (mode: LocationFilterMode) => {
         console.log('Location filter mode selected:', mode);
 
-        // Устанавливаем режим в стор - это откроет панель деталей
+        // Проверяем, есть ли активный режим с несохранёнными данными
+        // Эту проверку делаем в самом компоненте режима через useLocalLocationState
+        // Здесь просто устанавливаем новый режим
         setLocationMode(mode);
 
         // Закрываем попап

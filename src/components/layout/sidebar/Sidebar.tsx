@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore } from '@/store/sidebarStore';
+import { useFilterStore } from '@/store/filterStore';
 import { Search, MessageCircle, User, Settings, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
@@ -31,10 +32,50 @@ export function Sidebar() {
         removeQuery,
     } = useSidebarStore();
 
+    const {
+        loadFiltersFromQuery,
+        syncWithQuery,
+        setActiveQueryId,
+        activeQueryId: filterActiveQueryId,
+    } = useFilterStore();
+
     const [showTopFade, setShowTopFade] = useState(false);
     const [showBottomFade, setShowBottomFade] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const previousQueriesLengthRef = useRef(queries.length);
+
+    // Синхронизация фильтров при смене активной вкладки
+    useEffect(() => {
+        if (activeQueryId && activeQueryId !== filterActiveQueryId) {
+            // Сохраняем фильтры из предыдущей вкладки
+            if (filterActiveQueryId) {
+                syncWithQuery(filterActiveQueryId);
+                console.log('[SYNC] Saved filters from previous tab:', filterActiveQueryId);
+            }
+
+            // Загружаем фильтры новой вкладки
+            const query = queries.find((q) => q.id === activeQueryId);
+            if (query) {
+                loadFiltersFromQuery(query.filters);
+                setActiveQueryId(activeQueryId);
+                console.log('[SYNC] Loaded filters for new tab:', activeQueryId);
+            }
+        }
+    }, [activeQueryId, filterActiveQueryId, syncWithQuery, loadFiltersFromQuery, setActiveQueryId, queries]);
+
+    // Инициализация при первом монтировании
+    useEffect(() => {
+        // При монтировании загружаем фильтры активной вкладки
+        if (activeQueryId && !filterActiveQueryId) {
+            const query = queries.find((q) => q.id === activeQueryId);
+            if (query) {
+                loadFiltersFromQuery(query.filters);
+                setActiveQueryId(activeQueryId);
+                console.log('[SYNC] Initialized filters from active tab:', activeQueryId);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Автоматический скролл вверх при добавлении нового элемента
     useEffect(() => {

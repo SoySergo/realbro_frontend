@@ -1,128 +1,120 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
+import { useTranslations, useLocale } from 'next-intl';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { X, Search, Loader2 } from 'lucide-react';
+import { ComboboxInput } from '@/components/ui/combobox-input';
+import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useFilterStore } from '@/store/filterStore';
 import type { LocationItem } from '@/types/filter';
+import type { MapboxLocation } from '@/types/map';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLocalLocationState } from '@/hooks/useLocalLocationState';
+import { searchLocations, mapPlaceTypeToLocationType, getAdminLevelForPlaceType } from '@/services/mapbox-geocoding';
+import { LocationModeActions } from './LocationModeActions';
 
 /**
- * Режим поиска локаций
+ * Режим поиска локаций через Mapbox Geocoding API
  * Содержит инпут с автокомплитом и выбранные теги локаций
+ * 
+ * ДВУХСЛОЙНАЯ СИСТЕМА:
+ * - Локальный слой (localStorage): временные изменения до применения
+ * - Глобальный слой (store): применённые фильтры
  */
-
-// Мокированные данные для локаций
-const MOCK_LOCATIONS: LocationItem[] = [
-    // Франция - страна
-    { id: 1, name: 'Франция', type: 'country' },
-
-    // Регионы Франции
-    { id: 10, name: 'Иль-де-Франс', type: 'province' },
-    { id: 11, name: 'Прованс-Альпы-Лазурный берег', type: 'province' },
-    { id: 12, name: 'Овернь-Рона-Альпы', type: 'province' },
-    { id: 13, name: 'Новая Аквитания', type: 'province' },
-    { id: 14, name: 'Окситания', type: 'province' },
-
-    // Города
-    { id: 100, name: 'Париж', type: 'city' },
-    { id: 101, name: 'Марсель', type: 'city' },
-    { id: 102, name: 'Лион', type: 'city' },
-    { id: 103, name: 'Тулуза', type: 'city' },
-    { id: 104, name: 'Ницца', type: 'city' },
-    { id: 105, name: 'Нант', type: 'city' },
-    { id: 106, name: 'Страсбург', type: 'city' },
-    { id: 107, name: 'Монпелье', type: 'city' },
-    { id: 108, name: 'Бордо', type: 'city' },
-    { id: 109, name: 'Лилль', type: 'city' },
-    { id: 110, name: 'Канны', type: 'city' },
-    { id: 111, name: 'Антиб', type: 'city' },
-    { id: 112, name: 'Грас', type: 'city' },
-
-    // Районы Парижа
-    { id: 200, name: 'Париж 1-й округ (Лувр)', type: 'district' },
-    { id: 201, name: 'Париж 4-й округ (Маре)', type: 'district' },
-    { id: 202, name: 'Париж 5-й округ (Латинский квартал)', type: 'district' },
-    { id: 203, name: 'Париж 6-й округ (Люксембург)', type: 'district' },
-    { id: 204, name: 'Париж 7-й округ (Эйфелева башня)', type: 'district' },
-    { id: 205, name: 'Париж 8-й округ (Елисейские поля)', type: 'district' },
-    { id: 206, name: 'Париж 16-й округ (Пасси)', type: 'district' },
-    { id: 207, name: 'Париж 18-й округ (Монмартр)', type: 'district' },
-];
-
-// Имитация API запроса с задержкой
-const searchLocations = async (query: string): Promise<LocationItem[]> => {
-    // Фейковая задержка 100мс
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    if (!query.trim()) return [];
-
-    const lowerQuery = query.toLowerCase();
-    return MOCK_LOCATIONS.filter(location =>
-        location.name.toLowerCase().includes(lowerQuery)
-    ).slice(0, 10); // Ограничиваем 10 результатами
-};
-
-// Тип-лейбл для типа локации
-const getLocationTypeLabel = (type: LocationItem['type']): string => {
-    const labels = {
-        country: 'Страна',
-        province: 'Регион',
-        city: 'Город',
-        district: 'Район'
-    };
-    return labels[type];
-};
 
 export function LocationSearchMode() {
     const t = useTranslations('filters');
-    const { locationFilter, setLocationFilter } = useFilterStore();
+    const locale = useLocale();
+    const {
+        activeLocationMode,
+        locationFilter,
+        setLocationFilter,
+        setLocationMode,
+        addSelectedBoundary,
+        clearSelectedBoundaries,
+    } = useFilterStore();
 
-    // Локальное состояние для поиска локаций
+    // Локальное состояние для этого режима
+    const {
+        currentLocalState,
+        updateSearchState,
+        clearLocalState,
+        getModesWithData,
+        loadFromGlobalFilter,
+        forceCleanLocalStorage,
+    } = useLocalLocationState(activeLocationMode);
+
+    // Локальное состояние для UI поиска
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedLocations, setSelectedLocations] = useState<LocationItem[]>(
-        locationFilter?.selectedLocations || []
-    );
-    const [searchResults, setSearchResults] = useState<LocationItem[]>([]);
+    const [searchResults, setSearchResults] = useState<MapboxLocation[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
-    const inputRef = useRef<HTMLInputElement>(null);
+    const isSelectingRef = useRef(false); // Флаг для предотвращения мигания при выборе
+
+    // Debounce для поискового запроса
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     // Лимит видимых тегов
     const VISIBLE_TAGS_LIMIT = 3;
 
-    // Обновление позиции dropdown при изменении showDropdown
-    useEffect(() => {
-        if (showDropdown && inputRef.current) {
-            const rect = inputRef.current.getBoundingClientRect();
-            setDropdownPosition({
-                top: rect.bottom + window.scrollY + 4,
-                left: rect.left + window.scrollX,
-                width: rect.width
-            });
-        }
-    }, [showDropdown]);
+    // Локальные выбранные локации (до применения)
+    const localSearchState = currentLocalState as { selectedLocations: LocationItem[] } | null;
+    const selectedLocations = useMemo(
+        () => localSearchState?.selectedLocations || [],
+        [localSearchState]
+    );
 
-    // Поиск локаций при изменении запроса
+    // Инициализация: при открытии режима ВСЕГДА загружаем из глобального фильтра
+    useEffect(() => {
+        if (locationFilter?.mode === 'search') {
+            loadFromGlobalFilter('search', locationFilter);
+            console.log('[LOCAL] Loaded from global filter on mode open');
+        } else if (selectedLocations.length === 0) {
+            // Если глобального фильтра нет - проверяем localStorage
+            // Данные уже загружены из localStorage хуком useLocalLocationState
+            console.log('[LOCAL] No global filter, using local state from localStorage');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeLocationMode]); // Зависимость от activeLocationMode - при каждом открытии режима
+
+    // Логирование изменений локального состояния
+    useEffect(() => {
+        console.log('LocationSearchMode local state:', selectedLocations.length, 'locations');
+    }, [selectedLocations.length]);
+
+    // Поиск локаций при изменении debounced запроса
     useEffect(() => {
         const performSearch = async () => {
-            if (!searchQuery.trim()) {
+            // Пропускаем поиск если идёт выбор элемента
+            if (isSelectingRef.current) {
+                isSelectingRef.current = false;
+                return;
+            }
+
+            if (!debouncedSearchQuery.trim()) {
                 setSearchResults([]);
                 setShowDropdown(false);
+                setIsSearching(false);
                 return;
             }
 
             setIsSearching(true);
-            const results = await searchLocations(searchQuery);
 
-            // Фильтруем уже выбранные локации
-            const filteredResults = results.filter(
-                result => !selectedLocations.find(loc => loc.id === result.id)
-            );
+            // Поиск через Mapbox Geocoding API
+            const mapboxResults = await searchLocations({
+                query: debouncedSearchQuery,
+                language: locale,
+                limit: 10,
+            });
+
+            // Фильтруем уже выбранные локации (сравниваем по wikidata)
+            const filteredResults = mapboxResults.filter((result) => {
+                // Если есть wikidata, сравниваем по нему, иначе пропускаем результат
+                if (!result.wikidata) return true;
+                return !selectedLocations.find((loc: LocationItem) => loc.wikidata === result.wikidata);
+            });
 
             setSearchResults(filteredResults);
 
@@ -137,40 +129,144 @@ export function LocationSearchMode() {
         };
 
         performSearch();
-    }, [searchQuery, selectedLocations]);
+    }, [debouncedSearchQuery, selectedLocations, locale]);
 
-    // Удаление выбранной локации
-    const handleRemoveLocation = (id: number) => {
-        setSelectedLocations(prev => prev.filter(loc => loc.id !== id));
+    // Получить лейбл типа локации (с локализацией)
+    const getLocationTypeLabel = (placeType: MapboxLocation['placeType']): string => {
+        const typeMap: Record<MapboxLocation['placeType'], string> = {
+            country: t('locationTypeCountry'),
+            region: t('locationTypeRegion'),
+            place: t('locationTypeCity'),
+            district: t('locationTypeDistrict'),
+            neighborhood: t('locationTypeNeighborhood'),
+            locality: t('locationTypeCity'),
+            postcode: t('locationTypePlace'),
+            address: t('locationTypePlace'),
+            poi: t('locationTypePlace'),
+        };
+        return typeMap[placeType] || t('locationTypePlace');
     };
 
-    // Добавление локации
-    const handleAddLocation = (location: LocationItem) => {
-        if (!selectedLocations.find(loc => loc.id === location.id)) {
-            setSelectedLocations(prev => [...prev, location]);
+    // Преобразовать Mapbox локацию в LocationItem
+    const mapboxToLocationItem = (mapboxLoc: MapboxLocation): LocationItem => {
+        // Извлекаем числовой ID из строки вида "place.123" или используем хеш от строки
+        const numericId = Number(mapboxLoc.id.split('.')[1]) ||
+            mapboxLoc.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+        return {
+            id: numericId,
+            name: mapboxLoc.name,
+            type: mapPlaceTypeToLocationType(mapboxLoc.placeType),
+            adminLevel: getAdminLevelForPlaceType(mapboxLoc.placeType),
+            centerLat: mapboxLoc.coordinates[1],
+            centerLon: mapboxLoc.coordinates[0],
+            wikidata: mapboxLoc.wikidata, // Основной идентификатор для синхронизации с картой
+        };
+    };
+
+    // Удаление выбранной локации (только из локального слоя)
+    const handleRemoveLocation = (location: LocationItem) => {
+        const newLocations = selectedLocations.filter((loc: LocationItem) => loc.id !== location.id);
+        updateSearchState({ selectedLocations: newLocations });
+        console.log('Removed location from local state:', location.name);
+    };
+
+    // Добавление локации (только в локальный слой)
+    const handleAddLocation = (mapboxLocation: MapboxLocation) => {
+        // Устанавливаем флаг выбора для предотвращения повторного поиска
+        isSelectingRef.current = true;
+
+        const locationItem = mapboxToLocationItem(mapboxLocation);
+
+        // Проверяем, не выбрана ли уже эта локация (по wikidata или по id)
+        const alreadySelected = locationItem.wikidata
+            ? selectedLocations.find((loc: LocationItem) => loc.wikidata === locationItem.wikidata)
+            : selectedLocations.find((loc: LocationItem) => loc.id === locationItem.id);
+
+        if (!alreadySelected) {
+            const newLocations = [...selectedLocations, locationItem];
+            updateSearchState({ selectedLocations: newLocations });
+            console.log('Added location to local state:', locationItem.name);
         }
-        setSearchQuery('');
-        setShowDropdown(false);
 
-        // Возвращаем фокус на инпут
-        setTimeout(() => {
-            inputRef.current?.focus();
-        }, 0);
+        // Скрываем dropdown и очищаем поиск
+        setShowDropdown(false);
+        setSearchQuery('');
+        setSearchResults([]);
     };
 
-    // Очистка инпута
+    // Обработчик очистки инпута поиска
     const handleClearInput = () => {
-        setSearchQuery('');
         setSearchResults([]);
         setShowDropdown(false);
     };
 
-    // Применение фильтра
-    const handleApply = () => {
+    // Очистка локального состояния (кнопка "Очистить")
+    const handleClear = () => {
+        // Очищаем только локальное состояние
+        clearLocalState('search');
+        console.log('Cleared local search state');
+    };
+
+    // Выход из режима (кнопка X)
+    const handleExit = () => {
+        // Полностью очищаем ВСЕ локальные состояния
+        forceCleanLocalStorage();
+        // Закрываем панель деталей
+        setLocationMode(null);
+        console.log('[LOCAL] Exited and cleaned all local states');
+    };
+
+    // Рендер элемента результата поиска
+    const renderSearchResult = (location: MapboxLocation, isSelected: boolean) => (
+        <div
+            className={cn(
+                'w-full flex items-center justify-between px-3 py-2.5',
+                'text-sm transition-colors duration-150',
+                'border-b border-border last:border-b-0',
+                isSelected
+                    ? 'bg-brand-primary-light text-brand-primary dark:bg-brand-primary dark:text-white'
+                    : 'text-text-primary hover:bg-brand-primary-light hover:text-brand-primary dark:text-text-secondary dark:hover:bg-brand-primary dark:hover:text-white'
+            )}
+        >
+            <div className="flex flex-col items-start gap-0.5">
+                <span className="font-medium">{location.name}</span>
+                {location.context && (
+                    <span className="text-xs text-text-tertiary">{location.context}</span>
+                )}
+            </div>
+            <span className="text-xs text-text-tertiary shrink-0 ml-2">
+                {getLocationTypeLabel(location.placeType)}
+            </span>
+        </div>
+    );
+
+    // Сохранение фильтра в глобальный store
+    const handleSave = () => {
+        // Очищаем ранее выбранные границы
+        clearSelectedBoundaries();
+
+        // Применяем локальные изменения в глобальный store
         setLocationFilter({
             mode: 'search',
             selectedLocations: selectedLocations,
         });
+
+        // Синхронизируем границы на карте
+        selectedLocations.forEach((location: LocationItem) => {
+            if (location.wikidata) {
+                addSelectedBoundary(location.wikidata);
+            }
+        });
+
+        // Полностью очищаем localStorage после сохранения
+        forceCleanLocalStorage();
+
+        // Закрываем панель деталей
+        setLocationMode(null);
+
+        console.log('[GLOBAL] Location filter saved:', selectedLocations.length, 'locations');
+        console.log('[LOCAL] Cleaned localStorage after save');
     };
 
     return (
@@ -181,53 +277,27 @@ export function LocationSearchMode() {
                 </Label>
 
                 {/* Инпут поиска с dropdown */}
-                <div className="relative flex-1 min-w-[200px] max-w-[400px]">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onFocus={() => {
-                            if (searchResults.length > 0) {
-                                setShowDropdown(true);
-                            }
-                        }}
-                        placeholder="Город, район, регион, страна..."
-                        className={cn(
-                            "w-full h-9 pl-9 pr-20 text-sm rounded-md transition-colors",
-                            "bg-background border border-border",
-                            "text-text-primary placeholder:text-text-tertiary",
-                            "focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent",
-                            "hover:border-border-hover"
-                        )}
-                    />
-
-                    {/* Лоадер или кнопка очистки */}
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                        {isSearching && (
-                            <Loader2 className="w-4 h-4 text-text-tertiary animate-spin" />
-                        )}
-                        {searchQuery && !isSearching && (
-                            <button
-                                onClick={handleClearInput}
-                                className={cn(
-                                    "p-1 rounded-sm transition-colors",
-                                    "text-text-tertiary hover:text-text-primary hover:bg-background-secondary"
-                                )}
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                        )}
-                    </div>
-                </div>
+                <ComboboxInput<MapboxLocation>
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                    onClear={handleClearInput}
+                    results={searchResults}
+                    isLoading={isSearching}
+                    showDropdown={showDropdown}
+                    onShowDropdownChange={setShowDropdown}
+                    onSelect={handleAddLocation}
+                    renderItem={renderSearchResult}
+                    getItemKey={(location) => location.id}
+                    placeholder={t('searchPlaceholder')}
+                    containerClassName="flex-1 min-w-[200px] max-w-[400px]"
+                />
 
                 {/* Выбранные локации (теги) */}
                 {selectedLocations.length > 0 && (
                     <div className="flex items-center gap-2 flex-wrap">
                         {selectedLocations.slice(0, VISIBLE_TAGS_LIMIT).map((location) => (
                             <div
-                                key={location.id}
+                                key={location.wikidata || location.id}
                                 className={cn(
                                     "flex items-center gap-1.5 px-2.5 py-1 rounded-md",
                                     "bg-brand-primary-light text-brand-primary",
@@ -237,7 +307,7 @@ export function LocationSearchMode() {
                             >
                                 <span className="font-medium">{location.name}</span>
                                 <button
-                                    onClick={() => handleRemoveLocation(location.id)}
+                                    onClick={() => handleRemoveLocation(location)}
                                     className={cn(
                                         "hover:bg-brand-primary/20 rounded-sm p-0.5 transition-colors",
                                         "dark:hover:bg-brand-primary/30"
@@ -273,7 +343,7 @@ export function LocationSearchMode() {
                                     <div className="flex flex-col gap-2">
                                         {selectedLocations.slice(VISIBLE_TAGS_LIMIT).map((location) => (
                                             <div
-                                                key={location.id}
+                                                key={location.wikidata || location.id}
                                                 className={cn(
                                                     "flex items-center gap-1.5 px-2.5 py-1 rounded-md w-fit",
                                                     "bg-brand-primary-light text-brand-primary",
@@ -283,7 +353,7 @@ export function LocationSearchMode() {
                                             >
                                                 <span className="font-medium truncate">{location.name}</span>
                                                 <button
-                                                    onClick={() => handleRemoveLocation(location.id)}
+                                                    onClick={() => handleRemoveLocation(location)}
                                                     className={cn(
                                                         "hover:bg-brand-primary/20 rounded-sm p-0.5 transition-colors shrink-0",
                                                         "dark:hover:bg-brand-primary/30"
@@ -301,52 +371,15 @@ export function LocationSearchMode() {
                 )}
             </div>
 
-            {/* Dropdown с результатами поиска - вынесен за пределы flex-контейнера */}
-            {showDropdown && searchResults.length > 0 && (
-                <div
-                    className={cn(
-                        "fixed z-50",
-                        "bg-background border border-border rounded-md shadow-lg",
-                        "max-h-[300px] overflow-y-auto"
-                    )}
-                    style={{
-                        top: `${dropdownPosition.top}px`,
-                        left: `${dropdownPosition.left}px`,
-                        width: `${dropdownPosition.width}px`
-                    }}
-                >
-                    {searchResults.map((location) => (
-                        <button
-                            key={location.id}
-                            onClick={() => handleAddLocation(location)}
-                            className={cn(
-                                "w-full flex items-center justify-between px-3 py-2.5 cursor-pointer",
-                                "text-sm text-text-secondary transition-colors duration-150",
-                                "hover:bg-brand-primary-light hover:text-brand-primary",
-                                "dark:hover:bg-brand-primary dark:hover:text-white",
-                                "border-b border-border last:border-b-0"
-                            )}
-                        >
-                            <span className="font-medium">{location.name}</span>
-                            <span className="text-xs text-text-tertiary">
-                                {getLocationTypeLabel(location.type)}
-                            </span>
-                        </button>
-                    ))}
-                </div>
-            )}
-
-            {/* Кнопка применить */}
-            <Button
-                size="sm"
-                onClick={handleApply}
-                className={cn(
-                    "h-8 ml-auto cursor-pointer",
-                    "bg-brand-primary hover:bg-brand-primary-hover text-white"
-                )}
-            >
-                {t('apply')}
-            </Button>
+            {/* Кнопки управления */}
+            <LocationModeActions
+                currentMode="search"
+                hasCurrentData={selectedLocations.length > 0}
+                otherModesWithData={getModesWithData('search')}
+                onClear={handleClear}
+                onApply={handleSave}
+                onExit={handleExit}
+            />
         </>
     );
 }

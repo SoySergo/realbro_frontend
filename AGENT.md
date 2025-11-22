@@ -6,6 +6,12 @@
 - **[Design Guide](/docs/DESIGN_GUIDE.md)** - Полное руководство по дизайн-системе
 - **[Functionality Index](/docs/functionality/index.md)** - Навигация по документации функциональности
 
+### 🗺️ Режимы работы с локацией
+- [LocationSearchMode](/docs/functionality/features/search/LocationSearchMode.md) - Поиск через Mapbox Geocoding
+- [LocationDrawMode](/docs/functionality/features/search/LocationDrawMode.md) - Рисование области
+- [LocationIsochroneMode](/docs/functionality/features/search/LocationIsochroneMode.md) - Изохрон (время в пути)
+- [LocationRadiusMode](/docs/functionality/features/search/LocationRadiusMode.md) - Радиус от точки
+
 ---
 
 ## 🎯 Основные принципы
@@ -281,6 +287,104 @@ export function PropertyCard({
 4. **Документируй** в `docs/functionality/features/[feature]/`
 5. **Обнови индекс** в `docs/functionality/index.md`
 6. **Добавь локали** для всего текста в UI
+
+## 🗺️ Интеграция с Mapbox
+
+### Доступные сервисы
+
+#### Mapbox Geocoding API
+**Файл**: `src/services/mapbox-geocoding.ts`
+
+Поиск мест (города, районы, страны):
+```typescript
+import { searchLocations } from '@/services/mapbox-geocoding';
+
+const results = await searchLocations({
+    query: 'Barcelona',
+    language: 'en',
+    limit: 10,
+});
+```
+
+#### Mapbox Isochrone API
+**Файл**: `src/services/mapbox-isochrone.ts`
+
+Построение изохронов (область доступности за время):
+```typescript
+import { getIsochrone, getProfileColor } from '@/services/mapbox-isochrone';
+
+const polygon = await getIsochrone({
+    coordinates: [2.1734, 41.3851], // [lng, lat]
+    profile: 'walking',
+    minutes: 15,
+});
+
+const color = getProfileColor('walking'); // #28A745
+```
+
+### Профили изохронов
+- `walking` - Пешком (зелёный #28A745)
+- `cycling` - Велосипед (жёлтый #FFC107)
+- `driving` - Машина (синий #198BFF)
+
+### Режимы фильтра локации
+
+Все режимы используют **двухслойную систему**:
+- **Локальный слой** (localStorage): временные изменения до применения
+- **Глобальный слой** (store): применённые фильтры
+
+#### 1. Search Mode (Поиск)
+- Mapbox Geocoding API для автокомплита
+- Синхронизация по Wikidata ID с OSM полигонами
+- Множественный выбор локаций
+- Теги с удалением + popover при большом количестве
+
+#### 2. Draw Mode (Рисование)
+- Произвольный полигон на карте
+- Редактируемое название области
+- Визуализация GeoJSON полигона
+- Сохранение координат для бекенда
+
+#### 3. Isochrone Mode (Время в пути)
+- Mapbox Isochrone API
+- Профили: walking/cycling/driving
+- Время: 5, 10, 15, 30, 45, 60 минут
+- Автоматический расчёт при выборе точки
+- Цвет полигона по профилю
+
+#### 4. Radius Mode (Радиус)
+- Круг заданного радиуса от точки
+- Радиусы: 1, 3, 5, 10, 15, 20 км
+- Динамическое обновление при изменении
+- Рисование через Turf.js или нативный Mapbox
+
+### Общие паттерны для режимов
+
+```typescript
+// Коллбэки для интеграции с картой
+type LocationModeProps = {
+    // Для Draw
+    onActivateDrawing?: () => void;
+    drawnPolygon?: DrawPolygon | null;
+    
+    // Для Isochrone/Radius
+    onSelectPoint?: () => void;
+    selectedCoordinates?: [number, number] | null;
+    onShowIsochrone?: (polygon: number[][][], color: string) => void;
+    onShowRadius?: (center: [number, number], radiusKm: number) => void;
+    
+    // Для удаления
+    onDeletePolygon?: (id: string) => void;
+    onClearIsochrone?: () => void;
+    onClearRadius?: () => void;
+};
+```
+
+### LocationModeActions
+Универсальный компонент кнопок управления для всех режимов:
+- **Очистить**: удаляет локальное состояние текущего режима
+- **Сохранить**: применяет в store (с алертом если есть данные в других режимах)
+- **X (Выход)**: закрывает панель (с алертом если есть несохранённые данные)
 
 ---
 

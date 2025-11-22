@@ -1,17 +1,29 @@
+'use client';
+
+import { useEffect } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { PropertyMap } from '@/components/features/map/PropertyMap';
 import { FilterBar } from '@/components/features/search/FilterBar';
 import { LocationDetailsBar } from '@/components/features/search/LocationDetailsBar';
-import { setRequestLocale } from 'next-intl/server';
+import { useSidebarStore } from '@/store/sidebarStore';
+import { useFilterStore } from '@/store/filterStore';
 
+export default function SearchPage() {
+    const { activeQueryId, queries } = useSidebarStore();
+    const { loadFiltersFromQuery, setActiveQueryId, activeQueryId: filterActiveQueryId } = useFilterStore();
 
-type Props = {
-    params: Promise<{ locale: string }>;
-};
-
-export default async function SearchPage({ params }: Props) {
-    const { locale } = await params;
-    setRequestLocale(locale);
+    // Инициализация фильтров при загрузке страницы
+    useEffect(() => {
+        if (activeQueryId && !filterActiveQueryId) {
+            const query = queries.find((q) => q.id === activeQueryId);
+            if (query) {
+                loadFiltersFromQuery(query.filters);
+                setActiveQueryId(activeQueryId);
+                console.log('[SYNC] Initialized filters from active query on page load');
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-background">
@@ -33,7 +45,7 @@ export default async function SearchPage({ params }: Props) {
 
                     {/* Карта на всю высоту */}
                     <div className="absolute z-10 inset-0">
-                        {/* <PropertyMap /> */}
+                        <PropertyMap />
                     </div>
                 </div>
             </main>
