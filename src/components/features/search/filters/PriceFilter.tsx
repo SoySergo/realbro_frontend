@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -111,21 +111,21 @@ PriceInput.displayName = 'PriceInput';
 export const PriceFilter = memo(() => {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
-    const { currentFilters, setFilters } = useFilterStore();
+    const { filters, setFilters } = useSearchFilters();
     const [isOpen, setIsOpen] = useState(false);
 
     // Локальное состояние для мгновенного UI отклика
-    const [localMin, setLocalMin] = useState(() => currentFilters.minPrice || 0);
-    const [localMax, setLocalMax] = useState(() => currentFilters.maxPrice || MAX_PRICE);
+    const [localMin, setLocalMin] = useState(() => filters.minPrice || 0);
+    const [localMax, setLocalMax] = useState(() => filters.maxPrice || MAX_PRICE);
 
     // Синхронизация при открытии попапа
     const handleOpenChange = useCallback((open: boolean) => {
         if (open) {
-            setLocalMin(currentFilters.minPrice || 0);
-            setLocalMax(currentFilters.maxPrice || MAX_PRICE);
+            setLocalMin(filters.minPrice || 0);
+            setLocalMax(filters.maxPrice || MAX_PRICE);
         }
         setIsOpen(open);
-    }, [currentFilters.minPrice, currentFilters.maxPrice]);
+    }, [filters.minPrice, filters.maxPrice]);
 
     // Конвертация локальных цен в позиции слайдера
     const sliderValue = useMemo<[number, number]>(
@@ -225,12 +225,12 @@ export const PriceFilter = memo(() => {
         setFilters({ minPrice: undefined, maxPrice: undefined });
     }, [setFilters]);
 
-    const isActive = currentFilters.minPrice !== undefined || currentFilters.maxPrice !== undefined;
+    const isActive = filters.minPrice !== undefined || filters.maxPrice !== undefined;
 
     const buttonLabel = useMemo(() => {
         if (!isActive) return t('price');
-        return `${t('price')}: €${formatPrice(currentFilters.minPrice || 0)} - €${formatPrice(currentFilters.maxPrice || MAX_PRICE)}`;
-    }, [isActive, currentFilters.minPrice, currentFilters.maxPrice, t]);
+        return `${t('price')}: €${formatPrice(filters.minPrice || 0)} - €${formatPrice(filters.maxPrice || MAX_PRICE)}`;
+    }, [isActive, filters.minPrice, filters.maxPrice, t]);
 
     return (
         <Popover open={isOpen} onOpenChange={handleOpenChange}>

@@ -74,7 +74,7 @@ export type LocationFilterMode = 'search' | 'draw' | 'isochrone' | 'radius';
 export interface LocationItem {
     id: number; // Deprecated: для обратной совместимости
     name: string;
-    type: 'city' | 'province' | 'district' | 'country' | 'neighborhood';
+    type: 'country' | 'region' | 'province' | 'comarca' | 'city' | 'district' | 'neighborhood';
     adminLevel?: number; // OSM admin_level: 2, 4, 6, 7, 8, 9, 10
     centerLat?: number;
     centerLon?: number;

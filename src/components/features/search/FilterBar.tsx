@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 
 
 // Импорты фильтров
@@ -22,19 +22,10 @@ import { QueryTitleEditor } from './filters/QueryTitleEditor';
  */
 export function FilterBar() {
     const t = useTranslations('filters');
-    const { currentFilters, resetFilters } = useFilterStore();
-
-    // Подсчет активных фильтров
-    const activeFiltersCount = Object.keys(currentFilters).filter(key => {
-        const value = currentFilters[key as keyof typeof currentFilters];
-        if (Array.isArray(value)) return value.length > 0;
-        if (typeof value === 'number') return true;
-        if (typeof value === 'string') return value !== 'all';
-        return !!value;
-    }).length;
+    const { filtersCount, clearFilters } = useSearchFilters();
 
     const handleReset = () => {
-        resetFilters();
+        clearFilters();
         console.log('Filters reset');
     };
 
@@ -56,7 +47,7 @@ export function FilterBar() {
                 <AreaFilter />
 
                 {/* Кнопка сброса */}
-                {activeFiltersCount > 0 && (
+                {filtersCount > 0 && (
                     <Button
                         variant="ghost"
                         size="sm"

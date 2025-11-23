@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 import type { MarkerType } from '@/types/filter';
 import { cn } from '@/lib/utils';
 import {
@@ -15,7 +15,7 @@ import {
 
 export function MarkerTypeFilter() {
     const t = useTranslations('filters');
-    const { currentFilters, setFilters } = useFilterStore();
+    const { filters, setFilters } = useSearchFilters();
 
     const markerTypes: { value: MarkerType; label: string }[] = [
         { value: 'all', label: t('markerAll') },
@@ -25,7 +25,7 @@ export function MarkerTypeFilter() {
         { value: 'dislike', label: t('markerDisliked') },
     ];
 
-    const selectedType = currentFilters.markerType || 'all';
+    const selectedType = filters.markerType || 'all';
 
     const handleSelect = (value: string) => {
         setFilters({ markerType: value as MarkerType });

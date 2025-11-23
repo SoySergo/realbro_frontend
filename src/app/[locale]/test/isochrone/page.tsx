@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapboxConfig } from '@/lib/mapbox';
 import { Sidebar } from '@/components/layout/sidebar';
-import { MapIsochrone } from '@/components/features/map/MapIsochrone';
+import { MapIsochrone } from '@/components/features/search/location-filter/isochrone/MapIsochrone';
 
 // Стиль карты - светлый для обеих тем
 const MAP_STYLE = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
@@ -71,19 +71,7 @@ export default function IsochroneTestPage() {
                         </div>
                     )}
 
-                    {/* Информационная панель */}
-                    <div className="absolute bottom-4 right-4 z-10 bg-background/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-w-sm">
-                        <h2 className="text-lg font-bold mb-2 text-text-primary">
-                            Isochrone Test Page
-                        </h2>
-                        <div className="space-y-1 text-sm text-text-secondary">
-                            <p>🔍 Search for an address using the search bar</p>
-                            <p>📍 Or click &quot;Pick point on map&quot; and select a location</p>
-                            <p>🚶 Choose your travel mode (walk, bike, car, car with traffic)</p>
-                            <p>⏱️ Adjust the travel time with the slider</p>
-                            <p>🗺️ The map will show the reachable area</p>
-                        </div>
-                    </div>
+
                 </div>
             </main>
         </div>

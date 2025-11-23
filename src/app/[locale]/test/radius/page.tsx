@@ -5,7 +5,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapboxConfig } from '@/lib/mapbox';
 import { Sidebar } from '@/components/layout/sidebar';
-import { MapRadius } from '@/components/features/map/MapRadius';
+import { MapRadius } from '@/components/features/search/location-filter/radius';
+
 
 // Стиль карты - светлый для обеих тем
 const MAP_STYLE = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';

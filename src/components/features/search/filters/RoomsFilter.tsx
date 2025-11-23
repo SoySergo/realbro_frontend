@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 export const RoomsFilter = memo(() => {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
-    const { currentFilters, setFilters } = useFilterStore();
+    const { filters, setFilters } = useSearchFilters();
     const [isOpen, setIsOpen] = useState(false);
 
     const roomOptions = useMemo(() => [
@@ -30,7 +30,7 @@ export const RoomsFilter = memo(() => {
         { value: '5', label: '5+' },
     ], [t]);
 
-    const selectedRooms = useMemo(() => currentFilters.rooms || [], [currentFilters.rooms]);
+    const selectedRooms = useMemo(() => filters.rooms || [], [filters.rooms]);
 
     // Конвертируем массив чисел в массив строк для ToggleGroup
     const selectedValues = useMemo(
@@ -98,7 +98,7 @@ export const RoomsFilter = memo(() => {
                                     key={option.value}
                                     onClick={() => {
                                         const newValues = isSelected
-                                            ? selectedValues.filter(v => v !== option.value)
+                                            ? selectedValues.filter((v: string) => v !== option.value)
                                             : [...selectedValues, option.value];
                                         handleValueChange(newValues);
                                     }}

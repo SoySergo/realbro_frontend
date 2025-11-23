@@ -3,7 +3,7 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -100,21 +100,21 @@ AreaInput.displayName = 'AreaInput';
 export const AreaFilter = memo(() => {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
-    const { currentFilters, setFilters } = useFilterStore();
+    const { filters, setFilters } = useSearchFilters();
     const [isOpen, setIsOpen] = useState(false);
 
     // Локальное состояние для мгновенного UI отклика
-    const [localMin, setLocalMin] = useState(() => currentFilters.minArea || 0);
-    const [localMax, setLocalMax] = useState(() => currentFilters.maxArea || MAX_AREA);
+    const [localMin, setLocalMin] = useState(() => filters.minArea || 0);
+    const [localMax, setLocalMax] = useState(() => filters.maxArea || MAX_AREA);
 
     // Синхронизация при открытии попапа
     const handleOpenChange = useCallback((open: boolean) => {
         if (open) {
-            setLocalMin(currentFilters.minArea || 0);
-            setLocalMax(currentFilters.maxArea || MAX_AREA);
+            setLocalMin(filters.minArea || 0);
+            setLocalMax(filters.maxArea || MAX_AREA);
         }
         setIsOpen(open);
-    }, [currentFilters.minArea, currentFilters.maxArea]);
+    }, [filters.minArea, filters.maxArea]);
 
     // Конвертация локальных значений в позиции слайдера
     const sliderValue = useMemo<[number, number]>(
@@ -214,12 +214,12 @@ export const AreaFilter = memo(() => {
         setFilters({ minArea: undefined, maxArea: undefined });
     }, [setFilters]);
 
-    const isActive = currentFilters.minArea !== undefined || currentFilters.maxArea !== undefined;
+    const isActive = filters.minArea !== undefined || filters.maxArea !== undefined;
 
     const buttonLabel = useMemo(() => {
         if (!isActive) return t('area');
-        return `${t('area')}: ${currentFilters.minArea || 0} - ${currentFilters.maxArea || MAX_AREA} м²`;
-    }, [isActive, currentFilters.minArea, currentFilters.maxArea, t]);
+        return `${t('area')}: ${filters.minArea || 0} - ${filters.maxArea || MAX_AREA} м²`;
+    }, [isActive, filters.minArea, filters.maxArea, t]);
 
     return (
         <Popover open={isOpen} onOpenChange={handleOpenChange}>

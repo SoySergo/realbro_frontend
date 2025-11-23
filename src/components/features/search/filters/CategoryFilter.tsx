@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
-import { useFilterStore } from '@/store/filterStore';
+import { useSearchFilters } from '@/hooks/useSearchFilters';
 import { cn } from '@/lib/utils';
 import {
     Popover,
@@ -17,7 +17,7 @@ import {
 export function CategoryFilter() {
     const t = useTranslations('filters');
     const tTypes = useTranslations('propertyTypes');
-    const { currentFilters, setFilters } = useFilterStore();
+    const { filters, setFilters } = useSearchFilters();
 
     // TODO: Эти категории должны приходить с бекенда
     // Пока захардкодим для примера
@@ -30,14 +30,14 @@ export function CategoryFilter() {
         { id: 6, label: tTypes('townhouse') },
     ];
 
-    const selectedIds = currentFilters.categoryIds || [];
+    const selectedIds = filters.categoryIds || [];
 
     const handleToggle = (id: number) => {
         const newIds = selectedIds.includes(id)
-            ? selectedIds.filter(i => i !== id)
+            ? selectedIds.filter((i: number) => i !== id)
             : [...selectedIds, id];
 
-        setFilters({ categoryIds: newIds });
+        setFilters({ categoryIds: newIds.length > 0 ? newIds : undefined });
         console.log('Categories updated:', newIds);
     };
 

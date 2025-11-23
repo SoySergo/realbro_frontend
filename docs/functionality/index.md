@@ -1,9 +1,10 @@
 # Функциональность проекта
 
 ## Компоненты карты
+- [BaseMap, SearchMap, MapLocationController](features/map/BaseMap.md) - **Новая архитектура!** Гибкая система карты с управлением режимами фильтра локации
 - [PropertyMap](features/map/PropertyMap.md) - Интерактивная карта с маркерами объектов недвижимости
-- [MapIsochrone](features/map/MapIsochrone.md) - **Новый!** Компонент изохронов с выбором точки, профиля передвижения и времени
-- [MapRadius](features/map/MapRadius.md) - **Новый!** Компонент радиуса - круг заданного расстояния от точки
+- [MapIsochrone](features/map/MapIsochrone.md) - Компонент изохронов с выбором точки, профиля передвижения и времени
+- [MapRadius](features/map/MapRadius.md) - Компонент радиуса - круг заданного расстояния от точки
 
 ## Поиск и фильтры
 - [SearchFilters](features/search/SearchFilters.md) - Компоненты фильтрации (цена, площадь, комнаты, категория, локация, тип маркеров)
@@ -36,6 +37,8 @@
 ## UI Компоненты
 - [SearchInput](ui/SearchInput.md) - UI инпут поиска с лоадером и кнопкой очистки
 - [ComboboxInput](ui/ComboboxInput.md) - Универсальный комбобокс с автокомплитом и клавиатурной навигацией
+- [LocationSearch](ui/LocationSearch.md) - **Новый!** Универсальный поиск локаций через Mapbox Geocoding (shared компонент)
+- [LocationModeActions](ui/LocationModeActions.md) - **Новый!** Универсальные кнопки действий для режимов фильтра локации
 
 ## Services
 - [Mapbox Geocoding](services/mapbox-geocoding.md) - Сервис для поиска мест через Mapbox Geocoding API

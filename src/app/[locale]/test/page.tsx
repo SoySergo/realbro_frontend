@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapboxConfig } from '@/lib/mapbox';
 import { Sidebar } from '@/components/layout/sidebar';
-import { MapDrawPolygon } from '@/components/features/map/MapDrawPolygon';
+import { MapDraw } from '@/components/features/search/location-filter/draw/MapDraw';
 
 // Стиль карты - светлый для обеих тем
 const MAP_STYLE = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
@@ -65,7 +65,7 @@ export default function TestPage() {
                     </div>
 
                     {/* Компонент рисования полигонов */}
-                    {mapInstance && <MapDrawPolygon map={mapInstance} />}
+                    {mapInstance && <MapDraw map={mapInstance} />}
 
                     {/* Информационная панель */}
                     <div className="absolute bottom-4 left-4 z-50 bg-background/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-w-sm">

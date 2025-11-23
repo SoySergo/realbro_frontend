@@ -153,12 +153,12 @@ function featureToLocation(feature: MapboxFeature): MapboxLocation {
  */
 export function mapPlaceTypeToLocationType(
     placeType: MapboxPlaceType
-): 'country' | 'province' | 'city' | 'district' | 'neighborhood' {
+): 'country' | 'region' | 'province' | 'comarca' | 'city' | 'district' | 'neighborhood' {
     switch (placeType) {
         case 'country':
             return 'country';
         case 'region':
-            return 'province';
+            return 'region';
         case 'place':
         case 'locality':
             return 'city';

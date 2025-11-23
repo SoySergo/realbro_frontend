@@ -77,7 +77,8 @@
     "markerDisliked": "Pas aimé",
     "locationSearch": "Recherche de lieux",
     "locationDraw": "Dessiner",
-    "locationTimeFrom": "Temps jusqu'au point",
+    "locationTimeFrom": "Temps de trajet",
+    "locationIsochrone": "Temps de trajet",
     "locationRadius": "Rayon du point",
     "walking": "À pied",
     "cycling": "À vélo",
@@ -161,7 +162,7 @@
     "bedrooms": "chambres"
   },
   "isochrone": {
-    "title": "Outil d'isochrone",
+    "title": "Temps de trajet",
     "travelMode": "Mode de déplacement",
     "travelTime": "Temps de trajet",
     "selectLocation": "Sélectionnez un emplacement",
@@ -171,6 +172,9 @@
     "clear": "Effacer",
     "calculating": "Calcul de l'isochrone...",
     "hint": "Recherchez une adresse ou cliquez sur la carte pour sélectionner un point de départ",
+    "mapPoint": "Point sur la carte",
+    "address": "Adresse",
+    "selectedPoint": "Point sélectionné",
     "profiles": {
       "walking": "À pied",
       "cycling": "Vélo",
@@ -183,14 +187,84 @@
     }
   },
   "radius": {
-    "title": "Outil de rayon",
+    "title": "Rayon",
     "radiusDistance": "Distance du rayon",
     "selectLocation": "Sélectionnez un emplacement",
     "pickPoint": "Choisir un point sur la carte",
     "clickOnMap": "Cliquez sur la carte...",
     "searchPlaceholder": "Rechercher une adresse ou un lieu...",
-    "clear": "Effacer",
-    "hint": "Recherchez une adresse ou cliquez sur la carte pour sélectionner un point central",
-    "circleHint": "Un cercle d'un rayon de {radius} km sera tracé autour du point sélectionné"
+    "selectedPoint": "Point sélectionné",
+    "emptyStateHint": "Recherchez une adresse ou cliquez sur la carte pour sélectionner un point central",
+    "hint": "Un cercle d'un rayon de {radius} km sera tracé autour du point sélectionné",
+    "distance": {
+      "km": "km"
+    }
+  },
+  "locationSearch": {
+    "title": "Recherche de lieux",
+    "searchLabel": "Rechercher des lieux",
+    "searchPlaceholder": "Rechercher des villes, régions, pays...",
+    "selectedLocations": "Lieux sélectionnés",
+    "remove": "Supprimer",
+    "emptyState": "Aucun lieu sélectionné",
+    "emptyStateHint": "Utilisez la recherche ci-dessus pour trouver et sélectionner des lieux",
+    "types": {
+      "country": "pays",
+      "region": "région",
+      "province": "province",
+      "comarca": "comarca",
+      "city": "ville",
+      "district": "district",
+      "neighborhood": "quartier"
+    }
+  },
+  "locationFilter": {
+    "mode": "Mode",
+    "modes": {
+      "search": "Recherche",
+      "draw": "Dessiner une zone",
+      "isochrone": "Temps de trajet",
+      "radius": "Rayon"
+    },
+    "actions": {
+      "clear": "Effacer",
+      "save": "Sauvegarder",
+      "close": "Fermer"
+    },
+    "selectedPoint": "Point sélectionné",
+    "searchPlaceholder": "Rechercher une adresse ou un lieu...",
+    "searchMode": {
+      "description": "Rechercher et sélectionner des emplacements via Mapbox Geocoding"
+    },
+    "drawMode": {
+      "description": "Dessiner un polygone personnalisé sur la carte"
+    },
+    "isochroneMode": {
+      "description": "Définir une zone par temps de trajet"
+    },
+    "radiusMode": {
+      "description": "Définir un rayon depuis un point"
+    },
+    "comingSoon": "Bientôt disponible..."
+  },
+  "draw": {
+    "title": "Dessiner des polygones",
+    "startDrawing": "Commencer à dessiner",
+    "addPolygon": "Ajouter un polygone",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "undo": "Annuler le point",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "points": "points",
+    "polygonName": "Polygone {number}",
+    "drawnPolygons": "Polygones dessinés",
+    "emptyState": "Aucun polygone dessiné",
+    "emptyStateHint": "Commencez à dessiner pour créer une zone de recherche personnalisée",
+    "drawingInstructions": "Instructions de dessin:",
+    "clickToAddPoint": "Cliquez sur la carte pour ajouter des points",
+    "dragToMovePoint": "Faites glisser les points pour changer la forme",
+    "minThreePoints": "Minimum 3 points pour compléter le polygone",
+    "maxPolygonsReached": "Limite maximale de 4 polygones atteinte. Supprimez un polygone existant pour en ajouter un nouveau."
   }
 }
