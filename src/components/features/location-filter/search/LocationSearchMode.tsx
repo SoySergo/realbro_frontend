@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
 import { ComboboxInput } from '@/components/ui/combobox-input';
-import { LocationModeWrapper } from '@/components/features/search/location-filter/shared/LocationModeWrapper';
+import { LocationModeWrapper } from '@/components/features/location-filter/shared/LocationModeWrapper';
 import { SelectedLocationsList } from './SelectedLocationsList';
 import { BoundariesVisualLayer } from './BoundariesVisualLayer';
 import { useSearchModeState } from './hooks/useSearchModeState';

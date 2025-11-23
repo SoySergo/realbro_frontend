@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Map, List } from 'lucide-react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { SearchMap } from '@/components/features/map/SearchMap';
-import { FilterBar } from '@/components/features/search/FilterBar';
+import { FilterBar } from '@/components/features/filters/FilterBar';
 import { Button } from '@/components/ui/button';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { useFilterStore } from '@/store/filterStore';

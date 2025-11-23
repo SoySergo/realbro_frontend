@@ -7,13 +7,13 @@ import { useSearchFilters } from '@/hooks/useSearchFilters';
 
 
 // Импорты фильтров
-import { MarkerTypeFilter } from './filters/MarkerTypeFilter';
-import { LocationFilter } from './filters/LocationFilter';
-import { CategoryFilter } from './filters/CategoryFilter';
-import { PriceFilter } from './filters/PriceFilter';
-import { RoomsFilter } from './filters/RoomsFilter';
-import { AreaFilter } from './filters/AreaFilter';
-import { QueryTitleEditor } from './filters/QueryTitleEditor';
+import { MarkerTypeFilter } from './MarkerTypeFilter';
+import { LocationFilter } from './LocationFilter';
+import { CategoryFilter } from './CategoryFilter';
+import { PriceFilter } from './PriceFilter';
+import { RoomsFilter } from './RoomsFilter';
+import { AreaFilter } from './AreaFilter';
+import { QueryTitleEditor } from './QueryTitleEditor';
 
 
 /**

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { BaseMap } from './BaseMap';
-import { MapLocationController } from './MapLocationController';
+import { MapLocationController } from '../location-filter/MapLocationController';
 import { useFilterStore } from '@/store/filterStore';
 
 type SearchMapProps = {

@@ -1,17 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import mapboxgl from 'mapbox-gl';
 import { useFilterStore } from '@/store/filterStore';
-import { MapIsochrone } from '@/components/features/search/location-filter/isochrone/MapIsochrone';
-import { MapDraw } from '../search/location-filter/draw/MapDraw';
-import { MapRadius } from '../search/location-filter/radius';
-import { LocationSearchMode } from '../search/location-filter/search';
+import { MapIsochrone } from '@/components/features/location-filter/isochrone/MapIsochrone';
+import { MapDraw } from './draw/MapDraw';
+import { MapRadius } from './radius';
+import { LocationSearchMode } from './search';
 
-// TODO: Импорты для остальных режимов когда будут готовы
-// import { MapRadius } from '@/components/features/search/location-filter/radius/MapRadius';
-// import { MapDraw } from '@/components/features/search/location-filter/draw/MapDraw';
-// import { MapSearch } from '@/components/features/search/location-filter/search/MapSearch';
 
 type MapLocationControllerProps = {
     /** Инстанс карты Mapbox */
@@ -80,23 +75,6 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 />
             )}
 
-
-            {/* TODO: Остальные режимы */}
-            {/* 
-
-            {activeLocationMode === 'draw' && (
-                <MapDraw 
-                    map={map} 
-                    onClose={handleClosePanel}
-                />
-            )}
-
-            {activeLocationMode === 'search' && (
-                <MapSearch 
-                    map={map} 
-                    onClose={handleClosePanel}
-                />
-            )} */}
         </div>
     );
 }

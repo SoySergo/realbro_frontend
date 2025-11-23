@@ -3,15 +3,14 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
+import * as turf from '@turf/turf';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LocationSearch } from '@/components/features/search/location-filter/shared/LocationSearch';
-import { LocationModeWrapper } from '@/components/features/search/location-filter/shared/LocationModeWrapper';
-import { IsochroneControls } from './IsochroneControls';
-import { getIsochrone, getProfileColor } from '@/services/mapbox-isochrone';
-import type { IsochroneProfile } from '@/services/mapbox-isochrone';
+import { LocationSearch } from '@/components/features/location-filter/shared/LocationSearch';
+import { LocationModeWrapper } from '@/components/features/location-filter/shared/LocationModeWrapper';
+import { RadiusControls } from './RadiusControls';
 
-type MapIsochroneProps = {
+type MapRadiusProps = {
     /** Инстанс карты Mapbox */
     map: mapboxgl.Map;
     /** Колбэк для закрытия панели */
@@ -20,129 +19,107 @@ type MapIsochroneProps = {
     className?: string;
 };
 
+// Цвет круга радиуса
+const RADIUS_COLOR = '#3B82F6'; // Синий
+
 /**
- * Компонент для работы с изохронами на карте
- * Позволяет выбрать точку на карте или через поиск, выбрать профиль и время
+ * Компонент для работы с радиусом на карте
+ * Позволяет пользователю выбрать точку на карте (кликом или через поиск) и радиус
+ * Использует двухслойную систему: локальное состояние + глобальное (store/URL)
  */
-export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
-    const t = useTranslations('isochrone');
+export function MapRadius({ map, onClose, className }: MapRadiusProps) {
+    const t = useTranslations('radius');
 
     // Состояние UI
-    const [selectedProfile, setSelectedProfile] = useState<IsochroneProfile>('walking');
-    const [selectedMinutes, setSelectedMinutes] = useState(15);
+    const [selectedRadius, setSelectedRadius] = useState(5);
     const [isSelectingPoint, setIsSelectingPoint] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
 
     // Состояние данных
     const [selectedCoordinates, setSelectedCoordinates] = useState<[number, number] | null>(null);
     const [selectedName, setSelectedName] = useState<string>('');
     const [fullAddress, setFullAddress] = useState<string>('');
-    const [isochroneData, setIsochroneData] = useState<number[][][] | null>(null);
 
     // Маркер на карте
     const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
 
-    // Очистка изохрона с карты
-    const clearIsochroneFromMap = useCallback(() => {
+    // Очистка радиуса с карты
+    const clearRadiusFromMap = useCallback(() => {
         try {
-            if (map && map.getLayer('isochrone-fill')) {
-                map.removeLayer('isochrone-fill');
+            if (map && map.getLayer('radius-fill')) {
+                map.removeLayer('radius-fill');
             }
-            if (map && map.getLayer('isochrone-line')) {
-                map.removeLayer('isochrone-line');
+            if (map && map.getLayer('radius-line')) {
+                map.removeLayer('radius-line');
             }
-            if (map && map.getSource('isochrone')) {
-                map.removeSource('isochrone');
+            if (map && map.getSource('radius')) {
+                map.removeSource('radius');
             }
         } catch (error) {
-            console.error('Error clearing isochrone:', error);
+            console.error('Error clearing radius:', error);
         }
     }, [map]);
 
-    // Отрисовка изохрона на карте
-    const drawIsochroneOnMap = useCallback(
-        (polygon: number[][][], color: string) => {
-            // Удаляем предыдущий изохрон
-            clearIsochroneFromMap();
+    // Отрисовка радиуса на карте
+    const drawRadiusOnMap = useCallback(
+        (center: [number, number], radiusKm: number) => {
+            // Удаляем предыдущий радиус
+            clearRadiusFromMap();
+
+            // Создаём круг с помощью Turf.js
+            const circle = turf.circle(center, radiusKm, {
+                steps: 64,
+                units: 'kilometers',
+            });
 
             // Добавляем источник данных
-            map.addSource('isochrone', {
+            map.addSource('radius', {
                 type: 'geojson',
-                data: {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                        type: 'Polygon',
-                        coordinates: polygon,
-                    },
-                },
+                data: circle,
             });
 
             // Добавляем слой заливки
             map.addLayer({
-                id: 'isochrone-fill',
+                id: 'radius-fill',
                 type: 'fill',
-                source: 'isochrone',
+                source: 'radius',
                 paint: {
-                    'fill-color': color,
-                    'fill-opacity': 0.3,
+                    'fill-color': RADIUS_COLOR,
+                    'fill-opacity': 0.2,
                 },
             });
 
             // Добавляем слой границы
             map.addLayer({
-                id: 'isochrone-line',
+                id: 'radius-line',
                 type: 'line',
-                source: 'isochrone',
+                source: 'radius',
                 paint: {
-                    'line-color': color,
+                    'line-color': RADIUS_COLOR,
                     'line-width': 2,
                 },
             });
 
-            // Центрируем карту на изохроне
-            const bounds = new mapboxgl.LngLatBounds();
-            polygon[0].forEach((coord) => {
-                bounds.extend(coord as [number, number]);
-            });
-            map.fitBounds(bounds, { padding: 50 });
+            // Центрируем карту на круге
+            const bbox = turf.bbox(circle);
+            map.fitBounds(
+                [
+                    [bbox[0], bbox[1]],
+                    [bbox[2], bbox[3]],
+                ],
+                { padding: 50 }
+            );
 
-            console.log('Isochrone drawn on map');
+            console.log('Radius drawn on map:', { center, radiusKm });
         },
-        [map, clearIsochroneFromMap]
+        [map, clearRadiusFromMap]
     );
 
-    // Автоматическое построение изохрона при изменении параметров
+    // Автоматическое обновление радиуса при изменении параметров
     useEffect(() => {
         if (!selectedCoordinates) return;
 
-        const buildIsochrone = async () => {
-            setIsLoading(true);
-            try {
-                console.log('Building isochrone:', { selectedProfile, selectedMinutes, selectedCoordinates });
-
-                const polygon = await getIsochrone({
-                    coordinates: selectedCoordinates,
-                    profile: selectedProfile,
-                    minutes: selectedMinutes,
-                });
-
-                if (polygon) {
-                    setIsochroneData(polygon);
-                    const color = getProfileColor(selectedProfile);
-                    drawIsochroneOnMap(polygon, color);
-                } else {
-                    console.error('Failed to build isochrone');
-                }
-            } catch (error) {
-                console.error('Error building isochrone:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        buildIsochrone();
-    }, [selectedProfile, selectedMinutes, selectedCoordinates, drawIsochroneOnMap]);
+        drawRadiusOnMap(selectedCoordinates, selectedRadius);
+    }, [selectedRadius, selectedCoordinates, drawRadiusOnMap]);
 
     // Обработчик выбора точки на карте
     useEffect(() => {
@@ -160,8 +137,8 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
                 marker.setLngLat(coordinates);
             } else {
                 const newMarker = new mapboxgl.Marker({
-                    color: getProfileColor(selectedProfile),
-                    draggable: true
+                    color: RADIUS_COLOR,
+                    draggable: true,
                 })
                     .setLngLat(coordinates)
                     .addTo(map);
@@ -195,7 +172,7 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
             map.off('click', handleMapClick);
             map.getCanvas().style.cursor = '';
         };
-    }, [isSelectingPoint, map, marker, selectedProfile, t]);
+    }, [isSelectingPoint, map, marker, t]);
 
     // Обработчик выбора локации через поиск
     const handleLocationSelect = (coordinates: [number, number], name: string, address?: string) => {
@@ -208,8 +185,8 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
             marker.setLngLat(coordinates);
         } else {
             const newMarker = new mapboxgl.Marker({
-                color: getProfileColor(selectedProfile),
-                draggable: true
+                color: RADIUS_COLOR,
+                draggable: true,
             })
                 .setLngLat(coordinates)
                 .addTo(map);
@@ -240,8 +217,7 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
         setSelectedCoordinates(null);
         setSelectedName('');
         setFullAddress('');
-        setIsochroneData(null);
-        clearIsochroneFromMap();
+        clearRadiusFromMap();
 
         // Удаляем маркер
         if (marker) {
@@ -249,7 +225,7 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
             setMarker(null);
         }
 
-        console.log('Isochrone cleared');
+        console.log('Radius cleared');
     };
 
     // Обработчик изменения названия
@@ -258,52 +234,21 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
         console.log('Name changed:', newName);
     };
 
-
-    // Обновление цвета маркера при смене профиля
-    useEffect(() => {
-        if (marker && selectedCoordinates) {
-            const color = getProfileColor(selectedProfile);
-            const lngLat = marker.getLngLat();
-            marker.remove();
-            const newMarker = new mapboxgl.Marker({
-                color,
-                draggable: true
-            })
-                .setLngLat(lngLat)
-                .addTo(map);
-
-            // Добавляем курсор pointer
-            const markerElement = newMarker.getElement();
-            markerElement.style.cursor = 'pointer';
-
-            // Обработчик перетаскивания маркера
-            newMarker.on('dragend', () => {
-                const lngLat = newMarker.getLngLat();
-                const newCoordinates: [number, number] = [lngLat.lng, lngLat.lat];
-                setSelectedCoordinates(newCoordinates);
-                console.log('Marker dragged to:', newCoordinates);
-            });
-
-            setMarker(newMarker);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedProfile]);
-
     // Cleanup при размонтировании
     useEffect(() => {
         return () => {
             try {
-                if (map && map.getLayer('isochrone-fill')) {
-                    map.removeLayer('isochrone-fill');
+                if (map && map.getLayer('radius-fill')) {
+                    map.removeLayer('radius-fill');
                 }
-                if (map && map.getLayer('isochrone-line')) {
-                    map.removeLayer('isochrone-line');
+                if (map && map.getLayer('radius-line')) {
+                    map.removeLayer('radius-line');
                 }
-                if (map && map.getSource('isochrone')) {
-                    map.removeSource('isochrone');
+                if (map && map.getSource('radius')) {
+                    map.removeSource('radius');
                 }
             } catch (error) {
-                console.error('Error cleaning up isochrone:', error);
+                console.error('Error cleaning up radius:', error);
             }
 
             if (marker) {
@@ -320,24 +265,23 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
     // Обработчик применения фильтра (сохранение в URL)
     const handleApply = () => {
         // TODO: Добавить логику пуша в URL search params
-        console.log('Apply isochrone filter:', {
+        console.log('Apply radius filter:', {
             coordinates: selectedCoordinates,
-            profile: selectedProfile,
-            minutes: selectedMinutes,
-            polygon: isochroneData,
+            radiusKm: selectedRadius,
+            name: selectedName,
         });
     };
 
     // Обработчик закрытия панели
     const handleClose = () => {
         onClose?.();
-        console.log('Close isochrone panel');
+        console.log('Close radius panel');
     };
 
     return (
         <LocationModeWrapper
             title={t('title')}
-            hasLocalData={!!selectedCoordinates || !!isochroneData}
+            hasLocalData={!!selectedCoordinates}
             onClear={handleClear}
             onApply={handleApply}
             onClose={handleClose}
@@ -345,7 +289,6 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
         >
             {/* Поиск адреса */}
             <div className="space-y-2">
-                {/* <label className="text-sm font-medium text-text-primary">{t('selectLocation')}</label> */}
                 <LocationSearch
                     onLocationSelect={handleLocationSelect}
                     selectedCoordinates={selectedCoordinates}
@@ -353,7 +296,6 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
                     fullAddress={fullAddress}
                     onClear={handleClear}
                     onNameChange={handleNameChange}
-
                     placeholder={t('searchPlaceholder')}
                 />
             </div>
@@ -371,23 +313,16 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
                 </Button>
             )}
 
-            {/* Управление изохроном */}
+            {/* Управление радиусом */}
             {selectedCoordinates && (
-                <>
-                    <div className="border-t border-border pt-4">
-                        <IsochroneControls
-                            selectedProfile={selectedProfile}
-                            onProfileChange={setSelectedProfile}
-                            selectedMinutes={selectedMinutes}
-                            onMinutesChange={setSelectedMinutes}
-                        />
-                    </div>
+                <div className="border-t border-border pt-4">
+                    <RadiusControls selectedRadius={selectedRadius} onRadiusChange={setSelectedRadius} />
+                </div>
+            )}
 
-                    {/* Индикатор загрузки */}
-                    {isLoading && (
-                        <div className="text-center text-sm text-text-secondary">{t('calculating')}</div>
-                    )}
-                </>
+            {/* Подсказка */}
+            {!selectedCoordinates && (
+                <p className="text-xs text-text-tertiary">{t('emptyStateHint')}</p>
             )}
         </LocationModeWrapper>
     );
