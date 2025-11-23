@@ -56,6 +56,14 @@ export function useActionsPopup({
                 actionsPopupRef.current.remove();
                 actionsPopupRef.current = null;
             }
+            // Размонтируем React root асинхронно
+            if (rootRef.current) {
+                const root = rootRef.current;
+                rootRef.current = null;
+                queueMicrotask(() => {
+                    root.unmount();
+                });
+            }
             return;
         }
 
@@ -85,10 +93,13 @@ export function useActionsPopup({
 
             // Обработчик закрытия popup
             popup.on('close', () => {
-                // Размонтируем React root
+                // Размонтируем React root асинхронно
                 if (rootRef.current) {
-                    rootRef.current.unmount();
+                    const root = rootRef.current;
                     rootRef.current = null;
+                    queueMicrotask(() => {
+                        root.unmount();
+                    });
                 }
                 actionsPopupRef.current = null;
                 // Сбрасываем выделение полигона
@@ -161,10 +172,13 @@ export function useActionsPopup({
     // Cleanup при размонтировании компонента
     useEffect(() => {
         return () => {
-            // Размонтируем React root
+            // Размонтируем React root асинхронно
             if (rootRef.current) {
-                rootRef.current.unmount();
+                const root = rootRef.current;
                 rootRef.current = null;
+                queueMicrotask(() => {
+                    root.unmount();
+                });
             }
         };
     }, []);

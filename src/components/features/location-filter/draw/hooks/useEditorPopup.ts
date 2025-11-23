@@ -56,6 +56,15 @@ export function useEditorPopup({
                 editorPopupRef.current.remove();
                 editorPopupRef.current = null;
             }
+            // Размонтируем React root асинхронно
+            if (rootRef.current) {
+                const root = rootRef.current;
+                rootRef.current = null;
+                // Откладываем размонтирование, чтобы не делать это во время рендера
+                queueMicrotask(() => {
+                    root.unmount();
+                });
+            }
             return;
         }
 
@@ -119,10 +128,14 @@ export function useEditorPopup({
     // Cleanup при размонтировании компонента
     useEffect(() => {
         return () => {
-            // Размонтируем React root
+            // Размонтируем React root асинхронно
             if (rootRef.current) {
-                rootRef.current.unmount();
+                const root = rootRef.current;
                 rootRef.current = null;
+                // Откладываем размонтирование, чтобы не делать это во время рендера
+                queueMicrotask(() => {
+                    root.unmount();
+                });
             }
         };
     }, []);

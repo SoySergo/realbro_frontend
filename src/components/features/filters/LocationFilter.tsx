@@ -67,7 +67,7 @@ export function LocationFilter() {
 
         switch (locationFilter.mode) {
             case 'search':
-                return locationFilter.selectedLocations?.length || 0;
+                return locationFilter.selectedLocations ? 1 : 0;
             case 'draw':
                 return locationFilter.polygon ? 1 : 0;
             case 'isochrone':
@@ -115,25 +115,31 @@ export function LocationFilter() {
                 align="start"
             >
                 <div className="space-y-1">
-                    {locationModes.map(({ mode, icon: Icon, label }) => (
-                        <button
-                            key={mode}
-                            onClick={() => handleModeSelect(mode)}
-                            className={cn(
-                                'w-full flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer',
-                                'text-sm text-text-secondary transition-colors duration-150',
-                                // Ховер: синий фон в обеих темах
-                                'hover:bg-brand-primary-light hover:text-brand-primary',
-                                'dark:hover:bg-brand-primary dark:hover:text-white',
-                                // Фокус
-                                'focus:outline-none focus:bg-brand-primary-light focus:text-brand-primary',
-                                'dark:focus:bg-brand-primary dark:focus:text-white'
-                            )}
-                        >
-                            <Icon className="w-4 h-4 shrink-0" />
-                            <span>{label}</span>
-                        </button>
-                    ))}
+                    {locationModes.map(({ mode, icon: Icon, label }) => {
+                        const isActiveMode = currentMode != null && currentMode === mode;
+                        return (
+                            <button
+                                key={mode}
+                                onClick={() => handleModeSelect(mode)}
+                                className={cn(
+                                    'w-full flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer',
+                                    'text-sm transition-colors duration-150',
+                                    'focus:outline-none',
+                                    // Активный режим
+                                    isActiveMode && 'bg-brand-primary-light text-brand-primary dark:bg-brand-primary dark:text-white',
+                                    // Неактивный режим
+                                    !isActiveMode && [
+                                        'text-text-secondary',
+                                        'hover:bg-brand-primary-light hover:text-brand-primary',
+                                        'dark:hover:bg-brand-primary dark:hover:text-white'
+                                    ]
+                                )}
+                            >
+                                <Icon className="w-4 h-4 shrink-0" />
+                                <span>{label}</span>
+                            </button>
+                        );
+                    })}
                 </div>
             </PopoverContent>
         </Popover>

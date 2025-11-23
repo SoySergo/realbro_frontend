@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
 import { BOUNDARIES_LAYER_IDS } from '../../shared/constants/boundariesStyles';
-import { boundaryToLocationItem, hasValidWikidata } from '../../shared/utils/boundariesHelpers';
+import { boundaryToLocationItem, hasValidWikidata } from '../utils/boundariesHelpers';
 import type { BoundaryFeature } from '@/types/boundary';
 import type { LocationItem } from '@/types/filter';
 
