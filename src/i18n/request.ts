@@ -1,8 +1,9 @@
 import { getRequestConfig } from 'next-intl/server';
-import { routing } from './routing';
+import { routing } from '@/shared/config/routing';
 
 /**
  * Конфигурация для загрузки переводов на основе локали
+ * Этот файл требуется next-intl для работы с App Router
  */
 export default getRequestConfig(async ({ requestLocale }) => {
     // Получаем локаль из запроса

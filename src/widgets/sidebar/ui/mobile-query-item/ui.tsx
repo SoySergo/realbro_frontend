@@ -1,0 +1,96 @@
+'use client';
+
+import { MapPin, X } from 'lucide-react';
+import { cn } from '@/shared/lib/utils';
+import type { SearchQuery } from '@/widgets/sidebar/model';
+import { forwardRef } from 'react';
+
+type MobileQueryItemProps = {
+    query: SearchQuery;
+    isActive: boolean;
+    canDelete: boolean;
+    onSelect: () => void;
+    onDelete?: () => void;
+};
+
+// Используем forwardRef для возможности скролла к элементу
+export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
+    function MobileQueryItem({ query, isActive, canDelete, onSelect, onDelete }, ref) {
+        return (
+            <div
+                ref={ref}
+                className={cn(
+                    'w-full flex items-center rounded-lg cursor-pointer relative',
+                    'transition-colors duration-150 border-2',
+                    'gap-3 px-4 py-3',
+                    isActive
+                        ? 'bg-brand-primary-light border-brand-primary text-text-primary'
+                        : 'border-transparent text-text-secondary active:bg-background-tertiary'
+                )}
+            >
+                {/* Кликабельная область для выбора query */}
+                <div
+                    onClick={onSelect}
+                    className="absolute inset-0 cursor-pointer"
+                    aria-label={`Select ${query.title}`}
+                />
+
+                <MapPin
+                    className={cn(
+                        'w-5 h-5 shrink-0 relative z-10 pointer-events-none',
+                        isActive ? 'text-brand-primary' : 'text-text-tertiary'
+                    )}
+                />
+                <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
+                    <div className="font-medium truncate text-base">{query.title}</div>
+                    <QueryStats query={query} className="mt-0.5 text-sm" />
+                </div>
+
+                {/* Кнопка удаления */}
+                {canDelete && onDelete && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete();
+                        }}
+                        className="rounded flex items-center justify-center active:bg-error/10 active:text-error transition-colors w-8 h-8 cursor-pointer relative z-10"
+                        aria-label={`Delete ${query.title}`}
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                )}
+            </div>
+        );
+    }
+);
+
+// Компонент для отображения статистики
+function QueryStats({ query, className }: { query: SearchQuery; className?: string }) {
+    return (
+        <div className={cn('flex items-center gap-1.5 text-text-tertiary', className)}>
+            {query.isLoading ? (
+                <>
+                    <div className="h-3 w-16 bg-text-tertiary/20 rounded animate-pulse" />
+                    <span>•</span>
+                    <div className="h-3 w-8 bg-text-tertiary/20 rounded animate-pulse" />
+                </>
+            ) : (
+                <>
+                    {query.resultsCount !== undefined && (
+                        <span className="text-blue-600 dark:text-blue-400 font-medium">
+                            {query.resultsCount.toLocaleString()}
+                        </span>
+                    )}
+                    {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
+                        <>
+                            <span>•</span>
+                            <span className="text-red-600 dark:text-red-400 font-medium">
+                                +{query.newResultsCount}
+                            </span>
+                        </>
+                    )}
+                </>
+            )}
+        </div>
+    );
+}

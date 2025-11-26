@@ -1,0 +1,1 @@
+export { DesktopQueryItem } from './ui';

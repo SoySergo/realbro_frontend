@@ -1,0 +1,1 @@
+export { SelectedLocationsList } from './ui';

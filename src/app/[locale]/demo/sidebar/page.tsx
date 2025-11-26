@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { Sidebar } from '@/components/layout/sidebar';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useSidebarStore } from '@/widgets/sidebar';
+import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
 import { Info } from 'lucide-react';
 
 export default function SidebarDemoPage() {
@@ -16,10 +16,10 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Apartments in Downtown',
                 filters: {
-                    location: 'City Center',
-                    priceMin: 300000,
-                    priceMax: 600000,
-                    bedrooms: 2,
+                    adminLevel8: [1],
+                    minPrice: 300000,
+                    maxPrice: 600000,
+                    rooms: [2],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 20) + 1,
@@ -27,10 +27,10 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Luxury Villas',
                 filters: {
-                    location: 'Suburbs',
-                    priceMin: 800000,
-                    bedrooms: 4,
-                    propertyType: 'Villa',
+                    adminLevel8: [2],
+                    minPrice: 800000,
+                    rooms: [4],
+                    categoryIds: [1],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 15) + 1,
@@ -38,9 +38,9 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Studio Apartments',
                 filters: {
-                    location: 'University District',
-                    priceMax: 200000,
-                    bedrooms: 1,
+                    adminLevel8: [3],
+                    maxPrice: 200000,
+                    rooms: [1],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 30) + 1,
@@ -55,10 +55,10 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Apartments in Downtown',
                 filters: {
-                    location: 'City Center',
-                    priceMin: 300000,
-                    priceMax: 600000,
-                    bedrooms: 2,
+                    adminLevel8: [1],
+                    minPrice: 300000,
+                    maxPrice: 600000,
+                    rooms: [2],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 20) + 1,
@@ -66,10 +66,10 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Luxury Villas',
                 filters: {
-                    location: 'Suburbs',
-                    priceMin: 800000,
-                    bedrooms: 4,
-                    propertyType: 'Villa',
+                    adminLevel8: [2],
+                    minPrice: 800000,
+                    rooms: [4],
+                    categoryIds: [1],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 15) + 1,
@@ -77,9 +77,9 @@ export default function SidebarDemoPage() {
             addQuery({
                 title: 'Studio Apartments',
                 filters: {
-                    location: 'University District',
-                    priceMax: 200000,
-                    bedrooms: 1,
+                    adminLevel8: [3],
+                    maxPrice: 200000,
+                    rooms: [1],
                 },
                 resultsCount: Math.floor(Math.random() * 9900) + 100,
                 newResultsCount: Math.floor(Math.random() * 30) + 1,
@@ -159,8 +159,8 @@ export default function SidebarDemoPage() {
                                     addQuery({
                                         title,
                                         filters: {
-                                            location: 'Custom Location',
-                                            bedrooms: Math.floor(Math.random() * 4) + 1,
+                                            adminLevel8: [Math.floor(Math.random() * 10) + 1],
+                                            rooms: [Math.floor(Math.random() * 4) + 1],
                                         },
                                         isLoading: true,
                                     });

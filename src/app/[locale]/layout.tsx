@@ -1,11 +1,9 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { AuthErrorHandler } from "@/components/layout/AuthErrorHandler";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { setRequestLocale } from 'next-intl/server';
+import { AuthErrorHandler, ThemeProvider } from "@/app/providers";
+import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { routing } from '@/i18n/routing';
+import { routing } from '@/shared/config/routing';
 import '../globals.css';
 
 // Основной шрифт - Inter (чистый, профессиональный)
@@ -48,7 +46,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     setRequestLocale(locale);
 
     // Загружаем переводы для локали
-    const messages = await getMessages();
+    const messages = await getMessages({ locale });
 
     return (
         <html lang={locale} suppressHydrationWarning>

@@ -1,4 +1,4 @@
-import { Sidebar } from '@/components/layout/sidebar';
+import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { setRequestLocale } from 'next-intl/server';
 
 type Props = {

@@ -1,0 +1,20 @@
+import { getRequestConfig } from 'next-intl/server';
+import { routing } from './routing';
+
+/**
+ * Конфигурация для загрузки переводов на основе локали
+ */
+export default getRequestConfig(async ({ requestLocale }) => {
+    // Получаем локаль из запроса
+    let locale = await requestLocale;
+
+    // Проверяем, что локаль поддерживается
+    if (!locale || !routing.locales.includes(locale as 'ru' | 'en' | 'fr')) {
+        locale = routing.defaultLocale;
+    }
+
+    return {
+        locale,
+        messages: (await import(`../../messages/${locale}.json`)).default,
+    };
+});

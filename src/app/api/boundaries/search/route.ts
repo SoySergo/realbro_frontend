@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import env from '@/config/env';
+import env from '@/shared/config/env';
 
 /**
  * API для поиска границ (boundaries) по названию
