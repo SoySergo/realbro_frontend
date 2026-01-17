@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { BaseMap } from '../base-map';
 import { MapLocationController } from '@/features/location-filter';
+import { MobileLocationMode } from '@/widgets/mobile-location-mode';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 
 type SearchMapProps = {
@@ -43,20 +44,29 @@ export function SearchMap({ initialCenter, initialZoom }: SearchMapProps) {
     // }, [mapInstance, activeLocationMode]);
 
     return (
-        <BaseMap
-            initialCenter={initialCenter}
-            initialZoom={initialZoom}
-            onMapLoad={handleMapLoad}
-        >
-            {/* Контроллер режимов фильтра локации */}
+        <>
+            {/* Мобильный режим локации - заменяет верхний сайдбар */}
             {mapInstance && activeLocationMode && (
-                <MapLocationController map={mapInstance} />
+                <MobileLocationMode map={mapInstance} />
             )}
 
-            {/* TODO: Когда нет активного режима - показывать маркеры недвижимости */}
-            {/* {mapInstance && !activeLocationMode && (
-                <PropertyMarkers map={mapInstance} />
-            )} */}
-        </BaseMap>
+            <BaseMap
+                initialCenter={initialCenter}
+                initialZoom={initialZoom}
+                onMapLoad={handleMapLoad}
+            >
+                {/* Контроллер режимов фильтра локации (только desktop) */}
+                {mapInstance && activeLocationMode && (
+                    <div className="hidden md:block">
+                        <MapLocationController map={mapInstance} />
+                    </div>
+                )}
+
+                {/* TODO: Когда нет активного режима - показывать маркеры недвижимости */}
+                {/* {mapInstance && !activeLocationMode && (
+                    <PropertyMarkers map={mapInstance} />
+                )} */}
+            </BaseMap>
+        </>
     );
 }

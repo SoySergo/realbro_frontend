@@ -189,13 +189,14 @@
   "radius": {
     "title": "Rayon",
     "radiusDistance": "Distance du rayon",
-    "selectLocation": "Sélectionnez un emplacement",
+    "selectLocation": "Sélectionner un emplacement",
     "pickPoint": "Choisir un point sur la carte",
     "clickOnMap": "Cliquez sur la carte...",
-    "searchPlaceholder": "Rechercher une adresse ou un lieu...",
+    "searchPlaceholder": "Trouver une adresse ou un lieu...",
     "selectedPoint": "Point sélectionné",
-    "emptyStateHint": "Recherchez une adresse ou cliquez sur la carte pour sélectionner un point central",
-    "hint": "Un cercle d'un rayon de {radius} km sera tracé autour du point sélectionné",
+    "pointName": "Nom du point",
+    "emptyStateHint": "Trouvez une adresse ou cliquez sur la carte pour sélectionner un point central",
+    "hint": "Un cercle d'un rayon de {radius} km sera dessiné autour du point sélectionné",
     "distance": {
       "km": "km"
     }

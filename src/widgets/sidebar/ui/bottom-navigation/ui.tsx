@@ -6,6 +6,7 @@ import { Search, MessageCircle, User, Settings } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import { useTranslations } from 'next-intl';
+import { useFilterStore } from '@/widgets/search-filters-bar';
 
 // Навигационные элементы для мобильного меню
 const navigationItems = [
@@ -18,6 +19,12 @@ const navigationItems = [
 export function BottomNavigation() {
     const pathname = usePathname();
     const t = useTranslations('sidebar');
+    const { activeLocationMode } = useFilterStore();
+
+    // Скрываем навигацию когда активен режим локации
+    if (activeLocationMode) {
+        return null;
+    }
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background-secondary border-t border-border md:hidden">

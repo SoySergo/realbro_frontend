@@ -11,3 +11,5 @@ export {
     LocationModeActions,
     LocationSearch,
 } from './ui';
+
+export { LocationFilterMobile } from './ui/mobile-ui';

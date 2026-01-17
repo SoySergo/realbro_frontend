@@ -1,1 +1,1 @@
-export { CategoryFilter } from './ui';
+export { CategoryFilter, CategoryFilterMobile } from './ui';

@@ -82,10 +82,10 @@ export function RadiusControls({ selectedRadius, onRadiusChange }: RadiusControl
             </div>
 
             {/* Визуальная подсказка */}
-            <div className="flex items-center gap-2 text-xs text-text-secondary bg-background-secondary p-3 rounded-lg">
+            {/* <div className="flex items-center gap-2 text-xs text-text-secondary bg-background-secondary p-3 rounded-lg">
                 <Circle className="h-4 w-4 shrink-0" />
                 <p>{t('hint', { radius: selectedRadius })}</p>
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -1,1 +1,1 @@
-export { RoomsFilter } from './ui';
+export { RoomsFilter, RoomsFilterMobile } from './ui';

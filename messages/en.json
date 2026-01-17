@@ -188,13 +188,14 @@
   },
   "radius": {
     "title": "Radius",
-    "radiusDistance": "Radius Distance",
-    "selectLocation": "Select Location",
+    "radiusDistance": "Radius distance",
+    "selectLocation": "Select location",
     "pickPoint": "Pick point on map",
-    "clickOnMap": "Click on map...",
-    "searchPlaceholder": "Search for address or place...",
-    "selectedPoint": "Selected Point",
-    "emptyStateHint": "Search for an address or click on the map to select a center point",
+    "clickOnMap": "Click on the map...",
+    "searchPlaceholder": "Find an address or place...",
+    "selectedPoint": "Selected point",
+    "pointName": "Point name",
+    "emptyStateHint": "Find an address or click on the map to select a center point",
     "hint": "A circle with a radius of {radius} km will be drawn around the selected point",
     "distance": {
       "km": "km"

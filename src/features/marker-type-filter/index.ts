@@ -1,1 +1,1 @@
-export { MarkerTypeFilter } from './ui';
+export { MarkerTypeFilter, MarkerTypeFilterMobile } from './ui';
