@@ -3,13 +3,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { Search, MessageCircle, User, Settings, Plus } from 'lucide-react';
+import { Search, MessageCircle, User, Settings, Plus, LogIn } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Separator } from '@/shared/ui/separator';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
+import { useAuth } from '@/features/auth';
 import { DesktopQueryItem } from '../desktop-query-item';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/shared/config/routing';
 import Image from 'next/image';
 
 // Навигационные элементы
@@ -22,6 +24,9 @@ const navigationItems = [
 
 export function DesktopSidebar() {
     const t = useTranslations('sidebar');
+    const tAuth = useTranslations('auth');
+    const { isAuthenticated } = useAuth();
+    const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
         setExpanded,
@@ -43,6 +48,11 @@ export function DesktopSidebar() {
     const [showBottomFade, setShowBottomFade] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const previousQueriesLengthRef = useRef(queries.length);
+
+    // Отслеживаем монтирование компонента для предотвращения hydration mismatch
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     // Синхронизация фильтров при смене активной вкладки
     useEffect(() => {
@@ -149,7 +159,7 @@ export function DesktopSidebar() {
         <aside
             className={cn(
                 'fixed left-0 top-0 h-screen bg-background-secondary border-r border-border',
-                'transition-all duration-300 ease-in-out z-50',
+                'transition-all duration-300 ease-in-out z-60',
                 isExpanded ? 'w-80' : 'w-16'
             )}
             onMouseEnter={() => setExpanded(true)}
@@ -246,36 +256,63 @@ export function DesktopSidebar() {
 
                 {/* Нижняя навигация */}
                 <div className="border-t border-border p-2 space-y-1 shrink-0">
-                    {navigationItems.map((item) => (
-                        <button
-                            key={item.id}
-                            className={cn(
-                                'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
-                                'transition-colors duration-150 relative',
-                                isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
-                            )}
-                        >
-                            <item.icon className="w-5 h-5 shrink-0" />
-                            {isExpanded && (
-                                <span className="text-sm font-medium">
-                                    {t(item.labelKey)}
-                                </span>
-                            )}
-                            {'badge' in item && item.badge && (
-                                <span
+                    {navigationItems.map((item) => {
+                        // Условная навигация для профиля
+                        // Показываем "Войти" если не смонтировано (для SSR) или если не авторизован
+                        if (item.id === 'profile' && (!isMounted || !isAuthenticated)) {
+                            return (
+                                <Link
+                                    key="login"
+                                    href="?modal=login"
                                     className={cn(
-                                        'absolute w-5 h-5 rounded-full',
-                                        'bg-error text-white text-xs font-bold',
-                                        'flex items-center justify-center',
-                                        isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
+                                        'w-full flex items-center gap-3 rounded-lg cursor-pointer',
+                                        'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
+                                        'transition-colors duration-150 relative',
+                                        isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
                                     )}
                                 >
-                                    {item.badge}
-                                </span>
-                            )}
-                        </button>
-                    ))}
+                                    <LogIn className="w-5 h-5 shrink-0" />
+                                    {isExpanded && (
+                                        <span className="text-sm font-medium">
+                                            {tAuth('signIn')}
+                                        </span>
+                                    )}
+                                </Link>
+                            );
+                        }
+
+                        return (
+                            <Link
+                                key={item.id}
+                                href={item.href}
+                                className={cn(
+                                    'w-full flex items-center gap-3 rounded-lg cursor-pointer',
+                                    'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
+                                    'transition-colors duration-150 relative',
+                                    isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
+                                )}
+                            >
+                                <item.icon className="w-5 h-5 shrink-0" />
+                                {isExpanded && (
+                                    <span className="text-sm font-medium">
+                                        {t(item.labelKey)}
+                                    </span>
+                                )}
+                                {'badge' in item && item.badge && (
+                                    <span
+                                        className={cn(
+                                            'absolute w-5 h-5 rounded-full',
+                                            'bg-error text-white text-xs font-bold',
+                                            'flex items-center justify-center',
+                                            isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
+                                        )}
+                                    >
+                                        {item.badge}
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
 
                     {/* Переключатели темы и языка */}
                     {isExpanded && (

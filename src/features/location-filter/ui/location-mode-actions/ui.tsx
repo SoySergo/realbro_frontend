@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
-import { X, Trash2, Check } from 'lucide-react';
+import { X, Trash2, Check, Loader2 } from 'lucide-react';
 
 type LocationModeActionsProps = {
     /** Есть ли локальные данные для очистки */
@@ -15,6 +15,8 @@ type LocationModeActionsProps = {
     onClose?: () => void;
     /** Показывать ли кнопку закрытия */
     showClose?: boolean;
+    /** Состояние загрузки при сохранении */
+    isSaving?: boolean;
     /** CSS классы для контейнера */
     className?: string;
 };
@@ -29,6 +31,7 @@ export function LocationModeActions({
     onApply,
     onClose,
     showClose = true,
+    isSaving = false,
     className,
 }: LocationModeActionsProps) {
     const t = useTranslations('locationFilter.actions');
@@ -41,7 +44,7 @@ export function LocationModeActions({
                     variant="outline"
                     size="sm"
                     onClick={onClear}
-                    disabled={!hasLocalData}
+                    disabled={!hasLocalData || isSaving}
                     className="flex-1"
                 >
                     <Trash2 className="h-4 w-4 mr-2" />
@@ -52,10 +55,14 @@ export function LocationModeActions({
                 <Button
                     size="sm"
                     onClick={onApply}
-                    disabled={!hasLocalData}
+                    disabled={!hasLocalData || isSaving}
                     className="flex-1 bg-brand-primary hover:bg-brand-primary-hover"
                 >
-                    <Check className="h-4 w-4 mr-2" />
+                    {isSaving ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                        <Check className="h-4 w-4 mr-2" />
+                    )}
                     {t('save')}
                 </Button>
 
@@ -65,6 +72,7 @@ export function LocationModeActions({
                         variant="ghost"
                         size="sm"
                         onClick={onClose}
+                        disabled={isSaving}
                         className="shrink-0 h-9 w-9 p-0"
                     >
                         <X className="h-4 w-4" />

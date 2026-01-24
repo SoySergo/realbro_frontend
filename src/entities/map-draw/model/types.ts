@@ -14,6 +14,7 @@ export type DrawMode = 'idle' | 'drawing' | 'editing';
 // Нарисованный полигон
 export type DrawPolygon = {
     id: string;
+    name?: string;
     points: DrawPoint[];
     createdAt: Date;
 };

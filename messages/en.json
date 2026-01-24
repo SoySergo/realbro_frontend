@@ -10,7 +10,98 @@
     "error": "Error",
     "notFound": "Not Found",
     "showMore": "Show More",
-    "showLess": "Show Less"
+    "showLess": "Show Less",
+    "show": "Show",
+    "free": "Free",
+    "perMonth": "/month",
+    "days": "days",
+    "euro": "€",
+    "back": "Back",
+    "next": "Next",
+    "of": "of"
+  },
+  "landing": {
+    "hero": {
+      "title": "Find your perfect property with AI agent",
+      "subtitle": "Your personal AI assistant searches properties across all platforms 24/7, while you focus on what matters",
+      "cta": "Start searching",
+      "ctaAgent": "Create agent task",
+      "ctaTabs": "Create search tab"
+    },
+    "features": {
+      "realtime": {
+        "title": "Real-time search",
+        "description": "Watch the agent find new properties right now. Cards appear instantly."
+      },
+      "background": {
+        "title": "Agent works in background",
+        "description": "Create filters — agent sends properties to chat. Get push notifications for new finds."
+      },
+      "multipleTabs": {
+        "title": "Multiple search tabs",
+        "description": "Find compromises: near work up to €1000 or 40 min by transport for €800."
+      },
+      "location": {
+        "title": "Flexible location settings",
+        "description": "Isochrone, polygons, radius, drawing — choose your preferred method."
+      },
+      "status": {
+        "title": "Status filtering",
+        "description": "View only new, liked, or all properties."
+      }
+    },
+    "demo": {
+      "realtimeTitle": "Properties appear in real-time",
+      "backgroundTitle": "Agent searches while you rest",
+      "tabsTitle": "Switch between searches",
+      "locationTitle": "Set location as you prefer",
+      "statusTitle": "Filter by view status"
+    },
+    "cta": {
+      "title": "Ready to start?",
+      "subtitle": "Try for free or choose a plan",
+      "startFree": "Start for free",
+      "viewPricing": "View pricing"
+    },
+    "professionals": "Professionals"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Choose the plan that fits your needs",
+    "popular": "Popular",
+    "features": {
+      "database": "Access to the largest property database",
+      "filtering": "Convenient filtering",
+      "tabs": "search tabs",
+      "tabsUnlimited": "Up to {count} search tabs",
+      "owners": "Access to owners",
+      "ownersLimited": "Limited access to owners",
+      "ownersMultiplier": "Access to owners x{count}",
+      "aiSearch": "Personal AI search",
+      "aiSearchNo": "No AI agent search",
+      "aiFilters": "Up to {count} agent filters",
+      "duration": "Duration: {days} days"
+    },
+    "plans": {
+      "free": {
+        "name": "Free",
+        "description": "Get to know the platform"
+      },
+      "trial": {
+        "name": "Trial",
+        "description": "Try all features"
+      },
+      "standard": {
+        "name": "Standard",
+        "description": "For active searching"
+      },
+      "maximum": {
+        "name": "Maximum",
+        "description": "Maximum capabilities"
+      }
+    },
+    "selectPlan": "Select plan",
+    "currentPlan": "Current plan"
   },
   "navigation": {
     "home": "Home",
@@ -43,7 +134,8 @@
     "villa": "Villa",
     "studio": "Studio",
     "penthouse": "Penthouse",
-    "townhouse": "Townhouse"
+    "townhouse": "Townhouse",
+    "duplex": "Duplex"
   },
   "filters": {
     "title": "Filters",
@@ -138,16 +230,63 @@
     "signUp": "Sign Up",
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
+    "hasAccount": "Already have an account?",
+    "loading": "Loading...",
+    "welcomeBack": "Welcome back",
+    "enterCredentials": "Enter your credentials to sign in",
+    "createAccount": "Create an account",
+    "enterDetails": "Enter your details to get started",
+    "resetPassword": "Reset Password",
+    "resetPasswordDescription": "Enter your email to receive a password reset link",
+    "sendResetLink": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "checkEmail": "Check your email",
+    "resetLinkSent": "We've sent you a password reset link. Please check your inbox.",
+    "orContinueWith": "Or continue with",
+    "passwordRequirements": "At least 8 characters, 1 uppercase, 1 lowercase, 1 number"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "displayName": "Display Name",
+    "displayNamePlaceholder": "Enter your name",
+    "email": "Email",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "emailNotifications": "Email Notifications",
+    "pushNotifications": "Push Notifications",
+    "security": "Security",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "activeSessions": "Active Sessions",
+    "logoutAll": "Logout from All Devices",
+    "dangerZone": "Danger Zone",
+    "deleteAccount": "Delete Account",
+    "deleteAccountWarning": "This action is irreversible. All your data will be deleted.",
+    "confirmDeleteTitle": "Delete Account?",
+    "confirmDeleteDescription": "This action cannot be undone. All data will be permanently deleted.",
+    "confirmDelete": "Yes, Delete",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saved": "Saved"
   },
   "errors": {
     "general": "An error occurred. Please try again.",
     "notFound": "Page not found",
     "unauthorized": "Authorization required",
     "serverError": "Server error",
-    "networkError": "Connection problem"
+    "networkError": "Connection problem",
+    "invalidCredentials": "Invalid email or password",
+    "emailExists": "User with this email already exists",
+    "weakPassword": "Password is too weak",
+    "passwordMismatch": "Passwords do not match",
+    "sessionExpired": "Session expired, please sign in again"
   },
   "sidebar": {
     "search": "Search",
@@ -159,7 +298,13 @@
     "filters": "Filters",
     "sort": "Sort",
     "close": "Close",
-    "bedrooms": "bed"
+    "bedrooms": "bed",
+    "list": "List",
+    "mapActive": "Map is active",
+    "clickListToView": "Click \"List\" to view properties",
+    "sortByDate": "By date",
+    "sortByPrice": "By price",
+    "sortByArea": "By area"
   },
   "isochrone": {
     "title": "Travel Time",

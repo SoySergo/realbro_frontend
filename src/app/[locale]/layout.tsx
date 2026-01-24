@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { AuthErrorHandler, ThemeProvider } from "@/app/providers";
+import { AuthErrorHandler, ThemeProvider, AuthProvider } from "@/app/providers";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
 import '../globals.css';
+import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
+import { AuthModals } from '@/widgets/auth-modals';
 
 // Основной шрифт - Inter (чистый, профессиональный)
 const inter = Inter({
@@ -53,8 +55,14 @@ export default async function LocaleLayout({ children, params }: Props) {
             <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
                 <ThemeProvider>
                     <NextIntlClientProvider messages={messages}>
-                        <AuthErrorHandler />
-                        {children}
+                        <AuthProvider>
+                            <AuthErrorHandler />
+                            {/* Sidebar (Desktop + Mobile) */}
+                            <Sidebar />
+                            {children}
+                            {/* Auth Modals */}
+                            <AuthModals />
+                        </AuthProvider>
                     </NextIntlClientProvider>
                 </ThemeProvider>
             </body>

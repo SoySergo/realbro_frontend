@@ -20,18 +20,20 @@ type LocationModeWrapperProps = {
     onApply: () => void;
     /** Колбэк для закрытия панели режима */
     onClose: () => void;
+    /** Состояние загрузки при сохранении */
+    isSaving?: boolean;
     /** CSS классы для контейнера */
     className?: string;
 };
 
 /**
  * Универсальная обёртка для всех режимов фильтра локации
- * 
+ *
  * Структура:
  * - Вверху: Заголовок режима + Крестик (закрыть)
  * - В центре: Контент режима (children)
  * - Внизу: Кнопки действий (Очистить, Сохранить)
- * 
+ *
  * Используется в: isochrone, draw, radius, search режимах
  */
 export function LocationModeWrapper({
@@ -42,6 +44,7 @@ export function LocationModeWrapper({
     onClear,
     onApply,
     onClose,
+    isSaving = false,
     className,
 }: LocationModeWrapperProps) {
     return (
@@ -53,6 +56,7 @@ export function LocationModeWrapper({
                     variant="ghost"
                     size="sm"
                     onClick={onClose}
+                    disabled={isSaving}
                     className="h-8 w-8 p-0 hover:bg-background-secondary"
                 >
                     <X className="h-4 w-4" />
@@ -78,6 +82,7 @@ export function LocationModeWrapper({
                     onClear={onClear}
                     onApply={onApply}
                     showClose={false}
+                    isSaving={isSaving}
                 />
             </div>
         </div>

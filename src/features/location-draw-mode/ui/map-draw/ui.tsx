@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
@@ -17,6 +17,8 @@ import {
     useActionsPopup,
 } from '../../model/hooks';
 import { cleanupDrawingLayers } from '../../lib/map-layer-helpers';
+import { useFilterStore } from '@/widgets/search-filters-bar';
+import { saveGeometry } from '@/shared/api';
 
 type MapDrawProps = {
     /** Инстанс карты Mapbox */
@@ -34,6 +36,8 @@ type MapDrawProps = {
  */
 export function MapDraw({ map, onClose, className }: MapDrawProps) {
     const t = useTranslations('draw');
+    const { setLocationFilter, setLocationMode } = useFilterStore();
+    const [isSaving, setIsSaving] = useState(false);
 
     // Хук управления состоянием
     const {
@@ -124,17 +128,46 @@ export function MapDraw({ map, onClose, className }: MapDrawProps) {
             delete: t('delete'),
         },
     });
+    // TODO: Сохраняем все полигоны и в поиск добавляем ids
+    // Обработчик применения фильтра (сохранение на бекенд и в store)
+    const handleApply = async () => {
+        if (polygons.length === 0) return;
 
-    // Обработчик применения фильтра (сохранение в URL)
-    const handleApply = () => {
-        // TODO: Добавить логику пуша в URL search params
-        console.log(
-            'Apply draw filter:',
-            polygons.map((p) => ({
-                id: p.id,
-                points: p.points,
-            }))
-        );
+        setIsSaving(true);
+        try {
+            // Берём первый полигон для сохранения
+            const polygon = polygons[0];
+            const coordinates = [polygon.points.map(p => [p.lng, p.lat])];
+
+            // Отправляем на бекенд
+            const result = await saveGeometry({
+                type: 'polygon',
+                coordinates,
+                metadata: {
+                    name: polygon.name,
+                    pointsCount: polygon.points.length,
+                },
+            });
+
+            console.log('Polygon saved to backend:', result);
+
+            // Обновляем store с сохранённым фильтром
+            setLocationFilter({
+                mode: 'draw',
+                polygon: {
+                    ...polygon,
+                    id: `polygon_${result.id}`,
+                },
+            });
+
+            // Закрываем панель режима
+            setLocationMode(null);
+            onClose?.();
+        } catch (error) {
+            console.error('Failed to save polygon:', error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Обработчик закрытия панели
@@ -177,6 +210,7 @@ export function MapDraw({ map, onClose, className }: MapDrawProps) {
             onClear={handleClear}
             onApply={handleApply}
             onClose={handleClose}
+            isSaving={isSaving}
             className={className}
         >
             <div className="space-y-4">

@@ -10,7 +10,94 @@
     "error": "Erreur",
     "notFound": "Non trouvé",
     "showMore": "Afficher plus",
-    "showLess": "Afficher moins"
+    "showLess": "Afficher moins",
+    "free": "Gratuit",
+    "perMonth": "/mois",
+    "days": "jours",
+    "euro": "€"
+  },
+  "landing": {
+    "hero": {
+      "title": "Trouvez la propriété idéale avec un agent IA",
+      "subtitle": "Votre assistant IA personnel recherche des propriétés sur toutes les plateformes 24h/24, pendant que vous vous concentrez sur l'essentiel",
+      "cta": "Commencer la recherche",
+      "ctaAgent": "Créer une tâche agent",
+      "ctaTabs": "Créer un onglet de recherche"
+    },
+    "features": {
+      "realtime": {
+        "title": "Recherche en temps réel",
+        "description": "Regardez l'agent trouver de nouvelles propriétés en ce moment. Les cartes apparaissent instantanément."
+      },
+      "background": {
+        "title": "Agent en arrière-plan",
+        "description": "Créez des filtres — l'agent envoie les propriétés au chat. Recevez des notifications push."
+      },
+      "multipleTabs": {
+        "title": "Plusieurs onglets de recherche",
+        "description": "Trouvez des compromis: près du travail jusqu'à 1000€ ou 40 min en transport pour 800€."
+      },
+      "location": {
+        "title": "Paramètres de localisation flexibles",
+        "description": "Isochrone, polygones, rayon, dessin — choisissez votre méthode préférée."
+      },
+      "status": {
+        "title": "Filtrage par statut",
+        "description": "Affichez uniquement les nouvelles, les favorites ou toutes les propriétés."
+      }
+    },
+    "demo": {
+      "realtimeTitle": "Les propriétés apparaissent en temps réel",
+      "backgroundTitle": "L'agent cherche pendant que vous vous reposez",
+      "tabsTitle": "Basculez entre les recherches",
+      "locationTitle": "Définissez l'emplacement comme vous préférez",
+      "statusTitle": "Filtrez par statut de visualisation"
+    },
+    "cta": {
+      "title": "Prêt à commencer?",
+      "subtitle": "Essayez gratuitement ou choisissez un forfait",
+      "startFree": "Commencer gratuitement",
+      "viewPricing": "Voir les tarifs"
+    },
+    "professionals": "Professionnels"
+  },
+  "pricing": {
+    "title": "Tarifs",
+    "subtitle": "Choisissez le forfait qui correspond à vos besoins",
+    "popular": "Populaire",
+    "features": {
+      "database": "Accès à la plus grande base de propriétés",
+      "filtering": "Filtrage pratique",
+      "tabs": "onglets de recherche",
+      "tabsUnlimited": "Jusqu'à {count} onglets de recherche",
+      "owners": "Accès aux propriétaires",
+      "ownersLimited": "Accès limité aux propriétaires",
+      "ownersMultiplier": "Accès aux propriétaires x{count}",
+      "aiSearch": "Recherche IA personnelle",
+      "aiSearchNo": "Sans recherche agent IA",
+      "aiFilters": "Jusqu'à {count} filtres agent",
+      "duration": "Durée: {days} jours"
+    },
+    "plans": {
+      "free": {
+        "name": "Gratuit",
+        "description": "Découvrir la plateforme"
+      },
+      "trial": {
+        "name": "Essai",
+        "description": "Essayez toutes les fonctionnalités"
+      },
+      "standard": {
+        "name": "Standard",
+        "description": "Pour une recherche active"
+      },
+      "maximum": {
+        "name": "Maximum",
+        "description": "Capacités maximales"
+      }
+    },
+    "selectPlan": "Choisir le forfait",
+    "currentPlan": "Forfait actuel"
   },
   "navigation": {
     "home": "Accueil",
@@ -138,16 +225,63 @@
     "signUp": "S'inscrire",
     "email": "Email",
     "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
     "forgotPassword": "Mot de passe oublié?",
     "noAccount": "Pas de compte?",
-    "hasAccount": "Vous avez déjà un compte?"
+    "hasAccount": "Vous avez déjà un compte?",
+    "loading": "Chargement...",
+    "welcomeBack": "Bon retour",
+    "enterCredentials": "Entrez vos identifiants pour vous connecter",
+    "createAccount": "Créer un compte",
+    "enterDetails": "Entrez vos détails pour commencer",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetPasswordDescription": "Entrez votre email pour recevoir un lien de réinitialisation",
+    "sendResetLink": "Envoyer le lien",
+    "backToLogin": "Retour à la connexion",
+    "checkEmail": "Vérifiez votre email",
+    "resetLinkSent": "Nous vous avons envoyé un lien de réinitialisation. Consultez votre boîte de réception.",
+    "orContinueWith": "Ou continuer avec",
+    "passwordRequirements": "Au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Informations personnelles",
+    "displayName": "Nom d'affichage",
+    "displayNamePlaceholder": "Entrez votre nom",
+    "email": "Email",
+    "language": "Langue",
+    "theme": "Thème",
+    "notifications": "Notifications",
+    "emailNotifications": "Notifications par email",
+    "pushNotifications": "Notifications push",
+    "security": "Sécurité",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "activeSessions": "Sessions actives",
+    "logoutAll": "Se déconnecter de tous les appareils",
+    "dangerZone": "Zone dangereuse",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountWarning": "Cette action est irréversible. Toutes vos données seront supprimées.",
+    "confirmDeleteTitle": "Supprimer le compte?",
+    "confirmDeleteDescription": "Cette action ne peut pas être annulée. Toutes les données seront définitivement supprimées.",
+    "confirmDelete": "Oui, supprimer",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "saved": "Enregistré"
   },
   "errors": {
     "general": "Une erreur s'est produite. Veuillez réessayer.",
     "notFound": "Page non trouvée",
     "unauthorized": "Autorisation requise",
     "serverError": "Erreur du serveur",
-    "networkError": "Problème de connexion"
+    "networkError": "Problème de connexion",
+    "invalidCredentials": "Email ou mot de passe invalide",
+    "emailExists": "Un utilisateur avec cet email existe déjà",
+    "weakPassword": "Le mot de passe est trop faible",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "sessionExpired": "Session expirée, veuillez vous reconnecter"
   },
   "sidebar": {
     "search": "Recherche",

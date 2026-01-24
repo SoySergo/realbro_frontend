@@ -12,9 +12,13 @@ import type { LocationFilterMode } from '@/features/location-filter/model';
  * Фильтр локации
  * Четыре режима: полигоны, рисование, изохрон (время до точки), радиус
  * При выборе режима открывается панель деталей локации (второй ряд фильтров)
+ *
+ * При сохранении показывает название режима + количество элементов
+ * Например: "Рисование (+2)" или "Поиск (+3)"
  */
 export function LocationFilterButton() {
     const t = useTranslations('filters');
+    const tLocationFilter = useTranslations('locationFilter.modes');
     const { locationFilter, activeLocationMode, setLocationMode } = useFilterStore();
     const [open, setOpen] = useState(false);
 
@@ -23,51 +27,50 @@ export function LocationFilterButton() {
             mode: 'search' as LocationFilterMode,
             icon: Search,
             label: t('locationSearch'),
+            shortLabel: tLocationFilter('search'),
         },
         {
             mode: 'draw' as LocationFilterMode,
             icon: Pencil,
             label: t('locationDraw'),
+            shortLabel: tLocationFilter('draw'),
         },
         {
             mode: 'isochrone' as LocationFilterMode,
             icon: Clock,
             label: t('locationTimeFrom'),
+            shortLabel: tLocationFilter('isochrone'),
         },
         {
             mode: 'radius' as LocationFilterMode,
             icon: Circle,
             label: t('locationRadius'),
+            shortLabel: tLocationFilter('radius'),
         },
     ];
 
     const handleModeSelect = (mode: LocationFilterMode) => {
         console.log('Location filter mode selected:', mode);
-
-        // Проверяем, есть ли активный режим с несохранёнными данными
-        // Эту проверку делаем в самом компоненте режима через useLocalLocationState
-        // Здесь просто устанавливаем новый режим
         setLocationMode(mode);
-
-        // Закрываем попап
         setOpen(false);
     };
 
-    const isActive = !!locationFilter || !!activeLocationMode;
+    // Проверяем есть ли сохранённый фильтр локации
+    const hasSavedFilter = !!locationFilter;
+    const isActive = hasSavedFilter || !!activeLocationMode;
 
-    // Определяем активную иконку и лейбл (приоритет activeLocationMode)
-    const currentMode = activeLocationMode || locationFilter?.mode;
+    // Определяем текущий режим для отображения
+    const currentMode = locationFilter?.mode || activeLocationMode;
     const activeMode = currentMode ? locationModes.find(m => m.mode === currentMode) : null;
     const ActiveIcon = activeMode?.icon || MapPin;
-    const activeLabel = activeMode?.label || t('location');
 
-    // Подсчёт выбранных параметров
+    // Подсчёт выбранных параметров для каждого режима
     const getSelectedCount = (): number => {
         if (!locationFilter) return 0;
 
         switch (locationFilter.mode) {
             case 'search':
-                return locationFilter.selectedLocations ? 1 : 0;
+                return locationFilter.selectedLocations?.length || 0;
             case 'draw':
                 return locationFilter.polygon ? 1 : 0;
             case 'isochrone':
@@ -80,6 +83,20 @@ export function LocationFilterButton() {
     };
 
     const selectedCount = getSelectedCount();
+
+    // Формируем текст кнопки
+    const getButtonLabel = (): string => {
+        if (hasSavedFilter && activeMode) {
+            // Если есть сохранённый фильтр - показываем короткое название режима
+            return activeMode.shortLabel;
+        }
+        if (activeLocationMode && activeMode) {
+            // Если режим активен но не сохранён - показываем полное название
+            return activeMode.label;
+        }
+        // По умолчанию
+        return t('location');
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -94,14 +111,20 @@ export function LocationFilterButton() {
                         'border border-border dark:border-transparent',
                         // Текст
                         'text-text-primary hover:text-text-primary',
-                        // Активное состояние
-                        isActive && 'text-text-primary'
+                        // Активное состояние с сохранённым фильтром
+                        hasSavedFilter && 'bg-brand-primary-light border-brand-primary text-brand-primary',
+                        hasSavedFilter && 'dark:bg-brand-primary dark:text-white'
                     )}
                 >
                     <ActiveIcon className="w-4 h-4" />
-                    <span>{activeLabel}</span>
+                    <span>{getButtonLabel()}</span>
                     {selectedCount > 0 && (
-                        <span className="text-text-tertiary">({selectedCount})</span>
+                        <span className={cn(
+                            'text-xs font-medium',
+                            hasSavedFilter ? 'text-brand-primary dark:text-white' : 'text-text-tertiary'
+                        )}>
+                            (+{selectedCount})
+                        </span>
                     )}
                     <ChevronDown className={cn(
                         "w-4 h-4 opacity-50 transition-transform",
@@ -116,7 +139,9 @@ export function LocationFilterButton() {
             >
                 <div className="space-y-1">
                     {locationModes.map(({ mode, icon: Icon, label }) => {
-                        const isActiveMode = currentMode != null && currentMode === mode;
+                        const isActiveMode = currentMode === mode;
+                        const isSavedMode = locationFilter?.mode === mode;
+
                         return (
                             <button
                                 key={mode}
@@ -125,18 +150,25 @@ export function LocationFilterButton() {
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer',
                                     'text-sm transition-colors duration-150',
                                     'focus:outline-none',
-                                    // Активный режим
-                                    isActiveMode && 'bg-brand-primary-light text-brand-primary dark:bg-brand-primary dark:text-white',
+                                    // Сохранённый режим
+                                    isSavedMode && 'bg-brand-primary text-white',
+                                    // Активный но не сохранённый
+                                    isActiveMode && !isSavedMode && 'bg-brand-primary-light text-brand-primary dark:bg-brand-primary/20',
                                     // Неактивный режим
-                                    !isActiveMode && [
+                                    !isActiveMode && !isSavedMode && [
                                         'text-text-secondary',
                                         'hover:bg-brand-primary-light hover:text-brand-primary',
-                                        'dark:hover:bg-brand-primary dark:hover:text-white'
+                                        'dark:hover:bg-brand-primary/20 dark:hover:text-white'
                                     ]
                                 )}
                             >
                                 <Icon className="w-4 h-4 shrink-0" />
-                                <span>{label}</span>
+                                <span className="flex-1 text-left">{label}</span>
+                                {isSavedMode && selectedCount > 0 && (
+                                    <span className="text-xs font-medium opacity-80">
+                                        (+{selectedCount})
+                                    </span>
+                                )}
                             </button>
                         );
                     })}
