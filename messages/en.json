@@ -126,7 +126,28 @@
     "location": "Location",
     "contact": "Contact",
     "viewDetails": "View Details",
-    "showOnMap": "Show on Map"
+    "showOnMap": "Show on Map",
+    "pricePerMeter": "€/m²",
+    "roomsShort": "rooms",
+    "floorOf": "{floor}/{total} fl.",
+    "verified": "Verified",
+    "top": "TOP",
+    "new": "New",
+    "viewMore": "{count} more",
+    "walkMin": "{min} min",
+    "like": "Like",
+    "dislike": "Dislike",
+    "addNote": "Add note",
+    "share": "Share",
+    "report": "Report",
+    "publishedAgo": "{time} ago",
+    "justNow": "just now",
+    "minutesAgo": "{count} min ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago",
+    "agent": "Agent",
+    "owner": "Owner",
+    "agency": "Agency"
   },
   "propertyTypes": {
     "apartment": "Apartment",
@@ -136,6 +157,17 @@
     "penthouse": "Penthouse",
     "townhouse": "Townhouse",
     "duplex": "Duplex"
+  },
+  "transport": {
+    "metro": "Metro",
+    "train": "Train",
+    "bus": "Bus"
+  },
+  "listing": {
+    "title": "Property Rental in Barcelona",
+    "subtitle": "Found {count} properties",
+    "emptyTitle": "Nothing found",
+    "emptySubtitle": "Try changing your search parameters"
   },
   "filters": {
     "title": "Filters",

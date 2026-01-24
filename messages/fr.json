@@ -122,7 +122,28 @@
     "location": "Emplacement",
     "contact": "Contacter",
     "viewDetails": "Voir les détails",
-    "showOnMap": "Afficher sur la carte"
+    "showOnMap": "Afficher sur la carte",
+    "pricePerMeter": "€/m²",
+    "roomsShort": "pièces",
+    "floorOf": "{floor}/{total} ét.",
+    "verified": "Vérifié",
+    "top": "TOP",
+    "new": "Nouveau",
+    "viewMore": "{count} de plus",
+    "walkMin": "{min} min",
+    "like": "J'aime",
+    "dislike": "Je n'aime pas",
+    "addNote": "Ajouter une note",
+    "share": "Partager",
+    "report": "Signaler",
+    "publishedAgo": "il y a {time}",
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {count} min",
+    "hoursAgo": "il y a {count}h",
+    "daysAgo": "il y a {count}j",
+    "agent": "Agent",
+    "owner": "Propriétaire",
+    "agency": "Agence"
   },
   "propertyTypes": {
     "apartment": "Appartement",
@@ -130,7 +151,19 @@
     "villa": "Villa",
     "studio": "Studio",
     "penthouse": "Penthouse",
-    "townhouse": "Maison de ville"
+    "townhouse": "Maison de ville",
+    "duplex": "Duplex"
+  },
+  "transport": {
+    "metro": "Métro",
+    "train": "Train",
+    "bus": "Bus"
+  },
+  "listing": {
+    "title": "Location immobilière à Barcelone",
+    "subtitle": "{count} propriétés trouvées",
+    "emptyTitle": "Aucun résultat",
+    "emptySubtitle": "Essayez de modifier vos paramètres de recherche"
   },
   "filters": {
     "title": "Filtres",

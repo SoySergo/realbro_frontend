@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
-import { X, Search } from 'lucide-react';
+import { X, Search, Map, List } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useFilterStore } from '../model/store';
 import { getPropertiesCount } from '@/shared/api';
@@ -32,7 +32,7 @@ function SearchFiltersBarContent() {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
     const { filtersCount, clearFilters, filters } = useSearchFilters();
-    const { currentFilters } = useFilterStore();
+    const { currentFilters, searchViewMode, setSearchViewMode } = useFilterStore();
 
     const [propertiesCount, setPropertiesCount] = useState<number | null>(null);
     const [isLoadingCount, setIsLoadingCount] = useState(false);
@@ -80,6 +80,39 @@ function SearchFiltersBarContent() {
     return (
         <div className="w-full bg-background-secondary border-b border-border">
             <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto">
+                {/* Переключатель режима: карта / список */}
+                <div className="flex items-center bg-background rounded-lg p-1 border border-border shrink-0">
+                    <button
+                        onClick={() => setSearchViewMode('map')}
+                        className={cn(
+                            'p-1.5 rounded transition-colors flex items-center gap-1.5',
+                            searchViewMode === 'map'
+                                ? 'bg-brand-primary text-white'
+                                : 'text-text-secondary hover:text-text-primary'
+                        )}
+                        title="Поиск на карте"
+                    >
+                        <Map className="w-4 h-4" />
+                        <span className="text-xs font-medium hidden sm:inline">Карта</span>
+                    </button>
+                    <button
+                        onClick={() => setSearchViewMode('list')}
+                        className={cn(
+                            'p-1.5 rounded transition-colors flex items-center gap-1.5',
+                            searchViewMode === 'list'
+                                ? 'bg-brand-primary text-white'
+                                : 'text-text-secondary hover:text-text-primary'
+                        )}
+                        title="Список объектов"
+                    >
+                        <List className="w-4 h-4" />
+                        <span className="text-xs font-medium hidden sm:inline">Список</span>
+                    </button>
+                </div>
+
+                {/* Разделитель */}
+                <div className="w-px h-6 bg-border shrink-0" />
+
                 {/* Название текущей вкладки */}
                 <div className="flex items-center gap-2 mr-2">
                     <QueryTitleEditor />

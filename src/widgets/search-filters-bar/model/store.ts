@@ -8,7 +8,13 @@ import type { LocationFilter } from '@/features/location-filter/model/types';
 import type { LocationItem } from '@/entities/location/model/types';
 import { useSidebarStore } from '@/widgets/sidebar';
 
+// Режим отображения поиска: карта (с сайдбаром) или список (без карты)
+export type SearchViewMode = 'map' | 'list';
+
 type FilterStore = {
+    // Режим отображения поиска
+    searchViewMode: SearchViewMode;
+
     // Фильтры текущей активной вкладки
     currentFilters: SearchFilters;
 
@@ -54,6 +60,10 @@ type FilterStore = {
     setActiveQueryId: (queryId: string | null) => void;
     syncWithQuery: (queryId: string) => void;
     loadFiltersFromQuery: (filters: SearchFilters) => void;
+
+    // Действия с режимом отображения
+    setSearchViewMode: (mode: SearchViewMode) => void;
+    toggleSearchViewMode: () => void;
 };
 
 // Генерация ID для полигона
@@ -173,6 +183,7 @@ function convertFiltersToLocationFilter(
 export const useFilterStore = create<FilterStore>()(
     persist(
         (set, get) => ({
+            searchViewMode: 'map' as SearchViewMode,
             currentFilters: initialFilters,
             savedPolygons: [],
             locationFilter: null,
@@ -456,6 +467,19 @@ export const useFilterStore = create<FilterStore>()(
             setActiveQueryId: (queryId) => {
                 set({ activeQueryId: queryId });
                 console.log('[SYNC] Active query ID set:', queryId);
+            },
+
+            // Установка режима отображения поиска
+            setSearchViewMode: (mode) => {
+                set({ searchViewMode: mode });
+                console.log('[VIEW] Search view mode set:', mode);
+            },
+
+            // Переключение режима отображения
+            toggleSearchViewMode: () => {
+                set((state) => ({
+                    searchViewMode: state.searchViewMode === 'map' ? 'list' : 'map',
+                }));
             },
         }),
         {

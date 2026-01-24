@@ -126,7 +126,28 @@
     "location": "Местоположение",
     "contact": "Связаться",
     "viewDetails": "Подробнее",
-    "showOnMap": "Показать на карте"
+    "showOnMap": "Показать на карте",
+    "pricePerMeter": "€/м²",
+    "roomsShort": "комн.",
+    "floorOf": "{floor}/{total} эт.",
+    "verified": "Проверено",
+    "top": "ТОП",
+    "new": "Новое",
+    "viewMore": "ещё {count}",
+    "walkMin": "{min} мин",
+    "like": "Нравится",
+    "dislike": "Не нравится",
+    "addNote": "Оставить заметку",
+    "share": "Поделиться",
+    "report": "Пожаловаться",
+    "publishedAgo": "{time} назад",
+    "justNow": "только что",
+    "minutesAgo": "{count} мин назад",
+    "hoursAgo": "{count} ч назад",
+    "daysAgo": "{count} дн назад",
+    "agent": "Агент",
+    "owner": "Собственник",
+    "agency": "Агентство"
   },
   "propertyTypes": {
     "apartment": "Квартира",
@@ -136,6 +157,17 @@
     "penthouse": "Пентхаус",
     "townhouse": "Таунхаус",
     "duplex": "Дуплекс"
+  },
+  "transport": {
+    "metro": "Метро",
+    "train": "Электричка",
+    "bus": "Автобус"
+  },
+  "listing": {
+    "title": "Аренда недвижимости в Барселоне",
+    "subtitle": "Найдено {count} объектов",
+    "emptyTitle": "Ничего не найдено",
+    "emptySubtitle": "Попробуйте изменить параметры поиска"
   },
   "filters": {
     "title": "Фильтры",
