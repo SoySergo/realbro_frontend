@@ -171,6 +171,7 @@
   },
   "filters": {
     "title": "Фильтры",
+    "aiAgent": "ИИ агент",
     "priceRange": "Диапазон цен",
     "minPrice": "От",
     "maxPrice": "До",

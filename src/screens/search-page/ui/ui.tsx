@@ -92,7 +92,7 @@ function SearchPageContent() {
                             <MapSidebar
                                 onPropertyClick={handlePropertyClick}
                                 onPropertyHover={handlePropertyHover}
-                                className="h-screen"
+                                className="fixed right-0 h-screen z-40 mt-[52px]"
                             />
                         </div>
                     </>

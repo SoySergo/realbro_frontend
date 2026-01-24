@@ -171,6 +171,7 @@
   },
   "filters": {
     "title": "Filters",
+    "aiAgent": "AI Agent",
     "priceRange": "Price Range",
     "minPrice": "Min",
     "maxPrice": "Max",
