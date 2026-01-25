@@ -248,7 +248,11 @@
     "locationTypeCity": "Город",
     "locationTypeDistrict": "Район",
     "locationTypeNeighborhood": "Квартал",
-    "locationTypePlace": "Место"
+    "locationTypePlace": "Место",
+    "viewMap": "Карта",
+    "viewList": "Список",
+    "sortDate": "По дате",
+    "allFilters": "Все фильтры"
   },
   "map": {
     "showMap": "Показать карту",

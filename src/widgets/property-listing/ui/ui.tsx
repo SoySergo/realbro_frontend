@@ -114,8 +114,8 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
 
     return (
         <div className={cn('flex flex-col h-full', className)}>
-            {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-background border-b border-border">
+            {/* Sticky Header - только на desktop, на мобильных используется MobileSearchHeader */}
+            <div className="sticky top-0 z-20 bg-background border-b border-border hidden md:block">
                 <div className="px-6 py-4">
                     {/* H1 заголовок */}
                     <h1 className="text-2xl font-bold text-text-primary mb-3">
@@ -187,8 +187,8 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
             )}
 
             {/* Grid карточек */}
-            <div className="flex-1 overflow-y-auto p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="flex-1 overflow-y-auto p-3 md:p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                     {properties.map((property) => (
                         <PropertyListingCard
                             key={property.id}
@@ -209,7 +209,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
 
             {/* Пагинация */}
             {pagination && pagination.totalPages > 1 && (
-                <div className="sticky bottom-0 flex items-center justify-center gap-4 px-6 py-4 border-t border-border bg-background">
+                <div className="sticky bottom-0 flex items-center justify-center gap-4 px-3 md:px-6 py-3 md:py-4 border-t border-border bg-background">
                     <Button
                         variant="outline"
                         onClick={() => setPage(page - 1)}

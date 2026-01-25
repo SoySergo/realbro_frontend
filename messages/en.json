@@ -248,7 +248,11 @@
     "locationTypeCity": "City",
     "locationTypeDistrict": "District",
     "locationTypeNeighborhood": "Neighborhood",
-    "locationTypePlace": "Place"
+    "locationTypePlace": "Place",
+    "viewMap": "Map",
+    "viewList": "List",
+    "sortDate": "By date",
+    "allFilters": "All filters"
   },
   "map": {
     "showMap": "Show Map",

@@ -1,9 +1,15 @@
 'use client';
 
-import { useEffect, Suspense, useCallback } from 'react';
+import { useEffect, Suspense, useCallback, useState } from 'react';
 
 import { SearchMap } from '@/features/map';
-import { SearchFiltersBar, useFilterStore } from '@/widgets/search-filters-bar';
+import {
+    SearchFiltersBar,
+    useFilterStore,
+    MobileSearchHeader,
+    MobileViewToggle,
+    MobileFiltersSheet,
+} from '@/widgets/search-filters-bar';
 import { MapSidebar } from '@/widgets/map-sidebar';
 import { PropertyListing } from '@/widgets/property-listing';
 import { useSidebarStore } from '@/widgets/sidebar';
@@ -30,6 +36,9 @@ function SearchPageContent() {
         activeLocationMode,
         searchViewMode,
     } = useFilterStore();
+
+    // Состояние мобильного sheet фильтров
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     // Инициализация фильтров при загрузке страницы
     useEffect(() => {
@@ -64,17 +73,37 @@ function SearchPageContent() {
     return (
         <div className="flex min-h-screen bg-background">
             {/* Основной контент */}
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex">
+            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+                {/* Мобильный хедер с фильтрами - только на мобильных */}
+                {!activeLocationMode && (
+                    <div className="md:hidden fixed top-0 left-0 right-0 z-50">
+                        <MobileSearchHeader
+                            onOpenFilters={() => setIsMobileFiltersOpen(true)}
+                        />
+                    </div>
+                )}
+
+                {/* Мобильный sheet фильтров */}
+                <MobileFiltersSheet
+                    open={isMobileFiltersOpen}
+                    onOpenChange={setIsMobileFiltersOpen}
+                />
+
+                {/* Кнопка переключения карта/список - только на мобильных */}
+                <div className="md:hidden">
+                    <MobileViewToggle />
+                </div>
+
                 {searchViewMode === 'map' ? (
                     // === РЕЖИМ КАРТЫ ===
                     <>
                         {/* Контейнер карты и фильтров */}
                         <div className="flex-1 relative">
-                            {/* Отступ сверху для мобильного верхнего меню - скрываем когда активен режим локации */}
-                            {!activeLocationMode && <div className="h-[60px] md:hidden" />}
+                            {/* Отступ сверху для мобильного хедера */}
+                            {!activeLocationMode && <div className="h-[104px] md:hidden" />}
 
                             {/* Контейнер карты и фильтров */}
-                            <div className="relative h-[calc(100vh-5rem)] md:h-screen w-full">
+                            <div className="relative h-[calc(100vh-8rem)] md:h-screen w-full">
                                 {/* Панель фильтров поверх карты - только на desktop */}
                                 <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
                                     <SearchFiltersBar />
@@ -99,8 +128,11 @@ function SearchPageContent() {
                 ) : (
                     // === РЕЖИМ СПИСКА ===
                     <div className="flex-1 flex flex-col">
-                        {/* Панель фильтров вверху */}
-                        <div className="shrink-0">
+                        {/* Отступ сверху для мобильного хедера */}
+                        <div className="h-[104px] md:hidden" />
+
+                        {/* Панель фильтров вверху - только на desktop */}
+                        <div className="shrink-0 hidden md:block">
                             <SearchFiltersBar />
                         </div>
 
@@ -132,9 +164,25 @@ export function SearchPage() {
 function SearchPageSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex">
+            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+                {/* Скелетон мобильного хедера */}
+                <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background-secondary border-b border-border">
+                    <div className="flex items-center gap-2 px-3 py-2.5">
+                        <div className="flex-1 h-10 bg-background animate-pulse rounded-lg" />
+                        <div className="w-12 h-10 bg-background animate-pulse rounded-lg" />
+                    </div>
+                    <div className="flex items-center gap-2 px-3 pb-2 overflow-hidden">
+                        <div className="h-8 w-24 bg-background animate-pulse rounded shrink-0" />
+                        <div className="h-8 w-28 bg-background animate-pulse rounded shrink-0" />
+                        <div className="h-8 w-24 bg-background animate-pulse rounded shrink-0" />
+                    </div>
+                </div>
+
                 <div className="flex-1 relative">
-                    {/* Скелетон фильтров */}
+                    {/* Отступ для мобильного хедера */}
+                    <div className="h-[104px] md:hidden" />
+
+                    {/* Скелетон фильтров - только на desktop */}
                     <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
                         <div className="w-full bg-background-secondary border-b border-border">
                             <div className="flex items-center gap-2 px-4 py-3">
@@ -149,7 +197,7 @@ function SearchPageSkeleton() {
                     <div className="absolute z-10 inset-0 md:pt-[60px] bg-background-secondary animate-pulse" />
                 </div>
 
-                {/* Скелетон сайдбара */}
+                {/* Скелетон сайдбара - только на desktop */}
                 <div className="hidden md:block w-80 bg-background border-l border-border">
                     <div className="p-3 border-b border-border">
                         <div className="h-8 w-full bg-background-secondary animate-pulse rounded" />

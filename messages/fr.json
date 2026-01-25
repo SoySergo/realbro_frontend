@@ -244,7 +244,11 @@
     "locationTypeCity": "Ville",
     "locationTypeDistrict": "Quartier",
     "locationTypeNeighborhood": "Voisinage",
-    "locationTypePlace": "Lieu"
+    "locationTypePlace": "Lieu",
+    "viewMap": "Carte",
+    "viewList": "Liste",
+    "sortDate": "Par date",
+    "allFilters": "Tous les filtres"
   },
   "map": {
     "showMap": "Afficher la carte",

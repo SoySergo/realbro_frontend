@@ -5,8 +5,14 @@ import { useSidebarStore } from '@/widgets/sidebar/model';
 import { ChevronDown, Plus, X } from 'lucide-react';
 import { MobileQueryItem } from '../mobile-query-item';
 import { useTranslations } from 'next-intl';
+import { cn } from '@/shared/lib/utils';
 
-export function QueriesSelect() {
+type QueriesSelectProps = {
+    /** Дополнительные стили для кнопки-триггера */
+    triggerClassName?: string;
+};
+
+export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
     const {
         queries,
         activeQueryId,
@@ -91,7 +97,10 @@ export function QueriesSelect() {
             {/* Простая кнопка с заголовком */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-background-tertiary transition-colors"
+                className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-background-tertiary transition-colors",
+                    triggerClassName
+                )}
             >
                 <span className="text-sm font-medium truncate">
                     {activeQuery?.title || t('selectSearch')}
@@ -139,7 +148,7 @@ export function QueriesSelect() {
                     </div>
 
                     {/* Кнопка добавления нового запроса - всегда зафиксирована внизу над bottom nav */}
-                    <div className="absolute bottom-16 left-0 right-0 px-4 pt-2 pb-3 bg-background border-t border-border">
+                    <div className="absolute bottom-0 left-0 right-0 px-4 pt-2 pb-3 bg-background border-t border-border">
                         <button
                             onClick={handleAddQuery}
                             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-primary text-white active:bg-brand-primary-hover transition-colors duration-150"
