@@ -76,7 +76,7 @@ function SearchPageContent() {
             <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер с фильтрами - только на мобильных */}
                 {!activeLocationMode && (
-                    <div className="md:hidden fixed top-0 left-0 right-0 z-50">
+                    <div className="md:hidden">
                         <MobileSearchHeader
                             onOpenFilters={() => setIsMobileFiltersOpen(true)}
                         />
@@ -99,9 +99,6 @@ function SearchPageContent() {
                     <>
                         {/* Контейнер карты и фильтров */}
                         <div className="flex-1 relative">
-                            {/* Отступ сверху для мобильного хедера */}
-                            {!activeLocationMode && <div className="h-[104px] md:hidden" />}
-
                             {/* Контейнер карты и фильтров */}
                             <div className="relative h-[calc(100vh-8rem)] md:h-screen w-full">
                                 {/* Панель фильтров поверх карты - только на desktop */}
@@ -128,9 +125,6 @@ function SearchPageContent() {
                 ) : (
                     // === РЕЖИМ СПИСКА ===
                     <div className="flex-1 flex flex-col">
-                        {/* Отступ сверху для мобильного хедера */}
-                        <div className="h-[104px] md:hidden" />
-
                         {/* Панель фильтров вверху - только на desktop */}
                         <div className="shrink-0 hidden md:block">
                             <SearchFiltersBar />

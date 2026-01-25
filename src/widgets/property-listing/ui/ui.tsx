@@ -186,8 +186,19 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                 </div>
             )}
 
+            {/* Счётчик объектов - только на мобильных */}
+            {pagination?.total && (
+                <div className="md:hidden px-3 pt-2 pb-1">
+                    <span className="text-sm text-text-secondary">
+                        {tListing('subtitle', {
+                            count: pagination.total.toLocaleString('ru-RU'),
+                        })}
+                    </span>
+                </div>
+            )}
+
             {/* Grid карточек */}
-            <div className="flex-1 overflow-y-auto p-3 md:p-6">
+            <div className="flex-1 overflow-y-auto p-3 md:p-6 pt-1 md:pt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                     {properties.map((property) => (
                         <PropertyListingCard
