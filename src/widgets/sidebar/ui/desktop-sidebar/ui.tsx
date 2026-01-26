@@ -9,6 +9,7 @@ import { Separator } from '@/shared/ui/separator';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
 import { useAuth } from '@/features/auth';
+import { useChatStore } from '@/features/chat-messages';
 import { DesktopQueryItem } from '../desktop-query-item';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/shared/config/routing';
@@ -17,7 +18,7 @@ import Image from 'next/image';
 // Навигационные элементы
 const navigationItems = [
     { id: 'search', icon: Search, labelKey: 'search', href: '/search' },
-    { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat', badge: 3 },
+    { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat' },
     { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' },
     { id: 'settings', icon: Settings, labelKey: 'settings', href: '/settings' },
 ] as const;
@@ -26,6 +27,7 @@ export function DesktopSidebar() {
     const t = useTranslations('sidebar');
     const tAuth = useTranslations('auth');
     const { isAuthenticated } = useAuth();
+    const chatUnread = useChatStore((s) => s.totalUnread());
     const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
@@ -298,7 +300,7 @@ export function DesktopSidebar() {
                                         {t(item.labelKey)}
                                     </span>
                                 )}
-                                {'badge' in item && item.badge && (
+                                {item.id === 'chat' && isMounted && chatUnread > 0 && (
                                     <span
                                         className={cn(
                                             'absolute w-5 h-5 rounded-full',
@@ -307,7 +309,7 @@ export function DesktopSidebar() {
                                             isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
                                         )}
                                     >
-                                        {item.badge}
+                                        {chatUnread > 9 ? '9+' : chatUnread}
                                     </span>
                                 )}
                             </Link>

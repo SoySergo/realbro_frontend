@@ -8,12 +8,13 @@ import { Badge } from '@/shared/ui/badge';
 import { useTranslations } from 'next-intl';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
+import { useChatStore } from '@/features/chat-messages';
 import { Link } from '@/shared/config/routing';
 
 // Навигационные элементы для мобильного меню
 const navigationItems = [
     { id: 'search', icon: Search, label: 'search', href: '/search', badge: undefined },
-    { id: 'chat', icon: MessageCircle, label: 'chat', href: '/chat', badge: 3 },
+    { id: 'chat', icon: MessageCircle, label: 'chat', href: '/chat', badge: undefined },
     { id: 'profile', icon: User, label: 'profile', href: '/profile', badge: undefined },
     { id: 'settings', icon: Settings, label: 'settings', href: '/settings', badge: undefined },
 ] as const;
@@ -24,6 +25,7 @@ export function BottomNavigation() {
     const tAuth = useTranslations('auth');
     const { activeLocationMode } = useFilterStore();
     const { isAuthenticated } = useAuth();
+    const chatUnread = useChatStore((s) => s.totalUnread());
     const [isMounted, setIsMounted] = useState(false);
 
     // Отслеживаем монтирование компонента для предотвращения hydration mismatch
@@ -82,12 +84,12 @@ export function BottomNavigation() {
                             <div className="relative">
                                 <Icon className="w-6 h-6" />
                                 {/* Badge для уведомлений */}
-                                {item.badge && item.badge > 0 && (
+                                {item.id === 'chat' && isMounted && chatUnread > 0 && (
                                     <Badge
                                         variant="destructive"
                                         className="absolute -top-1 -right-1 w-4 h-4 p-0 flex items-center justify-center text-[10px] font-bold"
                                     >
-                                        {item.badge > 9 ? '9+' : item.badge}
+                                        {chatUnread > 9 ? '9+' : chatUnread}
                                     </Badge>
                                 )}
                             </div>
