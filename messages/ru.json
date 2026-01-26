@@ -451,5 +451,88 @@
     "dragToMovePoint": "Перетаскивайте точки для изменения формы",
     "minThreePoints": "Минимум 3 точки для завершения полигона",
     "maxPolygonsReached": "Достигнут лимит в 4 полигона. Удалите один из существующих, чтобы добавить новый."
+  },
+  "chat": {
+    "title": "Сообщения",
+    "searchPlaceholder": "Поиск по чатам...",
+    "tabs": {
+      "all": "Все",
+      "aiAgent": "ИИ Агент",
+      "support": "Поддержка",
+      "users": "Пользователи"
+    },
+    "aiAgent": {
+      "title": "ИИ Агент",
+      "searching": "Поиск объектов...",
+      "foundProperties": "Найдено {count} новых объектов",
+      "newBatch": "{count} новых объектов пока вы были офлайн",
+      "reviewedCount": "{reviewed} из {total} просмотрено",
+      "noProperties": "Объекты по выбранным фильтрам не найдены",
+      "settings": "Настройки агента",
+      "started": "ИИ Агент начал мониторинг ваших фильтров"
+    },
+    "filters": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "thisWeek": "На этой неделе",
+      "thisMonth": "В этом месяце",
+      "allTime": "Всё время",
+      "allFilters": "Все фильтры",
+      "selectFilter": "Выбрать фильтр"
+    },
+    "settings": {
+      "title": "Настройки ИИ Агента",
+      "searchParams": "Параметры поиска",
+      "activeFilters": "Активные фильтры",
+      "editFilter": "Редактировать",
+      "linkFilter": "Привязать фильтр",
+      "notifications": "Уведомления",
+      "activeHours": "Активные часы",
+      "from": "С",
+      "to": "До",
+      "frequency": "Частота",
+      "immediately": "Сразу",
+      "every15min": "Раз в 15 минут",
+      "every30min": "Раз в 30 минут",
+      "every1hour": "Раз в час",
+      "every2hours": "Раз в 2 часа",
+      "agentStatus": "Статус агента",
+      "active": "Активен",
+      "paused": "На паузе",
+      "runningFor": "Работает {days} дней",
+      "totalFound": "Всего найдено: {count}"
+    },
+    "message": {
+      "placeholder": "Введите сообщение...",
+      "send": "Отправить",
+      "support": "Поддержка",
+      "supportGreeting": "Чем можем помочь?",
+      "you": "Вы"
+    },
+    "actions": {
+      "like": "Нравится",
+      "dislike": "Не нравится",
+      "save": "Сохранить",
+      "saved": "Сохранено",
+      "viewDetails": "Подробнее",
+      "share": "Поделиться"
+    },
+    "empty": {
+      "title": "Сообщений пока нет",
+      "subtitle": "Начните переписку или ожидайте находки ИИ Агента"
+    },
+    "time": {
+      "justNow": "только что",
+      "minutesAgo": "{count} мин назад",
+      "hoursAgo": "{count} ч назад",
+      "yesterday": "Вчера",
+      "daysAgo": "{count} дн назад"
+    },
+    "online": "Онлайн",
+    "offline": "Не в сети",
+    "typing": "печатает...",
+    "selectConversation": "Выберите чат для начала переписки",
+    "newProperties": "новых объектов",
+    "viewAll": "Смотреть все"
   }
 }
