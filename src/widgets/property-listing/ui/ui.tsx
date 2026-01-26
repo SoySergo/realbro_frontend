@@ -17,6 +17,8 @@ import {
     Clock,
     Train,
     Bus,
+    Grid3x3,
+    List,
 } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
@@ -37,6 +39,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { getPropertiesList, type PropertiesListResponse } from '@/shared/api';
 import type { Property } from '@/entities/property';
+import { PropertyCardHorizontal } from '@/entities/property';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
@@ -57,7 +60,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
     const tMap = useTranslations('map');
     const tListing = useTranslations('listing');
 
-    const { currentFilters, setSearchViewMode } = useFilterStore();
+    const { currentFilters, setSearchViewMode, listingViewMode, setListingViewMode } = useFilterStore();
 
     const [properties, setProperties] = useState<Property[]>([]);
     const [pagination, setPagination] =
@@ -166,15 +169,39 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                             </div>
                         </div>
 
-                        {/* Кнопка "На карте" */}
-                        <Button
-                            variant="outline"
-                            onClick={handleShowOnMap}
-                            className="gap-2"
-                        >
-                            <Map className="w-4 h-4" />
-                            {tMap('showMap')}
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            {/* Переключатель режима отображения */}
+                            <div className="flex items-center border border-border rounded-lg">
+                                <Button
+                                    variant={listingViewMode === 'grid' ? 'default' : 'ghost'}
+                                    size="sm"
+                                    onClick={() => setListingViewMode('grid')}
+                                    className="h-9 rounded-r-none"
+                                    title={tListing('viewModeGrid')}
+                                >
+                                    <Grid3x3 className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                    variant={listingViewMode === 'list' ? 'default' : 'ghost'}
+                                    size="sm"
+                                    onClick={() => setListingViewMode('list')}
+                                    className="h-9 rounded-l-none"
+                                    title={tListing('viewModeList')}
+                                >
+                                    <List className="w-4 h-4" />
+                                </Button>
+                            </div>
+
+                            {/* Кнопка "На карте" */}
+                            <Button
+                                variant="outline"
+                                onClick={handleShowOnMap}
+                                className="gap-2"
+                            >
+                                <Map className="w-4 h-4" />
+                                {tMap('showMap')}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,17 +224,31 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                 </div>
             )}
 
-            {/* Grid карточек */}
+            {/* Список карточек */}
             <div className="flex-1 overflow-y-auto p-3 md:p-6 pt-1 md:pt-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
-                    {properties.map((property) => (
-                        <PropertyListingCard
-                            key={property.id}
-                            property={property}
-                            onClick={() => onPropertyClick?.(property)}
-                        />
-                    ))}
-                </div>
+                {listingViewMode === 'grid' ? (
+                    /* Grid - плиточное отображение */
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+                        {properties.map((property) => (
+                            <PropertyListingCard
+                                key={property.id}
+                                property={property}
+                                onClick={() => onPropertyClick?.(property)}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    /* List - горизонтальное отображение */
+                    <div className="flex flex-col">
+                        {properties.map((property) => (
+                            <PropertyCardHorizontal
+                                key={property.id}
+                                property={property}
+                                onClick={() => onPropertyClick?.(property)}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 {/* Пустой результат */}
                 {properties.length === 0 && !isLoading && (

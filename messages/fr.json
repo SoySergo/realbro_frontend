@@ -163,7 +163,9 @@
     "title": "Location immobilière à Barcelone",
     "subtitle": "{count} propriétés trouvées",
     "emptyTitle": "Aucun résultat",
-    "emptySubtitle": "Essayez de modifier vos paramètres de recherche"
+    "emptySubtitle": "Essayez de modifier vos paramètres de recherche",
+    "viewModeGrid": "Grille",
+    "viewModeList": "Liste"
   },
   "filters": {
     "title": "Filtres",

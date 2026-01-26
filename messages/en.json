@@ -167,7 +167,9 @@
     "title": "Property Rental in Barcelona",
     "subtitle": "Found {count} properties",
     "emptyTitle": "Nothing found",
-    "emptySubtitle": "Try changing your search parameters"
+    "emptySubtitle": "Try changing your search parameters",
+    "viewModeGrid": "Grid",
+    "viewModeList": "List"
   },
   "filters": {
     "title": "Filters",

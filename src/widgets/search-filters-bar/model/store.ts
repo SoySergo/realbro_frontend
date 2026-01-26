@@ -11,9 +11,15 @@ import { useSidebarStore } from '@/widgets/sidebar';
 // Режим отображения поиска: карта (с сайдбаром) или список (без карты)
 export type SearchViewMode = 'map' | 'list';
 
+// Режим отображения карточек в листинге: плитка или горизонтальный список
+export type ListingViewMode = 'grid' | 'list';
+
 type FilterStore = {
     // Режим отображения поиска
     searchViewMode: SearchViewMode;
+
+    // Режим отображения карточек в листинге
+    listingViewMode: ListingViewMode;
 
     // Фильтры текущей активной вкладки
     currentFilters: SearchFilters;
@@ -61,9 +67,13 @@ type FilterStore = {
     syncWithQuery: (queryId: string) => void;
     loadFiltersFromQuery: (filters: SearchFilters) => void;
 
-    // Действия с режимом отображения
+    // Действия с режимом отображения поиска
     setSearchViewMode: (mode: SearchViewMode) => void;
     toggleSearchViewMode: () => void;
+
+    // Действия с режимом отображения карточек в листинге
+    setListingViewMode: (mode: ListingViewMode) => void;
+    toggleListingViewMode: () => void;
 };
 
 // Генерация ID для полигона
@@ -184,6 +194,7 @@ export const useFilterStore = create<FilterStore>()(
     persist(
         (set, get) => ({
             searchViewMode: 'map' as SearchViewMode,
+            listingViewMode: 'grid' as ListingViewMode,
             currentFilters: initialFilters,
             savedPolygons: [],
             locationFilter: null,
@@ -479,6 +490,19 @@ export const useFilterStore = create<FilterStore>()(
             toggleSearchViewMode: () => {
                 set((state) => ({
                     searchViewMode: state.searchViewMode === 'map' ? 'list' : 'map',
+                }));
+            },
+
+            // Установка режима отображения карточек в листинге
+            setListingViewMode: (mode) => {
+                set({ listingViewMode: mode });
+                console.log('[VIEW] Listing view mode set:', mode);
+            },
+
+            // Переключение режима отображения карточек
+            toggleListingViewMode: () => {
+                set((state) => ({
+                    listingViewMode: state.listingViewMode === 'grid' ? 'list' : 'grid',
                 }));
             },
         }),

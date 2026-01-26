@@ -20,7 +20,21 @@ export interface PropertyAuthor {
     avatar?: string;
     type: 'agent' | 'owner' | 'agency';
     agencyName?: string;
+    agencyLogo?: string;
     isVerified?: boolean;
+    isSuperAgent?: boolean;
+    phone?: string;
+}
+
+// Медиа-контент недвижимости
+export interface PropertyVideo {
+    url: string;
+    thumbnail: string;
+}
+
+export interface PropertyTour3D {
+    url: string;
+    thumbnail: string;
 }
 
 export interface Property {
@@ -51,6 +65,15 @@ export interface Property {
     author?: PropertyAuthor;
     isNew?: boolean;
     isVerified?: boolean;
+    // Медиа-контент
+    video?: PropertyVideo;
+    floorPlan?: string;
+    tour3d?: PropertyTour3D;
+    // Удобства
+    amenities?: string[];
+    // Особые метки
+    noCommission?: boolean;
+    exclusive?: boolean;
 }
 
 export type PropertyFeature =

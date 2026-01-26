@@ -1,0 +1,1 @@
+export { PropertyCardHorizontal } from './ui';
