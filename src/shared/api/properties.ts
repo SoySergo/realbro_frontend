@@ -28,34 +28,50 @@ export interface PropertiesListParams {
 }
 
 /**
- * Получить количество объектов по фильтрам
+ * Сериализует фильтры в URLSearchParams
  */
-export async function getPropertiesCount(filters: SearchFilters): Promise<number> {
+function serializeFiltersToParams(filters: SearchFilters): URLSearchParams {
+    const params = new URLSearchParams();
+
+    // Serialize filters to query params
+    if (filters.minPrice) params.set('minPrice', String(filters.minPrice));
+    if (filters.maxPrice) params.set('maxPrice', String(filters.maxPrice));
+    if (filters.rooms?.length) params.set('rooms', filters.rooms.join(','));
+    if (filters.minArea) params.set('minArea', String(filters.minArea));
+    if (filters.maxArea) params.set('maxArea', String(filters.maxArea));
+    if (filters.categoryIds?.length) params.set('categoryIds', filters.categoryIds.join(','));
+    if (filters.markerType && filters.markerType !== 'all') params.set('markerType', filters.markerType);
+
+    // Admin levels for location
+    if (filters.adminLevel2?.length) params.set('adminLevel2', filters.adminLevel2.join(','));
+    if (filters.adminLevel4?.length) params.set('adminLevel4', filters.adminLevel4.join(','));
+    if (filters.adminLevel6?.length) params.set('adminLevel6', filters.adminLevel6.join(','));
+    if (filters.adminLevel7?.length) params.set('adminLevel7', filters.adminLevel7.join(','));
+    if (filters.adminLevel8?.length) params.set('adminLevel8', filters.adminLevel8.join(','));
+    if (filters.adminLevel9?.length) params.set('adminLevel9', filters.adminLevel9.join(','));
+    if (filters.adminLevel10?.length) params.set('adminLevel10', filters.adminLevel10.join(','));
+
+    // Geometry for draw/isochrone/radius
+    if (filters.geometryIds?.length) params.set('geometryIds', filters.geometryIds.join(','));
+
+    return params;
+}
+
+/**
+ * Получить количество объектов по фильтрам
+ * @param filters - Фильтры для поиска
+ * @param signal - AbortSignal для отмены запроса
+ */
+export async function getPropertiesCount(
+    filters: SearchFilters,
+    signal?: AbortSignal
+): Promise<number> {
     try {
-        const params = new URLSearchParams();
+        const params = serializeFiltersToParams(filters);
 
-        // Serialize filters to query params
-        if (filters.minPrice) params.set('minPrice', String(filters.minPrice));
-        if (filters.maxPrice) params.set('maxPrice', String(filters.maxPrice));
-        if (filters.rooms?.length) params.set('rooms', filters.rooms.join(','));
-        if (filters.minArea) params.set('minArea', String(filters.minArea));
-        if (filters.maxArea) params.set('maxArea', String(filters.maxArea));
-        if (filters.categoryIds?.length) params.set('categoryIds', filters.categoryIds.join(','));
-        if (filters.markerType && filters.markerType !== 'all') params.set('markerType', filters.markerType);
-
-        // Admin levels for location
-        if (filters.adminLevel2?.length) params.set('adminLevel2', filters.adminLevel2.join(','));
-        if (filters.adminLevel4?.length) params.set('adminLevel4', filters.adminLevel4.join(','));
-        if (filters.adminLevel6?.length) params.set('adminLevel6', filters.adminLevel6.join(','));
-        if (filters.adminLevel7?.length) params.set('adminLevel7', filters.adminLevel7.join(','));
-        if (filters.adminLevel8?.length) params.set('adminLevel8', filters.adminLevel8.join(','));
-        if (filters.adminLevel9?.length) params.set('adminLevel9', filters.adminLevel9.join(','));
-        if (filters.adminLevel10?.length) params.set('adminLevel10', filters.adminLevel10.join(','));
-
-        // Geometry for draw/isochrone/radius
-        if (filters.geometryIds?.length) params.set('geometryIds', filters.geometryIds.join(','));
-
-        const response = await fetch(`${API_BASE}/properties/count?${params.toString()}`);
+        const response = await fetch(`${API_BASE}/properties/count?${params.toString()}`, {
+            signal,
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,6 +80,10 @@ export async function getPropertiesCount(filters: SearchFilters): Promise<number
         const data: PropertiesCountResponse = await response.json();
         return data.count;
     } catch (error) {
+        // Игнорируем ошибки отмены
+        if (error instanceof Error && error.name === 'AbortError') {
+            throw error;
+        }
         console.error('[API] Failed to get properties count:', error);
         // Return mock count for development
         return Math.floor(Math.random() * 5000) + 100;

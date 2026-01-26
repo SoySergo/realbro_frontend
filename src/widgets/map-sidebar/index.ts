@@ -1,1 +1,1 @@
-export { MapSidebar } from './ui/ui';
+export { MapSidebar, MobileMapSidebar } from './ui/ui';

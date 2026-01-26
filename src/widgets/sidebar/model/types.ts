@@ -12,6 +12,7 @@ export type SearchQuery = {
     resultsCount?: number;
     newResultsCount?: number; // Количество новых результатов
     isLoading?: boolean; // Флаг загрузки данных
+    isUnsaved?: boolean; // Флаг несохранённой вкладки (для новых вкладок)
     createdAt: Date;
     lastUpdated: Date;
 };

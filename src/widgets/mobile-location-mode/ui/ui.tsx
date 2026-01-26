@@ -6,6 +6,9 @@ import { Button } from '@/shared/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { MobileRadiusPanel } from '@/features/location-radius-mode/ui/mobile-radius-panel';
+import { MobileSearchPanel } from '@/features/location-search-mode/ui/mobile-search-panel';
+import { MobileDrawPanel } from '@/features/location-draw-mode/ui/mobile-draw-panel';
+import { MobileIsochronePanel } from '@/features/location-isochrone-mode/ui/mobile-isochrone-panel';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 import type mapboxgl from 'mapbox-gl';
 
@@ -97,21 +100,15 @@ export function MobileLocationMode({ map }: MobileLocationModeProps) {
                         </TabsContent>
 
                         <TabsContent value="search" className="m-0">
-                            <div className="px-4 py-6 text-center text-sm text-text-secondary">
-                                {t('locationSearch')} (в разработке)
-                            </div>
+                            <MobileSearchPanel map={map} />
                         </TabsContent>
 
                         <TabsContent value="draw" className="m-0">
-                            <div className="px-4 py-6 text-center text-sm text-text-secondary">
-                                {t('locationDraw')} (в разработке)
-                            </div>
+                            <MobileDrawPanel map={map} />
                         </TabsContent>
 
                         <TabsContent value="isochrone" className="m-0">
-                            <div className="px-4 py-6 text-center text-sm text-text-secondary">
-                                {t('locationTimeFrom')} (в разработке)
-                            </div>
+                            <MobileIsochronePanel map={map} />
                         </TabsContent>
                     </Tabs>
                 </div>
