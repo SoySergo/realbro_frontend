@@ -441,5 +441,88 @@
     "dragToMovePoint": "Faites glisser les points pour changer la forme",
     "minThreePoints": "Minimum 3 points pour compléter le polygone",
     "maxPolygonsReached": "Limite maximale de 4 polygones atteinte. Supprimez un polygone existant pour en ajouter un nouveau."
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Rechercher des conversations...",
+    "tabs": {
+      "all": "Tous",
+      "aiAgent": "Agent IA",
+      "support": "Support",
+      "users": "Utilisateurs"
+    },
+    "aiAgent": {
+      "title": "Agent IA",
+      "searching": "Recherche de propriétés...",
+      "foundProperties": "{count} nouvelles propriétés trouvées",
+      "newBatch": "{count} nouvelles propriétés pendant votre absence",
+      "reviewedCount": "{reviewed} sur {total} examinées",
+      "noProperties": "Aucune propriété trouvée pour les filtres sélectionnés",
+      "settings": "Paramètres de l'agent",
+      "started": "L'Agent IA a commencé à surveiller vos filtres"
+    },
+    "filters": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "thisWeek": "Cette semaine",
+      "thisMonth": "Ce mois",
+      "allTime": "Tout le temps",
+      "allFilters": "Tous les filtres",
+      "selectFilter": "Sélectionner un filtre"
+    },
+    "settings": {
+      "title": "Paramètres de l'Agent IA",
+      "searchParams": "Paramètres de recherche",
+      "activeFilters": "Filtres actifs",
+      "editFilter": "Modifier",
+      "linkFilter": "Lier un autre filtre",
+      "notifications": "Notifications",
+      "activeHours": "Heures actives",
+      "from": "De",
+      "to": "À",
+      "frequency": "Fréquence",
+      "immediately": "Immédiatement",
+      "every15min": "Toutes les 15 minutes",
+      "every30min": "Toutes les 30 minutes",
+      "every1hour": "Toutes les heures",
+      "every2hours": "Toutes les 2 heures",
+      "agentStatus": "Statut de l'agent",
+      "active": "Actif",
+      "paused": "En pause",
+      "runningFor": "En cours depuis {days} jours",
+      "totalFound": "Total trouvé: {count}"
+    },
+    "message": {
+      "placeholder": "Tapez un message...",
+      "send": "Envoyer",
+      "support": "Support",
+      "supportGreeting": "Comment pouvons-nous vous aider?",
+      "you": "Vous"
+    },
+    "actions": {
+      "like": "J'aime",
+      "dislike": "Je n'aime pas",
+      "save": "Sauvegarder",
+      "saved": "Sauvegardé",
+      "viewDetails": "Voir les détails",
+      "share": "Partager"
+    },
+    "empty": {
+      "title": "Pas encore de messages",
+      "subtitle": "Commencez une conversation ou attendez que l'Agent IA trouve des propriétés"
+    },
+    "time": {
+      "justNow": "à l'instant",
+      "minutesAgo": "il y a {count}m",
+      "hoursAgo": "il y a {count}h",
+      "yesterday": "Hier",
+      "daysAgo": "il y a {count}j"
+    },
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "typing": "écrit...",
+    "selectConversation": "Sélectionnez une conversation pour commencer",
+    "newProperties": "nouvelles propriétés",
+    "viewAll": "Voir tout"
   }
 }

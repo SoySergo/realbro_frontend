@@ -451,5 +451,88 @@
     "dragToMovePoint": "Drag points to change the shape",
     "minThreePoints": "Minimum 3 points to complete the polygon",
     "maxPolygonsReached": "Maximum limit of 4 polygons reached. Delete one of the existing polygons to add a new one."
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search conversations...",
+    "tabs": {
+      "all": "All",
+      "aiAgent": "AI Agent",
+      "support": "Support",
+      "users": "Users"
+    },
+    "aiAgent": {
+      "title": "AI Agent",
+      "searching": "Searching for properties...",
+      "foundProperties": "Found {count} new properties",
+      "newBatch": "{count} new properties while you were away",
+      "reviewedCount": "{reviewed} of {total} reviewed",
+      "noProperties": "No properties found for selected filters",
+      "settings": "Agent Settings",
+      "started": "AI Agent started monitoring your search filters"
+    },
+    "filters": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "allTime": "All time",
+      "allFilters": "All filters",
+      "selectFilter": "Select filter"
+    },
+    "settings": {
+      "title": "AI Agent Settings",
+      "searchParams": "Search Parameters",
+      "activeFilters": "Active Filters",
+      "editFilter": "Edit",
+      "linkFilter": "Link another filter",
+      "notifications": "Notifications",
+      "activeHours": "Active hours",
+      "from": "From",
+      "to": "To",
+      "frequency": "Frequency",
+      "immediately": "Immediately",
+      "every15min": "Every 15 minutes",
+      "every30min": "Every 30 minutes",
+      "every1hour": "Every hour",
+      "every2hours": "Every 2 hours",
+      "agentStatus": "Agent Status",
+      "active": "Active",
+      "paused": "Paused",
+      "runningFor": "Running for {days} days",
+      "totalFound": "Total found: {count}"
+    },
+    "message": {
+      "placeholder": "Type a message...",
+      "send": "Send",
+      "support": "Support",
+      "supportGreeting": "How can we help you?",
+      "you": "You"
+    },
+    "actions": {
+      "like": "Like",
+      "dislike": "Dislike",
+      "save": "Save",
+      "saved": "Saved",
+      "viewDetails": "View details",
+      "share": "Share"
+    },
+    "empty": {
+      "title": "No messages yet",
+      "subtitle": "Start a conversation or wait for AI Agent to find properties"
+    },
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{count}d ago"
+    },
+    "online": "Online",
+    "offline": "Offline",
+    "typing": "typing...",
+    "selectConversation": "Select a conversation to start messaging",
+    "newProperties": "new properties",
+    "viewAll": "View all"
   }
 }

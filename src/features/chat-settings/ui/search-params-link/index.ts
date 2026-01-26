@@ -1,0 +1,1 @@
+export { SearchParamsLink } from './ui';

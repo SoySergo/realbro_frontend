@@ -1,0 +1,87 @@
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+    const now = new Date();
+    return NextResponse.json({
+        conversations: [
+            {
+                id: 'conv_ai_agent',
+                type: 'ai-agent',
+                title: 'AI Agent',
+                participants: ['current_user', 'ai-agent'],
+                lastMessage: {
+                    id: 'msg_ai_last',
+                    conversationId: 'conv_ai_agent',
+                    senderId: 'ai-agent',
+                    type: 'property-batch',
+                    content: '5 new properties matching "Barcelona Center"',
+                    status: 'delivered',
+                    createdAt: new Date(now.getTime() - 30 * 60000).toISOString(),
+                },
+                unreadCount: 5,
+                isPinned: true,
+                createdAt: '2026-01-01T00:00:00Z',
+                updatedAt: new Date(now.getTime() - 30 * 60000).toISOString(),
+            },
+            {
+                id: 'conv_support',
+                type: 'support',
+                title: 'Support',
+                participants: ['current_user', 'support'],
+                lastMessage: {
+                    id: 'msg_support_last',
+                    conversationId: 'conv_support',
+                    senderId: 'support',
+                    type: 'text',
+                    content: 'How can we help you?',
+                    status: 'delivered',
+                    createdAt: new Date(now.getTime() - 2 * 3600000).toISOString(),
+                },
+                unreadCount: 0,
+                isPinned: true,
+                createdAt: '2026-01-01T00:00:00Z',
+                updatedAt: new Date(now.getTime() - 2 * 3600000).toISOString(),
+            },
+            {
+                id: 'conv_user_1',
+                type: 'p2p',
+                title: 'Maria Garcia',
+                avatar: 'https://i.pravatar.cc/150?u=maria_garcia',
+                participants: ['current_user', 'user_1'],
+                lastMessage: {
+                    id: 'msg_p2p_last_1',
+                    conversationId: 'conv_user_1',
+                    senderId: 'user_1',
+                    type: 'text',
+                    content: 'Is the apartment still available?',
+                    status: 'delivered',
+                    createdAt: new Date(now.getTime() - 5 * 3600000).toISOString(),
+                },
+                unreadCount: 2,
+                isPinned: false,
+                createdAt: '2026-01-15T00:00:00Z',
+                updatedAt: new Date(now.getTime() - 5 * 3600000).toISOString(),
+            },
+            {
+                id: 'conv_user_2',
+                type: 'p2p',
+                title: 'José Martinez',
+                avatar: 'https://i.pravatar.cc/150?u=jose_martinez',
+                participants: ['current_user', 'user_2'],
+                lastMessage: {
+                    id: 'msg_p2p_last_2',
+                    conversationId: 'conv_user_2',
+                    senderId: 'current_user',
+                    type: 'text',
+                    content: 'Thank you for the tour!',
+                    status: 'read',
+                    createdAt: new Date(now.getTime() - 24 * 3600000).toISOString(),
+                },
+                unreadCount: 0,
+                isPinned: false,
+                createdAt: '2026-01-10T00:00:00Z',
+                updatedAt: new Date(now.getTime() - 24 * 3600000).toISOString(),
+            },
+        ],
+    });
+}
