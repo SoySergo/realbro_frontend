@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, type MouseEvent, memo } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import {
@@ -12,9 +13,10 @@ import {
     List,
 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
-import { useFilterStore } from '../model/store';
+import { useSearchViewMode, useActiveLocationMode } from '../model/store';
 import { QueriesSelect } from '@/widgets/sidebar/ui/queries-select';
 import { cn } from '@/shared/lib/utils';
+import { useReducedMotion, useDebouncedCallback } from '@/shared/hooks';
 import {
     Select,
     SelectContent,
@@ -37,7 +39,8 @@ const HEADER_HEIGHT = 56;
  */
 export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHeaderProps) {
     const { filtersCount } = useSearchFilters();
-    const { searchViewMode } = useFilterStore();
+    // Используем оптимизированный селектор вместо полного стора
+    const searchViewMode = useSearchViewMode();
 
     const isMapMode = searchViewMode === 'map';
 
@@ -93,6 +96,9 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { filters, setFilters, clearFilter } = useSearchFilters();
+
+    // Проверка предпочтения уменьшенного движения
+    const prefersReducedMotion = useReducedMotion();
 
     // Состояние видимости (только для режима списка)
     const [isVisible, setIsVisible] = useState(true);
@@ -214,6 +220,7 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                         activeFilterChips={activeFilterChips}
                         onRemoveChip={handleRemoveChip}
                         withShadow
+                        prefersReducedMotion={prefersReducedMotion}
                     />
                 </div>
             </div>
@@ -229,8 +236,14 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
             {/* Фиксированная панель */}
             <div
                 className={cn(
-                    'fixed left-0 right-0 z-40 transition-transform duration-200 ease-out',
-                    isVisible ? 'translate-y-0' : '-translate-y-full'
+                    'fixed left-0 right-0 z-40',
+                    // Отключаем анимации если пользователь предпочитает уменьшенное движение
+                    prefersReducedMotion
+                        ? (isVisible ? 'translate-y-0' : '-translate-y-full')
+                        : cn(
+                              'transition-transform duration-200 ease-out',
+                              isVisible ? 'translate-y-0' : '-translate-y-full'
+                          )
                 )}
                 style={{ top: HEADER_HEIGHT }}
             >
@@ -253,6 +266,7 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                             onToggleSortOrder={toggleSortOrder}
                             activeFilterChips={activeFilterChips}
                             onRemoveChip={handleRemoveChip}
+                            prefersReducedMotion={prefersReducedMotion}
                         />
                     </div>
                 </div>
@@ -271,12 +285,56 @@ type FilterButtonsProps = {
     activeFilterChips: { key: string; label: string }[];
     onRemoveChip: (key: string) => void;
     withShadow?: boolean;
+    prefersReducedMotion?: boolean;
 };
+
+/**
+ * Мемоизированный chip для фильтра
+ */
+const FilterChip = memo(function FilterChip({
+    chipKey,
+    label,
+    onRemove,
+    shadowClass,
+    prefersReducedMotion,
+}: {
+    chipKey: string;
+    label: string;
+    onRemove: (key: string) => void;
+    shadowClass: string;
+    prefersReducedMotion: boolean;
+}) {
+    // Debounce для предотвращения множественных кликов
+    const debouncedRemove = useDebouncedCallback(onRemove, 50);
+
+    const handleClick = useCallback(
+        (e: MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation();
+            debouncedRemove(chipKey);
+        },
+        [chipKey, debouncedRemove]
+    );
+
+    return (
+        <Button
+            variant="outline"
+            onClick={handleClick}
+            className={cn(
+                'shrink-0 h-9 gap-2 text-sm bg-background border-border px-3 touch-manipulation',
+                shadowClass,
+                prefersReducedMotion ? '' : 'transition-colors'
+            )}
+        >
+            <span className="whitespace-nowrap">{label}</span>
+            <X className="w-3.5 h-3.5 shrink-0" />
+        </Button>
+    );
+});
 
 /**
  * Кнопки фильтров - вынесены отдельно для переиспользования
  */
-function FilterButtons({
+const FilterButtons = memo(function FilterButtons({
     t,
     sortOptions,
     selectedSort,
@@ -286,6 +344,7 @@ function FilterButtons({
     activeFilterChips,
     onRemoveChip,
     withShadow = false,
+    prefersReducedMotion = false,
 }: FilterButtonsProps) {
     const shadowClass = withShadow ? 'shadow-md' : '';
 
@@ -294,7 +353,7 @@ function FilterButtons({
             {/* ИИ Агент */}
             <Button
                 className={cn(
-                    'shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white h-9 px-4',
+                    'shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white h-9 px-4 touch-manipulation',
                     shadowClass
                 )}
             >
@@ -306,7 +365,7 @@ function FilterButtons({
             <div className={cn('flex items-center shrink-0', shadowClass && 'shadow-md rounded-lg')}>
                 <Select value={selectedSort} onValueChange={onSortChange}>
                     <SelectTrigger
-                        className="w-fit h-9 text-sm bg-background border-border rounded-r-none border-r-0 px-3"
+                        className="w-fit h-9 text-sm bg-background border-border rounded-r-none border-r-0 px-3 touch-manipulation"
                     >
                         <SelectValue>
                             {sortOptions.find(s => s.value === selectedSort)?.label}
@@ -323,7 +382,10 @@ function FilterButtons({
                 <Button
                     variant="outline"
                     onClick={onToggleSortOrder}
-                    className="h-9 w-9 p-0 rounded-l-none bg-background border-border"
+                    className={cn(
+                        'h-9 w-9 p-0 rounded-l-none bg-background border-border touch-manipulation',
+                        prefersReducedMotion ? '' : 'transition-transform'
+                    )}
                 >
                     <ArrowUpDown className={cn(
                         'w-4 h-4',
@@ -334,42 +396,66 @@ function FilterButtons({
 
             {/* Активные фильтры */}
             {activeFilterChips.map((chip) => (
-                <Button
+                <FilterChip
                     key={chip.key}
-                    variant="outline"
-                    onClick={() => onRemoveChip(chip.key)}
-                    className={cn(
-                        'shrink-0 h-9 gap-2 text-sm bg-background border-border px-3',
-                        shadowClass
-                    )}
-                >
-                    <span className="whitespace-nowrap">{chip.label}</span>
-                    <X className="w-3.5 h-3.5 shrink-0" />
-                </Button>
+                    chipKey={chip.key}
+                    label={chip.label}
+                    onRemove={onRemoveChip}
+                    shadowClass={shadowClass}
+                    prefersReducedMotion={prefersReducedMotion}
+                />
             ))}
         </>
     );
-}
+});
 
 /**
  * Плавающая кнопка переключения карта/список
+ * Скрывается когда активен режим локации (draw, search, radius, isochrone)
+ *
+ * При клике на "Карта" из листинга - редирект на /search/map
+ * При клике на "Список" с карты - редирект на /search/list
  */
 export function MobileViewToggle() {
     const t = useTranslations('filters');
-    const { searchViewMode, toggleSearchViewMode } = useFilterStore();
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    // Используем оптимизированный селектор вместо полного стора
+    const activeLocationMode = useActiveLocationMode();
 
-    const isMapMode = searchViewMode === 'map';
+    // Определяем текущий режим по URL
+    const isMapPage = pathname.includes('/search/map');
+
+    // Скрываем кнопку когда активен любой режим локации
+    if (activeLocationMode) {
+        return null;
+    }
+
+    const handleToggle = () => {
+        // Сохраняем текущие параметры фильтров
+        const params = searchParams.toString();
+        const queryString = params ? `?${params}` : '';
+
+        if (isMapPage) {
+            // С карты на список
+            router.push(`/search/list${queryString}`);
+        } else {
+            // С листинга на карту
+            router.push(`/search/map${queryString}`);
+        }
+    };
 
     return (
         <Button
-            onClick={toggleSearchViewMode}
+            onClick={handleToggle}
             className={cn(
                 'fixed left-4 bottom-20 z-40 gap-2 shadow-lg',
                 'bg-brand-primary hover:bg-brand-primary/90 text-white',
                 'h-10 px-4 rounded-lg'
             )}
         >
-            {isMapMode ? (
+            {isMapPage ? (
                 <>
                     <List className="w-5 h-5" />
                     <span className="font-medium">{t('viewList')}</span>

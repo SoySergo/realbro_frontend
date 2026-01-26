@@ -1,0 +1,1 @@
+export { SearchMapPage } from './ui';

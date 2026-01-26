@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/shallow';
 import type { SearchFilters } from '@/entities/filter/model/types';
 import type { DrawPolygon } from '@/entities/map-draw/model/types';
 import type { LocationFilter } from '@/features/location-filter/model/types';
@@ -491,3 +492,110 @@ export const useFilterStore = create<FilterStore>()(
         }
     )
 );
+
+// ==========================================
+// Оптимизированные селекторы с shallow сравнением
+// ==========================================
+
+/**
+ * Селектор для режима отображения (карта/список)
+ * Оптимизирован: обновляется только при изменении searchViewMode
+ */
+export function useSearchViewMode() {
+    return useFilterStore((state) => state.searchViewMode);
+}
+
+/**
+ * Селектор для активного режима локации
+ * Оптимизирован: обновляется только при изменении activeLocationMode
+ */
+export function useActiveLocationMode() {
+    return useFilterStore((state) => state.activeLocationMode);
+}
+
+/**
+ * Селектор для текущих фильтров
+ * Использует shallow сравнение для предотвращения лишних ререндеров
+ */
+export function useCurrentFilters() {
+    return useFilterStore(useShallow((state) => state.currentFilters));
+}
+
+/**
+ * Селектор для действий с локацией
+ * Экшены стабильны, но useShallow гарантирует отсутствие лишних ререндеров
+ */
+export function useLocationActions() {
+    return useFilterStore(
+        useShallow((state) => ({
+            setLocationFilter: state.setLocationFilter,
+            setLocationMode: state.setLocationMode,
+            addSelectedBoundary: state.addSelectedBoundary,
+            removeSelectedBoundary: state.removeSelectedBoundary,
+            toggleSelectedBoundary: state.toggleSelectedBoundary,
+            clearSelectedBoundaries: state.clearSelectedBoundaries,
+        }))
+    );
+}
+
+/**
+ * Селектор для действий с фильтрами
+ * Экшены стабильны, но useShallow гарантирует отсутствие лишних ререндеров
+ */
+export function useFilterActions() {
+    return useFilterStore(
+        useShallow((state) => ({
+            setFilters: state.setFilters,
+            resetFilters: state.resetFilters,
+            clearFilter: state.clearFilter,
+        }))
+    );
+}
+
+/**
+ * Селектор для фильтра локации
+ */
+export function useLocationFilter() {
+    return useFilterStore((state) => state.locationFilter);
+}
+
+/**
+ * Селектор для выбранных границ (wikidata IDs)
+ */
+export function useSelectedBoundaryWikidata() {
+    return useFilterStore((state) => state.selectedBoundaryWikidata);
+}
+
+/**
+ * Селектор для сохранённых полигонов
+ */
+export function useSavedPolygons() {
+    return useFilterStore(useShallow((state) => state.savedPolygons));
+}
+
+/**
+ * Селектор для действий с полигонами
+ */
+export function usePolygonActions() {
+    return useFilterStore(
+        useShallow((state) => ({
+            addPolygon: state.addPolygon,
+            removePolygon: state.removePolygon,
+            updatePolygon: state.updatePolygon,
+            clearPolygons: state.clearPolygons,
+        }))
+    );
+}
+
+/**
+ * Селектор для режима отображения и его переключения
+ */
+export function useViewModeActions() {
+    return useFilterStore(
+        useShallow((state) => ({
+            searchViewMode: state.searchViewMode,
+            setSearchViewMode: state.setSearchViewMode,
+            toggleSearchViewMode: state.toggleSearchViewMode,
+        }))
+    );
+}

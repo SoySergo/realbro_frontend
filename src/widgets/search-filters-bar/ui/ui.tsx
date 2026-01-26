@@ -159,6 +159,10 @@ function SearchFiltersBarContent() {
             // Нет активного запроса - можно сохранить если есть фильтры
             return filtersCount > 0;
         }
+        // Если вкладка ещё не сохранена (isUnsaved: true), всегда показываем как несохранённую
+        if (activeQuery.isUnsaved) {
+            return true;
+        }
         // Есть активный запрос - сравниваем с сохранённым состоянием
         return savedFiltersSnapshot !== currentFiltersSnapshot;
     }, [activeQuery, savedFiltersSnapshot, currentFiltersSnapshot, filtersCount]);
@@ -199,15 +203,21 @@ function SearchFiltersBarContent() {
 
     const handleSave = () => {
         if (activeQuery) {
-            // Обновляем существующий фильтр
-            const mergedFilters = { ...filters, ...currentFilters };
-            updateQuery(activeQueryId!, {
-                filters: mergedFilters,
-                resultsCount: propertiesCount ?? undefined,
-            });
-            setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
+            // Проверяем, является ли вкладка несохранённой (новой)
+            if (activeQuery.isUnsaved) {
+                // Для несохранённых вкладок показываем диалог ввода названия
+                setIsSavePopoverOpen(true);
+            } else {
+                // Обновляем существующий (уже сохранённый) фильтр
+                const mergedFilters = { ...filters, ...currentFilters };
+                updateQuery(activeQueryId!, {
+                    filters: mergedFilters,
+                    resultsCount: propertiesCount ?? undefined,
+                });
+                setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
+            }
         } else {
-            // Открываем popover для ввода названия нового фильтра
+            // Нет активного запроса - открываем popover для ввода названия нового фильтра
             setIsSavePopoverOpen(true);
         }
     };
@@ -215,11 +225,25 @@ function SearchFiltersBarContent() {
     const handleSaveNewFilter = () => {
         if (filterName.trim()) {
             const mergedFilters = { ...filters, ...currentFilters };
-            addQuery({
-                title: filterName.trim(),
-                filters: mergedFilters,
-                resultsCount: propertiesCount ?? undefined,
-            });
+
+            if (activeQuery?.isUnsaved) {
+                // Для несохранённой вкладки обновляем title и снимаем флаг isUnsaved
+                updateQuery(activeQueryId!, {
+                    title: filterName.trim(),
+                    filters: mergedFilters,
+                    resultsCount: propertiesCount ?? undefined,
+                    isUnsaved: false,
+                });
+                setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
+            } else {
+                // Создаём новую вкладку с isUnsaved: false (сразу сохранённая)
+                addQuery({
+                    title: filterName.trim(),
+                    filters: mergedFilters,
+                    resultsCount: propertiesCount ?? undefined,
+                    isUnsaved: false,
+                });
+            }
             setFilterName('');
             setIsSavePopoverOpen(false);
         }

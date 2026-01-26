@@ -19,6 +19,7 @@ type SidebarStore = {
     removeQuery: (id: string) => void;
     setActiveQuery: (id: string | null) => void;
     updateQuery: (id: string, updates: Partial<SearchQuery>) => void;
+    saveQuery: (id: string, title: string) => void; // Сохраняет вкладку (isUnsaved → false)
 
     // Вариант отображения
     variant: SidebarVariant;
@@ -46,6 +47,7 @@ export const useSidebarStore = create<SidebarStore>()(
                 const newQuery: SearchQuery = {
                     ...query,
                     id: generateId(),
+                    isUnsaved: query.isUnsaved ?? true, // Новые вкладки по умолчанию несохранённые
                     createdAt: new Date(),
                     lastUpdated: new Date(),
                 };
@@ -87,6 +89,17 @@ export const useSidebarStore = create<SidebarStore>()(
             },
 
             setVariant: (variant) => set({ variant }),
+
+            // Сохраняет вкладку с названием (переводит isUnsaved в false)
+            saveQuery: (id, title) => {
+                set((state) => ({
+                    queries: state.queries.map((q) =>
+                        q.id === id
+                            ? { ...q, title, isUnsaved: false, lastUpdated: new Date() }
+                            : q
+                    ),
+                }));
+            },
         }),
         {
             name: 'sidebar-storage',
