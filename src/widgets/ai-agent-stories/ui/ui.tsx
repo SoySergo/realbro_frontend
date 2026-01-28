@@ -77,7 +77,7 @@ export function AiAgentStories({ properties }: AiAgentStoriesProps) {
     };
 
     return (
-        <div className="hidden md:block px-6 py-4 border-b border-border">
+        <div className="px-3 md:px-6 py-4 border-b border-border">
             {/* Header */}
             <div className="flex items-center gap-2 mb-1">
                 <SearchCheckIcon className="w-5 h-5 text-brand-primary" />
@@ -91,10 +91,10 @@ export function AiAgentStories({ properties }: AiAgentStoriesProps) {
 
             {/* Stories carousel */}
             <div className="relative group">
-                {/* Scroll left */}
+                {/* Scroll left - only on desktop */}
                 <button
                     onClick={scrollLeft}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background/90 border border-border rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background/90 border border-border rounded-full items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -108,10 +108,10 @@ export function AiAgentStories({ properties }: AiAgentStoriesProps) {
                     ))}
                 </div>
 
-                {/* Scroll right */}
+                {/* Scroll right - only on desktop */}
                 <button
                     onClick={scrollRight}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background/90 border border-border rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background/90 border border-border rounded-full items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                     <ChevronRight className="w-4 h-4" />
                 </button>

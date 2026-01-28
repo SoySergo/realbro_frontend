@@ -47,7 +47,7 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
     return (
         <div className={cn('', className)}>
             {/* Фиксированный хедер */}
-            <div className="fixed top-0 left-0 right-0 z-50 bg-background-secondary border-b border-border">
+            <div className="fixed top-0 left-0 right-0 z-101 bg-background-secondary">
                 <div className="flex items-center justify-between px-3 py-2 gap-2">
                     <div className="flex-1 min-w-0">
                         <QueriesSelect
@@ -57,15 +57,16 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
 
                     <Button
                         variant="outline"
+                        size="icon"
                         onClick={onOpenFilters}
                         className={cn(
-                            'h-10 gap-2 bg-background border-border shrink-0 relative',
+                            'h-10 w-10 bg-background border-border shrink-0 relative',
                             filtersCount > 0 && 'border-brand-primary text-brand-primary'
                         )}
                     >
-                        <SlidersHorizontal className="w-4 h-4" />
+                        <SlidersHorizontal className="w-5 h-5" />
                         {filtersCount > 0 && (
-                            <span className="bg-brand-primary absolute -top-1 -right-2 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            <span className="bg-brand-primary absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                                 {filtersCount}
                             </span>
                         )}

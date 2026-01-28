@@ -59,6 +59,19 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
+    // Блокировка скролла body при открытых фильтрах
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [open]);
+
     // Проверка наличия изменений в локальном состоянии
     const hasLocalChanges =
         localMarkerType !== 'all' ||
@@ -105,13 +118,15 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
         <>
             {/* Overlay */}
             <div
-                className="fixed inset-0 bg-black/50 z-110 animate-in fade-in duration-75"
+                className="fixed inset-0 bg-black/50 animate-in fade-in duration-75"
+                style={{ zIndex: 110 }}
                 onClick={() => onOpenChange(false)}
             />
 
             {/* Content */}
             <div
-                className="fixed inset-0 bg-background z-120 flex flex-col animate-in slide-in-from-bottom duration-75"
+                className="fixed inset-0 bg-background flex flex-col animate-in slide-in-from-bottom duration-75"
+                style={{ zIndex: 120 }}
             >
                 {/* Заголовок */}
                 <div className="px-4 py-3 border-b border-border shrink-0">

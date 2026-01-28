@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useTransition } from 'react';
+import { useState, useCallback, useTransition, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Loader2 } from 'lucide-react';
@@ -9,9 +9,12 @@ import {
     MobileSearchHeader,
     MobileFiltersSheet,
     useListingViewMode,
+    MobileViewToggle,
+    useViewModeActions,
 } from '@/widgets/search-filters-bar';
 import { ListingControls } from '@/widgets/listing-controls';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
+import { MapPreview } from '@/widgets/map-preview';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { Pagination } from '@/shared/ui/pagination';
 import type { PropertiesListResponse } from '@/shared/api/properties-server';
@@ -50,9 +53,37 @@ export function SearchListPage({
     const [sortBy, setSortBy] = useState<PropertySortBy>(initialSortBy);
     const [sortOrder, setSortOrder] = useState<PropertySortOrder>(initialSortOrder);
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+    const [isMapVisible, setIsMapVisible] = useState(true);
+
+    // Ref for MapPreview to track visibility
+    const mapPreviewRef = useRef<HTMLDivElement>(null);
 
     // Listing view mode from store (grid / list)
     const { listingViewMode, setListingViewMode } = useListingViewMode();
+
+    // Get setSearchViewMode to sync store with this page
+    const { setSearchViewMode } = useViewModeActions();
+
+    // Sync searchViewMode to 'list' on mount (this page is list mode)
+    useEffect(() => {
+        setSearchViewMode('list');
+    }, [setSearchViewMode]);
+
+    // Track MapPreview visibility with IntersectionObserver
+    useEffect(() => {
+        const mapElement = mapPreviewRef.current;
+        if (!mapElement) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsMapVisible(entry.isIntersecting);
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(mapElement);
+        return () => observer.disconnect();
+    }, []);
 
     // Update URL when pagination/sort changes
     const updateUrl = useCallback(
@@ -110,17 +141,13 @@ export function SearchListPage({
                     <MobileSearchHeader onOpenFilters={() => setIsMobileFiltersOpen(true)} />
                 </div>
 
-                {/* Mobile filters sheet */}
-                <MobileFiltersSheet
-                    open={isMobileFiltersOpen}
-                    onOpenChange={setIsMobileFiltersOpen}
-                />
-
-                {/* Filters Bar (fixed at top on desktop) */}
-                <SearchFiltersBar />
+                {/* Filters Bar (desktop only - fixed at top) */}
+                <div className="hidden md:block">
+                    <SearchFiltersBar />
+                </div>
 
                 {/* Page Title (Desktop) */}
-                <div className="hidden md:block md:mt-14 px-6 pt-6">
+                <div className="hidden md:block mt-14 px-6 pt-6">
                     <h1 className="text-2xl font-bold text-text-primary">
                         {tListing('title')}
                     </h1>
@@ -155,6 +182,9 @@ export function SearchListPage({
                         </span>
                     </div>
                 )}
+
+                {/* Map Preview (mobile only) */}
+                <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
 
                 {/* AI Agent Stories */}
                 <AiAgentStories properties={properties.slice(0, 10)} />
@@ -200,6 +230,19 @@ export function SearchListPage({
                     onPageChange={handlePageChange}
                 />
             </main>
+
+            {/* Floating Map Button - visible when MapPreview is scrolled out of view and filters are closed */}
+            {!isMapVisible && !isMobileFiltersOpen && (
+                <div className="md:hidden">
+                    <MobileViewToggle />
+                </div>
+            )}
+
+            {/* Mobile filters sheet - outside main to avoid stacking context issues */}
+            <MobileFiltersSheet
+                open={isMobileFiltersOpen}
+                onOpenChange={setIsMobileFiltersOpen}
+            />
         </div>
     );
 }

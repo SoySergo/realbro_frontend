@@ -176,6 +176,7 @@
     "sortByArea": "By area",
     "aiStoriesTitle": "New listings from AI agent",
     "aiStoriesSubtitle": "Get new offers and connect before everyone else",
+    "onMap": "On map",
     "page": "Page",
     "metaDescription": "Search for property rental in Barcelona with AI agent"
   },
@@ -342,6 +343,7 @@
     "settings": "Settings",
     "newSearch": "New Search",
     "selectSearch": "Select Search",
+    "saveFilter": "Save Filter",
     "filters": "Filters",
     "sort": "Sort",
     "close": "Close",

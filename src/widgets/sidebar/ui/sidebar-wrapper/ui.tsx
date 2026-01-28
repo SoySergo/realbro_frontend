@@ -21,7 +21,7 @@ export function SidebarWrapper() {
             </div>
 
             {/* Mobile версия - видна только на экранах меньше md */}
-            <div className="block md:hidden z-101">
+            <div className="block md:hidden ">
                 <MobileSidebar />
             </div>
         </>
