@@ -27,7 +27,7 @@ export function DesktopQueryItem({
             <button
                 onClick={onSelect}
                 className={cn(
-                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
+                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer relative',
                     'transition-colors duration-150 border-2',
                     isActive
                         ? 'bg-brand-primary-light border-brand-primary text-brand-primary'
@@ -35,6 +35,9 @@ export function DesktopQueryItem({
                 )}
             >
                 <MapPin className="w-5 h-5" />
+                {query.isUnsaved && (
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-warning" />
+                )}
             </button>
         );
     }
@@ -65,7 +68,15 @@ export function DesktopQueryItem({
                 )}
             />
             <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
-                <div className="font-medium truncate text-sm">{query.title}</div>
+                <div className="flex items-center gap-1.5">
+                    <span className="font-medium truncate text-sm">{query.title}</span>
+                    {query.isUnsaved && (
+                        <span
+                            className="w-2 h-2 rounded-full bg-warning shrink-0"
+                            title="Unsaved"
+                        />
+                    )}
+                </div>
                 <QueryStats query={query} className="mt-0.5 text-xs" />
             </div>
 

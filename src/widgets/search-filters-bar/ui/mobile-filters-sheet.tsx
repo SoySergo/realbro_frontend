@@ -120,6 +120,7 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
                         <button
                             onClick={() => onOpenChange(false)}
                             className="p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+                            aria-label={t('cancel')}
                         >
                             <X className="w-5 h-5 text-text-secondary" />
                         </button>
@@ -127,7 +128,15 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
                 </div>
 
                 {/* Фильтры в вертикальной компоновке со скроллом */}
-                <div className="flex-1 overflow-y-auto px-4 py-4">
+                <div
+                    className="flex-1 overflow-y-auto px-4 py-4"
+                    onScroll={() => {
+                        // Скрываем клавиатуру при скролле на мобильных
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                        }
+                    }}
+                >
                     <div className="flex flex-col gap-6">
                         {/* Тип маркера */}
                         <div className="w-full">
@@ -210,7 +219,7 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
                 </div>
 
                 {/* Футер с кнопками "Очистить" и "Применить" */}
-                <div className="px-4 py-3 border-t border-border shrink-0 bg-background">
+                <div className="px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-border shrink-0 bg-background">
                     <div className="flex gap-3">
                         <Button
                             onClick={handleClear}

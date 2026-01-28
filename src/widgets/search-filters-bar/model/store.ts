@@ -128,7 +128,10 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
         result.geometryIds = [parseInt(locationFilter.polygon.id.replace('polygon_', ''))];
     }
 
-    // TODO: isochrone и radius когда будут реализованы
+    if (locationFilter.mode === 'radius' && locationFilter.radius) {
+        result.radiusCenter = locationFilter.radius.center;
+        result.radiusKm = locationFilter.radius.radiusKm;
+    }
 
     return result;
 }
@@ -186,6 +189,17 @@ function convertFiltersToLocationFilter(
                 polygon,
             };
         }
+    }
+
+    // Проверяем радиус
+    if (filters.radiusCenter && filters.radiusKm) {
+        return {
+            mode: 'radius',
+            radius: {
+                center: filters.radiusCenter,
+                radiusKm: filters.radiusKm,
+            },
+        };
     }
 
     return null;
@@ -620,6 +634,19 @@ export function useViewModeActions() {
             searchViewMode: state.searchViewMode,
             setSearchViewMode: state.setSearchViewMode,
             toggleSearchViewMode: state.toggleSearchViewMode,
+        }))
+    );
+}
+
+/**
+ * Селектор для режима отображения карточек в листинге (grid/list)
+ */
+export function useListingViewMode() {
+    return useFilterStore(
+        useShallow((state) => ({
+            listingViewMode: state.listingViewMode,
+            setListingViewMode: state.setListingViewMode,
+            toggleListingViewMode: state.toggleListingViewMode,
         }))
     );
 }

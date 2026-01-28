@@ -26,4 +26,5 @@ export {
     useSavedPolygons,
     usePolygonActions,
     useViewModeActions,
+    useListingViewMode,
 } from './model/store';

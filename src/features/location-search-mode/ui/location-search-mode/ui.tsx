@@ -10,6 +10,7 @@ import { SelectedLocationsList } from '../selected-locations-list';
 import { BoundariesVisualLayer } from '../boundaries-visual-layer';
 import { useSearchModeState } from '../../model/hooks/use-search-mode-state';
 import { searchLocations, mapPlaceTypeToLocationType, getAdminLevelForPlaceType } from '@/shared/api';
+import { useFilterStore } from '@/widgets/search-filters-bar';
 import { cn } from '@/shared/lib/utils';
 import type { MapboxLocation } from '@/entities/location';
 import type { LocationItem } from '@/entities/location';
@@ -125,11 +126,22 @@ export function LocationSearchMode({ map, onClose, className }: LocationSearchMo
         setShowDropdown(false);
     }, [clearLocations]);
 
-    // Обработчик применения фильтра (сохранение в URL/store)
+    // Обработчик применения фильтра (сохранение в store)
     const handleApply = useCallback(() => {
-        // TODO: Добавить логику пуша в URL search params
-        console.log('[LocationSearchMode] Apply location filter:', selectedLocations);
-    }, [selectedLocations]);
+        if (selectedLocations.length === 0) return;
+
+        const { setLocationFilter, setLocationMode } = useFilterStore.getState();
+
+        // Сохраняем в filter store как LocationFilter
+        setLocationFilter({
+            mode: 'search',
+            selectedLocations,
+        });
+
+        // Закрываем панель режима локации
+        setLocationMode(null);
+        onClose?.();
+    }, [selectedLocations, onClose]);
 
     // Обработчик закрытия панели
     const handleClose = useCallback(() => {

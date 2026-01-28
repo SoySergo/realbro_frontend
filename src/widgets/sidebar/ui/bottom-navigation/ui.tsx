@@ -39,7 +39,7 @@ export function BottomNavigation() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background-secondary border-t border-border md:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background-secondary border-t border-border md:hidden pb-[env(safe-area-inset-bottom)]">
             <div className="flex items-center justify-around h-16 px-2">
                 {navigationItems.map((item) => {
                     // Условная навигация для профиля
@@ -58,7 +58,7 @@ export function BottomNavigation() {
                                 <div className="relative">
                                     <LogIn className="w-6 h-6" />
                                 </div>
-                                <span className="text-[10px] font-medium">
+                                <span className="text-[11px] font-medium">
                                     {tAuth('signIn')}
                                 </span>
                             </Link>
@@ -93,7 +93,7 @@ export function BottomNavigation() {
                                     </Badge>
                                 )}
                             </div>
-                            <span className="text-[10px] font-medium">
+                            <span className="text-[11px] font-medium">
                                 {t(item.label)}
                             </span>
                         </Link>

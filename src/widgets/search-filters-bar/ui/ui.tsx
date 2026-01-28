@@ -198,7 +198,22 @@ function SearchFiltersBarContent() {
     };
 
     const handleShowResults = () => {
-        // Логика показа результатов
+        // 1. Закрыть попап полных фильтров
+        setIsFiltersPopupOpen(false);
+
+        // 2. Объединить URL-фильтры с location/polygon фильтрами
+        const mergedFilters = { ...filters, ...currentFilters };
+
+        // 3. Обновить активную вкладку если есть
+        if (activeQueryId && activeQuery) {
+            updateQuery(activeQueryId, {
+                filters: mergedFilters,
+                resultsCount: propertiesCount ?? undefined,
+            });
+        }
+
+        // 4. Применить фильтры (обновить URL, это вызовет перезагрузку данных)
+        setFilters(mergedFilters);
     };
 
     const handleSave = () => {
@@ -258,8 +273,8 @@ function SearchFiltersBarContent() {
     const SaveIcon = activeQuery ? (hasUnsavedChanges ? CloudCog : CloudCheck) : CloudUpload;
 
     return (
-        <div className="w-full bg-background-secondary border-b border-border relative z-50">
-            <div className="flex items-center gap-2 px-4 py-2.5">
+        <div className="w-full bg-background-secondary border-b border-border relative z-50 ">
+            <div className="flex items-center gap-2 px-4 py-2.5 fixed top-0 backdrop-blur-sm bg-background-secondary/85 w-full border-b border-border z-50">
                 {/* Кнопка ИИ агент - первая, синяя */}
                 <Button
                     size="sm"
@@ -310,6 +325,7 @@ function SearchFiltersBarContent() {
                             onClick={() => setIsFiltersPopupOpen(true)}
                             className="text-text-secondary hover:text-brand-primary hover:bg-brand-primary/10"
                             title={t('allFilters')}
+                            aria-label={t('allFilters')}
                         >
                             <SlidersHorizontal className="w-4 h-4" />
                         </Button>
@@ -325,6 +341,7 @@ function SearchFiltersBarContent() {
                                 hasActiveFilters && "hover:text-error hover:bg-error/10"
                             )}
                             title={t('clearAll')}
+                            aria-label={t('clearAll')}
                         >
                             <Trash2 className="w-4 h-4" />
                         </Button>
@@ -436,7 +453,7 @@ function SearchFiltersBarContent() {
                     {/* Modal по центру */}
                     <div className="fixed inset-0 z-110 flex items-center justify-center p-4">
                         <div
-                            className="bg-background rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col animate-in zoom-in-95 fade-in duration-150"
+                            className="bg-background rounded-xl shadow-2xl w-full max-w-lg lg:max-w-xl max-h-[80vh] flex flex-col animate-in zoom-in-95 fade-in duration-150"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Заголовок */}
@@ -446,6 +463,7 @@ function SearchFiltersBarContent() {
                                     <button
                                         onClick={() => setIsFiltersPopupOpen(false)}
                                         className="p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+                                        aria-label={t('cancel')}
                                     >
                                         <X className="w-5 h-5 text-text-secondary" />
                                     </button>

@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { MapPin, ChevronDown, Pencil, Clock, Circle, Search } from 'lucide-react';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useRouter } from '@/shared/config/routing';
 import { cn } from '@/shared/lib/utils';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 
@@ -16,10 +18,15 @@ import type { LocationFilterMode } from '@/features/location-filter/model';
  * При сохранении показывает название режима + количество элементов
  * Например: "Рисование (+2)" или "Поиск (+3)"
  */
+// Режимы, требующие карту для работы
+const MAP_REQUIRED_MODES: LocationFilterMode[] = ['draw', 'isochrone', 'radius'];
+
 export function LocationFilterButton() {
     const t = useTranslations('filters');
     const tLocationFilter = useTranslations('locationFilter.modes');
-    const { locationFilter, activeLocationMode, setLocationMode } = useFilterStore();
+    const { locationFilter, activeLocationMode, setLocationMode, searchViewMode } = useFilterStore();
+    const router = useRouter();
+    const pathname = usePathname();
     const [open, setOpen] = useState(false);
 
     const locationModes = [
@@ -51,6 +58,16 @@ export function LocationFilterButton() {
 
     const handleModeSelect = (mode: LocationFilterMode) => {
         console.log('Location filter mode selected:', mode);
+
+        // Если выбран режим, требующий карту, и мы на странице листинга — редирект на карту
+        const isOnListPage = pathname?.includes('/search/list');
+        if (MAP_REQUIRED_MODES.includes(mode) && isOnListPage) {
+            setLocationMode(mode);
+            router.push(`/search/map?openMode=${mode}`);
+            setOpen(false);
+            return;
+        }
+
         setLocationMode(mode);
         setOpen(false);
     };

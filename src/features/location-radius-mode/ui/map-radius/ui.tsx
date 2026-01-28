@@ -8,6 +8,8 @@ import { LocationSearch } from '@/features/location-filter/ui/location-search';
 import { LocationModeWrapper } from '@/features/location-filter/ui/location-mode-wrapper';
 import { RadiusControls } from '../radius-controls';
 import { useRadiusState } from '../../model/hooks/use-radius-state';
+import { useFilterStore } from '@/widgets/search-filters-bar';
+import { saveRadius } from '@/shared/api/geometries';
 
 type MapRadiusProps = {
     /** Инстанс карты Mapbox */
@@ -43,14 +45,36 @@ export function MapRadius({ map, onClose, className }: MapRadiusProps) {
         defaultPointName: t('selectedPoint'),
     });
 
-    // Обработчик применения фильтра (сохранение в URL)
-    const handleApply = () => {
-        // TODO: Добавить логику пуша в URL search params
-        console.log('Apply radius filter:', {
-            coordinates: selectedCoordinates,
-            radiusKm: selectedRadius,
-            name: selectedName,
+    // Обработчик применения фильтра
+    const handleApply = async () => {
+        if (!selectedCoordinates) return;
+
+        const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
+
+        // Сохраняем в filter store как LocationFilter
+        setLocationFilter({
+            mode: 'radius',
+            radius: {
+                center: selectedCoordinates,
+                radiusKm: selectedRadius,
+            },
         });
+
+        // Обновляем SearchFilters с данными радиуса
+        setFilters({
+            radiusCenter: selectedCoordinates,
+            radiusKm: selectedRadius,
+        });
+
+        // Закрываем панель режима локации
+        setLocationMode(null);
+
+        // Сохраняем на бекенд (фоном)
+        saveRadius(selectedCoordinates, selectedRadius, selectedName).catch((error) => {
+            console.error('[Radius] Failed to save to backend:', error);
+        });
+
+        onClose?.();
     };
 
     // Обработчик закрытия панели

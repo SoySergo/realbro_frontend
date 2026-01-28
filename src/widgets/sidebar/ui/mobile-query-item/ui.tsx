@@ -42,7 +42,15 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     )}
                 />
                 <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
-                    <div className="font-medium truncate text-base">{query.title}</div>
+                    <div className="flex items-center gap-1.5">
+                        <span className="font-medium truncate text-base">{query.title}</span>
+                        {query.isUnsaved && (
+                            <span
+                                className="w-2 h-2 rounded-full bg-warning shrink-0"
+                                title="Unsaved"
+                            />
+                        )}
+                    </div>
                     <QueryStats query={query} className="mt-0.5 text-sm" />
                 </div>
 

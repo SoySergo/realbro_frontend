@@ -169,7 +169,15 @@
     "emptyTitle": "Nothing found",
     "emptySubtitle": "Try changing your search parameters",
     "viewModeGrid": "Grid",
-    "viewModeList": "List"
+    "viewModeList": "List",
+    "showOnMap": "View on map",
+    "sortByDate": "By date",
+    "sortByPrice": "By price",
+    "sortByArea": "By area",
+    "aiStoriesTitle": "New listings from AI agent",
+    "aiStoriesSubtitle": "Get new offers and connect before everyone else",
+    "page": "Page",
+    "metaDescription": "Search for property rental in Barcelona with AI agent"
   },
   "filters": {
     "title": "Filters",

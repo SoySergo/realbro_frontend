@@ -169,7 +169,15 @@
     "emptyTitle": "Ничего не найдено",
     "emptySubtitle": "Попробуйте изменить параметры поиска",
     "viewModeGrid": "Плитка",
-    "viewModeList": "Список"
+    "viewModeList": "Список",
+    "showOnMap": "Смотреть на карте",
+    "sortByDate": "По дате",
+    "sortByPrice": "По цене",
+    "sortByArea": "По площади",
+    "aiStoriesTitle": "Новые объявления от ии-агента",
+    "aiStoriesSubtitle": "Получайте новые предложения и связывайтесь раньше всех",
+    "page": "Стр.",
+    "metaDescription": "Поиск аренды недвижимости в Барселоне с ИИ-агентом"
   },
   "filters": {
     "title": "Фильтры",

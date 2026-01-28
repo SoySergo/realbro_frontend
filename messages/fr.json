@@ -165,7 +165,15 @@
     "emptyTitle": "Aucun résultat",
     "emptySubtitle": "Essayez de modifier vos paramètres de recherche",
     "viewModeGrid": "Grille",
-    "viewModeList": "Liste"
+    "viewModeList": "Liste",
+    "showOnMap": "Voir sur la carte",
+    "sortByDate": "Par date",
+    "sortByPrice": "Par prix",
+    "sortByArea": "Par surface",
+    "aiStoriesTitle": "Nouvelles annonces de l'agent IA",
+    "aiStoriesSubtitle": "Recevez de nouvelles offres et contactez avant tout le monde",
+    "page": "Page",
+    "metaDescription": "Recherche de location immobilière à Barcelone avec agent IA"
   },
   "filters": {
     "title": "Filtres",

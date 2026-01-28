@@ -64,7 +64,10 @@ export function convertLocationFilterToFilters(locationFilter: {
         result.geometryIds = [parseInt(locationFilter.polygon.id.replace('polygon_', ''))];
     }
 
-    // TODO: isochrone и radius когда будут реализованы
+    if (locationFilter.mode === 'radius' && locationFilter.radius) {
+        result.radiusCenter = locationFilter.radius.center;
+        result.radiusKm = locationFilter.radius.radiusKm;
+    }
 
     return result;
 }
@@ -79,6 +82,7 @@ export function convertFiltersToLocationFilter(
     mode: 'search' | 'draw' | 'isochrone' | 'radius';
     selectedLocations?: LocationItem[];
     polygon?: DrawPolygon;
+    radius?: { center: [number, number]; radiusKm: number };
 } | null {
     // Проверяем наличие adminLevel полей
     const hasAdminLevels =
@@ -129,6 +133,19 @@ export function convertFiltersToLocationFilter(
                 polygon,
             };
         }
+    }
+
+    // Проверяем радиус
+    if (filters.radiusCenter && filters.radiusKm) {
+        return {
+            mode: 'radius',
+            selectedLocations: undefined,
+            polygon: undefined,
+            radius: {
+                center: filters.radiusCenter,
+                radiusKm: filters.radiusKm,
+            },
+        };
     }
 
     return null;

@@ -45,6 +45,10 @@ export interface SearchFilters {
     geometryIds?: number[];
     rawGeometryIds?: number[];
 
+    // Радиус (центр + радиус в км)
+    radiusCenter?: [number, number]; // [lng, lat]
+    radiusKm?: number;
+
     // Сортировка
     sort?: string;
     sortOrder?: 'asc' | 'desc';

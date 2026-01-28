@@ -2,6 +2,7 @@
 
 import { DesktopSidebar } from '../desktop-sidebar';
 import { MobileSidebar } from '../mobile-sidebar';
+import { useAutosave } from '@/widgets/sidebar/model';
 
 /**
  * SidebarWrapper - рендерит обе версии, скрывая нужную через CSS
@@ -9,6 +10,9 @@ import { MobileSidebar } from '../mobile-sidebar';
  * Mobile версия скрыта на десктопе (>= 768px)
  */
 export function SidebarWrapper() {
+    // Автосохранение, Ctrl+S, предупреждение при закрытии
+    useAutosave();
+
     return (
         <>
             {/* Desktop версия - видна только на md и выше */}

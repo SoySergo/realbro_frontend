@@ -22,6 +22,18 @@ const jetbrainsMono = JetBrains_Mono({
     display: "swap",
 });
 
+import type { Viewport } from 'next';
+
+/**
+ * Viewport с поддержкой safe-area для телефонов с вырезом (notch)
+ */
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    viewportFit: 'cover',
+};
+
 /**
  * Генерация статических параметров для всех поддерживаемых локалей
  */

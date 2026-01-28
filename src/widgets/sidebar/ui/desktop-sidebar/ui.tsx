@@ -290,7 +290,7 @@ export function DesktopSidebar() {
                                 className={cn(
                                     'w-full flex items-center gap-3 rounded-lg cursor-pointer',
                                     'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
-                                    'transition-colors duration-150 relative',
+                                    'transition-colors duration-150 relative focus-visible:outline-2 focus-visible:outline-brand-primary focus-visible:outline-offset-2',
                                     isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
                                 )}
                             >

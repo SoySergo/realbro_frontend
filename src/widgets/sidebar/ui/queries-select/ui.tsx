@@ -105,6 +105,9 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
                 <span className="text-sm font-medium truncate">
                     {activeQuery?.title || t('selectSearch')}
                 </span>
+                {activeQuery?.isUnsaved && (
+                    <span className="w-2 h-2 rounded-full bg-warning shrink-0" />
+                )}
                 <ChevronDown className="w-4 h-4 shrink-0 text-text-secondary" />
             </button>
 

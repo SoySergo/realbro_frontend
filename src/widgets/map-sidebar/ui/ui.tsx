@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef, memo, type CSSProperties } from 'react';
+import { useEffect, useState, useCallback, useRef, memo } from 'react';
 import { useTranslations } from 'next-intl';
-import { List, type RowComponentProps, useListRef } from 'react-window';
+import { List, type ListImperativeAPI } from 'react-window';
 import {
     Loader2,
     ArrowUpDown,
@@ -60,8 +60,9 @@ type PropertyRowProps = {
 
 /**
  * Компонент строки для виртуализированного списка (react-window v2 API)
+ * Не оборачиваем в memo — react-window сам управляет рендером строк
  */
-const PropertyRow = memo(function PropertyRow({
+function PropertyRow({
     index,
     style,
     properties,
@@ -70,7 +71,11 @@ const PropertyRow = memo(function PropertyRow({
     onPropertyClick,
     onPropertyHover,
     prefersReducedMotion,
-}: RowComponentProps<PropertyRowProps>) {
+}: {
+    ariaAttributes: { 'aria-posinset': number; 'aria-setsize': number; role: 'listitem' };
+    index: number;
+    style: React.CSSProperties;
+} & PropertyRowProps) {
     const property = properties[index];
     if (!property) return null;
 
@@ -95,7 +100,7 @@ const PropertyRow = memo(function PropertyRow({
             />
         </div>
     );
-});
+}
 
 /**
  * MapSidebar - правый сайдбар для режима карты (Desktop)
@@ -129,7 +134,7 @@ export function MapSidebar({
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
-    const listRef = useListRef();
+    const listRef = useRef<ListImperativeAPI>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const prefersReducedMotion = useReducedMotion();
 
@@ -252,6 +257,7 @@ export function MapSidebar({
                     onClick={() => setIsCollapsed(false)}
                     className="w-full h-12 rounded-none"
                     title="Развернуть панель"
+                    aria-label="Развернуть панель"
                 >
                     <ChevronLeft className="w-4 h-4" />
                 </Button>
@@ -263,7 +269,7 @@ export function MapSidebar({
         <div
             ref={containerRef}
             className={cn(
-                'w-80 bg-background border-l border-border flex flex-col',
+                'w-72 lg:w-80 bg-background border-l border-border flex flex-col',
                 className
             )}
             tabIndex={0}
@@ -310,6 +316,7 @@ export function MapSidebar({
                             'h-8 w-8 p-0',
                             !prefersReducedMotion && 'transition-transform'
                         )}
+                        aria-label={sortOrder === 'asc' ? 'Сортировка по убыванию' : 'Сортировка по возрастанию'}
                     >
                         <ArrowUpDown
                             className={cn('w-4 h-4', sortOrder === 'asc' && 'rotate-180')}
@@ -323,6 +330,7 @@ export function MapSidebar({
                         onClick={() => setIsCollapsed(true)}
                         className="ml-auto h-8 w-8 p-0"
                         title="Свернуть панель"
+                        aria-label="Свернуть панель"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </Button>
@@ -391,7 +399,7 @@ export function MapSidebar({
                         size="sm"
                         onClick={() => setPage(page - 1)}
                         disabled={page <= 1 || isLoading}
-                        className="h-8 w-8 p-0"
+                        className="h-10 w-10 p-0"
                     >
                         <ChevronUp className="w-4 h-4" />
                     </Button>
@@ -403,7 +411,7 @@ export function MapSidebar({
                         size="sm"
                         onClick={() => setPage(page + 1)}
                         disabled={page >= pagination.totalPages || isLoading}
-                        className="h-8 w-8 p-0"
+                        className="h-10 w-10 p-0"
                     >
                         <ChevronDown className="w-4 h-4" />
                     </Button>
@@ -611,7 +619,7 @@ export function MobileMapSidebar({
                         {/* Сортировка */}
                         <div className="flex items-center gap-2">
                             <Select value={sortBy} onValueChange={handleSortChange}>
-                                <SelectTrigger className="w-[100px] h-8 text-xs">
+                                <SelectTrigger className="w-[100px] h-10 text-xs">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -627,7 +635,7 @@ export function MobileMapSidebar({
                                 variant="ghost"
                                 size="sm"
                                 onClick={toggleSortOrder}
-                                className="h-8 w-8 p-0"
+                                className="h-10 w-10 p-0"
                             >
                                 <ArrowUpDown
                                     className={cn('w-4 h-4', sortOrder === 'asc' && 'rotate-180')}

@@ -45,8 +45,9 @@ export function SearchMapPage() {
     // Состояние мобильного sheet фильтров
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-    // Проверяем, нужно ли автоматически открыть режим рисования
+    // Проверяем, нужно ли автоматически открыть режим локации
     const autoOpenDraw = searchParams.get('openDraw') === 'true';
+    const autoOpenMode = searchParams.get('openMode') as 'draw' | 'radius' | 'isochrone' | 'search' | null;
 
     // Инициализация фильтров при загрузке страницы
     useEffect(() => {
@@ -61,14 +62,15 @@ export function SearchMapPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Автоматически открыть режим рисования при редиректе с листинга
+    // Автоматически открыть режим локации при редиректе с листинга
     useEffect(() => {
-        if (autoOpenDraw && !activeLocationMode) {
-            setLocationMode('draw');
-            console.log('[SearchMapPage] Auto-opened draw mode from redirect');
+        const modeToOpen = autoOpenMode || (autoOpenDraw ? 'draw' : null);
+        if (modeToOpen && !activeLocationMode) {
+            setLocationMode(modeToOpen);
+            console.log('[SearchMapPage] Auto-opened location mode from redirect:', modeToOpen);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [autoOpenDraw]);
+    }, [autoOpenDraw, autoOpenMode]);
 
     // Обработчик клика на объект - центрировать карту
     const handlePropertyClick = useCallback((property: Property) => {
@@ -106,7 +108,7 @@ export function SearchMapPage() {
 
                 {/* Контейнер карты и фильтров */}
                 <div className="flex-1 relative">
-                    <div className="relative h-[calc(100vh-8rem)] md:h-screen w-full">
+                    <div className="relative h-[calc(100dvh-8rem)] md:h-screen w-full">
                         {/* Панель фильтров поверх карты - только на desktop */}
                         <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
                             <SearchFiltersBar />

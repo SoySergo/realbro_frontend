@@ -3,7 +3,7 @@
 import type { SearchFilters } from '@/entities/filter';
 import type { Property } from '@/entities/property';
 
-const API_BASE = '/api/backend';
+const API_BASE = '/api/properties';
 
 export interface PropertiesCountResponse {
     count: number;
@@ -69,7 +69,7 @@ export async function getPropertiesCount(
     try {
         const params = serializeFiltersToParams(filters);
 
-        const response = await fetch(`${API_BASE}/properties/count?${params.toString()}`, {
+        const response = await fetch(`${API_BASE}/count?${params.toString()}`, {
             signal,
         });
 
@@ -126,7 +126,7 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
         // Geometry
         if (filters.geometryIds?.length) searchParams.set('geometryIds', filters.geometryIds.join(','));
 
-        const response = await fetch(`${API_BASE}/properties?${searchParams.toString()}`);
+        const response = await fetch(`${API_BASE}?${searchParams.toString()}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -157,7 +157,7 @@ export async function saveGeometry(geometry: {
     metadata?: Record<string, unknown>;
 }): Promise<{ id: number }> {
     try {
-        const response = await fetch(`${API_BASE}/geometries`, {
+        const response = await fetch(`/api/geometries`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
