@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState, useCallback, type MouseEvent, memo } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { Link } from '@/shared/config/routing';
 import { Button } from '@/shared/ui/button';
 import {
     SlidersHorizontal,
@@ -11,10 +13,14 @@ import {
     X,
     Map,
     List,
+    CloudUpload,
 } from 'lucide-react';
+import { CloudSyncIcon, CloudCheckIcon } from '@/shared/icons/cloude-sync';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useSearchViewMode, useActiveLocationMode } from '../model/store';
 import { QueriesSelect } from '@/widgets/sidebar/ui/queries-select';
+import { useSidebarStore } from '@/widgets/sidebar/model';
+import { useAuth } from '@/features/auth';
 import { cn } from '@/shared/lib/utils';
 import { useReducedMotion, useDebouncedCallback } from '@/shared/hooks';
 import {
@@ -38,9 +44,58 @@ const HEADER_HEIGHT = 56;
  * Мобильный хедер для страницы поиска
  */
 export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHeaderProps) {
-    const { filtersCount } = useSearchFilters();
+    const { filtersCount, filters } = useSearchFilters();
+    const t = useTranslations('sidebar');
+    const tFilters = useTranslations('filters');
+    const tCommon = useTranslations('common'); // Assuming 'saving' and 'saved' are here or need to provide hardcoded/key
     // Используем оптимизированный селектор вместо полного стора
     const searchViewMode = useSearchViewMode();
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    
+    // Auth state
+    const { isAuthenticated } = useAuth();
+    const [isSaving, setIsSaving] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    
+    // Получаем queries для определения первого визита
+    const { queries, addQuery } = useSidebarStore();
+    const isFirstTimeUser = queries.length === 0;
+    
+    // Обработчик сохранения фильтра
+    const handleSaveFilter = async () => {
+        if (!isAuthenticated) {
+            // Если не авторизован - открываем модалку регистрации
+            // Сохраняем текущие параметры в URL чтобы модалка открылась поверх
+            const params = new URLSearchParams(searchParams);
+            params.set('modal', 'register');
+            router.push(`${pathname}?${params.toString()}`);
+            return;
+        }
+
+        setIsSaving(true);
+
+        // Имитация асинхронного сохранения на бекенд
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            addQuery({
+                title: t('newSearch'),
+                filters: filters,
+                isUnsaved: true, // В будущем это будет false, когда будет реальное сохранение
+            });
+            
+            setIsSuccess(true);
+            setTimeout(() => {
+                setIsSuccess(false);
+            }, 2000);
+        } catch (error) {
+            console.error('Failed to save filter:', error);
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const isMapMode = searchViewMode === 'map';
 
@@ -48,29 +103,103 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
         <div className={cn('', className)}>
             {/* Фиксированный хедер */}
             <div className="fixed top-0 left-0 right-0 z-101 bg-background-secondary">
-                <div className="flex items-center justify-between px-3 py-2 gap-2">
-                    <div className="flex-1 min-w-0">
-                        <QueriesSelect
-                            triggerClassName="h-10 text-base bg-background border border-border rounded-lg px-4 w-full justify-between"
-                        />
+                <div className="flex items-center px-3 py-2 gap-2">
+                    {/* Logo Block - 1/3 (approx width to balance) */}
+                    <div className="flex-[0_0_auto] mr-auto">
+                        <Link href="/" className="flex items-start">
+                            <Image
+                                src="/logo.svg"
+                                alt="Logo"
+                                width={24}
+                                height={24}
+                                className="w-6 h-6 object-contain"
+                            />
+                            <span className="ml-2 text-xl font-bold text-text-primary leading-none">Realbro</span>
+                        </Link>
                     </div>
 
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={onOpenFilters}
-                        className={cn(
-                            'h-10 w-10 bg-background border-border shrink-0 relative',
-                            filtersCount > 0 && 'border-brand-primary text-brand-primary'
+                    {/* Actions Block - 2/3 (takes remaining space and aligns right) */}
+                    <div className="flex-[1_1_auto] flex items-center justify-end gap-2 min-w-0 pl-2">
+                        {isFirstTimeUser ? (
+                            <>
+                                {/* Первый визит: кнопка "Сохранить фильтр" (не тянется) + кнопка "Фильтры" */}
+                                <Button
+                                    onClick={handleSaveFilter}
+                                    disabled={filtersCount === 0 || isSaving || isSuccess}
+                                    className={cn(
+                                        'h-10 gap-2 px-4 shrink-0 transition-all duration-300',
+                                        filtersCount > 0
+                                            ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
+                                            : 'bg-background-tertiary text-text-secondary cursor-not-allowed',
+                                        isSaving && 'animate-pulse cursor-wait',
+                                        isSuccess && 'bg-green-600 hover:bg-green-700 text-white border-green-600'
+                                    )}
+                                >
+                                    {isSaving ? (
+                                        <CloudSyncIcon className="w-5 h-5 animate-spin" />
+                                    ) : isSuccess ? (
+                                        <CloudCheckIcon className="w-5 h-5" />
+                                    ) : (
+                                        <CloudUpload className="w-5 h-5" />
+                                    )}
+                                    
+                                    <span>
+                                        {isSaving 
+                                            ? tCommon('saving') 
+                                            : isSuccess 
+                                                ? tCommon('saved') 
+                                                : t('saveFilter')
+                                        }
+                                    </span>
+                                </Button>
+                                
+                                <Button
+                                    variant="outline"
+                                    onClick={onOpenFilters}
+                                    className={cn(
+                                        'h-10 bg-background border-border shrink-0',
+                                        filtersCount > 0
+                                            ? 'w-10 p-0 border-brand-primary text-brand-primary relative'
+                                            : 'px-4 gap-2'
+                                    )}
+                                >
+                                    <SlidersHorizontal className="w-5 h-5" />
+                                    {filtersCount === 0 && <span>{tFilters('title')}</span>}
+                                    {filtersCount > 0 && (
+                                        <span className="bg-brand-primary absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {filtersCount}
+                                        </span>
+                                    )}
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                {/* Вернувшийся пользователь: dropdown (компактный) + иконка фильтров */}
+                                <div className="min-w-0 shrink-0 max-w-[200px]">
+                                    <QueriesSelect
+                                        triggerClassName="h-10 text-base bg-background border border-border rounded-lg px-4 justify-between"
+                                    />
+                                </div>
+
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={onOpenFilters}
+                                    className={cn(
+                                        'h-10 w-10 bg-background border-border shrink-0 relative',
+                                        filtersCount > 0 && 'border-brand-primary text-brand-primary'
+                                    )}
+                                >
+                                    <SlidersHorizontal className="w-5 h-5" />
+                                    {filtersCount > 0 && (
+                                        <span className="bg-brand-primary absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {filtersCount}
+                                        </span>
+                                    )}
+                                </Button>
+                            </>
                         )}
-                    >
-                        <SlidersHorizontal className="w-5 h-5" />
-                        {filtersCount > 0 && (
-                            <span className="bg-brand-primary absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {filtersCount}
-                            </span>
-                        )}
-                    </Button>
+                    </div>
                 </div>
             </div>
 

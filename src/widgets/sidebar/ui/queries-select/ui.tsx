@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSidebarStore } from '@/widgets/sidebar/model';
-import { ChevronDown, Plus, X, BookmarkPlus } from 'lucide-react';
+import { ChevronDown, Plus, X } from 'lucide-react';
 import { MobileQueryItem } from '../mobile-query-item';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { useSearchFilters } from '@/features/search-filters/model';
 
 type QueriesSelectProps = {
     /** Дополнительные стили для кнопки-триггера */
@@ -25,12 +24,6 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
     const [isOpen, setIsOpen] = useState(false);
     const t = useTranslations('sidebar');
     const activeItemRef = useRef<HTMLDivElement>(null);
-
-    // Проверяем количество заполненных фильтров
-    const { filtersCount } = useSearchFilters();
-
-    // Первый визит - нет сохраненных подборок
-    const isFirstTimeUser = queries.length === 0;
 
     // Получаем активный query
     const activeQuery = queries.find(q => q.id === activeQueryId) || queries[0];
@@ -101,42 +94,19 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
 
     return (
         <>
-            {/* Для первых пользователей - кнопка "Сохранить фильтр" */}
-            {isFirstTimeUser ? (
-                <button
-                    onClick={() => {
-                        // Создаем новый поиск с текущими фильтрами
-                        handleAddQuery();
-                    }}
-                    disabled={filtersCount === 0}
-                    className={cn(
-                        "flex items-center gap-2 px-3 py-2 rounded-lg transition-colors",
-                        filtersCount > 0
-                            ? "bg-brand-primary text-white hover:bg-brand-primary-hover"
-                            : "bg-background-tertiary text-text-secondary cursor-not-allowed",
-                        triggerClassName
-                    )}
-                >
-                    <BookmarkPlus className="w-4 h-4 shrink-0" />
-                    <span className="text-sm font-medium truncate">
-                        {t('saveFilter')}
-                    </span>
-                </button>
-            ) : (
-                /* Обычная кнопка с заголовком для пользователей с подборками */
-                <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={cn(
-                        "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-background-tertiary transition-colors",
-                        triggerClassName
-                    )}
-                >
-                    <span className="text-sm font-medium truncate">
-                        {activeQuery?.title || t('selectSearch')}
-                    </span>
-                    <ChevronDown className="w-4 h-4 shrink-0 text-text-secondary" />
-                </button>
-            )}
+            {/* Кнопка dropdown для выбора подборки */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-background-tertiary transition-colors",
+                    triggerClassName
+                )}
+            >
+                <span className="text-sm font-medium truncate">
+                    {activeQuery?.title || t('selectSearch')}
+                </span>
+                <ChevronDown className="w-4 h-4 shrink-0 text-text-secondary" />
+            </button>
 
             {/* Полноэкранный оверлей */}
             {isOpen && (
