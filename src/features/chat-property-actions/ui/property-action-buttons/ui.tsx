@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { ThumbsUp, ThumbsDown, Bookmark, ExternalLink } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { usePropertyActionsStore } from '../../model/store';
@@ -10,7 +11,11 @@ interface PropertyActionButtonsProps {
     className?: string;
 }
 
-export function PropertyActionButtons({
+/**
+ * Action buttons for property cards (like, dislike, save, view)
+ * Memoized to prevent re-renders when other properties change
+ */
+export const PropertyActionButtons = React.memo(function PropertyActionButtons({
     propertyId,
     onViewDetails,
     className,
@@ -92,4 +97,5 @@ export function PropertyActionButtons({
             </button>
         </div>
     );
-}
+});
+

@@ -1,0 +1,1 @@
+export { PropertyCharacteristics } from './ui';

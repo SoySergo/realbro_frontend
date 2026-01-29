@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { MapPin, Bed, Maximize, Train, Bus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
@@ -13,7 +14,11 @@ interface PropertyBatchCardProps {
     className?: string;
 }
 
-export function PropertyBatchCard({
+/**
+ * Batch property card for carousel display
+ * Memoized to prevent re-renders when sibling cards change
+ */
+export const PropertyBatchCard = React.memo(function PropertyBatchCard({
     property,
     filterName,
     actions,
@@ -29,7 +34,7 @@ export function PropertyBatchCard({
             className={cn(
                 'bg-card border border-border rounded-xl overflow-hidden',
                 'transition-all duration-200 hover:border-brand-primary/50 hover:shadow-md',
-                'w-[280px] shrink-0 cursor-pointer',
+                'w-full cursor-pointer',
                 className
             )}
             onClick={onClick}
@@ -131,4 +136,4 @@ export function PropertyBatchCard({
             </div>
         </div>
     );
-}
+});

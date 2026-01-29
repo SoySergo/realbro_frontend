@@ -22,10 +22,11 @@ interface ChatSidebarProps {
         searchPlaceholder: string;
         tabs: Record<string, string>;
     };
+    onSelectConversation?: () => void;
     className?: string;
 }
 
-export function ChatSidebar({ labels, className }: ChatSidebarProps) {
+export function ChatSidebar({ labels, onSelectConversation, className }: ChatSidebarProps) {
     const {
         conversations,
         activeConversationId,
@@ -133,7 +134,10 @@ export function ChatSidebar({ labels, className }: ChatSidebarProps) {
                             key={conversation.id}
                             conversation={conversation}
                             isActive={activeConversationId === conversation.id}
-                            onClick={() => setActiveConversation(conversation.id)}
+                            onClick={() => {
+                                setActiveConversation(conversation.id);
+                                onSelectConversation?.();
+                            }}
                         />
                     ))
                 )}

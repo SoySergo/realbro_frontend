@@ -1,0 +1,1 @@
+export { PropertyDescriptionSection } from './ui';

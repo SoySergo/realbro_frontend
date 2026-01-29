@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useCallback, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 import {
@@ -72,11 +72,12 @@ export function SearchMapPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autoOpenDraw, autoOpenMode]);
 
+    const router = useRouter();
+
     // Обработчик клика на объект - центрировать карту
     const handlePropertyClick = useCallback((property: Property) => {
-        console.log('Property clicked:', property.id);
-        // TODO: Центрировать карту на координатах объекта
-    }, []);
+        router.push(`/property/${property.id}`);
+    }, [router]);
 
     // Обработчик наведения - подсветить на карте
     const handlePropertyHover = useCallback((property: Property | null) => {

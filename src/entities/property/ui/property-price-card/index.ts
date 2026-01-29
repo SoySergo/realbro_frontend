@@ -1,0 +1,1 @@
+export { PropertyPriceCard } from './ui';

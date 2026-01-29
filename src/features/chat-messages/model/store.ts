@@ -27,6 +27,7 @@ interface ChatStore {
     markAsRead: (conversationId: string) => void;
     startSimulation: () => void;
     stopSimulation: () => void;
+    initializeDemoScenario: () => Promise<void>;
     totalUnread: () => number;
 }
 
@@ -138,41 +139,18 @@ export const useChatStore = create<ChatStore>()(
                 set((state) => {
                     const conversationMsgs = state.messages[message.conversationId] || [];
 
-                    // Check if we should merge into an existing batch
-                    if (message.type === 'property' && message.properties?.length === 1) {
-                        const lastMsg = conversationMsgs[conversationMsgs.length - 1];
-                        if (
-                            lastMsg &&
-                            (lastMsg.type === 'property' || lastMsg.type === 'property-batch') &&
-                            lastMsg.senderId === 'ai-agent'
-                        ) {
-                            // Merge into batch
-                            const existingProps = lastMsg.properties || [];
-                            const mergedMsg: ChatMessage = {
-                                ...lastMsg,
-                                type: 'property-batch',
-                                content: `${existingProps.length + 1} new properties`,
-                                properties: [...existingProps, ...(message.properties || [])],
-                                createdAt: message.createdAt,
-                            };
-                            return {
-                                messages: {
-                                    ...state.messages,
-                                    [message.conversationId]: [
-                                        ...conversationMsgs.slice(0, -1),
-                                        mergedMsg,
-                                    ],
-                                },
-                            };
-                        }
-                    }
+                    // Mark as real-time message (pushed via WebSocket while chat is open)
+                    const messageWithFlag: ChatMessage = {
+                        ...message,
+                        isRealTime: true,
+                    };
 
                     return {
                         messages: {
                             ...state.messages,
                             [message.conversationId]: [
                                 ...conversationMsgs,
-                                message,
+                                messageWithFlag,
                             ],
                         },
                     };
@@ -201,11 +179,107 @@ export const useChatStore = create<ChatStore>()(
                 }));
             },
 
+            initializeDemoScenario: async () => {
+                const state = get();
+                const aiConv = state.conversations.find((c) => c.type === 'ai-agent');
+                
+                if (!aiConv) {
+                    await state.fetchConversations();
+                    // Retry once
+                    const retryConv = get().conversations.find((c) => c.type === 'ai-agent');
+                    if (!retryConv) return;
+                    
+                    // Recursive call with fresh state
+                    get().initializeDemoScenario();
+                    return;
+                }
+
+                // Clear existing messages for this conversation to ensure clean demo state
+                set((state) => ({
+                    messages: {
+                        ...state.messages,
+                        [aiConv.id]: [],
+                    }
+                }));
+
+                const now = new Date();
+                const messages: ChatMessage[] = [];
+                let msgIdCounter = 1000;
+
+                // Helper to create batch message
+                const createBatch = (count: number, date: Date, startId: number) => {
+                    const properties = [];
+                    for (let i = 0; i < count; i++) {
+                        properties.push(generateMockProperty(startId + i));
+                    }
+                    
+                    // Create multiple messages or one batch? 
+                    // Requirement: "Grouped". The current UI groups by time.
+                    // Let's create individual messages closely timed so they group.
+                    
+                    const msgs: ChatMessage[] = [];
+                    const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
+                    
+                    // We'll create one message per property to allow existing grouping logic to work,
+                    // or we could create batch messages if the backend supports it.
+                    // Looking at the code, it supports 'property' type with multiple properties array?
+                    // "msg.properties?.length || 1" implies it handles arrays.
+                    // But to ensure "grouped" UI (which groups by time), individual messages might be better tested.
+                    // valid types: 'text' | 'property' | 'property-batch'
+                    
+                    // Let's simulate distinct messages to rely on the frontend grouping logic we saw in AIAgentPropertyFeed
+                    // (getGroupKey function)
+                    
+                    for (let i = 0; i < count; i++) {
+                        const property = properties[i];
+                        const filterIdx = i % 3;
+                        
+                        msgs.push({
+                            id: `msg_demo_${startId + i}`,
+                            conversationId: aiConv.id,
+                            senderId: 'ai-agent',
+                            type: 'property',
+                            content: '',
+                            properties: [property],
+                            status: 'delivered',
+                            createdAt: date.toISOString(),
+                            metadata: {
+                                filterName: filterNames[filterIdx],
+                                filterId: `filter_${filterIdx}`,
+                            },
+                        });
+                    }
+                    return msgs;
+                };
+
+                // 1. Yesterday: 10 objects
+                const yesterday = new Date(now);
+                yesterday.setDate(yesterday.getDate() - 1);
+                yesterday.setHours(14, 0, 0, 0); // Yesterday 2 PM
+                messages.push(...createBatch(10, yesterday, 2000));
+
+                // 2. Today: 20 objects (grouped)
+                const today = new Date(now);
+                today.setHours(10, 0, 0, 0); // Today 10 AM
+                messages.push(...createBatch(20, today, 3000));
+
+                // Update store with historical data
+                set((state) => ({
+                    messages: {
+                        ...state.messages,
+                        [aiConv.id]: messages
+                    }
+                }));
+
+                // 3. Start simulation: New object every 5 seconds
+                get().startSimulation();
+            },
+
             startSimulation: () => {
                 const existing = get().simulationInterval;
                 if (existing) return;
 
-                let counter = 200;
+                let counter = 5000;
                 const interval = setInterval(() => {
                     const state = get();
                     const aiConv = state.conversations.find(
@@ -215,8 +289,10 @@ export const useChatStore = create<ChatStore>()(
 
                     counter++;
                     const property = generateMockProperty(counter);
+                    // Add "NEW" flag to property or handle via isRealTime
+                    property.isNew = true; 
+
                     const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
-                    const filterIds = ['filter_1', 'filter_2', 'filter_3'];
                     const filterIdx = counter % 3;
 
                     state.addIncomingMessage({
@@ -230,10 +306,10 @@ export const useChatStore = create<ChatStore>()(
                         createdAt: new Date().toISOString(),
                         metadata: {
                             filterName: filterNames[filterIdx],
-                            filterId: filterIds[filterIdx],
+                            filterId: `filter_${filterIdx}`,
                         },
                     });
-                }, 15000); // Every 15 seconds
+                }, 5000); // Every 5 seconds
 
                 set({ simulationInterval: interval });
             },
@@ -255,9 +331,8 @@ export const useChatStore = create<ChatStore>()(
         }),
         {
             name: 'realbro-chat-store',
-            partialize: (state) => ({
-                activeConversationId: state.activeConversationId,
-            }),
+            // Don't persist activeConversationId - user should select chat on each visit
+            partialize: () => ({}),
         }
     )
 );

@@ -10,28 +10,28 @@
 
 :root {
   /* Фирменный цвет (из логотипа) */
-  --brand-primary: #198BFF;
-  --brand-primary-hover: #0D7AE8;
-  --brand-primary-light: #E6F4FF;
+  --brand-primary: #198bff;
+  --brand-primary-hover: #0d7ae8;
+  --brand-primary-light: #e6f4ff;
 
   /* Светлая тема - Фоны */
-  --background-secondary: #F8F9FA;
-  --background-tertiary: #F1F3F5;
+  --background-secondary: #f8f9fa;
+  --background-tertiary: #f1f3f5;
 
   /* Светлая тема - Текст */
-  --text-primary: #1A1A1A;
-  --text-secondary: #6C757D;
-  --text-tertiary: #ADB5BD;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6c757d;
+  --text-tertiary: #adb5bd;
 
   /* Светлая тема - Границы */
   --border: oklch(0.922 0 0);
-  --border-hover: #CED4DA;
+  --border-hover: #ced4da;
 
   /* Состояния */
-  --success: #28A745;
-  --warning: #FFC107;
-  --error: #DC3545;
-  --info: #198BFF;
+  --success: #28a745;
+  --warning: #ffc107;
+  --error: #dc3545;
+  --info: #198bff;
 
   /* Семантические цвета */
   --price-color: var(--brand-primary);
@@ -83,28 +83,28 @@
 /* Тёмная тема */
 [data-theme="dark"] {
   /* Фирменный цвет */
-  --brand-primary: #198BFF;
-  --brand-primary-hover: #3DA1FF;
+  --brand-primary: #198bff;
+  --brand-primary-hover: #3da1ff;
   --brand-primary-light: rgba(25, 139, 255, 0.15);
 
   /* Фоны */
-  --background: #0F0F0F;
-  --background-secondary: #1A1A1A;
+  --background: #0f0f0f;
+  --background-secondary: #1a1a1a;
   --background-tertiary: #252525;
 
   /* Текст */
-  --text-primary: #F8F9FA;
-  --text-secondary: #ADB5BD;
-  --text-tertiary: #6C757D;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --text-tertiary: #6c757d;
 
   /* Границы */
-  --border: #343A40;
+  --border: #343a40;
   --border-hover: #495057;
 
   /* Состояния (чуть ярче для тёмной темы) */
-  --success: #2ECC71;
-  --warning: #F39C12;
-  --error: #E74C3C;
+  --success: #2ecc71;
+  --warning: #f39c12;
+  --error: #e74c3c;
 }
 
 /* Применение цветов через @theme для Tailwind v4 */
@@ -181,16 +181,26 @@
 /* Базовые стили body */
 body {
   color: var(--text-primary);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-sans),
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* Плавный переход между темами - только для нужных элементов */
 [data-theme] {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 [data-theme] * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 /* Скрытие скроллбара */
@@ -248,4 +258,112 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ========================================
+   CHAT ANIMATIONS
+   ======================================== */
+
+/* Badge pop animation */
+@keyframes badge-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 0.3s ease-out;
+}
+
+/* Chat icon wiggle animation */
+@keyframes chat-wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
+}
+
+.animate-chat-wiggle {
+  animation: chat-wiggle 0.5s ease-in-out;
+}
+
+/* Chat icon pulse animation */
+@keyframes chat-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-chat-pulse {
+  animation: chat-pulse 0.6s ease-in-out;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* Message slide in (Telegram-like) */
+@keyframes message-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-message-slide-in {
+  animation: message-slide-in 0.3s ease-out;
+}
+
+/* Property card slide in */
+@keyframes card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-card-slide-in {
+  animation: card-slide-in 0.4s ease-out;
 }

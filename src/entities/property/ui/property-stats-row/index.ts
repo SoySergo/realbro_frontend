@@ -1,0 +1,1 @@
+export { PropertyStatsRow } from './ui';

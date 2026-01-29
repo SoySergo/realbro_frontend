@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore } from '@/features/chat-messages';
 import { ChatSidebar } from '../chat-sidebar/ui';
@@ -51,22 +51,12 @@ interface ChatLayoutProps {
 }
 
 export function ChatLayout({ labels, className }: ChatLayoutProps) {
-    const { activeConversationId, startSimulation, stopSimulation } = useChatStore();
+    const { activeConversationId } = useChatStore();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [showMobileChat, setShowMobileChat] = useState(false);
 
-    // Start AI simulation on mount
-    useEffect(() => {
-        startSimulation();
-        return () => stopSimulation();
-    }, [startSimulation, stopSimulation]);
-
-    // When conversation is selected on mobile, show the chat window
-    useEffect(() => {
-        if (activeConversationId) {
-            setShowMobileChat(true);
-        }
-    }, [activeConversationId]);
+    // Mobile: show chat only when user explicitly clicks a conversation
+    // (removed auto-trigger on activeConversationId change)
 
     const handleBackToSidebar = () => {
         setShowMobileChat(false);
@@ -87,6 +77,7 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
                         searchPlaceholder: labels.searchPlaceholder,
                         tabs: labels.tabs,
                     }}
+                    onSelectConversation={() => setShowMobileChat(true)}
                     className="w-full"
                 />
             </div>

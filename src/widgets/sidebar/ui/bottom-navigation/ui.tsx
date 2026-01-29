@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Search, MessageCircle, User, Settings, LogIn } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import { Badge } from '@/shared/ui/badge';
+import { ChatNotificationBadge } from '@/shared/ui/chat-notification-badge';
 import { useTranslations } from 'next-intl';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
@@ -27,11 +27,23 @@ export function BottomNavigation() {
     const { isAuthenticated } = useAuth();
     const chatUnread = useChatStore((s) => s.totalUnread());
     const [isMounted, setIsMounted] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const prevUnreadRef = useRef(chatUnread);
 
     // Отслеживаем монтирование компонента для предотвращения hydration mismatch
     useEffect(() => {
         setIsMounted(true);
     }, []);
+
+    // Trigger animation when new messages arrive
+    useEffect(() => {
+        if (chatUnread > prevUnreadRef.current) {
+            setIsAnimating(true);
+            const timer = setTimeout(() => setIsAnimating(false), 600);
+            return () => clearTimeout(timer);
+        }
+        prevUnreadRef.current = chatUnread;
+    }, [chatUnread]);
 
     // Скрываем навигацию когда активен режим локации
     if (activeLocationMode) {
@@ -68,6 +80,7 @@ export function BottomNavigation() {
                     // Определяем активность по началу пути
                     const isActive = pathname?.includes(item.href) ?? false;
                     const Icon = item.icon;
+                    const isChatIcon = item.id === 'chat';
 
                     return (
                         <Link
@@ -81,16 +94,19 @@ export function BottomNavigation() {
                                     : 'text-text-secondary hover:text-text-primary active:text-brand-primary'
                             )}
                         >
-                            <div className="relative">
-                                <Icon className="w-6 h-6" />
+                            <div className={cn(
+                                'relative',
+                                isChatIcon && isAnimating && 'animate-chat-wiggle'
+                            )}>
+                                <Icon className={cn(
+                                    'w-6 h-6',
+                                    isChatIcon && isAnimating && 'animate-chat-pulse'
+                                )} />
                                 {/* Badge для уведомлений */}
-                                {item.id === 'chat' && isMounted && chatUnread > 0 && (
-                                    <Badge
-                                        variant="destructive"
-                                        className="absolute -top-1 -right-1 w-4 h-4 p-0 flex items-center justify-center text-[10px] font-bold"
-                                    >
-                                        {chatUnread > 9 ? '9+' : chatUnread}
-                                    </Badge>
+                                {isChatIcon && isMounted && chatUnread > 0 && (
+                                    <div className="absolute -top-1.5 -right-2">
+                                        <ChatNotificationBadge count={chatUnread} />
+                                    </div>
                                 )}
                             </div>
                             <span className="text-[11px] font-medium">

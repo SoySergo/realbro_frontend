@@ -1,0 +1,1 @@
+export { PropertyMainInfo } from './ui';

@@ -1,0 +1,1 @@
+export { ChatNotificationBadge } from './ui';

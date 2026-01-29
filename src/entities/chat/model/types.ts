@@ -34,10 +34,13 @@ export interface ChatMessage {
     status: MessageStatus;
     createdAt: string;
     readAt?: string;
+    /** True if message was pushed via WebSocket (real-time) */
+    isRealTime?: boolean;
     metadata?: {
         filterName?: string;
         filterId?: string;
         batchId?: string;
+        matchedFilters?: Array<{ id: string; name: string }>;
         actionTaken?: PropertyAction;
     };
 }

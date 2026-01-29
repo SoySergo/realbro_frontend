@@ -126,7 +126,7 @@ export function SearchListPage({
 
     const handlePropertyClick = useCallback(
         (property: Property) => {
-            router.push(`/search/property/${property.id}`);
+            router.push(`/property/${property.id}`);
         },
         [router]
     );

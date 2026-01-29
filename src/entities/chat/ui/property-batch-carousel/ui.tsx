@@ -32,11 +32,17 @@ export function PropertyBatchCarousel({
         ? properties.filter((p) => viewedIds.has(p.id)).length
         : 0;
 
+    const [scrollProgress, setScrollProgress] = useState(0);
+
     const updateScrollState = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
         setCanScrollLeft(el.scrollLeft > 10);
         setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+
+        // Update progress for slider
+        const progress = (el.scrollLeft / (el.scrollWidth - el.clientWidth)) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, progress)));
 
         // Calculate current index based on scroll position
         const cardWidth = 292; // 280px card + 12px gap
@@ -82,7 +88,7 @@ export function PropertyBatchCarousel({
 
             {/* Carousel */}
             <div className="relative group">
-                {/* Left arrow */}
+                {/* Left arrow - always visible on touch devices */}
                 {canScrollLeft && (
                     <button
                         onClick={() => scrollTo('left')}
@@ -90,8 +96,8 @@ export function PropertyBatchCarousel({
                             'absolute left-0 top-1/2 -translate-y-1/2 z-10',
                             'w-8 h-8 rounded-full bg-background/90 border border-border',
                             'flex items-center justify-center shadow-md',
-                            'opacity-0 group-hover:opacity-100 transition-opacity',
-                            'hover:bg-background cursor-pointer'
+                            'opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity',
+                            'hover:bg-background active:bg-background cursor-pointer'
                         )}
                     >
                         <ChevronLeft className="w-4 h-4" />
@@ -105,20 +111,20 @@ export function PropertyBatchCarousel({
                     className={cn(
                         'flex gap-3 overflow-x-auto scrollbar-hide',
                         'scroll-smooth snap-x snap-mandatory',
-                        'pb-2'
+                        'pb-2 touch-pan-x'
                     )}
                 >
                     {properties.map((property, index) => (
                         <div
                             key={property.id}
-                            className="snap-start shrink-0"
+                            className="snap-start shrink-0 w-[calc(100vw-3rem)] max-w-[280px]"
                         >
                             {renderCard(property, index)}
                         </div>
                     ))}
                 </div>
 
-                {/* Right arrow */}
+                {/* Right arrow - always visible on touch devices */}
                 {canScrollRight && (
                     <button
                         onClick={() => scrollTo('right')}
@@ -126,8 +132,8 @@ export function PropertyBatchCarousel({
                             'absolute right-0 top-1/2 -translate-y-1/2 z-10',
                             'w-8 h-8 rounded-full bg-background/90 border border-border',
                             'flex items-center justify-center shadow-md',
-                            'opacity-0 group-hover:opacity-100 transition-opacity',
-                            'hover:bg-background cursor-pointer'
+                            'opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity',
+                            'hover:bg-background active:bg-background cursor-pointer'
                         )}
                     >
                         <ChevronRight className="w-4 h-4" />
@@ -135,28 +141,17 @@ export function PropertyBatchCarousel({
                 )}
             </div>
 
-            {/* Dot indicators */}
+            {/* Progress Bar (Slider) */}
             {properties.length > 1 && (
-                <div className="flex items-center justify-center gap-1.5">
-                    {properties.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => {
-                                const el = scrollRef.current;
-                                if (!el) return;
-                                el.scrollTo({
-                                    left: index * 292,
-                                    behavior: 'smooth',
-                                });
-                            }}
-                            className={cn(
-                                'w-1.5 h-1.5 rounded-full transition-all duration-200 cursor-pointer',
-                                index === currentIndex
-                                    ? 'bg-brand-primary w-4'
-                                    : 'bg-text-tertiary/40 hover:bg-text-tertiary'
-                            )}
-                        />
-                    ))}
+                <div className="mx-1 h-1 bg-border/40 rounded-full mt-2 relative overflow-hidden">
+                    <div 
+                        className="absolute top-0 bottom-0 bg-brand-primary rounded-full transition-all duration-150"
+                        style={{
+                            left: `${scrollProgress}%`,
+                            width: `${Math.max(10, (1 / properties.length) * 100)}%`,
+                            transform: `translateX(-${scrollProgress}%)`
+                        }}
+                    />
                 </div>
             )}
         </div>

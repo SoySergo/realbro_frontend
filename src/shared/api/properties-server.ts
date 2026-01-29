@@ -116,6 +116,33 @@ export async function getPropertiesCountServer(filters: SearchFilters): Promise<
 }
 
 /**
+ * Получить объект недвижимости по ID (для ISR/SSR)
+ */
+export async function getPropertyByIdServer(id: string): Promise<Property | null> {
+    try {
+        const response = await fetch(`${API_BASE}/properties/${id}`, {
+            next: { revalidate: 21600 }, // ISR: revalidate every 6 hours
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) return null;
+            // Fallback for demo if API fails
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`[API Server] Failed to get property ${id}:`, error);
+        
+        // Return mock for specific ID or Generate one
+        const mockList = generateMockProperties(1);
+        const mockProperty = mockList[0];
+        mockProperty.id = id;
+        return mockProperty;
+    }
+}
+
+/**
  * Парсинг фильтров из URL search params
  */
 export function parseFiltersFromSearchParams(
@@ -242,8 +269,12 @@ function generateMockProperties(count: number, page: number = 1): Property[] {
             price,
             pricePerMeter: Math.round(price / area),
             bedrooms,
+            rooms: bedrooms + 1,
             bathrooms: (idx % 2) + 1,
             area,
+            livingArea: Math.floor(area * 0.7),
+            kitchenArea: Math.floor(area * 0.15),
+            ceilingHeight: 2.7 + (idx % 5) / 10,
             floor: (idx % 6) + 1,
             totalFloors: (idx % 4) + 5,
             address: `${street}, ${(idx % 200) + 1}`,
@@ -253,7 +284,8 @@ function generateMockProperties(count: number, page: number = 1): Property[] {
                 lat: 41.3851 + ((idx % 100) - 50) * 0.001,
                 lng: 2.1734 + ((idx % 100) - 50) * 0.001,
             },
-            description: `Beautiful ${type} in the heart of Barcelona. Perfect for professionals and families.`,
+            description: `Представляем вашему вниманию эту великолепную недвижимость, расположенную в одном из самых востребованных районов Барселоны. Эта светлая и просторная квартира была недавно отремонтирована с использованием высококачественных материалов и готова к заселению.\n\nПросторная и светлая гостиная: Идеальное место для отдыха и приема гостей, с прямым выходом на большой балкон (или террасу), откуда открывается потрясающий вид на город (или море/горы). Гостиная оснащена современной мебелью и стильными элементами декора, создающими уютную атмосферу.\n\nСовременная кухня: Полностью оборудованная новой бытовой техникой премиум-класса (холодильник, духовка, посудомоечная машина, микроволновая печь). Стильный дизайн с функциональными шкафами и рабочей поверхностью из натурального камня. Здесь вы найдете все необходимое для приготовления изысканных блюд.\n\nУютные спальни: Две просторные спальни с двуспальными кроватями, встроенными шкафами и большими окнами, обеспечивающими естественное освещение. Главная спальня имеет собственную ванную команду для вашего удобства. Вторая спальня идеально подойдет для гостей или детей.\n\nРоскошные ванные комнаты: Две современные ванные комнаты, отделанные итальянской плиткой, с душевыми кабинами (или ванной) и качественной сантехникой. Подогрев полов добавит комфорта в холодное время года.\n\nКомфорт и удобства:\nКондиционер и автономное отопление для поддержания идеальной температуры круглый год.\nПаркетные полы из натурального дерева, придающие тепло и уют всей квартире.\nДвойные стеклопакеты для отличной звукоизоляции от городского шума.\nВидеодомофон и надежная входная дверь с системой против взлома.\nВысокоскоростной интернет проведен в каждую комнату.\n\nЗдание и инфраструктура:\nДом с лифтом и ухоженным подъездом, где регулярно проводится уборка.\nВозможность аренды (или покупки) парковочного места в подземном гараже под зданием.\nКладовая для хранения крупногабаритных вещей расположена на цокольном этаже.\nОбщая терраса на крыше с панорамным видом на Барселону для всех жильцов.\n\nРасположение:\nКвартира находится в шаговой доступности от метро (название станции) и автобусных остановок нескольких маршрутов.\nРядом расположены престижные школы, детские сады с международным обучением, современные супермаркеты, аптеки, зеленые парки и фитнес-центры с бассейнами.\nВсего в 15 минутах ходьбы от знаменитого пляжа Барселонеты.\n\nЭта недвижимость станет идеальным домом для семьи или пары, ценящих комфорт, стиль и удобное расположение в центре событий. Квартира полностью меблирована и укомплектована всем необходимым. Не упустите свой шанс жить в одном из лучших городов мира! Звоните прямо сейчас, чтобы договориться о просмотре в удобное для вас время. Мы также предлагаем онлайн-показ недвижимости для иностранных клиентов.`,
+            descriptionOriginal: `We present to your attention this magnificent property located in one of the most sought-after areas of Barcelona. This bright and spacious apartment has been recently renovated using high-quality materials and is ready to move in.\n\nSpacious and bright living room: An ideal place for relaxing and receiving guests, with direct access to a large balcony (or terrace), offering a stunning view of the city (or sea/mountains). The living room is equipped with modern furniture and stylish decorative elements that create a cozy atmosphere.\n\nModern kitchen: Fully equipped with new premium appliances (refrigerator, oven, dishwasher, microwave). Stylish design with functional cabinets and natural stone worktop. Here you will find everything you need to prepare gourmet meals.\n\nCozy bedrooms: Two spacious bedrooms with double beds, built-in wardrobes and large windows providing natural light. The master bedroom has an en-suite bathroom for your convenience. The second bedroom is ideal for guests or children.`,
             features: ['parking', 'elevator', 'airConditioning', 'balcony', 'furnished'] as Property['features'],
             images,
             isNew: idx % 3 === 0,
@@ -274,6 +306,48 @@ function generateMockProperties(count: number, page: number = 1): Property[] {
             },
             createdAt: new Date(Date.now() - (idx % 7) * 24 * 60 * 60 * 1000),
             updatedAt: new Date(Date.now() - (idx % 3) * 24 * 60 * 60 * 1000),
+            
+            // Extra fields for PropertyMainInfo
+            rentalConditions: {
+                deposit: price,
+                commission: 50,
+                commissionType: 'percent',
+                prepaymentMonths: 1,
+                utilitiesIncluded: false,
+                utilitiesAmount: 150,
+                petsAllowed: idx % 2 === 0,
+                childrenAllowed: true,
+                minRentalMonths: (idx % 3) * 6 + 1 // 1, 7, 13 months
+            },
+            tenantPreferences: {
+                minRentalMonths: (idx % 3) * 6 + 1,
+                prepaymentMonths: idx % 2 === 0 ? 1 : 2,
+                petsAllowed: idx % 2 === 0,
+                childrenAllowed: true,
+                ageRange: [20 + (idx % 10), 40 + (idx % 10)],
+                gender: idx % 3 === 0 ? 'any' : (idx % 3 === 1 ? 'male' : 'female'),
+                occupation: idx % 2 === 0 ? 'any' : 'student',
+                couplesAllowed: idx % 2 === 0,
+                smokingAllowed: false
+            },
+            roommates: {
+                gender: idx % 3 === 0 ? 'mix' : (idx % 3 === 1 ? 'female' : 'male'),
+                ageRange: [20 + (idx % 5), 30 + (idx % 10)],
+                occupation: idx % 2 === 0 ? 'worker' : 'student',
+                ownerLivesIn: idx % 2 === 0,
+                atmosphere: idx % 2 === 0 ? 'quiet' : 'friendly',
+                visitsAllowed: true
+            },
+            amenities: ['wifi', 'airConditioning', 'washingMachine', 'elevator', 'balcony', 'kitchen'],
+            building: {
+                name: 'Casa Milà Neighbor',
+                type: 'brick',
+                year: 1950 + (idx % 70),
+                floorsTotal: (idx % 4) + 5,
+                elevatorPassenger: 1,
+                parkingType: 'underground',
+                closedTerritory: idx % 2 === 0
+            },
         };
     });
 }
