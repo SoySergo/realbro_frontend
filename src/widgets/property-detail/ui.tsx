@@ -17,7 +17,9 @@ import {
     PropertyPriceSection,
     PropertyAgentCard,
     PropertyMediaSection,
-    PropertyTenantInfo
+    PropertyTenantInfo,
+    PropertySidebarConditions,
+    PropertyAgentSidebarCard
 } from '@/entities/property/ui';
 
 // Feature components
@@ -182,28 +184,26 @@ export function PropertyDetailWidget({
                         )}
                     </div>
 
-                    {/* Sidebar Column (Right) - Sticky */}
-                    <div className="hidden lg:block lg:col-span-4 sticky top-24 h-fit space-y-4">
-                        <PropertyPriceCard
+                    {/* Sidebar Column (Right) - Sticky - Adjusted to ~60px offset from viewport top */}
+                    <div className="hidden lg:block lg:col-span-4 sticky top-[60px] h-fit space-y-4">
+                        <PropertySidebarConditions
                             price={property.price}
                             rentalConditions={property.rentalConditions}
                             noCommission={property.noCommission}
-                            author={property.author}
+                            // author={property.author} // Author info moved to separate card
                             onCall={handleCall}
                             onMessage={handleMessage}
-                            onToggleFavorite={() => handleToggleFavorite(property.id)}
+                            onLike={() => console.log('Like', property.id)}
+                            onDislike={() => console.log('Dislike', property.id)}
                             onShare={() => handleShare(property.id)}
-                            isFavorite={false} // Would need real state
-                            actionButtons={
-                                <PropertyActions
-                                    propertyId={property.id}
-                                    onToggleFavorite={handleToggleFavorite}
-                                    onShare={handleShare}
-                                    isFavorite={false} 
-                                    variant="primary"
-                                />
-                            }
+                            author={property.author} // Passed for online status check
                         />
+                        
+                        {property.author && (
+                            <PropertyAgentSidebarCard 
+                                agent={property.author}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

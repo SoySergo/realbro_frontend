@@ -19,3 +19,7 @@ export { PropertyCharacteristics } from './property-characteristics';
 export { PropertyAgentCard } from './property-agent-card';
 export { PropertyLocationSection } from './property-location-section';
 export { PropertyTenantInfo } from './property-tenant-info';
+
+// Sidebar specifics
+export { PropertySidebarConditions } from './property-sidebar-conditions';
+export { PropertyAgentSidebarCard } from './property-agent-sidebar-card';
