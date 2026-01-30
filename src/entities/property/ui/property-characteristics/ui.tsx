@@ -191,7 +191,7 @@ export function PropertyCharacteristics({
 
 
     return (
-        <div className={cn('flex flex-col gap-10', className)}>
+        <div className={cn('flex flex-col gap-10 bg-secondary rounded-2xl p-6', className)}>
             {/* Top Section: Flat & Building Characteristics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                 {flatCharacteristics.length > 0 && (
