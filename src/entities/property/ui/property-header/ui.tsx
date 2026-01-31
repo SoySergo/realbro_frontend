@@ -2,6 +2,8 @@ import { MapPin, ShieldCheck, Star, Eye } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '../../model/types';
+import { PropertyAddressWithTransport } from '../property-address-transport';
+import { mockBarcelonaStations } from '../property-address-transport/transport-stations';
 
 interface PropertyHeaderProps {
     title: string;
@@ -50,35 +52,26 @@ export function PropertyHeader({
                 {title}
             </h1>
             
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm md:text-[15px] text-muted-foreground">
-                <span>Spain, Barcelona, Granollers, calle del sol, 123</span>
-                <a 
-                    href={`https://maps.google.com/?q=${address}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline hover:text-blue-600 transition-colors whitespace-nowrap"
-                >
-                    На карте
-                </a>
-            </div>
-
-            {/* Metro Stations Line (Mocked) */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm pt-1">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#E44097]" /> 
-                    <span className="text-foreground">Granollers Centre</span>
-                    <span className="text-muted-foreground">14 мин.</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#E44097]" /> 
-                    <span className="text-foreground">Rambla del Celler</span>
-                    <span className="text-muted-foreground">12 мин.</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-[#33A02C]" />
-                    <span className="text-foreground">Rambla del Celler</span>
-                    <span className="text-muted-foreground">24 мин.</span>
-                </div>
+            {/* Address and Transport */}
+            <div className="mt-4">
+                <PropertyAddressWithTransport 
+                    address={address}
+                    country="Испания"
+                    region="Каталония"
+                    province="Барселона"
+                    city="Барселона"
+                    district="Эшампле"
+                    // street part is inside address prop currently or we splits it. 
+                    // user example was "...Eixample, {address}" where address likely was just street/house
+                    stations={mockBarcelonaStations}
+                    showMapButton={true}
+                    onMapClick={() => {
+                        const mapSection = document.getElementById('property-map-section');
+                        if (mapSection) {
+                            mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }}
+                />
             </div>
         </div>
     );

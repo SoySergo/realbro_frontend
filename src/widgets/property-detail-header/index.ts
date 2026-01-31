@@ -1,0 +1,2 @@
+
+export { PropertyDetailHeader } from './ui';

@@ -23,3 +23,7 @@ export { PropertyTenantInfo } from './property-tenant-info';
 // Sidebar specifics
 export { PropertySidebarConditions } from './property-sidebar-conditions';
 export { PropertyAgentSidebarCard } from './property-agent-sidebar-card';
+export { PropertyAddressWithTransport } from './property-address-transport';
+export { PropertyAgentBlock } from './property-agent-block/ui'; // Agent block component
+export { PropertyListSection } from './property-list-section/ui';
+

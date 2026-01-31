@@ -603,7 +603,21 @@
     "tenantPreferences": "Tenant preferences",
     "roommates": "Roommates",
     "roomDetails": "Room details",
-    "aboutRoommates": "About roommates"
+    "aboutRoommates": "About roommates",
+    "locationSection": {
+      "categories": {
+        "transport": "Transport",
+        "schools": "Schools",
+        "medical": "Medical",
+        "shops": "Shops",
+        "restaurants": "Restaurants",
+        "parks": "Parks",
+        "beauty": "Beauty",
+        "attractions": "Attractions"
+      },
+      "showingObjects": "Showing objects within 1 km",
+      "distance": "{distance} m"
+    }
   },
   "characteristics": {
     "propertyType": "Property type",

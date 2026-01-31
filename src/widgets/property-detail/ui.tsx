@@ -18,13 +18,17 @@ import {
     PropertyAgentCard,
     PropertyMediaSection,
     PropertyTenantInfo,
-    PropertySidebarConditions,
-    PropertyAgentSidebarCard
+    PropertySidebarConditions, // Re-adding
+    PropertyAgentSidebarCard,
+    PropertyAgentBlock,
+    PropertyListSection
 } from '@/entities/property/ui';
 
 // Feature components
 import { PropertyContactBar } from '@/features/property-contact';
 import { PropertyActions } from '@/features/property-actions';
+
+import { useTranslations } from 'next-intl';
 
 interface PropertyDetailWidgetProps {
     property: Property;
@@ -35,6 +39,8 @@ export function PropertyDetailWidget({
     property,
     className
 }: PropertyDetailWidgetProps) {
+    const t = useTranslations('propertyDetail');
+
     const handleCall = () => {
         if (property.author?.phone) {
             window.location.href = `tel:${property.author.phone}`;
@@ -57,7 +63,18 @@ export function PropertyDetailWidget({
     const mockRating = 4.5 + (property.id.length % 5) / 10;
 
     return (
-        <div className={cn('min-h-screen pb-24 lg:pb-12', className)}>
+        <div className={cn('min-h-screen pb-24 pt-8 lg:pb-0', className)}>
+            {/* Mobile Top Info Strip */}
+            <div className="lg:hidden px-4 mb-2 flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">
+                    Сдается {property.rooms}-комн. {property.type === 'apartment' ? 'квартира' : 'объект'}, {property.area} м²
+                </span>
+                <button className="text-muted-foreground">
+                    <span className="sr-only">Menu</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                </button>
+            </div>
+
             {/* Mobile: Gallery matches full width, top of page */}
             <div className="lg:hidden mb-4">
                 <PropertyGallery 
@@ -75,21 +92,6 @@ export function PropertyDetailWidget({
                         
                         {/* Header Section */}
                         <div className="space-y-6">
-                             {/* Mobile Price/Actions row (below gallery) */}
-                            <div className="lg:hidden flex items-start justify-between gap-4">
-                                <PropertyPriceSection
-                                    price={property.price}
-                                    rentalConditions={property.rentalConditions}
-                                    noCommission={property.noCommission}
-                                    className="flex-1"
-                                />
-                                <PropertyActions
-                                    propertyId={property.id}
-                                    onToggleFavorite={handleToggleFavorite}
-                                    onShare={handleShare}
-                                />
-                            </div>
-
                             <PropertyHeader 
                                 title={property.title}
                                 address={property.address}
@@ -103,18 +105,20 @@ export function PropertyDetailWidget({
                                 }}
                             />
 
-                            {/* Desktop Actions Bar - REMOVED, moving to split layout */}
-                            {/* <div className="hidden lg:block">
-                                <PropertyActions
-                                    propertyId={property.id}
-                                    onToggleFavorite={handleToggleFavorite}
-                                    onShare={handleShare}
-                                    variant="full" 
+                             {/* Mobile Price (below title) */}
+                            <div className="lg:hidden flex items-start justify-between gap-4">
+                                <PropertyPriceSection
+                                    price={property.price}
+                                    rentalConditions={property.rentalConditions}
+                                    noCommission={property.noCommission}
+                                    className="flex-1"
                                 />
-                             </div> */}
+                                {/* Actions moved to sticky header */}
+                            </div>
 
+                            
                             {/* Desktop Media Section */}
-                            <div className="hidden lg:block">
+                            <div id="photos" className="hidden lg:block scroll-mt-24">
                                 <PropertyMediaSection 
                                     property={property}
                                     className="w-full"
@@ -137,7 +141,7 @@ export function PropertyDetailWidget({
                         </section>
 
                         {/* Description */}
-                        <section className="border-t border-border/50 pt-6">
+                        <section id="description" className="border-t border-border/50 pt-6 scroll-mt-24">
                             <PropertyDescriptionSection
                                 description={property.description}
                                 descriptionOriginal={property.descriptionOriginal}
@@ -146,7 +150,7 @@ export function PropertyDetailWidget({
                         </section>
 
                          {/* Characteristics */}
-                        <section className="border-t border-border/50 pt-6">
+                        <section id="characteristics" className="border-t border-border/50 pt-6 scroll-mt-24">
                             <PropertyCharacteristics property={property} />
                         </section>
 
@@ -165,17 +169,19 @@ export function PropertyDetailWidget({
                         </section>
 
                         {/* Location */}
-                         <section className="border-t border-border/50 pt-6">
+                         <section id="map" className="border-t border-border/50 pt-6 scroll-mt-24">
                             <PropertyLocationSection
                                 address={property.address}
                                 coordinates={property.coordinates}
+                                nearbyTransport={property.nearbyTransportList}
                             />
                         </section>
 
-                        {/* Mobile Agent Card */}
+                        {/* Agent Block - Visible on all screens primarily (or you can restrict to mobile if prefered, but "below map" usually implies main flow) 
+                            Actually, let's keep it visible everywhere as it provides more info than the sidebar card */}
                         {property.author && (
-                            <section className="lg:hidden border-t border-border/50 pt-6">
-                                <PropertyAgentCard
+                            <section className="border-t border-border/50 pt-6">
+                                <PropertyAgentBlock
                                     agent={property.author}
                                     onCall={handleCall}
                                     onMessage={handleMessage}
@@ -206,6 +212,29 @@ export function PropertyDetailWidget({
                         )}
                     </div>
                 </div>
+            </div>
+
+            {/* Spacer for testing sticky sidebar behavior is handled by the new sections essentially pushing content down */}
+            {/* Suggestions Sections */}
+            <div className="bg-muted/30 mt-16">
+                {/* Other Offers Section */}
+                <PropertyListSection
+                    title={t("otherOffers")} // Add translation key later
+                    subtitle={property.author ? `${t("from")} ${property.author.name}` : undefined}
+                    properties={[property, property, property, property]} // Mock data: repeat current property
+                    viewAllText={t("showAll")}
+                    onViewAll={() => console.log('View all other offers')}
+                    className="pb-6 pt-12"
+                />
+
+                {/* Similar Properties Section */}
+                <PropertyListSection
+                    title={t("similarProperties")} // Add translation key later
+                    properties={[property, property, property, property]} // Mock data
+                    viewAllText={t("showAll")}
+                    onViewAll={() => console.log('View all similar')}
+                    className="pt-6 pb-20"
+                />
             </div>
 
             {/* Mobile Sticky Bottom Bar */}

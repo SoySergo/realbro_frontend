@@ -1,4 +1,20 @@
 {
+  "footer": {
+    "aboutService": "О сервисе",
+    "tariffs": "Тарифы",
+    "profile": "Личный кабинет",
+    "search": "Поиск",
+    "mapSearch": "Поиск недвижимости на карте",
+    "listSearch": "Поиск недвижимости списком",
+    "agenciesSearch": "Поиск агентств недвижимости",
+    "support": "Служба поддержки",
+    "terms": "Условия использования",
+    "privacy": "Политика конфиденциальности",
+    "cookies": "Политика Cookies",
+    "legal": "Правовая информация",
+    "agreement": "Используя сервис, вы соглашаетесь с условиями использования",
+    "allRightsReserved": "Все права защищены"
+  },
   "common": {
     "search": "Поиск",
     "filter": "Фильтр",
@@ -629,6 +645,11 @@
     "longTerm": "от года",
     "livingRules": "Условия проживания",
     "noSpecialConditions": "по согласованию",
+    "navPhotos": "Фото",
+    "navDescription": "Описание",
+    "navCharacteristics": "Характеристики",
+    "navMap": "Карта",
+    "back": "Назад",
     "showPhone": "Показать телефон",
     "writeMessage": "Написать",
     "writeOnline": "Напишите, пока пользователь в сети",
@@ -638,10 +659,33 @@
     "years_short": "лет",
     "objectsInWork": "Объектов в работе",
     "realtor": "Риелтор",
+    "sendMessage": "Написать сообщение",
+    "otherOffers": "Другие предложения",
+    "similarProperties": "Похожие объявления",
+    "showAll": "Смотреть все",
+    "from": "от",
     "agent": "Агент",
     "reviews": "отзыва",
     "like": "Нравится",
-    "dislike": "Не нравится"
+    "dislike": "Не нравится",
+    "map": "На карте",
+    "min": "мин.",
+    "locationSection": {
+      "categories": {
+        "transport": "Транспорт",
+        "schools": "Школы и сады",
+        "medical": "Медицина",
+        "groceries": "Продукты",
+        "shopping": "Шопинг",
+        "restaurants": "Бары и рестораны",
+        "sports": "Спорт",
+        "parks": "Парки скверы",
+        "beauty": "Бьюти и уход",
+        "entertainment": "Культура и отдых",
+        "attractions": "Достопримечательности"
+      },
+      "distance": "{distance} м"
+    }
   },
   "characteristics": {
     "propertyType": "Тип жилья",
@@ -692,7 +736,7 @@
     "quiet": "Тихо",
     "friendly": "Дружелюбно",
     "party": "Вечеринки",
-    "ownerLivesIn": "Владелец проживает",
+
     "visitsAllowed": "Гости разрешены",
     "furnished": "Меблирована",
     "bedType": "Тип кровати",
@@ -705,7 +749,7 @@
     "types": {
       "apartment": "Квартира",
       "studio": "Студия",
-      "house": "Дом",
+
       "penthouse": "Пентхаус",
       "duplex": "Дуплекс"
     },

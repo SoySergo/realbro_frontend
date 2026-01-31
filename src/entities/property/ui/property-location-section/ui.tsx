@@ -1,11 +1,49 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { MapPin, ExternalLink } from 'lucide-react';
+import { 
+    ExternalLink, 
+    Building2, 
+    Compass, 
+    Bus, 
+    GraduationCap, 
+    Stethoscope, 
+    Trees, 
+    ShoppingCart,
+    ChevronRight,
+    ChevronLeft,
+    Utensils,
+    Scissors,
+    Landmark,
+    ShoppingBag,
+    Dumbbell,
+    Clapperboard,
+    Ticket
+} from 'lucide-react';
 import { BaseMap } from '@/features/map';
 import mapboxgl from 'mapbox-gl';
+import type { NearbyTransport } from '../../model/types';
+import { PropertyAddressWithTransport } from '../property-address-transport';
+import { PropertyCardGrid } from '../property-card-grid';
+import { LocationCategoryList } from './location-category-list';
+import { TransportStationsDetailed } from '../property-address-transport/transport-stations';
+import { 
+    mockNearbyProperties, 
+    mockMedical, 
+    mockSchools, 
+    mockRecreation, 
+    mockGroceries,
+    mockShopping,
+    mockSports,
+    mockEntertainment,
+    mockTransportStations,
+    mockRestaurants,
+    mockBeauty,
+    mockAttractions
+} from './mock-data';
+import { HorizontalScroll } from '@/shared/ui/horizontal-scroll';
 
 interface PropertyLocationSectionProps {
     address: string;
@@ -13,153 +51,160 @@ interface PropertyLocationSectionProps {
         lat: number;
         lng: number;
     };
+    nearbyTransport?: NearbyTransport[];
     className?: string;
 }
 
-// Infrastructure categories (CIAN style)
-const infrastructureCategories = [
-    { key: 'metro', icon: 'M', label: 'Метро и МЦД', count: null },
-    { key: 'schools', icon: '🏫', label: 'Школы', count: null },
-    { key: 'kindergartens', icon: '🎒', label: 'Детские сады', count: null },
-    { key: 'medical', icon: '🏥', label: 'Медицина', count: null },
-    { key: 'recreation', icon: '🌳', label: 'Зоны отдыха', count: null },
-    { key: 'shops', icon: '🛒', label: 'Магазины', count: null }
+// Filter categories
+const filterCategories = [
+    { key: 'transport', icon: Bus, label: 'Транспорт' },
+    { key: 'schools', icon: GraduationCap, label: 'Школы и сады' },
+    { key: 'medical', icon: Stethoscope, label: 'Медицина' },
+    { key: 'groceries', icon: ShoppingCart, label: 'Продукты' },
+    { key: 'shopping', icon: ShoppingBag, label: 'Шопинг' },
+    { key: 'restaurants', icon: Utensils, label: 'Бары и рестораны' },
+    { key: 'sports', icon: Dumbbell, label: 'Спорт' },
+    { key: 'entertainment', icon: Ticket, label: 'Культура и отдых' },
+    { key: 'parks', icon: Trees, label: 'Парки скверы' }, 
+    { key: 'beauty', icon: Scissors, label: 'Бьюти и уход' },
+    { key: 'attractions', icon: Landmark, label: 'Достопримечательности' }
 ];
 
 export function PropertyLocationSection({
     address,
     coordinates,
+    nearbyTransport,
     className
 }: PropertyLocationSectionProps) {
-    const t = useTranslations('propertyDetail');
-    const [activeTab, setActiveTab] = useState<'infrastructure' | 'panorama'>('infrastructure');
-
+    const t = useTranslations('propertyDetail.locationSection');
+    const [activeFilter, setActiveFilter] = useState<string>('transport');
+    
     const handleMapLoad = useCallback((map: mapboxgl.Map) => {
         // Add marker at property location
-        new mapboxgl.Marker({ color: '#3b82f6' })
+        const marker = new mapboxgl.Marker({ color: '#3b82f6' })
             .setLngLat([coordinates.lng, coordinates.lat])
             .addTo(map);
 
         // Center map on property
         map.flyTo({
             center: [coordinates.lng, coordinates.lat],
-            zoom: 15,
+            zoom: 14,
             duration: 0
         });
     }, [coordinates]);
 
-    const handleOpenGoogleMaps = () => {
-        const url = `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
-        window.open(url, '_blank');
-    };
+    const mappedStations: any[] = nearbyTransport?.map((t, i) => ({
+        id: String(i),
+        name: t.name,
+        lines: [{ 
+            id: String(i), 
+            type: t.type, 
+            name: 'line' in t ? t.line : '', 
+            color: 'color' in t ? t.color : undefined 
+        }],
+        distance: 'walkMinutes' in t ? t.walkMinutes : 0,
+        isWalk: true
+    })) || mockTransportStations;
 
-    const handleOpenStreetView = () => {
-        const url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coordinates.lat},${coordinates.lng}`;
-        window.open(url, '_blank');
+    const renderContent = () => {
+        switch (activeFilter) {
+            case 'transport':
+                return (
+                    <div className="space-y-4">
+                        <TransportStationsDetailed 
+                            key="transport"
+                            stations={mappedStations} 
+                            className="bg-card w-full"
+                        />
+                    </div>
+                );
+            case 'schools':
+            case 'medical':
+            case 'groceries':
+            case 'shopping':
+            case 'restaurants':
+            case 'sports':
+            case 'entertainment':
+            case 'parks':
+            case 'beauty':
+            case 'attractions':
+                let items: any[] = [];
+                switch(activeFilter) {
+                    case 'medical': items = mockMedical; break;
+                    case 'schools': items = mockSchools; break;
+                    case 'groceries': items = mockGroceries; break;
+                    case 'shopping': items = mockShopping; break;
+                    case 'restaurants': items = mockRestaurants; break;
+                    case 'sports': items = mockSports; break;
+                    case 'entertainment': items = mockEntertainment; break;
+                    case 'parks': items = mockRecreation; break;
+                    case 'beauty': items = mockBeauty; break;
+                    case 'attractions': items = mockAttractions; break;
+                    default: items = mockGroceries; 
+                }
+                return <LocationCategoryList key={activeFilter} items={items} />;
+            default:
+                return null;
+        }
     };
 
     return (
-        <div className={cn('space-y-4', className)}>
-            <h3 className="font-semibold text-foreground">
-                {t('location')}
+        <div id="property-map-section" className={cn('space-y-4 md:space-y-6', className)}>
+            <h3 className="text-xl font-bold text-foreground">
+                {useTranslations('propertyDetail')('location')}
             </h3>
 
-            {/* Address */}
-            <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                <p className="text-sm text-foreground">{address}</p>
+            {/* Address and Transport Info */}
+            <div className="space-y-2">
+                <PropertyAddressWithTransport 
+                    address={address}
+                    stations={mappedStations}
+                />
             </div>
 
-            {/* Tabs - Desktop */}
-            <div className="hidden md:flex gap-1 p-1 bg-muted rounded-lg w-fit">
-                <button
-                    onClick={() => setActiveTab('infrastructure')}
-                    className={cn(
-                        'px-4 py-2 text-sm font-medium rounded-md transition-colors',
-                        activeTab === 'infrastructure'
-                            ? 'bg-background text-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground'
-                    )}
+            <div className="-mx-4 md:mx-0">
+                <HorizontalScroll 
+                    variant="static"
+                    className="gap-2 px-4 md:px-0 rounded-none md:rounded-xl"
+                    leftButtonWrapperClassName="hidden md:flex"
+                    rightButtonWrapperClassName="hidden md:flex"
                 >
-                    {t('infrastructure')}
-                </button>
-                <button
-                    onClick={() => setActiveTab('panorama')}
-                    className={cn(
-                        'px-4 py-2 text-sm font-medium rounded-md transition-colors',
-                        activeTab === 'panorama'
-                            ? 'bg-background text-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground'
-                    )}
-                >
-                    {t('panorama')}
-                </button>
+                    {filterCategories.map((category) => {
+                        const Icon = category.icon;
+                        const isActive = activeFilter === category.key;
+                        
+                        return (
+                            <button
+                                key={category.key}
+                                onClick={() => setActiveFilter(category.key)}
+                                className={cn(
+                                    'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border shrink-0 snap-start scroll-mx-4',
+                                    isActive 
+                                        ? 'bg-brand-primary text-white border-brand-primary ' 
+                                        : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground'
+                                )}
+                            >
+                                <Icon className={cn("w-4 h-4", isActive ? "text-white" : "text-muted-foreground")} />
+                                {t(`categories.${category.key}`)}
+                            </button>
+                        );
+                    })}
+                </HorizontalScroll>
             </div>
 
             {/* Map */}
-            <div className="relative rounded-xl overflow-hidden h-[200px] md:h-[300px] bg-muted">
+            <div className="relative -mx-4 md:mx-0 rounded-none md:rounded-2xl overflow-hidden h-[300px] md:h-[400px] bg-muted border-y md:border border-border/50 shadow-sm">
                 <BaseMap
                     initialCenter={[coordinates.lng, coordinates.lat]}
-                    initialZoom={15}
+                    initialZoom={14}
                     onMapLoad={handleMapLoad}
                     className="h-full w-full"
                 />
-
-                {/* "Open in Google Maps" button */}
-                <button
-                    onClick={handleOpenGoogleMaps}
-                    className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1.5 bg-background/90 backdrop-blur-sm rounded-lg text-xs font-medium text-foreground shadow-md hover:bg-background transition-colors z-10"
-                >
-                    <ExternalLink className="w-3 h-3" />
-                    Google Maps
-                </button>
             </div>
-
-            {/* Mobile: Show on map button */}
-            <button
-                onClick={handleOpenGoogleMaps}
-                className="md:hidden w-full py-3 rounded-lg border border-border text-center font-medium text-foreground hover:bg-muted transition-colors"
-            >
-                {t('showOnMap')}
-            </button>
-
-            {/* Panorama tab content */}
-            {activeTab === 'panorama' && (
-                <button
-                    onClick={handleOpenStreetView}
-                    className="hidden md:flex w-full items-center justify-center gap-2 py-3 rounded-lg border border-border text-center font-medium text-foreground hover:bg-muted transition-colors"
-                >
-                    <ExternalLink className="w-4 h-4" />
-                    {t('openStreetView') || 'Открыть Google Street View'}
-                </button>
-            )}
-
-            {/* Infrastructure categories - Desktop, CIAN style */}
-            {activeTab === 'infrastructure' && (
-                <div className="hidden md:block">
-                    <p className="text-sm text-muted-foreground mb-3">
-                        Показываем объекты в 1 км от дома
-                    </p>
-                    <div className="space-y-2">
-                        {infrastructureCategories.map((cat) => (
-                            <div 
-                                key={cat.key}
-                                className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted transition-colors cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <span className="text-lg">{cat.icon}</span>
-                                    <span className="text-sm text-foreground">{cat.label}</span>
-                                </div>
-                                {cat.count !== null && (
-                                    <span className="text-sm text-primary font-medium">
-                                        {cat.count}
-                                    </span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+            
+            <div className="min-h-[150px]">
+                {renderContent()}
+            </div>
         </div>
     );
 }

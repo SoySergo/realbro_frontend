@@ -44,14 +44,14 @@ export function PropertyContactBar({
                 <div className="flex gap-2 max-w-lg mx-auto">
                     <button
                         onClick={handleCall}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold transition-all hover:bg-primary/90 active:scale-[0.98]"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold transition-all hover:bg-blue-700 active:scale-[0.98]"
                     >
                         <Phone className="w-5 h-5" />
                         {t('call')}
                     </button>
                     <button
                         onClick={handleMessage}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-background text-foreground font-semibold transition-all hover:bg-muted active:scale-[0.98]"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-blue-600 bg-background text-blue-600 font-semibold transition-all hover:bg-blue-50 active:scale-[0.98]"
                     >
                         <MessageCircle className="w-5 h-5" />
                         {t('message')}
@@ -65,14 +65,14 @@ export function PropertyContactBar({
         <div className={cn('flex flex-col gap-2', className)}>
             <button
                 onClick={handleCall}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold transition-all hover:bg-primary/90 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold transition-all hover:bg-blue-700 active:scale-[0.98]"
             >
                 <Phone className="w-5 h-5" />
                 {t('call')}
             </button>
             <button
                 onClick={handleMessage}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-border bg-background text-foreground font-semibold transition-all hover:bg-muted active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-blue-600 bg-background text-blue-600 font-semibold transition-all hover:bg-blue-50 active:scale-[0.98]"
             >
                 <MessageCircle className="w-5 h-5" />
                 {t('message')}

@@ -1,0 +1,125 @@
+
+import { cn } from '@/shared/lib/utils';
+import { PropertyAuthor } from '../../model/types';
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { Phone, MessageCircle, Star, BadgeCheck } from 'lucide-react';
+import { Button } from '@/shared/ui/button';
+
+interface PropertyAgentBlockProps {
+    agent: PropertyAuthor;
+    className?: string;
+    onCall?: () => void;
+    onMessage?: () => void;
+}
+
+export function PropertyAgentBlock({
+    agent,
+    className,
+    onCall,
+    onMessage
+}: PropertyAgentBlockProps) {
+    const t = useTranslations('propertyDetail');
+    
+    // Determine the role text
+    const roleText = agent.type === 'agency' 
+        ? (t('agency') || 'Агентство')
+        : (t('realtor') || 'Риелтор');
+        
+    const agencyText = agent.agencyName ? ` · ${agent.agencyName}` : '';
+    const headerText = `${roleText}${agencyText}`;
+
+    return (
+        <div className={cn("w-full rounded-2xl border border-border bg-card overflow-hidden text-center", className)}>
+            {/* Header with gradient */}
+            <div className="h-24 w-full bg-linear-to-b from-blue-50/80 to-transparent dark:from-blue-950/30 dark:to-transparent relative">
+                {/* Optional: Add some subtle pattern or texture if needed */}
+            </div>
+
+            {/* Avatar Section - Pull up overlapping the header */}
+            <div className="relative -mt-12 mb-4 flex justify-center">
+                <div className="relative">
+                    {/* Main Avatar */}
+                    <div className="h-24 w-24 rounded-full border-4 border-card bg-card overflow-hidden relative shadow-xs">
+                        {agent.avatar ? (
+                            <Image 
+                                src={agent.avatar} 
+                                alt={agent.name} 
+                                fill 
+                                className="object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground">
+                                {agent.name.charAt(0)}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* Agency Logo Badge (if exists) */}
+                    {(agent.agencyLogo || agent.type === 'agency') && (
+                        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-0 shadow-sm">
+                             <div className="h-9 w-9 rounded-lg border-2 border-card bg-card flex items-center justify-center overflow-hidden">
+                                {agent.agencyLogo ? (
+                                    <Image 
+                                        src={agent.agencyLogo} 
+                                        alt={agent.agencyName || 'Agency'} 
+                                        width={32} 
+                                        height={32} 
+                                        className="object-contain p-0.5"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                                       <span className="text-[10px] font-bold text-primary">A</span>
+                                    </div>
+                                )}
+                             </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 pb-8 space-y-5">
+                
+                {/* Name & Role */}
+                <div className="space-y-1">
+                    <p className="text-xs uppercase tracking-wider font-medium text-muted-foreground">
+                        {headerText}
+                    </p>
+                    <h3 className="text-xl font-bold text-foreground">
+                        {agent.name}
+                    </h3>
+                </div>
+
+                {/* Rating & Verification */}
+                <div className="flex items-center justify-center gap-4 text-sm">
+                    {/* Rating placeholder (mock if not in data) */}
+                    <div className="flex items-center gap-1.5 font-medium">
+                        <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                        <span>5,0</span>
+                        <span className="text-muted-foreground mx-1">·</span>
+                        <span className="text-muted-foreground">2 {t('reviews')}</span>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3 justify-center max-w-md mx-auto pt-2">
+                    <Button 
+                        onClick={onCall}
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11 px-6 rounded-xl font-medium shadow-sm shadow-blue-600/10"
+                    >
+                        {t('showPhone')}
+                    </Button>
+                    <Button 
+                        onClick={onMessage}
+                        variant="secondary"
+                        className="flex-1 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/30 h-11 px-6 rounded-xl font-medium border-0"
+                    >
+                        {t('sendMessage')}
+                    </Button>
+                </div>
+
+            </div>
+        </div>
+    );
+}

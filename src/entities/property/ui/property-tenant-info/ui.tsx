@@ -1,4 +1,4 @@
-'use client';
+
 
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';

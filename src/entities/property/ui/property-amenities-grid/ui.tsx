@@ -93,8 +93,8 @@ export function PropertyAmenitiesGrid({
     const hiddenCount = amenities.length - maxVisible;
 
     return (
-        <div className={cn('space-y-3', className)}>
-            <h3 className="font-semibold text-foreground">
+        <div className={cn('flex flex-col gap-4 bg-brand-primary/10 rounded-2xl p-6', className)}>
+            <h3 className="font-semibold text-foreground text-lg">
                 {t('amenities')}
             </h3>
             

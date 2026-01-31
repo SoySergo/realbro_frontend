@@ -122,8 +122,14 @@ export interface Property {
     floor?: number;
     totalFloors?: number;
     address: string;
+    country?: string;
+    region?: string;
+    province?: string;
     city: string;
-    province: string;
+    district?: string;
+    neighborhood?: string;
+    street?: string;
+    houseNumber?: string;
     coordinates: {
         lat: number;
         lng: number;
