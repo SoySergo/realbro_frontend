@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { ArrowLeft, ChevronLeft, ChevronRight, Share2, Heart, ThumbsDown } from 'lucide-react';
@@ -15,12 +16,26 @@ interface PropertyDetailHeaderProps {
     totalListingCount?: number;
 }
 
+
 export function PropertyDetailHeader({
     className,
     hasListingContext = true, // Defaulting to true for demo as requested
     currentListingIndex = 1,
-    totalListingCount = 600
-}: PropertyDetailHeaderProps) {
+    totalListingCount = 600,
+    price,
+    area,
+    rooms,
+    title,
+    floor,
+    currency = '€'
+}: PropertyDetailHeaderProps & { 
+    price?: number; 
+    area?: number; 
+    rooms?: number; 
+    title?: string; 
+    floor?: number;
+    currency?: string 
+}) {
     const t = useTranslations('propertyDetail');
     const router = useRouter();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -31,7 +46,7 @@ export function PropertyDetailHeader({
             const scrollY = window.scrollY;
             setIsScrolled(scrollY > 50);
 
-            // Simple intersection detection (could be improved with IntersectionObserver)
+            // Simple intersection detection 
             const sections = ['photos', 'description', 'characteristics', 'map'];
             for (const section of sections) {
                 const el = document.getElementById(section);
@@ -39,7 +54,7 @@ export function PropertyDetailHeader({
                     const rect = el.getBoundingClientRect();
                     // If top is near viewport top (with some offset)
                     if (rect.top >= 0 && rect.top < 300) {
-                        // setActiveSection(section); // This logic might feel jumpy, simplified for now
+                        // setActiveSection(section); 
                     }
                 }
             }
@@ -69,29 +84,33 @@ export function PropertyDetailHeader({
         { id: 'map', label: t('navMap') },
     ];
 
+
+    const formattedPrice = price ? new Intl.NumberFormat('ru-RU').format(price) : '';
+    const pricePerMeter = price && area ? Math.round(price / area) : null;
+    // const formattedPricePerMeter = pricePerMeter ? new Intl.NumberFormat('ru-RU').format(pricePerMeter) : '';
+
     return (
         <header 
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-[52px] flex items-center",
-                isScrolled ? "bg-background/80 backdrop-blur-md border-b border-border" : "bg-transparent",
+                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-[60px] flex items-center bg-background/95 backdrop-blur-md border-b border-border shadow-sm",
                 className
             )}
         >
-            <div className="container mx-auto px-4 md:px-6 flex items-center justify-between h-full">
+            <div className="container mx-auto px-2 md:px-6 flex items-center justify-between h-full gap-2">
                 {/* Left: Back Button */}
-                <div className="flex items-center gap-4 flex-1">
+                <div className="flex items-center shrink-0">
                     <Button 
                         variant="ghost" 
                         size="icon" 
                         onClick={() => router.back()}
-                        className={cn("rounded-full", !isScrolled && "bg-background/20 hover:bg-background/40 text-foreground backdrop-blur-sm")}
+                        className="rounded-full transition-all h-10 w-10 active:scale-95 hover:bg-blue-50 text-blue-600"
                         title={t('back')}
                     >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-7 h-7" strokeWidth={2.5} />
                     </Button>
                 </div>
 
-                {/* Center: Section Navigation */}
+                {/* Center: Section Navigation (Desktop) */}
                 <nav className="hidden md:flex items-center gap-1 bg-background/50 backdrop-blur-sm p-1 rounded-full border border-border/10 shadow-sm">
                     {navItems.map((item) => (
                         <button
@@ -109,39 +128,82 @@ export function PropertyDetailHeader({
                     ))}
                 </nav>
 
-                {/* Mobile Actions (Center) */}
-                <div className="flex md:hidden items-center gap-2">
-                    <Button variant="ghost" size="icon" className="rounded-full bg-background/20 hover:bg-background/40 backdrop-blur-sm">
-                        <Heart className="w-5 h-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="rounded-full bg-background/20 hover:bg-background/40 backdrop-blur-sm">
-                        <ThumbsDown className="w-5 h-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="rounded-full bg-background/20 hover:bg-background/40 backdrop-blur-sm">
-                        <Share2 className="w-5 h-5" />
-                    </Button>
+                {/* Mobile Info */}
+                <div className="md:hidden flex-1 relative h-full mx-2 ">
+                     {/* Logo State (Not Scrolled) */}
+                    <div className={cn(
+                        "absolute inset-0 flex items-center justify-start transition-all duration-200",
+                        !isScrolled ? "opacity-100 translate-y-0 " : "opacity-0 -translate-y-2 pointer-events-none"
+                    )}>
+                        <Image
+                            src="/logo.svg"
+                            alt="Realbro"
+                            width={28}
+                            height={28}
+                            className="w-7 h-7 object-contain"
+                        />
+                        <span className="ml-2 mt-1 text-2xl font-bold leading-none">Realbro</span>
+                    </div>
+
+                    {/* Property Info State (Scrolled) */}
+                    <div className={cn(
+                        "absolute inset-0 flex flex-col justify-center items-start transition-all duration-200",
+                        isScrolled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
+                    )}>
+                        {/* Top Row: Title */}
+                        <div className="w-full text-left">
+                            <div className="text-sm font-bold leading-tight truncate text-foreground/90">
+                                {title || t('property.title')}
+                            </div>
+                        </div>
+                        
+                        {/* Bottom Row: Specs + Price */}
+                        <div className="flex items-center justify-start text-[11px] leading-tight mt-0.5 font-medium whitespace-nowrap overflow-hidden">
+                             {price && (
+                                <div className="text-sm font-bold text-blue-600 mr-3 shrink-0">
+                                    {formattedPrice} {currency}
+                                </div>
+                            )}
+                            <div className="flex items-center text-muted-foreground truncate">
+                                {rooms && <span>{rooms} {t('roomsShort')}</span>}
+                                {rooms && area && <span className="mx-1.5">•</span>}
+                                {area && <span>{area} {t('sqm')}</span>}
+                                {floor && (
+                                    <>
+                                        <span className="mx-1.5">•</span>
+                                        <span>{floor} {t('floor')}</span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Right: Listing Navigation or Actions */}
-                <div className="flex items-center justify-end gap-2 flex-1">
+                <div className="flex items-center justify-end shrink-0">
                     {hasListingContext ? (
-                         <div className={cn(
-                             "flex items-center gap-2 p-1 rounded-full transition-all",
-                             isScrolled ? "bg-muted/50" : "bg-background/20 backdrop-blur-sm"
-                         )}>
-                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                                 <ChevronLeft className="w-4 h-4" />
+                         <div className="flex items-center gap-4 p-1 rounded-full transition-all">
+                             <Button 
+                                 variant="ghost" 
+                                 size="icon" 
+                                 className="h-10 w-10 rounded-full hover:bg-blue-50 text-blue-600 active:scale-95 transition-all"
+                             >
+                                 <ChevronLeft className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
-                             <span className="text-sm font-medium px-2 min-w-[60px] text-center">
-                                 {currentListingIndex} / {totalListingCount}
-                             </span>
-                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                                 <ChevronRight className="w-4 h-4" />
+                             <Button 
+                                 variant="ghost" 
+                                 size="icon" 
+                                 className="h-10 w-10 rounded-full hover:bg-blue-50 text-blue-600 active:scale-95 transition-all"
+                             >
+                                 <ChevronRight className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
                          </div>
                     ) : (
                         <div className="flex gap-2">
                              {/* Fallback actions if no listing context */}
+                             <Button variant="ghost" size="icon" className="text-blue-600">
+                                <Share2 className="w-6 h-6" />
+                             </Button>
                         </div>
                     )}
                 </div>
@@ -149,3 +211,5 @@ export function PropertyDetailHeader({
         </header>
     );
 }
+
+

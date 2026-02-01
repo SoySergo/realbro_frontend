@@ -124,11 +124,11 @@ export function LocationCategoryList({ items, className }: LocationCategoryListP
 
     return (
         <HorizontalScrollWithFade 
-            className={cn("w-full -mx-4 sm:mx-0", className)}
+            className={cn("-mx-4 sm:mx-0", className)}
             hideButtons={false}
             scrollAmount={664}
         >
-            <div className="flex gap-2 sm:gap-3 pl-[10px] pr-0 sm:px-0">
+            <div className="flex gap-2 sm:gap-3 px-4 sm:px-0">
                 {items.map((item) => (
                     <div 
                         key={item.id}

@@ -10,12 +10,14 @@ interface PropertyDescriptionSectionProps {
     descriptionOriginal?: string;
     maxLines?: number;
     className?: string;
+    variant?: 'default' | 'mobile';
 }
 
 export function PropertyDescriptionSection({
     description,
     descriptionOriginal,
-    maxLines = 6,
+    variant = 'default',
+    maxLines = variant === 'mobile' ? 12 : 6,
     className
 }: PropertyDescriptionSectionProps & { descriptionOriginal?: string }) {
     const t = useTranslations('propertyDetail');
@@ -40,7 +42,7 @@ export function PropertyDescriptionSection({
     return (
         <div className={cn('space-y-3', className)}>
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 w-full justify-between">
                     <h3 className="font-semibold text-lg text-foreground">
                         {t('description')}
                     </h3>
@@ -51,22 +53,28 @@ export function PropertyDescriptionSection({
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
                             className={cn(
-                                "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors cursor-pointer outline-none",
+                                "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors cursor-pointer outline-none whitespace-nowrap",
                                 !showOriginal 
                                     ? "bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100" 
                                     : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100"
                             )}
                         >
-                            {!showOriginal ? (
+                            {variant === 'mobile' ? (
                                 <>
-                                    <Check className="w-3.5 h-3.5" />
-                                    {isHovered ? t('showOriginal') : t('translatedByAI')}
+                                    {!showOriginal ? t('showOriginal') : t('showTranslation')}
                                 </>
                             ) : (
-                                <>
-                                    <Sparkles className="w-3.5 h-3.5" />
-                                    {t('showTranslation')}
-                                </>
+                                !showOriginal ? (
+                                    <>
+                                        <Check className="w-3.5 h-3.5" />
+                                        {isHovered ? t('showOriginal') : t('translatedByAI')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                        {t('showTranslation')}
+                                    </>
+                                )
                             )}
                         </button>
                     )}

@@ -348,6 +348,15 @@ function generateMockProperties(count: number, page: number = 1): Property[] {
                 parkingType: 'underground',
                 closedTerritory: idx % 2 === 0
             },
+            video: {
+                url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Mock video
+                thumbnail: images[0]
+            },
+            tour3d: {
+                url: 'https://my.matterport.com/show/?m=5cTrQWja5Ku', // Mock 3D tour
+                thumbnail: images[1] || images[0]
+            },
+            floorPlan: 'https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?auto=format&fit=crop&w=800&q=80' // Mock floor plan
         };
     });
 }

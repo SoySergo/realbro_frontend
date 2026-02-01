@@ -9,12 +9,20 @@ interface PropertyDetailPageProps {
     property: Property;
 }
 
+
 export function PropertyDetailPage({ property }: PropertyDetailPageProps) {
     return (
         <main className="min-h-screen bg-background">
-            <PropertyDetailHeader />
+            <PropertyDetailHeader 
+                price={property.price}
+                area={property.area}
+                rooms={property.rooms} 
+                title={property.title}
+                floor={property.floor}
+            />
             <PropertyDetailWidget property={property} />
             <Footer />
         </main>
     );
 }
+

@@ -108,11 +108,11 @@ export function TransportStationsDetailed({ stations, className }: TransportStat
     
     return (
         <HorizontalScrollWithFade 
-            className={cn("w-full -mx-4 sm:mx-0", className)}
+            className={cn("-mx-4 sm:mx-0", className)}
             hideButtons={false}
             scrollAmount={664}
         >
-            <div className="flex gap-3 px-4 sm:px-0">
+            <div className="flex gap-3 pl-[10px] pr-0 sm:px-0">
                 {stations.map((station) => {
                     // Sort lines by priority
                     const sortedLines = [...station.lines].sort((a, b) => {

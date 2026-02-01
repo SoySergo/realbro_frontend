@@ -158,7 +158,7 @@ export async function GET(
             thumbnail: images[0]
         },
         tour3d: {
-            url: 'https://matterport.com/discover/space/1', // Mock 3D tour
+            url: 'https://my.matterport.com/show/?m=5cTrQWja5Ku', // Mock 3D tour
             thumbnail: images[1] || images[0]
         },
         floorPlan: 'https://images.unsplash.com/photo-1536895058696-a69b1c7ba34d?auto=format&fit=crop&w=800&q=80' // Mock floor plan

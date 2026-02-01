@@ -616,8 +616,13 @@
         "attractions": "Attractions"
       },
       "showingObjects": "Showing objects within 1 km",
+
       "distance": "{distance} m"
-    }
+    },
+    "contact": "Contact",
+    "roomsShort": "rooms",
+    "pricePerMeter": "€/m²"
+
   },
   "characteristics": {
     "propertyType": "Property type",

@@ -2,19 +2,25 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, ZoomIn, Map, Play, Box, Camera, Group } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useTranslations } from 'next-intl';
+
+import type { PropertyVideo, PropertyTour3D } from '@/entities/property/model/types';
 
 interface PropertyGalleryProps {
     images: string[];
     title?: string;
+    floorPlan?: string;
+    video?: PropertyVideo;
+    tour3d?: PropertyTour3D;
     className?: string;
 }
 
-export function PropertyGallery({ images, title, className }: PropertyGalleryProps) {
+export function PropertyGallery({ images, title, floorPlan, video, tour3d, className }: PropertyGalleryProps) {
     const t = useTranslations('propertyDetail');
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [activeView, setActiveView] = useState<'photos' | 'video' | 'tour3d' | 'plan'>('photos');
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [touchStart, setTouchStart] = useState<number | null>(null);
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -35,7 +41,7 @@ export function PropertyGallery({ images, title, className }: PropertyGalleryPro
         setCurrentIndex(index);
     }, []);
 
-    // Touch handlers for swipe
+    // Touch handlers for swipe (removed in favor of native scroll)
     const onTouchStart = (e: React.TouchEvent) => {
         setTouchEnd(null);
         setTouchStart(e.targetTouches[0].clientX);
@@ -55,6 +61,20 @@ export function PropertyGallery({ images, title, className }: PropertyGalleryPro
             goToNext();
         } else if (isRightSwipe) {
             goToPrev();
+        }
+    };
+
+    // Handle scroll for native slider
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const container = e.currentTarget;
+        const scrollLeft = container.scrollLeft;
+        const width = container.offsetWidth;
+        // Simple calculation - can be improved with IntersectionObserver for better accuracy
+        const index = Math.round(scrollLeft / width);
+        // Clamp index
+        const safeIndex = Math.min(Math.max(index, 0), images.length - 1);
+        if (safeIndex !== currentIndex) {
+            setCurrentIndex(safeIndex);
         }
     };
 
@@ -94,58 +114,193 @@ export function PropertyGallery({ images, title, className }: PropertyGalleryPro
 
     return (
         <>
-            {/* Mobile Carousel */}
-            <div 
-                className={cn('md:hidden relative', className)}
-                ref={containerRef}
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-            >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                        src={images[currentIndex]}
-                        alt={title || `Image ${currentIndex + 1}`}
-                        fill
-                        className="object-cover"
-                        priority={currentIndex === 0}
-                    />
-                    
-                    {/* Counter badge */}
-                    <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
-                        {currentIndex + 1} / {totalImages}
-                    </div>
-                    
-                    {/* Zoom button */}
-                    <button
-                        onClick={() => setIsLightboxOpen(true)}
-                        className="absolute bottom-3 right-3 bg-black/60 text-white p-2 rounded-full backdrop-blur-sm hover:bg-black/80 transition-colors"
-                        aria-label={t('showAllPhotos', { count: totalImages })}
-                    >
-                        <ZoomIn className="w-4 h-4" />
-                    </button>
-                </div>
-                
-                {/* Dot indicators */}
-                {totalImages > 1 && (
-                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1">
-                        {images.slice(0, Math.min(5, totalImages)).map((_, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => goToIndex(idx)}
-                                className={cn(
-                                    'w-1.5 h-1.5 rounded-full transition-all',
-                                    idx === currentIndex 
-                                        ? 'bg-white w-3' 
-                                        : 'bg-white/50'
-                                )}
-                                aria-label={`Go to image ${idx + 1}`}
-                            />
-                        ))}
-                        {totalImages > 5 && (
-                            <span className="text-white/70 text-xs ml-1">+{totalImages - 5}</span>
+
+            {/* Mobile Carousel - Native Horizontal Scroll */}
+            <div className={cn('md:hidden relative group mt-4', className)}>
+                <div className="relative aspect-9/10 w-full">
+                    {/* Photos View */}
+                    <div 
+                        className={cn(
+                            "flex overflow-x-auto snap-x snap-mandatory scrollbar-hide overscroll-x-contain pl-4 pr-[calc(15vw-16px)] pb-4 h-full absolute inset-0 transition-opacity duration-300",
+                            activeView === 'photos' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
                         )}
+                        ref={containerRef}
+                        onScroll={handleScroll}
+                        style={{ scrollPaddingLeft: '1rem', scrollPaddingRight: '1rem' }}
+                    >
+                        {images.map((img, idx) => (
+                            <div 
+                                key={idx}
+                                className={cn(
+                                    "relative w-[85vw] shrink-0 snap-start snap-always h-full rounded-xl overflow-hidden mr-3 last:mr-0 bg-black/10",
+                                )}
+                            >
+                                {/* Background: Blurred and Covered */}
+                                <Image
+                                    src={img}
+                                    alt={title || `Image ${idx + 1}`}
+                                    fill
+                                    className="object-cover blur-xl scale-110 opacity-60"
+                                    priority={idx === 0}
+                                    sizes="85vw"
+                                />
+                                
+                                {/* Foreground: Contained */}
+                                <Image
+                                    src={img}
+                                    alt={title || `Image ${idx + 1}`}
+                                    fill
+                                    className="object-contain relative z-10"
+                                    priority={idx === 0}
+                                    sizes="85vw"
+                                />
+                                
+                                {/* Overlay Gradient */}
+                                <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/40 to-transparent pointer-events-none z-20" />
+                            </div>
+                        ))}
+                        
+                        {/* End of scroll indicator */}
+                        <div className="flex flex-col items-center justify-center min-w-[40px] h-full shrink-0 opacity-30">
+                            <div className="w-1 h-12 bg-gray-400 rounded-full" />
+                        </div>
                     </div>
+
+                    {/* Video View */}
+                    {video && (
+                        <div className={cn(
+                            "absolute inset-0 z-10 bg-black rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4",
+                            activeView === 'video' ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        )}>
+                            <div className="text-center text-white">
+                                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                                    <Play className="w-8 h-8 fill-white" />
+                                </div>
+                                <p className="font-medium">Видео презентация</p>
+                                <p className="text-sm opacity-70 mt-2">Mock Video Player</p>
+                            </div>
+                            <Image 
+                                src={video.thumbnail || images[0]} 
+                                alt="Video thumbnail" 
+                                fill 
+                                className="object-cover opacity-50 -z-10" 
+                            />
+                        </div>
+                    )}
+
+                    {/* 3D Tour View */}
+                    {tour3d && (
+                        <div className={cn(
+                            "absolute inset-0 z-10 bg-zinc-900 rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4",
+                            activeView === 'tour3d' ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        )}>
+                            <div className="text-center text-white">
+                                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
+                                    <Box className="w-8 h-8" />
+                                </div>
+                                <p className="font-medium">3D Тур</p>
+                                <p className="text-sm opacity-70 mt-2">Mock 3D Viewer</p>
+                            </div>
+                            <Image 
+                                src={tour3d.thumbnail || images[0]} 
+                                alt="3D Tour thumbnail" 
+                                fill 
+                                className="object-cover opacity-30 -z-10" 
+                            />
+                        </div>
+                    )}
+
+                    {/* Plan View */}
+                    {floorPlan && (
+                        <div className={cn(
+                            "absolute inset-0 z-10 bg-white rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4 border border-border/10",
+                            activeView === 'plan' ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        )}>
+                            <div className="relative w-full h-full p-4">
+                                <Image
+                                    src={floorPlan}
+                                    alt="Floor plan"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+
+
+
+
+                {/* Overlays */}
+                {/* Counter badge - positioned bottom left inside the media area */}
+                <div className="absolute bottom-7 left-8 bg-black/60 text-white text-[10px] font-medium px-2 py-0.5 rounded-md backdrop-blur-sm pointer-events-none z-30">
+                     {currentIndex + 1} / {totalImages}
+                </div>
+            </div>
+
+            {/* Media Buttons - Below the block */}
+            <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-full scrollbar-hide pb-1 mt-1.5 px-4 md:hidden">
+                {/* Photos Button */}
+                <button
+                    onClick={() => setActiveView('photos')}
+                    className={cn(
+                        "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
+                        activeView === 'photos' 
+                            ? "bg-brand-primary text-white border-brand-primary" 
+                            : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                    )}
+                >
+                        <Camera className={cn("w-3.5 h-3.5", activeView === 'photos' ? "stroke-white" : "stroke-black")} />
+                        {t('photos') || 'Фото'}
+                </button>
+
+                {/* Video Button */}
+                {video && (
+                    <button
+                        onClick={() => setActiveView(activeView === 'video' ? 'photos' : 'video')}
+                        className={cn(
+                            "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
+                            activeView === 'video' 
+                                ? "bg-brand-primary text-white border-brand-primary" 
+                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                        )}
+                    >
+                            <Play className={cn("w-3.5 h-3.5", activeView === 'video' ? "fill-white stroke-white" : "fill-black stroke-black")} />
+                            {t('video') || 'Видео'}
+                    </button>
+                )}
+
+                {/* 3D Tour Button */}
+                {tour3d && (
+                    <button
+                        onClick={() => setActiveView(activeView === 'tour3d' ? 'photos' : 'tour3d')}
+                        className={cn(
+                            "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
+                            activeView === 'tour3d' 
+                                ? "bg-brand-primary text-white border-brand-primary" 
+                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                        )}
+                    >
+                            <Box className={cn("w-3.5 h-3.5", activeView === 'tour3d' ? "stroke-white" : "stroke-black")} />
+                            {t('tour3d') || '3D-тур'}
+                    </button>
+                )}
+
+                {/* Plan Button */}
+                {floorPlan && (
+                    <button
+                        onClick={() => setActiveView(activeView === 'plan' ? 'photos' : 'plan')}
+                        className={cn(
+                            "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
+                            activeView === 'plan' 
+                                ? "bg-brand-primary text-white border-brand-primary" 
+                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                        )}
+                    >
+                            <Group className={cn("w-3.5 h-3.5 ", activeView === 'plan' ? "stroke-white" : "stroke-black")} />
+                            {t('plan') || 'Планировка'}
+                    </button>
                 )}
             </div>
 

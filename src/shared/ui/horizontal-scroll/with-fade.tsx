@@ -78,7 +78,7 @@ export function HorizontalScrollWithFade({
                 <div 
                     ref={scrollContainerRef}
                     onScroll={checkScroll}
-                    className="overflow-x-auto scrollbar-none flex transition-all duration-300 rounded-xl snap-x snap-mandatory py-4 -my-4 px-0"
+                    className="overflow-x-auto scrollbar-none flex transition-all duration-300 rounded-none md:rounded-xl snap-x snap-mandatory py-4 -my-4 px-0"
                     style={{ 
                         scrollbarWidth: 'none', 
                         msOverflowStyle: 'none'

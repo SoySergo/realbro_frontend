@@ -21,7 +21,8 @@ import {
     PropertySidebarConditions, // Re-adding
     PropertyAgentSidebarCard,
     PropertyAgentBlock,
-    PropertyListSection
+    PropertyListSection,
+    PropertyMobileMainInfo
 } from '@/entities/property/ui';
 
 // Feature components
@@ -30,10 +31,17 @@ import { PropertyActions } from '@/features/property-actions';
 
 import { useTranslations } from 'next-intl';
 
+// Import PropertyAddressWithTransport if not already exported from @/entities/property/ui
+// accessing it via the index export which I updated
+import { PropertyAddressWithTransport } from '@/entities/property/ui/property-address-transport'; 
+import { mockBarcelonaStations } from '@/entities/property/ui/property-address-transport/transport-stations';
+
+
 interface PropertyDetailWidgetProps {
     property: Property;
     className?: string;
 }
+
 
 export function PropertyDetailWidget({
     property,
@@ -58,28 +66,33 @@ export function PropertyDetailWidget({
     const handleShare = (id: string) => {
         console.log('Share:', id);
     };
+    
+    const handleLike = () => {
+        console.log('Like', property.id);
+    };
+
+    const handleDislike = () => {
+        console.log('Dislike', property.id);
+    };
+
+    const handleMore = () => {
+        console.log('More options', property.id);
+    };
 
     // Calculate rating (mock based on ID for consistency)
     const mockRating = 4.5 + (property.id.length % 5) / 10;
 
     return (
-        <div className={cn('min-h-screen pb-24 pt-8 lg:pb-0', className)}>
-            {/* Mobile Top Info Strip */}
-            <div className="lg:hidden px-4 mb-2 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                    Сдается {property.rooms}-комн. {property.type === 'apartment' ? 'квартира' : 'объект'}, {property.area} м²
-                </span>
-                <button className="text-muted-foreground">
-                    <span className="sr-only">Menu</span>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                </button>
-            </div>
+        <div className={cn('min-h-screen pb-24 pt-[60px] lg:pt-8 lg:pb-0', className)}>
 
             {/* Mobile: Gallery matches full width, top of page */}
-            <div className="lg:hidden mb-4">
+            <div className="lg:hidden mb-0">
                 <PropertyGallery 
                     images={property.images} 
                     title={property.title}
+                    floorPlan={property.floorPlan}
+                    video={property.video}
+                    tour3d={property.tour3d}
                 />
             </div>
 
@@ -92,7 +105,20 @@ export function PropertyDetailWidget({
                         
                         {/* Header Section */}
                         <div className="space-y-6">
+                            
+                            {/* Mobile: New Main Info Block + Address */}
+                            <div className="lg:hidden space-y-6 mt-4">
+                                <PropertyMobileMainInfo property={property} />
+                                
+                                <PropertyDescriptionSection
+                                    description={property.description}
+                                    descriptionOriginal={property.descriptionOriginal}
+                                    variant="mobile"
+                                />
+                            </div>
+
                             <PropertyHeader 
+                                className="hidden lg:block"
                                 title={property.title}
                                 address={property.address}
                                 isVerified={property.isVerified}
@@ -105,17 +131,7 @@ export function PropertyDetailWidget({
                                 }}
                             />
 
-                             {/* Mobile Price (below title) */}
-                            <div className="lg:hidden flex items-start justify-between gap-4">
-                                <PropertyPriceSection
-                                    price={property.price}
-                                    rentalConditions={property.rentalConditions}
-                                    noCommission={property.noCommission}
-                                    className="flex-1"
-                                />
-                                {/* Actions moved to sticky header */}
-                            </div>
-
+                             {/* Mobile Price (REMOVED - now in MobileMainInfo) */}
                             
                             {/* Desktop Media Section */}
                             <div id="photos" className="hidden lg:block scroll-mt-24">
@@ -133,15 +149,15 @@ export function PropertyDetailWidget({
                             </div>
                         </div>
 
-                        {/* Main Info (Stats) */}
-                        <section>
+                        {/* Main Info (Stats) - Desktop Only */}
+                        <section className="hidden lg:block">
                             <PropertyMainInfo
                                 property={property}
                             />
                         </section>
 
-                        {/* Description */}
-                        <section id="description" className="border-t border-border/50 pt-6 scroll-mt-24">
+                        {/* Description - Desktop Only */}
+                        <section id="description" className="hidden lg:block border-t border-border/50 pt-6 scroll-mt-24">
                             <PropertyDescriptionSection
                                 description={property.description}
                                 descriptionOriginal={property.descriptionOriginal}
@@ -199,8 +215,8 @@ export function PropertyDetailWidget({
                             // author={property.author} // Author info moved to separate card
                             onCall={handleCall}
                             onMessage={handleMessage}
-                            onLike={() => console.log('Like', property.id)}
-                            onDislike={() => console.log('Dislike', property.id)}
+                            onLike={handleLike}
+                            onDislike={handleDislike}
                             onShare={() => handleShare(property.id)}
                             author={property.author} // Passed for online status check
                         />
@@ -243,6 +259,9 @@ export function PropertyDetailWidget({
                 phone={property.author?.phone}
                 onCall={handleCall}
                 onMessage={handleMessage}
+                onLike={handleLike}
+                onDislike={handleDislike}
+                onMore={handleMore}
                 className="lg:hidden"
             />
         </div>
