@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { PropertyDetailPage } from '@/screens/property-detail-page';
 import { getPropertyByIdServer, getPropertiesListServer } from '@/shared/api/properties-server';
+import { getPropertyPageTranslations } from '@/shared/lib/get-property-translations';
 
 interface PropertyPageProps {
     params: Promise<{
@@ -11,19 +12,19 @@ interface PropertyPageProps {
     }>;
 }
 
-// ISR configuration
-export const revalidate = 21600; // 6 hours
+// ISR configuration - revalidate every 6 hours
+export const revalidate = 21600;
 
 export async function generateStaticParams() {
     try {
         // Generate params for the first 24 properties to speed up initial build
-        // The rest will be substantialy generated on demand
+        // The rest will be generated on demand
         const { data } = await getPropertiesListServer({
             filters: {},
             page: 1,
             limit: 24
         });
-        
+
         return data.map((property) => ({
             id: property.id
         }));
@@ -35,18 +36,20 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PropertyPageProps): Promise<Metadata> {
     const { locale, id } = await params;
-    
+
     // Parallel data fetching
-    const property = await getPropertyByIdServer(id);
-    const t = await getTranslations({ locale, namespace: 'propertyDetail' });
+    const [property, t] = await Promise.all([
+        getPropertyByIdServer(id),
+        getTranslations({ locale, namespace: 'propertyDetail' })
+    ]);
 
     if (!property) {
         return {
-            title: t('maxTitle') || 'Property Not Found'
+            title: 'Property Not Found'
         };
     }
 
-    const price = new Intl.NumberFormat('ru-RU').format(property.price);
+    const price = new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : locale === 'fr' ? 'fr-FR' : 'en-US').format(property.price);
     const title = `${property.title} | ${price} €/${t('perMonth')}`;
     const description = property.description.substring(0, 160);
 
@@ -69,12 +72,23 @@ export async function generateMetadata({ params }: PropertyPageProps): Promise<M
 }
 
 export default async function PropertyPage({ params }: PropertyPageProps) {
-    const { id } = await params;
-    const property = await getPropertyByIdServer(id);
+    const { locale, id } = await params;
+
+    // Parallel data fetching - property and translations
+    const [property, translations] = await Promise.all([
+        getPropertyByIdServer(id),
+        getPropertyPageTranslations(locale)
+    ]);
 
     if (!property) {
         notFound();
     }
 
-    return <PropertyDetailPage property={property} />;
+    return (
+        <PropertyDetailPage
+            property={property}
+            translations={translations}
+            locale={locale}
+        />
+    );
 }

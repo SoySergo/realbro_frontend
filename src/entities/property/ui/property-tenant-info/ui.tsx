@@ -53,28 +53,28 @@ export function PropertyTenantInfo({
         },
         {
             key: 'smokingAllowed',
-            icon: property.tenantPreferences.smokingAllowed ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />,
+            icon: property.tenantPreferences.smokingAllowed ? <Check className="w-4 h-4 text-success" /> : <X className="w-4 h-4 text-error" />,
             label: tChars('smokingAllowed'),
             value: property.tenantPreferences.smokingAllowed ? tChars('yes') : tChars('no'),
             show: property.tenantPreferences.smokingAllowed !== undefined
         },
         {
             key: 'couplesAllowed',
-            icon: property.tenantPreferences.couplesAllowed ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />,
+            icon: property.tenantPreferences.couplesAllowed ? <Check className="w-4 h-4 text-success" /> : <X className="w-4 h-4 text-error" />,
             label: tChars('couplesAllowed'),
             value: property.tenantPreferences.couplesAllowed ? tChars('yes') : tChars('no'),
             show: property.tenantPreferences.couplesAllowed !== undefined
         },
         {
             key: 'petsAllowed',
-            icon: property.tenantPreferences.petsAllowed ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />,
+            icon: property.tenantPreferences.petsAllowed ? <Check className="w-4 h-4 text-success" /> : <X className="w-4 h-4 text-error" />,
             label: tChars('petsAllowed'),
             value: property.tenantPreferences.petsAllowed ? tChars('yes') : tChars('no'),
             show: property.tenantPreferences.petsAllowed !== undefined
         },
         {
             key: 'childrenAllowed',
-            icon: property.tenantPreferences.childrenAllowed ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />,
+            icon: property.tenantPreferences.childrenAllowed ? <Check className="w-4 h-4 text-success" /> : <X className="w-4 h-4 text-error" />,
             label: tChars('childrenAllowed'),
             value: property.tenantPreferences.childrenAllowed ? tChars('yes') : tChars('no'),
             show: property.tenantPreferences.childrenAllowed !== undefined

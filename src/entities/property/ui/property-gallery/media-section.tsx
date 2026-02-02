@@ -5,7 +5,8 @@ import { cn } from '@/shared/lib/utils';
 import { PropertyGallery } from './ui';
 import type { Property } from '@/entities/property/model/types';
 import Image from 'next/image';
-import { Play, Box, Map } from 'lucide-react';
+import { Play, Box } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface PropertyMediaSectionProps {
     property: Property;
@@ -16,13 +17,14 @@ interface PropertyMediaSectionProps {
 type MediaType = 'photos' | 'video' | 'tour3d' | 'plan';
 
 export function PropertyMediaSection({ property, className, actions }: PropertyMediaSectionProps) {
+    const t = useTranslations('propertyDetail');
     const [activeTab, setActiveTab] = useState<MediaType>('photos');
 
     const tabs = [
-        { id: 'photos', label: 'Фото', count: property.images.length, hasData: true },
-        { id: 'video', label: 'Видео', count: 0, hasData: !!property.video },
-        { id: 'tour3d', label: '3D-тур', count: 0, hasData: !!property.tour3d },
-        { id: 'plan', label: 'Планировка', count: 0, hasData: !!property.floorPlan },
+        { id: 'photos', label: t('navPhotos'), count: property.images.length, hasData: true },
+        { id: 'video', label: t('video'), count: 0, hasData: !!property.video },
+        { id: 'tour3d', label: t('tour3d'), count: 0, hasData: !!property.tour3d },
+        { id: 'plan', label: t('plan'), count: 0, hasData: !!property.floorPlan },
     ] as const;
 
     return (
@@ -77,8 +79,7 @@ export function PropertyMediaSection({ property, className, actions }: PropertyM
                              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
                                 <Play className="w-8 h-8 fill-white" />
                              </div>
-                             <p className="font-medium">Видео презентация</p>
-                             <p className="text-sm opacity-70 mt-2">Mock Video Player</p>
+                             <p className="font-medium">{t('videoPresentation')}</p>
                         </div>
                          <Image 
                             src={property.video.thumbnail || property.images[0]} 
@@ -95,8 +96,7 @@ export function PropertyMediaSection({ property, className, actions }: PropertyM
                              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
                                 <Box className="w-8 h-8" />
                              </div>
-                             <p className="font-medium">3D Тур</p>
-                             <p className="text-sm opacity-70 mt-2">Mock 3D Viewer</p>
+                             <p className="font-medium">{t('tour3d')}</p>
                         </div>
                         <Image 
                             src={property.tour3d.thumbnail || property.images[0]} 

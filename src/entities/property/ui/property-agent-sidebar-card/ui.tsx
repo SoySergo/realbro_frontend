@@ -28,14 +28,14 @@ export function PropertyAgentSidebarCard({
             */}
             <Card className="overflow-hidden border-0 shadow-sm">
                 {/* Header Background - Modified to vertical fade for distinction */}
-                <div className="h-28 bg-linear-to-b from-blue-50/80 to-transparent dark:from-blue-900/30 dark:to-transparent w-full absolute top-0 left-0 z-0"></div>
+                <div className="h-28 bg-linear-to-b from-brand-primary-light/80 to-transparent dark:from-brand-primary/20 dark:to-transparent w-full absolute top-0 left-0 z-0"></div>
 
                 <div className="relative z-10 px-5 pt-8 text-center space-y-3">
                     {/* Agency/Agent Logo/Avatar (Centered and large) */}
                     <div className="flex justify-center">
                         <div className="relative">
                             {isAgency && agent.agencyLogo ? (
-                                <div className="w-24 h-24 bg-white dark:bg-card rounded-2xl shadow-sm border border-border p-2 flex items-center justify-center overflow-hidden">
+                                <div className="w-24 h-24 bg-background dark:bg-card rounded-2xl shadow-sm border border-border p-2 flex items-center justify-center overflow-hidden">
                                      <Image
                                         src={agent.agencyLogo}
                                         alt={agent.agencyName || agent.name}
@@ -45,7 +45,7 @@ export function PropertyAgentSidebarCard({
                                     />
                                 </div>
                             ) : (
-                                <div className="w-24 h-24 bg-white dark:bg-card rounded-2xl shadow-sm border border-border flex items-center justify-center overflow-hidden p-1">
+                                <div className="w-24 h-24 bg-background dark:bg-card rounded-2xl shadow-sm border border-border flex items-center justify-center overflow-hidden p-1">
                                     {agent.avatar ? (
                                         <Image
                                             src={agent.avatar}
@@ -105,7 +105,7 @@ export function PropertyAgentSidebarCard({
                              <p className="font-medium text-sm text-foreground leading-tight">{agent.name}</p>
                              <div className="flex items-center gap-1.5 mt-0.5">
                                 <span className="text-sm font-bold text-foreground">5.0</span>
-                                <Star className="w-3.5 h-3.5 text-blue-500 fill-current" />
+                                <Star className="w-3.5 h-3.5 text-brand-primary fill-current" />
                                 <span className="text-xs text-muted-foreground">{t('reviews') || 'отзыва'}: 2</span>
                              </div>
                          </div>

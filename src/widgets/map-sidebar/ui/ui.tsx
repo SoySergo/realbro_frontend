@@ -503,7 +503,7 @@ const MapSidebarCard = memo(function MapSidebarCard({
                     <div className="flex items-center gap-3 text-xs text-text-secondary mt-auto">
                         <span className="flex items-center gap-1">
                             <Bed className="w-3 h-3" />
-                            {property.bedrooms}
+                            {property.rooms}
                         </span>
                         <span className="flex items-center gap-1">
                             <Maximize2 className="w-3 h-3" />
@@ -785,7 +785,7 @@ const MobilePropertyCard = memo(function MobilePropertyCard({
                 <div className="flex items-center gap-4 text-sm text-text-secondary mt-2">
                     <span className="flex items-center gap-1">
                         <Bed className="w-4 h-4" />
-                        {property.bedrooms} комн.
+                        {property.rooms} комн.
                     </span>
                     <span className="flex items-center gap-1">
                         <Maximize2 className="w-4 h-4" />

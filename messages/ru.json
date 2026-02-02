@@ -694,8 +694,13 @@
     "tour3d": "3D-тур",
     "plan": "План",
     "example": "Например",
-    "of": "из"
-
+    "of": "из",
+    "updated": "Обновлено",
+    "views": "просмотров",
+    "viewsToday": "за сегодня",
+    "videoPresentation": "Видео презентация",
+    "yes": "Да",
+    "no": "Нет"
   },
   "characteristics": {
     "propertyType": "Тип жилья",

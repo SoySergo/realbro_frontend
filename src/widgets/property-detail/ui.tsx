@@ -2,23 +2,20 @@
 
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
+import type { PropertyPageTranslations } from '@/shared/lib/get-property-translations';
 
 // Entity components
 import {
     PropertyGallery,
     PropertyHeader,
-    PropertyPriceCard,
     PropertyMainInfo,
-    PropertyDescriptionSection, // Using the existing collapsible one
+    PropertyDescriptionSection,
     PropertyCharacteristics,
     PropertyAmenitiesGrid,
     PropertyLocationSection,
-    PropertyStatsRow,
-    PropertyPriceSection,
-    PropertyAgentCard,
     PropertyMediaSection,
     PropertyTenantInfo,
-    PropertySidebarConditions, // Re-adding
+    PropertySidebarConditions,
     PropertyAgentSidebarCard,
     PropertyAgentBlock,
     PropertyListSection,
@@ -29,25 +26,21 @@ import {
 import { PropertyContactBar } from '@/features/property-contact';
 import { PropertyActions } from '@/features/property-actions';
 
-import { useTranslations } from 'next-intl';
-
-// Import PropertyAddressWithTransport if not already exported from @/entities/property/ui
-// accessing it via the index export which I updated
-import { PropertyAddressWithTransport } from '@/entities/property/ui/property-address-transport'; 
-import { mockBarcelonaStations } from '@/entities/property/ui/property-address-transport/transport-stations';
-
-
 interface PropertyDetailWidgetProps {
     property: Property;
     className?: string;
+    translations: PropertyPageTranslations;
+    locale: string;
 }
 
 
 export function PropertyDetailWidget({
     property,
-    className
+    className,
+    translations,
+    locale
 }: PropertyDetailWidgetProps) {
-    const t = useTranslations('propertyDetail');
+    const t = translations;
 
     const handleCall = () => {
         if (property.author?.phone) {
@@ -56,27 +49,27 @@ export function PropertyDetailWidget({
     };
 
     const handleMessage = () => {
-        console.log('Open message');
+        // TODO: Implement message functionality
     };
 
-    const handleToggleFavorite = (id: string) => {
-        console.log('Toggle favorite:', id);
+    const handleToggleFavorite = (_id: string) => {
+        // TODO: Implement toggle favorite functionality
     };
 
-    const handleShare = (id: string) => {
-        console.log('Share:', id);
+    const handleShare = (_id: string) => {
+        // TODO: Implement share functionality
     };
-    
+
     const handleLike = () => {
-        console.log('Like', property.id);
+        // TODO: Implement like functionality
     };
 
     const handleDislike = () => {
-        console.log('Dislike', property.id);
+        // TODO: Implement dislike functionality
     };
 
     const handleMore = () => {
-        console.log('More options', property.id);
+        // TODO: Implement more options functionality
     };
 
     // Calculate rating (mock based on ID for consistency)
@@ -235,20 +228,20 @@ export function PropertyDetailWidget({
             <div className="bg-muted/30 mt-16">
                 {/* Other Offers Section */}
                 <PropertyListSection
-                    title={t("otherOffers")} // Add translation key later
-                    subtitle={property.author ? `${t("from")} ${property.author.name}` : undefined}
-                    properties={[property, property, property, property]} // Mock data: repeat current property
-                    viewAllText={t("showAll")}
-                    onViewAll={() => console.log('View all other offers')}
+                    title={t.related.otherOffers}
+                    subtitle={property.author ? `${t.related.from} ${property.author.name}` : undefined}
+                    properties={[property, property, property, property]}
+                    viewAllText={t.related.showAll}
+                    onViewAll={() => {}}
                     className="pb-6 pt-12"
                 />
 
                 {/* Similar Properties Section */}
                 <PropertyListSection
-                    title={t("similarProperties")} // Add translation key later
-                    properties={[property, property, property, property]} // Mock data
-                    viewAllText={t("showAll")}
-                    onViewAll={() => console.log('View all similar')}
+                    title={t.related.similarProperties}
+                    properties={[property, property, property, property]}
+                    viewAllText={t.related.showAll}
+                    onViewAll={() => {}}
                     className="pt-6 pb-20"
                 />
             </div>

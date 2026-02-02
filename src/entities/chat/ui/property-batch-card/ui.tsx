@@ -91,10 +91,10 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
 
                 {/* Specs */}
                 <div className="flex items-center gap-3 text-xs text-text-secondary">
-                    {property.bedrooms > 0 && (
+                    {property.rooms > 0 && (
                         <span className="flex items-center gap-1">
                             <Bed className="w-3.5 h-3.5" />
-                            {property.bedrooms}
+                            {property.rooms}
                         </span>
                     )}
                     <span className="flex items-center gap-1">

@@ -64,7 +64,7 @@ export const PropertyCard = ({
 
                 <div className="flex gap-4 mt-2 text-sm">
                     <span>{property.area} m²</span>
-                    <span>{property.bedrooms} комнат</span>
+                    <span>{property.rooms} комнат</span>
                     {property.floor && <span>{property.floor} этаж</span>}
                 </div>
             </div>

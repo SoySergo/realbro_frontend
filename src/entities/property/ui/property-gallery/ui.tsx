@@ -162,7 +162,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                         
                         {/* End of scroll indicator */}
                         <div className="flex flex-col items-center justify-center min-w-[40px] h-full shrink-0 opacity-30">
-                            <div className="w-1 h-12 bg-gray-400 rounded-full" />
+                            <div className="w-1 h-12 bg-text-tertiary rounded-full" />
                         </div>
                     </div>
 
@@ -176,8 +176,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
                                     <Play className="w-8 h-8 fill-white" />
                                 </div>
-                                <p className="font-medium">Видео презентация</p>
-                                <p className="text-sm opacity-70 mt-2">Mock Video Player</p>
+                                <p className="font-medium">{t('videoPresentation')}</p>
                             </div>
                             <Image 
                                 src={video.thumbnail || images[0]} 
@@ -198,8 +197,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
                                     <Box className="w-8 h-8" />
                                 </div>
-                                <p className="font-medium">3D Тур</p>
-                                <p className="text-sm opacity-70 mt-2">Mock 3D Viewer</p>
+                                <p className="font-medium">{t('tour3d')}</p>
                             </div>
                             <Image 
                                 src={tour3d.thumbnail || images[0]} 
@@ -213,7 +211,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                     {/* Plan View */}
                     {floorPlan && (
                         <div className={cn(
-                            "absolute inset-0 z-10 bg-white rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4 border border-border/10",
+                            "absolute inset-0 z-10 bg-background rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4 border border-border/10",
                             activeView === 'plan' ? 'opacity-100' : 'opacity-0 pointer-events-none'
                         )}>
                             <div className="relative w-full h-full p-4">
@@ -246,12 +244,12 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                     onClick={() => setActiveView('photos')}
                     className={cn(
                         "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
-                        activeView === 'photos' 
-                            ? "bg-brand-primary text-white border-brand-primary" 
-                            : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                        activeView === 'photos'
+                            ? "bg-brand-primary text-white border-brand-primary"
+                            : "bg-secondary text-foreground border-transparent hover:bg-muted"
                     )}
                 >
-                        <Camera className={cn("w-3.5 h-3.5", activeView === 'photos' ? "stroke-white" : "stroke-black")} />
+                        <Camera className={cn("w-3.5 h-3.5", activeView === 'photos' ? "stroke-white" : "stroke-current")} />
                         {t('photos') || 'Фото'}
                 </button>
 
@@ -261,12 +259,12 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                         onClick={() => setActiveView(activeView === 'video' ? 'photos' : 'video')}
                         className={cn(
                             "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
-                            activeView === 'video' 
-                                ? "bg-brand-primary text-white border-brand-primary" 
-                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                            activeView === 'video'
+                                ? "bg-brand-primary text-white border-brand-primary"
+                                : "bg-secondary text-foreground border-transparent hover:bg-muted"
                         )}
                     >
-                            <Play className={cn("w-3.5 h-3.5", activeView === 'video' ? "fill-white stroke-white" : "fill-black stroke-black")} />
+                            <Play className={cn("w-3.5 h-3.5", activeView === 'video' ? "fill-white stroke-white" : "fill-current stroke-current")} />
                             {t('video') || 'Видео'}
                     </button>
                 )}
@@ -277,12 +275,12 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                         onClick={() => setActiveView(activeView === 'tour3d' ? 'photos' : 'tour3d')}
                         className={cn(
                             "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
-                            activeView === 'tour3d' 
-                                ? "bg-brand-primary text-white border-brand-primary" 
-                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                            activeView === 'tour3d'
+                                ? "bg-brand-primary text-white border-brand-primary"
+                                : "bg-secondary text-foreground border-transparent hover:bg-muted"
                         )}
                     >
-                            <Box className={cn("w-3.5 h-3.5", activeView === 'tour3d' ? "stroke-white" : "stroke-black")} />
+                            <Box className={cn("w-3.5 h-3.5", activeView === 'tour3d' ? "stroke-white" : "stroke-current")} />
                             {t('tour3d') || '3D-тур'}
                     </button>
                 )}
@@ -293,12 +291,12 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                         onClick={() => setActiveView(activeView === 'plan' ? 'photos' : 'plan')}
                         className={cn(
                             "text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm flex items-center gap-1.5 transition-colors border whitespace-nowrap shrink-0",
-                            activeView === 'plan' 
-                                ? "bg-brand-primary text-white border-brand-primary" 
-                                : "bg-gray-100 text-black border-transparent hover:bg-gray-200"
+                            activeView === 'plan'
+                                ? "bg-brand-primary text-white border-brand-primary"
+                                : "bg-secondary text-foreground border-transparent hover:bg-muted"
                         )}
                     >
-                            <Group className={cn("w-3.5 h-3.5 ", activeView === 'plan' ? "stroke-white" : "stroke-black")} />
+                            <Group className={cn("w-3.5 h-3.5 ", activeView === 'plan' ? "stroke-white" : "stroke-current")} />
                             {t('plan') || 'Планировка'}
                     </button>
                 )}

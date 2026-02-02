@@ -51,7 +51,7 @@ export function PropertyContactBar({
                 <div className="flex gap-3 max-w-lg mx-auto">
                     <button
                         onClick={handleCall}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold transition-all hover:bg-blue-700 active:scale-[0.98] shadow-sm"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-primary text-white font-semibold transition-all hover:bg-brand-primary-hover active:scale-[0.98] shadow-sm"
                     >
                         {/* <Phone className="w-5 h-5" /> Icon might be optional if text is 'Contact' but usually good. User didn't specify removing icon. */}
                         {t('contact')}
@@ -89,14 +89,14 @@ export function PropertyContactBar({
         <div className={cn('flex flex-col gap-2', className)}>
             <button
                 onClick={handleCall}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold transition-all hover:bg-blue-700 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-primary text-white font-semibold transition-all hover:bg-brand-primary-hover active:scale-[0.98]"
             >
                 <Phone className="w-5 h-5" />
                 {t('call')}
             </button>
             <button
                 onClick={handleMessage}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-blue-600 bg-background text-blue-600 font-semibold transition-all hover:bg-blue-50 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-brand-primary bg-background text-brand-primary font-semibold transition-all hover:bg-brand-primary-light active:scale-[0.98]"
             >
                 <MessageCircle className="w-5 h-5" />
                 {t('message')}

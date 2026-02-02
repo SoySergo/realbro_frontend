@@ -208,7 +208,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                     </div>
                     <div className="flex items-center gap-2">
                          <Bed className="w-4 h-4 text-text-tertiary" />
-                         <span className="text-sm font-medium text-text-secondary">{property.bedrooms} спальни</span>
+                         <span className="text-sm font-medium text-text-secondary">{property.rooms} спальни</span>
                     </div>
                     <div className="flex items-center gap-2">
                          <Bath className="w-4 h-4 text-text-tertiary" />

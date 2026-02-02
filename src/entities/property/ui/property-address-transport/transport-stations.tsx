@@ -171,7 +171,7 @@ function TransportLineIcon({ line }: { line: TransportLine }) {
         <div 
             className={cn(
                 "flex items-center justify-center min-w-[24px] h-6 px-1.5 text-[11px] font-bold leading-none shrink-0 rounded-md shadow-sm",
-                isBus && !hasColor ? "bg-white border border-border text-foreground" : "text-white"
+                isBus && !hasColor ? "bg-background border border-border text-foreground" : "text-white"
             )}
             style={!isBus || hasColor ? { 
                 backgroundColor: line.color,

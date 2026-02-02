@@ -225,7 +225,7 @@ export function PropertyCardHorizontal({ property, onClick }: PropertyCardHorizo
                     {property.title}
                 </a>
                 <p className="text-sm text-muted-foreground mb-2">
-                    {property.bedrooms} {t('roomsShort')} • {property.area} м²
+                    {property.rooms} {t('roomsShort')} • {property.area} м²
                     {property.floor && property.totalFloors && (
                         <> • {t('floorOf', { floor: property.floor, total: property.totalFloors })}</>
                     )}

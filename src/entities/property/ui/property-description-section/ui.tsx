@@ -54,9 +54,9 @@ export function PropertyDescriptionSection({
                             onMouseLeave={() => setIsHovered(false)}
                             className={cn(
                                 "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors cursor-pointer outline-none whitespace-nowrap",
-                                !showOriginal 
-                                    ? "bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100" 
-                                    : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100"
+                                !showOriginal
+                                    ? "bg-brand-primary-light text-brand-primary border-brand-primary-light hover:bg-brand-primary-light/80"
+                                    : "bg-secondary text-text-secondary border-border hover:bg-brand-primary-light hover:text-brand-primary hover:border-brand-primary-light"
                             )}
                         >
                             {variant === 'mobile' ? (

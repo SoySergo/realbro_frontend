@@ -35,7 +35,7 @@ export const PropertyDetails = ({
                     </div>
                     <div>
                         <span className="text-sm text-muted-foreground">Комнаты</span>
-                        <p className="text-lg font-semibold">{property.bedrooms}</p>
+                        <p className="text-lg font-semibold">{property.rooms}</p>
                     </div>
                     <div>
                         <span className="text-sm text-muted-foreground">Ванные</span>

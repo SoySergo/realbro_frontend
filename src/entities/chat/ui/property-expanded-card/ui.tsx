@@ -199,10 +199,10 @@ export function PropertyExpandedCard({
 
                 {/* Characteristics */}
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary">
-                    {property.bedrooms > 0 && (
+                    {property.rooms > 0 && (
                         <span className="flex items-center gap-1.5">
                             <Bed className="w-4 h-4" />
-                            {property.bedrooms} комн.
+                            {property.rooms} комн.
                         </span>
                     )}
                     {property.bathrooms > 0 && (

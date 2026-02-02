@@ -55,21 +55,6 @@ interface PropertyLocationSectionProps {
     className?: string;
 }
 
-// Filter categories
-const filterCategories = [
-    { key: 'transport', icon: Bus, label: 'Транспорт' },
-    { key: 'schools', icon: GraduationCap, label: 'Школы и сады' },
-    { key: 'medical', icon: Stethoscope, label: 'Медицина' },
-    { key: 'groceries', icon: ShoppingCart, label: 'Продукты' },
-    { key: 'shopping', icon: ShoppingBag, label: 'Шопинг' },
-    { key: 'restaurants', icon: Utensils, label: 'Бары и рестораны' },
-    { key: 'sports', icon: Dumbbell, label: 'Спорт' },
-    { key: 'entertainment', icon: Ticket, label: 'Культура и отдых' },
-    { key: 'parks', icon: Trees, label: 'Парки скверы' }, 
-    { key: 'beauty', icon: Scissors, label: 'Бьюти и уход' },
-    { key: 'attractions', icon: Landmark, label: 'Достопримечательности' }
-];
-
 export function PropertyLocationSection({
     address,
     coordinates,
@@ -77,6 +62,21 @@ export function PropertyLocationSection({
     className
 }: PropertyLocationSectionProps) {
     const t = useTranslations('propertyDetail.locationSection');
+
+    // Filter categories with translations
+    const filterCategories = [
+        { key: 'transport', icon: Bus, label: t('categories.transport') },
+        { key: 'schools', icon: GraduationCap, label: t('categories.schools') },
+        { key: 'medical', icon: Stethoscope, label: t('categories.medical') },
+        { key: 'groceries', icon: ShoppingCart, label: t('categories.groceries') },
+        { key: 'shopping', icon: ShoppingBag, label: t('categories.shopping') },
+        { key: 'restaurants', icon: Utensils, label: t('categories.restaurants') },
+        { key: 'sports', icon: Dumbbell, label: t('categories.sports') },
+        { key: 'entertainment', icon: Ticket, label: t('categories.entertainment') },
+        { key: 'parks', icon: Trees, label: t('categories.parks') },
+        { key: 'beauty', icon: Scissors, label: t('categories.beauty') },
+        { key: 'attractions', icon: Landmark, label: t('categories.attractions') }
+    ];
     const [activeFilter, setActiveFilter] = useState<string>('transport');
     
     const handleMapLoad = useCallback((map: mapboxgl.Map) => {

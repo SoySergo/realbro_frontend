@@ -47,21 +47,21 @@ export function PropertyMobileMainInfo({
         {
             id: 'area',
             icon: Maximize2,
-            value: `${property.area} м²`,
+            value: `${property.area} ${t('sqm')}`,
             label: t('area'),
             show: !!property.area
         },
         {
             id: 'livingArea',
             icon: Armchair,
-            value: property.livingArea ? `${property.livingArea} м²` : null,
+            value: property.livingArea ? `${property.livingArea} ${t('sqm')}` : null,
             label: t('livingArea'),
             show: !!property.livingArea
         },
         {
             id: 'kitchenArea',
             icon: Utensils,
-            value: property.kitchenArea ? `${property.kitchenArea} м²` : null,
+            value: property.kitchenArea ? `${property.kitchenArea} ${t('sqm')}` : null,
             label: t('kitchenArea'),
             show: !!property.kitchenArea
         },
@@ -120,14 +120,14 @@ export function PropertyMobileMainInfo({
                         <span className="text-[28px] font-bold leading-none text-foreground">
                             {formatPrice(property.price)} €
                         </span>
-                        <span className="text-xl font-bold text-foreground">/мес</span>
+                        <span className="text-xl font-bold text-foreground">/{t('perMonth')}</span>
                     </div>
                     
                     {/* Price History / Stats Icon */}
-                    <div className="relative bg-gray-100 p-1.5 rounded-lg ml-1">
-                        <BarChart3 className="w-5 h-5 text-gray-600" />
-                        <div className="absolute -top-1 -right-1 bg-white rounded-full shadow-sm p-0.5">
-                            <TrendingDown className="w-3 h-3 text-green-600" />
+                    <div className="relative bg-secondary p-1.5 rounded-lg ml-1">
+                        <BarChart3 className="w-5 h-5 text-text-secondary" />
+                        <div className="absolute -top-1 -right-1 bg-background rounded-full shadow-sm p-0.5">
+                            <TrendingDown className="w-3 h-3 text-success" />
                         </div>
                     </div>
                 </div>
@@ -141,14 +141,14 @@ export function PropertyMobileMainInfo({
                 </p>
                 <div className="flex gap-2">
                     <div className="relative flex-1">
-                        <Input 
+                        <Input
                             placeholder={`${t('example') || 'Например'}, ${formattedExamplePrice} €`}
-                            className="h-12 text-base rounded-xl border-gray-200 bg-white shadow-sm placeholder:text-gray-400"
+                            className="h-12 text-base rounded-xl border-border bg-background shadow-sm placeholder:text-text-tertiary"
                         />
                     </div>
-                    <Button 
-                        size="icon" 
-                        className="h-12 w-12 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-600 border-none shrink-0"
+                    <Button
+                        size="icon"
+                        className="h-12 w-12 rounded-xl bg-brand-primary-light hover:bg-brand-primary-light/80 text-brand-primary border-none shrink-0"
                     >
                         <ChevronRight className="w-6 h-6 stroke-[2.5px]" />
                     </Button>

@@ -40,7 +40,7 @@ function AiStoryCard({ property }: { property: Property }) {
                         {formatPrice(property.price)}
                     </p>
                     <p className="text-white/80 text-[10px] truncate">
-                        {property.bedrooms} komn. · {property.area} m²
+                        {property.rooms} komn. · {property.area} m²
                     </p>
                     <p className="text-white/60 text-[10px] truncate">{property.city}</p>
                 </div>

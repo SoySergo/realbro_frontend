@@ -221,7 +221,7 @@ export function generateMockProperty(index: number): Property {
         type,
         price,
         pricePerMeter: Math.round(price / area),
-        bedrooms,
+        rooms: bedrooms,
         bathrooms: Math.floor(Math.random() * 2) + 1,
         area,
         floor: Math.floor(Math.random() * 6) + 1,

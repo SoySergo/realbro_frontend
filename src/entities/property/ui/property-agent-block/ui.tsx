@@ -32,7 +32,7 @@ export function PropertyAgentBlock({
     return (
         <div className={cn("w-full rounded-2xl border border-border bg-card overflow-hidden text-center", className)}>
             {/* Header with gradient */}
-            <div className="h-24 w-full bg-linear-to-b from-blue-50/80 to-transparent dark:from-blue-950/30 dark:to-transparent relative">
+            <div className="h-24 w-full bg-linear-to-b from-brand-primary-light/80 to-transparent dark:from-brand-primary/20 dark:to-transparent relative">
                 {/* Optional: Add some subtle pattern or texture if needed */}
             </div>
 
@@ -104,16 +104,16 @@ export function PropertyAgentBlock({
 
                 {/* Actions */}
                 <div className="flex gap-3 justify-center max-w-md mx-auto pt-2">
-                    <Button 
+                    <Button
                         onClick={onCall}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11 px-6 rounded-xl font-medium shadow-sm shadow-blue-600/10"
+                        className="flex-1 bg-brand-primary hover:bg-brand-primary-hover text-white h-11 px-6 rounded-xl font-medium shadow-sm shadow-brand-primary/10"
                     >
                         {t('showPhone')}
                     </Button>
-                    <Button 
+                    <Button
                         onClick={onMessage}
                         variant="secondary"
-                        className="flex-1 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/30 h-11 px-6 rounded-xl font-medium border-0"
+                        className="flex-1 bg-brand-primary-light text-brand-primary hover:bg-brand-primary-light/80 dark:bg-brand-primary/20 dark:text-brand-primary dark:hover:bg-brand-primary/30 h-11 px-6 rounded-xl font-medium border-0"
                     >
                         {t('sendMessage')}
                     </Button>

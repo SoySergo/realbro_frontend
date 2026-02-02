@@ -25,7 +25,7 @@ export function PropertyListSection({
     properties,
     className,
     onViewAll,
-    viewAllText = "Смотреть все",
+    viewAllText,
     action
 }: PropertyListSectionProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -60,9 +60,8 @@ export function PropertyListSection({
                 >
                     {properties.map((property, index) => (
                         <div key={`${property.id}-${index}`} className="min-w-[280px] w-[280px] md:min-w-[320px] md:w-[320px] snap-start">
-                           <PropertyCardGrid 
+                           <PropertyCardGrid
                                property={property}
-                               onClick={() => console.log('Click property', property.id)}
                            />
                         </div>
                     ))}

@@ -267,7 +267,7 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
                 {/* Characteristics */}
                 <div className="flex items-center gap-1 text-xs text-foreground mb-1.5 flex-wrap">
                     <span className="font-semibold whitespace-nowrap">
-                        {property.bedrooms} {t('roomsShort')}
+                        {property.rooms} {t('roomsShort')}
                     </span>
                     <span className="text-muted-foreground">·</span>
                     <span className="whitespace-nowrap">{property.area} m²</span>
