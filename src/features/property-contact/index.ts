@@ -1,1 +1,1 @@
-export { PropertyContactBar } from './ui';
+export { PropertyContactBar, type PropertyContactBarTranslations } from './ui';

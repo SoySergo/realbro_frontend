@@ -129,10 +129,10 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                         style={{ scrollPaddingLeft: '1rem', scrollPaddingRight: '1rem' }}
                     >
                         {images.map((img, idx) => (
-                            <div 
+                            <div
                                 key={idx}
                                 className={cn(
-                                    "relative w-[85vw] shrink-0 snap-start snap-always h-full rounded-xl overflow-hidden mr-3 last:mr-0 bg-black/10",
+                                    "relative w-[85vw] shrink-0 snap-start snap-always h-full rounded-xl overflow-hidden mr-3 last:mr-0 bg-muted",
                                 )}
                             >
                                 {/* Background: Blurred and Covered */}
@@ -169,7 +169,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                     {/* Video View */}
                     {video && (
                         <div className={cn(
-                            "absolute inset-0 z-10 bg-black rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4",
+                            "absolute inset-0 z-10 bg-zinc-900 dark:bg-black rounded-xl overflow-hidden flex items-center justify-center transition-opacity duration-300 mx-4 mb-4",
                             activeView === 'video' ? 'opacity-100' : 'opacity-0 pointer-events-none'
                         )}>
                             <div className="text-center text-white">

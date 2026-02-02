@@ -196,6 +196,7 @@ export async function getPropertyPageTranslations(locale: string) {
             age: t('age'),
             atmosphere: t('atmosphere'),
             occupation: t('occupation'),
+            minRentalPeriod: tCharacteristics('minRentalPeriod'),
             noSpecialConditions: t('noSpecialConditions'),
         },
 
@@ -212,12 +213,16 @@ export async function getPropertyPageTranslations(locale: string) {
             utilitiesNotIncludedShort: t('utilitiesNotIncludedShort'),
             totalAtStart: t('totalAtStart'),
             perMonth: t('perMonth'),
-            minRentalPeriod: t('minRentalPeriod'),
+            minRentalPeriod: t.raw('minRentalPeriod') as string,
             term: t('term'),
             rentalTerm: t('rentalTerm'),
             longTerm: t('longTerm'),
             months: t('months'),
             fromYear: t('fromYear'),
+            priceHistory: t('priceHistory'),
+            trackPrice: t('trackPrice'),
+            offerYourPrice: t('offerYourPrice'),
+            example: t('example'),
         },
 
         // Agent info
@@ -248,10 +253,15 @@ export async function getPropertyPageTranslations(locale: string) {
             call: t('call'),
             message: t('message'),
             addToFavorites: t('addToFavorites'),
+            inFavorites: t('inFavorites'),
             share: t('share'),
             like: t('like'),
             dislike: t('dislike'),
             contact: t('contact'),
+            showMore: tCommon('showMore'),
+            note: t('note'),
+            pdf: t('pdf'),
+            report: t('report'),
         },
 
         // Related properties

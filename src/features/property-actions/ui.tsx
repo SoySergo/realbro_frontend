@@ -1,13 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { Heart, Share2, MoreHorizontal, Pencil, FileDown, Printer, EyeOff, Flag, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Heart, Share2, Pencil, FileDown, Flag, ThumbsUp, ThumbsDown } from 'lucide-react';
+
+export interface PropertyActionsTranslations {
+    addToFavorites: string;
+    inFavorites: string;
+    share: string;
+    note: string;
+    pdf: string;
+    report: string;
+}
 
 interface PropertyActionsProps {
     propertyId: string;
     isFavorite?: boolean;
+    translations: PropertyActionsTranslations;
     onToggleFavorite?: (id: string) => void;
     onShare?: (id: string) => void;
     className?: string;
@@ -17,12 +26,13 @@ interface PropertyActionsProps {
 export function PropertyActions({
     propertyId,
     isFavorite = false,
+    translations,
     onToggleFavorite,
     onShare,
     className,
     variant = 'row'
 }: PropertyActionsProps) {
-    const t = useTranslations('propertyDetail');
+    const t = translations;
     const [isLiked, setIsLiked] = useState(isFavorite);
     const [isDisliked, setIsDisliked] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -76,13 +86,13 @@ export function PropertyActions({
                     onClick={handleToggleFavorite}
                     className={cn(
                         'flex items-center gap-2 px-3 py-2 rounded-md transition-colors font-medium text-sm',
-                         isLiked 
-                            ? 'text-red-500 hover:bg-red-50' 
-                            : 'text-muted-foreground hover:bg-muted hover:text-red-500'
+                         isLiked
+                            ? 'text-error hover:bg-error/10 dark:hover:bg-error/20'
+                            : 'text-muted-foreground hover:bg-muted hover:text-error'
                     )}
                 >
                     <Heart className={cn('w-4 h-4', isLiked && 'fill-current')} />
-                    {isLiked ? t('inFavorites') : t('addToFavorites')}
+                    {isLiked ? t.inFavorites : t.addToFavorites}
                 </button>
 
                 <button
@@ -90,12 +100,11 @@ export function PropertyActions({
                     className={cn(
                         'flex items-center gap-2 px-3 py-2 rounded-md transition-colors font-medium text-sm',
                          isDisliked
-                            ? 'text-foreground bg-muted' 
+                            ? 'text-foreground bg-muted'
                             : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     )}
                 >
                     <ThumbsDown className={cn('w-4 h-4', isDisliked && 'fill-current')} />
-                    {/* <span>Не нравится</span> */}
                 </button>
 
                  <button
@@ -103,7 +112,7 @@ export function PropertyActions({
                     className="flex items-center gap-2 px-3 py-2 rounded-md transition-colors font-medium text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                     <Share2 className="w-4 h-4" />
-                    {t('share')}
+                    {t.share}
                 </button>
             </div>
         );
@@ -111,9 +120,9 @@ export function PropertyActions({
 
     if (variant === 'secondary') {
          const actions = [
-            { icon: Pencil, label: 'Оставить заметку' },
-            { icon: FileDown, label: 'PDF' },
-            { icon: Flag, label: 'Жалоба' },
+            { icon: Pencil, label: t.note },
+            { icon: FileDown, label: t.pdf },
+            { icon: Flag, label: t.report },
         ];
 
         return (
@@ -141,24 +150,24 @@ export function PropertyActions({
                 onClick={handleToggleFavorite}
                 className={cn(
                     'p-2 rounded-full transition-all',
-                    isLiked 
-                        ? 'text-green-600' 
+                    isLiked
+                        ? 'text-success'
                         : 'text-muted-foreground hover:text-foreground'
                 )}
-                aria-label={t('addToFavorites')}
+                aria-label={t.addToFavorites}
             >
-                <ThumbsUp 
+                <ThumbsUp
                     className={cn(
                         'w-6 h-6 transition-transform',
                         isLiked && 'fill-current',
                         isAnimating && 'scale-125'
-                    )} 
+                    )}
                 />
             </button>
             <button
                 onClick={handleShare}
                 className="p-2 rounded-full text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={t('share')}
+                aria-label={t.share}
             >
                 <Share2 className="w-6 h-6" />
             </button>

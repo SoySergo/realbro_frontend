@@ -196,7 +196,7 @@ export default async function Page() {
 - [x] `property-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
 - [x] `property-characteristics/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
 - [x] `property-tenant-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
-- [ ] `property-mobile-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов
+- [x] `property-mobile-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
 
 #### 3.2.2 Компоненты которые могут быть Client Components (интерактивные)
 
@@ -215,11 +215,11 @@ export default async function Page() {
 **Задачи:**
 - [x] `property-gallery/ui.tsx` - оставить `'use client'`, использует useTranslations
 - [x] `property-location-section/ui.tsx` - оставить `'use client'`, категории локализованы через useTranslations
-- [ ] `property-sidebar-conditions/ui.tsx` - оставить `'use client'`, передавать лейблы через props
+- [x] `property-sidebar-conditions/ui.tsx` - оставить `'use client'`, передавать лейблы через props - выполнено
 - [x] `property-detail-header/ui.tsx` - оставить `'use client'`, передавать nav items через props
-- [ ] `property-actions/ui.tsx` - оставить `'use client'`, передавать labels через props
-- [ ] `property-contact/ui.tsx` - оставить `'use client'`, передавать labels через props
-- [ ] `property-agent-block/ui.tsx` - добавить `'use client'`, передавать labels через props
+- [x] `property-actions/ui.tsx` - оставить `'use client'`, передавать labels через props - выполнено
+- [x] `property-contact/ui.tsx` - оставить `'use client'`, передавать labels через props - выполнено
+- [x] `property-agent-block/ui.tsx` - добавить `'use client'`, передавать labels через props - выполнено
 
 ### 3.3 Рефакторинг страницы для ISR
 
@@ -366,17 +366,23 @@ export function ExpandButton({ labels }) {
 
 ### 4.1 Проверить все компоненты на dark mode
 
-- [ ] `property-gallery/ui.tsx` - добавить dark: варианты
-- [ ] `property-mobile-main-info/ui.tsx` - добавить dark: варианты
-- [ ] `property-description-section/ui.tsx` - добавить dark: варианты
-- [ ] `transport-stations.tsx` - добавить dark: варианты
+- [x] `property-gallery/ui.tsx` - добавить dark: варианты - выполнено (используются семантические классы)
+- [x] `property-mobile-main-info/ui.tsx` - добавить dark: варианты - выполнено
+- [x] `property-description-section/ui.tsx` - добавить dark: варианты - выполнено
+- [x] `transport-stations.tsx` - добавить dark: варианты - выполнено
 
 ### 4.2 Тестирование тёмной темы
 
-- [ ] Проверить все кнопки в dark mode
-- [ ] Проверить все карточки в dark mode
-- [ ] Проверить галерею в dark mode
+- [x] Проверить все кнопки в dark mode - выполнено
+- [x] Проверить все карточки в dark mode - выполнено (синхронизированы CSS переменные в globals.css)
+- [x] Проверить галерею в dark mode - выполнено
 - [ ] Проверить карту в dark mode (Mapbox имеет свои темы)
+
+### 4.3 Исправления тёмной темы (2026-02-02)
+
+- [x] Синхронизированы CSS переменные `[data-theme="dark"]` с `.dark` классом в `globals.css`
+- [x] `property-amenities-grid/ui.tsx` - заменён `bg-brand-primary/10` на `bg-secondary` для корректной работы в тёмной теме
+- [x] `property-gallery/media-section.tsx` - заменён `bg-white` на `bg-background` для floor plan section
 
 ---
 

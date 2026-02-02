@@ -1,34 +1,57 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { BarChart3, ChevronRight, TrendingDown, Maximize2, Armchair, Utensils, Layers, CalendarClock, Wallet, Bath, ChevronsUp, Bed } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import type { Property } from '@/entities/property/model/types';
 
+export interface PropertyMobileMainInfoTranslations {
+    sqm: string;
+    rooms: string;
+    livingArea: string;
+    kitchenArea: string;
+    floor: string;
+    of: string;
+    term: string;
+    deposit: string;
+    bathrooms: string;
+    elevator: string;
+    yes: string;
+    no: string;
+    area: string;
+    minRentalPeriod: string;
+    perMonth: string;
+    offerYourPrice: string;
+    example: string;
+}
+
 interface PropertyMobileMainInfoProps {
     property: Property;
+    translations: PropertyMobileMainInfoTranslations;
+    locale?: string;
     className?: string;
 }
 
 export function PropertyMobileMainInfo({
     property,
+    translations,
+    locale = 'ru-RU',
     className
 }: PropertyMobileMainInfoProps) {
-    const t = useTranslations('propertyDetail');
+    const t = translations;
 
     // Price formatting
     const formatPrice = (price?: number) => {
         if (!price) return '';
-        return new Intl.NumberFormat('ru-RU').format(price);
+        return new Intl.NumberFormat(locale).format(price);
     };
 
     // Helper for rental term
     const getRentalTerm = () => {
         if (!property.rentalConditions?.minRentalMonths) return null;
         const months = property.rentalConditions.minRentalMonths;
-        return t('minRentalPeriod', { months });
+        return t.minRentalPeriod.replace('{months}', String(months));
     };
 
     // Calculate proposed price (example: 3% lower)
@@ -41,63 +64,63 @@ export function PropertyMobileMainInfo({
             id: 'rooms',
             icon: Bed,
             value: property.rooms,
-            label: t('rooms'),
+            label: t.rooms,
             show: !!property.rooms
         },
         {
             id: 'area',
             icon: Maximize2,
-            value: `${property.area} ${t('sqm')}`,
-            label: t('area'),
+            value: `${property.area} ${t.sqm}`,
+            label: t.area,
             show: !!property.area
         },
         {
             id: 'livingArea',
             icon: Armchair,
-            value: property.livingArea ? `${property.livingArea} ${t('sqm')}` : null,
-            label: t('livingArea'),
+            value: property.livingArea ? `${property.livingArea} ${t.sqm}` : null,
+            label: t.livingArea,
             show: !!property.livingArea
         },
         {
             id: 'kitchenArea',
             icon: Utensils,
-            value: property.kitchenArea ? `${property.kitchenArea} ${t('sqm')}` : null,
-            label: t('kitchenArea'),
+            value: property.kitchenArea ? `${property.kitchenArea} ${t.sqm}` : null,
+            label: t.kitchenArea,
             show: !!property.kitchenArea
         },
         {
             id: 'floor',
             icon: Layers,
-            value: property.floor ? `${property.floor} ${t('of')} ${property.totalFloors || '?'}` : null,
-            label: t('floor'),
+            value: property.floor ? `${property.floor} ${t.of} ${property.totalFloors || '?'}` : null,
+            label: t.floor,
             show: !!property.floor
         },
         {
             id: 'term',
             icon: CalendarClock,
             value: getRentalTerm(),
-            label: t('term'),
+            label: t.term,
             show: !!property.rentalConditions?.minRentalMonths
         },
         {
             id: 'deposit',
             icon: Wallet,
             value: property.rentalConditions?.deposit ? formatPrice(property.rentalConditions.deposit) : null,
-            label: t('deposit'),
+            label: t.deposit,
             show: !!property.rentalConditions?.deposit
         },
         {
             id: 'bathrooms',
             icon: Bath,
             value: property.bathrooms,
-            label: t('bathrooms'),
+            label: t.bathrooms,
             show: !!property.bathrooms
         },
         {
             id: 'elevator',
             icon: ChevronsUp,
-            value: t(property.elevator ? 'yes' : 'no'),
-            label: t('elevator'),
+            value: property.elevator ? t.yes : t.no,
+            label: t.elevator,
             show: !!property.elevator
         }
     ];
@@ -120,7 +143,7 @@ export function PropertyMobileMainInfo({
                         <span className="text-[28px] font-bold leading-none text-foreground">
                             {formatPrice(property.price)} €
                         </span>
-                        <span className="text-xl font-bold text-foreground">/{t('perMonth')}</span>
+                        <span className="text-xl font-bold text-foreground">/{t.perMonth}</span>
                     </div>
                     
                     {/* Price History / Stats Icon */}
@@ -137,18 +160,18 @@ export function PropertyMobileMainInfo({
             {/* Offer Price Block */}
             <div className="space-y-3 mb-8">
                 <p className="font-medium text-[15px] text-foreground">
-                    {t('offerYourPrice') || 'Предложите свою цену'}
+                    {t.offerYourPrice}
                 </p>
                 <div className="flex gap-2">
                     <div className="relative flex-1">
                         <Input
-                            placeholder={`${t('example') || 'Например'}, ${formattedExamplePrice} €`}
-                            className="h-12 text-base rounded-xl border-border bg-background shadow-sm placeholder:text-text-tertiary"
+                            placeholder={`${t.example}, ${formattedExamplePrice} €`}
+                            className="h-12 text-base rounded-xl border-border bg-background shadow-sm placeholder:text-text-tertiary dark:bg-muted/30"
                         />
                     </div>
                     <Button
                         size="icon"
-                        className="h-12 w-12 rounded-xl bg-brand-primary-light hover:bg-brand-primary-light/80 text-brand-primary border-none shrink-0"
+                        className="h-12 w-12 rounded-xl bg-brand-primary-light hover:bg-brand-primary-light/80 dark:bg-brand-primary/20 dark:hover:bg-brand-primary/30 text-brand-primary border-none shrink-0"
                     >
                         <ChevronRight className="w-6 h-6 stroke-[2.5px]" />
                     </Button>

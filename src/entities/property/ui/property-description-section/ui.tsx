@@ -77,8 +77,8 @@ export function PropertyDescriptionSection({
                             className={cn(
                                 "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors cursor-pointer outline-none whitespace-nowrap",
                                 !showOriginal
-                                    ? "bg-brand-primary-light text-brand-primary border-brand-primary-light hover:bg-brand-primary-light/80"
-                                    : "bg-secondary text-text-secondary border-border hover:bg-brand-primary-light hover:text-brand-primary hover:border-brand-primary-light"
+                                    ? "bg-brand-primary-light text-brand-primary border-brand-primary-light hover:bg-brand-primary-light/80 dark:bg-brand-primary/20 dark:border-brand-primary/30 dark:hover:bg-brand-primary/30"
+                                    : "bg-secondary text-text-secondary border-border hover:bg-brand-primary-light hover:text-brand-primary hover:border-brand-primary-light dark:hover:bg-brand-primary/20"
                             )}
                         >
                             {variant === 'mobile' ? (

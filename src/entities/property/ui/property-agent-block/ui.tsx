@@ -1,13 +1,22 @@
+'use client';
 
 import { cn } from '@/shared/lib/utils';
 import { PropertyAuthor } from '../../model/types';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { Phone, MessageCircle, Star, BadgeCheck } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
+
+export interface PropertyAgentBlockTranslations {
+    agency: string;
+    realtor: string;
+    reviews: string;
+    showPhone: string;
+    sendMessage: string;
+}
 
 interface PropertyAgentBlockProps {
     agent: PropertyAuthor;
+    translations: PropertyAgentBlockTranslations;
     className?: string;
     onCall?: () => void;
     onMessage?: () => void;
@@ -15,16 +24,15 @@ interface PropertyAgentBlockProps {
 
 export function PropertyAgentBlock({
     agent,
+    translations,
     className,
     onCall,
     onMessage
 }: PropertyAgentBlockProps) {
-    const t = useTranslations('propertyDetail');
+    const t = translations;
     
     // Determine the role text
-    const roleText = agent.type === 'agency' 
-        ? (t('agency') || 'Агентство')
-        : (t('realtor') || 'Риелтор');
+    const roleText = agent.type === 'agency' ? t.agency : t.realtor;
         
     const agencyText = agent.agencyName ? ` · ${agent.agencyName}` : '';
     const headerText = `${roleText}${agencyText}`;
@@ -95,10 +103,10 @@ export function PropertyAgentBlock({
                 <div className="flex items-center justify-center gap-4 text-sm">
                     {/* Rating placeholder (mock if not in data) */}
                     <div className="flex items-center gap-1.5 font-medium">
-                        <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                        <Star className="w-4 h-4 text-warning fill-warning" />
                         <span>5,0</span>
                         <span className="text-muted-foreground mx-1">·</span>
-                        <span className="text-muted-foreground">2 {t('reviews')}</span>
+                        <span className="text-muted-foreground">2 {t.reviews}</span>
                     </div>
                 </div>
 
@@ -108,14 +116,14 @@ export function PropertyAgentBlock({
                         onClick={onCall}
                         className="flex-1 bg-brand-primary hover:bg-brand-primary-hover text-white h-11 px-6 rounded-xl font-medium shadow-sm shadow-brand-primary/10"
                     >
-                        {t('showPhone')}
+                        {t.showPhone}
                     </Button>
                     <Button
                         onClick={onMessage}
                         variant="secondary"
                         className="flex-1 bg-brand-primary-light text-brand-primary hover:bg-brand-primary-light/80 dark:bg-brand-primary/20 dark:text-brand-primary dark:hover:bg-brand-primary/30 h-11 px-6 rounded-xl font-medium border-0"
                     >
-                        {t('sendMessage')}
+                        {t.sendMessage}
                     </Button>
                 </div>
 

@@ -108,7 +108,7 @@ export function PropertyMediaSection({ property, className, actions }: PropertyM
                 )}
 
                 {activeTab === 'plan' && property.floorPlan && (
-                    <div className="relative w-full h-[440px] rounded-2xl overflow-hidden bg-white flex items-center justify-center p-8 border border-border">
+                    <div className="relative w-full h-[440px] rounded-2xl overflow-hidden bg-background flex items-center justify-center p-8 border border-border">
                         <div className="relative w-full h-full">
                             <Image
                                 src={property.floorPlan}

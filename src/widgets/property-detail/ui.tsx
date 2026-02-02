@@ -190,7 +190,7 @@ export function PropertyDetailWidget({
         age: t.tenant.age,
         gender: t.tenant.gender,
         occupation: t.tenant.occupation,
-        minRentalPeriod: t.conditions.minRentalPeriod,
+        minRentalPeriod: t.tenant.minRentalPeriod,
         smokingAllowed: t.tenant.smokingAllowed,
         couplesAllowed: t.tenant.couplesAllowed,
         petsAllowed: t.tenant.petsAllowed,
@@ -236,7 +236,29 @@ export function PropertyDetailWidget({
 
                             {/* Mobile: New Main Info Block + Address */}
                             <div className="lg:hidden space-y-6 mt-4">
-                                <PropertyMobileMainInfo property={property} />
+                                <PropertyMobileMainInfo
+                                    property={property}
+                                    translations={{
+                                        sqm: t.mainInfo.sqm,
+                                        rooms: t.mainInfo.rooms,
+                                        livingArea: t.mainInfo.livingArea,
+                                        kitchenArea: t.mainInfo.kitchenArea,
+                                        floor: t.mainInfo.floor,
+                                        of: t.characteristics.of,
+                                        term: t.conditions.term,
+                                        deposit: t.conditions.deposit,
+                                        bathrooms: t.mainInfo.bathrooms,
+                                        elevator: t.characteristics.elevator,
+                                        yes: t.characteristics.yes,
+                                        no: t.characteristics.no,
+                                        area: t.mainInfo.area,
+                                        minRentalPeriod: t.conditions.minRentalPeriod,
+                                        perMonth: t.conditions.perMonth,
+                                        offerYourPrice: t.conditions.offerYourPrice,
+                                        example: t.conditions.example,
+                                    }}
+                                    locale={locale}
+                                />
 
                                 <PropertyDescriptionSection
                                     description={property.description}
@@ -275,6 +297,14 @@ export function PropertyDetailWidget({
                                             propertyId={property.id}
                                             variant="secondary"
                                             className="gap-1"
+                                            translations={{
+                                                addToFavorites: t.contact.addToFavorites,
+                                                inFavorites: t.contact.inFavorites,
+                                                share: t.contact.share,
+                                                note: t.contact.note,
+                                                pdf: t.contact.pdf,
+                                                report: t.contact.report,
+                                            }}
                                         />
                                     }
                                 />
@@ -341,6 +371,13 @@ export function PropertyDetailWidget({
                             <section className="border-t border-border/50 pt-6">
                                 <PropertyAgentBlock
                                     agent={property.author}
+                                    translations={{
+                                        agency: t.agent.agency,
+                                        realtor: t.agent.realtor,
+                                        reviews: t.agent.reviews,
+                                        showPhone: t.agent.showPhone,
+                                        sendMessage: t.agent.sendMessage,
+                                    }}
                                     onCall={handleCall}
                                     onMessage={handleMessage}
                                 />
@@ -354,6 +391,27 @@ export function PropertyDetailWidget({
                             price={property.price}
                             rentalConditions={property.rentalConditions}
                             noCommission={property.noCommission}
+                            translations={{
+                                perMonth: t.conditions.perMonth,
+                                priceHistory: t.conditions.priceHistory,
+                                trackPrice: t.conditions.trackPrice,
+                                like: t.contact.like,
+                                dislike: t.contact.dislike,
+                                share: t.contact.share,
+                                offerYourPrice: t.conditions.offerYourPrice,
+                                example: t.conditions.example,
+                                utilities: t.conditions.utilities,
+                                utilitiesIncluded: t.conditions.utilitiesIncluded,
+                                utilitiesNotIncluded: t.conditions.utilitiesNotIncluded,
+                                deposit: t.conditions.deposit,
+                                rentalTerm: t.conditions.rentalTerm,
+                                minRentalPeriod: t.conditions.minRentalPeriod,
+                                longTerm: t.conditions.longTerm,
+                                showPhone: t.agent.showPhone,
+                                writeMessage: t.agent.writeMessage,
+                                writeOnline: t.agent.writeOnline,
+                            }}
+                            locale={locale}
                             onCall={handleCall}
                             onMessage={handleMessage}
                             onLike={handleLike}
@@ -401,6 +459,14 @@ export function PropertyDetailWidget({
             <PropertyContactBar
                 variant="sticky"
                 phone={property.author?.phone}
+                translations={{
+                    contact: t.contact.contact,
+                    call: t.contact.call,
+                    message: t.contact.message,
+                    like: t.contact.like,
+                    dislike: t.contact.dislike,
+                    showMore: t.contact.showMore,
+                }}
                 onCall={handleCall}
                 onMessage={handleMessage}
                 onLike={handleLike}

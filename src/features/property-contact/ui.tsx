@@ -1,12 +1,20 @@
 'use client';
 
-
-import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import { Phone, MessageCircle, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react';
 
+export interface PropertyContactBarTranslations {
+    contact: string;
+    call: string;
+    message: string;
+    like: string;
+    dislike: string;
+    showMore: string;
+}
+
 interface PropertyContactBarProps {
     phone?: string;
+    translations: PropertyContactBarTranslations;
     onCall?: () => void;
     onMessage?: () => void;
     onLike?: () => void;
@@ -18,6 +26,7 @@ interface PropertyContactBarProps {
 
 export function PropertyContactBar({
     phone,
+    translations,
     onCall,
     onMessage,
     onLike,
@@ -26,7 +35,7 @@ export function PropertyContactBar({
     className,
     variant = 'default'
 }: PropertyContactBarProps) {
-    const t = useTranslations('propertyDetail');
+    const t = translations;
 
     const handleCall = () => {
         if (onCall) {
@@ -53,29 +62,28 @@ export function PropertyContactBar({
                         onClick={handleCall}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-primary text-white font-semibold transition-all hover:bg-brand-primary-hover active:scale-[0.98] shadow-sm"
                     >
-                        {/* <Phone className="w-5 h-5" /> Icon might be optional if text is 'Contact' but usually good. User didn't specify removing icon. */}
-                        {t('contact')}
+                        {t.contact}
                     </button>
-                    
+
                     <div className="flex items-center gap-2">
                          <button
                             onClick={onLike}
-                            className="w-[48px] h-[48px] flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t('like')}
+                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                            aria-label={t.like}
                         >
                             <ThumbsUp className="w-5 h-5" />
                         </button>
                         <button
                             onClick={onDislike}
-                            className="w-[48px] h-[48px] flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t('dislike')}
+                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                            aria-label={t.dislike}
                         >
                             <ThumbsDown className="w-5 h-5" />
                         </button>
                         <button
                             onClick={onMore}
-                            className="w-[48px] h-[48px] flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t('showMore')} // Assuming generic translation or just 'More'
+                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                            aria-label={t.showMore}
                         >
                             <MoreHorizontal className="w-5 h-5" />
                         </button>
@@ -92,14 +100,14 @@ export function PropertyContactBar({
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-primary text-white font-semibold transition-all hover:bg-brand-primary-hover active:scale-[0.98]"
             >
                 <Phone className="w-5 h-5" />
-                {t('call')}
+                {t.call}
             </button>
             <button
                 onClick={handleMessage}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-brand-primary bg-background text-brand-primary font-semibold transition-all hover:bg-brand-primary-light active:scale-[0.98]"
             >
                 <MessageCircle className="w-5 h-5" />
-                {t('message')}
+                {t.message}
             </button>
         </div>
     );

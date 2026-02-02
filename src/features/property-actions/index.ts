@@ -1,1 +1,1 @@
-export { PropertyActions } from './ui';
+export { PropertyActions, type PropertyActionsTranslations } from './ui';
