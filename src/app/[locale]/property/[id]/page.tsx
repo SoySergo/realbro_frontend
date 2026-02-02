@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { PropertyDetailPage } from '@/screens/property-detail-page';
 import { getPropertyByIdServer, getPropertiesListServer } from '@/shared/api/properties-server';
 import { getPropertyPageTranslations } from '@/shared/lib/get-property-translations';
+import { getNearbyPlaces, getAgentProperties, getSimilarProperties } from '@/shared/api';
 
 interface PropertyPageProps {
     params: Promise<{
@@ -84,11 +85,23 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
         notFound();
     }
 
+    // Fetch additional data in parallel (after we have property for agent ID)
+    const [nearbyPlaces, agentProperties, similarProperties] = await Promise.all([
+        getNearbyPlaces(id),
+        property.author?.id
+            ? getAgentProperties(property.author.id, id)
+            : Promise.resolve([]),
+        getSimilarProperties(id)
+    ]);
+
     return (
         <PropertyDetailPage
             property={property}
             translations={translations}
             locale={locale}
+            nearbyPlaces={nearbyPlaces}
+            agentProperties={agentProperties}
+            similarProperties={similarProperties}
         />
     );
 }

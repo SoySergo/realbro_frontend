@@ -1,0 +1,186 @@
+{
+  "id": "prop-barcelona-001",
+  "title": "Elegant Modernist Apartment in Eixample",
+  "type": "apartment",
+  "price": 1850,
+  "pricePerMeter": 22,
+  "rooms": 3,
+  "bathrooms": 2,
+  "area": 85,
+  "livingArea": 65,
+  "kitchenArea": 12,
+  "floor": 4,
+  "totalFloors": 6,
+  "ceilingHeight": 3.2,
+  "elevator": true,
+  "renovation": "euro",
+  "bathroomType": "separate",
+  "balconyCount": 2,
+  "windowView": "both",
+
+  "address": "Carrer de València, 245",
+  "country": "Spain",
+  "region": "Catalonia",
+  "province": "Barcelona",
+  "city": "Barcelona",
+  "district": "Eixample",
+  "neighborhood": "Dreta de l'Eixample",
+  "street": "Carrer de València",
+  "houseNumber": "245",
+  "coordinates": {
+    "lat": 41.3954,
+    "lng": 2.1648
+  },
+
+  "description": "Stunning modernist apartment in the heart of Eixample, featuring original architectural details, high ceilings, and abundant natural light. Recently renovated with high-end finishes while preserving the building's historic charm. The apartment includes a spacious living-dining area, a fully equipped modern kitchen, three comfortable bedrooms, and two full bathrooms. Two balconies overlook the tree-lined street. Building has an elevator and a beautiful communal terrace. Located just steps from Passeig de Gràcia, surrounded by restaurants, shops, and excellent public transportation.",
+  "descriptionOriginal": "Потрясающая модернистская квартира в самом сердце Эшампле с оригинальными архитектурными деталями, высокими потолками и обильным естественным освещением. Недавно отремонтирована с высококачественной отделкой при сохранении исторического очарования здания. Квартира включает просторную гостиную-столовую, полностью оборудованную современную кухню, три удобные спальни и две полные ванные комнаты. Два балкона выходят на улицу с деревьями. В здании есть лифт и красивая общая терраса. Расположена в нескольких шагах от Passeig de Gràcia, в окружении ресторанов, магазинов и отличного общественного транспорта.",
+
+  "features": ["elevator", "balcony", "airConditioning", "heating", "furnished"],
+  "amenities": [
+    "wifi",
+    "airConditioning",
+    "heating",
+    "washingMachine",
+    "dryer",
+    "dishwasher",
+    "oven",
+    "microwave",
+    "refrigerator",
+    "tv",
+    "balcony",
+    "terrace",
+    "elevator",
+    "intercom",
+    "securityDoor"
+  ],
+
+  "images": [
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&q=80"
+  ],
+  "video": {
+    "url": "https://www.youtube.com/watch?v=example",
+    "thumbnail": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80"
+  },
+  "tour3d": {
+    "url": "https://my.matterport.com/show/?m=example",
+    "thumbnail": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+  },
+  "floorPlan": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+
+  "nearbyTransport": {
+    "type": "metro",
+    "name": "Passeig de Gràcia",
+    "line": "L3",
+    "color": "#27A638",
+    "walkMinutes": 3
+  },
+  "nearbyTransportList": [
+    {
+      "type": "metro",
+      "name": "Passeig de Gràcia",
+      "line": "L2",
+      "color": "#9F55A8",
+      "walkMinutes": 3
+    },
+    {
+      "type": "metro",
+      "name": "Passeig de Gràcia",
+      "line": "L3",
+      "color": "#27A638",
+      "walkMinutes": 3
+    },
+    {
+      "type": "metro",
+      "name": "Passeig de Gràcia",
+      "line": "L4",
+      "color": "#FAB800",
+      "walkMinutes": 3
+    },
+    {
+      "type": "metro",
+      "name": "Diagonal",
+      "line": "L5",
+      "color": "#0055A4",
+      "walkMinutes": 7
+    },
+    {
+      "type": "train",
+      "name": "Passeig de Gràcia",
+      "line": "R2",
+      "color": "#E1251B",
+      "walkMinutes": 5
+    }
+  ],
+
+  "rentalConditions": {
+    "deposit": 3700,
+    "commission": 50,
+    "commissionType": "percent",
+    "prepaymentMonths": 1,
+    "minRentalMonths": 12,
+    "utilitiesIncluded": false,
+    "utilitiesAmount": 150,
+    "petsAllowed": true,
+    "childrenAllowed": true,
+    "smokingAllowed": false
+  },
+
+  "tenantPreferences": {
+    "minRentalMonths": 12,
+    "prepaymentMonths": 1,
+    "petsAllowed": true,
+    "childrenAllowed": true,
+    "ageRange": [25, 55],
+    "gender": "any",
+    "occupation": "any",
+    "couplesAllowed": true,
+    "smokingAllowed": false
+  },
+
+  "building": {
+    "name": "Casa Modernista",
+    "year": 1905,
+    "type": "brick",
+    "floorsTotal": 6,
+    "elevatorPassenger": 1,
+    "elevatorFreight": 0,
+    "parkingType": "street",
+    "closedTerritory": false,
+    "concierge": true,
+    "garbageChute": false
+  },
+
+  "author": {
+    "id": "agent-001",
+    "name": "Maria Garcia Rodriguez",
+    "avatar": "https://i.pravatar.cc/300?u=agent-001",
+    "type": "agent",
+    "agencyName": "Barcelona Premium Realty",
+    "agencyLogo": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&w=200&q=80",
+    "isVerified": true,
+    "isSuperAgent": true,
+    "phone": "+34 612 345 678",
+    "yearsOnPlatform": 5,
+    "objectsCount": 47,
+    "showOnline": true
+  },
+
+  "isNew": true,
+  "isVerified": true,
+  "noCommission": false,
+  "exclusive": true,
+
+  "publishedAt": "2026-01-28T10:30:00Z",
+  "createdAt": "2026-01-28T10:30:00Z",
+  "updatedAt": "2026-02-01T14:22:00Z",
+  "viewsCount": 1247,
+  "viewsToday": 89,
+  "favoritesCount": 156
+}

@@ -1,0 +1,512 @@
+{
+  "transport": [
+    {
+      "id": "t1",
+      "name": "Passeig de Gràcia",
+      "type": "metro",
+      "lines": [
+        { "id": "l2", "type": "metro", "name": "L2", "color": "#9F55A8", "destination": "Badalona Pompeu Fabra" },
+        { "id": "l3", "type": "metro", "name": "L3", "color": "#27A638", "destination": "Trinitat Nova" },
+        { "id": "l4", "type": "metro", "name": "L4", "color": "#FAB800", "destination": "La Pau" }
+      ],
+      "distance": 250,
+      "walkTime": 3,
+      "coordinates": { "lat": 41.3917, "lng": 2.1650 }
+    },
+    {
+      "id": "t2",
+      "name": "Diagonal",
+      "type": "metro",
+      "lines": [
+        { "id": "l3", "type": "metro", "name": "L3", "color": "#27A638", "destination": "Zona Universitària" },
+        { "id": "l5", "type": "metro", "name": "L5", "color": "#0055A4", "destination": "Cornellà Centre" }
+      ],
+      "distance": 550,
+      "walkTime": 7,
+      "coordinates": { "lat": 41.3944, "lng": 2.1596 }
+    },
+    {
+      "id": "t3",
+      "name": "Passeig de Gràcia (Renfe)",
+      "type": "train",
+      "lines": [
+        { "id": "r2", "type": "train", "name": "R2", "color": "#E1251B", "destination": "Maçanet-Massanes" },
+        { "id": "r2n", "type": "train", "name": "R2 Nord", "color": "#E1251B", "destination": "Sant Celoni" }
+      ],
+      "distance": 350,
+      "walkTime": 5,
+      "coordinates": { "lat": 41.3920, "lng": 2.1655 }
+    },
+    {
+      "id": "t4",
+      "name": "Aragó - Passeig de Gràcia",
+      "type": "bus",
+      "lines": [
+        { "id": "h10", "type": "bus", "name": "H10", "color": "#00A1E4", "destination": "Badal" },
+        { "id": "v15", "type": "bus", "name": "V15", "color": "#00A1E4", "destination": "Pg Marítim" },
+        { "id": "n4", "type": "bus", "name": "N4", "color": "#1A1A6C", "destination": "Zona Franca" }
+      ],
+      "distance": 100,
+      "walkTime": 1,
+      "coordinates": { "lat": 41.3952, "lng": 2.1648 }
+    }
+  ],
+
+  "schools": [
+    {
+      "id": "s1",
+      "name": "Escola Pia Balmes",
+      "type": "School",
+      "distance": 200,
+      "walkTime": 3,
+      "address": "Carrer de Balmes, 208",
+      "rating": 4.5,
+      "website": "balmes.escolapia.cat",
+      "coordinates": { "lat": 41.3978, "lng": 2.1565 }
+    },
+    {
+      "id": "s2",
+      "name": "Universitat de Barcelona",
+      "type": "University",
+      "distance": 600,
+      "walkTime": 8,
+      "address": "Gran Via de les Corts Catalanes, 585",
+      "rating": 4.7,
+      "website": "ub.edu",
+      "coordinates": { "lat": 41.3868, "lng": 2.1647 }
+    },
+    {
+      "id": "s3",
+      "name": "Llar d'Infants Patufet",
+      "type": "Kindergarten",
+      "distance": 350,
+      "walkTime": 5,
+      "address": "Carrer de Pau Claris, 150",
+      "rating": 4.8,
+      "openingHours": "07:30 - 18:00",
+      "coordinates": { "lat": 41.3942, "lng": 2.1680 }
+    },
+    {
+      "id": "s4",
+      "name": "IES Jaume Balmes",
+      "type": "High School",
+      "distance": 450,
+      "walkTime": 6,
+      "address": "Carrer de Pau Claris, 121",
+      "rating": 4.3,
+      "coordinates": { "lat": 41.3935, "lng": 2.1683 }
+    }
+  ],
+
+  "medical": [
+    {
+      "id": "m1",
+      "name": "Hospital Clínic de Barcelona",
+      "type": "Hospital",
+      "distance": 500,
+      "walkTime": 7,
+      "address": "Carrer de Villarroel, 170",
+      "rating": 4.8,
+      "openingHours": "24h",
+      "phone": "+34 932 275 400",
+      "website": "hospitalclinic.org",
+      "coordinates": { "lat": 41.3894, "lng": 2.1528 }
+    },
+    {
+      "id": "m2",
+      "name": "Farmàcia Passeig de Gràcia",
+      "type": "Pharmacy",
+      "distance": 100,
+      "walkTime": 1,
+      "address": "Passeig de Gràcia, 55",
+      "openingHours": "Open 24 hours",
+      "phone": "+34 934 532 233",
+      "coordinates": { "lat": 41.3945, "lng": 2.1645 }
+    },
+    {
+      "id": "m3",
+      "name": "CAP Eixample",
+      "type": "Clinic",
+      "distance": 300,
+      "walkTime": 4,
+      "address": "Carrer de Rosselló, 161",
+      "rating": 4.2,
+      "openingHours": "08:00 - 20:00",
+      "coordinates": { "lat": 41.3965, "lng": 2.1610 }
+    },
+    {
+      "id": "m4",
+      "name": "Dental Clinic Premium BCN",
+      "type": "Dentist",
+      "distance": 450,
+      "walkTime": 6,
+      "address": "Carrer de Balmes, 150",
+      "rating": 4.9,
+      "openingHours": "09:00 - 19:00",
+      "website": "dentalclinicbcn.com",
+      "coordinates": { "lat": 41.3955, "lng": 2.1560 }
+    }
+  ],
+
+  "groceries": [
+    {
+      "id": "g1",
+      "name": "Mercadona",
+      "type": "Supermarket",
+      "distance": 150,
+      "walkTime": 2,
+      "address": "Carrer de València, 180",
+      "rating": 4.3,
+      "openingHours": "09:00 - 21:00",
+      "coordinates": { "lat": 41.3950, "lng": 2.1625 }
+    },
+    {
+      "id": "g2",
+      "name": "Frutería Pepe",
+      "type": "Grocery",
+      "distance": 50,
+      "walkTime": 1,
+      "address": "Carrer del Consell de Cent, 300",
+      "rating": 4.8,
+      "openingHours": "08:00 - 20:30",
+      "coordinates": { "lat": 41.3948, "lng": 2.1650 }
+    },
+    {
+      "id": "g3",
+      "name": "Fornet de Barri",
+      "type": "Bakery",
+      "distance": 100,
+      "walkTime": 1,
+      "address": "Carrer de València, 190",
+      "rating": 4.5,
+      "openingHours": "07:00 - 21:00",
+      "coordinates": { "lat": 41.3952, "lng": 2.1640 }
+    },
+    {
+      "id": "g4",
+      "name": "Carrefour Express",
+      "type": "Convenience Store",
+      "distance": 200,
+      "walkTime": 3,
+      "address": "Carrer d'Aragó, 265",
+      "rating": 4.0,
+      "openingHours": "08:00 - 22:00",
+      "coordinates": { "lat": 41.3930, "lng": 2.1645 }
+    }
+  ],
+
+  "shopping": [
+    {
+      "id": "sh1",
+      "name": "El Corte Inglés",
+      "type": "Department Store",
+      "distance": 800,
+      "walkTime": 10,
+      "address": "Plaça de Catalunya, 14",
+      "rating": 4.6,
+      "openingHours": "09:30 - 21:00",
+      "website": "elcorteingles.es",
+      "coordinates": { "lat": 41.3873, "lng": 2.1690 }
+    },
+    {
+      "id": "sh2",
+      "name": "Zara",
+      "type": "Clothing",
+      "distance": 400,
+      "walkTime": 5,
+      "address": "Passeig de Gràcia, 16",
+      "rating": 4.4,
+      "openingHours": "10:00 - 21:00",
+      "coordinates": { "lat": 41.3895, "lng": 2.1670 }
+    },
+    {
+      "id": "sh3",
+      "name": "FNAC",
+      "type": "Electronics",
+      "distance": 700,
+      "walkTime": 9,
+      "address": "Plaça de Catalunya, 4",
+      "rating": 4.3,
+      "openingHours": "10:00 - 21:30",
+      "website": "fnac.es",
+      "coordinates": { "lat": 41.3870, "lng": 2.1695 }
+    },
+    {
+      "id": "sh4",
+      "name": "Casa del Libro",
+      "type": "Bookstore",
+      "distance": 350,
+      "walkTime": 5,
+      "address": "Passeig de Gràcia, 62",
+      "rating": 4.7,
+      "openingHours": "09:30 - 21:30",
+      "coordinates": { "lat": 41.3925, "lng": 2.1655 }
+    }
+  ],
+
+  "restaurants": [
+    {
+      "id": "r1",
+      "name": "El Glop",
+      "type": "Restaurant",
+      "distance": 120,
+      "walkTime": 2,
+      "address": "Carrer de Casp, 21",
+      "rating": 4.5,
+      "cuisine": "Catalan",
+      "priceLevel": 2,
+      "openingHours": "13:00 - 00:00",
+      "coordinates": { "lat": 41.3920, "lng": 2.1710 }
+    },
+    {
+      "id": "r2",
+      "name": "Vinitus",
+      "type": "Tapas Bar",
+      "distance": 300,
+      "walkTime": 4,
+      "address": "Carrer del Consell de Cent, 333",
+      "rating": 4.7,
+      "cuisine": "Tapas",
+      "priceLevel": 2,
+      "openingHours": "11:30 - 01:00",
+      "coordinates": { "lat": 41.3905, "lng": 2.1625 }
+    },
+    {
+      "id": "r3",
+      "name": "Federal Café",
+      "type": "Cafe",
+      "distance": 400,
+      "walkTime": 5,
+      "address": "Carrer del Parlament, 39",
+      "rating": 4.4,
+      "cuisine": "Brunch",
+      "priceLevel": 2,
+      "openingHours": "09:00 - 23:00",
+      "coordinates": { "lat": 41.3912, "lng": 2.1598 }
+    },
+    {
+      "id": "r4",
+      "name": "Tickets",
+      "type": "Fine Dining",
+      "distance": 1200,
+      "walkTime": 15,
+      "address": "Avinguda del Paral·lel, 164",
+      "rating": 4.9,
+      "cuisine": "Molecular",
+      "priceLevel": 4,
+      "openingHours": "19:00 - 23:00",
+      "website": "ticketsbar.es",
+      "coordinates": { "lat": 41.3758, "lng": 2.1590 }
+    }
+  ],
+
+  "sports": [
+    {
+      "id": "sp1",
+      "name": "Gym DiR Diagonal",
+      "type": "Gym",
+      "distance": 300,
+      "walkTime": 4,
+      "address": "Gran Via de les Corts Catalanes, 600",
+      "rating": 4.2,
+      "openingHours": "06:30 - 23:00",
+      "website": "dir.cat",
+      "coordinates": { "lat": 41.3918, "lng": 2.1635 }
+    },
+    {
+      "id": "sp2",
+      "name": "CrossFit Eixample",
+      "type": "CrossFit",
+      "distance": 450,
+      "walkTime": 6,
+      "address": "Carrer de Balmes, 85",
+      "rating": 4.8,
+      "openingHours": "07:00 - 22:00",
+      "coordinates": { "lat": 41.3900, "lng": 2.1575 }
+    },
+    {
+      "id": "sp3",
+      "name": "Piscina Municipal Jardins Indústria",
+      "type": "Swimming Pool",
+      "distance": 850,
+      "walkTime": 11,
+      "address": "Carrer de Sicília, 333",
+      "rating": 4.3,
+      "openingHours": "07:00 - 21:00",
+      "coordinates": { "lat": 41.4030, "lng": 2.1738 }
+    }
+  ],
+
+  "parks": [
+    {
+      "id": "p1",
+      "name": "Parc de la Ciutadella",
+      "type": "Park",
+      "distance": 1200,
+      "walkTime": 15,
+      "address": "Passeig de Picasso, 21",
+      "rating": 4.6,
+      "openingHours": "10:00 - 22:30",
+      "coordinates": { "lat": 41.3877, "lng": 2.1846 }
+    },
+    {
+      "id": "p2",
+      "name": "Jardins de les Torres de les Aigües",
+      "type": "Garden",
+      "distance": 400,
+      "walkTime": 5,
+      "address": "Carrer de Roger de Llúria, 56",
+      "rating": 4.4,
+      "openingHours": "10:00 - 20:00",
+      "coordinates": { "lat": 41.3930, "lng": 2.1695 }
+    },
+    {
+      "id": "p3",
+      "name": "Parc de Joan Miró",
+      "type": "Park",
+      "distance": 1500,
+      "walkTime": 19,
+      "address": "Carrer d'Aragó, 2",
+      "rating": 4.3,
+      "openingHours": "10:00 - 21:00",
+      "coordinates": { "lat": 41.3780, "lng": 2.1485 }
+    }
+  ],
+
+  "beauty": [
+    {
+      "id": "b1",
+      "name": "Hair Salon Style Barcelona",
+      "type": "Hairdresser",
+      "distance": 200,
+      "walkTime": 3,
+      "address": "Carrer de Balmes, 120",
+      "rating": 4.6,
+      "openingHours": "10:00 - 20:00",
+      "coordinates": { "lat": 41.3945, "lng": 2.1570 }
+    },
+    {
+      "id": "b2",
+      "name": "Nails & Spa Luxury",
+      "type": "Spa",
+      "distance": 400,
+      "walkTime": 5,
+      "address": "Carrer de València, 250",
+      "rating": 4.4,
+      "website": "nailsandspa.com",
+      "openingHours": "10:00 - 21:00",
+      "coordinates": { "lat": 41.3960, "lng": 2.1655 }
+    },
+    {
+      "id": "b3",
+      "name": "Barber Shop BCN",
+      "type": "Barber",
+      "distance": 550,
+      "walkTime": 7,
+      "address": "Carrer d'Enric Granados, 30",
+      "rating": 4.9,
+      "openingHours": "09:30 - 20:00",
+      "coordinates": { "lat": 41.3885, "lng": 2.1565 }
+    }
+  ],
+
+  "entertainment": [
+    {
+      "id": "e1",
+      "name": "Cinemes Verdi",
+      "type": "Cinema",
+      "distance": 900,
+      "walkTime": 12,
+      "address": "Carrer de Verdi, 32",
+      "rating": 4.5,
+      "website": "cines-verdi.com",
+      "openingHours": "15:00 - 01:00",
+      "coordinates": { "lat": 41.4040, "lng": 2.1555 }
+    },
+    {
+      "id": "e2",
+      "name": "Galeria Joan Prats",
+      "type": "Art Gallery",
+      "distance": 300,
+      "walkTime": 4,
+      "address": "Carrer de Balmes, 54",
+      "rating": 4.7,
+      "openingHours": "11:00 - 20:00",
+      "coordinates": { "lat": 41.3890, "lng": 2.1580 }
+    },
+    {
+      "id": "e3",
+      "name": "Jamboree Jazz Club",
+      "type": "Jazz Club",
+      "distance": 1400,
+      "walkTime": 18,
+      "address": "Plaça Reial, 17",
+      "rating": 4.5,
+      "openingHours": "19:00 - 05:00",
+      "website": "masimas.com/jamboree",
+      "coordinates": { "lat": 41.3802, "lng": 2.1752 }
+    },
+    {
+      "id": "e4",
+      "name": "Teatre Coliseum",
+      "type": "Theater",
+      "distance": 500,
+      "walkTime": 7,
+      "address": "Gran Via de les Corts Catalanes, 595",
+      "rating": 4.6,
+      "website": "teatrecoliseum.com",
+      "coordinates": { "lat": 41.3882, "lng": 2.1655 }
+    }
+  ],
+
+  "attractions": [
+    {
+      "id": "a1",
+      "name": "Casa Batlló",
+      "type": "Landmark",
+      "distance": 400,
+      "walkTime": 5,
+      "address": "Passeig de Gràcia, 43",
+      "rating": 4.8,
+      "website": "casabatllo.es",
+      "openingHours": "09:00 - 20:00",
+      "coordinates": { "lat": 41.3917, "lng": 2.1650 }
+    },
+    {
+      "id": "a2",
+      "name": "Casa Milà - La Pedrera",
+      "type": "Landmark",
+      "distance": 600,
+      "walkTime": 8,
+      "address": "Passeig de Gràcia, 92",
+      "rating": 4.7,
+      "website": "lapedrera.com",
+      "openingHours": "09:00 - 20:30",
+      "coordinates": { "lat": 41.3954, "lng": 2.1618 }
+    },
+    {
+      "id": "a3",
+      "name": "Sagrada Família",
+      "type": "Basilica",
+      "distance": 1800,
+      "walkTime": 23,
+      "address": "Carrer de Mallorca, 401",
+      "rating": 4.9,
+      "website": "sagradafamilia.org",
+      "openingHours": "09:00 - 18:00",
+      "coordinates": { "lat": 41.4036, "lng": 2.1744 }
+    },
+    {
+      "id": "a4",
+      "name": "Fundació Antoni Tàpies",
+      "type": "Museum",
+      "distance": 200,
+      "walkTime": 3,
+      "address": "Carrer d'Aragó, 255",
+      "rating": 4.4,
+      "website": "fundaciotapies.org",
+      "openingHours": "10:00 - 19:00",
+      "coordinates": { "lat": 41.3920, "lng": 2.1625 }
+    }
+  ]
+}

@@ -7,6 +7,11 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { ArrowLeft, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
 
+// Layout constants
+const SCROLL_THRESHOLD = 50; // px to trigger header state change
+const INTERSECTION_OFFSET = 300; // px offset for section detection
+const HEADER_HEIGHT = 60; // px height of sticky header
+
 interface HeaderTranslations {
     back: string;
     navPhotos: string;
@@ -41,7 +46,18 @@ interface PropertyDetailHeaderProps {
     currency?: string;
     translations: HeaderTranslations;
     mainInfoTranslations: MainInfoTranslations;
+    locale?: string;
 }
+
+// Get Intl locale from app locale
+const getIntlLocale = (locale?: string): string => {
+    switch (locale) {
+        case 'ru': return 'ru-RU';
+        case 'fr': return 'fr-FR';
+        case 'en': return 'en-US';
+        default: return 'en-US';
+    }
+};
 
 export function PropertyDetailHeader({
     className,
@@ -55,7 +71,8 @@ export function PropertyDetailHeader({
     floor,
     currency = '€',
     translations: t,
-    mainInfoTranslations
+    mainInfoTranslations,
+    locale
 }: PropertyDetailHeaderProps) {
     const router = useRouter();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -64,17 +81,17 @@ export function PropertyDetailHeader({
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
-            setIsScrolled(scrollY > 50);
+            setIsScrolled(scrollY > SCROLL_THRESHOLD);
 
-            // Simple intersection detection 
+            // Simple intersection detection
             const sections = ['photos', 'description', 'characteristics', 'map'];
             for (const section of sections) {
                 const el = document.getElementById(section);
                 if (el) {
                     const rect = el.getBoundingClientRect();
                     // If top is near viewport top (with some offset)
-                    if (rect.top >= 0 && rect.top < 300) {
-                        // setActiveSection(section); 
+                    if (rect.top >= 0 && rect.top < INTERSECTION_OFFSET) {
+                        // setActiveSection(section);
                     }
                 }
             }
@@ -88,10 +105,9 @@ export function PropertyDetailHeader({
         setActiveSection(id);
         const el = document.getElementById(id);
         if (el) {
-            const offset = 60; // height of sticky header
             const elementPosition = el.getBoundingClientRect().top + window.scrollY;
             window.scrollTo({
-                top: elementPosition - offset,
+                top: elementPosition - HEADER_HEIGHT,
                 behavior: 'smooth'
             });
         }
@@ -105,9 +121,9 @@ export function PropertyDetailHeader({
     ];
 
 
-    const formattedPrice = price ? new Intl.NumberFormat('ru-RU').format(price) : '';
+    const intlLocale = getIntlLocale(locale);
+    const formattedPrice = price ? new Intl.NumberFormat(intlLocale).format(price) : '';
     const pricePerMeter = price && area ? Math.round(price / area) : null;
-    // const formattedPricePerMeter = pricePerMeter ? new Intl.NumberFormat('ru-RU').format(pricePerMeter) : '';
 
     return (
         <header 

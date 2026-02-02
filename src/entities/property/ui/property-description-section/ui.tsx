@@ -1,9 +1,20 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import { ChevronDown, Check, Sparkles } from 'lucide-react';
+
+// This component needs 'use client' for expand/collapse interactivity
+// but the description text is rendered on first paint for SEO
+
+interface DescriptionTranslations {
+    title: string;
+    showMore: string;
+    showLess: string;
+    showOriginal: string;
+    showTranslation: string;
+    translatedByAI: string;
+}
 
 interface PropertyDescriptionSectionProps {
     description: string;
@@ -11,6 +22,7 @@ interface PropertyDescriptionSectionProps {
     maxLines?: number;
     className?: string;
     variant?: 'default' | 'mobile';
+    translations?: DescriptionTranslations;
 }
 
 export function PropertyDescriptionSection({
@@ -18,9 +30,19 @@ export function PropertyDescriptionSection({
     descriptionOriginal,
     variant = 'default',
     maxLines = variant === 'mobile' ? 12 : 6,
-    className
-}: PropertyDescriptionSectionProps & { descriptionOriginal?: string }) {
-    const t = useTranslations('propertyDetail');
+    className,
+    translations
+}: PropertyDescriptionSectionProps) {
+    // Default translations for backwards compatibility
+    const t = translations || {
+        title: 'Description',
+        showMore: 'Show more',
+        showLess: 'Show less',
+        showOriginal: 'Show original',
+        showTranslation: 'Show translation',
+        translatedByAI: 'Translated by AI'
+    };
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [showOriginal, setShowOriginal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -44,9 +66,9 @@ export function PropertyDescriptionSection({
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 w-full justify-between">
                     <h3 className="font-semibold text-lg text-foreground">
-                        {t('description')}
+                        {t.title}
                     </h3>
-                    
+
                     {descriptionOriginal && (
                         <button
                             onClick={() => setShowOriginal(!showOriginal)}
@@ -61,18 +83,18 @@ export function PropertyDescriptionSection({
                         >
                             {variant === 'mobile' ? (
                                 <>
-                                    {!showOriginal ? t('showOriginal') : t('showTranslation')}
+                                    {!showOriginal ? t.showOriginal : t.showTranslation}
                                 </>
                             ) : (
                                 !showOriginal ? (
                                     <>
                                         <Check className="w-3.5 h-3.5" />
-                                        {isHovered ? t('showOriginal') : t('translatedByAI')}
+                                        {isHovered ? t.showOriginal : t.translatedByAI}
                                     </>
                                 ) : (
                                     <>
                                         <Sparkles className="w-3.5 h-3.5" />
-                                        {t('showTranslation')}
+                                        {t.showTranslation}
                                     </>
                                 )
                             )}
@@ -80,9 +102,10 @@ export function PropertyDescriptionSection({
                     )}
                 </div>
             </div>
-            
+
             <div className="relative">
-                <p 
+                {/* SEO: Description text is rendered immediately */}
+                <p
                     ref={textRef}
                     className={cn(
                         'text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap',
@@ -108,13 +131,13 @@ export function PropertyDescriptionSection({
                     className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-primary transition-colors mt-0"
                 >
                     <span>
-                        {isExpanded ? t('showLess') : t('showMore')}
+                        {isExpanded ? t.showLess : t.showMore}
                     </span>
-                    <ChevronDown 
+                    <ChevronDown
                         className={cn(
                             'w-4 h-4 transition-transform',
                             isExpanded && 'rotate-180'
-                        )} 
+                        )}
                     />
                 </button>
             )}

@@ -1,48 +1,28 @@
 'use client';
 
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { 
-    ExternalLink, 
-    Building2, 
-    Compass, 
-    Bus, 
-    GraduationCap, 
-    Stethoscope, 
-    Trees, 
+import {
+    Bus,
+    GraduationCap,
+    Stethoscope,
+    Trees,
     ShoppingCart,
-    ChevronRight,
-    ChevronLeft,
     Utensils,
     Scissors,
     Landmark,
     ShoppingBag,
     Dumbbell,
-    Clapperboard,
     Ticket
 } from 'lucide-react';
 import { BaseMap } from '@/features/map';
 import mapboxgl from 'mapbox-gl';
 import type { NearbyTransport } from '../../model/types';
+import type { NearbyPlaces, NearbyPlace } from '@/shared/api';
 import { PropertyAddressWithTransport } from '../property-address-transport';
-import { PropertyCardGrid } from '../property-card-grid';
 import { LocationCategoryList } from './location-category-list';
 import { TransportStationsDetailed } from '../property-address-transport/transport-stations';
-import { 
-    mockNearbyProperties, 
-    mockMedical, 
-    mockSchools, 
-    mockRecreation, 
-    mockGroceries,
-    mockShopping,
-    mockSports,
-    mockEntertainment,
-    mockTransportStations,
-    mockRestaurants,
-    mockBeauty,
-    mockAttractions
-} from './mock-data';
 import { HorizontalScroll } from '@/shared/ui/horizontal-scroll';
 
 interface PropertyLocationSectionProps {
@@ -52,6 +32,7 @@ interface PropertyLocationSectionProps {
         lng: number;
     };
     nearbyTransport?: NearbyTransport[];
+    nearbyPlaces?: NearbyPlaces;
     className?: string;
 }
 
@@ -59,6 +40,7 @@ export function PropertyLocationSection({
     address,
     coordinates,
     nearbyTransport,
+    nearbyPlaces,
     className
 }: PropertyLocationSectionProps) {
     const t = useTranslations('propertyDetail.locationSection');
@@ -80,8 +62,11 @@ export function PropertyLocationSection({
     const [activeFilter, setActiveFilter] = useState<string>('transport');
     
     const handleMapLoad = useCallback((map: mapboxgl.Map) => {
+        // Get brand color from CSS variable
+        const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim() || '#198bff';
+
         // Add marker at property location
-        const marker = new mapboxgl.Marker({ color: '#3b82f6' })
+        const marker = new mapboxgl.Marker({ color: brandColor })
             .setLngLat([coordinates.lng, coordinates.lat])
             .addTo(map);
 
@@ -93,27 +78,62 @@ export function PropertyLocationSection({
         });
     }, [coordinates]);
 
-    const mappedStations: any[] = nearbyTransport?.map((t, i) => ({
-        id: String(i),
-        name: t.name,
-        lines: [{ 
-            id: String(i), 
-            type: t.type, 
-            name: 'line' in t ? t.line : '', 
-            color: 'color' in t ? t.color : undefined 
-        }],
-        distance: 'walkMinutes' in t ? t.walkMinutes : 0,
-        isWalk: true
-    })) || mockTransportStations;
+    // Convert nearbyPlaces transport to component format, or map from nearbyTransport prop
+    const transportStations = nearbyPlaces?.transport
+        ? nearbyPlaces.transport.map(station => ({
+            id: station.id,
+            name: station.name,
+            lines: station.lines.map(line => ({
+                id: line.id,
+                type: line.type as 'metro' | 'train' | 'tram' | 'bus',
+                name: line.name,
+                color: line.color,
+                destination: line.destination
+            })),
+            distance: station.walkTime,
+            isWalk: station.isWalk ?? true
+        }))
+        : nearbyTransport?.map((t, i) => ({
+            id: String(i),
+            name: t.name,
+            lines: [{
+                id: String(i),
+                type: t.type,
+                name: t.line ?? '',
+                color: t.color
+            }],
+            distance: t.walkMinutes,
+            isWalk: true
+        })) || [];
+
+    // Helper to convert NearbyPlace to LocationPOI format for LocationCategoryList
+    const convertToLocationPOI = (places: NearbyPlace[] | undefined) => {
+        if (!places) return [];
+        return places.map(place => ({
+            id: place.id,
+            name: place.name,
+            type: place.type,
+            distance: place.distance < 1000
+                ? `${place.distance} м`
+                : `${(place.distance / 1000).toFixed(1)} км`,
+            address: place.address,
+            openingHours: place.openingHours,
+            phone: place.phone,
+            website: place.website,
+            rating: place.rating,
+            priceLevel: place.priceLevel,
+            cuisine: place.cuisine
+        }));
+    };
 
     const renderContent = () => {
         switch (activeFilter) {
             case 'transport':
                 return (
                     <div className="space-y-4">
-                        <TransportStationsDetailed 
+                        <TransportStationsDetailed
                             key="transport"
-                            stations={mappedStations} 
+                            stations={transportStations}
                             className="bg-card w-full"
                         />
                     </div>
@@ -128,20 +148,19 @@ export function PropertyLocationSection({
             case 'parks':
             case 'beauty':
             case 'attractions':
-                let items: any[] = [];
-                switch(activeFilter) {
-                    case 'medical': items = mockMedical; break;
-                    case 'schools': items = mockSchools; break;
-                    case 'groceries': items = mockGroceries; break;
-                    case 'shopping': items = mockShopping; break;
-                    case 'restaurants': items = mockRestaurants; break;
-                    case 'sports': items = mockSports; break;
-                    case 'entertainment': items = mockEntertainment; break;
-                    case 'parks': items = mockRecreation; break;
-                    case 'beauty': items = mockBeauty; break;
-                    case 'attractions': items = mockAttractions; break;
-                    default: items = mockGroceries; 
-                }
+                const categoryData: Record<string, NearbyPlace[] | undefined> = {
+                    medical: nearbyPlaces?.medical,
+                    schools: nearbyPlaces?.schools,
+                    groceries: nearbyPlaces?.groceries,
+                    shopping: nearbyPlaces?.shopping,
+                    restaurants: nearbyPlaces?.restaurants,
+                    sports: nearbyPlaces?.sports,
+                    entertainment: nearbyPlaces?.entertainment,
+                    parks: nearbyPlaces?.parks,
+                    beauty: nearbyPlaces?.beauty,
+                    attractions: nearbyPlaces?.attractions
+                };
+                const items = convertToLocationPOI(categoryData[activeFilter]);
                 return <LocationCategoryList key={activeFilter} items={items} />;
             default:
                 return null;
@@ -156,9 +175,9 @@ export function PropertyLocationSection({
 
             {/* Address and Transport Info */}
             <div className="space-y-2">
-                <PropertyAddressWithTransport 
+                <PropertyAddressWithTransport
                     address={address}
-                    stations={mappedStations}
+                    stations={transportStations}
                 />
             </div>
 

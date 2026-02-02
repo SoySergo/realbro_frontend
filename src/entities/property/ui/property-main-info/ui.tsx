@@ -1,35 +1,66 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
-import { 
-    Maximize2, 
-    Armchair, 
-    Utensils, 
-    Layers, 
-    CalendarClock, 
-    Wallet, 
-    Bath, 
+import {
+    Maximize2,
+    Armchair,
+    Utensils,
+    Layers,
+    CalendarClock,
+    Wallet,
+    Bath,
     ChevronsUp,
     Bed
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
 
+// SEO-critical component - NO 'use client' to ensure translations are in HTML
+
+interface MainInfoTranslations {
+    sqm: string;
+    floor: string;
+    rooms: string;
+    livingArea: string;
+    kitchenArea: string;
+    area: string;
+    term: string;
+    deposit: string;
+    bathrooms: string;
+    elevator: string;
+    yes: string;
+    no: string;
+    minRentalPeriod: string;
+    months: string;
+    of: string;
+}
+
 interface PropertyMainInfoProps {
     property: Property;
     className?: string;
+    translations: MainInfoTranslations;
+    locale?: string;
 }
+
+// Get Intl locale from app locale
+const getIntlLocale = (locale?: string): string => {
+    switch (locale) {
+        case 'ru': return 'ru-RU';
+        case 'fr': return 'fr-FR';
+        case 'en': return 'en-US';
+        default: return 'en-US';
+    }
+};
 
 export function PropertyMainInfo({
     property,
-    className
+    className,
+    translations: t,
+    locale
 }: PropertyMainInfoProps) {
-    const t = useTranslations('propertyDetail');
+    const intlLocale = getIntlLocale(locale);
 
     // Helper to format currency
     const formatPrice = (price?: number) => {
         if (!price) return '';
-        return new Intl.NumberFormat('ru-RU', {
+        return new Intl.NumberFormat(intlLocale, {
             style: 'currency',
             currency: 'EUR',
             maximumFractionDigits: 0
@@ -40,72 +71,71 @@ export function PropertyMainInfo({
     const getRentalTerm = () => {
         if (!property.rentalConditions?.minRentalMonths) return null;
         const months = property.rentalConditions.minRentalMonths;
-        return t('minRentalPeriod', { months });
+        return `${months} ${t.months}`;
     };
 
     const stats = [
-
         {
             id: 'rooms',
             icon: Bed,
             value: property.rooms,
-            label: t('rooms'),
-            show: !!property.rooms  
+            label: t.rooms,
+            show: !!property.rooms
         },
         {
             id: 'area',
             icon: Maximize2,
-            value: `${property.area} м²`,
-            label: t('area'),
+            value: `${property.area} ${t.sqm}`,
+            label: t.area,
             show: !!property.area
         },
         {
             id: 'livingArea',
             icon: Armchair,
-            value: property.livingArea ? `${property.livingArea} м²` : null,
-            label: t('livingArea'),
+            value: property.livingArea ? `${property.livingArea} ${t.sqm}` : null,
+            label: t.livingArea,
             show: !!property.livingArea
         },
         {
             id: 'kitchenArea',
             icon: Utensils,
-            value: property.kitchenArea ? `${property.kitchenArea} м²` : null,
-            label: t('kitchenArea'),
+            value: property.kitchenArea ? `${property.kitchenArea} ${t.sqm}` : null,
+            label: t.kitchenArea,
             show: !!property.kitchenArea
         },
         {
             id: 'floor',
             icon: Layers,
-            value: property.floor ? `${property.floor} из ${property.totalFloors || '?'}` : null,
-            label: t('floor'),
+            value: property.floor ? `${property.floor} ${t.of} ${property.totalFloors || '?'}` : null,
+            label: t.floor,
             show: !!property.floor
         },
         {
             id: 'term',
             icon: CalendarClock,
             value: getRentalTerm(),
-            label: t('term'),
+            label: t.term,
             show: !!property.rentalConditions?.minRentalMonths
         },
         {
             id: 'deposit',
             icon: Wallet,
             value: property.rentalConditions?.deposit ? formatPrice(property.rentalConditions.deposit) : null,
-            label: t('deposit'),
+            label: t.deposit,
             show: !!property.rentalConditions?.deposit
         },
         {
             id: 'bathrooms',
             icon: Bath,
             value: property.bathrooms,
-            label: t('bathrooms'),
+            label: t.bathrooms,
             show: !!property.bathrooms
         },
         {
             id: 'elevator',
             icon: ChevronsUp,
-            value: t(property.elevator ? 'yes' : 'no'),
-            label: t('elevator'),
+            value: property.elevator ? t.yes : t.no,
+            label: t.elevator,
             show: !!property.elevator
         }
     ];
@@ -121,7 +151,7 @@ export function PropertyMainInfo({
                         <stat.icon size={28} strokeWidth={1.5} />
                     </div>
                     <div className="flex flex-col gap-0.5">
-                         <span className="text-sm text-muted-foreground leading-tight">
+                        <span className="text-sm text-muted-foreground leading-tight">
                             {stat.label}
                         </span>
                         <span className="text-lg font-bold text-foreground leading-tight">

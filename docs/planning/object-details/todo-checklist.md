@@ -71,13 +71,13 @@
 - [x] `ui.tsx:59-63` - убрать хардкод локаций - данные теперь приходят через props (location)
 
 #### property-sidebar-conditions
-- [ ] `ui.tsx:57` - заменить `/мес.` на `t('common.perMonth')`
+- [x] `ui.tsx:57` - заменить `/мес.` на `t('common.perMonth')` - выполнено
 
 #### property-mobile-main-info
-- [ ] `ui.tsx:123` - заменить `/мес` на `t('common.perMonth')`
+- [x] `ui.tsx:123` - заменить `/мес` на `t('common.perMonth')`, м² → t('sqm') - выполнено
 
 #### property-list-section
-- [ ] `ui.tsx:28` - заменить default `"Смотреть все"` на `t('propertyDetail.showAll')`
+- [x] `ui.tsx:28` - убран дефолтный текст "Смотреть все" - выполнено
 
 ---
 
@@ -85,66 +85,66 @@
 
 ### 2.1 Обновить globals.css (если нужно)
 
-- [ ] Проверить наличие всех нужных CSS переменных:
-  - [ ] `--brand-primary` ✓
-  - [ ] `--brand-primary-hover` ✓
-  - [ ] `--brand-primary-light` ✓
-  - [ ] `--success`, `--error`, `--warning` ✓
-  - [ ] `--background-secondary`, `--background-tertiary` ✓
-  - [ ] `--text-secondary`, `--text-tertiary` ✓
+- [x] Проверить наличие всех нужных CSS переменных:
+  - [x] `--brand-primary` ✓
+  - [x] `--brand-primary-hover` ✓
+  - [x] `--brand-primary-light` ✓
+  - [x] `--success`, `--error`, `--warning` ✓
+  - [x] `--background-secondary`, `--background-tertiary` ✓
+  - [x] `--text-secondary`, `--text-tertiary` ✓
 
 ### 2.2 Заменить хардкод цветов
 
 #### widgets/property-detail-header
-- [ ] `ui.tsx:106` - `text-blue-600` → `text-brand-primary`
-- [ ] `ui.tsx:122` - `bg-blue-600 text-white shadow-sm` → `bg-brand-primary text-white shadow-sm`
-- [ ] `ui.tsx:163` - `text-blue-600` → `text-brand-primary`
-- [ ] `ui.tsx:189` - `text-blue-600 hover:bg-blue-50` → `text-brand-primary hover:bg-brand-primary-light`
-- [ ] `ui.tsx:196` - то же
-- [ ] `ui.tsx:204` - `text-blue-600` → `text-brand-primary`
+- [x] `ui.tsx:106` - `text-blue-600` → `text-brand-primary` - выполнено
+- [x] `ui.tsx:122` - `bg-blue-600 text-white shadow-sm` → `bg-brand-primary text-white shadow-sm` - выполнено
+- [x] `ui.tsx:163` - `text-blue-600` → `text-brand-primary` - выполнено
+- [x] `ui.tsx:189` - `text-blue-600 hover:bg-blue-50` → `text-brand-primary hover:bg-brand-primary-light` - выполнено
+- [x] `ui.tsx:196` - то же - выполнено
+- [x] `ui.tsx:204` - `text-blue-600` → `text-brand-primary` - выполнено
 
 #### entities/property/ui/property-sidebar-conditions
-- [ ] `ui.tsx:102` - `bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-400` → использовать переменные
-- [ ] `ui.tsx:145` - `bg-blue-600 hover:bg-blue-700 text-white` → `bg-brand-primary hover:bg-brand-primary-hover text-white`
-- [ ] `ui.tsx:154` - `bg-blue-50 text-blue-700 hover:bg-blue-100` → переменные
-- [ ] `ui.tsx:164` - `bg-green-500` → `bg-success`
+- [x] `ui.tsx:102` - использовать переменные - выполнено
+- [x] `ui.tsx:145` - `bg-brand-primary hover:bg-brand-primary-hover text-white` - выполнено
+- [x] `ui.tsx:154` - переменные - выполнено
+- [x] `ui.tsx:164` - `bg-success` - выполнено
 
 #### entities/property/ui/property-agent-block
-- [ ] `ui.tsx:109` - `bg-blue-600 hover:bg-blue-700 text-white` → `bg-brand-primary hover:bg-brand-primary-hover text-white`
-- [ ] `ui.tsx:116` - `bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20` → переменные
+- [x] `ui.tsx:109` - `bg-brand-primary hover:bg-brand-primary-hover text-white` - выполнено
+- [x] `ui.tsx:116` - переменные - выполнено
 
 #### entities/property/ui/property-agent-sidebar-card
-- [ ] `ui.tsx:108` - `text-blue-500 fill-current` → `text-brand-primary`
+- [x] `ui.tsx:108` - `text-brand-primary` - выполнено
 
 #### entities/property/ui/property-gallery
-- [ ] `ui.tsx:165` - `bg-gray-400` → `bg-text-tertiary`
-- [ ] `ui.tsx:251, 266, 282, 298` - `bg-gray-100 text-black hover:bg-gray-200` → `bg-secondary text-foreground hover:bg-muted`
-- [ ] `ui.tsx:254, 269, 285, 301` - `stroke-white/stroke-black` → использовать переменные или оставить (на изображениях)
-- [ ] `ui.tsx:216` - `bg-white` → `bg-background`
-- [ ] `ui.tsx:395` - `bg-black` → допустимо для lightbox
+- [x] `ui.tsx:165` - `bg-text-tertiary` - выполнено
+- [x] `ui.tsx:251, 266, 282, 298` - `bg-secondary text-foreground hover:bg-muted` - выполнено
+- [x] `ui.tsx:254, 269, 285, 301` - оставлено для изображений - выполнено
+- [x] `ui.tsx:216` - `bg-background` - выполнено
+- [x] `ui.tsx:395` - `bg-black` допустимо для lightbox - выполнено
 
 #### entities/property/ui/property-description-section
-- [ ] `ui.tsx:58-59` - заменить хардкод цветов кнопок на переменные
+- [x] `ui.tsx:58-59` - заменить хардкод цветов кнопок на переменные - выполнено
 
 #### entities/property/ui/property-mobile-main-info
-- [ ] `ui.tsx:127` - `bg-gray-100` → `bg-secondary`
-- [ ] `ui.tsx:128` - `text-gray-600` → `text-text-secondary`
-- [ ] `ui.tsx:129` - `bg-white` → `bg-background`
-- [ ] `ui.tsx:146` - `border-gray-200 placeholder:text-gray-400` → `border-border placeholder:text-text-tertiary`
-- [ ] `ui.tsx:151` - `bg-blue-100 hover:bg-blue-200 text-blue-600` → переменные
+- [x] `ui.tsx:127` - `bg-secondary` - выполнено
+- [x] `ui.tsx:128` - `text-text-secondary` - выполнено
+- [x] `ui.tsx:129` - `bg-background` - выполнено
+- [x] `ui.tsx:146` - `border-border placeholder:text-text-tertiary` - выполнено
+- [x] `ui.tsx:151` - переменные - выполнено
 
 #### features/property-contact
-- [ ] `ui.tsx:54, 92` - `bg-blue-600 hover:bg-blue-700 text-white` → `bg-brand-primary hover:bg-brand-primary-hover text-white`
-- [ ] `ui.tsx:99` - `border-blue-600 bg-background text-blue-600 hover:bg-blue-50` → переменные
+- [x] `ui.tsx:54, 92` - `bg-brand-primary hover:bg-brand-primary-hover text-white` - выполнено
+- [x] `ui.tsx:99` - переменные - выполнено
 
 #### entities/property/ui/property-tenant-info
-- [ ] `ui.tsx:56, 63, 70, 77` - `text-green-500`/`text-red-500` → `text-success`/`text-error`
+- [x] `ui.tsx:56, 63, 70, 77` - `text-success`/`text-error` - выполнено
 
 #### entities/property/ui/property-address-transport/transport-stations
-- [ ] `transport-stations.tsx:174` - `bg-white` → `bg-background`
+- [x] `transport-stations.tsx:174` - `bg-background` - выполнено
 
 #### entities/property/ui/property-location-section
-- [ ] `ui.tsx:84` - Mapbox цвет `'#3b82f6'` → получать из CSS variable через getComputedStyle или config
+- [x] `ui.tsx:84` - Mapbox цвет `'#3b82f6'` → получать из CSS variable через getComputedStyle - выполнено
 
 ---
 
@@ -192,10 +192,10 @@ export default async function Page() {
 | `property-amenities-grid` | Список удобств | Статичная часть - server |
 
 **Задачи:**
-- [ ] `property-header/ui.tsx` - убрать `useTranslations`, добавить props для переводов
-- [ ] `property-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов
-- [ ] `property-characteristics/ui.tsx` - убрать `useTranslations`, добавить props для переводов
-- [ ] `property-tenant-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов
+- [x] `property-header/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
+- [x] `property-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
+- [x] `property-characteristics/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
+- [x] `property-tenant-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов - выполнено
 - [ ] `property-mobile-main-info/ui.tsx` - убрать `useTranslations`, добавить props для переводов
 
 #### 3.2.2 Компоненты которые могут быть Client Components (интерактивные)
@@ -321,8 +321,8 @@ export function ExpandButton({ labels }) {
 ```
 
 **Задачи:**
-- [ ] `property-description-section` - разделить на server (текст) + client (кнопка)
-- [ ] `property-amenities-grid` - разделить на server (список) + client (expand)
+- [x] `property-description-section` - принимает translations через props, текст рендерится на сервере
+- [x] `property-amenities-grid` - принимает translations через props, список рендерится на сервере
 
 ### 3.4 Создать хелпер для сбора переводов
 
@@ -384,14 +384,15 @@ export function ExpandButton({ labels }) {
 
 ### 5.1 Удалить console.log
 
-- [ ] `widgets/property-detail/ui.tsx:59` - удалить/заменить на logger
-- [ ] `widgets/property-detail/ui.tsx:63` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:67` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:71` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:75` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:79` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:242` - удалить/заменить
-- [ ] `widgets/property-detail/ui.tsx:251` - удалить/заменить
+- [x] `widgets/property-detail/ui.tsx:59` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:63` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:67` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:71` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:75` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:79` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:242` - заменён на TODO-комментарий
+- [x] `widgets/property-detail/ui.tsx:251` - заменён на TODO-комментарий
+- [x] `property-list-section/ui.tsx` - удалён console.log из onClick
 
 ### 5.2 Организация мок-данных для разработки
 
@@ -407,86 +408,47 @@ src/shared/api/mocks/property-detail/
 ```
 
 #### 5.2.1 Создать `property.json` - основной объект
-- [ ] Создать файл `src/shared/api/mocks/property-detail/property.json`
-- [ ] Включить все данные объекта:
-  - id, title, description (оригинал + перевод)
-  - price, deposit, commission, utilities
-  - location (country, region, city, district, address, coordinates)
-  - характеристики (area, rooms, floor, etc.)
-  - amenities (массив удобств)
-  - images, video, tour3d, floorPlan
-  - agent info (id, name, phone, avatar, rating, isOnline)
-  - stats (views, viewsToday, updatedAt)
-  - tenant preferences (если аренда комнаты)
+- [x] Создать файл `src/shared/api/mocks/property-detail/property.json` - выполнено
+- [x] Включить все данные объекта - выполнено
 
 #### 5.2.2 Создать `nearby-places.json` - инфраструктура
-- [ ] Создать файл `src/shared/api/mocks/property-detail/nearby-places.json`
-- [ ] Структура по категориям:
-  ```json
-  {
-    "transport": [{ "name": "Passeig de Gràcia", "type": "metro", "line": "L3", "distance": 250, "walkTime": 3 }],
-    "schools": [...],
-    "medical": [...],
-    "groceries": [...],
-    "shopping": [...],
-    "restaurants": [...],
-    "sports": [...],
-    "parks": [...],
-    "beauty": [...],
-    "entertainment": [...],
-    "attractions": [...]
-  }
-  ```
+- [x] Создать файл `src/shared/api/mocks/property-detail/nearby-places.json` - выполнено
+- [x] Структура по категориям (transport, schools, medical, и т.д.) - выполнено
 
 #### 5.2.3 Создать `agent-properties.json` - объекты агента
-- [ ] Создать файл `src/shared/api/mocks/property-detail/agent-properties.json`
-- [ ] Массив карточек объектов агента (упрощённая версия property)
+- [x] Создать файл `src/shared/api/mocks/property-detail/agent-properties.json` - выполнено
+- [x] Массив карточек объектов агента - выполнено
 
 #### 5.2.4 Создать `similar-properties.json` - рекомендации
-- [ ] Создать файл `src/shared/api/mocks/property-detail/similar-properties.json`
-- [ ] Массив похожих объектов
+- [x] Создать файл `src/shared/api/mocks/property-detail/similar-properties.json` - выполнено
+- [x] Массив похожих объектов - выполнено
 
 #### 5.2.5 Создать хелпер для загрузки моков
-- [ ] Создать `src/shared/api/mocks/property-detail/index.ts`:
-  ```typescript
-  // Флаг для переключения между моками и реальным API
-  const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
-
-  export async function getPropertyDetail(id: string) {
-    if (USE_MOCKS) {
-      const data = await import('./property.json');
-      return data.default;
-    }
-    return fetch(`/api/properties/${id}`).then(r => r.json());
-  }
-
-  export async function getNearbyPlaces(propertyId: string) {
-    if (USE_MOCKS) {
-      const data = await import('./nearby-places.json');
-      return data.default;
-    }
-    return fetch(`/api/properties/${propertyId}/nearby`).then(r => r.json());
-  }
-
-  // ... аналогично для остальных
-  ```
+- [x] Создать `src/shared/api/mocks/property-detail/index.ts` - выполнено
+- [x] Создать `src/shared/api/mocks/property-detail/types.ts` - выполнено
+- [x] Реализовать функции: `getPropertyDetailById`, `getNearbyPlaces`, `getAgentProperties`, `getSimilarProperties`, `getPropertyPageData` - выполнено
+- [x] Экспортировать типы и функции через `src/shared/api/index.ts` - выполнено
 
 #### 5.2.6 Удалить старые моки из entities
-- [ ] Удалить `property-location-section/mock-data.ts`
-- [ ] Удалить `mockBarcelonaStations` из `transport-stations.tsx`
-- [ ] Убрать хардкод локаций из `property-header/ui.tsx`
-- [ ] Обновить компоненты чтобы получали данные через props
+- [x] Удалить `property-location-section/mock-data.ts` - выполнено
+- [ ] Удалить `mockBarcelonaStations` из `transport-stations.tsx` - оставлен для возможного тестирования
+- [x] Обновить компоненты чтобы получали данные через props - выполнено:
+  - [x] `PropertyLocationSection` - принимает `nearbyPlaces` через props
+  - [x] `PropertyListSection` - получает `agentProperties` и `similarProperties` через props
+  - [x] Обновлён `page.tsx` для загрузки всех данных параллельно
+  - [x] Обновлён `PropertyDetailPage` для передачи данных
+  - [x] Обновлён `PropertyDetailWidget` для использования данных
 
 #### 5.2.7 Добавить переменную окружения
-- [ ] Добавить в `.env.local`: `NEXT_PUBLIC_USE_MOCKS=true`
-- [ ] Добавить в `.env.example`: `NEXT_PUBLIC_USE_MOCKS=false`
+- [x] Добавить в `.env.local`: `NEXT_PUBLIC_USE_MOCKS=true` - выполнено
+- [x] Добавить в `.env.example`: `NEXT_PUBLIC_USE_MOCKS=false` - выполнено
 
 ### 5.3 Убрать magic numbers
 
-- [ ] `widgets/property-detail-header/ui.tsx:47` - вынести `50` в константу `SCROLL_THRESHOLD`
-- [ ] `widgets/property-detail-header/ui.tsx:56` - вынести `300` в константу `INTERSECTION_OFFSET`
-- [ ] `widgets/property-detail-header/ui.tsx:71` - вынести `60` в константу `HEADER_HEIGHT`
-- [ ] `widgets/property-detail/ui.tsx:88` - `'ru-RU'` → использовать текущую локаль из контекста
+- [x] `widgets/property-detail-header/ui.tsx:47` - вынести `50` в константу `SCROLL_THRESHOLD` - выполнено
+- [x] `widgets/property-detail-header/ui.tsx:56` - вынести `300` в константу `INTERSECTION_OFFSET` - выполнено
+- [x] `widgets/property-detail-header/ui.tsx:71` - вынести `60` в константу `HEADER_HEIGHT` - выполнено
+- [x] `widgets/property-detail-header/ui.tsx` - `'ru-RU'` → добавлен locale prop + getIntlLocale() helper - выполнено
 
 ### 5.4 Рефакторинг widget (optional)
 

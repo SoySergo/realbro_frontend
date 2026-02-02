@@ -1,96 +1,131 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { Check, X, User, Users, Briefcase, Moon, Sun, Heart, Coffee } from 'lucide-react';
 import type { Property } from '@/entities/property/model/types';
+
+// SEO-critical component - NO 'use client' to ensure translations are in HTML
+
+interface CharacteristicsTranslations {
+    aboutFlat: string;
+    aboutBuilding: string;
+    sqm: string;
+    propertyType: string;
+    totalArea: string;
+    livingArea: string;
+    kitchenArea: string;
+    rooms: string;
+    floor: string;
+    of: string;
+    ceilingHeight: string;
+    bathroom: string;
+    balcony: string;
+    loggia: string;
+    renovation: string;
+    windowView: string;
+    residentialComplex: string;
+    buildingType: string;
+    buildingYear: string;
+    floorsTotal: string;
+    elevator: string;
+    parking: string;
+    closedTerritory: string;
+    concierge: string;
+    garbageChute: string;
+    yes: string;
+    no: string;
+    meters: string;
+    // Type translations
+    types: Record<string, string>;
+    bathroomTypes: Record<string, string>;
+    renovationTypes: Record<string, string>;
+    windowViews: Record<string, string>;
+    buildingTypes: Record<string, string>;
+    parkingTypes: Record<string, string>;
+}
 
 interface PropertyCharacteristicsProps {
     property: Property;
     className?: string;
+    translations: CharacteristicsTranslations;
 }
 
 export function PropertyCharacteristics({
     property,
-    className
+    className,
+    translations: t
 }: PropertyCharacteristicsProps) {
-    const t = useTranslations('propertyDetail');
-    const tChars = useTranslations('characteristics');
-
     // About the flat
     const flatCharacteristics = [
         {
             key: 'type',
-            label: tChars('propertyType'),
-            value: tChars(`types.${property.type}`),
+            label: t.propertyType,
+            value: property.type ? t.types[property.type] : null,
             show: !!property.type
         },
         {
             key: 'area',
-            label: tChars('totalArea'),
-            value: `${property.area} ${t('sqm')}`,
+            label: t.totalArea,
+            value: `${property.area} ${t.sqm}`,
             show: true
         },
         {
             key: 'livingArea',
-            label: tChars('livingArea'),
-            value: property.livingArea ? `${property.livingArea} ${t('sqm')}` : null,
+            label: t.livingArea,
+            value: property.livingArea ? `${property.livingArea} ${t.sqm}` : null,
             show: !!property.livingArea
         },
         {
             key: 'kitchenArea',
-            label: tChars('kitchenArea'),
-            value: property.kitchenArea ? `${property.kitchenArea} ${t('sqm')}` : null,
+            label: t.kitchenArea,
+            value: property.kitchenArea ? `${property.kitchenArea} ${t.sqm}` : null,
             show: !!property.kitchenArea
         },
         {
             key: 'rooms',
-            label: tChars('rooms'),
+            label: t.rooms,
             value: property.rooms?.toString(),
             show: !!property.rooms
         },
         {
             key: 'floor',
-            label: tChars('floor'),
-            value: property.floor 
-                ? property.totalFloors 
-                    ? `${property.floor} ${tChars('of')} ${property.totalFloors}`
+            label: t.floor,
+            value: property.floor
+                ? property.totalFloors
+                    ? `${property.floor} ${t.of} ${property.totalFloors}`
                     : property.floor.toString()
                 : null,
             show: !!property.floor
         },
         {
             key: 'ceilingHeight',
-            label: tChars('ceilingHeight'),
-            value: property.ceilingHeight ? `${property.ceilingHeight} м` : null,
+            label: t.ceilingHeight,
+            value: property.ceilingHeight ? `${property.ceilingHeight} ${t.meters}` : null,
             show: !!property.ceilingHeight
         },
         {
             key: 'bathroom',
-            label: tChars('bathroom'),
-            value: property.bathroomType ? tChars(`bathroomTypes.${property.bathroomType}`) : null,
+            label: t.bathroom,
+            value: property.bathroomType ? t.bathroomTypes[property.bathroomType] : null,
             show: !!property.bathroomType
         },
         {
             key: 'balcony',
-            label: tChars('balcony'),
-            value: property.balconyCount 
-                ? `${property.balconyCount}` 
-                : property.loggia 
-                    ? tChars('loggia') 
+            label: t.balcony,
+            value: property.balconyCount
+                ? `${property.balconyCount}`
+                : property.loggia
+                    ? t.loggia
                     : null,
             show: !!(property.balconyCount || property.loggia)
         },
         {
             key: 'renovation',
-            label: tChars('renovation'),
-            value: property.renovation ? tChars(`renovationTypes.${property.renovation}`) : null,
+            label: t.renovation,
+            value: property.renovation ? t.renovationTypes[property.renovation] : null,
             show: !!property.renovation
         },
         {
             key: 'windowView',
-            label: tChars('windowView'),
-            value: property.windowView ? tChars(`windowViews.${property.windowView}`) : null,
+            label: t.windowView,
+            value: property.windowView ? t.windowViews[property.windowView] : null,
             show: !!property.windowView
         }
     ].filter(c => c.show && c.value);
@@ -99,73 +134,73 @@ export function PropertyCharacteristics({
     const buildingCharacteristics = property.building ? [
         {
             key: 'buildingName',
-            label: tChars('residentialComplex'),
+            label: t.residentialComplex,
             value: property.building.name,
             show: !!property.building.name
         },
         {
             key: 'buildingType',
-            label: tChars('buildingType'),
-            value: property.building.type ? tChars(`buildingTypes.${property.building.type}`) : null,
+            label: t.buildingType,
+            value: property.building.type ? t.buildingTypes[property.building.type] : null,
             show: !!property.building.type
         },
         {
             key: 'buildingYear',
-            label: tChars('buildingYear'),
+            label: t.buildingYear,
             value: property.building.year?.toString(),
             show: !!property.building.year
         },
         {
             key: 'floorsTotal',
-            label: tChars('floorsTotal'),
+            label: t.floorsTotal,
             value: property.building.floorsTotal?.toString(),
             show: !!property.building.floorsTotal
         },
         {
             key: 'elevator',
-            label: tChars('elevator'),
-            value: property.building.elevatorPassenger 
-                ? property.building.elevatorFreight 
-                    ? `${property.building.elevatorPassenger} пасс., ${property.building.elevatorFreight} груз.`
+            label: t.elevator,
+            value: property.building.elevatorPassenger
+                ? property.building.elevatorFreight
+                    ? `${property.building.elevatorPassenger} + ${property.building.elevatorFreight}`
                     : `${property.building.elevatorPassenger}`
                 : null,
             show: !!property.building.elevatorPassenger
         },
         {
             key: 'parking',
-            label: tChars('parking'),
-            value: property.building.parkingType 
-                ? tChars(`parkingTypes.${property.building.parkingType}`)
+            label: t.parking,
+            value: property.building.parkingType
+                ? t.parkingTypes[property.building.parkingType]
                 : null,
             show: !!property.building.parkingType && property.building.parkingType !== 'none'
         },
         {
             key: 'closedTerritory',
-            label: tChars('closedTerritory'),
-            value: property.building.closedTerritory ? tChars('yes') : null,
+            label: t.closedTerritory,
+            value: property.building.closedTerritory ? t.yes : null,
             show: !!property.building.closedTerritory
         },
         {
             key: 'concierge',
-            label: tChars('concierge'),
-            value: property.building.concierge ? tChars('yes') : null,
+            label: t.concierge,
+            value: property.building.concierge ? t.yes : null,
             show: !!property.building.concierge
         },
         {
             key: 'garbageChute',
-            label: tChars('garbageChute'),
-            value: property.building.garbageChute ? tChars('yes') : null,
+            label: t.garbageChute,
+            value: property.building.garbageChute ? t.yes : null,
             show: !!property.building.garbageChute
         }
     ].filter(c => c.show && c.value) : [];
 
 
-    const CharacteristicsTable = ({ 
-        title, 
-        items 
-    }: { 
-        title: string; 
-        items: { key: string; label: string; value: string | null | undefined }[] 
+    const CharacteristicsTable = ({
+        title,
+        items
+    }: {
+        title: string;
+        items: { key: string; label: string; value: string | null | undefined }[]
     }) => {
         if (!items.length) return null;
 
@@ -174,7 +209,7 @@ export function PropertyCharacteristics({
                 <h3 className="font-semibold text-foreground text-lg">{title}</h3>
                 <div className="space-y-2">
                     {items.map(item => (
-                        <div 
+                        <div
                             key={item.key}
                             className="flex justify-between gap-4 text-sm py-2 border-b border-border/40 last:border-0"
                         >
@@ -195,15 +230,15 @@ export function PropertyCharacteristics({
             {/* Top Section: Flat & Building Characteristics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                 {flatCharacteristics.length > 0 && (
-                    <CharacteristicsTable 
-                        title={t('aboutFlat')} 
-                        items={flatCharacteristics} 
+                    <CharacteristicsTable
+                        title={t.aboutFlat}
+                        items={flatCharacteristics}
                     />
                 )}
                 {buildingCharacteristics.length > 0 && (
-                    <CharacteristicsTable 
-                        title={t('aboutBuilding')} 
-                        items={buildingCharacteristics} 
+                    <CharacteristicsTable
+                        title={t.aboutBuilding}
+                        items={buildingCharacteristics}
                     />
                 )}
             </div>
