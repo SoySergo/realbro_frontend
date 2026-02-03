@@ -12,8 +12,6 @@ import {
     Flag,
     MapPin,
     Clock,
-    Train,
-    Bus,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -34,7 +32,6 @@ interface PropertyCardGridProps {
 
 export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
     const t = useTranslations('property');
-    const tTypes = useTranslations('propertyTypes');
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
@@ -134,24 +131,6 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
         return price.toLocaleString('ru-RU') + ' \u20ac';
     };
 
-    const getTransportIcon = (type: string) => {
-        switch (type) {
-            case 'metro':
-                return (
-                    <span
-                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: mockProperty.nearbyTransport?.color || '#E50914' }}
-                    />
-                );
-            case 'train':
-                return <Train className="w-3.5 h-3.5 flex-shrink-0" />;
-            case 'bus':
-                return <Bus className="w-3.5 h-3.5 flex-shrink-0" />;
-            default:
-                return null;
-        }
-    };
-
     return (
         <div
             className={cn(
@@ -229,44 +208,44 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
             </div>
 
             {/* Card content */}
-            <div className="p-3">
+            <div className="p-3 sm:p-3">
                 {/* Price and buttons */}
-                <div className="flex items-start justify-between gap-1 mb-1.5">
+                <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="min-w-0 flex-1">
-                        <div className="text-base font-bold text-foreground truncate">
+                        <div className="text-lg sm:text-base font-bold text-foreground truncate">
                             {formatPrice(mockProperty.price)}
                         </div>
-                        <div className="text-[11px] text-muted-foreground">
+                        <div className="text-xs sm:text-[11px] text-muted-foreground">
                             {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
                         </div>
                     </div>
 
-                    {/* Like/dislike buttons */}
-                    <div className="flex items-center gap-0.5 flex-shrink-0">
+                    {/* Like/dislike buttons - увеличены на мобильных */}
+                    <div className="flex items-center gap-1 sm:gap-0.5 flex-shrink-0">
                         <button
-                            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-green-500/20 hover:text-green-600 text-muted-foreground transition-colors"
+                            className="w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full hover:bg-green-500/20 hover:text-green-600 text-muted-foreground transition-colors"
                             onClick={handleLike}
                             title={t('like')}
                         >
                             <ThumbsUp
-                                className={cn('w-4 h-4', likeAnimating && 'animate-bounce')}
+                                className={cn('w-5 h-5 sm:w-4 sm:h-4', likeAnimating && 'animate-bounce')}
                             />
                         </button>
                         <button
-                            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-red-500/20 hover:text-red-500 text-muted-foreground transition-colors"
+                            className="w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full hover:bg-red-500/20 hover:text-red-500 text-muted-foreground transition-colors"
                             onClick={handleDislike}
                             title={t('dislike')}
                         >
                             <ThumbsDown
-                                className={cn('w-4 h-4', dislikeAnimating && 'animate-bounce')}
+                                className={cn('w-5 h-5 sm:w-4 sm:h-4', dislikeAnimating && 'animate-bounce')}
                             />
                         </button>
                     </div>
                 </div>
 
                 {/* Characteristics */}
-                <div className="flex items-center gap-1 text-xs text-foreground mb-1.5 flex-wrap">
-                    <span className="font-semibold whitespace-nowrap">
+                <div className="flex items-center gap-1.5 text-sm sm:text-xs text-foreground mb-2 flex-wrap">
+                    <span className="font-medium whitespace-nowrap">
                         {property.rooms} {t('roomsShort')}
                     </span>
                     <span className="text-muted-foreground">·</span>
@@ -284,31 +263,42 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
                     )}
                 </div>
 
-                {/* Property type */}
-                <div className="text-xs text-primary font-medium mb-1.5 truncate">
-                    {tTypes(property.type)}
+                {/* Title - новое поле вместо типа */}
+                <div className="text-sm sm:text-xs font-medium text-foreground mb-2 line-clamp-2">
+                    {property.title}
                 </div>
 
                 {/* Address */}
-                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
-                    <MapPin className="w-3 h-3 flex-shrink-0" />
+                <div className="flex items-center gap-1 text-sm sm:text-xs text-muted-foreground mb-2">
+                    <MapPin className="w-3.5 h-3.5 sm:w-3 sm:h-3 flex-shrink-0" />
                     <span className="truncate">
                         {property.address}, {property.city}
                     </span>
                 </div>
 
                 {/* Transport and menu */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                     {mockProperty.nearbyTransport ? (
-                        <div className="flex items-center gap-1.5 text-xs min-w-0">
-                            <div className="flex items-center gap-1 min-w-0">
-                                {getTransportIcon(mockProperty.nearbyTransport.type)}
-                                <span className="text-foreground truncate">
-                                    {mockProperty.nearbyTransport.name}
-                                </span>
+                        <div className="flex items-center gap-2 text-sm sm:text-xs min-w-0">
+                            {/* Линии метро */}
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                                <div
+                                    className="flex items-center justify-center min-w-[28px] h-6 px-1.5 text-[11px] font-bold leading-none rounded-md shadow-sm text-white"
+                                    style={{
+                                        backgroundColor: mockProperty.nearbyTransport.color || '#E50914',
+                                    }}
+                                    title={`${mockProperty.nearbyTransport.type} ${mockProperty.nearbyTransport.line}`}
+                                >
+                                    {mockProperty.nearbyTransport.line || 'M'}
+                                </div>
                             </div>
-                            <div className="flex items-center gap-0.5 text-muted-foreground flex-shrink-0">
-                                <Clock className="w-3 h-3" />
+                            {/* Название станции */}
+                            <span className="text-foreground truncate font-normal">
+                                {mockProperty.nearbyTransport.name}
+                            </span>
+                            {/* Время в пути */}
+                            <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
+                                <Clock className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
                                 <span>
                                     {t('walkMin', { min: mockProperty.nearbyTransport.walkMinutes })}
                                 </span>
