@@ -24,6 +24,7 @@ import type { Property } from '../../model/types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
 const MAX_HOVER_IMAGES = 6;
+const DEFAULT_METRO_LINE_COLOR = '#E50914';
 
 interface PropertyCardGridProps {
     property: Property;
@@ -208,7 +209,7 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
             </div>
 
             {/* Card content */}
-            <div className="p-3 sm:p-3">
+            <div className="p-3">
                 {/* Price and buttons */}
                 <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="min-w-0 flex-1">
@@ -283,11 +284,10 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
                             {/* Линии метро */}
                             <div className="flex items-center gap-1 flex-shrink-0">
                                 <div
-                                    className="flex items-center justify-center min-w-[28px] h-6 px-1.5 text-[11px] font-bold leading-none rounded-md shadow-sm text-white"
+                                    className="flex items-center justify-center min-w-7 h-6 px-1.5 text-[11px] font-bold leading-none rounded-md shadow-sm text-white"
                                     style={{
-                                        backgroundColor: mockProperty.nearbyTransport.color || '#E50914',
+                                        backgroundColor: mockProperty.nearbyTransport.color || DEFAULT_METRO_LINE_COLOR,
                                     }}
-                                    title={`${mockProperty.nearbyTransport.type} ${mockProperty.nearbyTransport.line}`}
                                 >
                                     {mockProperty.nearbyTransport.line || 'M'}
                                 </div>
