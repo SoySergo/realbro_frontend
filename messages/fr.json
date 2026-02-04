@@ -539,7 +539,27 @@
     "typing": "écrit...",
     "selectConversation": "Sélectionnez une conversation pour commencer",
     "newProperties": "nouvelles propriétés",
-    "viewAll": "Voir tout"
+    "viewAll": "Voir tout",
+    "toast": {
+      "newProperty": "Nouvelle propriété trouvée",
+      "view": "Voir"
+    },
+    "propertyCard": {
+      "perMonth": "/mois",
+      "rooms": "pièces",
+      "bedrooms": "chambres",
+      "bathrooms": "salles de bain",
+      "floor": "ét.",
+      "walkMin": "min à pied",
+      "contact": "Contacter",
+      "notViewed": "Non consulté",
+      "viewedGroup": "Consulté",
+      "notViewedGroup": "Non consulté",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "live": "EN DIRECT",
+      "objects": "propriétés"
+    }
   },
   "footer": {
     "aboutService": "À propos du service",
@@ -784,6 +804,24 @@
       "street": "Rue",
       "none": "Aucun"
     }
+  },
+  "mapSidebar": {
+    "hidePanel": "Masquer le panneau",
+    "showPanel": "Afficher le panneau",
+    "showOnMap": "Carte",
+    "showAsList": "Liste",
+    "resetCluster": "Tout afficher",
+    "clusterObjects": "Objets du cluster",
+    "sortBy": "Trier par",
+    "sortPrice": "Prix",
+    "sortArea": "Surface",
+    "sortDate": "Date",
+    "sortAscending": "Tri croissant",
+    "sortDescending": "Tri décroissant",
+    "noResults": "Aucun bien trouvé",
+    "loading": "Chargement...",
+    "objectsCount": "{count} biens",
+    "changeSearchArea": "Modifier la zone de recherche sur la carte"
   },
   "amenities": {
     "wifi": "Wi-Fi",

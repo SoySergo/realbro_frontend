@@ -545,7 +545,27 @@
     "typing": "typing...",
     "selectConversation": "Select a conversation to start messaging",
     "newProperties": "new properties",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "toast": {
+      "newProperty": "New property found",
+      "view": "View"
+    },
+    "propertyCard": {
+      "perMonth": "/mo",
+      "rooms": "rooms",
+      "bedrooms": "bedrooms",
+      "bathrooms": "bathrooms",
+      "floor": "fl.",
+      "walkMin": "min walk",
+      "contact": "Contact",
+      "notViewed": "Not viewed",
+      "viewedGroup": "Viewed",
+      "notViewedGroup": "Not viewed",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "live": "LIVE",
+      "objects": "properties"
+    }
   },
   "propertyDetail": {
     "photos": "Photos",
@@ -737,6 +757,24 @@
       "street": "Street",
       "none": "None"
     }
+  },
+  "mapSidebar": {
+    "hidePanel": "Hide panel",
+    "showPanel": "Show panel",
+    "showOnMap": "Map",
+    "showAsList": "List view",
+    "resetCluster": "Show all",
+    "clusterObjects": "Cluster objects",
+    "sortBy": "Sort by",
+    "sortPrice": "Price",
+    "sortArea": "Area",
+    "sortDate": "Date",
+    "sortAscending": "Sort ascending",
+    "sortDescending": "Sort descending",
+    "noResults": "No properties found",
+    "loading": "Loading...",
+    "objectsCount": "{count} properties",
+    "changeSearchArea": "Change the search area on the map"
   },
   "amenities": {
     "wifi": "Wi-Fi",
