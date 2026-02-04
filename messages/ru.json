@@ -282,7 +282,21 @@
     "viewMap": "Карта",
     "viewList": "Список",
     "sortDate": "По дате",
-    "allFilters": "Все фильтры"
+    "allFilters": "Все фильтры",
+    "reset": "Сбросить",
+    "resetAll": "Сбросить все",
+    "showResults": "Показать {count} вариантов",
+    "noResults": "Ничего не найдено",
+    "loading": "Поиск...",
+    "activeFilters": "{count} активных фильтров",
+    "categories": {
+      "price": "Цена",
+      "area": "Площадь",
+      "rooms": "Комнаты",
+      "location": "Локация",
+      "features": "Удобства",
+      "propertyType": "Тип недвижимости"
+    }
   },
   "map": {
     "showMap": "Показать карту",
@@ -589,7 +603,6 @@
       "objects": "объектов"
     }
   },
-
   "propertyDetail": {
     "photos": "Фотографии",
     "description": "Описание",
@@ -647,7 +660,7 @@
     "occupation": "Род занятий",
     "minRentalPeriod": "От {months} мес.",
     "months": "мес.",
-    "from": "От",
+    "from": "от",
     "fromYear": "От года",
     "agency": "Агентство",
     "term": "Срок аренды",
@@ -687,7 +700,6 @@
     "otherOffers": "Другие предложения",
     "similarProperties": "Похожие объявления",
     "showAll": "Смотреть все",
-    "from": "от",
     "agent": "Агент",
     "reviews": "отзыва",
     "like": "Нравится",
@@ -708,7 +720,6 @@
         "entertainment": "Культура и отдых",
         "attractions": "Достопримечательности"
       },
-
       "distance": "{distance} м"
     },
     "contact": "Связаться",
@@ -764,7 +775,6 @@
     "petsAllowed": "Животные",
     "childrenAllowed": "Дети",
     "yes": "Да",
-
     "no": "Нет",
     "male": "Мужской",
     "female": "Женский",
@@ -775,20 +785,18 @@
     "quiet": "Тихо",
     "friendly": "Дружелюбно",
     "party": "Вечеринки",
-
     "visitsAllowed": "Гости разрешены",
     "furnished": "Меблирована",
     "bedType": "Тип кровати",
     "bedTypes": {
-        "single": "Односпальная",
-        "double": "Двуспальная",
-        "sofa": "Диван",
-        "bunk": "Двухъярусная"
+      "single": "Односпальная",
+      "double": "Двуспальная",
+      "sofa": "Диван",
+      "bunk": "Двухъярусная"
     },
     "types": {
       "apartment": "Квартира",
       "studio": "Студия",
-
       "penthouse": "Пентхаус",
       "duplex": "Дуплекс"
     },

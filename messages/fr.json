@@ -265,7 +265,21 @@
     "viewMap": "Carte",
     "viewList": "Liste",
     "sortDate": "Par date",
-    "allFilters": "Tous les filtres"
+    "allFilters": "Tous les filtres",
+    "reset": "Réinitialiser",
+    "resetAll": "Tout réinitialiser",
+    "showResults": "Afficher {count} résultats",
+    "noResults": "Aucun résultat trouvé",
+    "loading": "Recherche...",
+    "activeFilters": "{count} filtres actifs",
+    "categories": {
+      "price": "Prix",
+      "area": "Surface",
+      "rooms": "Chambres",
+      "location": "Localisation",
+      "features": "Équipements",
+      "propertyType": "Type de propriété"
+    }
   },
   "map": {
     "showMap": "Afficher la carte",

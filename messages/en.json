@@ -265,7 +265,21 @@
     "viewMap": "Map",
     "viewList": "List",
     "sortDate": "By date",
-    "allFilters": "All filters"
+    "allFilters": "All filters",
+    "reset": "Reset",
+    "resetAll": "Reset all",
+    "showResults": "Show {count} results",
+    "noResults": "No results found",
+    "loading": "Searching...",
+    "activeFilters": "{count} active filters",
+    "categories": {
+      "price": "Price",
+      "area": "Area",
+      "rooms": "Rooms",
+      "location": "Location",
+      "features": "Features",
+      "propertyType": "Property Type"
+    }
   },
   "map": {
     "showMap": "Show Map",
@@ -640,7 +654,6 @@
         "attractions": "Attractions"
       },
       "showingObjects": "Showing objects within 1 km",
-
       "distance": "{distance} m"
     },
     "contact": "Contact",
@@ -715,10 +728,10 @@
     "furnished": "Furnished",
     "bedType": "Bed type",
     "bedTypes": {
-        "single": "Single",
-        "double": "Double",
-        "sofa": "Sofa",
-        "bunk": "Bunk"
+      "single": "Single",
+      "double": "Double",
+      "sofa": "Sofa",
+      "bunk": "Bunk"
     },
     "types": {
       "apartment": "Apartment",
