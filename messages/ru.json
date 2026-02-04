@@ -123,9 +123,9 @@
     "currentPlan": "Текущий план"
   },
   "navigation": {
-    "home": "Главная",
-    "properties": "Недвижимость",
+    "search": "Поиск",
     "favorites": "Избранное",
+    "chat": "Чат",
     "profile": "Профиль"
   },
   "property": {
@@ -331,21 +331,147 @@
   },
   "profile": {
     "title": "Профиль",
+    "tabs": {
+      "general": "Основное",
+      "subscription": "Подписка",
+      "notifications": "Уведомления",
+      "security": "Безопасность",
+      "appearance": "Оформление"
+    },
     "personalInfo": "Личная информация",
     "displayName": "Имя пользователя",
     "displayNamePlaceholder": "Введите имя",
     "email": "Email",
+    "phone": "Телефон",
+    "phonePlaceholder": "Введите телефон",
+    "avatar": "Аватар",
+    "changeAvatar": "Изменить фото",
+    "removeAvatar": "Удалить фото",
+    "memberSince": "На платформе с",
+    "accountStats": "Статистика аккаунта",
+    "savedProperties": "Сохранённые объекты",
+    "savedSearches": "Сохранённые поиски",
+    "viewedProperties": "Просмотренные объекты",
     "language": "Язык",
-    "theme": "Тема",
+    "theme": "Тема оформления",
+    "themeLight": "Светлая",
+    "themeDark": "Тёмная",
+    "themeSystem": "Системная",
+    "currency": "Валюта",
+    "timezone": "Часовой пояс",
     "notifications": "Уведомления",
     "emailNotifications": "Email уведомления",
     "pushNotifications": "Push уведомления",
+    "notificationSettings": {
+      "title": "Настройки уведомлений",
+      "email": {
+        "title": "Email уведомления",
+        "newProperties": "Новые объекты по сохранённым поискам",
+        "priceChanges": "Изменение цен на избранные объекты",
+        "savedSearches": "Обновления по сохранённым поискам",
+        "promotions": "Акции и специальные предложения",
+        "accountUpdates": "Изменения аккаунта и безопасность"
+      },
+      "push": {
+        "title": "Push уведомления",
+        "newProperties": "Новые объекты",
+        "priceChanges": "Изменение цен",
+        "savedSearches": "Обновления поисков",
+        "messages": "Сообщения от агентов"
+      },
+      "telegram": {
+        "title": "Telegram уведомления",
+        "enabled": "Включить Telegram бот",
+        "connect": "Подключить Telegram",
+        "connected": "Telegram подключён",
+        "disconnect": "Отключить",
+        "newProperties": "Новые объекты",
+        "priceChanges": "Изменение цен"
+      }
+    },
+    "subscription": {
+      "title": "Подписка",
+      "currentPlan": "Текущий план",
+      "freePlan": "Бесплатный план",
+      "noPlan": "Нет активной подписки",
+      "status": "Статус",
+      "active": "Активна",
+      "canceled": "Отменена",
+      "expired": "Истекла",
+      "pastDue": "Просрочена",
+      "renewsOn": "Продлится",
+      "expiresOn": "Истекает",
+      "canceledOn": "Будет отменена",
+      "features": "Возможности плана",
+      "searchTabs": "Поисковых вкладок",
+      "aiFilters": "Фильтров для ИИ-агента",
+      "ownerAccess": "Доступ к владельцам",
+      "ownerAccessMultiplier": "Доступ к владельцам ×{count}",
+      "unlimited": "Без ограничений",
+      "changePlan": "Сменить план",
+      "upgradePlan": "Улучшить план",
+      "downgradePlan": "Понизить план",
+      "cancelSubscription": "Отменить подписку",
+      "reactivate": "Возобновить подписку",
+      "cancelConfirmTitle": "Отменить подписку?",
+      "cancelConfirmDescription": "Вы сможете пользоваться текущим планом до конца оплаченного периода.",
+      "cancelAtPeriodEnd": "Отменить в конце периода",
+      "cancelImmediately": "Отменить немедленно",
+      "comparePlans": "Сравнить планы",
+      "selectPlan": "Выбрать план",
+      "currentPlanBadge": "Текущий"
+    },
+    "payments": {
+      "title": "История платежей",
+      "noPayments": "История платежей пуста",
+      "amount": "Сумма",
+      "date": "Дата",
+      "status": "Статус",
+      "description": "Описание",
+      "invoice": "Счёт",
+      "downloadInvoice": "Скачать счёт",
+      "viewInvoice": "Посмотреть счёт",
+      "succeeded": "Оплачено",
+      "pending": "В обработке",
+      "failed": "Ошибка",
+      "refunded": "Возвращено"
+    },
+    "paymentMethods": {
+      "title": "Способы оплаты",
+      "noMethods": "Нет сохранённых способов оплаты",
+      "addMethod": "Добавить способ оплаты",
+      "removeMethod": "Удалить",
+      "setDefault": "Сделать основным",
+      "default": "Основной",
+      "expires": "Истекает",
+      "card": "Карта",
+      "paypal": "PayPal"
+    },
     "security": "Безопасность",
     "changePassword": "Сменить пароль",
     "currentPassword": "Текущий пароль",
     "newPassword": "Новый пароль",
     "confirmNewPassword": "Подтвердите новый пароль",
+    "passwordChanged": "Пароль успешно изменён",
+    "passwordRequirements": "Минимум 8 символов, включая цифры и буквы",
+    "twoFactorAuth": "Двухфакторная аутентификация",
+    "twoFactorEnabled": "2FA включена",
+    "twoFactorDisabled": "2FA отключена",
+    "enable2FA": "Включить 2FA",
+    "disable2FA": "Отключить 2FA",
     "activeSessions": "Активные сессии",
+    "sessions": {
+      "title": "Активные сессии",
+      "current": "Текущая сессия",
+      "lastActive": "Последняя активность",
+      "terminateSession": "Завершить сессию",
+      "terminateAll": "Завершить все сессии",
+      "terminateOther": "Завершить все, кроме текущей",
+      "device": "Устройство",
+      "browser": "Браузер",
+      "location": "Местоположение",
+      "sessionTerminated": "Сессия завершена"
+    },
     "logoutAll": "Выйти со всех устройств",
     "dangerZone": "Опасная зона",
     "deleteAccount": "Удалить аккаунт",
@@ -355,7 +481,12 @@
     "confirmDelete": "Да, удалить",
     "cancel": "Отмена",
     "saveChanges": "Сохранить изменения",
-    "saved": "Сохранено"
+    "saved": "Сохранено",
+    "savingChanges": "Сохранение...",
+    "unsavedChanges": "Есть несохранённые изменения",
+    "discardChanges": "Отменить изменения",
+    "errorSaving": "Ошибка при сохранении",
+    "tryAgain": "Попробовать снова"
   },
   "errors": {
     "general": "Произошла ошибка. Попробуйте ещё раз.",
@@ -386,7 +517,9 @@
     "clickListToView": "Нажмите на \"Список\" для просмотра объектов",
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
-    "sortByArea": "По площади"
+    "sortByArea": "По площади",
+    "compare": "Сравнение"
+    "favorites": "Избранное"
   },
   "isochrone": {
     "title": "Время в пути",
@@ -983,5 +1116,66 @@
     "uk": "Украинский",
     "zh": "Китайский",
     "ar": "Арабский"
+  "comparison": {
+    "title": "Сравнение объектов",
+    "subtitle": "выбрано объектов",
+    "compare": "Сравнить",
+    "inComparison": "В сравнении",
+    "limitReached": "Лимит достигнут",
+    "clearAll": "Очистить всё",
+    "addMore": "Добавить",
+    "emptySlot": "Выберите объект для сравнения",
+    "remove": "Удалить",
+    "backToSearch": "Вернуться к поиску",
+    "characteristics": "Характеристики",
+    "selected": "выбрано",
+    "outOf": "из",
+    "openComparison": "Открыть сравнение",
+    "price": "Цена",
+    "pricePerMeter": "Цена за м²",
+    "area": "Площадь",
+    "rooms": "Комнаты",
+    "floor": "Этаж",
+    "bathrooms": "Ванные",
+    "deposit": "Залог",
+    "commission": "Комиссия",
+    "minRentalPeriod": "Мин. срок аренды",
+    "elevator": "Лифт",
+    "balcony": "Балкон",
+    "terrace": "Терраса",
+    "airConditioning": "Кондиционер",
+    "heating": "Отопление",
+    "furnished": "С мебелью",
+    "petFriendly": "Можно с животными",
+    "parking": "Парковка",
+    "pool": "Бассейн",
+    "perMonth": "мес.",
+    "sqm": "м²",
+    "months": "мес.",
+    "yes": "Да",
+    "no": "Нет",
+    "notSpecified": "Не указано"
+  "authRequired": {
+    "title": "Авторизация требуется",
+    "chat": {
+      "description": "Авторизуйтесь, чтобы пользоваться чатом",
+      "action": "Войти в чат"
+    },
+    "profile": {
+      "description": "Авторизуйтесь, чтобы редактировать профиль",
+      "action": "Войти в профиль"
+    },
+    "favorites": {
+      "description": "Авторизуйтесь, чтобы просматривать избранное",
+      "action": "Войти для просмотра"
+    }
+  },
+  "favorites": {
+    "title": "Избранное",
+    "empty": {
+      "title": "Пока пусто",
+      "description": "Добавляйте понравившиеся объекты в избранное, чтобы вернуться к ним позже"
+    },
+    "count": "{count} объектов"
   }
 }

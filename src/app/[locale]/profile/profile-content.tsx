@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { LogOut, Shield, Trash2, Save, Loader2 } from 'lucide-react';
-import { useAuth, useRequireAuth } from '@/features/auth';
+import { useAuth } from '@/features/auth';
 import { UserAvatar } from '@/entities/user';
 import { usersApi } from '@/shared/api/users';
 import { authApi } from '@/shared/api/auth';
-import type { UserResponse, UserSettings } from '@/entities/user';
+import type { UserResponse } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
@@ -25,14 +25,13 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/shared/ui/alert-dialog';
-import { cn } from '@/shared/lib/utils';
+import { AuthRequired } from '@/shared/ui/auth-required';
 
 export function ProfileContent() {
     const t = useTranslations('profile');
     const tAuth = useTranslations('auth');
     const router = useRouter();
-    const { user, logout, logoutAll } = useAuth();
-    const { isLoading: isAuthLoading } = useRequireAuth();
+    const { user, logout, logoutAll, isAuthenticated, isInitialized } = useAuth();
 
     const [profile, setProfile] = useState<UserResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -136,7 +135,20 @@ export function ProfileContent() {
         }
     };
 
-    if (isAuthLoading || isLoading) {
+    if (!isInitialized) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
+            </div>
+        );
+    }
+
+    // Не авторизован - показываем заглушку
+    if (!isAuthenticated) {
+        return <AuthRequired context="profile" />;
+    }
+
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />

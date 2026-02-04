@@ -1,0 +1,57 @@
+[
+    {
+        "id": "free",
+        "name": "Free",
+        "price": 0,
+        "currency": "EUR",
+        "period": "monthly",
+        "features": {
+            "searchTabs": 1,
+            "aiFilters": 0,
+            "ownerAccess": false,
+            "durationDays": 0
+        }
+    },
+    {
+        "id": "trial",
+        "name": "Trial",
+        "price": 0,
+        "currency": "EUR",
+        "period": "monthly",
+        "features": {
+            "searchTabs": 3,
+            "aiFilters": 3,
+            "ownerAccess": true,
+            "ownerAccessMultiplier": 1,
+            "durationDays": 7
+        }
+    },
+    {
+        "id": "standard",
+        "name": "Standard",
+        "price": 19.99,
+        "currency": "EUR",
+        "period": "monthly",
+        "features": {
+            "searchTabs": 5,
+            "aiFilters": 10,
+            "ownerAccess": true,
+            "ownerAccessMultiplier": 2,
+            "durationDays": 30
+        }
+    },
+    {
+        "id": "maximum",
+        "name": "Maximum",
+        "price": 49.99,
+        "currency": "EUR",
+        "period": "monthly",
+        "features": {
+            "searchTabs": 20,
+            "aiFilters": 50,
+            "ownerAccess": true,
+            "ownerAccessMultiplier": 5,
+            "durationDays": 30
+        }
+    }
+]

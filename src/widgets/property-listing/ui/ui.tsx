@@ -22,6 +22,7 @@ import { useFilterStore } from '@/widgets/search-filters-bar';
 import { getPropertiesList, type PropertiesListResponse } from '@/shared/api';
 import type { Property } from '@/entities/property';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
+import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import { cn } from '@/shared/lib/utils';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
@@ -210,6 +211,8 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                                 key={property.id}
                                 property={property}
                                 onClick={() => onPropertyClick?.(property)}
+                                actions={<PropertyCompareButton property={property} />}
+                                menuItems={<PropertyCompareMenuItem property={property} />}
                             />
                         ))}
                     </div>
@@ -220,6 +223,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                                 key={property.id}
                                 property={property}
                                 onClick={() => onPropertyClick?.(property)}
+                                actions={<PropertyCompareButton property={property} size="md" />}
                             />
                         ))}
                     </div>

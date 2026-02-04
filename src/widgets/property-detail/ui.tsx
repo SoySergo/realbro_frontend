@@ -26,6 +26,7 @@ import {
 // Feature components
 import { PropertyContactBar } from '@/features/property-contact';
 import { PropertyActions } from '@/features/property-actions';
+import { PropertyCompareButton } from '@/features/comparison';
 
 /**
  * Convert AgentPropertyCard/SimilarPropertyCard to Property format
@@ -293,19 +294,22 @@ export function PropertyDetailWidget({
                                     property={property}
                                     className="w-full"
                                     actions={
-                                        <PropertyActions
-                                            propertyId={property.id}
-                                            variant="secondary"
-                                            className="gap-1"
-                                            translations={{
-                                                addToFavorites: t.contact.addToFavorites,
-                                                inFavorites: t.contact.inFavorites,
-                                                share: t.contact.share,
-                                                note: t.contact.note,
-                                                pdf: t.contact.pdf,
-                                                report: t.contact.report,
-                                            }}
-                                        />
+                                        <div className="flex items-center gap-1">
+                                            <PropertyCompareButton property={property} variant="full" size="sm" />
+                                            <PropertyActions
+                                                propertyId={property.id}
+                                                variant="secondary"
+                                                className="gap-1"
+                                                translations={{
+                                                    addToFavorites: t.contact.addToFavorites,
+                                                    inFavorites: t.contact.inFavorites,
+                                                    share: t.contact.share,
+                                                    note: t.contact.note,
+                                                    pdf: t.contact.pdf,
+                                                    report: t.contact.report,
+                                                }}
+                                            />
+                                        </div>
                                     }
                                 />
                             </div>

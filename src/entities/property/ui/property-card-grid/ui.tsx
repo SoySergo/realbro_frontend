@@ -29,9 +29,13 @@ const DEFAULT_METRO_LINE_COLOR = '#E50914';
 interface PropertyCardGridProps {
     property: Property;
     onClick?: () => void;
+    // Слот для дополнительных действий (например, кнопка сравнения)
+    actions?: React.ReactNode;
+    // Слот для пунктов меню
+    menuItems?: React.ReactNode;
 }
 
-export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
+export function PropertyCardGrid({ property, onClick, actions, menuItems }: PropertyCardGridProps) {
     const t = useTranslations('property');
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -223,6 +227,8 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
 
                     {/* Like/dislike buttons - увеличены на мобильных */}
                     <div className="flex items-center gap-1 sm:gap-0.5 flex-shrink-0">
+                        {/* Слот для дополнительных действий (например, сравнение) */}
+                        {actions}
                         <button
                             className="w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full hover:bg-green-500/20 hover:text-green-600 text-muted-foreground transition-colors"
                             onClick={handleLike}
@@ -319,6 +325,8 @@ export function PropertyCardGrid({ property, onClick }: PropertyCardGridProps) {
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
+                            {/* Слот для дополнительных пунктов меню */}
+                            {menuItems}
                             <DropdownMenuItem
                                 onClick={(e) => e.stopPropagation()}
                                 className="gap-2 cursor-pointer"

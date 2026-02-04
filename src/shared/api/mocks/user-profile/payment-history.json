@@ -1,0 +1,44 @@
+[
+    {
+        "id": "pay_001",
+        "amount": 19.99,
+        "currency": "EUR",
+        "status": "succeeded",
+        "description": "Standard Plan - Monthly",
+        "planId": "standard",
+        "paymentMethodId": "pm_card_001",
+        "invoiceUrl": "https://invoice.stripe.com/i/acct_xxx/inv_001",
+        "createdAt": "2024-01-15T10:30:00Z"
+    },
+    {
+        "id": "pay_002",
+        "amount": 19.99,
+        "currency": "EUR",
+        "status": "succeeded",
+        "description": "Standard Plan - Monthly",
+        "planId": "standard",
+        "paymentMethodId": "pm_card_001",
+        "invoiceUrl": "https://invoice.stripe.com/i/acct_xxx/inv_002",
+        "createdAt": "2023-12-15T10:30:00Z"
+    },
+    {
+        "id": "pay_003",
+        "amount": 19.99,
+        "currency": "EUR",
+        "status": "succeeded",
+        "description": "Standard Plan - Monthly",
+        "planId": "standard",
+        "paymentMethodId": "pm_card_001",
+        "invoiceUrl": "https://invoice.stripe.com/i/acct_xxx/inv_003",
+        "createdAt": "2023-11-15T10:30:00Z"
+    },
+    {
+        "id": "pay_004",
+        "amount": 0,
+        "currency": "EUR",
+        "status": "succeeded",
+        "description": "Trial Plan - 7 Days Free",
+        "planId": "trial",
+        "createdAt": "2023-11-08T08:00:00Z"
+    }
+]

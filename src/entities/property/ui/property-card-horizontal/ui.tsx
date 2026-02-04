@@ -33,6 +33,8 @@ import { cn, safeImageSrc } from '@/shared/lib/utils';
 interface PropertyCardHorizontalProps {
     property: Property;
     onClick?: () => void;
+    // Слот для дополнительных действий (например, кнопка сравнения)
+    actions?: React.ReactNode;
 }
 
 /**
@@ -41,7 +43,7 @@ interface PropertyCardHorizontalProps {
  * Используется в режиме списка для отображения объектов с расширенными деталями.
  * Показывает галерею, описание, информацию об агентстве и контакты.
  */
-export function PropertyCardHorizontal({ property, onClick }: PropertyCardHorizontalProps) {
+export function PropertyCardHorizontal({ property, onClick, actions }: PropertyCardHorizontalProps) {
     const t = useTranslations('property');
     const tTypes = useTranslations('propertyTypes');
     const tTransport = useTranslations('transport');
@@ -328,6 +330,8 @@ export function PropertyCardHorizontal({ property, onClick }: PropertyCardHorizo
 
                 {/* Панель действий */}
                 <div className="flex items-center justify-center gap-3 mt-3">
+                    {/* Слот для дополнительных действий (например, сравнение) */}
+                    {actions}
                     <button
                         className="p-2 text-muted-foreground hover:text-green-600 hover:bg-green-500/10 rounded transition-colors"
                         onClick={(e) => {
