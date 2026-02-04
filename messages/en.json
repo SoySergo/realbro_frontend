@@ -106,9 +106,9 @@
     "currentPlan": "Current plan"
   },
   "navigation": {
-    "home": "Home",
-    "properties": "Properties",
+    "search": "Search",
     "favorites": "Favorites",
+    "chat": "Chat",
     "profile": "Profile"
   },
   "property": {
@@ -371,6 +371,7 @@
     "sortByPrice": "By price",
     "sortByArea": "By area",
     "compare": "Compare"
+    "favorites": "Favorites"
   },
   "isochrone": {
     "title": "Travel Time",
@@ -868,5 +869,27 @@
     "yes": "Yes",
     "no": "No",
     "notSpecified": "Not specified"
+  "authRequired": {
+    "title": "Authorization required",
+    "chat": {
+      "description": "Please sign in to use the chat",
+      "action": "Sign in to chat"
+    },
+    "profile": {
+      "description": "Please sign in to edit your profile",
+      "action": "Sign in to profile"
+    },
+    "favorites": {
+      "description": "Please sign in to view your favorites",
+      "action": "Sign in to view"
+    }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": {
+      "title": "Nothing here yet",
+      "description": "Add properties you like to favorites to come back to them later"
+    },
+    "count": "{count} properties"
   }
 }

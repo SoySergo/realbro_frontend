@@ -107,9 +107,9 @@
     "currentPlan": "Forfait actuel"
   },
   "navigation": {
-    "home": "Accueil",
-    "properties": "Propriétés",
+    "search": "Recherche",
     "favorites": "Favoris",
+    "chat": "Chat",
     "profile": "Profil"
   },
   "property": {
@@ -365,6 +365,7 @@
     "close": "Fermer",
     "bedrooms": "chambres",
     "compare": "Comparer"
+    "favorites": "Favoris"
   },
   "isochrone": {
     "title": "Temps de trajet",
@@ -917,5 +918,27 @@
     "yes": "Oui",
     "no": "Non",
     "notSpecified": "Non précisé"
+  "authRequired": {
+    "title": "Autorisation requise",
+    "chat": {
+      "description": "Connectez-vous pour utiliser le chat",
+      "action": "Se connecter au chat"
+    },
+    "profile": {
+      "description": "Connectez-vous pour modifier votre profil",
+      "action": "Se connecter au profil"
+    },
+    "favorites": {
+      "description": "Connectez-vous pour voir vos favoris",
+      "action": "Se connecter pour voir"
+    }
+  },
+  "favorites": {
+    "title": "Favoris",
+    "empty": {
+      "title": "Rien ici encore",
+      "description": "Ajoutez des propriétés à vos favoris pour y revenir plus tard"
+    },
+    "count": "{count} propriétés"
   }
 }
