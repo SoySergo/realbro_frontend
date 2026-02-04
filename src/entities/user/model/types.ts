@@ -116,3 +116,210 @@ export type MessageResponse = {
 export type GoogleOAuthURLResponse = {
     url: string;
 };
+
+// ============================================================================
+// Subscription & Billing Types
+// ============================================================================
+
+/**
+ * Типы тарифных планов
+ */
+export type SubscriptionPlanId = 'free' | 'trial' | 'standard' | 'maximum';
+
+/**
+ * Статус подписки
+ */
+export type SubscriptionStatus = 'active' | 'canceled' | 'expired' | 'past_due';
+
+/**
+ * Период подписки
+ */
+export type BillingPeriod = 'monthly' | 'yearly';
+
+/**
+ * Тарифный план
+ */
+export type SubscriptionPlan = {
+    id: SubscriptionPlanId;
+    name: string;
+    price: number;
+    currency: string;
+    period: BillingPeriod;
+    features: {
+        searchTabs: number;
+        aiFilters: number;
+        ownerAccess: boolean;
+        ownerAccessMultiplier?: number;
+        durationDays: number;
+    };
+};
+
+/**
+ * Текущая подписка пользователя
+ */
+export type UserSubscription = {
+    id: string;
+    planId: SubscriptionPlanId;
+    status: SubscriptionStatus;
+    currentPeriodStart: string;
+    currentPeriodEnd: string;
+    cancelAtPeriodEnd: boolean;
+    createdAt: string;
+};
+
+/**
+ * Метод оплаты
+ */
+export type PaymentMethodType = 'card' | 'paypal' | 'bank_transfer';
+
+/**
+ * Платежный метод
+ */
+export type PaymentMethod = {
+    id: string;
+    type: PaymentMethodType;
+    isDefault: boolean;
+    card?: {
+        brand: string;
+        last4: string;
+        expiryMonth: number;
+        expiryYear: number;
+    };
+    paypal?: {
+        email: string;
+    };
+    createdAt: string;
+};
+
+/**
+ * Статус платежа
+ */
+export type PaymentStatus = 'succeeded' | 'pending' | 'failed' | 'refunded';
+
+/**
+ * История платежа
+ */
+export type PaymentHistory = {
+    id: string;
+    amount: number;
+    currency: string;
+    status: PaymentStatus;
+    description: string;
+    planId?: SubscriptionPlanId;
+    paymentMethodId?: string;
+    invoiceUrl?: string;
+    createdAt: string;
+};
+
+// ============================================================================
+// Notification Settings Types
+// ============================================================================
+
+/**
+ * Настройки уведомлений
+ */
+export type NotificationSettings = {
+    // Email уведомления
+    email: {
+        newProperties: boolean;
+        priceChanges: boolean;
+        savedSearches: boolean;
+        promotions: boolean;
+        accountUpdates: boolean;
+    };
+    // Push уведомления
+    push: {
+        newProperties: boolean;
+        priceChanges: boolean;
+        savedSearches: boolean;
+        messages: boolean;
+    };
+    // Telegram бот
+    telegram: {
+        enabled: boolean;
+        chatId?: string;
+        newProperties: boolean;
+        priceChanges: boolean;
+    };
+};
+
+// ============================================================================
+// Extended User Profile Types
+// ============================================================================
+
+/**
+ * Расширенные настройки пользователя
+ */
+export type ExtendedUserSettings = UserSettings & {
+    notifications: NotificationSettings;
+    currency?: string;
+    timezone?: string;
+};
+
+/**
+ * Расширенный профиль пользователя (для страницы профиля)
+ */
+export type ExtendedUserProfile = {
+    id: string;
+    email: string;
+    role: UserRole;
+    is_active: boolean;
+    settings: ExtendedUserSettings;
+    subscription?: UserSubscription;
+    paymentMethods: PaymentMethod[];
+    created_at: string;
+    updated_at: string;
+    // Статистика
+    stats?: {
+        savedProperties: number;
+        savedSearches: number;
+        viewedProperties: number;
+    };
+};
+
+/**
+ * Данные для страницы профиля
+ */
+export type ProfilePageData = {
+    profile: ExtendedUserProfile;
+    subscription: UserSubscription | null;
+    plans: SubscriptionPlan[];
+    paymentHistory: PaymentHistory[];
+    paymentMethods: PaymentMethod[];
+    activeSessions: number;
+};
+
+/**
+ * Запрос на обновление уведомлений
+ */
+export type UpdateNotificationSettingsRequest = Partial<NotificationSettings>;
+
+/**
+ * Запрос на обновление подписки
+ */
+export type UpdateSubscriptionRequest = {
+    planId: SubscriptionPlanId;
+    paymentMethodId?: string;
+};
+
+/**
+ * Запрос на отмену подписки
+ */
+export type CancelSubscriptionRequest = {
+    reason?: string;
+    cancelAtPeriodEnd?: boolean;
+};
+
+/**
+ * Активная сессия пользователя
+ */
+export type UserSession = {
+    id: string;
+    device: string;
+    browser: string;
+    location?: string;
+    ip?: string;
+    lastActive: string;
+    isCurrent: boolean;
+    createdAt: string;
+};

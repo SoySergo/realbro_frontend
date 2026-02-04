@@ -13,4 +13,24 @@ export type {
     SessionsResponse,
     MessageResponse,
     GoogleOAuthURLResponse,
+    // Subscription & Billing Types
+    SubscriptionPlanId,
+    SubscriptionStatus,
+    BillingPeriod,
+    SubscriptionPlan,
+    UserSubscription,
+    PaymentMethodType,
+    PaymentMethod,
+    PaymentStatus,
+    PaymentHistory,
+    // Notification Types
+    NotificationSettings,
+    // Extended Profile Types
+    ExtendedUserSettings,
+    ExtendedUserProfile,
+    ProfilePageData,
+    UpdateNotificationSettingsRequest,
+    UpdateSubscriptionRequest,
+    CancelSubscriptionRequest,
+    UserSession,
 } from './types';

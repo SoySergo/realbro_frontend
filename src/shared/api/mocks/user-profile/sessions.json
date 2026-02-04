@@ -1,0 +1,32 @@
+[
+    {
+        "id": "session_001",
+        "device": "Desktop",
+        "browser": "Chrome 120.0",
+        "location": "Barcelona, Spain",
+        "ip": "85.xxx.xxx.xxx",
+        "lastActive": "2024-01-20T16:45:00Z",
+        "isCurrent": true,
+        "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+        "id": "session_002",
+        "device": "iPhone 15",
+        "browser": "Safari Mobile",
+        "location": "Barcelona, Spain",
+        "ip": "85.xxx.xxx.xxx",
+        "lastActive": "2024-01-19T20:30:00Z",
+        "isCurrent": false,
+        "createdAt": "2024-01-10T14:20:00Z"
+    },
+    {
+        "id": "session_003",
+        "device": "MacBook Pro",
+        "browser": "Firefox 121.0",
+        "location": "Madrid, Spain",
+        "ip": "80.xxx.xxx.xxx",
+        "lastActive": "2024-01-18T09:15:00Z",
+        "isCurrent": false,
+        "createdAt": "2024-01-05T11:00:00Z"
+    }
+]

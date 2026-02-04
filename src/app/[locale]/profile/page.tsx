@@ -1,7 +1,7 @@
 import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
-import { ProfileContent } from './profile-content';
+import { ProfileWidget } from '@/widgets/profile';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -25,7 +25,7 @@ export default async function ProfilePage({ params }: Props) {
             <Sidebar />
 
             <main className="flex-1 md:ml-16 pb-16 md:pb-0">
-                <ProfileContent />
+                <ProfileWidget />
             </main>
         </div>
     );
