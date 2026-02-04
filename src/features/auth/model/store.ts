@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { UserInfo } from '@/entities/user';
 import { authApi, AuthError } from '@/shared/api/auth';
+import { FEATURES, MOCK_USER } from '@/shared/config/features';
 
 type AuthState = {
     // Состояние
@@ -64,6 +65,13 @@ export const useAuthStore = create<AuthState>()(
             // Инициализация - проверка сессии через бекенд
             initialize: async () => {
                 set({ isLoading: true });
+
+                // Если включен мок авторизации - возвращаем тестового пользователя
+                if (FEATURES.MOCK_AUTH_ENABLED) {
+                    console.log('Mock auth enabled, using test user');
+                    set({ user: MOCK_USER, isInitialized: true, isLoading: false });
+                    return;
+                }
 
                 try {
                     // Всегда проверяем сессию через бекенд (токен в cookies)
