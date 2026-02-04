@@ -805,6 +805,24 @@
       "none": "Aucun"
     }
   },
+  "mapSidebar": {
+    "hidePanel": "Masquer le panneau",
+    "showPanel": "Afficher le panneau",
+    "showOnMap": "Carte",
+    "showAsList": "Liste",
+    "resetCluster": "Tout afficher",
+    "clusterObjects": "Objets du cluster",
+    "sortBy": "Trier par",
+    "sortPrice": "Prix",
+    "sortArea": "Surface",
+    "sortDate": "Date",
+    "sortAscending": "Tri croissant",
+    "sortDescending": "Tri décroissant",
+    "noResults": "Aucun bien trouvé",
+    "loading": "Chargement...",
+    "objectsCount": "{count} biens",
+    "changeSearchArea": "Modifier la zone de recherche sur la carte"
+  },
   "amenities": {
     "wifi": "Wi-Fi",
     "internet": "Internet",

@@ -823,6 +823,24 @@
       "none": "Нет"
     }
   },
+  "mapSidebar": {
+    "hidePanel": "Скрыть панель",
+    "showPanel": "Показать панель",
+    "showOnMap": "Карта",
+    "showAsList": "Списком",
+    "resetCluster": "Показать все",
+    "clusterObjects": "Объекты кластера",
+    "sortBy": "Сортировать по",
+    "sortPrice": "Цене",
+    "sortArea": "Площади",
+    "sortDate": "Дате",
+    "sortAscending": "Сортировка по возрастанию",
+    "sortDescending": "Сортировка по убыванию",
+    "noResults": "Объекты не найдены",
+    "loading": "Загрузка...",
+    "objectsCount": "{count} объектов",
+    "changeSearchArea": "Измените область поиска на карте"
+  },
   "amenities": {
     "wifi": "Wi-Fi",
     "internet": "Интернет",
