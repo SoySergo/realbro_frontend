@@ -958,7 +958,11 @@
       "consulting": "Консалтинг",
       "legal": "Юридические услуги",
       "valuation": "Оценка"
-    }
+    },
+    "noPropertiesFound": "Объекты не найдены",
+    "noAgentsFound": "Агенты не найдены",
+    "rooms": "комн.",
+    "sqm": "м²"
   },
   "searchCategory": {
     "title": "Категория поиска",

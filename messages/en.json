@@ -897,7 +897,11 @@
       "consulting": "Consulting",
       "legal": "Legal services",
       "valuation": "Valuation"
-    }
+    },
+    "noPropertiesFound": "No properties found",
+    "noAgentsFound": "No agents found",
+    "rooms": "rooms",
+    "sqm": "sqm"
   },
   "searchCategory": {
     "title": "Search category",

@@ -946,7 +946,11 @@
       "consulting": "Conseil",
       "legal": "Services juridiques",
       "valuation": "Évaluation"
-    }
+    },
+    "noPropertiesFound": "Aucune propriété trouvée",
+    "noAgentsFound": "Aucun agent trouvé",
+    "rooms": "pièces",
+    "sqm": "m²"
   },
   "searchCategory": {
     "title": "Catégorie de recherche",

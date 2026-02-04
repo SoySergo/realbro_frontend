@@ -340,13 +340,13 @@ function AgencyPropertiesTab({
     properties: Property[];
 }) {
     const t = useTranslations('agency');
-    const tProperty = useTranslations('property');
+    const tCommon = useTranslations('common');
 
     if (properties.length === 0) {
         return (
             <div className="bg-background border border-border rounded-xl p-8 text-center">
                 <Building2 className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-                <p className="text-text-secondary">{t('noAgenciesFound')}</p>
+                <p className="text-text-secondary">{t('noPropertiesFound')}</p>
             </div>
         );
     }
@@ -375,13 +375,13 @@ function AgencyPropertiesTab({
                     <div className="p-3">
                         <p className="font-semibold text-price">
                             {property.price.toLocaleString()} €
-                            <span className="text-text-tertiary font-normal text-sm">/{tProperty('perMonth')}</span>
+                            <span className="text-text-tertiary font-normal text-sm">{tCommon('perMonth')}</span>
                         </p>
                         <h3 className="text-sm font-medium text-text-primary truncate mt-1">
                             {property.title}
                         </h3>
                         <p className="text-xs text-text-secondary mt-1">
-                            {property.rooms} {tProperty('roomsShort')} · {property.area} м²
+                            {property.rooms} {t('rooms')} · {property.area} {t('sqm')}
                         </p>
                     </div>
                 </div>
@@ -520,7 +520,7 @@ function AgencyTeamTab({
         return (
             <div className="bg-background border border-border rounded-xl p-8 text-center">
                 <Users className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-                <p className="text-text-secondary">{t('noAgenciesFound')}</p>
+                <p className="text-text-secondary">{t('noAgentsFound')}</p>
             </div>
         );
     }
