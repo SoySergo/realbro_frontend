@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Label } from '@/shared/ui/label';
-import { X } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { MarkerTypeFilterMobile } from '@/features/marker-type-filter';
@@ -14,6 +14,8 @@ import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
 import { LocationFilterMobile } from '@/features/location-filter';
 import type { LocationFilterMode } from '@/features/location-filter/model';
+import { FilterSection } from './filter-section';
+import { getPropertiesCount } from '@/shared/api';
 
 // Константы
 const MAX_PRICE = 20_000;
@@ -25,14 +27,21 @@ interface MobileFiltersSheetProps {
 }
 
 /**
- * Мобильная версия панели фильтров
- * Локальное состояние - изменения применяются только по кнопке "Применить"
+ * Мобильная версия панели фильтров с улучшенным UI/UX
+ * 
+ * Особенности:
+ * - Full-screen bottom sheet
+ * - Drag handle сверху
+ * - Accordion-стиль для категорий фильтров
+ * - Sticky footer с динамическим подсчётом результатов
+ * - Локальное состояние - изменения применяются только по кнопке "Показать N вариантов"
+ * - Touch-friendly размеры элементов (минимум 44px)
  */
 export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetProps) {
     const t = useTranslations('filters');
     const { filters, setFilters } = useSearchFilters();
 
-    const { activeLocationMode, setLocationMode } = useFilterStore();
+    const { activeLocationMode, setLocationMode, currentFilters } = useFilterStore();
 
     // Локальное состояние для всех фильтров
     const [localMarkerType, setLocalMarkerType] = useState(filters.markerType || 'all');
@@ -43,6 +52,45 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
     const [localMinArea, setLocalMinArea] = useState(filters.minArea || 0);
     const [localMaxArea, setLocalMaxArea] = useState(filters.maxArea || MAX_AREA);
     const [localLocationMode, setLocalLocationMode] = useState<LocationFilterMode | null>(activeLocationMode);
+
+    // Состояние для подсчёта результатов
+    const [propertiesCount, setPropertiesCount] = useState<number | null>(null);
+    const [isLoadingCount, setIsLoadingCount] = useState(false);
+
+    // Функция для получения количества объектов
+    const fetchPropertiesCount = useCallback(async () => {
+        setIsLoadingCount(true);
+        try {
+            const mergedFilters = {
+                ...currentFilters,
+                markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
+                categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
+                rooms: localRooms.length > 0 ? localRooms : undefined,
+                minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
+                maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
+                minArea: localMinArea !== 0 ? localMinArea : undefined,
+                maxArea: localMaxArea !== MAX_AREA ? localMaxArea : undefined,
+            };
+            const count = await getPropertiesCount(mergedFilters);
+            setPropertiesCount(count);
+        } catch (error) {
+            console.error('Failed to fetch properties count:', error);
+            setPropertiesCount(null);
+        } finally {
+            setIsLoadingCount(false);
+        }
+    }, [localMarkerType, localCategoryIds, localRooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, currentFilters]);
+
+    // Обновляем счётчик при изменении фильтров (с debounce)
+    useEffect(() => {
+        if (open) {
+            const timeoutId = setTimeout(() => {
+                fetchPropertiesCount();
+            }, 500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [open, fetchPropertiesCount]);
 
     // Синхронизация локального состояния при открытии
     useEffect(() => {
@@ -94,8 +142,6 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
             minArea: localMinArea !== 0 ? localMinArea : undefined,
             maxArea: localMaxArea !== MAX_AREA ? localMaxArea : undefined,
         });
-        // TODO: применить localLocationMode через useFilterStore
-        console.log('Filters applied from mobile');
         onOpenChange(false);
     };
 
@@ -109,7 +155,11 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
         setLocalMinArea(0);
         setLocalMaxArea(MAX_AREA);
         setLocalLocationMode(null);
-        console.log('Local filters cleared');
+    };
+
+    // Форматирование числа с разделителями
+    const formatNumber = (num: number): string => {
+        return num.toLocaleString('ru-RU');
     };
 
     if (!open) return null;
@@ -125,16 +175,21 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
 
             {/* Content */}
             <div
-                className="fixed inset-0 bg-background flex flex-col animate-in slide-in-from-bottom duration-75"
+                className="fixed inset-0 bg-background flex flex-col animate-in slide-in-from-bottom duration-300"
                 style={{ zIndex: 120 }}
             >
+                {/* Drag handle */}
+                <div className="flex justify-center pt-2 pb-1 shrink-0">
+                    <div className="w-12 h-1 rounded-full bg-text-tertiary" />
+                </div>
+
                 {/* Заголовок */}
                 <div className="px-4 py-3 border-b border-border shrink-0">
                     <div className="flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-text-primary">{t('title')}</h2>
                         <button
                             onClick={() => onOpenChange(false)}
-                            className="p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+                            className="p-2 rounded-lg hover:bg-background-tertiary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                             aria-label={t('cancel')}
                         >
                             <X className="w-5 h-5 text-text-secondary" />
@@ -144,7 +199,7 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
 
                 {/* Фильтры в вертикальной компоновке со скроллом */}
                 <div
-                    className="flex-1 overflow-y-auto px-4 py-4"
+                    className="flex-1 overflow-y-auto"
                     onScroll={() => {
                         // Скрываем клавиатуру при скролле на мобильных
                         if (document.activeElement instanceof HTMLElement) {
@@ -152,104 +207,109 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
                         }
                     }}
                 >
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col">
                         {/* Тип маркера */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('markerType')}
-                            </Label>
-                            <MarkerTypeFilterMobile
-                                value={localMarkerType}
-                                onChange={setLocalMarkerType}
-                            />
-                        </div>
+                        <FilterSection id="marker-type" title={t('markerType')}>
+                            <div className="px-4">
+                                <MarkerTypeFilterMobile
+                                    value={localMarkerType}
+                                    onChange={setLocalMarkerType}
+                                />
+                            </div>
+                        </FilterSection>
 
                         {/* Локация */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('location')}
-                            </Label>
-                            <LocationFilterMobile
-                                value={localLocationMode}
-                                onChange={setLocalLocationMode}
-                                onLaunch={(mode: LocationFilterMode) => {
-                                    // Активируем режим на карте и закрываем мобильное окно фильтров
-                                    setLocationMode(mode);
-                                    onOpenChange(false);
-                                }}
-                            />
-                        </div>
+                        <FilterSection id="location" title={t('categories.location')}>
+                            <div className="px-4">
+                                <LocationFilterMobile
+                                    value={localLocationMode}
+                                    onChange={setLocalLocationMode}
+                                    onLaunch={(mode: LocationFilterMode) => {
+                                        // Активируем режим на карте и закрываем мобильное окно фильтров
+                                        setLocationMode(mode);
+                                        onOpenChange(false);
+                                    }}
+                                />
+                            </div>
+                        </FilterSection>
 
                         {/* Категория */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('category')}
-                            </Label>
-                            <CategoryFilterMobile
-                                value={localCategoryIds}
-                                onChange={setLocalCategoryIds}
-                            />
-                        </div>
+                        <FilterSection id="category" title={t('category')}>
+                            <div className="px-4">
+                                <CategoryFilterMobile
+                                    value={localCategoryIds}
+                                    onChange={setLocalCategoryIds}
+                                />
+                            </div>
+                        </FilterSection>
 
                         {/* Цена */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('priceRange')}
-                            </Label>
-                            <PriceFilterMobile
-                                minPrice={localMinPrice}
-                                maxPrice={localMaxPrice}
-                                onMinPriceChange={setLocalMinPrice}
-                                onMaxPriceChange={setLocalMaxPrice}
-                            />
-                        </div>
-
-
+                        <FilterSection id="price" title={t('categories.price')}>
+                            <div className="px-4">
+                                <PriceFilterMobile
+                                    minPrice={localMinPrice}
+                                    maxPrice={localMaxPrice}
+                                    onMinPriceChange={setLocalMinPrice}
+                                    onMaxPriceChange={setLocalMaxPrice}
+                                />
+                            </div>
+                        </FilterSection>
 
                         {/* Комнаты */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('rooms')}
-                            </Label>
-                            <RoomsFilterMobile
-                                value={localRooms}
-                                onChange={setLocalRooms}
-                            />
-                        </div>
+                        <FilterSection id="rooms" title={t('categories.rooms')}>
+                            <div className="px-4">
+                                <RoomsFilterMobile
+                                    value={localRooms}
+                                    onChange={setLocalRooms}
+                                />
+                            </div>
+                        </FilterSection>
 
                         {/* Площадь */}
-                        <div className="w-full">
-                            <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                {t('areaRange')}
-                            </Label>
-                            <AreaFilterMobile
-                                minArea={localMinArea}
-                                maxArea={localMaxArea}
-                                onMinAreaChange={setLocalMinArea}
-                                onMaxAreaChange={setLocalMaxArea}
-                            />
-                        </div>
-
+                        <FilterSection id="area" title={t('categories.area')}>
+                            <div className="px-4">
+                                <AreaFilterMobile
+                                    minArea={localMinArea}
+                                    maxArea={localMaxArea}
+                                    onMinAreaChange={setLocalMinArea}
+                                    onMaxAreaChange={setLocalMaxArea}
+                                />
+                            </div>
+                        </FilterSection>
                     </div>
                 </div>
 
-                {/* Футер с кнопками "Очистить" и "Применить" */}
-                <div className="px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-border shrink-0 bg-background">
+                {/* Футер с кнопками "Сбросить" и "Показать N вариантов" */}
+                <div className="px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-border shrink-0 bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
                     <div className="flex gap-3">
                         <Button
                             onClick={handleClear}
-                            className="flex-1 h-11"
+                            className="h-11 min-h-[44px] text-text-secondary"
                             variant="ghost"
                             disabled={!hasLocalChanges}
                         >
-                            {t('clear')}
+                            {t('resetAll')}
                         </Button>
                         <Button
                             onClick={handleApply}
-                            className="flex-1 h-11 bg-brand-primary text-white "
+                            className="flex-1 h-11 min-h-[44px] bg-brand-primary hover:bg-brand-primary-hover text-white font-medium"
                             variant="default"
+                            disabled={isLoadingCount}
                         >
-                            {t('apply')}
+                            {isLoadingCount ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    {t('loading')}
+                                </>
+                            ) : (
+                                <>
+                                    {propertiesCount !== null && propertiesCount > 0
+                                        ? t('showResults', { count: formatNumber(propertiesCount) })
+                                        : propertiesCount === 0
+                                        ? t('noResults')
+                                        : t('apply')}
+                                </>
+                            )}
                         </Button>
                     </div>
                 </div>

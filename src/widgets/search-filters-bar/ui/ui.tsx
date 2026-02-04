@@ -35,6 +35,9 @@ import { RoomsFilter, RoomsFilterMobile } from '@/features/rooms-filter';
 import { AreaFilter, AreaFilterMobile } from '@/features/area-filter';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 
+// Импорт улучшенной панели фильтров для desktop
+import { FiltersDesktopPanel } from './filters-desktop-panel';
+
 /**
  * Widget: Панель фильтров поиска недвижимости
  *
@@ -59,78 +62,12 @@ function SearchFiltersBarContent() {
 
     const [propertiesCount, setPropertiesCount] = useState<number | null>(null);
     const [isLoadingCount, setIsLoadingCount] = useState(false);
-    const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
     const [isFiltersPopupOpen, setIsFiltersPopupOpen] = useState(false);
     const [isSavePopoverOpen, setIsSavePopoverOpen] = useState(false);
     const [filterName, setFilterName] = useState('');
     const [savedFiltersSnapshot, setSavedFiltersSnapshot] = useState<string | null>(null);
 
-    // Константы для попапа фильтров
-    const MAX_PRICE = 20_000;
-    const MAX_AREA = 500;
-
-    // Локальное состояние для попапа фильтров
-    const [localMarkerType, setLocalMarkerType] = useState(filters.markerType || 'all');
-    const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
-    const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
-    const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
-    const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
-    const [localMinArea, setLocalMinArea] = useState(filters.minArea || 0);
-    const [localMaxArea, setLocalMaxArea] = useState(filters.maxArea || MAX_AREA);
-    const [localLocationMode, setLocalLocationMode] = useState<LocationFilterMode | null>(null);
-
     const filtersContainerRef = useRef<HTMLDivElement>(null);
-
-    // Синхронизация локального состояния при открытии попапа
-    useEffect(() => {
-        if (isFiltersPopupOpen) {
-            setLocalMarkerType(filters.markerType || 'all');
-            setLocalCategoryIds(filters.categoryIds || []);
-            setLocalRooms(filters.rooms || []);
-            setLocalMinPrice(filters.minPrice || 0);
-            setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
-            setLocalMinArea(filters.minArea || 0);
-            setLocalMaxArea(filters.maxArea || MAX_AREA);
-            setLocalLocationMode(null);
-        }
-    }, [isFiltersPopupOpen]);
-
-    // Проверка локальных изменений в попапе
-    const hasLocalChanges =
-        localMarkerType !== 'all' ||
-        localCategoryIds.length > 0 ||
-        localRooms.length > 0 ||
-        localMinPrice !== 0 ||
-        localMaxPrice !== MAX_PRICE ||
-        localMinArea !== 0 ||
-        localMaxArea !== MAX_AREA ||
-        localLocationMode !== null;
-
-    // Применение фильтров из попапа
-    const handleApplyFiltersFromPopup = () => {
-        setFilters({
-            markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
-            categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
-            rooms: localRooms.length > 0 ? localRooms : undefined,
-            minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
-            maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
-            minArea: localMinArea !== 0 ? localMinArea : undefined,
-            maxArea: localMaxArea !== MAX_AREA ? localMaxArea : undefined,
-        });
-        setIsFiltersPopupOpen(false);
-    };
-
-    // Очистка локальных фильтров в попапе
-    const handleClearLocalFilters = () => {
-        setLocalMarkerType('all');
-        setLocalCategoryIds([]);
-        setLocalRooms([]);
-        setLocalMinPrice(0);
-        setLocalMaxPrice(MAX_PRICE);
-        setLocalMinArea(0);
-        setLocalMaxArea(MAX_AREA);
-        setLocalLocationMode(null);
-    };
 
     // Активный запрос (сохранённый фильтр)
     const activeQuery = useMemo(
@@ -441,138 +378,11 @@ function SearchFiltersBarContent() {
                 </div>
             </div>
 
-            {/* Попап с полными фильтрами по центру экрана */}
-            {isFiltersPopupOpen && (
-                <>
-                    {/* Overlay */}
-                    <div
-                        className="fixed inset-0 bg-black/50 z-100 animate-in fade-in duration-150"
-                        onClick={() => setIsFiltersPopupOpen(false)}
-                    />
-
-                    {/* Modal по центру */}
-                    <div className="fixed inset-0 z-110 flex items-center justify-center p-4">
-                        <div
-                            className="bg-background rounded-xl shadow-2xl w-full max-w-lg lg:max-w-xl max-h-[80vh] flex flex-col animate-in zoom-in-95 fade-in duration-150"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {/* Заголовок */}
-                            <div className="px-5 py-4 border-b border-border shrink-0">
-                                <div className="flex items-center justify-between">
-                                    <h2 className="text-lg font-semibold text-text-primary">{t('title')}</h2>
-                                    <button
-                                        onClick={() => setIsFiltersPopupOpen(false)}
-                                        className="p-2 rounded-lg hover:bg-background-tertiary transition-colors"
-                                        aria-label={t('cancel')}
-                                    >
-                                        <X className="w-5 h-5 text-text-secondary" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Фильтры со скроллом */}
-                            <div className="flex-1 overflow-y-auto px-5 py-4">
-                                <div className="flex flex-col gap-6">
-                                    {/* Тип маркера */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('markerType')}
-                                        </Label>
-                                        <MarkerTypeFilterMobile
-                                            value={localMarkerType}
-                                            onChange={setLocalMarkerType}
-                                        />
-                                    </div>
-
-                                    {/* Локация */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('location')}
-                                        </Label>
-                                        <LocationFilterMobile
-                                            value={localLocationMode}
-                                            onChange={setLocalLocationMode}
-                                            onLaunch={(mode: LocationFilterMode) => {
-                                                setLocationMode(mode);
-                                                setIsFiltersPopupOpen(false);
-                                            }}
-                                        />
-                                    </div>
-
-                                    {/* Категория */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('category')}
-                                        </Label>
-                                        <CategoryFilterMobile
-                                            value={localCategoryIds}
-                                            onChange={setLocalCategoryIds}
-                                        />
-                                    </div>
-
-                                    {/* Цена */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('priceRange')}
-                                        </Label>
-                                        <PriceFilterMobile
-                                            minPrice={localMinPrice}
-                                            maxPrice={localMaxPrice}
-                                            onMinPriceChange={setLocalMinPrice}
-                                            onMaxPriceChange={setLocalMaxPrice}
-                                        />
-                                    </div>
-
-                                    {/* Комнаты */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('rooms')}
-                                        </Label>
-                                        <RoomsFilterMobile
-                                            value={localRooms}
-                                            onChange={setLocalRooms}
-                                        />
-                                    </div>
-
-                                    {/* Площадь */}
-                                    <div className="w-full">
-                                        <Label className="text-sm font-medium text-text-primary mb-3 block">
-                                            {t('areaRange')}
-                                        </Label>
-                                        <AreaFilterMobile
-                                            minArea={localMinArea}
-                                            maxArea={localMaxArea}
-                                            onMinAreaChange={setLocalMinArea}
-                                            onMaxAreaChange={setLocalMaxArea}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Футер с кнопками */}
-                            <div className="px-5 py-4 border-t border-border shrink-0 bg-background rounded-b-xl">
-                                <div className="flex gap-3">
-                                    <Button
-                                        onClick={handleClearLocalFilters}
-                                        className="flex-1 h-11"
-                                        variant="ghost"
-                                        disabled={!hasLocalChanges}
-                                    >
-                                        {t('clear')}
-                                    </Button>
-                                    <Button
-                                        onClick={handleApplyFiltersFromPopup}
-                                        className="flex-1 h-11 bg-brand-primary text-white"
-                                        variant="default"
-                                    >
-                                        {t('apply')}
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
+            {/* Улучшенная панель фильтров для desktop */}
+            <FiltersDesktopPanel 
+                open={isFiltersPopupOpen} 
+                onOpenChange={setIsFiltersPopupOpen} 
+            />
         </div>
     );
 }
