@@ -501,7 +501,7 @@
     "sortByDate": "By date",
     "sortByPrice": "By price",
     "sortByArea": "By area",
-    "compare": "Compare"
+    "compare": "Compare",
     "favorites": "Favorites"
   },
   "isochrone": {
@@ -1055,6 +1055,7 @@
     "uk": "Ukrainian",
     "zh": "Chinese",
     "ar": "Arabic"
+  },
   "comparison": {
     "title": "Compare Properties",
     "subtitle": "selected properties",
@@ -1094,6 +1095,7 @@
     "yes": "Yes",
     "no": "No",
     "notSpecified": "Not specified"
+  },
   "authRequired": {
     "title": "Authorization required",
     "chat": {
