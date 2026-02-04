@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { Link } from '@/shared/config/routing';
-import { Star, MapPin, BadgeCheck, Crown, Building2, Sparkles } from 'lucide-react';
+import { Star, MapPin, BadgeCheck, Crown, Building2 } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { Card } from '@/shared/ui/card';
 import { cn } from '@/shared/lib/utils';

@@ -495,7 +495,7 @@
     "sort": "Trier",
     "close": "Fermer",
     "bedrooms": "chambres",
-    "compare": "Comparer"
+    "compare": "Comparer",
     "favorites": "Favoris"
   },
   "isochrone": {
@@ -1104,6 +1104,7 @@
     "uk": "Ukrainien",
     "zh": "Chinois",
     "ar": "Arabe"
+  },
   "comparison": {
     "title": "Comparer les biens",
     "subtitle": "biens sélectionnés",
@@ -1143,6 +1144,7 @@
     "yes": "Oui",
     "no": "Non",
     "notSpecified": "Non précisé"
+  },
   "authRequired": {
     "title": "Autorisation requise",
     "chat": {
