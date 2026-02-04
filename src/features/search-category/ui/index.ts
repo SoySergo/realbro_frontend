@@ -1,0 +1,1 @@
+export { SearchCategorySwitcher } from './SearchCategorySwitcher';
