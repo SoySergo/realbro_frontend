@@ -64,14 +64,16 @@ interface ContactModalProps {
 // ============================================================================
 
 /**
- * Определяем мобильное устройство
+ * Определяем мобильное устройство по ширине экрана
+ * Используем только ширину экрана для надежного определения
  */
 function useIsMobile(): boolean {
     const [isMobile, setIsMobile] = useState(false);
     
     useEffect(() => {
         const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+            // Используем только ширину экрана - более надежный метод
+            setIsMobile(window.innerWidth < 768);
         };
         checkMobile();
         window.addEventListener('resize', checkMobile);
@@ -352,7 +354,13 @@ function ContactsDisplay({
                 <ContactButton
                     icon={<ExternalLink className="w-5 h-5 text-muted-foreground" />}
                     label={translations.website}
-                    value={new URL(contacts.website).hostname}
+                    value={(() => {
+                        try {
+                            return new URL(contacts.website).hostname;
+                        } catch {
+                            return contacts.website;
+                        }
+                    })()}
                     href={contacts.website}
                     variant="outline"
                 />

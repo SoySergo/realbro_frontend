@@ -151,7 +151,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
         const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
         const newToast: Toast = { id, message, type, duration };
         
-        setToasts((prev) => [...prev.slice(-4), newToast]); // Максимум 5 тостов
+        // Оставляем последние 4 тоста + добавляем новый = максимум 5
+        setToasts((prev) => [...prev.slice(-4), newToast]);
     }, []);
 
     const dismissToast = useCallback((id: string) => {

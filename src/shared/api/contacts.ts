@@ -208,14 +208,15 @@ function generateMockContacts(authorId: string, authorType: AuthorType): Contact
     // Генерируем на основе ID
     const hash = authorId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const phoneBase = 600000000 + (hash % 99999999);
+    const phoneStr = String(phoneBase).padStart(9, '0');
     
     const contacts: ContactInfo = {
-        phone: `+34 ${phoneBase.toString().slice(0, 3)} ${phoneBase.toString().slice(3, 6)} ${phoneBase.toString().slice(6, 9)}`,
+        phone: `+34 ${phoneStr.slice(0, 3)} ${phoneStr.slice(3, 6)} ${phoneStr.slice(6, 9)}`,
     };
 
     // Добавляем WhatsApp с вероятностью 80%
     if (hash % 5 !== 0) {
-        contacts.whatsapp = `+34${phoneBase}`;
+        contacts.whatsapp = `+34${phoneStr}`;
     }
 
     // Telegram для владельцев с вероятностью 40%
@@ -320,7 +321,15 @@ export async function getContactAccess(
             
             if (shouldFail) {
                 console.log('[Contacts API] Mock limit exceeded');
-                const limitKey = authorType === 'owner' ? 'owner' : authorType === 'agent' ? 'agent' : 'agency';
+                // Определяем ключ лимита на основе типа автора
+                let limitKey: 'owner' | 'agent' | 'agency';
+                if (authorType === 'owner') {
+                    limitKey = 'owner';
+                } else if (authorType === 'agent') {
+                    limitKey = 'agent';
+                } else {
+                    limitKey = 'agency';
+                }
                 return {
                     success: false,
                     error: 'limit_exceeded',

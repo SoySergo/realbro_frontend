@@ -125,10 +125,6 @@ export function PropertyDetailWidget({
         // TODO: Открыть модалку жалобы
     }, []);
 
-    const handleMore = useCallback(() => {
-        // Не используется напрямую, обрабатывается в PropertyActionsMenu
-    }, []);
-
     // Calculate rating (mock based on ID for consistency)
     const mockRating = 4.5 + (property.id.length % 5) / 10;
     
@@ -540,10 +536,19 @@ export function PropertyDetailWidget({
                 }}
                 onCall={handleCall}
                 onMessage={handleMessage}
-                onLike={() => handleLike(property.id, true)}
-                onDislike={() => handleDislike(property.id, true)}
-                onMore={handleMore}
                 className="lg:hidden"
+                actionsSlot={
+                    <PropertyActionsMenu
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                        variant="compact"
+                        translations={actionsMenuTranslations}
+                        onLike={handleLike}
+                        onDislike={handleDislike}
+                        onShare={handleShare}
+                        onReport={handleReport}
+                    />
+                }
             />
             
             {/* Contact Modal */}
