@@ -796,6 +796,8 @@
     "sortPrice": "Prix",
     "sortArea": "Surface",
     "sortDate": "Date",
+    "sortAscending": "Tri croissant",
+    "sortDescending": "Tri décroissant",
     "noResults": "Aucun bien trouvé",
     "loading": "Chargement...",
     "objectsCount": "{count} biens",

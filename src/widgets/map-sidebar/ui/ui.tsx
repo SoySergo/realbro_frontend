@@ -51,7 +51,10 @@ interface MobileMapSidebarProps {
     onViewModeChange?: (mode: 'map' | 'list') => void;
 }
 
-// Высота одной карточки в виртуализированном списке (PropertyCardGrid имеет aspect-ratio 4:3 + padding)
+// Высота одной карточки в виртуализированном списке
+// PropertyCardGrid: aspect-ratio 4:3 с базовой шириной ~320px = ~240px высота
+// + padding (12px сверху/снизу) + внутренние отступы карточки (~160px для контента)
+// Итого: примерно 420px. Можно корректировать на основе реальных замеров.
 const ITEM_HEIGHT = 420;
 
 // Props для rowComponent в react-window
@@ -284,8 +287,8 @@ export function MapSidebar({
                         className="h-9 w-9 p-0"
                         aria-label={
                             sortOrder === 'asc'
-                                ? 'Сортировка по убыванию'
-                                : 'Сортировка по возрастанию'
+                                ? tMapSidebar('sortDescending')
+                                : tMapSidebar('sortAscending')
                         }
                     >
                         <ArrowUpDown

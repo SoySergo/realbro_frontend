@@ -749,6 +749,8 @@
     "sortPrice": "Price",
     "sortArea": "Area",
     "sortDate": "Date",
+    "sortAscending": "Sort ascending",
+    "sortDescending": "Sort descending",
     "noResults": "No properties found",
     "loading": "Loading...",
     "objectsCount": "{count} properties",

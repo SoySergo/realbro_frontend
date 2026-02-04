@@ -814,6 +814,8 @@
     "sortPrice": "Цене",
     "sortArea": "Площади",
     "sortDate": "Дате",
+    "sortAscending": "Сортировка по возрастанию",
+    "sortDescending": "Сортировка по убыванию",
     "noResults": "Объекты не найдены",
     "loading": "Загрузка...",
     "objectsCount": "{count} объектов",
