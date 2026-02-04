@@ -495,7 +495,7 @@
     "sort": "Trier",
     "close": "Fermer",
     "bedrooms": "chambres",
-    "compare": "Comparer"
+    "compare": "Comparer",
     "favorites": "Favoris"
   },
   "isochrone": {
@@ -1058,6 +1058,7 @@
       "closeButton": "Fermer",
       "characterCount": "{current}/{max}"
     }
+  },
   "agency": {
     "title": "Agence immobilière",
     "agencies": "Agences immobilières",
@@ -1152,6 +1153,7 @@
     "uk": "Ukrainien",
     "zh": "Chinois",
     "ar": "Arabe"
+  },
   "comparison": {
     "title": "Comparer les biens",
     "subtitle": "biens sélectionnés",
@@ -1191,6 +1193,7 @@
     "yes": "Oui",
     "no": "Non",
     "notSpecified": "Non précisé"
+  },
   "authRequired": {
     "title": "Autorisation requise",
     "chat": {

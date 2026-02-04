@@ -518,7 +518,7 @@
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
     "sortByArea": "По площади",
-    "compare": "Сравнение"
+    "compare": "Сравнение",
     "favorites": "Избранное"
   },
   "isochrone": {
@@ -1070,6 +1070,7 @@
       "closeButton": "Закрыть",
       "characterCount": "{current}/{max}"
     }
+  },
   "agency": {
     "title": "Агентство недвижимости",
     "agencies": "Агентства недвижимости",
@@ -1164,6 +1165,7 @@
     "uk": "Украинский",
     "zh": "Китайский",
     "ar": "Арабский"
+  },
   "comparison": {
     "title": "Сравнение объектов",
     "subtitle": "выбрано объектов",
@@ -1203,6 +1205,7 @@
     "yes": "Да",
     "no": "Нет",
     "notSpecified": "Не указано"
+  },
   "authRequired": {
     "title": "Авторизация требуется",
     "chat": {

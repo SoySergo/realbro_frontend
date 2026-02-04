@@ -28,10 +28,8 @@ import {
 // Feature components
 import { PropertyContactBar, ContactModal, useContactStore } from '@/features/property-contact';
 import { PropertyActionsMenu } from '@/features/property-actions';
-import type { AuthorType } from '@/shared/api/contacts';
-import { PropertyContactBar } from '@/features/property-contact';
-import { PropertyActions } from '@/features/property-actions';
 import { PropertyCompareButton } from '@/features/comparison';
+import type { AuthorType } from '@/shared/api/contacts';
 
 /**
  * Convert AgentPropertyCard/SimilarPropertyCard to Property format
@@ -366,32 +364,19 @@ export function PropertyDetailWidget({
                                     property={property}
                                     className="w-full"
                                     actions={
-                                        <PropertyActionsMenu
-                                            propertyId={property.id}
-                                            propertyTitle={property.title}
-                                            variant="inline"
-                                            translations={actionsMenuTranslations}
-                                            onLike={handleLike}
-                                            onDislike={handleDislike}
-                                            onShare={handleShare}
-                                            onReport={handleReport}
-                                        />
-                                        <div className="flex items-center gap-1">
-                                            <PropertyCompareButton property={property} variant="full" size="sm" />
-                                            <PropertyActions
+                                        <>
+                                            <PropertyActionsMenu
                                                 propertyId={property.id}
-                                                variant="secondary"
-                                                className="gap-1"
-                                                translations={{
-                                                    addToFavorites: t.contact.addToFavorites,
-                                                    inFavorites: t.contact.inFavorites,
-                                                    share: t.contact.share,
-                                                    note: t.contact.note,
-                                                    pdf: t.contact.pdf,
-                                                    report: t.contact.report,
-                                                }}
+                                                propertyTitle={property.title}
+                                                variant="inline"
+                                                translations={actionsMenuTranslations}
+                                                onLike={handleLike}
+                                                onDislike={handleDislike}
+                                                onShare={handleShare}
+                                                onReport={handleReport}
                                             />
-                                        </div>
+                                            <PropertyCompareButton property={property} variant="full" size="sm" />
+                                        </>
                                     }
                                 />
                             </div>

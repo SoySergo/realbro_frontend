@@ -501,7 +501,7 @@
     "sortByDate": "By date",
     "sortByPrice": "By price",
     "sortByArea": "By area",
-    "compare": "Compare"
+    "compare": "Compare",
     "favorites": "Favorites"
   },
   "isochrone": {
@@ -1009,6 +1009,7 @@
       "closeButton": "Close",
       "characterCount": "{current}/{max}"
     }
+  },
   "agency": {
     "title": "Real Estate Agency",
     "agencies": "Real Estate Agencies",
@@ -1103,6 +1104,7 @@
     "uk": "Ukrainian",
     "zh": "Chinese",
     "ar": "Arabic"
+  },
   "comparison": {
     "title": "Compare Properties",
     "subtitle": "selected properties",
@@ -1142,6 +1144,7 @@
     "yes": "Yes",
     "no": "No",
     "notSpecified": "Not specified"
+  },
   "authRequired": {
     "title": "Authorization required",
     "chat": {
