@@ -518,7 +518,7 @@
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
     "sortByArea": "По площади",
-    "compare": "Сравнение"
+    "compare": "Сравнение",
     "favorites": "Избранное"
   },
   "isochrone": {
@@ -1022,6 +1022,55 @@
     "smokingAllowed": "Можно курить",
     "elevator": "Лифт"
   },
+  "contact": {
+    "title": "Контакты",
+    "loadingTitle": "Загружаем контакты...",
+    "authRequiredTitle": "Требуется авторизация",
+    "authRequiredDescription": "Войдите, чтобы связаться с агентом",
+    "authRequiredOwnerDescription": "Чтобы связаться с владельцем, пожалуйста, авторизуйтесь",
+    "limitExceededTitle": "Лимит исчерпан",
+    "limitExceededDescription": "Вы достигли дневного лимита просмотров контактов. Перейдите на более подходящий тариф для расширения возможностей.",
+    "loginButton": "Войти",
+    "upgradeButton": "Улучшить тариф",
+    "closeButton": "Закрыть",
+    "phone": "Телефон",
+    "showPhone": "Показать телефон",
+    "call": "Позвонить",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "email": "Email",
+    "website": "Веб-сайт",
+    "agencyProfile": "Профиль агентства",
+    "copySuccess": "Скопировано",
+    "owner": "Собственник",
+    "agent": "Агент",
+    "agency": "Агентство",
+    "limitInfo": "Использовано {current} из {max}"
+  },
+  "actions": {
+    "like": "Нравится",
+    "liked": "Добавлено в избранное",
+    "dislike": "Не нравится",
+    "disliked": "Скрыто из ленты",
+    "share": "Поделиться",
+    "copyLink": "Скопировать ссылку",
+    "linkCopied": "Ссылка скопирована",
+    "addNote": "Оставить заметку",
+    "editNote": "Редактировать заметку",
+    "noteSaved": "Заметка сохранена",
+    "downloadPdf": "Скачать PDF",
+    "report": "Пожаловаться",
+    "more": "Ещё",
+    "noteModal": {
+      "title": "Заметка",
+      "description": "Ваши личные заметки к объекту",
+      "placeholder": "Напишите заметку...",
+      "saveButton": "Сохранить",
+      "cancelButton": "Отмена",
+      "closeButton": "Закрыть",
+      "characterCount": "{current}/{max}"
+    }
+  },
   "agency": {
     "title": "Агентство недвижимости",
     "agencies": "Агентства недвижимости",
@@ -1116,6 +1165,7 @@
     "uk": "Украинский",
     "zh": "Китайский",
     "ar": "Арабский"
+  },
   "comparison": {
     "title": "Сравнение объектов",
     "subtitle": "выбрано объектов",
@@ -1155,6 +1205,7 @@
     "yes": "Да",
     "no": "Нет",
     "notSpecified": "Не указано"
+  },
   "authRequired": {
     "title": "Авторизация требуется",
     "chat": {

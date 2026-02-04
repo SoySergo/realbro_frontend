@@ -6,6 +6,7 @@ export * from './users';
 export * from './properties';
 export * from './search-queries';
 export * from './geometries';
+export * from './contacts';
 
 // Property detail mock/real API
 export {

@@ -1,5 +1,7 @@
 'use client';
 
+import { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
 import type { PropertyPageTranslations } from '@/shared/lib/get-property-translations';
@@ -24,9 +26,10 @@ import {
 } from '@/entities/property/ui';
 
 // Feature components
-import { PropertyContactBar } from '@/features/property-contact';
-import { PropertyActions } from '@/features/property-actions';
+import { PropertyContactBar, ContactModal, useContactStore } from '@/features/property-contact';
+import { PropertyActionsMenu } from '@/features/property-actions';
 import { PropertyCompareButton } from '@/features/comparison';
+import type { AuthorType } from '@/shared/api/contacts';
 
 /**
  * Convert AgentPropertyCard/SimilarPropertyCard to Property format
@@ -78,39 +81,106 @@ export function PropertyDetailWidget({
     similarProperties
 }: PropertyDetailWidgetProps) {
     const t = translations;
+    const tContact = useTranslations('contact');
+    const tActions = useTranslations('actions');
+    
+    // Contact store
+    const { openContactModal } = useContactStore();
 
-    const handleCall = () => {
-        if (property.author?.phone) {
-            window.location.href = `tel:${property.author.phone}`;
-        }
-    };
+    // Открыть модалку контактов
+    const handleOpenContacts = useCallback(() => {
+        if (!property.author) return;
+        
+        openContactModal({
+            propertyId: property.id,
+            authorId: property.author.id,
+            authorType: property.author.type as AuthorType,
+            authorName: property.author.name,
+            authorAvatar: property.author.avatar,
+        });
+    }, [property, openContactModal]);
 
-    const handleMessage = () => {
-        // TODO: Implement message functionality
-    };
+    const handleCall = useCallback(() => {
+        handleOpenContacts();
+    }, [handleOpenContacts]);
 
-    const handleToggleFavorite = (_id: string) => {
-        // TODO: Implement toggle favorite functionality
-    };
+    const handleMessage = useCallback(() => {
+        // TODO: Implement message functionality - открыть чат
+    }, []);
 
-    const handleShare = (_id: string) => {
-        // TODO: Implement share functionality
-    };
+    // Обработчики действий
+    const handleLike = useCallback((propertyId: string, isLiked: boolean) => {
+        console.log('[Property] Like toggled', { propertyId, isLiked });
+    }, []);
 
-    const handleLike = () => {
-        // TODO: Implement like functionality
-    };
+    const handleDislike = useCallback((propertyId: string, isDisliked: boolean) => {
+        console.log('[Property] Dislike toggled', { propertyId, isDisliked });
+    }, []);
 
-    const handleDislike = () => {
-        // TODO: Implement dislike functionality
-    };
+    const handleShare = useCallback((propertyId: string) => {
+        console.log('[Property] Shared', { propertyId });
+    }, []);
 
-    const handleMore = () => {
-        // TODO: Implement more options functionality
-    };
+    const handleReport = useCallback((propertyId: string) => {
+        console.log('[Property] Reported', { propertyId });
+        // TODO: Открыть модалку жалобы
+    }, []);
 
     // Calculate rating (mock based on ID for consistency)
     const mockRating = 4.5 + (property.id.length % 5) / 10;
+    
+    // Переводы для модалки контактов
+    const contactModalTranslations = {
+        title: tContact('title'),
+        loadingTitle: tContact('loadingTitle'),
+        authRequiredTitle: tContact('authRequiredTitle'),
+        authRequiredDescription: tContact('authRequiredDescription'),
+        authRequiredOwnerDescription: tContact('authRequiredOwnerDescription'),
+        limitExceededTitle: tContact('limitExceededTitle'),
+        limitExceededDescription: tContact('limitExceededDescription'),
+        loginButton: tContact('loginButton'),
+        upgradeButton: tContact('upgradeButton'),
+        closeButton: tContact('closeButton'),
+        phone: tContact('phone'),
+        showPhone: tContact('showPhone'),
+        call: tContact('call'),
+        whatsapp: tContact('whatsapp'),
+        telegram: tContact('telegram'),
+        email: tContact('email'),
+        website: tContact('website'),
+        agencyProfile: tContact('agencyProfile'),
+        copySuccess: tContact('copySuccess'),
+        owner: tContact('owner'),
+        agent: tContact('agent'),
+        agency: tContact('agency'),
+        limitInfo: tContact('limitInfo'),
+    };
+    
+    // Переводы для действий
+    const actionsMenuTranslations = {
+        like: tActions('like'),
+        liked: tActions('liked'),
+        dislike: tActions('dislike'),
+        disliked: tActions('disliked'),
+        share: tActions('share'),
+        copyLink: tActions('copyLink'),
+        linkCopied: tActions('linkCopied'),
+        addNote: tActions('addNote'),
+        editNote: tActions('editNote'),
+        noteSaved: tActions('noteSaved'),
+        downloadPdf: tActions('downloadPdf'),
+        report: tActions('report'),
+        more: tActions('more'),
+        noteModal: {
+            title: tActions('noteModal.title'),
+            description: tActions('noteModal.description'),
+            placeholder: tActions('noteModal.placeholder'),
+            saveButton: tActions('noteModal.saveButton'),
+            cancelButton: tActions('noteModal.cancelButton'),
+            closeButton: tActions('noteModal.closeButton'),
+            characterCount: tActions('noteModal.characterCount'),
+        },
+    };
 
     // Prepare translations for SEO-critical components
     const characteristicsTranslations = {
@@ -294,22 +364,19 @@ export function PropertyDetailWidget({
                                     property={property}
                                     className="w-full"
                                     actions={
-                                        <div className="flex items-center gap-1">
-                                            <PropertyCompareButton property={property} variant="full" size="sm" />
-                                            <PropertyActions
+                                        <>
+                                            <PropertyActionsMenu
                                                 propertyId={property.id}
-                                                variant="secondary"
-                                                className="gap-1"
-                                                translations={{
-                                                    addToFavorites: t.contact.addToFavorites,
-                                                    inFavorites: t.contact.inFavorites,
-                                                    share: t.contact.share,
-                                                    note: t.contact.note,
-                                                    pdf: t.contact.pdf,
-                                                    report: t.contact.report,
-                                                }}
+                                                propertyTitle={property.title}
+                                                variant="inline"
+                                                translations={actionsMenuTranslations}
+                                                onLike={handleLike}
+                                                onDislike={handleDislike}
+                                                onShare={handleShare}
+                                                onReport={handleReport}
                                             />
-                                        </div>
+                                            <PropertyCompareButton property={property} variant="full" size="sm" />
+                                        </>
                                     }
                                 />
                             </div>
@@ -418,8 +485,8 @@ export function PropertyDetailWidget({
                             locale={locale}
                             onCall={handleCall}
                             onMessage={handleMessage}
-                            onLike={handleLike}
-                            onDislike={handleDislike}
+                            onLike={() => handleLike(property.id, true)}
+                            onDislike={() => handleDislike(property.id, true)}
                             onShare={() => handleShare(property.id)}
                             author={property.author}
                         />
@@ -473,11 +540,23 @@ export function PropertyDetailWidget({
                 }}
                 onCall={handleCall}
                 onMessage={handleMessage}
-                onLike={handleLike}
-                onDislike={handleDislike}
-                onMore={handleMore}
                 className="lg:hidden"
+                actionsSlot={
+                    <PropertyActionsMenu
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                        variant="compact"
+                        translations={actionsMenuTranslations}
+                        onLike={handleLike}
+                        onDislike={handleDislike}
+                        onShare={handleShare}
+                        onReport={handleReport}
+                    />
+                }
             />
+            
+            {/* Contact Modal */}
+            <ContactModal translations={contactModalTranslations} />
         </div>
     );
 }

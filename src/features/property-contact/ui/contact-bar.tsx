@@ -22,6 +22,8 @@ interface PropertyContactBarProps {
     onMore?: () => void;
     className?: string;
     variant?: 'default' | 'sticky';
+    /** Слот для кастомных действий (например PropertyActionsMenu) */
+    actionsSlot?: React.ReactNode;
 }
 
 export function PropertyContactBar({
@@ -33,7 +35,8 @@ export function PropertyContactBar({
     onDislike,
     onMore,
     className,
-    variant = 'default'
+    variant = 'default',
+    actionsSlot,
 }: PropertyContactBarProps) {
     const t = translations;
 
@@ -65,29 +68,36 @@ export function PropertyContactBar({
                         {t.contact}
                     </button>
 
-                    <div className="flex items-center gap-2">
-                         <button
-                            onClick={onLike}
-                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t.like}
-                        >
-                            <ThumbsUp className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={onDislike}
-                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t.dislike}
-                        >
-                            <ThumbsDown className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={onMore}
-                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
-                            aria-label={t.showMore}
-                        >
-                            <MoreHorizontal className="w-5 h-5" />
-                        </button>
-                    </div>
+                    {/* Слот для действий или дефолтные кнопки */}
+                    {actionsSlot ? (
+                        <div className="flex items-center">
+                            {actionsSlot}
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                             <button
+                                onClick={onLike}
+                                className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                                aria-label={t.like}
+                            >
+                                <ThumbsUp className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={onDislike}
+                                className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                                aria-label={t.dislike}
+                            >
+                                <ThumbsDown className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={onMore}
+                                className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-input text-muted-foreground hover:text-foreground hover:bg-muted transition-all active:scale-95"
+                                aria-label={t.showMore}
+                            >
+                                <MoreHorizontal className="w-5 h-5" />
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         );

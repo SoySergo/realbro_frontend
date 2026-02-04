@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider, ComparisonBarProvider } from "@/app/providers";
+import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider, SimpleToastProvider, ComparisonBarProvider } from "@/app/providers";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
@@ -69,6 +69,16 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <NextIntlClientProvider messages={messages}>
                         <AuthProvider>
                             <WebSocketProvider>
+                                <SimpleToastProvider>
+                                    <AuthErrorHandler />
+                                    {/* Sidebar (Desktop + Mobile) */}
+                                    <Sidebar />
+                                    {children}
+                                    {/* Auth Modals */}
+                                    <AuthModals />
+                                    {/* Global Toast Notifications */}
+                                    <GlobalToastProvider />
+                                </SimpleToastProvider>
                                 <AuthErrorHandler />
                                 {/* Sidebar (Desktop + Mobile) */}
                                 <Sidebar />
