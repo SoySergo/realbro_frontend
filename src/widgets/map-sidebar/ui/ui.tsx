@@ -189,22 +189,6 @@ export function MapSidebar({
         setProperties([]);
     }, [sortBy, sortOrder, currentFilters, clusterId]);
 
-    // Infinite scroll handler
-    const handleScroll = useCallback(
-        (e: React.UIEvent<HTMLDivElement>) => {
-            const target = e.currentTarget;
-            const scrollPercentage =
-                (target.scrollTop + target.clientHeight) / target.scrollHeight;
-
-            if (scrollPercentage > 0.8 && hasMore && !isLoading) {
-                const nextPage = page + 1;
-                setPage(nextPage);
-                fetchProperties(nextPage, true);
-            }
-        },
-        [hasMore, isLoading, page, fetchProperties]
-    );
-
     const handleSortChange = (value: string) => {
         setSortBy(value as PropertySortBy);
     };
@@ -357,27 +341,34 @@ export function MapSidebar({
 
             {/* Виртуализированный список карточек */}
             {properties.length > 0 && (
-                <div className="flex-1 min-h-0" onScroll={handleScroll}>
-                    <List
-                        listRef={listRef}
-                        rowCount={properties.length}
-                        rowHeight={ITEM_HEIGHT}
-                        className="scrollbar-thin"
-                        style={{ height: '100%' }}
-                        rowComponent={PropertyRow}
-                        rowProps={{
-                            properties,
-                            selectedPropertyId: selectedPropertyId ?? null,
-                            onPropertyClick: handlePropertyClick,
-                            onPropertyHover: handlePropertyHover,
-                        }}
-                    />
-                    {/* Loading indicator для infinite scroll */}
-                    {isLoading && properties.length > 0 && (
-                        <div className="flex justify-center p-4">
-                            <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                        </div>
-                    )}
+                <List
+                    listRef={listRef}
+                    rowCount={properties.length}
+                    rowHeight={ITEM_HEIGHT}
+                    className="scrollbar-thin flex-1"
+                    style={{ height: '100%' }}
+                    rowComponent={PropertyRow}
+                    rowProps={{
+                        properties,
+                        selectedPropertyId: selectedPropertyId ?? null,
+                        onPropertyClick: handlePropertyClick,
+                        onPropertyHover: handlePropertyHover,
+                    }}
+                    onScroll={({ scrollTop, scrollHeight, clientHeight }: { scrollTop: number; scrollHeight: number; clientHeight: number }) => {
+                        const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+                        if (scrollPercentage > 0.8 && hasMore && !isLoading) {
+                            const nextPage = page + 1;
+                            setPage(nextPage);
+                            fetchProperties(nextPage, true);
+                        }
+                    }}
+                />
+            )}
+
+            {/* Loading indicator для infinite scroll */}
+            {isLoading && properties.length > 0 && (
+                <div className="flex justify-center p-4 shrink-0">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
                 </div>
             )}
 
