@@ -816,7 +816,8 @@
     "sortDate": "Дате",
     "noResults": "Объекты не найдены",
     "loading": "Загрузка...",
-    "objectsCount": "{count} объектов"
+    "objectsCount": "{count} объектов",
+    "changeSearchArea": "Измените область поиска на карте"
   },
   "amenities": {
     "wifi": "Wi-Fi",

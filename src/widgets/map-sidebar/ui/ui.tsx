@@ -11,7 +11,6 @@ import {
     ChevronRight,
     MapPin,
     X,
-    Map as MapIcon,
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import {
@@ -378,7 +377,7 @@ export function MapSidebar({
                     <div className="text-center py-12 text-muted-foreground">
                         <MapPin className="w-12 h-12 mx-auto mb-3 opacity-30" />
                         <p className="text-sm">{tMapSidebar('noResults')}</p>
-                        <p className="text-xs mt-1">Измените область поиска на карте</p>
+                        <p className="text-xs mt-1">{tMapSidebar('changeSearchArea')}</p>
                     </div>
                 </div>
             )}

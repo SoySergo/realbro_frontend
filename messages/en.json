@@ -751,7 +751,8 @@
     "sortDate": "Date",
     "noResults": "No properties found",
     "loading": "Loading...",
-    "objectsCount": "{count} properties"
+    "objectsCount": "{count} properties",
+    "changeSearchArea": "Change the search area on the map"
   },
   "amenities": {
     "wifi": "Wi-Fi",
