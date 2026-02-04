@@ -28,6 +28,16 @@ export type {
     NearbyPlaceCategory,
 } from './mocks/property-detail';
 
+// Agency mock/real API
+export {
+    getAgencyById,
+    getAgencyBySlug,
+    getAgenciesList,
+    getAgencyProperties,
+    getAgencyReviews,
+    searchAgenciesByPhone,
+} from './mocks/agencies';
+
 // Server-only exports (use direct import for Server Components)
 export {
     getPropertiesListServer,

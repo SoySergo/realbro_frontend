@@ -1,0 +1,65 @@
+{
+    "id": "user_123456",
+    "email": "user@example.com",
+    "role": "user",
+    "is_active": true,
+    "settings": {
+        "language": "ru",
+        "theme": "system",
+        "display_name": "Иван Петров",
+        "notifications_email": true,
+        "notifications_push": true,
+        "currency": "EUR",
+        "timezone": "Europe/Madrid",
+        "notifications": {
+            "email": {
+                "newProperties": true,
+                "priceChanges": true,
+                "savedSearches": true,
+                "promotions": false,
+                "accountUpdates": true
+            },
+            "push": {
+                "newProperties": true,
+                "priceChanges": false,
+                "savedSearches": true,
+                "messages": true
+            },
+            "telegram": {
+                "enabled": false,
+                "newProperties": false,
+                "priceChanges": false
+            }
+        }
+    },
+    "subscription": {
+        "id": "sub_abc123",
+        "planId": "standard",
+        "status": "active",
+        "currentPeriodStart": "2024-01-15T00:00:00Z",
+        "currentPeriodEnd": "2024-02-15T00:00:00Z",
+        "cancelAtPeriodEnd": false,
+        "createdAt": "2024-01-15T10:30:00Z"
+    },
+    "paymentMethods": [
+        {
+            "id": "pm_card_001",
+            "type": "card",
+            "isDefault": true,
+            "card": {
+                "brand": "visa",
+                "last4": "4242",
+                "expiryMonth": 12,
+                "expiryYear": 2025
+            },
+            "createdAt": "2024-01-15T10:30:00Z"
+        }
+    ],
+    "stats": {
+        "savedProperties": 24,
+        "savedSearches": 5,
+        "viewedProperties": 156
+    },
+    "created_at": "2023-06-10T08:00:00Z",
+    "updated_at": "2024-01-20T14:30:00Z"
+}
