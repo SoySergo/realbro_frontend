@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { PropertyNoteDialog } from '@/features/property-note';
 import type { Property } from '../../model/types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
@@ -42,6 +43,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [isHovering, setIsHovering] = useState(false);
     const [likeAnimating, setLikeAnimating] = useState(false);
     const [dislikeAnimating, setDislikeAnimating] = useState(false);
+    const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
 
     const mockProperty = useMemo(
@@ -328,7 +330,10 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             {/* Слот для дополнительных пунктов меню */}
                             {menuItems}
                             <DropdownMenuItem
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsNoteDialogOpen(true);
+                                }}
                                 className="gap-2 cursor-pointer"
                             >
                                 <StickyNote className="w-4 h-4" />
@@ -352,6 +357,14 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                     </DropdownMenu>
                 </div>
             </div>
+
+            {/* Диалог заметки */}
+            <PropertyNoteDialog
+                propertyId={property.id}
+                propertyTitle={property.title}
+                isOpen={isNoteDialogOpen}
+                onClose={() => setIsNoteDialogOpen(false)}
+            />
         </div>
     );
 }

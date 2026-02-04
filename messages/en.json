@@ -1162,10 +1162,81 @@
   },
   "favorites": {
     "title": "Favorites",
+    "tabs": {
+      "properties": "Properties",
+      "professionals": "Professionals",
+      "filters": "Filters",
+      "notes": "Notes"
+    },
     "empty": {
       "title": "Nothing here yet",
-      "description": "Add properties you like to favorites to come back to them later"
+      "description": "Add properties you like to favorites to come back to them later",
+      "professionals": {
+        "title": "No saved professionals",
+        "description": "Add realtors and agencies you like to favorites"
+      },
+      "filters": {
+        "title": "No saved filters",
+        "description": "Save your search settings for quick access"
+      },
+      "notes": {
+        "title": "No notes",
+        "description": "Create notes for properties and set reminders"
+      }
     },
-    "count": "{count} properties"
+    "count": "{count} properties",
+    "notes": {
+      "title": "Notes & Reminders",
+      "addNote": "Add note",
+      "editNote": "Edit note",
+      "deleteNote": "Delete note",
+      "placeholder": "Enter your note...",
+      "reminder": "Reminder",
+      "setReminder": "Set reminder",
+      "removeReminder": "Remove reminder",
+      "reminderSet": "Reminder set for {date}",
+      "noReminder": "No reminder",
+      "saveNote": "Save note",
+      "cancel": "Cancel",
+      "noteCreated": "Note created",
+      "noteUpdated": "Note updated",
+      "noteDeleted": "Note deleted",
+      "reminderPresets": {
+        "in1Hour": "In 1 hour",
+        "in3Hours": "In 3 hours",
+        "tomorrow": "Tomorrow",
+        "in3Days": "In 3 days",
+        "inWeek": "In a week"
+      },
+      "today": "Today",
+      "tomorrowLabel": "Tomorrow",
+      "rooms": "rooms",
+      "minutes": "min",
+      "km": "km"
+    },
+    "professionals": {
+      "title": "Professionals",
+      "agent": "Agent",
+      "agency": "Agency",
+      "owner": "Owner",
+      "activeListings": "{count} active listings",
+      "verified": "Verified",
+      "superAgent": "Super agent",
+      "yearsOnPlatform": "{count} years on platform",
+      "contact": "Contact",
+      "remove": "Remove from favorites"
+    },
+    "filters": {
+      "title": "Saved Filters",
+      "applyFilter": "Apply",
+      "deleteFilter": "Delete",
+      "editFilter": "Edit",
+      "lastUsed": "Last used: {date}",
+      "propertiesCount": "{count} properties found"
+    },
+    "authPrompt": {
+      "title": "Sign in to save",
+      "description": "Sign in to save favorites and sync across devices"
+    }
   }
 }
