@@ -112,7 +112,7 @@ export function ComparisonPanel({
         {
             key: 'pricePerMeter',
             label: t.pricePerMeter,
-            getValue: (p) => p.pricePerMeter ?? Math.round(p.price / p.area),
+            getValue: (p) => p.pricePerMeter ?? (p.area > 0 ? Math.round(p.price / p.area) : null),
             format: 'price',
             highlight: 'min',
             suffix: `€/${t.sqm}`,
@@ -162,7 +162,7 @@ export function ComparisonPanel({
         {
             key: 'elevator',
             label: t.elevator,
-            getValue: (p) => p.elevator ?? p.building?.elevatorPassenger != null,
+            getValue: (p) => p.elevator ?? (p.building?.elevatorPassenger != null && p.building.elevatorPassenger > 0),
             format: 'boolean',
             highlight: 'boolean',
         },
@@ -197,7 +197,12 @@ export function ComparisonPanel({
         {
             key: 'parking',
             label: t.parking,
-            getValue: (p) => p.features?.includes('parking') || (p.building?.parkingType && p.building.parkingType !== 'none'),
+            getValue: (p) => {
+                // Проверяем наличие парковки через features или building.parkingType
+                const hasFeatureParking = p.features?.includes('parking') ?? false;
+                const hasBuildingParking = p.building?.parkingType != null && p.building.parkingType !== 'none';
+                return hasFeatureParking || hasBuildingParking;
+            },
             format: 'boolean',
             highlight: 'boolean',
         },

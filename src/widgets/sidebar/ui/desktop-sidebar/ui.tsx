@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { Search, MessageCircle, User, Settings, Plus, LogIn } from 'lucide-react';
+import { Search, MessageCircle, User, Settings, Plus, LogIn, GitCompareArrows } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Separator } from '@/shared/ui/separator';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
 import { useAuth } from '@/features/auth';
 import { useChatStore } from '@/features/chat-messages';
+import { useComparisonCount } from '@/features/comparison';
 import { DesktopQueryItem } from '../desktop-query-item';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/shared/config/routing';
@@ -18,6 +19,7 @@ import Image from 'next/image';
 // Навигационные элементы
 const navigationItems = [
     { id: 'search', icon: Search, labelKey: 'search', href: '/search' },
+    { id: 'compare', icon: GitCompareArrows, labelKey: 'compare', href: '/compare' },
     { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat' },
     { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' },
     { id: 'settings', icon: Settings, labelKey: 'settings', href: '/settings' },
@@ -28,6 +30,7 @@ export function DesktopSidebar() {
     const tAuth = useTranslations('auth');
     const { isAuthenticated } = useAuth();
     const chatUnread = useChatStore((s) => s.totalUnread());
+    const comparisonCount = useComparisonCount();
     const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
@@ -310,6 +313,18 @@ export function DesktopSidebar() {
                                         )}
                                     >
                                         {chatUnread > 9 ? '9+' : chatUnread}
+                                    </span>
+                                )}
+                                {item.id === 'compare' && isMounted && comparisonCount > 0 && (
+                                    <span
+                                        className={cn(
+                                            'absolute w-5 h-5 rounded-full',
+                                            'bg-brand-primary text-white text-xs font-bold',
+                                            'flex items-center justify-center',
+                                            isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
+                                        )}
+                                    >
+                                        {comparisonCount}
                                     </span>
                                 )}
                             </Link>

@@ -386,7 +386,8 @@
     "clickListToView": "Нажмите на \"Список\" для просмотра объектов",
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
-    "sortByArea": "По площади"
+    "sortByArea": "По площади",
+    "compare": "Сравнение"
   },
   "isochrone": {
     "title": "Время в пути",

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { CompareButton } from './compare-button';
 import { GitCompareArrows, Check } from 'lucide-react';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
+import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
 import type { Property } from '@/entities/property';
 
@@ -88,9 +89,13 @@ export function PropertyCompareMenuItem({
     return (
         <DropdownMenuItem
             onClick={handleClick}
-            className={`gap-2 cursor-pointer ${isInComparison ? 'text-brand-primary' : ''} ${className || ''}`}
+            className={cn(
+                'gap-2 cursor-pointer',
+                isInComparison && 'text-brand-primary',
+                className
+            )}
         >
-            <Icon className={`w-4 h-4 ${isInComparison ? 'fill-current' : ''}`} />
+            <Icon className={cn('w-4 h-4', isInComparison && 'fill-current')} />
             {label}
         </DropdownMenuItem>
     );

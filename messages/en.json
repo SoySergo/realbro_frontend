@@ -369,7 +369,8 @@
     "clickListToView": "Click \"List\" to view properties",
     "sortByDate": "By date",
     "sortByPrice": "By price",
-    "sortByArea": "By area"
+    "sortByArea": "By area",
+    "compare": "Compare"
   },
   "isochrone": {
     "title": "Travel Time",

@@ -363,7 +363,8 @@
     "filters": "Filtres",
     "sort": "Trier",
     "close": "Fermer",
-    "bedrooms": "chambres"
+    "bedrooms": "chambres",
+    "compare": "Comparer"
   },
   "isochrone": {
     "title": "Temps de trajet",

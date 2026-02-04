@@ -62,8 +62,9 @@ export const CompareButton = React.memo(function CompareButton({
             return;
         }
 
-        // Добавляем в сравнение
-        const added = toggleComparison(property);
+        // Добавляем в сравнение (используем addToComparison напрямую для ясности)
+        const { addToComparison } = useComparisonStore.getState();
+        const added = addToComparison(property);
         if (added) {
             setIsAnimating(true);
             setTimeout(() => setIsAnimating(false), 300);
