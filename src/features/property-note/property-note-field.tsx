@@ -90,11 +90,11 @@ export function PropertyNoteField({
 
     // Предустановленные даты для напоминаний
     const reminderPresets = [
-        { label: 'Через 1 час', hours: 1 },
-        { label: 'Через 3 часа', hours: 3 },
-        { label: 'Завтра', hours: 24 },
-        { label: 'Через 3 дня', hours: 72 },
-        { label: 'Через неделю', hours: 168 },
+        { label: t('reminderPresets.in1Hour'), hours: 1 },
+        { label: t('reminderPresets.in3Hours'), hours: 3 },
+        { label: t('reminderPresets.tomorrow'), hours: 24 },
+        { label: t('reminderPresets.in3Days'), hours: 72 },
+        { label: t('reminderPresets.inWeek'), hours: 168 },
     ];
 
     const handleSetReminder = (hours: number) => {

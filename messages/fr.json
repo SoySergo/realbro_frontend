@@ -1105,7 +1105,19 @@
       "cancel": "Annuler",
       "noteCreated": "Note créée",
       "noteUpdated": "Note mise à jour",
-      "noteDeleted": "Note supprimée"
+      "noteDeleted": "Note supprimée",
+      "reminderPresets": {
+        "in1Hour": "Dans 1 heure",
+        "in3Hours": "Dans 3 heures",
+        "tomorrow": "Demain",
+        "in3Days": "Dans 3 jours",
+        "inWeek": "Dans une semaine"
+      },
+      "today": "Aujourd'hui",
+      "tomorrowLabel": "Demain",
+      "rooms": "pièces",
+      "minutes": "min",
+      "km": "km"
     },
     "professionals": {
       "title": "Professionnels",

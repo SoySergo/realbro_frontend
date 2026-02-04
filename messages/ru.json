@@ -1117,7 +1117,19 @@
       "cancel": "Отмена",
       "noteCreated": "Заметка создана",
       "noteUpdated": "Заметка обновлена",
-      "noteDeleted": "Заметка удалена"
+      "noteDeleted": "Заметка удалена",
+      "reminderPresets": {
+        "in1Hour": "Через 1 час",
+        "in3Hours": "Через 3 часа",
+        "tomorrow": "Завтра",
+        "in3Days": "Через 3 дня",
+        "inWeek": "Через неделю"
+      },
+      "today": "Сегодня",
+      "tomorrowLabel": "Завтра",
+      "rooms": "комн.",
+      "minutes": "мин",
+      "km": "км"
     },
     "professionals": {
       "title": "Профессионалы",

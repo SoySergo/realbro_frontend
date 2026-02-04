@@ -1056,7 +1056,19 @@
       "cancel": "Cancel",
       "noteCreated": "Note created",
       "noteUpdated": "Note updated",
-      "noteDeleted": "Note deleted"
+      "noteDeleted": "Note deleted",
+      "reminderPresets": {
+        "in1Hour": "In 1 hour",
+        "in3Hours": "In 3 hours",
+        "tomorrow": "Tomorrow",
+        "in3Days": "In 3 days",
+        "inWeek": "In a week"
+      },
+      "today": "Today",
+      "tomorrowLabel": "Tomorrow",
+      "rooms": "rooms",
+      "minutes": "min",
+      "km": "km"
     },
     "professionals": {
       "title": "Professionals",

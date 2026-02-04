@@ -35,6 +35,7 @@ export function FavoritesNotesTab({
     onEdit 
 }: FavoritesNotesTabProps) {
     const t = useTranslations('favorites');
+    const tNotes = useTranslations('favorites.notes');
     const locale = useLocale();
 
     const formatDate = (date: Date) => {
@@ -49,8 +50,8 @@ export function FavoritesNotesTab({
         const isToday = reminderDate.toDateString() === now.toDateString();
         const isTomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toDateString() === reminderDate.toDateString();
         
-        if (isToday) return 'Сегодня';
-        if (isTomorrow) return 'Завтра';
+        if (isToday) return tNotes('today');
+        if (isTomorrow) return tNotes('tomorrowLabel');
         return format(reminderDate, 'd MMM yyyy', { 
             locale: dateLocales[locale] || enUS 
         });

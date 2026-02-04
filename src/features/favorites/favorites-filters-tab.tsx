@@ -35,6 +35,7 @@ export function FavoritesFiltersTab({
     onEdit 
 }: FavoritesFiltersTabProps) {
     const t = useTranslations('favorites');
+    const tNotes = useTranslations('favorites.notes');
     const locale = useLocale();
 
     const formatDate = (date: Date) => {
@@ -90,20 +91,20 @@ export function FavoritesFiltersTab({
                                 {filter.filters.roomsMin && (
                                     <Badge variant="secondary" className="text-xs">
                                         <Home className="w-3 h-3 mr-1" />
-                                        {`${filter.filters.roomsMin}+ комн.`}
+                                        {`${filter.filters.roomsMin}+ ${tNotes('rooms')}`}
                                     </Badge>
                                 )}
                                 {filter.filters.areaMin && (
                                     <Badge variant="secondary" className="text-xs">
-                                        {`≥ ${filter.filters.areaMin} м²`}
+                                        {`≥ ${filter.filters.areaMin} m²`}
                                     </Badge>
                                 )}
                                 {filter.location && (
                                     <Badge variant="outline" className="text-xs">
                                         <MapPin className="w-3 h-3 mr-1" />
                                         {filter.location.type === 'search' && filter.location.places?.[0]?.name}
-                                        {filter.location.type === 'isochrone' && `${filter.location.isochrone?.minutes} мин`}
-                                        {filter.location.type === 'radius' && `${filter.location.radius?.radiusKm} км`}
+                                        {filter.location.type === 'isochrone' && `${filter.location.isochrone?.minutes} ${tNotes('minutes')}`}
+                                        {filter.location.type === 'radius' && `${filter.location.radius?.radiusKm} ${tNotes('km')}`}
                                     </Badge>
                                 )}
                             </div>
