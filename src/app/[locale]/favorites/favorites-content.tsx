@@ -16,7 +16,7 @@ export function FavoritesContent() {
     // Пока инициализируемся - показываем скелетон
     if (!isInitialized) {
         return (
-            <div className="p-4 md:p-6">
+            <div className="p-4 md:p-6" aria-busy="true" aria-label={t('title')}>
                 <div className="animate-pulse">
                     <div className="h-8 bg-background-secondary rounded w-48 mb-6" />
                     <div className="h-32 bg-background-secondary rounded mb-4" />
