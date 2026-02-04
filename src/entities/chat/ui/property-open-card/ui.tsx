@@ -4,11 +4,29 @@ import React, { useRef, useState } from 'react';
 import { 
     MapPin, Bed, Bath, Maximize, Train, Bus, 
     ChevronLeft, ChevronRight, Wifi, Snowflake, 
-    Car, Sofa, Dumbbell, Waves, Trees
+    Car, Sofa, Dumbbell, Waves, Trees, Phone
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
 import type { Property, PropertyFeature } from '@/entities/property';
+
+export interface PropertyCardLabels {
+    perMonth?: string;
+    rooms?: string;
+    bedrooms?: string;
+    bathrooms?: string;
+    floor?: string;
+    walkMin?: string;
+    contact?: string;
+    notViewed?: string;
+    viewedGroup?: string;
+    notViewedGroup?: string;
+    today?: string;
+    yesterday?: string;
+    live?: string;
+    objects?: string;
+}
 
 interface PropertyOpenCardProps {
     property: Property;
@@ -16,6 +34,8 @@ interface PropertyOpenCardProps {
     actions?: React.ReactNode;
     className?: string;
     isNew?: boolean;
+    labels?: PropertyCardLabels;
+    onContact?: (propertyId: string) => void;
 }
 
 const featureIcons: Partial<Record<PropertyFeature, React.ElementType>> = {
@@ -25,17 +45,6 @@ const featureIcons: Partial<Record<PropertyFeature, React.ElementType>> = {
     elevator: Dumbbell,
     pool: Waves,
     garden: Trees,
-};
-
-const featureLabels: Partial<Record<PropertyFeature, string>> = {
-    airConditioning: 'Кондиционер',
-    parking: 'Парковка',
-    furnished: 'Мебель',
-    elevator: 'Лифт',
-    pool: 'Бассейн',
-    garden: 'Сад',
-    balcony: 'Балкон',
-    terrace: 'Терраса',
 };
 
 /**
@@ -49,10 +58,22 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
     actions,
     className,
     isNew = false,
+    labels = {},
+    onContact,
 }: PropertyOpenCardProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const images = property.images || [];
+
+    // Значения по умолчанию для меток
+    const {
+        perMonth = '/мес',
+        bedrooms = 'спальни',
+        bathrooms = 'ванные',
+        floor = 'эт.',
+        walkMin = 'мин пешком',
+        contact = 'Связаться',
+    } = labels;
 
     const scrollImages = (direction: 'left' | 'right') => {
         const el = scrollRef.current;
@@ -87,6 +108,12 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
         });
         
         setCurrentImageIndex(closestIndex);
+    };
+
+    const handleContact = () => {
+        if (onContact) {
+            onContact(property.id);
+        }
     };
 
     const TransportIcon = property.nearbyTransport?.type === 'bus' ? Bus : Train;
@@ -177,7 +204,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                              {property.title}
                          </h3>
                          {filterName && (
-                             <div className="text-[10px] font-semibold text-brand-primary uppercase tracking-wide bg-brand-secondary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
+                             <div className="text-[10px] font-semibold text-brand-primary uppercase tracking-wide bg-brand-primary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
                                  {filterName}
                              </div>
                          )}
@@ -191,7 +218,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                 {/* 2. Price Section (Below Title/Address) */}
                 <div className="flex items-baseline gap-2">
                      <div className="text-2xl font-bold text-text-primary">
-                         {property.price.toLocaleString()} €
+                         {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{perMonth}</span>
                      </div>
                      {property.pricePerMeter && (
                         <div className="text-sm text-text-tertiary">
@@ -201,51 +228,92 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                 </div>
 
                 {/* 3. Key Stats Row - Minimalist (No separators) */}
-                <div className="flex items-center gap-6 py-1">
+                <div className="flex flex-wrap items-center gap-4 md:gap-6 py-1">
                     <div className="flex items-center gap-2">
                         <Maximize className="w-4 h-4 text-text-tertiary" />
                         <span className="text-sm font-medium text-text-secondary">{property.area} m²</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                         <Bed className="w-4 h-4 text-text-tertiary" />
-                         <span className="text-sm font-medium text-text-secondary">{property.rooms} спальни</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                         <Bath className="w-4 h-4 text-text-tertiary" />
-                         <span className="text-sm font-medium text-text-secondary">{property.bathrooms} ванные</span>
-                    </div>
+                    {property.rooms > 0 && (
+                        <div className="flex items-center gap-2">
+                             <Bed className="w-4 h-4 text-text-tertiary" />
+                             <span className="text-sm font-medium text-text-secondary">{property.rooms} {bedrooms}</span>
+                        </div>
+                    )}
+                    {property.bathrooms > 0 && (
+                        <div className="flex items-center gap-2">
+                             <Bath className="w-4 h-4 text-text-tertiary" />
+                             <span className="text-sm font-medium text-text-secondary">{property.bathrooms} {bathrooms}</span>
+                        </div>
+                    )}
+                    {property.floor && property.totalFloors && (
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-text-secondary">
+                                {property.floor}/{property.totalFloors} {floor}
+                            </span>
+                        </div>
+                    )}
                 </div>
 
-                {/* 4. Tags / Amenities */}
-                <div className="flex flex-wrap gap-1.5">
-                    {displayFeatures.map((feature) => {
-                        const Icon = featureIcons[feature] || Wifi;
-                        const label = featureLabels[feature] || feature.replace(/([A-Z])/g, ' $1').trim();
-                        return (
-                            <div 
-                                key={feature} 
-                                className="flex items-center gap-1 text-[10px] md:text-xs text-text-secondary bg-background-secondary/40 px-2.5 py-1.5 rounded-lg"
-                            >
-                                <Icon className="w-3.5 h-3.5 shrink-0 text-text-tertiary" />
-                                <span className="capitalize">{label}</span>
-                            </div>
-                        );
-                    })}
-                </div>
+                {/* 4. Transport info */}
+                {property.nearbyTransport && (
+                    <div className="flex items-center gap-2 py-1">
+                        <TransportIcon className="w-4 h-4 text-text-tertiary" />
+                        <span
+                            className="w-3 h-3 rounded-full shrink-0"
+                            style={{ backgroundColor: property.nearbyTransport.color || '#6c757d' }}
+                        />
+                        <span className="text-sm text-text-secondary">
+                            {property.nearbyTransport.name}
+                        </span>
+                        <span className="text-sm text-text-tertiary">
+                            • {property.nearbyTransport.walkMinutes} {walkMin}
+                        </span>
+                    </div>
+                )}
 
-                {/* 5. Description */}
+                {/* 5. Tags / Amenities */}
+                {displayFeatures.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                        {displayFeatures.map((feature) => {
+                            const Icon = featureIcons[feature] || Wifi;
+                            return (
+                                <div 
+                                    key={feature} 
+                                    className="flex items-center gap-1 text-[10px] md:text-xs text-text-secondary bg-background-secondary/40 px-2.5 py-1.5 rounded-lg"
+                                >
+                                    <Icon className="w-3.5 h-3.5 shrink-0 text-text-tertiary" />
+                                    <span className="capitalize">{feature}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* 6. Description */}
                 {property.description && (
-                    <p className="text-xs md:text-sm text-text-secondary leading-relaxed text-justify line-clamp-3">
+                    <p className="text-xs md:text-sm text-text-secondary leading-relaxed line-clamp-3">
                         {property.description}
                     </p>
                 )}
 
-                {/* 6. Actions (Aligned Left & Larger) */}
-                {actions && (
-                    <div className="flex justify-start pt-2 [&>div]:scale-110 origin-left">
-                        {actions}
-                    </div>
-                )}
+                {/* 7. Contact Button + Actions */}
+                <div className="flex items-center gap-3 pt-2">
+                    <Button 
+                        variant="default"
+                        size="sm"
+                        onClick={handleContact}
+                        className="gap-2"
+                    >
+                        <Phone className="w-4 h-4" />
+                        {contact}
+                    </Button>
+                    
+                    {actions && (
+                        <div className="flex items-center">
+                            {actions}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

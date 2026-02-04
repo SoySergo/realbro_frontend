@@ -545,7 +545,27 @@
     "typing": "typing...",
     "selectConversation": "Select a conversation to start messaging",
     "newProperties": "new properties",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "toast": {
+      "newProperty": "New property found",
+      "view": "View"
+    },
+    "propertyCard": {
+      "perMonth": "/mo",
+      "rooms": "rooms",
+      "bedrooms": "bedrooms",
+      "bathrooms": "bathrooms",
+      "floor": "fl.",
+      "walkMin": "min walk",
+      "contact": "Contact",
+      "notViewed": "Not viewed",
+      "viewedGroup": "Viewed",
+      "notViewedGroup": "Not viewed",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "live": "LIVE",
+      "objects": "properties"
+    }
   },
   "propertyDetail": {
     "photos": "Photos",

@@ -1,13 +1,13 @@
 'use client';
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { Bot, Clock } from 'lucide-react';
+import { Bot, Clock, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore } from '@/features/chat-messages';
 import { useChatFilterStore } from '@/features/chat-filters';
 import { DayFilter } from '@/features/chat-filters/ui/day-filter';
 import { SearchFilterSelector } from '@/features/chat-filters/ui/search-filter-selector';
-import { PropertyBatchCard, PropertyBatchCarousel, PropertyExpandedCard, PropertyOpenCard } from '@/entities/chat';
+import { PropertyBatchCard, PropertyBatchCarousel, PropertyOpenCard, type PropertyCardLabels } from '@/entities/chat';
 import { PropertyActionButtons } from '@/features/chat-property-actions/ui/property-action-buttons';
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
 import { ScrollToBottomButton } from '@/shared/ui/scroll-to-bottom';
@@ -23,6 +23,7 @@ interface AIAgentPropertyFeedProps {
         noProperties: string;
         allFilters: string;
         selectFilter: string;
+        propertyCard?: PropertyCardLabels;
     };
     className?: string;
 }
@@ -44,8 +45,14 @@ function getGroupKey(date: Date, dayFilter: string): string {
     return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 }
 
-// Format group label
-function formatGroupLabel(date: Date, dayFilter: string, locale = 'ru'): string {
+// Format group label with localization support
+function formatGroupLabel(
+    date: Date, 
+    dayFilter: string, 
+    locale = 'ru',
+    todayLabel = 'Сегодня',
+    yesterdayLabel = 'Вчера'
+): string {
     if (dayFilter === 'today' || dayFilter === 'yesterday') {
         return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
     }
@@ -54,8 +61,8 @@ function formatGroupLabel(date: Date, dayFilter: string, locale = 'ru'): string 
     const isToday = date.toDateString() === now.toDateString();
     const isYesterday = date.toDateString() === new Date(now.getTime() - 86400000).toDateString();
     
-    if (isToday) return 'Сегодня';
-    if (isYesterday) return 'Вчера';
+    if (isToday) return todayLabel;
+    if (isYesterday) return yesterdayLabel;
     
     return date.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
 }
@@ -66,6 +73,7 @@ interface PropertyGroup {
     date: Date;
     properties: Property[];
     filterName?: string;
+    isViewed: boolean; // Группа просмотренных или нет
 }
 
 export function AIAgentPropertyFeed({
@@ -86,6 +94,13 @@ export function AIAgentPropertyFeed({
     const { viewedIds } = usePropertyActionsStore();
     // Memoize viewedSet to prevent recreating Set on every render
     const viewedSet = useMemo(() => new Set(viewedIds), [viewedIds]);
+
+    // Локализованные метки
+    const todayLabel = labels.propertyCard?.today || labels.filters?.today || 'Сегодня';
+    const yesterdayLabel = labels.propertyCard?.yesterday || labels.filters?.yesterday || 'Вчера';
+    const objectsLabel = labels.propertyCard?.objects || 'объектов';
+    const liveFeedLabel = labels.propertyCard?.live || labels.aiAgent?.liveFeed || 'LIVE';
+    const notViewedLabel = labels.propertyCard?.notViewedGroup || 'Не просмотрено';
 
     // Initialize demo data on mount (only once)
     useEffect(() => {
@@ -138,8 +153,6 @@ export function AIAgentPropertyFeed({
         el.addEventListener('scroll', checkScrollPosition, { passive: true });
         return () => el.removeEventListener('scroll', checkScrollPosition);
     }, [checkScrollPosition]);
-
-
 
     // Extract unique filters from property messages for the selector
     const availableFilters = useMemo(() => {
@@ -210,10 +223,11 @@ export function AIAgentPropertyFeed({
     }, [conversationMessages, dayFilter, selectedFilterIds, showAllFilters]);
 
     // Separate real-time (WebSocket) messages from API-loaded ones
-    const { realTimeMessages, groupedProperties } = useMemo(() => {
+    // Group by date AND by viewed/not-viewed status
+    const { realTimeMessages, viewedGroups, notViewedGroups } = useMemo(() => {
         const realTime: ChatMessage[] = [];
-        const grouped: PropertyGroup[] = [];
-        const groupMap = new Map<string, PropertyGroup>();
+        const viewedGroupMap = new Map<string, PropertyGroup>();
+        const notViewedGroupMap = new Map<string, PropertyGroup>();
 
         filteredMessages.forEach((msg) => {
             if (msg.isRealTime) {
@@ -223,25 +237,41 @@ export function AIAgentPropertyFeed({
                 const groupKey = getGroupKey(date, dayFilter);
                 const properties = msg.properties || [];
                 
-                if (groupMap.has(groupKey)) {
-                    groupMap.get(groupKey)!.properties.push(...properties);
-                } else {
-                    groupMap.set(groupKey, {
-                        key: groupKey,
-                        label: formatGroupLabel(date, dayFilter),
-                        date,
-                        properties: [...properties],
-                        filterName: msg.metadata?.filterName,
-                    });
-                }
+                // Разделяем properties на просмотренные и непросмотренные
+                properties.forEach(prop => {
+                    const isViewed = viewedSet.has(prop.id);
+                    const targetMap = isViewed ? viewedGroupMap : notViewedGroupMap;
+                    const key = `${groupKey}-${isViewed ? 'viewed' : 'not-viewed'}`;
+                    
+                    if (targetMap.has(key)) {
+                        targetMap.get(key)!.properties.push(prop);
+                    } else {
+                        targetMap.set(key, {
+                            key,
+                            label: formatGroupLabel(date, dayFilter, 'ru', todayLabel, yesterdayLabel),
+                            date,
+                            properties: [prop],
+                            filterName: msg.metadata?.filterName,
+                            isViewed,
+                        });
+                    }
+                });
             }
         });
 
-        // Sort groups by date (oldest first)
-        grouped.push(...Array.from(groupMap.values()).sort((a, b) => a.date.getTime() - b.date.getTime()));
+        // Sort groups by date (oldest first for viewed, newest first for not viewed)
+        const viewed = Array.from(viewedGroupMap.values())
+            .sort((a, b) => a.date.getTime() - b.date.getTime());
+        
+        const notViewed = Array.from(notViewedGroupMap.values())
+            .sort((a, b) => b.date.getTime() - a.date.getTime()); // Newest first for not viewed
 
-        return { realTimeMessages: realTime, groupedProperties: grouped };
-    }, [filteredMessages, dayFilter]);
+        return { 
+            realTimeMessages: realTime, 
+            viewedGroups: viewed,
+            notViewedGroups: notViewed 
+        };
+    }, [filteredMessages, dayFilter, viewedSet, todayLabel, yesterdayLabel]);
 
     // Handle new real-time messages - Telegram-like behavior
     useEffect(() => {
@@ -327,10 +357,6 @@ export function AIAgentPropertyFeed({
         };
     }, [unseenIds.size, realTimeMessages.length]);
 
-    // Handle new real-time messages
-
-
-
     // Memoize renderPropertyCard to prevent function recreation on every render
     const renderPropertyCard = useCallback((property: Property) => (
         <PropertyBatchCard
@@ -338,6 +364,47 @@ export function AIAgentPropertyFeed({
             actions={<PropertyActionButtons propertyId={property.id} />}
         />
     ), []);
+
+    // Рендер группы объектов
+    const renderGroup = useCallback((group: PropertyGroup, showViewedBadge = false) => (
+        <div key={group.key} className="space-y-2">
+            {/* Group header */}
+            <div className="flex items-center gap-2 text-xs text-text-tertiary bg-background/90 backdrop-blur-sm py-1 -mx-1 px-1 z-10">
+                <Clock className="w-3.5 h-3.5" />
+                <span>{group.label}</span>
+                <span className="text-text-tertiary/60">
+                    ({group.properties.length} {objectsLabel})
+                </span>
+                {showViewedBadge && (
+                    <span className={cn(
+                        "ml-auto flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded",
+                        group.isViewed 
+                            ? "text-success bg-success/10" 
+                            : "text-warning bg-warning/10"
+                    )}>
+                        {group.isViewed ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                    </span>
+                )}
+            </div>
+            
+            {/* Carousel or single card */}
+            {group.properties.length === 1 ? (
+                <PropertyBatchCard
+                    property={group.properties[0]}
+                    filterName={group.filterName}
+                    actions={<PropertyActionButtons propertyId={group.properties[0].id} />}
+                />
+            ) : (
+                <PropertyBatchCarousel
+                    properties={group.properties}
+                    batchLabel={`${group.properties.length} ${objectsLabel}`}
+                    filterName={group.filterName}
+                    viewedIds={viewedSet}
+                    renderCard={renderPropertyCard}
+                />
+            )}
+        </div>
+    ), [objectsLabel, viewedSet, renderPropertyCard]);
 
     if (isLoadingMessages) {
         return (
@@ -347,7 +414,10 @@ export function AIAgentPropertyFeed({
         );
     }
 
-    const isEmpty = groupedProperties.length === 0 && realTimeMessages.length === 0;
+    const hasViewedGroups = viewedGroups.length > 0;
+    const hasNotViewedGroups = notViewedGroups.length > 0;
+    const hasRealTimeMessages = realTimeMessages.length > 0;
+    const isEmpty = !hasViewedGroups && !hasNotViewedGroups && !hasRealTimeMessages;
 
     return (
         <div className={cn('flex flex-col flex-1 min-h-0 relative overflow-x-hidden', className)}>
@@ -374,46 +444,44 @@ export function AIAgentPropertyFeed({
                     ref={scrollRef}
                     className="flex-1 overflow-y-auto px-3 md:px-4 py-3 space-y-4 scrollbar-hide"
                 >
-                    {/* Grouped properties (Compact view) */}
-                    {groupedProperties.map((group) => (
-                        <div key={group.key} className="space-y-2">
-                            {/* Group header */}
-                            <div className="flex items-center gap-2 text-xs text-text-tertiary bg-background/90 backdrop-blur-sm py-1 -mx-1 px-1 z-10">
-                                <Clock className="w-3.5 h-3.5" />
-                                <span>{group.label}</span>
-                                <span className="text-text-tertiary/60">
-                                    ({group.properties.length})
+                    {/* Просмотренные группы */}
+                    {hasViewedGroups && (
+                        <div className="space-y-4">
+                            {viewedGroups.map((group) => renderGroup(group, hasNotViewedGroups))}
+                        </div>
+                    )}
+
+                    {/* Разделитель между просмотренными и непросмотренными */}
+                    {hasViewedGroups && hasNotViewedGroups && (
+                        <div className="relative py-4">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t border-warning/30" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-warning flex items-center gap-1">
+                                    <EyeOff className="w-3 h-3" />
+                                    {notViewedLabel}
                                 </span>
                             </div>
-                            
-                            {/* Carousel or single card */}
-                            {group.properties.length === 1 ? (
-                                <PropertyBatchCard
-                                    property={group.properties[0]}
-                                    filterName={group.filterName}
-                                    actions={<PropertyActionButtons propertyId={group.properties[0].id} />}
-                                />
-                            ) : (
-                                <PropertyBatchCarousel
-                                    properties={group.properties}
-                                    batchLabel={`${group.properties.length} объектов`}
-                                    filterName={group.filterName}
-                                    viewedIds={viewedSet}
-                                    renderCard={renderPropertyCard}
-                                />
-                            )}
                         </div>
-                    ))}
+                    )}
+
+                    {/* Непросмотренные группы */}
+                    {hasNotViewedGroups && (
+                        <div className="space-y-4">
+                            {notViewedGroups.map((group) => renderGroup(group, hasViewedGroups))}
+                        </div>
+                    )}
 
                     {/* Separator if both exist */}
-                    {groupedProperties.length > 0 && realTimeMessages.length > 0 && (
+                    {(hasViewedGroups || hasNotViewedGroups) && hasRealTimeMessages && (
                         <div className="relative py-4">
                             <div className="absolute inset-0 flex items-center">
                                 <span className="w-full border-t border-border" />
                             </div>
                             <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background px-2 text-text-tertiary">
-                                    {labels.aiAgent?.liveFeed || 'LIVE'}
+                                <span className="bg-background px-2 text-brand-primary font-medium">
+                                    {liveFeedLabel}
                                 </span>
                             </div>
                         </div>
@@ -435,6 +503,7 @@ export function AIAgentPropertyFeed({
                                     property={property}
                                     filterName={msg.metadata?.filterName}
                                     isNew={true}
+                                    labels={labels.propertyCard}
                                     actions={<PropertyActionButtons propertyId={property.id} />}
                                 />
                             ))}
