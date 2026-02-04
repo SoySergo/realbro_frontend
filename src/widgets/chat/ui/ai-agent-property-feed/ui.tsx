@@ -10,6 +10,7 @@ import { SearchFilterSelector } from '@/features/chat-filters/ui/search-filter-s
 import { PropertyBatchCard, PropertyBatchCarousel, PropertyOpenCard, type PropertyCardLabels } from '@/entities/chat';
 import { PropertyActionButtons } from '@/features/chat-property-actions/ui/property-action-buttons';
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
+import { PropertyCompareButton } from '@/features/comparison';
 import { ScrollToBottomButton } from '@/shared/ui/scroll-to-bottom';
 import type { ChatMessage } from '@/entities/chat';
 import type { Property } from '@/entities/property';
@@ -361,7 +362,12 @@ export function AIAgentPropertyFeed({
     const renderPropertyCard = useCallback((property: Property) => (
         <PropertyBatchCard
             property={property}
-            actions={<PropertyActionButtons propertyId={property.id} />}
+            actions={
+                <div className="flex items-center gap-1">
+                    <PropertyCompareButton property={property} size="sm" />
+                    <PropertyActionButtons propertyId={property.id} />
+                </div>
+            }
         />
     ), []);
 
@@ -392,7 +398,12 @@ export function AIAgentPropertyFeed({
                 <PropertyBatchCard
                     property={group.properties[0]}
                     filterName={group.filterName}
-                    actions={<PropertyActionButtons propertyId={group.properties[0].id} />}
+                    actions={
+                        <div className="flex items-center gap-1">
+                            <PropertyCompareButton property={group.properties[0]} size="sm" />
+                            <PropertyActionButtons propertyId={group.properties[0].id} />
+                        </div>
+                    }
                 />
             ) : (
                 <PropertyBatchCarousel
@@ -504,7 +515,12 @@ export function AIAgentPropertyFeed({
                                     filterName={msg.metadata?.filterName}
                                     isNew={true}
                                     labels={labels.propertyCard}
-                                    actions={<PropertyActionButtons propertyId={property.id} />}
+                                    actions={
+                                        <div className="flex items-center gap-1">
+                                            <PropertyCompareButton property={property} size="sm" />
+                                            <PropertyActionButtons propertyId={property.id} />
+                                        </div>
+                                    }
                                 />
                             ))}
                         </div>
