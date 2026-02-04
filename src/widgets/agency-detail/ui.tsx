@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
+import { Card } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { cn } from '@/shared/lib/utils';
 import type { Agency, AgencyReview } from '@/entities/agency';
@@ -38,10 +39,18 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
     const tLang = useTranslations('languages');
     const tCommon = useTranslations('common');
 
+    // Определяем стили для Premium агентства
+    const isPremium = agency.isPremium;
+
     return (
         <div className="min-h-screen bg-background">
-            {/* Фоновое изображение (hero section как в YouTube) */}
-            <div className="relative h-48 md:h-64 lg:h-80 bg-background-secondary">
+            {/* Фоновое изображение (hero section) */}
+            <div className={cn(
+                "relative h-48 md:h-64 lg:h-80",
+                isPremium 
+                    ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" 
+                    : "bg-background-secondary"
+            )}>
                 {agency.coverImage ? (
                     <Image
                         src={agency.coverImage}
@@ -51,116 +60,215 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                         priority
                         sizes="100vw"
                     />
+                ) : isPremium ? (
+                    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-transparent to-amber-500/10" />
+                    </div>
                 ) : (
-                    <div className="w-full h-full bg-gradient-to-r from-brand-primary/20 to-brand-primary/10" />
+                    <div className="w-full h-full bg-gradient-to-br from-brand-primary-light via-brand-primary-light/50 to-background dark:from-brand-primary/20 dark:via-brand-primary/10 dark:to-background" />
                 )}
                 {/* Градиент для читаемости */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                <div className={cn(
+                    "absolute inset-0",
+                    isPremium 
+                        ? "bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"
+                        : "bg-gradient-to-t from-background via-background/50 to-transparent"
+                )} />
             </div>
 
             {/* Основной контент */}
             <div className="max-w-6xl mx-auto px-4 -mt-20 md:-mt-24 relative z-10">
                 {/* Шапка агентства */}
-                <div className="bg-background border border-border rounded-xl p-4 md:p-6 shadow-lg">
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                        {/* Логотип */}
-                        <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden bg-background-secondary border border-border shrink-0 mx-auto md:mx-0">
-                            {agency.logo ? (
-                                <Image
-                                    src={agency.logo}
-                                    alt={agency.name}
-                                    fill
-                                    className="object-cover"
-                                    sizes="(max-width: 768px) 96px, 128px"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <Building2 className="w-12 h-12 text-text-tertiary" />
-                                </div>
-                            )}
-                        </div>
+                <Card className={cn(
+                    "p-0 overflow-hidden",
+                    isPremium 
+                        ? "border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-xl shadow-brand-primary/10"
+                        : "shadow-lg"
+                )}>
+                    {/* Декоративный элемент для Premium */}
+                    {isPremium && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-amber-500/5 pointer-events-none" />
+                    )}
+                    
+                    <div className={cn(
+                        "relative p-4 md:p-6",
+                        !isPremium && "bg-background"
+                    )}>
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                            {/* Логотип */}
+                            <div className={cn(
+                                "relative w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden shrink-0 mx-auto md:mx-0",
+                                isPremium 
+                                    ? "ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20 bg-white dark:bg-slate-700"
+                                    : "bg-background border border-border shadow-sm"
+                            )}>
+                                {agency.logo ? (
+                                    <Image
+                                        src={agency.logo}
+                                        alt={agency.name}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 96px, 128px"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                        <Building2 className={cn(
+                                            "w-12 h-12",
+                                            isPremium ? "text-amber-500" : "text-text-tertiary"
+                                        )} />
+                                    </div>
+                                )}
+                            </div>
 
-                        {/* Информация */}
-                        <div className="flex-1 text-center md:text-left">
-                            {/* Название и бейджи */}
-                            <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-                                <h1 className="text-2xl md:text-3xl font-bold text-text-primary">
-                                    {agency.name}
-                                </h1>
-                                <div className="flex items-center justify-center md:justify-start gap-2">
-                                    {agency.isVerified && (
-                                        <Badge variant="success" className="gap-1">
-                                            <BadgeCheck className="w-3 h-3" />
-                                            {t('verified')}
-                                        </Badge>
+                            {/* Информация */}
+                            <div className="flex-1 text-center md:text-left">
+                                {/* Название и бейджи */}
+                                <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+                                    <h1 className={cn(
+                                        "text-2xl md:text-3xl font-bold",
+                                        isPremium ? "text-white" : "text-text-primary"
+                                    )}>
+                                        {agency.name}
+                                    </h1>
+                                    <div className="flex items-center justify-center md:justify-start gap-2">
+                                        {agency.isPremium && (
+                                            <Badge 
+                                                variant="default" 
+                                                className="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold border-0 shadow-lg shadow-amber-500/30 gap-1"
+                                            >
+                                                <Crown className="w-3 h-3" />
+                                                {t('premium')}
+                                            </Badge>
+                                        )}
+                                        {agency.isVerified && (
+                                            <Badge variant="success" className="gap-1 shadow-sm">
+                                                <BadgeCheck className="w-3 h-3" />
+                                                {t('verified')}
+                                            </Badge>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Локация */}
+                                {agency.offices[0] && (
+                                    <div className={cn(
+                                        "flex items-center justify-center md:justify-start gap-1.5 mb-3",
+                                        isPremium ? "text-slate-300" : "text-text-secondary"
+                                    )}>
+                                        <MapPin className={cn(
+                                            "w-4 h-4",
+                                            isPremium && "text-amber-400/70"
+                                        )} />
+                                        <span>{agency.offices[0].address}, {agency.offices[0].city}</span>
+                                    </div>
+                                )}
+
+                                {/* Статистика */}
+                                <div className={cn(
+                                    "flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6 text-sm",
+                                    isPremium && "bg-white/5 rounded-lg px-4 py-2.5 backdrop-blur-sm w-fit mx-auto md:mx-0"
+                                )}>
+                                    {/* Рейтинг */}
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="flex items-center gap-0.5">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <Star
+                                                    key={star}
+                                                    className={cn(
+                                                        'w-4 h-4',
+                                                        star <= Math.round(agency.rating)
+                                                            ? isPremium 
+                                                                ? 'text-amber-400 fill-amber-400'
+                                                                : 'text-amber-500 fill-amber-500'
+                                                            : isPremium
+                                                                ? 'text-slate-500'
+                                                                : 'text-text-tertiary'
+                                                    )}
+                                                />
+                                            ))}
+                                        </div>
+                                        <span className={cn(
+                                            "font-semibold text-base",
+                                            isPremium ? "text-white" : "text-text-primary"
+                                        )}>
+                                            {agency.rating.toFixed(1)}
+                                        </span>
+                                        <span className={cn(
+                                            isPremium ? "text-slate-400" : "text-text-secondary"
+                                        )}>
+                                            ({agency.reviewsCount} {t('reviews')})
+                                        </span>
+                                    </div>
+
+                                    {!isPremium && <div className="w-px h-4 bg-border hidden md:block" />}
+
+                                    {/* Объекты */}
+                                    <div className={cn(
+                                        "flex items-center gap-1.5",
+                                        isPremium ? "text-slate-300" : "text-text-secondary"
+                                    )}>
+                                        <Building2 className={cn(
+                                            "w-4 h-4",
+                                            isPremium && "text-amber-400/70"
+                                        )} />
+                                        <span>{t('objectsCount', { count: agency.objectsCount })}</span>
+                                    </div>
+
+                                    {/* Агенты */}
+                                    {agency.agentsCount && (
+                                        <div className={cn(
+                                            "flex items-center gap-1.5",
+                                            isPremium ? "text-slate-300" : "text-text-secondary"
+                                        )}>
+                                            <Users className={cn(
+                                                "w-4 h-4",
+                                                isPremium && "text-amber-400/70"
+                                            )} />
+                                            <span>{t('agentsCount', { count: agency.agentsCount })}</span>
+                                        </div>
                                     )}
-                                    {agency.isPremium && (
-                                        <Badge variant="default" className="gap-1">
-                                            <Crown className="w-3 h-3" />
-                                            {t('premium')}
-                                        </Badge>
+
+                                    {/* Год основания */}
+                                    {agency.foundedYear && (
+                                        <div className={cn(
+                                            "flex items-center gap-1.5",
+                                            isPremium ? "text-slate-300" : "text-text-secondary"
+                                        )}>
+                                            <Calendar className={cn(
+                                                "w-4 h-4",
+                                                isPremium && "text-amber-400/70"
+                                            )} />
+                                            <span>{t('founded', { year: agency.foundedYear })}</span>
+                                        </div>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Локация */}
-                            {agency.offices[0] && (
-                                <div className="flex items-center justify-center md:justify-start gap-1 text-text-secondary mb-3">
-                                    <MapPin className="w-4 h-4" />
-                                    <span>{agency.offices[0].address}, {agency.offices[0].city}</span>
-                                </div>
-                            )}
-
-                            {/* Статистика */}
-                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6 text-sm">
-                                {/* Рейтинг */}
-                                <div className="flex items-center gap-1">
-                                    <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                                    <span className="font-semibold text-text-primary text-base">
-                                        {agency.rating.toFixed(1)}
-                                    </span>
-                                    <span className="text-text-secondary">
-                                        ({agency.reviewsCount} {t('reviews')})
-                                    </span>
-                                </div>
-
-                                {/* Объекты */}
-                                <div className="flex items-center gap-1 text-text-secondary">
-                                    <Building2 className="w-4 h-4" />
-                                    <span>{t('objectsCount', { count: agency.objectsCount })}</span>
-                                </div>
-
-                                {/* Агенты */}
-                                {agency.agentsCount && (
-                                    <div className="flex items-center gap-1 text-text-secondary">
-                                        <Users className="w-4 h-4" />
-                                        <span>{t('agentsCount', { count: agency.agentsCount })}</span>
-                                    </div>
-                                )}
-
-                                {/* Год основания */}
-                                {agency.foundedYear && (
-                                    <div className="flex items-center gap-1 text-text-secondary">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>{t('founded', { year: agency.foundedYear })}</span>
-                                    </div>
-                                )}
+                            {/* Кнопки действий */}
+                            <div className="flex flex-col gap-2 shrink-0">
+                                <Button 
+                                    className={cn(
+                                        "gap-2",
+                                        isPremium && "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 hover:from-amber-500 hover:to-amber-600 shadow-lg shadow-amber-500/20"
+                                    )}
+                                >
+                                    <Phone className="w-4 h-4" />
+                                    {t('showPhone')}
+                                </Button>
+                                <Button 
+                                    variant="outline" 
+                                    className={cn(
+                                        "gap-2",
+                                        isPremium && "border-white/20 text-white hover:bg-white/10 hover:text-white"
+                                    )}
+                                >
+                                    <MessageCircle className="w-4 h-4" />
+                                    {t('writeMessage')}
+                                </Button>
                             </div>
-                        </div>
-
-                        {/* Кнопки действий */}
-                        <div className="flex flex-col gap-2 shrink-0">
-                            <Button className="gap-2">
-                                <Phone className="w-4 h-4" />
-                                {t('showPhone')}
-                            </Button>
-                            <Button variant="outline" className="gap-2">
-                                <MessageCircle className="w-4 h-4" />
-                                {t('writeMessage')}
-                            </Button>
                         </div>
                     </div>
-                </div>
+                </Card>
 
                 {/* Табы с контентом */}
                 <Tabs defaultValue="about" className="mt-6">
