@@ -259,12 +259,12 @@ export function AIAgentPropertyFeed({
             }
         });
 
-        // Sort groups by date (oldest first for viewed, newest first for not viewed)
+        // Сортируем группы по дате (сначала старые для просмотренных, сначала новые для непросмотренных)
         const viewed = Array.from(viewedGroupMap.values())
             .sort((a, b) => a.date.getTime() - b.date.getTime());
         
         const notViewed = Array.from(notViewedGroupMap.values())
-            .sort((a, b) => b.date.getTime() - a.date.getTime()); // Newest first for not viewed
+            .sort((a, b) => b.date.getTime() - a.date.getTime()); // Сначала новые для непросмотренных
 
         return { 
             realTimeMessages: realTime, 

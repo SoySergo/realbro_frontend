@@ -40,7 +40,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     const { addIncomingMessage, conversations } = useChatStore();
     const { addToast } = useToastStore();
 
-    // Проверяем находится ли пользователь на странице чата
+    // Проверяем, находится ли пользователь на странице чата
     const isOnChatPage = pathname?.includes('/chat');
 
     // Get AI agent conversation ID
