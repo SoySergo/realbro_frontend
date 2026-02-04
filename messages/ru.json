@@ -567,7 +567,27 @@
     "maxPolygonsReached": "Достигнут лимит в 4 полигона. Удалите один из существующих, чтобы добавить новый.",
     "tapToStart": "Нажимайте на карту для добавления точек",
     "pointsCount": "Точек: {count}",
-    "needMorePoints": "Нужно ещё {count} точки"
+    "needMorePoints": "Нужно ещё {count} точки",
+    "toast": {
+      "newProperty": "Найден новый объект",
+      "view": "Смотреть"
+    },
+    "propertyCard": {
+      "perMonth": "/мес",
+      "rooms": "комн.",
+      "bedrooms": "спальни",
+      "bathrooms": "ванные",
+      "floor": "эт.",
+      "walkMin": "мин пешком",
+      "contact": "Связаться",
+      "notViewed": "Не просмотрено",
+      "viewedGroup": "Просмотрено",
+      "notViewedGroup": "Не просмотрено",
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "live": "В РЕАЛЬНОМ ВРЕМЕНИ",
+      "objects": "объектов"
+    }
   },
 
   "propertyDetail": {

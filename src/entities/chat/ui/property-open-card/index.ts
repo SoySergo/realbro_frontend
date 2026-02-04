@@ -1,1 +1,1 @@
-export { PropertyOpenCard } from './ui';
+export { PropertyOpenCard, type PropertyCardLabels } from './ui';

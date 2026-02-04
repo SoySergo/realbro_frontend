@@ -539,7 +539,27 @@
     "typing": "écrit...",
     "selectConversation": "Sélectionnez une conversation pour commencer",
     "newProperties": "nouvelles propriétés",
-    "viewAll": "Voir tout"
+    "viewAll": "Voir tout",
+    "toast": {
+      "newProperty": "Nouvelle propriété trouvée",
+      "view": "Voir"
+    },
+    "propertyCard": {
+      "perMonth": "/mois",
+      "rooms": "pièces",
+      "bedrooms": "chambres",
+      "bathrooms": "salles de bain",
+      "floor": "ét.",
+      "walkMin": "min à pied",
+      "contact": "Contacter",
+      "notViewed": "Non consulté",
+      "viewedGroup": "Consulté",
+      "notViewedGroup": "Non consulté",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "live": "EN DIRECT",
+      "objects": "propriétés"
+    }
   },
   "footer": {
     "aboutService": "À propos du service",

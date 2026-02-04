@@ -8,7 +8,7 @@ import { ChatNotificationBadge } from '@/shared/ui/chat-notification-badge';
 import { useTranslations } from 'next-intl';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
-import { useChatStore } from '@/features/chat-messages';
+import { useChatStore, useChatUIStore } from '@/features/chat-messages';
 import { Link } from '@/shared/config/routing';
 
 // Навигационные элементы для мобильного меню
@@ -26,6 +26,7 @@ export function BottomNavigation() {
     const { activeLocationMode } = useFilterStore();
     const { isAuthenticated } = useAuth();
     const chatUnread = useChatStore((s) => s.totalUnread());
+    const isChatOpen = useChatUIStore((s) => s.isChatOpen);
     const [isMounted, setIsMounted] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const prevUnreadRef = useRef(chatUnread);
@@ -45,8 +46,8 @@ export function BottomNavigation() {
         prevUnreadRef.current = chatUnread;
     }, [chatUnread]);
 
-    // Скрываем навигацию когда активен режим локации
-    if (activeLocationMode) {
+    // Скрываем навигацию когда активен режим локации или открыт чат
+    if (activeLocationMode || isChatOpen) {
         return null;
     }
 
