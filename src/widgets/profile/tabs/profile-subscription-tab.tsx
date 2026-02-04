@@ -43,6 +43,14 @@ type ProfileSubscriptionTabProps = {
     onUpdate: () => void;
 };
 
+// Утилита форматирования цены
+const formatPrice = (amount: number, currency: string) => {
+    return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: currency,
+    }).format(amount);
+};
+
 /**
  * Таб подписки и платежей
  * Отображает текущую подписку, доступные планы и историю платежей
@@ -57,6 +65,7 @@ export function ProfileSubscriptionTab({
     const t = useTranslations('profile.subscription');
     const tPayments = useTranslations('profile.payments');
     const tPricing = useTranslations('pricing');
+    const tCommon = useTranslations('common');
 
     const [isChangingPlan, setIsChangingPlan] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
@@ -72,14 +81,6 @@ export function ProfileSubscriptionTab({
             month: 'short',
             day: 'numeric',
         });
-    };
-
-    // Форматирование цены
-    const formatPrice = (amount: number, currency: string) => {
-        return new Intl.NumberFormat(undefined, {
-            style: 'currency',
-            currency: currency,
-        }).format(amount);
     };
 
     // Смена плана
@@ -164,10 +165,10 @@ export function ProfileSubscriptionTab({
                                 </div>
                                 <div className="text-right">
                                     <p className="text-2xl font-bold text-text-primary">
-                                        {currentPlan.price === 0 ? tPricing('features.free') : formatPrice(currentPlan.price, currentPlan.currency)}
+                                        {currentPlan.price === 0 ? tCommon('free') : formatPrice(currentPlan.price, currentPlan.currency)}
                                     </p>
                                     {currentPlan.price > 0 && (
-                                        <p className="text-sm text-text-secondary">/{tPricing('features.perMonth')}</p>
+                                        <p className="text-sm text-text-secondary">{tCommon('perMonth')}</p>
                                     )}
                                 </div>
                             </div>
@@ -217,7 +218,7 @@ export function ProfileSubscriptionTab({
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                                                <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
                                                 <AlertDialogAction 
                                                     onClick={handleCancelSubscription}
                                                     className="bg-error hover:bg-error/90"
@@ -340,6 +341,7 @@ function PlanCard({
 }) {
     const t = useTranslations('profile.subscription');
     const tPricing = useTranslations('pricing');
+    const tCommon = useTranslations('common');
 
     return (
         <div className={cn(
@@ -357,8 +359,8 @@ function PlanCard({
                 )}
             </div>
             <p className="text-2xl font-bold text-text-primary mb-4">
-                {plan.price === 0 ? tPricing('features.free') : `€${plan.price}`}
-                {plan.price > 0 && <span className="text-sm font-normal text-text-secondary">/мес</span>}
+                {plan.price === 0 ? tCommon('free') : formatPrice(plan.price, plan.currency)}
+                {plan.price > 0 && <span className="text-sm font-normal text-text-secondary">{tCommon('perMonth')}</span>}
             </p>
             <div className="space-y-2 text-sm text-text-secondary mb-4">
                 <p>✓ {plan.features.searchTabs} {t('searchTabs')}</p>
