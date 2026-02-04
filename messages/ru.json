@@ -581,7 +581,27 @@
     "maxPolygonsReached": "Достигнут лимит в 4 полигона. Удалите один из существующих, чтобы добавить новый.",
     "tapToStart": "Нажимайте на карту для добавления точек",
     "pointsCount": "Точек: {count}",
-    "needMorePoints": "Нужно ещё {count} точки"
+    "needMorePoints": "Нужно ещё {count} точки",
+    "toast": {
+      "newProperty": "Найден новый объект",
+      "view": "Смотреть"
+    },
+    "propertyCard": {
+      "perMonth": "/мес",
+      "rooms": "комн.",
+      "bedrooms": "спальни",
+      "bathrooms": "ванные",
+      "floor": "эт.",
+      "walkMin": "мин пешком",
+      "contact": "Связаться",
+      "notViewed": "Не просмотрено",
+      "viewedGroup": "Просмотрено",
+      "notViewedGroup": "Не просмотрено",
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "live": "В РЕАЛЬНОМ ВРЕМЕНИ",
+      "objects": "объектов"
+    }
   },
   "propertyDetail": {
     "photos": "Фотографии",
@@ -810,6 +830,24 @@
       "street": "На улице",
       "none": "Нет"
     }
+  },
+  "mapSidebar": {
+    "hidePanel": "Скрыть панель",
+    "showPanel": "Показать панель",
+    "showOnMap": "Карта",
+    "showAsList": "Списком",
+    "resetCluster": "Показать все",
+    "clusterObjects": "Объекты кластера",
+    "sortBy": "Сортировать по",
+    "sortPrice": "Цене",
+    "sortArea": "Площади",
+    "sortDate": "Дате",
+    "sortAscending": "Сортировка по возрастанию",
+    "sortDescending": "Сортировка по убыванию",
+    "noResults": "Объекты не найдены",
+    "loading": "Загрузка...",
+    "objectsCount": "{count} объектов",
+    "changeSearchArea": "Измените область поиска на карте"
   },
   "amenities": {
     "wifi": "Wi-Fi",

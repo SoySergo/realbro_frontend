@@ -7,6 +7,7 @@ import { MessageList } from '@/features/chat-messages/ui/message-list';
 import { SendMessageForm } from '@/features/chat-messages/ui/send-message-form';
 import { ChatHeader } from '../chat-header/ui';
 import { AIAgentPropertyFeed } from '../ai-agent-property-feed/ui';
+import type { PropertyCardLabels } from '@/entities/chat';
 
 interface ChatWindowProps {
     onSettingsClick?: () => void;
@@ -26,6 +27,7 @@ interface ChatWindowProps {
         noProperties: string;
         allFilters: string;
         selectFilter: string;
+        propertyCard?: PropertyCardLabels;
     };
     className?: string;
 }

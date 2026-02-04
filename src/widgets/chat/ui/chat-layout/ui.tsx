@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { useChatStore } from '@/features/chat-messages';
+import { useChatStore, useChatUIStore } from '@/features/chat-messages';
 import { ChatSidebar } from '../chat-sidebar/ui';
 import { ChatWindow } from '../chat-window/ui';
 import { ChatSettingsPanel } from '../chat-settings-panel/ui';
+import type { PropertyCardLabels } from '@/entities/chat';
 
 interface ChatLayoutProps {
     labels: {
@@ -25,6 +26,7 @@ interface ChatLayoutProps {
         noProperties: string;
         allFilters: string;
         selectFilter: string;
+        propertyCard?: PropertyCardLabels;
         settingsPanel: {
             settingsTitle: string;
             searchParams: string;
@@ -52,8 +54,15 @@ interface ChatLayoutProps {
 
 export function ChatLayout({ labels, className }: ChatLayoutProps) {
     const { activeConversationId } = useChatStore();
+    const { setChatOpen } = useChatUIStore();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [showMobileChat, setShowMobileChat] = useState(false);
+
+    // Синхронизируем состояние чата с глобальным стором для скрытия нижнего меню
+    useEffect(() => {
+        setChatOpen(showMobileChat);
+        return () => setChatOpen(false);
+    }, [showMobileChat, setChatOpen]);
 
     // Mobile: show chat only when user explicitly clicks a conversation
     // (removed auto-trigger on activeConversationId change)
