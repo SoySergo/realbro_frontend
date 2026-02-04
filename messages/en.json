@@ -738,6 +738,21 @@
       "none": "None"
     }
   },
+  "mapSidebar": {
+    "hidePanel": "Hide panel",
+    "showPanel": "Show panel",
+    "showOnMap": "Map",
+    "showAsList": "List view",
+    "resetCluster": "Show all",
+    "clusterObjects": "Cluster objects",
+    "sortBy": "Sort by",
+    "sortPrice": "Price",
+    "sortArea": "Area",
+    "sortDate": "Date",
+    "noResults": "No properties found",
+    "loading": "Loading...",
+    "objectsCount": "{count} properties"
+  },
   "amenities": {
     "wifi": "Wi-Fi",
     "internet": "Internet",
