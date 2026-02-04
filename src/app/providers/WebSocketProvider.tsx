@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useRef, useCallback, useState } from 'react';
-import { useChatStore } from '@/features/chat-messages';
+import { usePathname } from 'next/navigation';
+import { useChatStore, useToastStore } from '@/features/chat-messages';
 import { generateMockProperty } from '@/shared/api/chat';
 
 type WebSocketStatus = 'connecting' | 'connected' | 'disconnected' | 'error';
@@ -27,14 +28,20 @@ interface WebSocketProviderProps {
 /**
  * Global WebSocket provider for real-time property updates
  * Runs in background regardless of which page user is on
+ * Shows toast notifications when user is not on chat page
  */
 export function WebSocketProvider({ children }: WebSocketProviderProps) {
     const [status, setStatus] = useState<WebSocketStatus>('disconnected');
     const simulationIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const propertyCounterRef = useRef(200);
     const hasStartedRef = useRef(false);
+    const pathname = usePathname();
 
     const { addIncomingMessage, conversations } = useChatStore();
+    const { addToast } = useToastStore();
+
+    // Проверяем, находится ли пользователь на странице чата
+    const isOnChatPage = pathname?.includes('/chat');
 
     // Get AI agent conversation ID
     const getAIConversationId = useCallback(() => {
@@ -48,12 +55,17 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
         propertyCounterRef.current++;
         
         const property = generateMockProperty(propertyCounterRef.current);
+        property.isNew = true; // Помечаем как новый
+        
         const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
         const filterIds = ['filter_1', 'filter_2', 'filter_3'];
         const filterIdx = propertyCounterRef.current % 3;
+        const filterName = filterNames[filterIdx];
+
+        const messageId = `msg_ws_${Date.now()}`;
 
         addIncomingMessage({
-            id: `msg_ws_${Date.now()}`,
+            id: messageId,
             conversationId,
             senderId: 'ai-agent',
             type: 'property',
@@ -62,11 +74,20 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
             status: 'delivered',
             createdAt: new Date().toISOString(),
             metadata: {
-                filterName: filterNames[filterIdx],
+                filterName,
                 filterId: filterIds[filterIdx],
             },
         });
-    }, [addIncomingMessage, getAIConversationId]);
+
+        // Показываем тост если пользователь НЕ на странице чата
+        if (!isOnChatPage) {
+            addToast({
+                id: `toast_${messageId}`,
+                property,
+                filterName,
+            });
+        }
+    }, [addIncomingMessage, getAIConversationId, addToast, isOnChatPage]);
 
     // Start simulation
     const startSimulation = useCallback(() => {

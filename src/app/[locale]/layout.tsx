@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider } from "@/app/providers";
+import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider } from "@/app/providers";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
@@ -75,6 +75,8 @@ export default async function LocaleLayout({ children, params }: Props) {
                                 {children}
                                 {/* Auth Modals */}
                                 <AuthModals />
+                                {/* Global Toast Notifications */}
+                                <GlobalToastProvider />
                             </WebSocketProvider>
                         </AuthProvider>
                     </NextIntlClientProvider>
