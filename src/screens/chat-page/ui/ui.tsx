@@ -2,9 +2,27 @@
 
 import { useTranslations } from 'next-intl';
 import { ChatLayout } from '@/widgets/chat';
+import { useAuth } from '@/features/auth';
+import { AuthRequired } from '@/shared/ui/auth-required';
+import { Loader2 } from 'lucide-react';
 
 export function ChatPage() {
     const t = useTranslations('chat');
+    const { isAuthenticated, isInitialized } = useAuth();
+
+    // Пока инициализируемся - показываем загрузку
+    if (!isInitialized) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
+            </div>
+        );
+    }
+
+    // Не авторизован - показываем заглушку
+    if (!isAuthenticated) {
+        return <AuthRequired context="chat" />;
+    }
 
     const labels = {
         title: t('title'),

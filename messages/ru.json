@@ -123,9 +123,9 @@
     "currentPlan": "Текущий план"
   },
   "navigation": {
-    "home": "Главная",
-    "properties": "Недвижимость",
+    "search": "Поиск",
     "favorites": "Избранное",
+    "chat": "Чат",
     "profile": "Профиль"
   },
   "property": {
@@ -386,7 +386,8 @@
     "clickListToView": "Нажмите на \"Список\" для просмотра объектов",
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
-    "sortByArea": "По площади"
+    "sortByArea": "По площади",
+    "favorites": "Избранное"
   },
   "isochrone": {
     "title": "Время в пути",
@@ -888,5 +889,28 @@
     "childFriendly": "Подходит для детей",
     "smokingAllowed": "Можно курить",
     "elevator": "Лифт"
+  },
+  "authRequired": {
+    "title": "Авторизация требуется",
+    "chat": {
+      "description": "Авторизуйтесь, чтобы пользоваться чатом",
+      "action": "Войти в чат"
+    },
+    "profile": {
+      "description": "Авторизуйтесь, чтобы редактировать профиль",
+      "action": "Войти в профиль"
+    },
+    "favorites": {
+      "description": "Авторизуйтесь, чтобы просматривать избранное",
+      "action": "Войти для просмотра"
+    }
+  },
+  "favorites": {
+    "title": "Избранное",
+    "empty": {
+      "title": "Пока пусто",
+      "description": "Добавляйте понравившиеся объекты в избранное, чтобы вернуться к ним позже"
+    },
+    "count": "{count} объектов"
   }
 }
