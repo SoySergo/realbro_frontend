@@ -518,7 +518,7 @@
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
     "sortByArea": "По площади",
-    "compare": "Сравнение"
+    "compare": "Сравнение",
     "favorites": "Избранное"
   },
   "isochrone": {
@@ -1061,6 +1061,7 @@
     "yes": "Да",
     "no": "Нет",
     "notSpecified": "Не указано"
+  },
   "authRequired": {
     "title": "Авторизация требуется",
     "chat": {

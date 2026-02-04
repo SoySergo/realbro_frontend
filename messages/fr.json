@@ -495,7 +495,7 @@
     "sort": "Trier",
     "close": "Fermer",
     "bedrooms": "chambres",
-    "compare": "Comparer"
+    "compare": "Comparer",
     "favorites": "Favoris"
   },
   "isochrone": {
@@ -1049,6 +1049,7 @@
     "yes": "Oui",
     "no": "Non",
     "notSpecified": "Non précisé"
+  },
   "authRequired": {
     "title": "Autorisation requise",
     "chat": {
@@ -1066,10 +1067,69 @@
   },
   "favorites": {
     "title": "Favoris",
+    "tabs": {
+      "properties": "Propriétés",
+      "professionals": "Professionnels",
+      "filters": "Filtres",
+      "notes": "Notes"
+    },
     "empty": {
       "title": "Rien ici encore",
-      "description": "Ajoutez des propriétés à vos favoris pour y revenir plus tard"
+      "description": "Ajoutez des propriétés à vos favoris pour y revenir plus tard",
+      "professionals": {
+        "title": "Aucun professionnel sauvegardé",
+        "description": "Ajoutez vos agents et agences préférés aux favoris"
+      },
+      "filters": {
+        "title": "Aucun filtre sauvegardé",
+        "description": "Sauvegardez vos paramètres de recherche pour un accès rapide"
+      },
+      "notes": {
+        "title": "Aucune note",
+        "description": "Créez des notes pour les propriétés et définissez des rappels"
+      }
     },
-    "count": "{count} propriétés"
+    "count": "{count} propriétés",
+    "notes": {
+      "title": "Notes & Rappels",
+      "addNote": "Ajouter une note",
+      "editNote": "Modifier la note",
+      "deleteNote": "Supprimer la note",
+      "placeholder": "Entrez votre note...",
+      "reminder": "Rappel",
+      "setReminder": "Définir un rappel",
+      "removeReminder": "Supprimer le rappel",
+      "reminderSet": "Rappel défini pour le {date}",
+      "noReminder": "Pas de rappel",
+      "saveNote": "Sauvegarder",
+      "cancel": "Annuler",
+      "noteCreated": "Note créée",
+      "noteUpdated": "Note mise à jour",
+      "noteDeleted": "Note supprimée"
+    },
+    "professionals": {
+      "title": "Professionnels",
+      "agent": "Agent",
+      "agency": "Agence",
+      "owner": "Propriétaire",
+      "activeListings": "{count} annonces actives",
+      "verified": "Vérifié",
+      "superAgent": "Super agent",
+      "yearsOnPlatform": "{count} ans sur la plateforme",
+      "contact": "Contacter",
+      "remove": "Retirer des favoris"
+    },
+    "filters": {
+      "title": "Filtres Sauvegardés",
+      "applyFilter": "Appliquer",
+      "deleteFilter": "Supprimer",
+      "editFilter": "Modifier",
+      "lastUsed": "Dernière utilisation: {date}",
+      "propertiesCount": "{count} propriétés trouvées"
+    },
+    "authPrompt": {
+      "title": "Connectez-vous pour sauvegarder",
+      "description": "Connectez-vous pour sauvegarder vos favoris et les synchroniser entre vos appareils"
+    }
   }
 }

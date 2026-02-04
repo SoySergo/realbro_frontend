@@ -27,6 +27,7 @@ import {
 import { PropertyContactBar } from '@/features/property-contact';
 import { PropertyActions } from '@/features/property-actions';
 import { PropertyCompareButton } from '@/features/comparison';
+import { PropertyNoteField } from '@/features/property-note';
 
 /**
  * Convert AgentPropertyCard/SimilarPropertyCard to Property format
@@ -267,6 +268,13 @@ export function PropertyDetailWidget({
                                     variant="mobile"
                                     translations={descriptionTranslations}
                                 />
+
+                                {/* Mobile: Поле заметки перед характеристиками */}
+                                <PropertyNoteField
+                                    propertyId={property.id}
+                                    variant="inline"
+                                    className="mt-4"
+                                />
                             </div>
 
                             <PropertyHeader
@@ -331,6 +339,14 @@ export function PropertyDetailWidget({
                                 descriptionOriginal={property.descriptionOriginal}
                                 maxLines={5}
                                 translations={descriptionTranslations}
+                            />
+                        </section>
+
+                        {/* Desktop: Поле заметки перед характеристиками */}
+                        <section className="hidden lg:block border-t border-border/50 pt-6">
+                            <PropertyNoteField
+                                propertyId={property.id}
+                                variant="inline"
                             />
                         </section>
 
