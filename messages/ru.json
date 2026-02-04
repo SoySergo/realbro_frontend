@@ -387,6 +387,7 @@
     "sortByDate": "По дате",
     "sortByPrice": "По цене",
     "sortByArea": "По площади",
+    "compare": "Сравнение"
     "favorites": "Избранное"
   },
   "isochrone": {
@@ -890,6 +891,45 @@
     "smokingAllowed": "Можно курить",
     "elevator": "Лифт"
   },
+  "comparison": {
+    "title": "Сравнение объектов",
+    "subtitle": "выбрано объектов",
+    "compare": "Сравнить",
+    "inComparison": "В сравнении",
+    "limitReached": "Лимит достигнут",
+    "clearAll": "Очистить всё",
+    "addMore": "Добавить",
+    "emptySlot": "Выберите объект для сравнения",
+    "remove": "Удалить",
+    "backToSearch": "Вернуться к поиску",
+    "characteristics": "Характеристики",
+    "selected": "выбрано",
+    "outOf": "из",
+    "openComparison": "Открыть сравнение",
+    "price": "Цена",
+    "pricePerMeter": "Цена за м²",
+    "area": "Площадь",
+    "rooms": "Комнаты",
+    "floor": "Этаж",
+    "bathrooms": "Ванные",
+    "deposit": "Залог",
+    "commission": "Комиссия",
+    "minRentalPeriod": "Мин. срок аренды",
+    "elevator": "Лифт",
+    "balcony": "Балкон",
+    "terrace": "Терраса",
+    "airConditioning": "Кондиционер",
+    "heating": "Отопление",
+    "furnished": "С мебелью",
+    "petFriendly": "Можно с животными",
+    "parking": "Парковка",
+    "pool": "Бассейн",
+    "perMonth": "мес.",
+    "sqm": "м²",
+    "months": "мес.",
+    "yes": "Да",
+    "no": "Нет",
+    "notSpecified": "Не указано"
   "authRequired": {
     "title": "Авторизация требуется",
     "chat": {

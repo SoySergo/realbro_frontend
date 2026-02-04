@@ -25,6 +25,7 @@ import { useCurrentFilters, useViewModeActions } from '@/widgets/search-filters-
 import { getPropertiesList, type PropertiesListResponse } from '@/shared/api';
 import type { Property } from '@/entities/property';
 import { PropertyCardGrid } from '@/entities/property';
+import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import { cn } from '@/shared/lib/utils';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
@@ -98,6 +99,8 @@ function PropertyRow({
             <PropertyCardGrid
                 property={property}
                 onClick={() => onPropertyClick(property)}
+                actions={<PropertyCompareButton property={property} />}
+                menuItems={<PropertyCompareMenuItem property={property} />}
             />
         </div>
     );
@@ -580,6 +583,8 @@ export function MobileMapSidebar({
                             key={property.id}
                             property={property}
                             onClick={() => onPropertyClick?.(property)}
+                            actions={<PropertyCompareButton property={property} />}
+                            menuItems={<PropertyCompareMenuItem property={property} />}
                         />
                     ))}
 

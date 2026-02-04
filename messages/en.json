@@ -370,6 +370,7 @@
     "sortByDate": "By date",
     "sortByPrice": "By price",
     "sortByArea": "By area",
+    "compare": "Compare"
     "favorites": "Favorites"
   },
   "isochrone": {
@@ -829,6 +830,45 @@
     "childFriendly": "Child-friendly",
     "smokingAllowed": "Smoking allowed"
   },
+  "comparison": {
+    "title": "Compare Properties",
+    "subtitle": "selected properties",
+    "compare": "Compare",
+    "inComparison": "In comparison",
+    "limitReached": "Limit reached",
+    "clearAll": "Clear all",
+    "addMore": "Add more",
+    "emptySlot": "Select a property to compare",
+    "remove": "Remove",
+    "backToSearch": "Back to search",
+    "characteristics": "Characteristics",
+    "selected": "selected",
+    "outOf": "of",
+    "openComparison": "Open comparison",
+    "price": "Price",
+    "pricePerMeter": "Price per m²",
+    "area": "Area",
+    "rooms": "Rooms",
+    "floor": "Floor",
+    "bathrooms": "Bathrooms",
+    "deposit": "Deposit",
+    "commission": "Commission",
+    "minRentalPeriod": "Min. rental period",
+    "elevator": "Elevator",
+    "balcony": "Balcony",
+    "terrace": "Terrace",
+    "airConditioning": "Air conditioning",
+    "heating": "Heating",
+    "furnished": "Furnished",
+    "petFriendly": "Pet friendly",
+    "parking": "Parking",
+    "pool": "Pool",
+    "perMonth": "mo.",
+    "sqm": "m²",
+    "months": "mo.",
+    "yes": "Yes",
+    "no": "No",
+    "notSpecified": "Not specified"
   "authRequired": {
     "title": "Authorization required",
     "chat": {

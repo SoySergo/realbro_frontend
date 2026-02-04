@@ -364,6 +364,7 @@
     "sort": "Trier",
     "close": "Fermer",
     "bedrooms": "chambres",
+    "compare": "Comparer"
     "favorites": "Favoris"
   },
   "isochrone": {
@@ -878,6 +879,45 @@
     "smokingAllowed": "Fumeurs acceptés",
     "elevator": "Ascenseur"
   },
+  "comparison": {
+    "title": "Comparer les biens",
+    "subtitle": "biens sélectionnés",
+    "compare": "Comparer",
+    "inComparison": "En comparaison",
+    "limitReached": "Limite atteinte",
+    "clearAll": "Tout effacer",
+    "addMore": "Ajouter",
+    "emptySlot": "Sélectionner un bien à comparer",
+    "remove": "Supprimer",
+    "backToSearch": "Retour à la recherche",
+    "characteristics": "Caractéristiques",
+    "selected": "sélectionné",
+    "outOf": "sur",
+    "openComparison": "Ouvrir la comparaison",
+    "price": "Prix",
+    "pricePerMeter": "Prix au m²",
+    "area": "Surface",
+    "rooms": "Pièces",
+    "floor": "Étage",
+    "bathrooms": "Salles de bain",
+    "deposit": "Dépôt",
+    "commission": "Commission",
+    "minRentalPeriod": "Durée min. de location",
+    "elevator": "Ascenseur",
+    "balcony": "Balcon",
+    "terrace": "Terrasse",
+    "airConditioning": "Climatisation",
+    "heating": "Chauffage",
+    "furnished": "Meublé",
+    "petFriendly": "Animaux acceptés",
+    "parking": "Parking",
+    "pool": "Piscine",
+    "perMonth": "mois",
+    "sqm": "m²",
+    "months": "mois",
+    "yes": "Oui",
+    "no": "Non",
+    "notSpecified": "Non précisé"
   "authRequired": {
     "title": "Autorisation requise",
     "chat": {
