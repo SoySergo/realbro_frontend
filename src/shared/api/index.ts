@@ -6,6 +6,7 @@ export * from './users';
 export * from './properties';
 export * from './search-queries';
 export * from './geometries';
+export * from './contacts';
 
 // Property detail mock/real API
 export {
@@ -26,6 +27,16 @@ export type {
     PropertyPageData,
     NearbyPlaceCategory,
 } from './mocks/property-detail';
+
+// Agency mock/real API
+export {
+    getAgencyById,
+    getAgencyBySlug,
+    getAgenciesList,
+    getAgencyProperties,
+    getAgencyReviews,
+    searchAgenciesByPhone,
+} from './mocks/agencies';
 
 // Server-only exports (use direct import for Server Components)
 export {
