@@ -3,10 +3,10 @@
  */
 
 export const FEATURES = {
-    // Использовать моки для недвижимости в development или когда включен флаг
-    USE_MOCK_PROPERTIES: 
-        process.env.NEXT_PUBLIC_USE_MOCK_PROPERTIES === 'true' || 
-        process.env.NODE_ENV === 'development',
+    // Использовать моки для недвижимости когда включен флаг
+    USE_MOCK_PROPERTIES:
+        process.env.NEXT_PUBLIC_USE_MOCK_PROPERTIES === 'true' ||
+        process.env.NEXT_PUBLIC_USE_MOCKS === 'true',
     
     /**
      * Мок авторизации для тестирования UI

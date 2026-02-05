@@ -1204,7 +1204,8 @@
     "months": "мес.",
     "yes": "Да",
     "no": "Нет",
-    "notSpecified": "Не указано"
+    "notSpecified": "Не указано",
+    "back": "Закрыть"
   },
   "authRequired": {
     "title": "Авторизация требуется",
@@ -1269,6 +1270,10 @@
         "in3Days": "Через 3 дня",
         "inWeek": "Через неделю"
       },
+      "customDateTime": "Выбрать дату и время",
+      "date": "Дата",
+      "time": "Время",
+      "apply": "Применить",
       "today": "Сегодня",
       "tomorrowLabel": "Завтра",
       "rooms": "комн.",

@@ -42,6 +42,7 @@ interface PropertySidebarConditionsProps {
     onLike?: () => void;
     onDislike?: () => void;
     onShare?: () => void;
+    compareButton?: React.ReactNode;
     className?: string;
 }
 
@@ -58,6 +59,7 @@ export function PropertySidebarConditions({
     onLike,
     onDislike,
     onShare,
+    compareButton,
     className
 }: PropertySidebarConditionsProps) {
     const t = translations;
@@ -89,6 +91,7 @@ export function PropertySidebarConditions({
                         </button>
                     </div>
                     <div className="flex gap-1">
+                        {compareButton}
                         <button
                             onClick={onLike}
                             className="p-2 rounded-full transition-all duration-200 hover:bg-muted active:scale-90 text-muted-foreground hover:text-foreground"

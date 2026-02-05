@@ -12,6 +12,7 @@ import {
     MapPin,
     X,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import {
     Select,
@@ -54,9 +55,9 @@ interface MobileMapSidebarProps {
 
 // Высота одной карточки в виртуализированном списке
 // PropertyCardGrid: aspect-ratio 4:3 с базовой шириной ~320px = ~240px высота
-// + padding (12px сверху/снизу) + внутренние отступы карточки (~160px для контента)
-// Итого: примерно 420px. Можно корректировать на основе реальных замеров.
-const ITEM_HEIGHT = 420;
+// + padding (16px сверху/снизу) + внутренние отступы карточки (~160px для контента)
+// Итого: примерно 440px. Можно корректировать на основе реальных замеров.
+const ITEM_HEIGHT = 440;
 
 // Props для rowComponent в react-window
 type PropertyRowProps = {
@@ -88,10 +89,10 @@ function PropertyRow({
         <div
             style={{
                 ...style,
-                paddingLeft: 12,
-                paddingRight: 12,
-                paddingTop: index === 0 ? 12 : 6,
-                paddingBottom: 6,
+                paddingLeft: 16,
+                paddingRight: 16,
+                paddingTop: index === 0 ? 16 : 8,
+                paddingBottom: 8,
             }}
             onMouseEnter={() => onPropertyHover(property)}
             onMouseLeave={() => onPropertyHover(null)}
@@ -124,6 +125,7 @@ export function MapSidebar({
 }: MapSidebarProps) {
     const tCommon = useTranslations('common');
     const tMapSidebar = useTranslations('mapSidebar');
+    const router = useRouter();
 
     const currentFilters = useCurrentFilters();
     const { setSearchViewMode } = useViewModeActions();
@@ -204,6 +206,7 @@ export function MapSidebar({
 
     const handleSwitchToList = () => {
         setSearchViewMode('list');
+        router.push('/search/list');
     };
 
     const handlePropertyClick = useCallback(
@@ -359,7 +362,11 @@ export function MapSidebar({
                         onPropertyClick: handlePropertyClick,
                         onPropertyHover: handlePropertyHover,
                     }}
-                    onScroll={({ scrollTop, scrollHeight, clientHeight }: { scrollTop: number; scrollHeight: number; clientHeight: number }) => {
+                    onScroll={(e: React.UIEvent<HTMLDivElement>) => {
+                        const target = e.currentTarget;
+                        const scrollTop = target.scrollTop;
+                        const scrollHeight = target.scrollHeight;
+                        const clientHeight = target.clientHeight;
                         const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
                         if (scrollPercentage > 0.8 && hasMore && !isLoading) {
                             const nextPage = page + 1;

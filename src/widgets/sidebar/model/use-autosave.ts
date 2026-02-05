@@ -80,18 +80,19 @@ export function useAutosave() {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [saveAllUnsaved]);
 
-    // beforeunload предупреждение
+    // pagehide - сохранение без предупреждения при закрытии страницы
     useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        const handlePageHide = () => {
             const { queries } = useSidebarStore.getState();
             const hasUnsaved = queries.some((q) => q.isUnsaved);
 
             if (hasUnsaved) {
-                e.preventDefault();
+                // Сохраняем данные без показа алерта
+                saveAllUnsaved();
             }
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, []);
+        window.addEventListener('pagehide', handlePageHide);
+        return () => window.removeEventListener('pagehide', handlePageHide);
+    }, [saveAllUnsaved]);
 }

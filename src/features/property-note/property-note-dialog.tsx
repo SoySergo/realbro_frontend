@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { StickyNote, Bell, Save } from 'lucide-react';
+import { StickyNote, Bell, Save, Calendar } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import {
     Dialog,
@@ -52,6 +52,9 @@ export function PropertyNoteDialog({
     const [note, setNote] = useState(initialNote);
     const [reminderDate, setReminderDate] = useState<Date | undefined>(initialReminderDate);
     const [isSaving, setIsSaving] = useState(false);
+    const [showCustomPicker, setShowCustomPicker] = useState(false);
+    const [customDate, setCustomDate] = useState('');
+    const [customTime, setCustomTime] = useState('12:00');
 
     const formatReminderDate = (date: Date) => {
         return format(new Date(date), 'd MMM yyyy, HH:mm', { 
@@ -95,6 +98,17 @@ export function PropertyNoteDialog({
     const handleSetReminder = (hours: number) => {
         const date = new Date(Date.now() + hours * 60 * 60 * 1000);
         setReminderDate(date);
+        setShowCustomPicker(false);
+    };
+
+    const handleCustomDateTime = () => {
+        if (customDate && customTime) {
+            const [hours, minutes] = customTime.split(':').map(Number);
+            const date = new Date(customDate);
+            date.setHours(hours, minutes, 0, 0);
+            setReminderDate(date);
+            setShowCustomPicker(false);
+        }
     };
 
     return (
@@ -147,32 +161,91 @@ export function PropertyNoteDialog({
                                     )}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-48 p-2" align="start">
-                                <div className="space-y-1">
-                                    {reminderPresets.map((preset) => (
+                            <PopoverContent className="w-64 p-2" align="start">
+                                {!showCustomPicker ? (
+                                    <div className="space-y-1">
+                                        {reminderPresets.map((preset) => (
+                                            <button
+                                                key={preset.hours}
+                                                onClick={() => handleSetReminder(preset.hours)}
+                                                className={cn(
+                                                    "w-full text-left px-3 py-2 text-sm rounded-md",
+                                                    "hover:bg-background-secondary transition-colors"
+                                                )}
+                                            >
+                                                {preset.label}
+                                            </button>
+                                        ))}
+                                        <hr className="my-2 border-border" />
                                         <button
-                                            key={preset.hours}
-                                            onClick={() => handleSetReminder(preset.hours)}
+                                            onClick={() => setShowCustomPicker(true)}
                                             className={cn(
-                                                "w-full text-left px-3 py-2 text-sm rounded-md",
-                                                "hover:bg-background-secondary transition-colors"
+                                                "w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2",
+                                                "hover:bg-background-secondary transition-colors text-primary"
                                             )}
                                         >
-                                            {preset.label}
+                                            <Calendar className="w-4 h-4" />
+                                            {t('customDateTime')}
                                         </button>
-                                    ))}
-                                    {reminderDate && (
-                                        <>
-                                            <hr className="my-2 border-border" />
-                                            <button
-                                                onClick={() => setReminderDate(undefined)}
-                                                className="w-full text-left px-3 py-2 text-sm rounded-md text-error hover:bg-error/10 transition-colors"
+                                        {reminderDate && (
+                                            <>
+                                                <hr className="my-2 border-border" />
+                                                <button
+                                                    onClick={() => setReminderDate(undefined)}
+                                                    className="w-full text-left px-3 py-2 text-sm rounded-md text-error hover:bg-error/10 transition-colors"
+                                                >
+                                                    {t('removeReminder')}
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <div className="space-y-2">
+                                            <label className="text-xs text-muted-foreground">{t('date')}</label>
+                                            <input
+                                                type="date"
+                                                value={customDate}
+                                                onChange={(e) => setCustomDate(e.target.value)}
+                                                min={format(new Date(), 'yyyy-MM-dd')}
+                                                className={cn(
+                                                    "w-full bg-background border border-border rounded-md px-3 py-2",
+                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs text-muted-foreground">{t('time')}</label>
+                                            <input
+                                                type="time"
+                                                value={customTime}
+                                                onChange={(e) => setCustomTime(e.target.value)}
+                                                className={cn(
+                                                    "w-full bg-background border border-border rounded-md px-3 py-2",
+                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="flex gap-2 pt-2">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="flex-1"
+                                                onClick={() => setShowCustomPicker(false)}
                                             >
-                                                {t('removeReminder')}
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
+                                                {t('cancel')}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                className="flex-1"
+                                                onClick={handleCustomDateTime}
+                                                disabled={!customDate}
+                                            >
+                                                {t('apply')}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </PopoverContent>
                         </Popover>
                     </div>

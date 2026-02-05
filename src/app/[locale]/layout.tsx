@@ -76,19 +76,11 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     {children}
                                     {/* Auth Modals */}
                                     <AuthModals />
+                                    {/* Comparison Floating Bar */}
+                                    <ComparisonBarProvider />
                                     {/* Global Toast Notifications */}
                                     <GlobalToastProvider />
                                 </SimpleToastProvider>
-                                <AuthErrorHandler />
-                                {/* Sidebar (Desktop + Mobile) */}
-                                <Sidebar />
-                                {children}
-                                {/* Auth Modals */}
-                                <AuthModals />
-                                {/* Comparison Floating Bar */}
-                                <ComparisonBarProvider />
-                                {/* Global Toast Notifications */}
-                                <GlobalToastProvider />
                             </WebSocketProvider>
                         </AuthProvider>
                     </NextIntlClientProvider>

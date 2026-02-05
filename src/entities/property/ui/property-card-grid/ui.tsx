@@ -141,9 +141,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     return (
         <div
             className={cn(
-                'bg-card rounded-xl overflow-hidden border-2 border-transparent',
-                'hover:border-primary transition-all duration-300 shadow-sm hover:shadow-xl',
-                'cursor-pointer group touch-manipulation active:scale-[0.98]',
+                'bg-card rounded-xl overflow-hidden border border-transparent',
+                'hover:border-border/50 transition-all duration-200 shadow-sm hover:shadow-md',
+                'cursor-pointer group touch-manipulation',
                 'min-w-0'
             )}
             onClick={onClick}
@@ -292,7 +292,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             {/* Линии метро */}
                             <div className="flex items-center gap-1 flex-shrink-0">
                                 <div
-                                    className="flex items-center justify-center min-w-7 h-6 px-1.5 text-[11px] font-bold leading-none rounded-md shadow-sm text-white"
+                                    className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
                                     style={{
                                         backgroundColor: mockProperty.nearbyTransport.color || DEFAULT_METRO_LINE_COLOR,
                                     }}
@@ -306,7 +306,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             </span>
                             {/* Время в пути */}
                             <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
-                                <Clock className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                                <Clock className="w-3 h-3" />
                                 <span>
                                     {t('walkMin', { min: mockProperty.nearbyTransport.walkMinutes })}
                                 </span>

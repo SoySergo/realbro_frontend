@@ -1143,7 +1143,8 @@
     "months": "mo.",
     "yes": "Yes",
     "no": "No",
-    "notSpecified": "Not specified"
+    "notSpecified": "Not specified",
+    "back": "Close"
   },
   "authRequired": {
     "title": "Authorization required",
@@ -1208,6 +1209,10 @@
         "in3Days": "In 3 days",
         "inWeek": "In a week"
       },
+      "customDateTime": "Select date & time",
+      "date": "Date",
+      "time": "Time",
+      "apply": "Apply",
       "today": "Today",
       "tomorrowLabel": "Tomorrow",
       "rooms": "rooms",

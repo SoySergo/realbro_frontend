@@ -154,7 +154,7 @@ export function PropertyDetailWidget({
         owner: tContact('owner'),
         agent: tContact('agent'),
         agency: tContact('agency'),
-        limitInfo: tContact('limitInfo'),
+        limitInfo: tContact.raw('limitInfo') as string,
     };
     
     // Переводы для действий
@@ -179,7 +179,7 @@ export function PropertyDetailWidget({
             saveButton: tActions('noteModal.saveButton'),
             cancelButton: tActions('noteModal.cancelButton'),
             closeButton: tActions('noteModal.closeButton'),
-            characterCount: tActions('noteModal.characterCount'),
+            characterCount: tActions.raw('noteModal.characterCount') as string,
         },
     };
 
@@ -372,19 +372,14 @@ export function PropertyDetailWidget({
                                     property={property}
                                     className="w-full"
                                     actions={
-                                        <>
-                                            <PropertyActionsMenu
-                                                propertyId={property.id}
-                                                propertyTitle={property.title}
-                                                variant="inline"
-                                                translations={actionsMenuTranslations}
-                                                onLike={handleLike}
-                                                onDislike={handleDislike}
-                                                onShare={handleShare}
-                                                onReport={handleReport}
-                                            />
-                                            <PropertyCompareButton property={property} variant="full" size="sm" />
-                                        </>
+                                        <PropertyActionsMenu
+                                            propertyId={property.id}
+                                            propertyTitle={property.title}
+                                            variant="mediaActions"
+                                            translations={actionsMenuTranslations}
+                                            onShare={handleShare}
+                                            onReport={handleReport}
+                                        />
                                     }
                                 />
                             </div>
@@ -504,6 +499,7 @@ export function PropertyDetailWidget({
                             onLike={() => handleLike(property.id, true)}
                             onDislike={() => handleDislike(property.id, true)}
                             onShare={() => handleShare(property.id)}
+                            compareButton={<PropertyCompareButton property={property} variant="icon" size="sm" />}
                             author={property.author}
                         />
 

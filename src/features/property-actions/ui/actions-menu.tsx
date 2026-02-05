@@ -56,7 +56,7 @@ interface PropertyActionsMenuProps {
     onReport?: (propertyId: string) => void;
     onDownloadPdf?: (propertyId: string) => void;
     className?: string;
-    variant?: 'inline' | 'compact' | 'full';
+    variant?: 'inline' | 'compact' | 'full' | 'mediaActions';
 }
 
 // ============================================================================
@@ -311,8 +311,51 @@ export function PropertyActionsMenu({
                     initialNote={currentNote}
                     propertyTitle={propertyTitle}
                     translations={t.noteModal}
-                />
+        />
             </>
+        );
+    }
+
+    // mediaActions вариант - только PDF, поделиться, пожаловаться (без лайков)
+    if (variant === 'mediaActions') {
+        return (
+            <div className={cn('flex items-center gap-1', className)}>
+                {/* Поделиться */}
+                <button
+                    onClick={handleShare}
+                    className={cn(
+                        buttonBase,
+                        'text-muted-foreground hover:text-foreground'
+                    )}
+                    title={t.share}
+                >
+                    <Share2 className="w-5 h-5" />
+                </button>
+
+                {/* PDF */}
+                <button
+                    onClick={handleDownloadPdf}
+                    className={cn(
+                        buttonBase,
+                        'text-muted-foreground hover:text-foreground'
+                    )}
+                    title={t.downloadPdf}
+                >
+                    <FileDown className="w-5 h-5" />
+                </button>
+
+                {/* Пожаловаться */}
+                <button
+                    onClick={handleReport}
+                    className={cn(
+                        buttonBase,
+                        'text-muted-foreground hover:text-error hover:bg-error/10'
+                    )}
+                    title={t.report}
+                >
+                    <Flag className="w-5 h-5" />
+                </button>
+            </div>
         );
     }
 
