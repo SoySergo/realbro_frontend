@@ -1,0 +1,1217 @@
+{
+  "footer": {
+    "aboutService": "Sobre el servei",
+    "tariffs": "Tarifes",
+    "profile": "Perfil personal",
+    "forAgents": "Per a agents",
+    "forOwners": "Per a propietaris",
+    "userAgreement": "Acord d'usuari",
+    "privacyPolicy": "Política de privadesa",
+    "contacts": "Contactes",
+    "socialNetworks": "Xarxes socials",
+    "copyright": "© {year} RealBro. Tots els drets reservats.",
+    "allRightsReserved": "Tots els drets reservats"
+  },
+  "common": {
+    "showMore": "Mostrar més",
+    "showLess": "Mostrar menys",
+    "notSpecified": "No especificat",
+    "goBack": "Tornar",
+    "close": "Tancar",
+    "cancel": "Cancel·lar",
+    "save": "Desar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Cercar",
+    "reset": "Restablir",
+    "apply": "Aplicar",
+    "confirm": "Confirmar",
+    "loading": "Carregant...",
+    "error": "Error",
+    "success": "Èxit",
+    "warning": "Avís",
+    "info": "Informació",
+    "yes": "Sí",
+    "no": "No",
+    "or": "o",
+    "and": "i",
+    "from": "des de",
+    "to": "fins a",
+    "per": "per",
+    "in": "a",
+    "on": "el",
+    "at": "a les",
+    "by": "per",
+    "with": "amb",
+    "without": "sense",
+    "for": "per a",
+    "of": "de",
+    "all": "Tot",
+    "any": "Qualsevol",
+    "none": "Cap",
+    "other": "Altres",
+    "more": "Més",
+    "less": "Menys",
+    "total": "Total",
+    "count": "Comptador",
+    "price": "Preu",
+    "date": "Data",
+    "time": "Hora",
+    "name": "Nom",
+    "description": "Descripció",
+    "address": "Adreça",
+    "phone": "Telèfon",
+    "email": "Correu electrònic",
+    "website": "Lloc web",
+    "city": "Ciutat",
+    "country": "País",
+    "region": "Regió",
+    "district": "Districte",
+    "street": "Carrer",
+    "house": "Casa",
+    "apartment": "Apartament",
+    "floor": "Planta",
+    "area": "Superfície",
+    "rooms": "Habitacions",
+    "bedrooms": "Dormitoris",
+    "bathrooms": "Banys",
+    "balcony": "Balcó",
+    "parking": "Pàrquing",
+    "elevator": "Ascensor",
+    "furnished": "Moblat",
+    "unfurnished": "Sense mobles",
+    "pets": "Mascotes",
+    "children": "Nens",
+    "smoking": "Fumar",
+    "available": "Disponible",
+    "unavailable": "No disponible",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "published": "Publicat",
+    "draft": "Esborrany",
+    "archived": "Arxivat",
+    "deleted": "Eliminat",
+    "new": "Nou",
+    "used": "Utilitzat",
+    "old": "Antic",
+    "modern": "Modern",
+    "renovated": "Renovat",
+    "underConstruction": "En construcció",
+    "readyToMove": "Llest per entrar-hi",
+    "popular": "Popular",
+    "recommended": "Recomanat",
+    "featured": "Destacat",
+    "verified": "Verificat",
+    "premium": "Premium",
+    "vip": "VIP",
+    "exclusive": "Exclusiu",
+    "luxury": "Luxe",
+    "standard": "Estàndard",
+    "economy": "Econòmic",
+    "comfort": "Confort",
+    "business": "Negocis",
+    "share": "Compartir",
+    "copy": "Copiar",
+    "download": "Descarregar",
+    "upload": "Pujar",
+    "print": "Imprimir",
+    "send": "Enviar",
+    "receive": "Rebre",
+    "update": "Actualitzar",
+    "refresh": "Actualitzar",
+    "clear": "Netejar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "view": "Veure",
+    "hide": "Amagar",
+    "expand": "Expandir",
+    "collapse": "Contraure",
+    "next": "Següent",
+    "previous": "Anterior",
+    "first": "Primer",
+    "last": "Últim",
+    "page": "Pàgina",
+    "results": "Resultats",
+    "noResults": "Sense resultats",
+    "notFound": "No trobat",
+    "comingSoon": "Properament",
+    "underDevelopment": "En desenvolupament",
+    "maintenance": "Manteniment",
+    "temporarilyUnavailable": "Temporalment no disponible",
+    "tryAgain": "Tornar-ho a provar",
+    "contactSupport": "Contactar amb suport",
+    "learnMore": "Més informació",
+    "readMore": "Llegir més",
+    "viewAll": "Veure tot",
+    "viewDetails": "Veure detalls",
+    "backToHome": "Tornar a l'inici",
+    "backToList": "Tornar a la llista",
+    "continueReading": "Continuar llegint"
+  },
+  "landing": {
+    "hero": {
+      "title": "Troba el teu llar ideal a Barcelona",
+      "subtitle": "Milers d'apartaments en lloguer amb cerca convenient i filtres detallats",
+      "searchPlaceholder": "Introdueix l'adreça o barri",
+      "searchButton": "Cercar",
+      "trustBadge": "Més de {count} apartaments verificats",
+      "popularLocations": "Ubicacions populars",
+      "viewOnMap": "Veure al mapa"
+    },
+    "features": {
+      "title": "Per què triar-nos",
+      "subtitle": "Tot el que necessites per a una cerca còmoda d'apartament",
+      "items": {
+        "verification": {
+          "title": "Anuncis verificats",
+          "description": "Tots els apartaments són verificats pels nostres especialistes"
+        },
+        "map": {
+          "title": "Cerca al mapa",
+          "description": "Visualitza còmodament tots els apartaments disponibles al mapa"
+        },
+        "filters": {
+          "title": "Filtres detallats",
+          "description": "Més de 20 paràmetres per a una cerca precisa"
+        },
+        "support": {
+          "title": "Suport 24/7",
+          "description": "El nostre equip sempre està preparat per ajudar-te"
+        },
+        "favorites": {
+          "title": "Apartaments favorits",
+          "description": "Desa els apartaments que t'agraden i compara'ls"
+        },
+        "notifications": {
+          "title": "Notificacions",
+          "description": "Rep avisos sobre nous apartaments que coincideixin amb els teus criteris"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Com funciona",
+      "subtitle": "Tres passos senzills cap al teu apartament somiat",
+      "steps": {
+        "search": {
+          "title": "1. Cerca",
+          "description": "Utilitza filtres i mapa per trobar apartaments adequats"
+        },
+        "contact": {
+          "title": "2. Contacta",
+          "description": "Contacta amb el propietari o agent immobiliari"
+        },
+        "move": {
+          "title": "3. Muda't",
+          "description": "Signa el contracte i muda't al teu nou llar"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Opinions dels clients",
+      "subtitle": "El que diuen els nostres usuaris",
+      "items": {
+        "user1": {
+          "name": "Maria Garcia",
+          "role": "Inquilí",
+          "text": "Servei excel·lent! He trobat l'apartament perfecte en només dues setmanes. Els filtres i el mapa han estat molt útils."
+        },
+        "user2": {
+          "name": "Ivan Petrov",
+          "role": "Propietari",
+          "text": "Com a propietari, estic molt satisfet. He trobat inquilins fiables en pocs dies. El servei és molt convenient."
+        },
+        "user3": {
+          "name": "Anna Kovalkova",
+          "role": "Inquilí",
+          "text": "He estat buscant apartament durant un mes, però aquí l'he trobat immediatament. Recomanat!"
+        }
+      }
+    },
+    "cta": {
+      "title": "Preparat per trobar el teu llar ideal?",
+      "subtitle": "Comença la cerca ara i troba el teu apartament perfecte a Barcelona",
+      "button": "Començar la cerca",
+      "note": "Registre gratuït. Sense comissions ocultes."
+    },
+    "stats": {
+      "properties": {
+        "count": "{count}+",
+        "label": "Apartaments"
+      },
+      "users": {
+        "count": "{count}+",
+        "label": "Usuaris satisfets"
+      },
+      "deals": {
+        "count": "{count}+",
+        "label": "Acords tancats"
+      },
+      "cities": {
+        "count": "{count}+",
+        "label": "Ciutats"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Tarifes",
+    "subtitle": "Tria el pla que s'adapta a les teves necessitats",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "saveUpTo": "Estalvia fins a {percent}%",
+    "plans": {
+      "free": {
+        "name": "Bàsic",
+        "description": "Per a usuaris privats",
+        "price": "Gratuït",
+        "features": {
+          "listings": "Fins a 3 anuncis",
+          "photos": "Fins a 5 fotos per anunci",
+          "support": "Suport per correu electrònic",
+          "analytics": "Estadístiques bàsiques",
+          "featured": "No disponible",
+          "priority": "No disponible"
+        },
+        "button": "Començar"
+      },
+      "standard": {
+        "name": "Estàndard",
+        "description": "Per a propietaris actius",
+        "price": "€{price}",
+        "priceMonthly": "/mes",
+        "features": {
+          "listings": "Fins a 10 anuncis",
+          "photos": "Fins a 15 fotos per anunci",
+          "support": "Suport prioritari",
+          "analytics": "Estadístiques detallades",
+          "featured": "3 anuncis destacats al mes",
+          "priority": "Visualització prioritària"
+        },
+        "button": "Triar pla",
+        "popular": "Popular"
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "Per a agents immobiliaris",
+        "price": "€{price}",
+        "priceMonthly": "/mes",
+        "features": {
+          "listings": "Anuncis il·limitats",
+          "photos": "Fotos il·limitades",
+          "support": "Suport 24/7",
+          "analytics": "Analítica avançada",
+          "featured": "Anuncis destacats il·limitats",
+          "priority": "Màxima prioritat"
+        },
+        "button": "Triar pla",
+        "bestValue": "Millor valor"
+      }
+    },
+    "faq": {
+      "title": "Preguntes freqüents",
+      "items": {
+        "payment": {
+          "question": "Quins mètodes de pagament accepteu?",
+          "answer": "Acceptem targetes bancàries, PayPal i transferències bancàries."
+        },
+        "cancel": {
+          "question": "Puc cancel·lar la subscripció?",
+          "answer": "Sí, pots cancel·lar la subscripció en qualsevol moment. Només paguen els dies que l'has utilitzat."
+        },
+        "upgrade": {
+          "question": "Puc canviar de pla?",
+          "answer": "Sí, pots canviar de pla en qualsevol moment. La diferència de cost serà calculada automàticament."
+        },
+        "refund": {
+          "question": "Hi ha reemborsament de diners?",
+          "answer": "Sí, oferim reemborsament complet durant els primers 14 dies si no estàs satisfet amb el servei."
+        }
+      }
+    }
+  },
+  "navigation": {
+    "home": "Inici",
+    "search": "Cerca",
+    "favorites": "Favorits",
+    "messages": "Missatges",
+    "profile": "Perfil",
+    "settings": "Configuració",
+    "help": "Ajuda",
+    "logout": "Tancar sessió",
+    "login": "Iniciar sessió",
+    "register": "Registrar-se",
+    "addProperty": "Afegir immoble",
+    "myProperties": "Els meus immobles",
+    "saved": "Desats",
+    "viewed": "Vistos",
+    "contacts": "Contactes",
+    "notifications": "Notificacions",
+    "language": "Idioma",
+    "theme": "Tema",
+    "dark": "Fosc",
+    "light": "Clar",
+    "system": "Sistema"
+  },
+  "property": {
+    "title": "Immoble",
+    "properties": "Immobles",
+    "details": "Detalls de l'immoble",
+    "description": "Descripció",
+    "features": "Característiques",
+    "location": "Ubicació",
+    "nearby": "A prop",
+    "contact": {
+      "label": "Contacte",
+      "call": "Trucar",
+      "message": "Enviar missatge",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram",
+      "email": "Correu electrònic",
+      "showPhone": "Mostrar telèfon",
+      "requestViewing": "Sol·licitar visita",
+      "schedule": "Programar visita",
+      "available": "Disponible per contacte"
+    },
+    "owner": "Propietari",
+    "agent": "Agent",
+    "published": "Publicat",
+    "updated": "Actualitzat",
+    "views": "Visualitzacions",
+    "favorites": "A favorits",
+    "share": "Compartir",
+    "report": "Denunciar",
+    "similar": "Immobles similars",
+    "moreFromOwner": "Més d'aquest propietari",
+    "id": "ID de l'immoble",
+    "type": {
+      "label": "Tipus d'immoble",
+      "apartment": "Apartament",
+      "house": "Casa",
+      "studio": "Estudi",
+      "room": "Habitació",
+      "penthouse": "Àtic",
+      "duplex": "Dúplex",
+      "loft": "Loft",
+      "villa": "Vil·la",
+      "townhouse": "Casa adossada",
+      "commercial": "Comercial",
+      "office": "Oficina",
+      "garage": "Garatge",
+      "land": "Terreny",
+      "other": "Altres"
+    },
+    "dealType": {
+      "label": "Tipus d'operació",
+      "rent": "Lloguer",
+      "sale": "Venda",
+      "dailyRent": "Lloguer diari"
+    },
+    "price": {
+      "label": "Preu",
+      "perMonth": "€/mes",
+      "perDay": "€/dia",
+      "total": "Preu total",
+      "deposit": "Dipòsit",
+      "commission": "Comissió",
+      "utilities": "Serveis",
+      "included": "Inclòs",
+      "notIncluded": "No inclòs",
+      "negotiable": "Negociable",
+      "priceHistory": "Historial de preus",
+      "priceReduced": "Preu reduït",
+      "priceIncreased": "Preu augmentat"
+    },
+    "area": {
+      "label": "Superfície",
+      "total": "Superfície total",
+      "living": "Superfície habitable",
+      "kitchen": "Cuina",
+      "sqm": "m²"
+    },
+    "rooms": {
+      "label": "Habitacions",
+      "count": "{count} habitacions",
+      "bedrooms": "Dormitoris",
+      "bathrooms": "Banys",
+      "livingRoom": "Sala d'estar",
+      "kitchen": "Cuina",
+      "balcony": "Balcó",
+      "terrace": "Terrassa",
+      "loggia": "Galeria",
+      "wardrobe": "Armari",
+      "storage": "Traster"
+    },
+    "floor": {
+      "label": "Planta",
+      "count": "Planta {count}",
+      "ground": "Planta baixa",
+      "last": "Última planta",
+      "notFirst": "No és la primera",
+      "notLast": "No és l'última",
+      "totalFloors": "de {count}"
+    },
+    "building": {
+      "label": "Edifici",
+      "type": "Tipus d'edifici",
+      "year": "Any de construcció",
+      "condition": "Estat",
+      "elevator": "Ascensor",
+      "parking": "Pàrquing",
+      "security": "Seguretat",
+      "concierge": "Conserge",
+      "intercom": "Interfon",
+      "access": "Control d'accés"
+    },
+    "condition": {
+      "label": "Estat",
+      "new": "Nou",
+      "excellent": "Excel·lent",
+      "good": "Bo",
+      "fair": "Acceptable",
+      "needsRepair": "Necessita reparació",
+      "afterRepair": "Després de reparació",
+      "designerRenovation": "Reforma de disseny",
+      "cosmetic": "Reforma cosmètica",
+      "euro": "Reforma europea"
+    },
+    "amenities": {
+      "label": "Comoditats",
+      "furnished": "Moblat",
+      "appliances": "Electrodomèstics",
+      "internet": "Internet",
+      "tv": "Televisió",
+      "washingMachine": "Rentadora",
+      "dishwasher": "Rentaplats",
+      "refrigerator": "Nevera",
+      "oven": "Forn",
+      "microwave": "Microones",
+      "airConditioning": "Aire condicionat",
+      "heating": "Calefacció",
+      "fireplace": "Llar de foc",
+      "pool": "Piscina",
+      "gym": "Gimnàs",
+      "sauna": "Sauna",
+      "jacuzzi": "Jacuzzi",
+      "garden": "Jardí",
+      "playground": "Parc infantil",
+      "storage": "Traster",
+      "basement": "Soterrani"
+    },
+    "rules": {
+      "label": "Normes",
+      "pets": "Mascotes",
+      "allowed": "Permès",
+      "notAllowed": "No permès",
+      "negotiable": "Negociable",
+      "children": "Nens",
+      "smoking": "Fumar",
+      "parties": "Festes",
+      "longTerm": "Llarga estada",
+      "shortTerm": "Curta estada"
+    },
+    "documents": {
+      "label": "Documents",
+      "contract": "Contracte",
+      "passport": "Passaport",
+      "registration": "Empadronament",
+      "deposit": "Dipòsit",
+      "insurance": "Assegurança"
+    },
+    "photos": {
+      "label": "Fotos",
+      "count": "{count} fotos",
+      "view": "Veure totes les fotos",
+      "mainPhoto": "Foto principal",
+      "floorPlan": "Plànol",
+      "video": "Vídeo",
+      "virtualTour": "Tour virtual"
+    },
+    "actions": {
+      "addToFavorites": "Afegir a favorits",
+      "removeFromFavorites": "Eliminar de favorits",
+      "share": "Compartir",
+      "print": "Imprimir",
+      "report": "Denunciar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deactivate": "Desactivar",
+      "activate": "Activar",
+      "promote": "Promocionar"
+    },
+    "status": {
+      "available": "Disponible",
+      "rented": "Llogat",
+      "reserved": "Reservat",
+      "notAvailable": "No disponible",
+      "active": "Actiu",
+      "inactive": "Inactiu",
+      "moderation": "En moderació",
+      "rejected": "Rebutjat",
+      "archived": "Arxivat"
+    }
+  },
+  "filters": {
+    "title": "Filtres",
+    "apply": "Aplicar filtres",
+    "reset": "Restablir filtres",
+    "clear": "Netejar tot",
+    "showResults": "Mostrar {count} resultats",
+    "noResults": "No s'han trobat resultats",
+    "moreFilters": "Més filtres",
+    "lessFilters": "Menys filtres",
+    "dealType": {
+      "label": "Tipus d'operació",
+      "rent": "Lloguer",
+      "sale": "Venda",
+      "dailyRent": "Lloguer diari"
+    },
+    "propertyType": {
+      "label": "Tipus d'immoble",
+      "apartment": "Apartament",
+      "house": "Casa",
+      "studio": "Estudi",
+      "room": "Habitació",
+      "commercial": "Comercial"
+    },
+    "price": {
+      "label": "Preu",
+      "from": "Des de",
+      "to": "Fins a",
+      "min": "Mínim",
+      "max": "Màxim",
+      "perMonth": "€/mes",
+      "perDay": "€/dia",
+      "any": "Qualsevol"
+    },
+    "rooms": {
+      "label": "Habitacions",
+      "studio": "Estudi",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5plus": "5+",
+      "any": "Qualsevol"
+    },
+    "area": {
+      "label": "Superfície",
+      "from": "Des de",
+      "to": "Fins a",
+      "sqm": "m²"
+    },
+    "floor": {
+      "label": "Planta",
+      "from": "Des de",
+      "to": "Fins a",
+      "notFirst": "No és la primera",
+      "notLast": "No és l'última",
+      "ground": "Planta baixa",
+      "last": "Última"
+    },
+    "amenities": {
+      "label": "Comoditats",
+      "furnished": "Moblat",
+      "pets": "Mascotes permeses",
+      "children": "Nens permesos",
+      "elevator": "Ascensor",
+      "parking": "Pàrquing",
+      "balcony": "Balcó",
+      "appliances": "Electrodomèstics",
+      "internet": "Internet",
+      "washingMachine": "Rentadora",
+      "dishwasher": "Rentaplats",
+      "airConditioning": "Aire condicionat",
+      "heating": "Calefacció"
+    },
+    "condition": {
+      "label": "Estat",
+      "new": "Nou",
+      "excellent": "Excel·lent",
+      "good": "Bo",
+      "needsRepair": "Necessita reparació"
+    },
+    "building": {
+      "label": "Edifici",
+      "yearFrom": "Any des de",
+      "yearTo": "Any fins a",
+      "elevator": "Amb ascensor",
+      "parking": "Amb pàrquing"
+    },
+    "location": {
+      "label": "Ubicació",
+      "city": "Ciutat",
+      "district": "Districte",
+      "metro": "Metro",
+      "radius": "Radi",
+      "km": "km"
+    },
+    "sort": {
+      "label": "Ordenar per",
+      "relevance": "Rellevància",
+      "priceAsc": "Preu: baix a alt",
+      "priceDesc": "Preu: alt a baix",
+      "dateDesc": "Data: nous primer",
+      "dateAsc": "Data: antics primer",
+      "areaDesc": "Superfície: gran a petita",
+      "areaAsc": "Superfície: petita a gran",
+      "popular": "Popularitat"
+    },
+    "view": {
+      "label": "Visualització",
+      "list": "Llista",
+      "grid": "Quadrícula",
+      "map": "Mapa"
+    }
+  },
+  "map": {
+    "title": "Mapa",
+    "showOnMap": "Mostrar al mapa",
+    "hideMap": "Amagar mapa",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Sortir de pantalla completa",
+    "zoom": {
+      "in": "Apropar",
+      "out": "Allunyar"
+    },
+    "controls": {
+      "search": "Cerca al mapa",
+      "layers": "Capes",
+      "filters": "Filtres",
+      "myLocation": "La meva ubicació"
+    },
+    "markers": {
+      "property": "Immoble",
+      "cluster": "{count} immobles",
+      "selected": "Seleccionat"
+    },
+    "draw": {
+      "enable": "Dibuixar àrea",
+      "disable": "Cancel·lar dibuix",
+      "clear": "Netejar àrea",
+      "instruction": "Clica al mapa per dibuixar l'àrea de cerca"
+    },
+    "errors": {
+      "loadFailed": "Error en carregar el mapa",
+      "locationDenied": "Accés a la ubicació denegat",
+      "locationUnavailable": "Ubicació no disponible"
+    }
+  },
+  "search": {
+    "title": "Cerca d'immobles",
+    "placeholder": "Ciutat, adreça, barri...",
+    "button": "Cercar",
+    "results": "Resultats de la cerca",
+    "found": "Trobats {count} immobles",
+    "noResults": "No s'han trobat immobles",
+    "noResultsDescription": "Intenta canviar els filtres o la consulta de cerca",
+    "suggestions": "Suggeriments",
+    "recent": "Cerques recents",
+    "popular": "Cerques populars",
+    "saved": "Cerques desades",
+    "saveSearch": "Desar cerca",
+    "deleteSearch": "Eliminar cerca",
+    "notifications": "Notificar sobre nous immobles",
+    "loading": "Cercant immobles..."
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sessió",
+      "subtitle": "Inicia sessió al teu compte",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "rememberMe": "Recorda'm",
+      "forgotPassword": "Has oblidat la contrasenya?",
+      "button": "Iniciar sessió",
+      "noAccount": "No tens compte?",
+      "register": "Registrar-se",
+      "or": "o",
+      "google": "Continuar amb Google",
+      "facebook": "Continuar amb Facebook",
+      "apple": "Continuar amb Apple"
+    },
+    "register": {
+      "title": "Registre",
+      "subtitle": "Crea un compte nou",
+      "name": "Nom",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "confirmPassword": "Confirma la contrasenya",
+      "agree": "Accepto",
+      "terms": "els termes d'ús",
+      "and": "i",
+      "privacy": "la política de privadesa",
+      "button": "Registrar-se",
+      "haveAccount": "Ja tens compte?",
+      "login": "Iniciar sessió"
+    },
+    "forgotPassword": {
+      "title": "Recuperar contrasenya",
+      "subtitle": "Introdueix el teu correu electrònic per recuperar la contrasenya",
+      "email": "Correu electrònic",
+      "button": "Enviar",
+      "backToLogin": "Tornar a l'inici de sessió",
+      "success": "Les instruccions s'han enviat al teu correu electrònic"
+    },
+    "resetPassword": {
+      "title": "Restablir contrasenya",
+      "subtitle": "Introdueix una contrasenya nova",
+      "password": "Contrasenya nova",
+      "confirmPassword": "Confirma la contrasenya",
+      "button": "Restablir",
+      "success": "La contrasenya s'ha restablert correctament"
+    },
+    "verify": {
+      "title": "Verificació de correu electrònic",
+      "subtitle": "Hem enviat un enllaç de verificació al teu correu electrònic",
+      "resend": "Reenviar enllaç",
+      "success": "El correu electrònic s'ha verificat correctament"
+    },
+    "errors": {
+      "invalidCredentials": "Correu electrònic o contrasenya incorrectes",
+      "emailExists": "Aquest correu electrònic ja està registrat",
+      "weakPassword": "La contrasenya és massa feble",
+      "passwordMismatch": "Les contrasenyes no coincideixen",
+      "invalidEmail": "Correu electrònic invàlid",
+      "required": "Camp obligatori",
+      "networkError": "Error de xarxa. Torna-ho a provar"
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "myProfile": "El meu perfil",
+    "editProfile": "Editar perfil",
+    "settings": "Configuració",
+    "personalInfo": {
+      "title": "Informació personal",
+      "name": "Nom",
+      "email": "Correu electrònic",
+      "phone": "Telèfon",
+      "avatar": "Avatar",
+      "changeAvatar": "Canviar avatar",
+      "removeAvatar": "Eliminar avatar",
+      "dateOfBirth": "Data de naixement",
+      "gender": "Gènere",
+      "male": "Home",
+      "female": "Dona",
+      "other": "Altres",
+      "about": "Sobre mi",
+      "languages": "Idiomes"
+    },
+    "account": {
+      "title": "Compte",
+      "email": "Correu electrònic",
+      "emailVerified": "Verificat",
+      "emailNotVerified": "No verificat",
+      "verifyEmail": "Verificar correu electrònic",
+      "changeEmail": "Canviar correu electrònic",
+      "changePassword": "Canviar contrasenya",
+      "currentPassword": "Contrasenya actual",
+      "newPassword": "Contrasenya nova",
+      "confirmPassword": "Confirma la contrasenya",
+      "twoFactor": "Autenticació de dos factors",
+      "enable": "Activar",
+      "disable": "Desactivar",
+      "sessions": "Sessions actives",
+      "devices": "Dispositius",
+      "logoutAll": "Tancar sessió a tots els dispositius"
+    },
+    "notifications": {
+      "title": "Notificacions",
+      "email": "Notificacions per correu electrònic",
+      "push": "Notificacions push",
+      "sms": "Notificacions SMS",
+      "newProperties": "Nous immobles",
+      "priceChanges": "Canvis de preu",
+      "messages": "Missatges nous",
+      "favorites": "Actualitzacions de favorits",
+      "marketing": "Notícies i ofertes"
+    },
+    "preferences": {
+      "title": "Preferències",
+      "language": "Idioma",
+      "theme": "Tema",
+      "currency": "Moneda",
+      "units": "Unitats de mesura",
+      "metric": "Mètric",
+      "imperial": "Imperial",
+      "timezone": "Zona horària"
+    },
+    "privacy": {
+      "title": "Privadesa",
+      "profileVisibility": "Visibilitat del perfil",
+      "public": "Públic",
+      "private": "Privat",
+      "showEmail": "Mostrar correu electrònic",
+      "showPhone": "Mostrar telèfon",
+      "showOnline": "Mostrar en línia",
+      "searchEngines": "Permetre als motors de cerca indexar el meu perfil"
+    },
+    "subscription": {
+      "title": "Subscripció",
+      "current": "Pla actual",
+      "expiresOn": "Expira el",
+      "renews": "Es renova el",
+      "change": "Canviar pla",
+      "cancel": "Cancel·lar subscripció",
+      "upgrade": "Actualitzar",
+      "downgrade": "Reduir",
+      "paymentMethod": "Mètode de pagament",
+      "billing": "Facturació",
+      "invoices": "Factures"
+    },
+    "deleteAccount": {
+      "title": "Eliminar compte",
+      "description": "L'eliminació del compte és permanent i no es pot desfer",
+      "button": "Eliminar compte",
+      "confirm": "Estàs segur que vols eliminar el teu compte?",
+      "enterPassword": "Introdueix la teva contrasenya per confirmar"
+    },
+    "myProperties": {
+      "title": "Els meus immobles",
+      "active": "Actius",
+      "inactive": "Inactius",
+      "draft": "Esborranys",
+      "archived": "Arxivats",
+      "add": "Afegir immoble",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "views": "Visualitzacions",
+      "favorites": "Favorits",
+      "messages": "Missatges"
+    },
+    "favorites": {
+      "title": "Favorits",
+      "empty": "No tens immobles favorits",
+      "addToFavorites": "Afegir a favorits",
+      "removeFromFavorites": "Eliminar de favorits"
+    },
+    "messages": {
+      "title": "Missatges",
+      "empty": "No tens missatges",
+      "new": "Nou missatge",
+      "unread": "No llegits",
+      "all": "Tots",
+      "archived": "Arxivats"
+    },
+    "viewed": {
+      "title": "Immobles vistos",
+      "empty": "No hasvist cap immoble encara",
+      "clear": "Netejar historial"
+    },
+    "searches": {
+      "title": "Cerques desades",
+      "empty": "No tens cerques desades",
+      "save": "Desar cerca",
+      "delete": "Eliminar cerca",
+      "notifications": "Notificacions"
+    }
+  },
+  "addProperty": {
+    "title": "Afegir immoble",
+    "edit": "Editar immoble",
+    "steps": {
+      "type": "Tipus",
+      "details": "Detalls",
+      "location": "Ubicació",
+      "photos": "Fotos",
+      "description": "Descripció",
+      "price": "Preu",
+      "contacts": "Contactes",
+      "publish": "Publicar"
+    },
+    "type": {
+      "title": "Tipus d'immoble",
+      "dealType": "Tipus d'operació",
+      "rent": "Lloguer",
+      "sale": "Venda",
+      "dailyRent": "Lloguer diari",
+      "propertyType": "Tipus d'immoble",
+      "apartment": "Apartament",
+      "house": "Casa",
+      "studio": "Estudi",
+      "room": "Habitació",
+      "commercial": "Comercial"
+    },
+    "details": {
+      "title": "Detalls de l'immoble",
+      "rooms": "Nombre d'habitacions",
+      "bedrooms": "Dormitoris",
+      "bathrooms": "Banys",
+      "area": "Superfície (m²)",
+      "floor": "Planta",
+      "totalFloors": "Total de plantes a l'edifici",
+      "buildingYear": "Any de construcció",
+      "condition": "Estat",
+      "furnished": "Moblat",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "location": {
+      "title": "Ubicació",
+      "country": "País",
+      "city": "Ciutat",
+      "district": "Districte",
+      "address": "Adreça",
+      "map": "Marca la ubicació al mapa",
+      "latitude": "Latitud",
+      "longitude": "Longitud"
+    },
+    "photos": {
+      "title": "Fotos",
+      "upload": "Pujar fotos",
+      "mainPhoto": "Foto principal",
+      "dragAndDrop": "Arrossega i deixa anar les fotos aquí",
+      "orClick": "o clica per seleccionar",
+      "formats": "Formats: JPG, PNG, WebP",
+      "maxSize": "Mida màxima: 10 MB",
+      "maxCount": "Màxim {count} fotos",
+      "delete": "Eliminar",
+      "setMain": "Establir com a principal"
+    },
+    "description": {
+      "title": "Descripció",
+      "description": "Descripció de l'immoble",
+      "placeholder": "Descriu el teu immoble: avantatges, característiques, transport proper, infraestructura...",
+      "amenities": "Comoditats",
+      "rules": "Normes",
+      "petsAllowed": "Mascotes permeses",
+      "childrenAllowed": "Nens permesos",
+      "smokingAllowed": "Fumar permès"
+    },
+    "price": {
+      "title": "Preu",
+      "price": "Preu",
+      "perMonth": "per mes",
+      "perDay": "per dia",
+      "deposit": "Dipòsit",
+      "commission": "Comissió",
+      "utilities": "Serveis",
+      "included": "Inclòs en el preu",
+      "notIncluded": "No inclòs",
+      "negotiable": "Negociable"
+    },
+    "contacts": {
+      "title": "Contactes",
+      "name": "Nom de contacte",
+      "phone": "Telèfon",
+      "email": "Correu electrònic",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram",
+      "preferredContact": "Mètode de contacte preferit"
+    },
+    "publish": {
+      "title": "Publicar anunci",
+      "preview": "Vista prèvia",
+      "saveDraft": "Desar com a esborrany",
+      "publish": "Publicar",
+      "agreement": "Publicant aquest anunci accepto",
+      "terms": "els termes d'ús",
+      "success": "L'anunci s'ha publicat correctament",
+      "error": "Error en publicar l'anunci"
+    },
+    "validation": {
+      "required": "Camp obligatori",
+      "minLength": "Longitud mínima: {count} caràcters",
+      "maxLength": "Longitud màxima: {count} caràcters",
+      "minValue": "Valor mínim: {value}",
+      "maxValue": "Valor màxim: {value}",
+      "invalidEmail": "Correu electrònic invàlid",
+      "invalidPhone": "Telèfon invàlid",
+      "invalidUrl": "URL invàlida"
+    }
+  },
+  "messages": {
+    "title": "Missatges",
+    "newMessage": "Nou missatge",
+    "conversations": "Converses",
+    "empty": "No tens missatges",
+    "emptyConversation": "No hi ha missatges en aquesta conversa",
+    "search": "Cercar converses",
+    "unread": "No llegits",
+    "archive": "Arxiu",
+    "startConversation": "Començar conversa",
+    "selectConversation": "Selecciona una conversa",
+    "typeMessage": "Escriu un missatge...",
+    "send": "Enviar",
+    "attach": "Adjuntar fitxer",
+    "emoji": "Emoji",
+    "seen": "Vist",
+    "delivered": "Entregat",
+    "sending": "Enviant...",
+    "failed": "Error en enviar",
+    "retry": "Tornar-ho a provar",
+    "delete": "Eliminar",
+    "deleteConversation": "Eliminar conversa",
+    "archiveConversation": "Arxivar conversa",
+    "blockUser": "Bloquejar usuari",
+    "reportUser": "Denunciar usuari",
+    "viewProfile": "Veure perfil",
+    "viewProperty": "Veure immoble",
+    "requestViewing": "Sol·licitar visita",
+    "scheduleViewing": "Programar visita",
+    "makeOffer": "Fer oferta",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "online": "En línia",
+    "offline": "Fora de línia",
+    "typing": "Escrivint..."
+  },
+  "notifications": {
+    "title": "Notificacions",
+    "empty": "No tens notificacions",
+    "markAllRead": "Marcar tot com a llegit",
+    "clearAll": "Netejar tot",
+    "settings": "Configuració de notificacions",
+    "types": {
+      "newProperty": "Nou immoble",
+      "priceChange": "Canvi de preu",
+      "newMessage": "Missatge nou",
+      "favoriteUpdate": "Actualització de favorits",
+      "viewingRequest": "Sol·licitud de visita",
+      "offer": "Oferta",
+      "system": "Notificació del sistema"
+    },
+    "actions": {
+      "view": "Veure",
+      "dismiss": "Descartar",
+      "markRead": "Marcar com a llegit",
+      "markUnread": "Marcar com a no llegit"
+    }
+  },
+  "favorites": {
+    "title": "Favorits",
+    "empty": "No tens immobles favorits",
+    "emptyDescription": "Afegeix immobles que t'agraden als favorits per trobar-los ràpidament més tard",
+    "add": "Afegir a favorits",
+    "remove": "Eliminar de favorits",
+    "added": "Afegit a favorits",
+    "removed": "Eliminat de favorits",
+    "folders": "Carpetes",
+    "newFolder": "Carpeta nova",
+    "folderName": "Nom de la carpeta",
+    "moveToFolder": "Moure a carpeta",
+    "removeFromFolder": "Eliminar de la carpeta",
+    "deleteFolder": "Eliminar carpeta",
+    "allFavorites": "Tots els favorits",
+    "unfiled": "Sense classificar"
+  },
+  "compare": {
+    "title": "Comparació d'immobles",
+    "empty": "No has afegit immobles per comparar",
+    "emptyDescription": "Afegeix immobles per comparar les seves característiques i preus",
+    "add": "Afegir a comparació",
+    "remove": "Eliminar de comparació",
+    "addMore": "Afegir més",
+    "maxReached": "Has arribat al màxim de {count} immobles per comparar",
+    "clear": "Netejar tot",
+    "characteristics": "Característiques",
+    "differences": "Només diferències",
+    "similarities": "Només similituds",
+    "all": "Tot"
+  },
+  "viewing": {
+    "title": "Visita a l'immoble",
+    "request": "Sol·licitar visita",
+    "schedule": "Programar visita",
+    "myViewings": "Les meves visites",
+    "date": "Data",
+    "time": "Hora",
+    "selectDate": "Selecciona data",
+    "selectTime": "Selecciona hora",
+    "availableTimes": "Horaris disponibles",
+    "message": "Missatge per al propietari",
+    "messagePlaceholder": "Informació addicional sobre la visita...",
+    "contactInfo": "Informació de contacte",
+    "name": "Nom",
+    "phone": "Telèfon",
+    "email": "Correu electrònic",
+    "submit": "Enviar sol·licitud",
+    "success": "Sol·licitud de visita enviada correctament",
+    "upcoming": "Properes visites",
+    "past": "Visites passades",
+    "cancelled": "Cancel·lades",
+    "pending": "Pendent",
+    "confirmed": "Confirmada",
+    "completed": "Completada",
+    "cancel": "Cancel·lar visita",
+    "reschedule": "Reprogramar",
+    "confirm": "Confirmar",
+    "details": "Detalls de la visita",
+    "address": "Adreça",
+    "contact": "Contacte",
+    "notes": "Notes"
+  },
+  "errors": {
+    "404": {
+      "title": "Pàgina no trobada",
+      "description": "La pàgina que busques no existeix o ha estat moguda",
+      "button": "Tornar a l'inici"
+    },
+    "500": {
+      "title": "Error del servidor",
+      "description": "Alguna cosa ha sortit malament. Ja estem treballant en la solució",
+      "button": "Actualitzar pàgina"
+    },
+    "403": {
+      "title": "Accés denegat",
+      "description": "No tens permisos per veure aquesta pàgina",
+      "button": "Tornar a l'inici"
+    },
+    "offline": {
+      "title": "No hi ha connexió a Internet",
+      "description": "Comprova la connexió i torna-ho a provar",
+      "button": "Tornar-ho a provar"
+    },
+    "generic": {
+      "title": "Ha ocorregut un error",
+      "description": "Alguna cosa ha sortit malament. Torna-ho a provar",
+      "button": "Tornar-ho a provar"
+    }
+  },
+  "sidebar": {
+    "main": "Principal",
+    "search": "Cerca",
+    "favorites": "Favorits",
+    "messages": "Missatges",
+    "notifications": "Notificacions",
+    "myProperties": "Els meus immobles",
+    "addProperty": "Afegir immoble",
+    "profile": "Perfil",
+    "settings": "Configuració",
+    "help": "Ajuda",
+    "logout": "Tancar sessió"
+  },
+  "meta": {
+    "home": {
+      "title": "RealBro - Cerca d'apartaments en lloguer a Barcelona",
+      "description": "Troba el teu apartament ideal a Barcelona. Milers d'ofertes verificades, cerca convenient al mapa i filtres detallats."
+    },
+    "search": {
+      "title": "Cerca d'apartaments a {location} - RealBro",
+      "description": "Apartaments en lloguer a {location}. Preus actuals, fotos i contactes dels propietaris."
+    },
+    "property": {
+      "title": "{title} - {price} - RealBro",
+      "description": "{rooms}, {area} m², {location}. {description}"
+    },
+    "favorites": {
+      "title": "Els meus favorits - RealBro",
+      "description": "Apartaments que has desat als teus favorits"
+    },
+    "profile": {
+      "title": "El meu perfil - RealBro",
+      "description": "Configuració del perfil personal i gestió dels anuncis"
+    }
+  },
+  "languages": {
+    "ru": "Русский",
+    "en": "English",
+    "es": "Español",
+    "ca": "Català",
+    "uk": "Українська",
+    "fr": "Français",
+    "it": "Italiano",
+    "pt": "Português",
+    "de": "Deutsch"
+  }
+}
