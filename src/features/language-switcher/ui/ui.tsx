@@ -14,7 +14,7 @@ import {
 
 /**
  * Компонент для переключения языка интерфейса
- * Использует shadcn/ui Select для лучшего UX с 9 языками
+ * Использует shadcn/ui Select для лучшего UX
  * Сохраняет текущий путь при смене языка
  */
 export function LanguageSwitcher() {
