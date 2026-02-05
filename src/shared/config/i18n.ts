@@ -28,7 +28,7 @@ export const LANGUAGES: LanguageMetadata[] = [
     { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
     { code: 'uk', name: 'Ukrainian', nativeName: 'Українська', flag: '🇺🇦' },
     { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
-    { code: 'ca', name: 'Catalan', nativeName: 'Català', flag: '🇨🇦' },
+    { code: 'ca', name: 'Catalan', nativeName: 'Català', flag: '🏴' },
     { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹' },
     { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
     { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
