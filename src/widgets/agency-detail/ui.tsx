@@ -71,7 +71,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
             <div className="fixed top-0 left-0 right-0 z-50 md:hidden bg-background/95 backdrop-blur-md border-b border-border h-14 flex items-center px-2 gap-2">
                 <button
                     onClick={() => router.back()}
-                    className="p-2 rounded-full hover:bg-muted active:scale-95 transition-all"
+                    className="p-2 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
                 >
                     <ArrowLeft className="w-5 h-5" />
                 </button>
@@ -513,7 +513,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                                                 className="flex items-center gap-3 text-text-secondary hover:text-brand-primary transition-colors w-full text-left"
                                             >
                                                 <Phone className="w-5 h-5 shrink-0" />
-                                                <span>+34 *** ** **</span>
+                                                <span>{agency.contact.phone.slice(0, 4)} *** ** **</span>
                                             </button>
                                         )
                                     )}
