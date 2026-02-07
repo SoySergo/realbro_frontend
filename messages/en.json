@@ -20,7 +20,11 @@
     "euro": "€",
     "back": "Back",
     "next": "Next",
-    "of": "of"
+    "of": "of",
+    "note": "Note",
+    "share": "Share",
+    "downloadPdf": "Download PDF",
+    "report": "Report"
   },
   "landing": {
     "hero": {
