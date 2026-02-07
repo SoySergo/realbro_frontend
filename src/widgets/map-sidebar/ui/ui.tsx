@@ -620,18 +620,27 @@ export function MobileMapSidebar({
                 bottom: `${BOTTOM_NAV_HEIGHT}px`,
                 height: sheetHeight,
                 transform: dragOffset !== 0
-                    ? `translateY(${snapState === 'collapsed' ? dragOffset : dragOffset}px)`
+                    ? `translateY(${dragOffset}px)`
                     : undefined,
             }}
         >
             {/* Drag handle — всегда доступен для свайпа */}
             <div
+                role="button"
+                tabIndex={0}
+                aria-label={isExpanded ? tMapSidebar('hidePanel') : tMapSidebar('showPanel')}
                 className="flex justify-center py-3 shrink-0 cursor-grab active:cursor-grabbing touch-none"
                 onTouchStart={handleHandleTouchStart}
                 onTouchMove={handleHandleTouchMove}
                 onTouchEnd={handleHandleTouchEnd}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSnapState((prev) => (prev === 'collapsed' ? 'expanded' : 'collapsed'));
+                    }
+                }}
             >
-                <div className="w-10 h-1.5 rounded-full bg-border" />
+                <div className="w-10 h-1.5 rounded-full bg-border" aria-hidden="true" />
             </div>
 
             {/* Header с сортировкой — только в развёрнутом состоянии */}
