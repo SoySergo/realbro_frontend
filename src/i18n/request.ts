@@ -10,7 +10,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     let locale = await requestLocale;
 
     // Проверяем, что локаль поддерживается
-    if (!locale || !routing.locales.includes(locale as 'ru' | 'en' | 'fr')) {
+    if (!locale || !routing.locales.includes(locale as 'ru' | 'en' | 'fr' | 'uk' | 'de' | 'pt' | 'es' | 'ca' | 'it')) {
         locale = routing.defaultLocale;
     }
 
