@@ -1,4 +1,4 @@
-export { CompareButton, type CompareButtonTranslations, FloatingComparisonBar, type FloatingComparisonBarTranslations, PropertyCompareButton, PropertyCompareMenuItem } from './ui';
+export { CompareButton, type CompareButtonTranslations, FloatingComparisonBar, type FloatingComparisonBarTranslations, PropertyCompareButton, PropertyCompareMenuItem, ComparisonDialog, type ComparisonDialogTranslations } from './ui';
 export { 
     useComparisonStore, 
     useComparisonIds, 

@@ -1045,6 +1045,55 @@
     "smokingAllowed": "Fumeurs acceptés",
     "elevator": "Ascenseur"
   },
+  "contact": {
+    "title": "Contacts",
+    "loadingTitle": "Chargement des contacts...",
+    "authRequiredTitle": "Autorisation requise",
+    "authRequiredDescription": "Connectez-vous pour contacter l'agent",
+    "authRequiredOwnerDescription": "Veuillez vous connecter pour contacter le propriétaire",
+    "limitExceededTitle": "Limite atteinte",
+    "limitExceededDescription": "Vous avez atteint votre limite quotidienne de consultation des contacts. Passez à un forfait supérieur pour étendre vos possibilités.",
+    "loginButton": "Se connecter",
+    "upgradeButton": "Améliorer le forfait",
+    "closeButton": "Fermer",
+    "phone": "Téléphone",
+    "showPhone": "Afficher le téléphone",
+    "call": "Appeler",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "email": "Email",
+    "website": "Site web",
+    "agencyProfile": "Profil de l'agence",
+    "copySuccess": "Copié",
+    "owner": "Propriétaire",
+    "agent": "Agent",
+    "agency": "Agence",
+    "limitInfo": "{current} sur {max} utilisés"
+  },
+  "actions": {
+    "like": "J'aime",
+    "liked": "Ajouté aux favoris",
+    "dislike": "Je n'aime pas",
+    "disliked": "Masqué du fil",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié",
+    "addNote": "Ajouter une note",
+    "editNote": "Modifier la note",
+    "noteSaved": "Note enregistrée",
+    "downloadPdf": "Télécharger PDF",
+    "report": "Signaler",
+    "more": "Plus",
+    "noteModal": {
+      "title": "Note",
+      "description": "Vos notes personnelles pour cette propriété",
+      "placeholder": "Écrivez une note...",
+      "saveButton": "Enregistrer",
+      "cancelButton": "Annuler",
+      "closeButton": "Fermer",
+      "characterCount": "{current}/{max}"
+    }
+  },
   "agency": {
     "title": "Agence immobilière",
     "agencies": "Agences immobilières",
@@ -1178,7 +1227,8 @@
     "months": "mois",
     "yes": "Oui",
     "no": "Non",
-    "notSpecified": "Non précisé"
+    "notSpecified": "Non précisé",
+    "back": "Fermer"
   },
   "authRequired": {
     "title": "Autorisation requise",
@@ -1197,10 +1247,109 @@
   },
   "favorites": {
     "title": "Favoris",
+    "tabs": {
+      "properties": "Propriétés",
+      "professionals": "Professionnels",
+      "filters": "Filtres",
+      "notes": "Notes"
+    },
     "empty": {
       "title": "Rien ici encore",
-      "description": "Ajoutez des propriétés à vos favoris pour y revenir plus tard"
+      "description": "Ajoutez des propriétés à vos favoris pour y revenir plus tard",
+      "professionals": {
+        "title": "Aucun professionnel sauvegardé",
+        "description": "Ajoutez vos agents et agences préférés aux favoris"
+      },
+      "filters": {
+        "title": "Aucun filtre sauvegardé",
+        "description": "Sauvegardez vos paramètres de recherche pour un accès rapide"
+      },
+      "notes": {
+        "title": "Aucune note",
+        "description": "Créez des notes pour les propriétés et définissez des rappels"
+      }
     },
-    "count": "{count} propriétés"
+    "count": "{count} propriétés",
+    "notes": {
+      "title": "Notes & Rappels",
+      "addNote": "Ajouter une note",
+      "editNote": "Modifier la note",
+      "deleteNote": "Supprimer la note",
+      "placeholder": "Entrez votre note...",
+      "reminder": "Rappel",
+      "setReminder": "Définir un rappel",
+      "removeReminder": "Supprimer le rappel",
+      "reminderSet": "Rappel défini pour le {date}",
+      "noReminder": "Pas de rappel",
+      "saveNote": "Sauvegarder",
+      "cancel": "Annuler",
+      "noteCreated": "Note créée",
+      "noteUpdated": "Note mise à jour",
+      "noteDeleted": "Note supprimée",
+      "reminderPresets": {
+        "in1Hour": "Dans 1 heure",
+        "in3Hours": "Dans 3 heures",
+        "tomorrow": "Demain",
+        "in3Days": "Dans 3 jours",
+        "inWeek": "Dans une semaine"
+      },
+      "customDateTime": "Sélectionner date et heure",
+      "date": "Date",
+      "time": "Heure",
+      "apply": "Appliquer",
+      "today": "Aujourd'hui",
+      "tomorrowLabel": "Demain",
+      "rooms": "pièces",
+      "minutes": "min",
+      "km": "km"
+    },
+    "professionals": {
+      "title": "Professionnels",
+      "agent": "Agent",
+      "agency": "Agence",
+      "owner": "Propriétaire",
+      "activeListings": "{count} annonces actives",
+      "verified": "Vérifié",
+      "superAgent": "Super agent",
+      "yearsOnPlatform": "{count} ans sur la plateforme",
+      "contact": "Contacter",
+      "remove": "Retirer des favoris"
+    },
+    "filters": {
+      "title": "Filtres Sauvegardés",
+      "applyFilter": "Appliquer",
+      "deleteFilter": "Supprimer",
+      "editFilter": "Modifier",
+      "lastUsed": "Dernière utilisation: {date}",
+      "propertiesCount": "{count} propriétés trouvées"
+    },
+    "authPrompt": {
+      "title": "Connectez-vous pour sauvegarder",
+      "description": "Connectez-vous pour sauvegarder vos favoris et les synchroniser entre vos appareils"
+    }
+  },
+  "complaint": {
+    "title": "Signaler l'annonce",
+    "description": "Sélectionnez le motif et décrivez le problème",
+    "reasonLabel": "Motif",
+    "reasonPlaceholder": "Sélectionnez un motif",
+    "reasonRequired": "Veuillez sélectionner un motif",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Décrivez le problème en détail...",
+    "descriptionMinLength": "La description doit contenir au moins 10 caractères",
+    "submit": "Envoyer le signalement",
+    "cancel": "Annuler",
+    "successMessage": "Signalement envoyé avec succès",
+    "errorMessage": "Erreur lors de l'envoi du signalement",
+    "reasons": {
+      "spam": "Spam ou arnaque",
+      "misleading": "Informations trompeuses",
+      "duplicate": "Annonce dupliquée",
+      "wrong_price": "Prix incorrect",
+      "wrong_photos": "Photos incorrectes ou volées",
+      "fraud": "Suspicion de fraude",
+      "offensive": "Contenu offensant",
+      "other": "Autre"
+    }
   }
 }

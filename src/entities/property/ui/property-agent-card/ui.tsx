@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import { Phone, MessageCircle, CheckCircle2, Star, Building2 } from 'lucide-react';
+import { Link } from '@/shared/config/routing';
 import type { PropertyAuthor } from '@/entities/property/model/types';
 
 interface PropertyAgentCardProps {
@@ -82,9 +83,13 @@ export function PropertyAgentCard({
                     )}
                     
                     {/* Name */}
-                    <p className={cn("font-semibold text-foreground truncate", compact && "text-sm")}>
+                    <Link
+                        href={`/agency/${agent.id}`}
+                        className={cn("font-semibold text-foreground truncate hover:text-brand-primary transition-colors block", compact && "text-sm")}
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {isAgency ? agent.agencyName || agent.name : agent.name}
-                    </p>
+                    </Link>
 
                     {/* Compact stats/badges */}
                     {compact ? (

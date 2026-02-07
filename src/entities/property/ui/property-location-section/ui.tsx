@@ -134,7 +134,7 @@ export function PropertyLocationSection({
                         <TransportStationsDetailed
                             key="transport"
                             stations={transportStations}
-                            className="bg-card w-full"
+                            className="w-full"
                         />
                     </div>
                 );

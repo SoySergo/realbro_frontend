@@ -41,7 +41,7 @@ export async function getPropertyPageTranslations(locale: string) {
             video: t('video'),
             tour3d: t('tour3d'),
             plan: t('plan'),
-            showAllPhotos: t('showAllPhotos'),
+            showAllPhotos: t.raw('showAllPhotos') as string,
         },
 
         // Main Info
@@ -133,7 +133,7 @@ export async function getPropertyPageTranslations(locale: string) {
         // Amenities
         amenities: {
             title: t('amenities'),
-            showAllAmenities: t('showAllAmenities'),
+            showAllAmenities: t.raw('showAllAmenities') as string,
             // Individual amenities
             items: {
                 wifi: tAmenities('wifi'),
@@ -165,7 +165,7 @@ export async function getPropertyPageTranslations(locale: string) {
             title: t('location'),
             infrastructure: t('infrastructure'),
             showOnMap: t('showOnMap'),
-            walkMinutes: t('walkMinutes'),
+            walkMinutes: t.raw('walkMinutes') as string,
             categories: {
                 transport: t('locationSection.categories.transport'),
                 schools: t('locationSection.categories.schools'),
@@ -234,10 +234,10 @@ export async function getPropertyPageTranslations(locale: string) {
             superAgent: t('superAgent'),
             verified: t('verified'),
             docsVerified: t('docsVerified'),
-            yearsOnPlatform: t('yearsOnPlatform'),
+            yearsOnPlatform: t.raw('yearsOnPlatform') as string,
             onPlatform: t('onPlatform'),
             years_short: t('years_short'),
-            objectsCount: t('objectsCount'),
+            objectsCount: t.raw('objectsCount') as string,
             objectsInWork: t('objectsInWork'),
             reviews: t('reviews'),
             call: t('call'),

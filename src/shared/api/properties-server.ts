@@ -57,6 +57,15 @@ export async function getPropertiesListServer(
 ): Promise<PropertiesListResponse> {
     const { filters, page = 1, limit = 24, sortBy = 'createdAt', sortOrder = 'desc' } = params;
 
+    // Return mock immediately if mock mode is enabled
+    if (FEATURES.USE_MOCK_PROPERTIES) {
+        return generateMockPropertiesPage(page, limit, 500, {
+            cardType: 'grid',
+            includeAuthor: true,
+            includeTransport: true
+        });
+    }
+
     try {
         const searchParams = new URLSearchParams();
 
@@ -80,14 +89,6 @@ export async function getPropertiesListServer(
         return await response.json();
     } catch (error) {
         console.error('[API Server] Failed to get properties list:', error);
-        // Return mock data in development
-        if (FEATURES.USE_MOCK_PROPERTIES) {
-            return generateMockPropertiesPage(page, limit, 500, {
-                cardType: 'grid',
-                includeAuthor: true,
-                includeTransport: true
-            });
-        }
         throw error;
     }
 }
@@ -96,6 +97,11 @@ export async function getPropertiesListServer(
  * Серверная функция для получения количества объектов
  */
 export async function getPropertiesCountServer(filters: SearchFilters): Promise<number> {
+    // Return mock immediately if mock mode is enabled
+    if (FEATURES.USE_MOCK_PROPERTIES) {
+        return 500;
+    }
+
     try {
         const params = new URLSearchParams();
         serializeFilters(filters, params);
@@ -112,10 +118,6 @@ export async function getPropertiesCountServer(filters: SearchFilters): Promise<
         return data.count;
     } catch (error) {
         console.error('[API Server] Failed to get properties count:', error);
-        // Return mock count in development
-        if (FEATURES.USE_MOCK_PROPERTIES) {
-            return 500; // Константный mock для стабильности
-        }
         throw error;
     }
 }
@@ -124,6 +126,14 @@ export async function getPropertiesCountServer(filters: SearchFilters): Promise<
  * Получить объект недвижимости по ID (для ISR/SSR)
  */
 export async function getPropertyByIdServer(id: string): Promise<Property | null> {
+    // Return mock immediately if mock mode is enabled
+    if (FEATURES.USE_MOCK_PROPERTIES) {
+        const numericId = parseInt(id.replace(/\D/g, '')) || 0;
+        const mockProperty = generateMockProperty(numericId, { cardType: 'detail' });
+        mockProperty.id = id;
+        return mockProperty;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/properties/${id}`, {
             next: { revalidate: 21600 }, // ISR: revalidate every 6 hours
@@ -131,23 +141,12 @@ export async function getPropertyByIdServer(id: string): Promise<Property | null
 
         if (!response.ok) {
             if (response.status === 404) return null;
-            // Fallback for demo if API fails
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         return await response.json();
     } catch (error) {
         console.error(`[API Server] Failed to get property ${id}:`, error);
-        
-        // Return mock in development
-        if (FEATURES.USE_MOCK_PROPERTIES) {
-            // Генерируем мок на основе id
-            const numericId = parseInt(id.replace(/\D/g, '')) || 0;
-            const mockProperty = generateMockProperty(numericId, { cardType: 'detail' });
-            mockProperty.id = id;
-            return mockProperty;
-        }
-        
         return null;
     }
 }

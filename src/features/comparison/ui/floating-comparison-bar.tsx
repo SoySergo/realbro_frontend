@@ -47,7 +47,7 @@ export function FloatingComparisonBar({
     return (
         <div
             className={cn(
-                'fixed bottom-4 left-1/2 -translate-x-1/2 z-50',
+                'fixed bottom-20 md:bottom-4 left-1/2 -translate-x-1/2 z-50',
                 'bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl',
                 'p-3 md:p-4',
                 'flex items-center gap-3 md:gap-4',

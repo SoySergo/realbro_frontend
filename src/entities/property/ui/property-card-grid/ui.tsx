@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { Link } from '@/shared/config/routing';
 import {
     ThumbsUp,
     ThumbsDown,
@@ -20,6 +21,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { PropertyNoteDialog } from '@/features/property-note';
 import type { Property } from '../../model/types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
@@ -42,6 +44,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [isHovering, setIsHovering] = useState(false);
     const [likeAnimating, setLikeAnimating] = useState(false);
     const [dislikeAnimating, setDislikeAnimating] = useState(false);
+    const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
 
     const mockProperty = useMemo(
@@ -139,9 +142,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     return (
         <div
             className={cn(
-                'bg-card rounded-xl overflow-hidden border-2 border-transparent',
-                'hover:border-primary transition-all duration-300 shadow-sm hover:shadow-xl',
-                'cursor-pointer group touch-manipulation active:scale-[0.98]',
+                'bg-card rounded-xl overflow-hidden border border-transparent',
+                'hover:border-border/50 transition-all duration-200 shadow-sm hover:shadow-md',
+                'cursor-pointer group touch-manipulation',
                 'min-w-0'
             )}
             onClick={onClick}
@@ -199,7 +202,11 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 {/* Author avatar and time */}
                 <div className="absolute top-2 right-2 z-10">
                     {mockProperty.author && (
-                        <div className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md">
+                        <Link
+                            href={`/agency/${mockProperty.author.id}`}
+                            className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Avatar className="w-5 h-5">
                                 <AvatarImage src={safeImageSrc(mockProperty.author.avatar)} />
                                 <AvatarFallback className="text-[10px]">
@@ -207,7 +214,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                 </AvatarFallback>
                             </Avatar>
                             <span className="text-[10px] text-text-secondary">{timeAgo}</span>
-                        </div>
+                        </Link>
                     )}
                 </div>
             </div>
@@ -217,11 +224,11 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 {/* Price and buttons */}
                 <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="min-w-0 flex-1">
-                        <div className="text-lg sm:text-base font-bold text-foreground truncate">
-                            {formatPrice(mockProperty.price)}
-                        </div>
-                        <div className="text-xs sm:text-[11px] text-muted-foreground">
-                            {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                        <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
+                            <span className="font-bold text-foreground">{formatPrice(mockProperty.price)}</span>
+                            <span className="text-xs sm:text-[11px] text-muted-foreground font-normal">
+                                {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                            </span>
                         </div>
                     </div>
 
@@ -290,7 +297,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             {/* Линии метро */}
                             <div className="flex items-center gap-1 flex-shrink-0">
                                 <div
-                                    className="flex items-center justify-center min-w-7 h-6 px-1.5 text-[11px] font-bold leading-none rounded-md shadow-sm text-white"
+                                    className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
                                     style={{
                                         backgroundColor: mockProperty.nearbyTransport.color || DEFAULT_METRO_LINE_COLOR,
                                     }}
@@ -304,7 +311,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             </span>
                             {/* Время в пути */}
                             <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
-                                <Clock className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                                <Clock className="w-3 h-3" />
                                 <span>
                                     {t('walkMin', { min: mockProperty.nearbyTransport.walkMinutes })}
                                 </span>
@@ -328,7 +335,10 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             {/* Слот для дополнительных пунктов меню */}
                             {menuItems}
                             <DropdownMenuItem
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsNoteDialogOpen(true);
+                                }}
                                 className="gap-2 cursor-pointer"
                             >
                                 <StickyNote className="w-4 h-4" />
@@ -352,6 +362,14 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                     </DropdownMenu>
                 </div>
             </div>
+
+            {/* Диалог заметки */}
+            <PropertyNoteDialog
+                propertyId={property.id}
+                propertyTitle={property.title}
+                isOpen={isNoteDialogOpen}
+                onClose={() => setIsNoteDialogOpen(false)}
+            />
         </div>
     );
 }

@@ -996,6 +996,55 @@
     "childFriendly": "Child-friendly",
     "smokingAllowed": "Smoking allowed"
   },
+  "contact": {
+    "title": "Contacts",
+    "loadingTitle": "Loading contacts...",
+    "authRequiredTitle": "Authorization required",
+    "authRequiredDescription": "Sign in to contact the agent",
+    "authRequiredOwnerDescription": "Please sign in to contact the owner",
+    "limitExceededTitle": "Limit exceeded",
+    "limitExceededDescription": "You have reached your daily limit for viewing contacts. Upgrade to a better plan to expand your capabilities.",
+    "loginButton": "Sign in",
+    "upgradeButton": "Upgrade plan",
+    "closeButton": "Close",
+    "phone": "Phone",
+    "showPhone": "Show phone",
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "email": "Email",
+    "website": "Website",
+    "agencyProfile": "Agency profile",
+    "copySuccess": "Copied",
+    "owner": "Owner",
+    "agent": "Agent",
+    "agency": "Agency",
+    "limitInfo": "Used {current} of {max}"
+  },
+  "actions": {
+    "like": "Like",
+    "liked": "Added to favorites",
+    "dislike": "Dislike",
+    "disliked": "Hidden from feed",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "addNote": "Add note",
+    "editNote": "Edit note",
+    "noteSaved": "Note saved",
+    "downloadPdf": "Download PDF",
+    "report": "Report",
+    "more": "More",
+    "noteModal": {
+      "title": "Note",
+      "description": "Your personal notes for this property",
+      "placeholder": "Write a note...",
+      "saveButton": "Save",
+      "cancelButton": "Cancel",
+      "closeButton": "Close",
+      "characterCount": "{current}/{max}"
+    }
+  },
   "agency": {
     "title": "Real Estate Agency",
     "agencies": "Real Estate Agencies",
@@ -1129,7 +1178,8 @@
     "months": "mo.",
     "yes": "Yes",
     "no": "No",
-    "notSpecified": "Not specified"
+    "notSpecified": "Not specified",
+    "back": "Close"
   },
   "authRequired": {
     "title": "Authorization required",
@@ -1148,10 +1198,109 @@
   },
   "favorites": {
     "title": "Favorites",
+    "tabs": {
+      "properties": "Properties",
+      "professionals": "Professionals",
+      "filters": "Filters",
+      "notes": "Notes"
+    },
     "empty": {
       "title": "Nothing here yet",
-      "description": "Add properties you like to favorites to come back to them later"
+      "description": "Add properties you like to favorites to come back to them later",
+      "professionals": {
+        "title": "No saved professionals",
+        "description": "Add realtors and agencies you like to favorites"
+      },
+      "filters": {
+        "title": "No saved filters",
+        "description": "Save your search settings for quick access"
+      },
+      "notes": {
+        "title": "No notes",
+        "description": "Create notes for properties and set reminders"
+      }
     },
-    "count": "{count} properties"
+    "count": "{count} properties",
+    "notes": {
+      "title": "Notes & Reminders",
+      "addNote": "Add note",
+      "editNote": "Edit note",
+      "deleteNote": "Delete note",
+      "placeholder": "Enter your note...",
+      "reminder": "Reminder",
+      "setReminder": "Set reminder",
+      "removeReminder": "Remove reminder",
+      "reminderSet": "Reminder set for {date}",
+      "noReminder": "No reminder",
+      "saveNote": "Save note",
+      "cancel": "Cancel",
+      "noteCreated": "Note created",
+      "noteUpdated": "Note updated",
+      "noteDeleted": "Note deleted",
+      "reminderPresets": {
+        "in1Hour": "In 1 hour",
+        "in3Hours": "In 3 hours",
+        "tomorrow": "Tomorrow",
+        "in3Days": "In 3 days",
+        "inWeek": "In a week"
+      },
+      "customDateTime": "Select date & time",
+      "date": "Date",
+      "time": "Time",
+      "apply": "Apply",
+      "today": "Today",
+      "tomorrowLabel": "Tomorrow",
+      "rooms": "rooms",
+      "minutes": "min",
+      "km": "km"
+    },
+    "professionals": {
+      "title": "Professionals",
+      "agent": "Agent",
+      "agency": "Agency",
+      "owner": "Owner",
+      "activeListings": "{count} active listings",
+      "verified": "Verified",
+      "superAgent": "Super agent",
+      "yearsOnPlatform": "{count} years on platform",
+      "contact": "Contact",
+      "remove": "Remove from favorites"
+    },
+    "filters": {
+      "title": "Saved Filters",
+      "applyFilter": "Apply",
+      "deleteFilter": "Delete",
+      "editFilter": "Edit",
+      "lastUsed": "Last used: {date}",
+      "propertiesCount": "{count} properties found"
+    },
+    "authPrompt": {
+      "title": "Sign in to save",
+      "description": "Sign in to save favorites and sync across devices"
+    }
+  },
+  "complaint": {
+    "title": "Report Listing",
+    "description": "Select the reason and describe the issue",
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "Select a reason",
+    "reasonRequired": "Please select a reason",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe the issue in detail...",
+    "descriptionMinLength": "Description must be at least 10 characters",
+    "submit": "Submit Report",
+    "cancel": "Cancel",
+    "successMessage": "Report submitted successfully",
+    "errorMessage": "Error submitting report",
+    "reasons": {
+      "spam": "Spam or scam",
+      "misleading": "Misleading information",
+      "duplicate": "Duplicate listing",
+      "wrong_price": "Incorrect price",
+      "wrong_photos": "Wrong or stolen photos",
+      "fraud": "Suspected fraud",
+      "offensive": "Offensive content",
+      "other": "Other"
+    }
   }
 }

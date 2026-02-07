@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BarChart3, ChevronRight, ThumbsUp, ThumbsDown, Share2 } from 'lucide-react';
+import { BarChart3, ChevronRight, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
@@ -42,6 +42,7 @@ interface PropertySidebarConditionsProps {
     onLike?: () => void;
     onDislike?: () => void;
     onShare?: () => void;
+    compareButton?: React.ReactNode;
     className?: string;
 }
 
@@ -58,6 +59,7 @@ export function PropertySidebarConditions({
     onLike,
     onDislike,
     onShare,
+    compareButton,
     className
 }: PropertySidebarConditionsProps) {
     const t = translations;
@@ -89,6 +91,7 @@ export function PropertySidebarConditions({
                         </button>
                     </div>
                     <div className="flex gap-1">
+                        {compareButton}
                         <button
                             onClick={onLike}
                             className="p-2 rounded-full transition-all duration-200 hover:bg-muted active:scale-90 text-muted-foreground hover:text-foreground"
@@ -102,13 +105,6 @@ export function PropertySidebarConditions({
                             title={t.dislike}
                         >
                             <ThumbsDown className="w-5 h-5" />
-                        </button>
-                        <button
-                            onClick={onShare}
-                            className="p-2 rounded-full transition-all duration-200 hover:bg-muted active:scale-90 text-muted-foreground hover:text-foreground"
-                            title={t.share}
-                        >
-                            <Share2 className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

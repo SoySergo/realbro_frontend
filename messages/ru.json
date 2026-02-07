@@ -1057,6 +1057,55 @@
     "smokingAllowed": "Можно курить",
     "elevator": "Лифт"
   },
+  "contact": {
+    "title": "Контакты",
+    "loadingTitle": "Загружаем контакты...",
+    "authRequiredTitle": "Требуется авторизация",
+    "authRequiredDescription": "Войдите, чтобы связаться с агентом",
+    "authRequiredOwnerDescription": "Чтобы связаться с владельцем, пожалуйста, авторизуйтесь",
+    "limitExceededTitle": "Лимит исчерпан",
+    "limitExceededDescription": "Вы достигли дневного лимита просмотров контактов. Перейдите на более подходящий тариф для расширения возможностей.",
+    "loginButton": "Войти",
+    "upgradeButton": "Улучшить тариф",
+    "closeButton": "Закрыть",
+    "phone": "Телефон",
+    "showPhone": "Показать телефон",
+    "call": "Позвонить",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "email": "Email",
+    "website": "Веб-сайт",
+    "agencyProfile": "Профиль агентства",
+    "copySuccess": "Скопировано",
+    "owner": "Собственник",
+    "agent": "Агент",
+    "agency": "Агентство",
+    "limitInfo": "Использовано {current} из {max}"
+  },
+  "actions": {
+    "like": "Нравится",
+    "liked": "Добавлено в избранное",
+    "dislike": "Не нравится",
+    "disliked": "Скрыто из ленты",
+    "share": "Поделиться",
+    "copyLink": "Скопировать ссылку",
+    "linkCopied": "Ссылка скопирована",
+    "addNote": "Оставить заметку",
+    "editNote": "Редактировать заметку",
+    "noteSaved": "Заметка сохранена",
+    "downloadPdf": "Скачать PDF",
+    "report": "Пожаловаться",
+    "more": "Ещё",
+    "noteModal": {
+      "title": "Заметка",
+      "description": "Ваши личные заметки к объекту",
+      "placeholder": "Напишите заметку...",
+      "saveButton": "Сохранить",
+      "cancelButton": "Отмена",
+      "closeButton": "Закрыть",
+      "characterCount": "{current}/{max}"
+    }
+  },
   "agency": {
     "title": "Агентство недвижимости",
     "agencies": "Агентства недвижимости",
@@ -1190,7 +1239,8 @@
     "months": "мес.",
     "yes": "Да",
     "no": "Нет",
-    "notSpecified": "Не указано"
+    "notSpecified": "Не указано",
+    "back": "Закрыть"
   },
   "authRequired": {
     "title": "Авторизация требуется",
@@ -1209,10 +1259,109 @@
   },
   "favorites": {
     "title": "Избранное",
+    "tabs": {
+      "properties": "Объекты",
+      "professionals": "Профессионалы",
+      "filters": "Фильтры",
+      "notes": "Заметки"
+    },
     "empty": {
       "title": "Пока пусто",
-      "description": "Добавляйте понравившиеся объекты в избранное, чтобы вернуться к ним позже"
+      "description": "Добавляйте понравившиеся объекты в избранное, чтобы вернуться к ним позже",
+      "professionals": {
+        "title": "Нет сохраненных профессионалов",
+        "description": "Добавляйте понравившихся риелторов и агентства в избранное"
+      },
+      "filters": {
+        "title": "Нет сохраненных фильтров",
+        "description": "Сохраняйте настройки поиска для быстрого доступа"
+      },
+      "notes": {
+        "title": "Нет заметок",
+        "description": "Создавайте заметки к объектам и ставьте напоминания"
+      }
     },
-    "count": "{count} объектов"
+    "count": "{count} объектов",
+    "notes": {
+      "title": "Заметки и напоминания",
+      "addNote": "Добавить заметку",
+      "editNote": "Редактировать заметку",
+      "deleteNote": "Удалить заметку",
+      "placeholder": "Введите заметку...",
+      "reminder": "Напоминание",
+      "setReminder": "Установить напоминание",
+      "removeReminder": "Удалить напоминание",
+      "reminderSet": "Напоминание установлено на {date}",
+      "noReminder": "Без напоминания",
+      "saveNote": "Сохранить заметку",
+      "cancel": "Отмена",
+      "noteCreated": "Заметка создана",
+      "noteUpdated": "Заметка обновлена",
+      "noteDeleted": "Заметка удалена",
+      "reminderPresets": {
+        "in1Hour": "Через 1 час",
+        "in3Hours": "Через 3 часа",
+        "tomorrow": "Завтра",
+        "in3Days": "Через 3 дня",
+        "inWeek": "Через неделю"
+      },
+      "customDateTime": "Выбрать дату и время",
+      "date": "Дата",
+      "time": "Время",
+      "apply": "Применить",
+      "today": "Сегодня",
+      "tomorrowLabel": "Завтра",
+      "rooms": "комн.",
+      "minutes": "мин",
+      "km": "км"
+    },
+    "professionals": {
+      "title": "Профессионалы",
+      "agent": "Агент",
+      "agency": "Агентство",
+      "owner": "Владелец",
+      "activeListings": "{count} активных объявлений",
+      "verified": "Проверен",
+      "superAgent": "Супер-агент",
+      "yearsOnPlatform": "{count} лет на платформе",
+      "contact": "Связаться",
+      "remove": "Удалить из избранного"
+    },
+    "filters": {
+      "title": "Сохраненные фильтры",
+      "applyFilter": "Применить",
+      "deleteFilter": "Удалить",
+      "editFilter": "Редактировать",
+      "lastUsed": "Последнее использование: {date}",
+      "propertiesCount": "{count} объектов найдено"
+    },
+    "authPrompt": {
+      "title": "Войдите для сохранения",
+      "description": "Авторизуйтесь, чтобы сохранять избранное и синхронизировать между устройствами"
+    }
+  },
+  "complaint": {
+    "title": "Пожаловаться на объявление",
+    "description": "Укажите причину жалобы и опишите проблему",
+    "reasonLabel": "Причина жалобы",
+    "reasonPlaceholder": "Выберите причину",
+    "reasonRequired": "Выберите причину жалобы",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Опишите проблему подробнее...",
+    "descriptionMinLength": "Описание должно содержать минимум 10 символов",
+    "submit": "Отправить жалобу",
+    "cancel": "Отмена",
+    "successMessage": "Жалоба успешно отправлена",
+    "errorMessage": "Ошибка при отправке жалобы",
+    "reasons": {
+      "spam": "Спам или мошенничество",
+      "misleading": "Недостоверная информация",
+      "duplicate": "Дубликат объявления",
+      "wrong_price": "Неверная цена",
+      "wrong_photos": "Чужие или неверные фото",
+      "fraud": "Подозрение на мошенничество",
+      "offensive": "Оскорбительный контент",
+      "other": "Другое"
+    }
   }
 }
