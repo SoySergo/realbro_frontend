@@ -211,10 +211,9 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
             {/* Фильтры — sticky с анимацией скрытия при скролле */}
             <div
                 className={cn(
-                    'sticky z-40 transition-transform duration-200 ease-out',
+                    'sticky top-0 z-40 transition-transform duration-200 ease-out',
                     isFiltersVisible ? 'translate-y-0' : '-translate-y-full'
                 )}
-                style={{ top: 0 }}
             >
                 <AgencyFiltersBar
                     filters={filters}

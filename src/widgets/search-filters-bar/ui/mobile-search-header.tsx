@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useCallback, type MouseEvent, memo } from 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Link, useRouter as useIntlRouter } from '@/shared/config/routing';
+import { Link, useRouter as useLocalizedRouter } from '@/shared/config/routing';
 import { Button } from '@/shared/ui/button';
 import {
     SlidersHorizontal,
@@ -54,7 +54,7 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
     // Используем оптимизированный селектор вместо полного стора
     const searchViewMode = useSearchViewMode();
     const router = useRouter();
-    const intlRouter = useIntlRouter();
+    const localizedRouter = useLocalizedRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     
@@ -106,7 +106,7 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
     // Обработчик смены категории поиска
     const handleCategoryChange = (value: string) => {
         if (value === 'professionals') {
-            intlRouter.push('/agencies');
+            localizedRouter.push('/agencies');
         }
     };
 
