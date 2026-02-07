@@ -116,7 +116,7 @@ export function PropertyNoteDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md max-sm:top-[30%]">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <StickyNote className="w-5 h-5" />

@@ -37,7 +37,11 @@
     "back": "Назад",
     "next": "Далее",
     "of": "из",
-    "months": "мес."
+    "months": "мес.",
+    "note": "Заметка",
+    "share": "Поделиться",
+    "downloadPdf": "Скачать PDF",
+    "report": "Пожаловаться"
   },
   "landing": {
     "hero": {

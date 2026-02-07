@@ -37,7 +37,11 @@
     "back": "Indietro",
     "next": "Avanti",
     "of": "di",
-    "months": "mesi"
+    "months": "mesi",
+    "note": "Nota",
+    "share": "Condividi",
+    "downloadPdf": "Scarica PDF",
+    "report": "Segnala"
   },
   "landing": {
     "hero": {

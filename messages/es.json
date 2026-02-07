@@ -37,7 +37,11 @@
     "back": "Atrás",
     "next": "Siguiente",
     "of": "de",
-    "months": "meses"
+    "months": "meses",
+    "note": "Nota",
+    "share": "Compartir",
+    "downloadPdf": "Descargar PDF",
+    "report": "Reportar"
   },
   "landing": {
     "hero": {

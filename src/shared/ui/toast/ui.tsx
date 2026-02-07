@@ -49,10 +49,10 @@ const toastIcons = {
 };
 
 const toastStyles = {
-    success: 'bg-white dark:bg-gray-900 border-border text-foreground',
-    error: 'bg-white dark:bg-gray-900 border-border text-foreground',
-    warning: 'bg-white dark:bg-gray-900 border-border text-foreground',
-    info: 'bg-white dark:bg-gray-900 border-border text-foreground',
+    success: 'bg-white dark:bg-background-secondary border-border text-foreground',
+    error: 'bg-white dark:bg-background-secondary border-border text-foreground',
+    warning: 'bg-white dark:bg-background-secondary border-border text-foreground',
+    info: 'bg-white dark:bg-background-secondary border-border text-foreground',
 };
 
 const toastIconStyles = {

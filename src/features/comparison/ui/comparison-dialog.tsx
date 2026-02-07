@@ -47,25 +47,41 @@ export function ComparisonDialog({
                 className={cn(
                     'max-w-6xl w-full md:w-[95vw] h-[100dvh] md:h-[90vh] max-h-[100dvh] md:max-h-[90vh] p-0 overflow-hidden',
                     'rounded-none md:rounded-lg',
-                    'pt-safe',
                     className
                 )}
             >
-                <DialogHeader className="sr-only">
-                    <DialogTitle>{t.dialogTitle}</DialogTitle>
-                    <DialogDescription>{t.dialogDescription}</DialogDescription>
-                </DialogHeader>
+                {/* Мобильный хедер для диалога сравнения */}
+                <div className="flex md:hidden items-center justify-between px-4 py-3 border-b border-border bg-background sticky top-0 z-10">
+                    <DialogTitle className="text-base font-semibold truncate flex-1">
+                        {t.dialogTitle}
+                    </DialogTitle>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onClose}
+                        className="shrink-0 rounded-full"
+                    >
+                        <X className="w-5 h-5" />
+                        <span className="sr-only">{t.close}</span>
+                    </Button>
+                </div>
 
-                {/* Close button */}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onClose}
-                    className="absolute right-4 top-4 z-10 rounded-full"
-                >
-                    <X className="w-5 h-5" />
-                    <span className="sr-only">{t.close}</span>
-                </Button>
+                {/* Desktop close button */}
+                <div className="hidden md:block">
+                    <DialogHeader className="sr-only">
+                        <DialogTitle>{t.dialogTitle}</DialogTitle>
+                        <DialogDescription>{t.dialogDescription}</DialogDescription>
+                    </DialogHeader>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onClose}
+                        className="absolute right-4 top-4 z-10 rounded-full"
+                    >
+                        <X className="w-5 h-5" />
+                        <span className="sr-only">{t.close}</span>
+                    </Button>
+                </div>
 
                 {/* Comparison Panel */}
                 <div className="h-full overflow-auto">

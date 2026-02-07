@@ -21,7 +21,11 @@
     "back": "Retour",
     "next": "Suivant",
     "of": "sur",
-    "months": "mois"
+    "months": "mois",
+    "note": "Note",
+    "share": "Partager",
+    "downloadPdf": "Télécharger PDF",
+    "report": "Signaler"
   },
   "landing": {
     "hero": {
