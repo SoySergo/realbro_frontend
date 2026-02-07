@@ -1,24 +1,24 @@
 {
   "footer": {
-    "aboutService": "Chi siamo",
+    "aboutService": "Informazioni sul servizio",
     "tariffs": "Tariffe",
-    "profile": "Profilo",
-    "search": "Cerca",
-    "mapSearch": "Cerca immobili sulla mappa",
-    "listSearch": "Cerca immobili in elenco",
-    "agenciesSearch": "Cerca agenzie immobiliari",
-    "support": "Assistenza",
+    "profile": "Area personale",
+    "search": "Ricerca",
+    "mapSearch": "Ricerca immobili sulla mappa",
+    "listSearch": "Ricerca immobili in lista",
+    "agenciesSearch": "Ricerca agenzie immobiliari",
+    "support": "Assistenza clienti",
     "terms": "Termini di utilizzo",
-    "privacy": "Politica sulla privacy",
+    "privacy": "Informativa sulla privacy",
     "cookies": "Politica sui Cookie",
-    "legal": "Note legali",
+    "legal": "Informazioni legali",
     "agreement": "Utilizzando il servizio, accetti i termini di utilizzo",
     "allRightsReserved": "Tutti i diritti riservati"
   },
   "common": {
     "search": "Cerca",
     "filter": "Filtro",
-    "reset": "Ripristina",
+    "reset": "Reimposta",
     "apply": "Applica",
     "cancel": "Annulla",
     "save": "Salva",
@@ -45,46 +45,46 @@
   },
   "landing": {
     "hero": {
-      "title": "Trova l'immobile perfetto con l'agente IA",
-      "subtitle": "Il tuo assistente IA personale cerca immobili su tutte le piattaforme 24/7, mentre tu ti occupi delle tue cose",
+      "title": "Trova l'immobile perfetto con l'agente AI",
+      "subtitle": "Il tuo assistente AI personale cerca immobili su tutte le piattaforme 24/7, mentre tu ti dedichi alle tue cose",
       "cta": "Inizia la ricerca",
-      "ctaAgent": "Crea un'attività per l'agente",
-      "ctaTabs": "Crea una scheda di ricerca"
+      "ctaAgent": "Crea compito per l'agente",
+      "ctaTabs": "Crea scheda di ricerca"
     },
     "features": {
       "realtime": {
         "title": "Ricerca in tempo reale",
-        "description": "Guarda come l'agente trova nuovi immobili proprio adesso. Le schede appaiono istantaneamente."
+        "description": "Guarda l'agente trovare nuovi immobili proprio ora. Le schede appaiono istantaneamente."
       },
       "background": {
         "title": "L'agente lavora in background",
-        "description": "Crea i filtri e l'agente invierà gli immobili in chat. Ricevi notifiche push su nuovi risultati."
+        "description": "Crea i filtri — l'agente invierà gli immobili in chat. Ricevi notifiche push sulle nuove scoperte."
       },
       "multipleTabs": {
         "title": "Più schede di ricerca",
-        "description": "Cerca compromessi: vicino al lavoro fino a 1000€ o 40 minuti con i mezzi per 800€."
+        "description": "Cerca compromessi: vicino al lavoro fino a 1000€ o 40 minuti di trasporto per 800€."
       },
       "location": {
-        "title": "Configurazione flessibile della posizione",
-        "description": "Isocrona, poligoni, raggio, disegno: scegli il metodo più comodo."
+        "title": "Impostazione flessibile della posizione",
+        "description": "Isocrona, poligoni, raggio, disegno — scegli il modo più comodo."
       },
       "status": {
-        "title": "Filtra per stato",
+        "title": "Filtraggio per stato",
         "description": "Visualizza solo nuovi, preferiti o tutti gli immobili."
       }
     },
     "demo": {
       "realtimeTitle": "Gli immobili appaiono in tempo reale",
       "backgroundTitle": "L'agente cerca mentre ti riposi",
-      "tabsTitle": "Passa da una ricerca all'altra",
-      "locationTitle": "Configura la posizione come preferisci",
+      "tabsTitle": "Passa tra le ricerche",
+      "locationTitle": "Imposta la posizione come preferisci",
       "statusTitle": "Filtra per stato di visualizzazione"
     },
     "cta": {
       "title": "Pronto per iniziare?",
-      "subtitle": "Prova gratuitamente o scegli il piano più adatto",
+      "subtitle": "Prova gratuitamente o scegli il piano adatto",
       "startFree": "Inizia gratis",
-      "viewPricing": "Vedi le tariffe"
+      "viewPricing": "Vedi tariffe"
     },
     "professionals": "Professionisti"
   },
@@ -93,15 +93,15 @@
     "subtitle": "Scegli il piano più adatto a te",
     "popular": "Popolare",
     "features": {
-      "database": "Accesso al più grande database di immobili",
-      "filtering": "Filtri comodi",
+      "database": "Accesso al database più grande di immobili",
+      "filtering": "Filtraggio conveniente",
       "tabs": "schede di ricerca",
       "tabsUnlimited": "Fino a {count} schede di ricerca",
       "owners": "Accesso ai proprietari",
       "ownersLimited": "Accesso limitato ai proprietari",
       "ownersMultiplier": "Accesso ai proprietari x{count}",
-      "aiSearch": "Ricerca personalizzata dall'IA",
-      "aiSearchNo": "Nessuna ricerca dall'agente IA",
+      "aiSearch": "Ricerca personalizzata dall'AI",
+      "aiSearchNo": "Senza ricerca dall'agente AI",
       "aiFilters": "Fino a {count} filtri per l'agente",
       "duration": "Durata: {days} giorni"
     },
@@ -123,11 +123,11 @@
         "description": "Massime possibilità"
       }
     },
-    "selectPlan": "Scegli il piano",
+    "selectPlan": "Scegli piano",
     "currentPlan": "Piano attuale"
   },
   "navigation": {
-    "search": "Cerca",
+    "search": "Ricerca",
     "favorites": "Preferiti",
     "chat": "Chat",
     "profile": "Profilo"
@@ -136,7 +136,7 @@
     "title": "Immobile",
     "price": "Prezzo",
     "area": "Superficie",
-    "rooms": "Camere",
+    "rooms": "Stanze",
     "bedrooms": "Camere da letto",
     "bathrooms": "Bagni",
     "floor": "Piano",
@@ -167,7 +167,7 @@
     "justNow": "proprio ora",
     "minutesAgo": "{count} min fa",
     "hoursAgo": "{count} h fa",
-    "daysAgo": "{count} gg fa",
+    "daysAgo": "{count} g fa",
     "agent": "Agente",
     "owner": "Proprietario",
     "agency": "Agenzia"
@@ -178,7 +178,7 @@
     "villa": "Villa",
     "studio": "Monolocale",
     "penthouse": "Attico",
-    "townhouse": "Villetta a schiera",
+    "townhouse": "Casa a schiera",
     "duplex": "Duplex"
   },
   "transport": {
@@ -189,30 +189,30 @@
   "listing": {
     "title": "Affitto immobili a Barcellona",
     "subtitle": "Trovati {count} immobili",
-    "emptyTitle": "Nessun risultato",
+    "emptyTitle": "Nessun risultato trovato",
     "emptySubtitle": "Prova a modificare i parametri di ricerca",
     "viewModeGrid": "Griglia",
-    "viewModeList": "Elenco",
-    "showOnMap": "Vedi sulla mappa",
+    "viewModeList": "Lista",
+    "showOnMap": "Visualizza sulla mappa",
     "sortByDate": "Per data",
     "sortByPrice": "Per prezzo",
     "sortByArea": "Per superficie",
-    "aiStoriesTitle": "Nuovi annunci dall'agente IA",
+    "aiStoriesTitle": "Nuovi annunci dall'agente AI",
     "aiStoriesSubtitle": "Ricevi nuove offerte e contatta per primo",
     "onMap": "Sulla mappa",
     "page": "Pag.",
-    "metaDescription": "Ricerca affitti a Barcellona con agente IA"
+    "metaDescription": "Ricerca affitto immobili a Barcellona con agente AI"
   },
   "filters": {
     "title": "Filtri",
-    "aiAgent": "Agente IA",
+    "aiAgent": "Agente AI",
     "priceRange": "Fascia di prezzo",
     "minPrice": "Da",
     "maxPrice": "A",
     "areaRange": "Superficie",
     "minArea": "Da m²",
     "maxArea": "A m²",
-    "roomCount": "Numero di camere",
+    "roomCount": "Numero di stanze",
     "propertyType": "Tipo di immobile",
     "status": "Stato",
     "forSale": "Vendita",
@@ -220,17 +220,17 @@
     "location": "Posizione",
     "category": "Categoria",
     "markerType": "Tipo di marcatori",
-    "rooms": "Camere",
+    "rooms": "Stanze",
     "price": "Prezzo",
     "area": "Superficie",
     "studio": "Monolocale",
-    "room1": "1 camera",
-    "room2": "2 camere",
-    "room3": "3 camere",
-    "room4": "4 camere",
-    "room5plus": "5 o più",
+    "room1": "1 stanza",
+    "room2": "2 stanze",
+    "room3": "3 stanze",
+    "room4": "4 stanze",
+    "room5plus": "5 e più",
     "markerAll": "Tutti gli immobili",
-    "markerNotViewed": "Non classificati",
+    "markerNotViewed": "Non esaminati",
     "markerNoView": "Non visti",
     "markerLiked": "Piaciuti",
     "markerDisliked": "Non piaciuti",
@@ -238,10 +238,10 @@
     "locationDraw": "Disegna",
     "locationTimeFrom": "Tempo di viaggio",
     "locationIsochrone": "Tempo di viaggio",
-    "locationRadius": "Raggio da un punto",
+    "locationRadius": "Raggio dal punto",
     "walking": "A piedi",
-    "cycling": "In bici",
-    "driving": "In auto",
+    "cycling": "Bicicletta",
+    "driving": "Auto",
     "minutes": "min",
     "radiusKm": "km dal punto",
     "clearAll": "Cancella tutto",
@@ -267,13 +267,13 @@
     "isochroneReady": "{profile} {minutes} min",
     "radiusReady": "Raggio {radius} km",
     "exitConfirmTitle": "Uscire senza salvare?",
-    "exitConfirmDescription": "Hai modifiche non salvate in modalità \"{mode}\". Verranno perse.",
+    "exitConfirmDescription": "Hai modifiche non salvate nella modalità \"{mode}\". Verranno perse.",
     "exitAnyway": "Esci comunque",
     "saveConfirmTitle": "Salvare il filtro?",
     "saveConfirmDescription": "Verranno salvati i dati dalla modalità \"{currentMode}\". I dati dalle modalità: {otherModes} — verranno persi.",
     "saveAnyway": "Salva",
     "modeChangeConfirmTitle": "Cambiare modalità?",
-    "modeChangeConfirmDescription": "Hai modifiche non salvate in modalità \"{currentMode}\". Cambiando modalità verranno perse.",
+    "modeChangeConfirmDescription": "Hai modifiche non salvate nella modalità \"{currentMode}\". Cambiando modalità verranno perse.",
     "switchMode": "Cambia modalità",
     "searchPlaceholder": "Città, quartiere, regione, paese...",
     "locationTypeCountry": "Paese",
@@ -284,21 +284,21 @@
     "locationTypeNeighborhood": "Zona",
     "locationTypePlace": "Luogo",
     "viewMap": "Mappa",
-    "viewList": "Elenco",
+    "viewList": "Lista",
     "sortDate": "Per data",
     "allFilters": "Tutti i filtri",
-    "reset": "Ripristina",
-    "resetAll": "Ripristina tutto",
+    "reset": "Reimposta",
+    "resetAll": "Reimposta tutto",
     "showResults": "Mostra {count} risultati",
-    "noResults": "Nessun risultato",
+    "noResults": "Nessun risultato trovato",
     "loading": "Ricerca...",
     "activeFilters": "{count} filtri attivi",
     "categories": {
       "price": "Prezzo",
       "area": "Superficie",
-      "rooms": "Camere",
+      "rooms": "Stanze",
       "location": "Posizione",
-      "features": "Servizi",
+      "features": "Comfort",
       "propertyType": "Tipo di immobile"
     }
   },
@@ -321,7 +321,7 @@
     "hasAccount": "Hai già un account?",
     "loading": "Caricamento...",
     "welcomeBack": "Bentornato",
-    "enterCredentials": "Inserisci le tue credenziali per accedere",
+    "enterCredentials": "Inserisci i tuoi dati per accedere",
     "createAccount": "Crea account",
     "enterDetails": "Inserisci i tuoi dati per registrarti",
     "resetPassword": "Reimposta password",
@@ -370,27 +370,27 @@
       "title": "Impostazioni notifiche",
       "email": {
         "title": "Notifiche email",
-        "newProperties": "Nuovi immobili dalle ricerche salvate",
-        "priceChanges": "Cambi di prezzo su immobili preferiti",
-        "savedSearches": "Aggiornamenti dalle ricerche salvate",
+        "newProperties": "Nuovi immobili nelle ricerche salvate",
+        "priceChanges": "Variazioni di prezzo sugli immobili preferiti",
+        "savedSearches": "Aggiornamenti sulle ricerche salvate",
         "promotions": "Promozioni e offerte speciali",
         "accountUpdates": "Modifiche account e sicurezza"
       },
       "push": {
         "title": "Notifiche push",
         "newProperties": "Nuovi immobili",
-        "priceChanges": "Cambi di prezzo",
+        "priceChanges": "Variazioni di prezzo",
         "savedSearches": "Aggiornamenti ricerche",
         "messages": "Messaggi dagli agenti"
       },
       "telegram": {
         "title": "Notifiche Telegram",
         "enabled": "Attiva bot Telegram",
-        "connect": "Collega Telegram",
-        "connected": "Telegram collegato",
-        "disconnect": "Scollega",
+        "connect": "Connetti Telegram",
+        "connected": "Telegram connesso",
+        "disconnect": "Disconnetti",
         "newProperties": "Nuovi immobili",
-        "priceChanges": "Cambi di prezzo"
+        "priceChanges": "Variazioni di prezzo"
       }
     },
     "subscription": {
@@ -408,12 +408,12 @@
       "canceledOn": "Verrà annullato il",
       "features": "Funzionalità del piano",
       "searchTabs": "Schede di ricerca",
-      "aiFilters": "Filtri per l'agente IA",
+      "aiFilters": "Filtri per l'agente AI",
       "ownerAccess": "Accesso ai proprietari",
       "ownerAccessMultiplier": "Accesso ai proprietari ×{count}",
       "unlimited": "Illimitato",
       "changePlan": "Cambia piano",
-      "upgradePlan": "Aggiorna piano",
+      "upgradePlan": "Migliora piano",
       "downgradePlan": "Riduci piano",
       "cancelSubscription": "Annulla abbonamento",
       "reactivate": "Riattiva abbonamento",
@@ -456,7 +456,7 @@
     "currentPassword": "Password attuale",
     "newPassword": "Nuova password",
     "confirmNewPassword": "Conferma nuova password",
-    "passwordChanged": "Password cambiata con successo",
+    "passwordChanged": "Password modificata con successo",
     "passwordRequirements": "Minimo 8 caratteri, inclusi numeri e lettere",
     "twoFactorAuth": "Autenticazione a due fattori",
     "twoFactorEnabled": "2FA attivata",
@@ -470,7 +470,7 @@
       "lastActive": "Ultima attività",
       "terminateSession": "Termina sessione",
       "terminateAll": "Termina tutte le sessioni",
-      "terminateOther": "Termina tutte tranne l'attuale",
+      "terminateOther": "Termina tutte tranne la corrente",
       "device": "Dispositivo",
       "browser": "Browser",
       "location": "Posizione",
@@ -495,17 +495,17 @@
   "errors": {
     "general": "Si è verificato un errore. Riprova.",
     "notFound": "Pagina non trovata",
-    "unauthorized": "Autenticazione richiesta",
+    "unauthorized": "Autenticazione necessaria",
     "serverError": "Errore del server",
     "networkError": "Problema di connessione",
     "invalidCredentials": "Email o password errati",
-    "emailExists": "Un utente con questa email esiste già",
+    "emailExists": "Utente con questa email già esistente",
     "weakPassword": "Password troppo debole",
     "passwordMismatch": "Le password non corrispondono",
-    "sessionExpired": "Sessione scaduta, accedi nuovamente"
+    "sessionExpired": "Sessione scaduta, accedi di nuovo"
   },
   "sidebar": {
-    "search": "Cerca",
+    "search": "Ricerca",
     "chat": "Chat",
     "profile": "Profilo",
     "settings": "Impostazioni",
@@ -515,14 +515,14 @@
     "filters": "Filtri",
     "sort": "Ordina",
     "close": "Chiudi",
-    "bedrooms": "camere da letto",
-    "list": "Elenco",
+    "bedrooms": "camere",
+    "list": "Lista",
     "mapActive": "Mappa attiva",
-    "clickListToView": "Clicca su \"Elenco\" per visualizzare gli immobili",
+    "clickListToView": "Clicca su \"Lista\" per visualizzare gli immobili",
     "sortByDate": "Per data",
     "sortByPrice": "Per prezzo",
     "sortByArea": "Per superficie",
-    "compare": "Confronta",
+    "compare": "Confronto",
     "favorites": "Preferiti"
   },
   "isochrone": {
@@ -530,19 +530,19 @@
     "travelMode": "Mezzo di trasporto",
     "travelTime": "Tempo di viaggio",
     "selectLocation": "Seleziona posizione",
-    "pickPoint": "Scegli un punto sulla mappa",
+    "pickPoint": "Seleziona punto sulla mappa",
     "clickOnMap": "Clicca sulla mappa...",
-    "searchPlaceholder": "Cerca un indirizzo o luogo...",
+    "searchPlaceholder": "Trova indirizzo o luogo...",
     "clear": "Cancella",
     "calculating": "Calcolo isocrona...",
-    "hint": "Inserisci un indirizzo o clicca sulla mappa per scegliere il punto di partenza",
+    "hint": "Inserisci un indirizzo o clicca sulla mappa per selezionare il punto di partenza",
     "mapPoint": "Punto sulla mappa",
     "address": "Indirizzo",
     "selectedPoint": "Punto selezionato",
     "profiles": {
       "walking": "A piedi",
-      "cycling": "In bici",
-      "driving": "In auto",
+      "cycling": "Bicicletta",
+      "driving": "Auto",
       "drivingTraffic": "Con traffico"
     },
     "time": {
@@ -552,15 +552,15 @@
   },
   "radius": {
     "title": "Raggio",
-    "radiusDistance": "Distanza del raggio",
+    "radiusDistance": "Distanza raggio",
     "selectLocation": "Seleziona posizione",
-    "pickPoint": "Scegli un punto sulla mappa",
+    "pickPoint": "Seleziona punto sulla mappa",
     "clickOnMap": "Clicca sulla mappa...",
-    "searchPlaceholder": "Cerca un indirizzo o luogo...",
+    "searchPlaceholder": "Trova indirizzo o luogo...",
     "selectedPoint": "Punto selezionato",
     "pointName": "Nome del punto",
-    "emptyStateHint": "Cerca un indirizzo o clicca sulla mappa per scegliere il punto centrale",
-    "hint": "Un cerchio di raggio {radius} km verrà disegnato attorno al punto selezionato",
+    "emptyStateHint": "Trova un indirizzo o clicca sulla mappa per selezionare il punto centrale",
+    "hint": "Verrà disegnato un cerchio di raggio {radius} km attorno al punto selezionato",
     "distance": {
       "km": "km"
     }
@@ -568,7 +568,7 @@
   "locationSearch": {
     "title": "Ricerca posizioni",
     "searchLabel": "Ricerca posizioni",
-    "searchPlaceholder": "Cerca città, regioni, paesi...",
+    "searchPlaceholder": "Trova città, regioni, paesi...",
     "selectedLocations": "Posizioni selezionate",
     "remove": "Rimuovi",
     "emptyState": "Nessuna posizione selezionata",
@@ -597,7 +597,7 @@
       "close": "Chiudi"
     },
     "selectedPoint": "Punto selezionato",
-    "searchPlaceholder": "Cerca un indirizzo o luogo...",
+    "searchPlaceholder": "Trova indirizzo o luogo...",
     "searchMode": {
       "description": "Ricerca e selezione posizioni tramite Mapbox Geocoding"
     },
@@ -605,15 +605,15 @@
       "description": "Disegna un poligono personalizzato sulla mappa"
     },
     "isochroneMode": {
-      "description": "Determina l'area per tempo di viaggio"
+      "description": "Definisci l'area per tempo di viaggio"
     },
     "radiusMode": {
-      "description": "Imposta il raggio da un punto"
+      "description": "Imposta il raggio dal punto"
     },
-    "comingSoon": "Presto disponibile..."
+    "comingSoon": "Disponibile presto..."
   },
   "draw": {
-    "title": "Disegno poligoni",
+    "title": "Disegna poligoni",
     "startDrawing": "Inizia a disegnare",
     "addPolygon": "Aggiungi poligono",
     "save": "Salva",
@@ -625,32 +625,32 @@
     "points": "punti",
     "polygonName": "Poligono {number}",
     "drawnPolygons": "Poligoni disegnati",
-    "emptyState": "Nessun poligono disegnato",
+    "emptyState": "Nessun poligono disegnato ancora",
     "emptyStateHint": "Clicca per iniziare a disegnare l'area di ricerca",
     "drawingInstructions": "Istruzioni per il disegno:",
     "clickToAddPoint": "Clicca sulla mappa per aggiungere punti",
     "dragToMovePoint": "Trascina i punti per modificare la forma",
     "minThreePoints": "Minimo 3 punti per completare il poligono",
-    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno di quelli esistenti per aggiungerne uno nuovo."
+    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno esistente per aggiungerne uno nuovo."
   },
   "chat": {
     "title": "Messaggi",
     "searchPlaceholder": "Cerca nelle chat...",
     "tabs": {
-      "all": "Tutte",
-      "aiAgent": "Agente IA",
+      "all": "Tutti",
+      "aiAgent": "Agente AI",
       "support": "Assistenza",
       "users": "Utenti"
     },
     "aiAgent": {
-      "title": "Agente IA",
+      "title": "Agente AI",
       "searching": "Ricerca immobili...",
       "foundProperties": "Trovati {count} nuovi immobili",
       "newBatch": "{count} nuovi immobili mentre eri offline",
       "reviewedCount": "{reviewed} di {total} visualizzati",
-      "noProperties": "Nessun immobile trovato per i filtri selezionati",
+      "noProperties": "Nessun immobile trovato con i filtri selezionati",
       "settings": "Impostazioni agente",
-      "started": "L'agente IA ha iniziato a monitorare i tuoi filtri"
+      "started": "L'agente AI ha iniziato il monitoraggio dei tuoi filtri"
     },
     "filters": {
       "today": "Oggi",
@@ -662,15 +662,15 @@
       "selectFilter": "Seleziona filtro"
     },
     "settings": {
-      "title": "Impostazioni agente IA",
+      "title": "Impostazioni agente AI",
       "searchParams": "Parametri di ricerca",
       "activeFilters": "Filtri attivi",
       "editFilter": "Modifica",
       "linkFilter": "Collega filtro",
       "notifications": "Notifiche",
-      "activeHours": "Orari attivi",
-      "from": "Da",
-      "to": "A",
+      "activeHours": "Ore attive",
+      "from": "Dalle",
+      "to": "Alle",
       "frequency": "Frequenza",
       "immediately": "Subito",
       "every15min": "Ogni 15 minuti",
@@ -700,14 +700,14 @@
     },
     "empty": {
       "title": "Nessun messaggio ancora",
-      "subtitle": "Inizia una conversazione o attendi i risultati dell'agente IA"
+      "subtitle": "Inizia una conversazione o attendi le scoperte dell'agente AI"
     },
     "time": {
       "justNow": "proprio ora",
       "minutesAgo": "{count} min fa",
       "hoursAgo": "{count} h fa",
       "yesterday": "Ieri",
-      "daysAgo": "{count} gg fa"
+      "daysAgo": "{count} g fa"
     },
     "online": "Online",
     "offline": "Offline",
@@ -715,7 +715,7 @@
     "selectConversation": "Seleziona una chat per iniziare",
     "newProperties": "nuovi immobili",
     "viewAll": "Vedi tutti",
-    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno di quelli esistenti per aggiungerne uno nuovo.",
+    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno esistente per aggiungerne uno nuovo.",
     "tapToStart": "Tocca la mappa per aggiungere punti",
     "pointsCount": "Punti: {count}",
     "needMorePoints": "Servono altri {count} punti",
@@ -726,7 +726,7 @@
     "propertyCard": {
       "perMonth": "/mese",
       "rooms": "cam.",
-      "bedrooms": "camere da letto",
+      "bedrooms": "camere",
       "bathrooms": "bagni",
       "floor": "p.",
       "walkMin": "min a piedi",
@@ -746,11 +746,11 @@
     "location": "Posizione",
     "aboutFlat": "Sull'appartamento",
     "aboutBuilding": "Sull'edificio",
-    "amenities": "Servizi",
+    "amenities": "Comfort",
     "characteristics": "Caratteristiche",
-    "deposit": "Cauzione",
+    "deposit": "Deposito",
     "commission": "Commissione",
-    "noCommission": "Nessuna commissione",
+    "noCommission": "Senza commissione",
     "prepayment": "Anticipo",
     "utilitiesIncluded": "Utenze incluse",
     "utilitiesNotIncluded": "Utenze non incluse",
@@ -761,15 +761,15 @@
     "showLess": "Riduci",
     "showOriginal": "Mostra originale",
     "showTranslation": "Mostra traduzione",
-    "translatedByAI": "Traduzione effettuata",
-    "showAllAmenities": "Altri {count} servizi",
+    "translatedByAI": "Tradotto",
+    "showAllAmenities": "Altri {count} comfort",
     "walkMinutes": "{min} min a piedi",
-    "showOnMap": "Vedi sulla mappa",
+    "showOnMap": "Visualizza sulla mappa",
     "panorama": "Panorama",
     "infrastructure": "Infrastruttura",
     "call": "Chiama",
     "message": "Scrivi",
-    "addToFavorites": "Ai preferiti",
+    "addToFavorites": "Aggiungi ai preferiti",
     "inFavorites": "Nei preferiti",
     "share": "Condividi",
     "note": "Aggiungi nota",
@@ -781,16 +781,16 @@
     "objectsCount": "{count} immobili",
     "sqm": "m²",
     "floor": "Piano",
-    "rooms": "Camere",
+    "rooms": "Stanze",
     "livingArea": "Abitabile",
     "kitchenArea": "Cucina",
     "ceilingHeight": "Soffitti",
     "buildingYear": "Anno di costruzione",
-    "petsAllowed": "Ammessi animali",
-    "childrenAllowed": "Ammessi bambini",
-    "couplesAllowed": "Ammesse coppie",
-    "smokingAllowed": "Ammesso fumare",
-    "studentsAllowed": "Ammessi studenti",
+    "petsAllowed": "Animali ammessi",
+    "childrenAllowed": "Bambini ammessi",
+    "couplesAllowed": "Coppie ammesse",
+    "smokingAllowed": "Fumo consentito",
+    "studentsAllowed": "Studenti ammessi",
     "gender": "Sesso",
     "age": "Età",
     "atmosphere": "Atmosfera",
@@ -808,16 +808,16 @@
     "roommates": "Coinquilini",
     "roomDetails": "Sulla stanza",
     "aboutRoommates": "Sui coinquilini",
-    "priceHistory": "Storico prezzi",
-    "trackPrice": "Monitora variazioni prezzo",
+    "priceHistory": "Cronologia prezzi",
+    "trackPrice": "Monitora variazioni di prezzo",
     "offerYourPrice": "Proponi il tuo prezzo",
-    "utilities": "Utenze",
+    "utilities": "Pagamento utenze",
     "utilitiesIncludedFull": "incluse (senza contatori)",
     "utilitiesNotIncludedShort": "non incluse",
     "month_genitive": "mese",
     "rentalTerm": "Durata affitto",
     "longTerm": "da un anno",
-    "livingRules": "Condizioni di soggiorno",
+    "livingRules": "Condizioni di convivenza",
     "noSpecialConditions": "da concordare",
     "navPhotos": "Foto",
     "navDescription": "Descrizione",
@@ -852,9 +852,9 @@
         "shopping": "Shopping",
         "restaurants": "Bar e ristoranti",
         "sports": "Sport",
-        "parks": "Parchi",
+        "parks": "Parchi e giardini",
         "beauty": "Bellezza e cura",
-        "entertainment": "Cultura e svago",
+        "entertainment": "Cultura e tempo libero",
         "attractions": "Attrazioni"
       },
       "distance": "{distance} m"
@@ -870,16 +870,16 @@
     "updated": "Aggiornato",
     "views": "visualizzazioni",
     "viewsToday": "oggi",
-    "videoPresentation": "Video presentazione",
+    "videoPresentation": "Presentazione video",
     "yes": "Sì",
     "no": "No"
   },
   "characteristics": {
-    "propertyType": "Tipo di immobile",
+    "propertyType": "Tipo di alloggio",
     "totalArea": "Superficie totale",
     "livingArea": "Superficie abitabile",
     "kitchenArea": "Superficie cucina",
-    "rooms": "Camere",
+    "rooms": "Stanze",
     "floor": "Piano",
     "of": "di",
     "ceilingHeight": "Altezza soffitti",
@@ -896,18 +896,18 @@
     "parking": "Parcheggio",
     "closedTerritory": "Area chiusa",
     "concierge": "Portineria",
-    "garbageChute": "Scarico rifiuti",
+    "garbageChute": "Scivolo rifiuti",
     "tenantPreferences": "Chi cerchiamo",
     "roommates": "Coinquilini",
     "gender": "Sesso",
     "age": "Età",
     "occupation": "Occupazione",
-    "smokingAllowed": "Ammesso fumare",
-    "couplesAllowed": "Ammesse coppie",
+    "smokingAllowed": "Fumo consentito",
+    "couplesAllowed": "Coppie ammesse",
     "atmosphere": "Atmosfera",
-    "ownerLivesIn": "Il proprietario risiede",
+    "ownerLivesIn": "Proprietario risiede",
     "rentalConditions": "Condizioni di affitto",
-    "minRentalPeriod": "Durata minima",
+    "minRentalPeriod": "Periodo minimo",
     "prepayment": "Anticipo",
     "petsAllowed": "Animali",
     "childrenAllowed": "Bambini",
@@ -922,7 +922,7 @@
     "quiet": "Tranquillo",
     "friendly": "Amichevole",
     "party": "Feste",
-    "visitsAllowed": "Ospiti ammessi",
+    "visitsAllowed": "Ospiti consentiti",
     "furnished": "Arredato",
     "bedType": "Tipo di letto",
     "bedTypes": {
@@ -944,14 +944,14 @@
     },
     "renovationTypes": {
       "cosmetic": "Cosmetica",
-      "euro": "Euroristrutturazione",
-      "designer": "Design",
-      "requires-repair": "Richiede ristrutturazione",
+      "euro": "Euro",
+      "designer": "Designer",
+      "requires-repair": "Richiede riparazione",
       "none": "Senza finiture"
     },
     "windowViews": {
-      "street": "Su strada",
-      "yard": "Su cortile",
+      "street": "Sulla strada",
+      "yard": "Sul cortile",
       "both": "Su entrambi i lati"
     },
     "buildingTypes": {
@@ -963,8 +963,8 @@
     },
     "parkingTypes": {
       "underground": "Sotterraneo",
-      "ground": "Superficie",
-      "street": "Strada",
+      "ground": "A livello terra",
+      "street": "In strada",
       "none": "Nessuno"
     }
   },
@@ -972,9 +972,9 @@
     "hidePanel": "Nascondi pannello",
     "showPanel": "Mostra pannello",
     "showOnMap": "Mappa",
-    "showAsList": "Elenco",
+    "showAsList": "Lista",
     "resetCluster": "Mostra tutti",
-    "clusterObjects": "Immobili del cluster",
+    "clusterObjects": "Immobili cluster",
     "sortBy": "Ordina per",
     "sortPrice": "Prezzo",
     "sortArea": "Superficie",
@@ -989,24 +989,24 @@
   "amenities": {
     "wifi": "Wi-Fi",
     "internet": "Internet",
-    "tv": "Televisore",
+    "tv": "TV",
     "television": "Televisore",
     "airConditioning": "Aria condizionata",
-    "ac": "Aria condizionata",
-    "conditioner": "Aria condizionata",
+    "ac": "Climatizzatore",
+    "conditioner": "Condizionatore",
     "refrigerator": "Frigorifero",
-    "fridge": "Frigorifero",
+    "fridge": "Frigo",
     "washingMachine": "Lavatrice",
     "washer": "Lavatrice",
     "dishwasher": "Lavastoviglie",
     "microwave": "Microonde",
-    "coffeeMachine": "Macchina del caffè",
+    "coffeeMachine": "Macchina caffè",
     "kitchen": "Cucina",
-    "kitchenEquipment": "Attrezzatura cucina",
+    "kitchenEquipment": "Elettrodomestici cucina",
     "bed": "Letto",
     "sofa": "Divano",
     "furniture": "Mobili",
-    "furnitureInRooms": "Mobili nelle camere",
+    "furnitureInRooms": "Mobili nelle stanze",
     "furnitureInKitchen": "Mobili in cucina",
     "bathtub": "Vasca",
     "shower": "Doccia",
@@ -1021,21 +1021,21 @@
     "garden": "Giardino",
     "gym": "Palestra",
     "pool": "Piscina",
-    "petsAllowed": "Ammessi animali",
+    "petsAllowed": "Animali ammessi",
     "childFriendly": "Adatto ai bambini",
-    "smokingAllowed": "Ammesso fumare",
+    "smokingAllowed": "Fumo consentito",
     "elevator": "Ascensore"
   },
   "contact": {
     "title": "Contatti",
     "loadingTitle": "Caricamento contatti...",
-    "authRequiredTitle": "Autenticazione richiesta",
+    "authRequiredTitle": "Autenticazione necessaria",
     "authRequiredDescription": "Accedi per contattare l'agente",
-    "authRequiredOwnerDescription": "Per contattare il proprietario, effettua l'accesso",
-    "limitExceededTitle": "Limite raggiunto",
-    "limitExceededDescription": "Hai raggiunto il limite giornaliero di visualizzazioni contatti. Passa a un piano più adatto per ampliare le possibilità.",
+    "authRequiredOwnerDescription": "Per contattare il proprietario, effettua il login",
+    "limitExceededTitle": "Limite esaurito",
+    "limitExceededDescription": "Hai raggiunto il limite giornaliero di visualizzazione contatti. Passa a un piano più adatto per ampliare le possibilità.",
     "loginButton": "Accedi",
-    "upgradeButton": "Aggiorna piano",
+    "upgradeButton": "Migliora piano",
     "closeButton": "Chiudi",
     "phone": "Telefono",
     "showPhone": "Mostra telefono",
@@ -1049,7 +1049,7 @@
     "owner": "Proprietario",
     "agent": "Agente",
     "agency": "Agenzia",
-    "limitInfo": "Usati {current} di {max}"
+    "limitInfo": "Utilizzati {current} di {max}"
   },
   "actions": {
     "like": "Mi piace",
@@ -1078,7 +1078,7 @@
   "agency": {
     "title": "Agenzia immobiliare",
     "agencies": "Agenzie immobiliari",
-    "searchAgencies": "Cerca agenzie",
+    "searchAgencies": "Ricerca agenzie",
     "allAgencies": "Tutte le agenzie",
     "verified": "Agenzia verificata",
     "premium": "Premium",
@@ -1097,8 +1097,8 @@
     "writeMessage": "Scrivi",
     "viewObjects": "Vedi immobili",
     "allObjects": "Tutti gli immobili",
-    "rentals": "Affitti",
-    "sales": "Vendite",
+    "rentals": "Affitto",
+    "sales": "Vendita",
     "languages": "Lingue",
     "propertyTypes": "Tipi di immobili",
     "services": "Servizi",
@@ -1113,8 +1113,8 @@
     "writeReview": "Scrivi recensione",
     "filterByLanguage": "Per lingua",
     "filterByPropertyType": "Per tipo di immobile",
-    "searchByName": "Cerca per nome",
-    "searchByPhone": "Cerca per telefono",
+    "searchByName": "Ricerca per nome",
+    "searchByPhone": "Ricerca per telefono",
     "namePlaceholder": "Nome agenzia...",
     "phonePlaceholder": "Numero di telefono...",
     "noAgenciesFound": "Nessuna agenzia trovata",
@@ -1174,11 +1174,11 @@
     "title": "Confronto immobili",
     "subtitle": "immobili selezionati",
     "compare": "Confronta",
-    "inComparison": "Nel confronto",
+    "inComparison": "In confronto",
     "limitReached": "Limite raggiunto",
     "clearAll": "Cancella tutto",
     "addMore": "Aggiungi",
-    "emptySlot": "Seleziona un immobile da confrontare",
+    "emptySlot": "Seleziona immobile da confrontare",
     "remove": "Rimuovi",
     "backToSearch": "Torna alla ricerca",
     "characteristics": "Caratteristiche",
@@ -1188,19 +1188,19 @@
     "price": "Prezzo",
     "pricePerMeter": "Prezzo al m²",
     "area": "Superficie",
-    "rooms": "Camere",
+    "rooms": "Stanze",
     "floor": "Piano",
     "bathrooms": "Bagni",
-    "deposit": "Cauzione",
+    "deposit": "Deposito",
     "commission": "Commissione",
-    "minRentalPeriod": "Durata min. affitto",
+    "minRentalPeriod": "Periodo min. affitto",
     "elevator": "Ascensore",
     "balcony": "Balcone",
     "terrace": "Terrazza",
     "airConditioning": "Aria condizionata",
     "heating": "Riscaldamento",
-    "furnished": "Con mobili",
-    "petFriendly": "Ammessi animali",
+    "furnished": "Arredato",
+    "petFriendly": "Animali ammessi",
     "parking": "Parcheggio",
     "pool": "Piscina",
     "perMonth": "mesi",
@@ -1211,9 +1211,9 @@
     "notSpecified": "Non specificato"
   },
   "authRequired": {
-    "title": "Autenticazione richiesta",
+    "title": "Autenticazione necessaria",
     "chat": {
-      "description": "Accedi per utilizzare la chat",
+      "description": "Accedi per usare la chat",
       "action": "Accedi alla chat"
     },
     "profile": {
@@ -1235,18 +1235,18 @@
     },
     "empty": {
       "title": "Ancora vuoto",
-      "description": "Aggiungi gli immobili che ti piacciono ai preferiti per tornarci più tardi",
+      "description": "Aggiungi gli immobili che ti piacciono ai preferiti per tornarci dopo",
       "professionals": {
         "title": "Nessun professionista salvato",
         "description": "Aggiungi agenti immobiliari e agenzie che ti piacciono ai preferiti"
       },
       "filters": {
         "title": "Nessun filtro salvato",
-        "description": "Salva le impostazioni di ricerca per un accesso rapido"
+        "description": "Salva le impostazioni di ricerca per accesso rapido"
       },
       "notes": {
         "title": "Nessuna nota",
-        "description": "Crea note per gli immobili e imposta promemoria"
+        "description": "Crea note sugli immobili e imposta promemoria"
       }
     },
     "count": "{count} immobili",
@@ -1260,7 +1260,7 @@
       "setReminder": "Imposta promemoria",
       "removeReminder": "Rimuovi promemoria",
       "reminderSet": "Promemoria impostato per {date}",
-      "noReminder": "Nessun promemoria",
+      "noReminder": "Senza promemoria",
       "saveNote": "Salva nota",
       "cancel": "Annulla",
       "noteCreated": "Nota creata",
@@ -1301,7 +1301,7 @@
     },
     "authPrompt": {
       "title": "Accedi per salvare",
-      "description": "Accedi per salvare i preferiti e sincronizzarli tra dispositivi"
+      "description": "Accedi per salvare i preferiti e sincronizzare tra dispositivi"
     }
   },
   "complaint": {

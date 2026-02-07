@@ -2,17 +2,17 @@
   "footer": {
     "aboutService": "Sobre el servicio",
     "tariffs": "Tarifas",
-    "profile": "Panel personal",
-    "search": "Búsqueda",
-    "mapSearch": "Búsqueda de inmuebles en el mapa",
-    "listSearch": "Búsqueda de inmuebles en lista",
-    "agenciesSearch": "Búsqueda de agencias inmobiliarias",
-    "support": "Servicio de atención al cliente",
-    "terms": "Condiciones de uso",
+    "profile": "Perfil",
+    "search": "Buscar",
+    "mapSearch": "Buscar propiedades en el mapa",
+    "listSearch": "Buscar propiedades en lista",
+    "agenciesSearch": "Buscar agencias inmobiliarias",
+    "support": "Soporte",
+    "terms": "Términos de uso",
     "privacy": "Política de privacidad",
     "cookies": "Política de Cookies",
     "legal": "Información legal",
-    "agreement": "Al usar el servicio, acepta las condiciones de uso",
+    "agreement": "Al usar el servicio, acepta los términos de uso",
     "allRightsReserved": "Todos los derechos reservados"
   },
   "common": {
@@ -45,32 +45,32 @@
   },
   "landing": {
     "hero": {
-      "title": "Encuentra la propiedad perfecta con un agente de IA",
-      "subtitle": "Tu asistente de IA personal busca propiedades en todas las plataformas 24/7 mientras te ocupas de tus asuntos",
-      "cta": "Empezar búsqueda",
+      "title": "Encuentra la propiedad perfecta con el agente IA",
+      "subtitle": "Tu asistente de IA personal busca propiedades en todas las plataformas 24/7 mientras te ocupas de tus cosas",
+      "cta": "Comenzar búsqueda",
       "ctaAgent": "Crear tarea para el agente",
       "ctaTabs": "Crear pestaña de búsqueda"
     },
     "features": {
       "realtime": {
         "title": "Búsqueda en tiempo real",
-        "description": "Observa cómo el agente encuentra nuevas propiedades en este momento. Las fichas aparecen instantáneamente."
+        "description": "Mira cómo el agente encuentra nuevas propiedades ahora mismo. Las tarjetas aparecen instantáneamente."
       },
       "background": {
         "title": "El agente trabaja en segundo plano",
-        "description": "Crea filtros: el agente enviará propiedades al chat. Recibe notificaciones push sobre nuevos hallazgos."
+        "description": "Crea filtros — el agente enviará propiedades al chat. Recibe notificaciones push sobre nuevos hallazgos."
       },
       "multipleTabs": {
         "title": "Múltiples pestañas de búsqueda",
-        "description": "Busca opciones: cerca del trabajo hasta 1000€ o 40 minutos en transporte por 800€."
+        "description": "Busca compromisos: cerca del trabajo hasta 1000€ o 40 minutos en transporte por 800€."
       },
       "location": {
         "title": "Configuración flexible de ubicación",
-        "description": "Isócrona, polígonos, radio, dibujo: elige el método más conveniente."
+        "description": "Isócrona, polígonos, radio, dibujo — elige la forma conveniente."
       },
       "status": {
         "title": "Filtrado por estado",
-        "description": "Visualiza solo propiedades nuevas, favoritas o todas."
+        "description": "Mira solo propiedades nuevas, favoritas o todas."
       }
     },
     "demo": {
@@ -81,16 +81,16 @@
       "statusTitle": "Filtra por estado de visualización"
     },
     "cta": {
-      "title": "¿Listo para empezar?",
-      "subtitle": "Prueba gratis o elige la tarifa adecuada",
-      "startFree": "Empezar gratis",
+      "title": "¿Listo para comenzar?",
+      "subtitle": "Prueba gratis o elige el plan adecuado",
+      "startFree": "Comenzar gratis",
       "viewPricing": "Ver tarifas"
     },
     "professionals": "Profesionales"
   },
   "pricing": {
     "title": "Tarifas",
-    "subtitle": "Elige el plan que mejor se adapte a ti",
+    "subtitle": "Elige el plan que más te convenga",
     "popular": "Popular",
     "features": {
       "database": "Acceso a la mayor base de datos de propiedades",
@@ -101,7 +101,7 @@
       "ownersLimited": "Acceso limitado a propietarios",
       "ownersMultiplier": "Acceso a propietarios x{count}",
       "aiSearch": "Búsqueda personalizada por IA",
-      "aiSearchNo": "Sin búsqueda del agente de IA",
+      "aiSearchNo": "Sin búsqueda del agente IA",
       "aiFilters": "Hasta {count} filtros para el agente",
       "duration": "Duración: {days} días"
     },
@@ -112,7 +112,7 @@
       },
       "trial": {
         "name": "Prueba",
-        "description": "Prueba todas las funcionalidades"
+        "description": "Prueba todas las funciones"
       },
       "standard": {
         "name": "Estándar",
@@ -123,11 +123,11 @@
         "description": "Máximas posibilidades"
       }
     },
-    "selectPlan": "Elegir plan",
+    "selectPlan": "Seleccionar plan",
     "currentPlan": "Plan actual"
   },
   "navigation": {
-    "search": "Búsqueda",
+    "search": "Buscar",
     "favorites": "Favoritos",
     "chat": "Chat",
     "profile": "Perfil"
@@ -148,11 +148,11 @@
     "features": "Características",
     "location": "Ubicación",
     "contact": "Contactar",
-    "viewDetails": "Más detalles",
+    "viewDetails": "Ver detalles",
     "showOnMap": "Mostrar en el mapa",
     "pricePerMeter": "€/m²",
     "roomsShort": "hab.",
-    "floorOf": "{floor}/{total} pl.",
+    "floorOf": "{floor}/{total} planta",
     "verified": "Verificado",
     "top": "TOP",
     "new": "Nuevo",
@@ -173,12 +173,12 @@
     "agency": "Agencia"
   },
   "propertyTypes": {
-    "apartment": "Piso",
+    "apartment": "Apartamento",
     "house": "Casa",
     "villa": "Villa",
     "studio": "Estudio",
     "penthouse": "Ático",
-    "townhouse": "Casa adosada",
+    "townhouse": "Adosado",
     "duplex": "Dúplex"
   },
   "transport": {
@@ -187,25 +187,25 @@
     "bus": "Autobús"
   },
   "listing": {
-    "title": "Alquiler de inmuebles en Barcelona",
-    "subtitle": "Se han encontrado {count} propiedades",
-    "emptyTitle": "No se ha encontrado nada",
-    "emptySubtitle": "Prueba a cambiar los parámetros de búsqueda",
+    "title": "Alquiler de propiedades en Barcelona",
+    "subtitle": "Se encontraron {count} propiedades",
+    "emptyTitle": "No se encontró nada",
+    "emptySubtitle": "Intenta cambiar los parámetros de búsqueda",
     "viewModeGrid": "Cuadrícula",
     "viewModeList": "Lista",
     "showOnMap": "Ver en el mapa",
     "sortByDate": "Por fecha",
     "sortByPrice": "Por precio",
     "sortByArea": "Por superficie",
-    "aiStoriesTitle": "Nuevos anuncios del agente de IA",
-    "aiStoriesSubtitle": "Recibe nuevas ofertas y contacta antes que nadie",
+    "aiStoriesTitle": "Nuevos anuncios del agente IA",
+    "aiStoriesSubtitle": "Recibe nuevas ofertas y contacta primero",
     "onMap": "En el mapa",
     "page": "Pág.",
-    "metaDescription": "Búsqueda de alquiler de inmuebles en Barcelona con agente de IA"
+    "metaDescription": "Buscar alquiler de propiedades en Barcelona con agente IA"
   },
   "filters": {
     "title": "Filtros",
-    "aiAgent": "Agente de IA",
+    "aiAgent": "Agente IA",
     "priceRange": "Rango de precios",
     "minPrice": "Desde",
     "maxPrice": "Hasta",
@@ -230,14 +230,14 @@
     "room4": "4 habitaciones",
     "room5plus": "5 o más",
     "markerAll": "Todas las propiedades",
-    "markerNotViewed": "Sin revisar",
-    "markerNoView": "Sin ver",
-    "markerLiked": "Favoritas",
-    "markerDisliked": "No me gustan",
+    "markerNotViewed": "No revisadas",
+    "markerNoView": "No visto",
+    "markerLiked": "Me gustaron",
+    "markerDisliked": "No me gustaron",
     "locationSearch": "Búsqueda por ubicación",
     "locationDraw": "Dibujar",
-    "locationTimeFrom": "Tiempo de desplazamiento",
-    "locationIsochrone": "Tiempo de desplazamiento",
+    "locationTimeFrom": "Tiempo de viaje",
+    "locationIsochrone": "Tiempo de viaje",
     "locationRadius": "Radio desde el punto",
     "walking": "A pie",
     "cycling": "Bicicleta",
@@ -249,17 +249,17 @@
     "exit": "Salir",
     "cancel": "Cancelar",
     "quickSelect": "Selección rápida",
-    "presets": "Ajustes predefinidos",
+    "presets": "Preajustes",
     "apply": "Aplicar",
     "save": "Guardar",
     "delete": "Eliminar",
     "selectPoint": "Seleccionar punto",
-    "selectPointOnMap": "Seleccione un punto en el mapa",
+    "selectPointOnMap": "Selecciona un punto en el mapa",
     "calculating": "Calculando...",
     "recalculate": "Recalcular",
-    "drawAreaHint": "Dibuje un área en el mapa",
+    "drawAreaHint": "Dibuja un área en el mapa",
     "drawing": "Dibujando...",
-    "startDrawing": "Empezar a dibujar",
+    "startDrawing": "Comenzar a dibujar",
     "polygonNamePlaceholder": "Nombre del área",
     "polygonDrawn": "Área dibujada",
     "deletePolygon": "Eliminar área",
@@ -267,15 +267,15 @@
     "isochroneReady": "{profile} {minutes} min",
     "radiusReady": "Radio {radius} km",
     "exitConfirmTitle": "¿Salir sin guardar?",
-    "exitConfirmDescription": "Tiene cambios sin guardar en el modo \"{mode}\". Se perderán.",
-    "exitAnyway": "Salir igualmente",
+    "exitConfirmDescription": "Tienes cambios sin guardar en el modo \"{mode}\". Se perderán.",
+    "exitAnyway": "Salir de todos modos",
     "saveConfirmTitle": "¿Guardar filtro?",
-    "saveConfirmDescription": "Se guardarán los datos del modo \"{currentMode}\". Los datos de los modos: {otherModes} se perderán.",
+    "saveConfirmDescription": "Se guardarán los datos del modo \"{currentMode}\". Los datos de los modos: {otherModes} — se perderán.",
     "saveAnyway": "Guardar",
-    "modeChangeConfirmTitle": "¿Cambiar de modo?",
-    "modeChangeConfirmDescription": "Tiene cambios sin guardar en el modo \"{currentMode}\". Al cambiar de modo se perderán.",
+    "modeChangeConfirmTitle": "¿Cambiar modo?",
+    "modeChangeConfirmDescription": "Tienes cambios sin guardar en el modo \"{currentMode}\". Al cambiar de modo se perderán.",
     "switchMode": "Cambiar modo",
-    "searchPlaceholder": "Ciudad, barrio, región, país...",
+    "searchPlaceholder": "Ciudad, distrito, región, país...",
     "locationTypeCountry": "País",
     "locationTypeRegion": "Región",
     "locationTypeProvince": "Provincia",
@@ -290,7 +290,7 @@
     "reset": "Restablecer",
     "resetAll": "Restablecer todo",
     "showResults": "Mostrar {count} opciones",
-    "noResults": "No se ha encontrado nada",
+    "noResults": "No se encontró nada",
     "loading": "Buscando...",
     "activeFilters": "{count} filtros activos",
     "categories": {
@@ -316,21 +316,21 @@
     "email": "Email",
     "password": "Contraseña",
     "confirmPassword": "Confirmar contraseña",
-    "forgotPassword": "¿Ha olvidado su contraseña?",
-    "noAccount": "¿No tiene cuenta?",
-    "hasAccount": "¿Ya tiene cuenta?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
     "loading": "Cargando...",
     "welcomeBack": "Bienvenido de nuevo",
-    "enterCredentials": "Introduzca sus datos para iniciar sesión",
+    "enterCredentials": "Ingresa tus datos para iniciar sesión",
     "createAccount": "Crear cuenta",
-    "enterDetails": "Introduzca sus datos para registrarse",
+    "enterDetails": "Ingresa tus datos para registrarte",
     "resetPassword": "Restablecer contraseña",
-    "resetPasswordDescription": "Introduzca su email para recibir el enlace de restablecimiento",
+    "resetPasswordDescription": "Ingresa tu email para recibir un enlace de restablecimiento",
     "sendResetLink": "Enviar enlace",
     "backToLogin": "Volver al inicio de sesión",
-    "checkEmail": "Compruebe su correo",
-    "resetLinkSent": "Le hemos enviado un enlace para restablecer su contraseña. Compruebe su bandeja de entrada.",
-    "orContinueWith": "O continuar con",
+    "checkEmail": "Revisa tu correo",
+    "resetLinkSent": "Te enviamos un enlace para restablecer la contraseña. Revisa tu bandeja de entrada.",
+    "orContinueWith": "O continúa con",
     "passwordRequirements": "Mínimo 8 caracteres, 1 mayúscula, 1 minúscula, 1 número"
   },
   "profile": {
@@ -344,20 +344,20 @@
     },
     "personalInfo": "Información personal",
     "displayName": "Nombre de usuario",
-    "displayNamePlaceholder": "Introduzca el nombre",
+    "displayNamePlaceholder": "Ingresa tu nombre",
     "email": "Email",
     "phone": "Teléfono",
-    "phonePlaceholder": "Introduzca el teléfono",
+    "phonePlaceholder": "Ingresa tu teléfono",
     "avatar": "Avatar",
     "changeAvatar": "Cambiar foto",
     "removeAvatar": "Eliminar foto",
     "memberSince": "En la plataforma desde",
-    "accountStats": "Estadísticas de la cuenta",
+    "accountStats": "Estadísticas de cuenta",
     "savedProperties": "Propiedades guardadas",
     "savedSearches": "Búsquedas guardadas",
     "viewedProperties": "Propiedades vistas",
     "language": "Idioma",
-    "theme": "Tema visual",
+    "theme": "Tema de apariencia",
     "themeLight": "Claro",
     "themeDark": "Oscuro",
     "themeSystem": "Sistema",
@@ -370,16 +370,16 @@
       "title": "Configuración de notificaciones",
       "email": {
         "title": "Notificaciones por email",
-        "newProperties": "Nuevas propiedades de búsquedas guardadas",
-        "priceChanges": "Cambios de precios en propiedades favoritas",
-        "savedSearches": "Actualizaciones de búsquedas guardadas",
+        "newProperties": "Nuevas propiedades en búsquedas guardadas",
+        "priceChanges": "Cambios de precio en propiedades favoritas",
+        "savedSearches": "Actualizaciones en búsquedas guardadas",
         "promotions": "Promociones y ofertas especiales",
         "accountUpdates": "Cambios de cuenta y seguridad"
       },
       "push": {
         "title": "Notificaciones push",
         "newProperties": "Nuevas propiedades",
-        "priceChanges": "Cambios de precios",
+        "priceChanges": "Cambios de precio",
         "savedSearches": "Actualizaciones de búsquedas",
         "messages": "Mensajes de agentes"
       },
@@ -390,7 +390,7 @@
         "connected": "Telegram conectado",
         "disconnect": "Desconectar",
         "newProperties": "Nuevas propiedades",
-        "priceChanges": "Cambios de precios"
+        "priceChanges": "Cambios de precio"
       }
     },
     "subscription": {
@@ -401,14 +401,14 @@
       "status": "Estado",
       "active": "Activa",
       "canceled": "Cancelada",
-      "expired": "Caducada",
+      "expired": "Expirada",
       "pastDue": "Vencida",
-      "renewsOn": "Se renovará",
-      "expiresOn": "Caduca",
+      "renewsOn": "Se renueva",
+      "expiresOn": "Expira",
       "canceledOn": "Se cancelará",
       "features": "Características del plan",
       "searchTabs": "Pestañas de búsqueda",
-      "aiFilters": "Filtros para el agente de IA",
+      "aiFilters": "Filtros para agente IA",
       "ownerAccess": "Acceso a propietarios",
       "ownerAccessMultiplier": "Acceso a propietarios ×{count}",
       "unlimited": "Sin límites",
@@ -418,17 +418,17 @@
       "cancelSubscription": "Cancelar suscripción",
       "reactivate": "Reactivar suscripción",
       "cancelConfirmTitle": "¿Cancelar suscripción?",
-      "cancelConfirmDescription": "Podrá usar el plan actual hasta el final del período pagado.",
+      "cancelConfirmDescription": "Podrás usar el plan actual hasta el final del período pagado.",
       "cancelAtPeriodEnd": "Cancelar al final del período",
       "cancelImmediately": "Cancelar inmediatamente",
       "comparePlans": "Comparar planes",
-      "selectPlan": "Elegir plan",
+      "selectPlan": "Seleccionar plan",
       "currentPlanBadge": "Actual"
     },
     "payments": {
       "title": "Historial de pagos",
-      "noPayments": "El historial de pagos está vacío",
-      "amount": "Importe",
+      "noPayments": "Historial de pagos vacío",
+      "amount": "Cantidad",
       "date": "Fecha",
       "status": "Estado",
       "description": "Descripción",
@@ -436,7 +436,7 @@
       "downloadInvoice": "Descargar factura",
       "viewInvoice": "Ver factura",
       "succeeded": "Pagado",
-      "pending": "En proceso",
+      "pending": "Procesando",
       "failed": "Error",
       "refunded": "Reembolsado"
     },
@@ -445,9 +445,9 @@
       "noMethods": "No hay métodos de pago guardados",
       "addMethod": "Añadir método de pago",
       "removeMethod": "Eliminar",
-      "setDefault": "Establecer como predeterminado",
-      "default": "Predeterminado",
-      "expires": "Caduca",
+      "setDefault": "Establecer como principal",
+      "default": "Principal",
+      "expires": "Expira",
       "card": "Tarjeta",
       "paypal": "PayPal"
     },
@@ -456,7 +456,7 @@
     "currentPassword": "Contraseña actual",
     "newPassword": "Nueva contraseña",
     "confirmNewPassword": "Confirmar nueva contraseña",
-    "passwordChanged": "Contraseña cambiada correctamente",
+    "passwordChanged": "Contraseña cambiada exitosamente",
     "passwordRequirements": "Mínimo 8 caracteres, incluyendo números y letras",
     "twoFactorAuth": "Autenticación de dos factores",
     "twoFactorEnabled": "2FA activada",
@@ -468,20 +468,20 @@
       "title": "Sesiones activas",
       "current": "Sesión actual",
       "lastActive": "Última actividad",
-      "terminateSession": "Finalizar sesión",
-      "terminateAll": "Finalizar todas las sesiones",
-      "terminateOther": "Finalizar todas excepto la actual",
+      "terminateSession": "Terminar sesión",
+      "terminateAll": "Terminar todas las sesiones",
+      "terminateOther": "Terminar todas excepto la actual",
       "device": "Dispositivo",
       "browser": "Navegador",
       "location": "Ubicación",
-      "sessionTerminated": "Sesión finalizada"
+      "sessionTerminated": "Sesión terminada"
     },
     "logoutAll": "Cerrar sesión en todos los dispositivos",
-    "dangerZone": "Zona peligrosa",
+    "dangerZone": "Zona de peligro",
     "deleteAccount": "Eliminar cuenta",
-    "deleteAccountWarning": "Esta acción es irreversible. Todos sus datos serán eliminados.",
+    "deleteAccountWarning": "Esta acción es irreversible. Todos tus datos serán eliminados.",
     "confirmDeleteTitle": "¿Eliminar cuenta?",
-    "confirmDeleteDescription": "Esta acción no se puede deshacer. Todos los datos serán eliminados de forma permanente.",
+    "confirmDeleteDescription": "Esta acción no se puede deshacer. Todos los datos serán eliminados permanentemente.",
     "confirmDelete": "Sí, eliminar",
     "cancel": "Cancelar",
     "saveChanges": "Guardar cambios",
@@ -493,7 +493,7 @@
     "tryAgain": "Intentar de nuevo"
   },
   "errors": {
-    "general": "Se ha producido un error. Inténtelo de nuevo.",
+    "general": "Ocurrió un error. Inténtalo de nuevo.",
     "notFound": "Página no encontrada",
     "unauthorized": "Se requiere autorización",
     "serverError": "Error del servidor",
@@ -502,10 +502,10 @@
     "emailExists": "Ya existe un usuario con este email",
     "weakPassword": "La contraseña es demasiado débil",
     "passwordMismatch": "Las contraseñas no coinciden",
-    "sessionExpired": "La sesión ha caducado, inicie sesión de nuevo"
+    "sessionExpired": "La sesión ha expirado, inicia sesión nuevamente"
   },
   "sidebar": {
-    "search": "Búsqueda",
+    "search": "Buscar",
     "chat": "Chat",
     "profile": "Perfil",
     "settings": "Configuración",
@@ -518,7 +518,7 @@
     "bedrooms": "dormitorios",
     "list": "Lista",
     "mapActive": "Mapa activo",
-    "clickListToView": "Pulse en \"Lista\" para ver las propiedades",
+    "clickListToView": "Haz clic en \"Lista\" para ver propiedades",
     "sortByDate": "Por fecha",
     "sortByPrice": "Por precio",
     "sortByArea": "Por superficie",
@@ -526,16 +526,16 @@
     "favorites": "Favoritos"
   },
   "isochrone": {
-    "title": "Tiempo de desplazamiento",
+    "title": "Tiempo de viaje",
     "travelMode": "Modo de transporte",
-    "travelTime": "Tiempo de desplazamiento",
-    "selectLocation": "Seleccione ubicación",
-    "pickPoint": "Elegir punto en el mapa",
-    "clickOnMap": "Haga clic en el mapa...",
-    "searchPlaceholder": "Busque una dirección o lugar...",
+    "travelTime": "Tiempo de viaje",
+    "selectLocation": "Selecciona una ubicación",
+    "pickPoint": "Seleccionar punto en el mapa",
+    "clickOnMap": "Haz clic en el mapa...",
+    "searchPlaceholder": "Busca una dirección o lugar...",
     "clear": "Limpiar",
     "calculating": "Calculando isócrona...",
-    "hint": "Introduzca una dirección o haga clic en el mapa para seleccionar el punto de partida",
+    "hint": "Ingresa una dirección o haz clic en el mapa para seleccionar un punto de inicio",
     "mapPoint": "Punto en el mapa",
     "address": "Dirección",
     "selectedPoint": "Punto seleccionado",
@@ -553,13 +553,13 @@
   "radius": {
     "title": "Radio",
     "radiusDistance": "Distancia del radio",
-    "selectLocation": "Seleccione ubicación",
-    "pickPoint": "Elegir punto en el mapa",
-    "clickOnMap": "Haga clic en el mapa...",
-    "searchPlaceholder": "Busque una dirección o lugar...",
+    "selectLocation": "Selecciona una ubicación",
+    "pickPoint": "Seleccionar punto en el mapa",
+    "clickOnMap": "Haz clic en el mapa...",
+    "searchPlaceholder": "Busca una dirección o lugar...",
     "selectedPoint": "Punto seleccionado",
     "pointName": "Nombre del punto",
-    "emptyStateHint": "Busque una dirección o haga clic en el mapa para seleccionar el punto central",
+    "emptyStateHint": "Busca una dirección o haz clic en el mapa para seleccionar el punto central",
     "hint": "Se dibujará un círculo de radio {radius} km alrededor del punto seleccionado",
     "distance": {
       "km": "km"
@@ -568,11 +568,11 @@
   "locationSearch": {
     "title": "Búsqueda de ubicaciones",
     "searchLabel": "Búsqueda de ubicaciones",
-    "searchPlaceholder": "Busque ciudades, regiones, países...",
+    "searchPlaceholder": "Busca ciudades, regiones, países...",
     "selectedLocations": "Ubicaciones seleccionadas",
     "remove": "Eliminar",
     "emptyState": "No hay ubicaciones seleccionadas",
-    "emptyStateHint": "Use la búsqueda superior para encontrar y seleccionar ubicaciones",
+    "emptyStateHint": "Usa la búsqueda de arriba para encontrar y seleccionar ubicaciones",
     "types": {
       "country": "país",
       "region": "región",
@@ -588,7 +588,7 @@
     "modes": {
       "search": "Búsqueda",
       "draw": "Dibujar área",
-      "isochrone": "Tiempo de desplazamiento",
+      "isochrone": "Tiempo de viaje",
       "radius": "Radio"
     },
     "actions": {
@@ -597,24 +597,24 @@
       "close": "Cerrar"
     },
     "selectedPoint": "Punto seleccionado",
-    "searchPlaceholder": "Busque una dirección o lugar...",
+    "searchPlaceholder": "Busca una dirección o lugar...",
     "searchMode": {
       "description": "Búsqueda y selección de ubicaciones mediante Mapbox Geocoding"
     },
     "drawMode": {
-      "description": "Dibuje un polígono personalizado en el mapa"
+      "description": "Dibuja un polígono personalizado en el mapa"
     },
     "isochroneMode": {
-      "description": "Defina el área por tiempo de desplazamiento"
+      "description": "Define un área por tiempo de viaje"
     },
     "radiusMode": {
-      "description": "Establezca un radio desde el punto"
+      "description": "Establece un radio desde un punto"
     },
-    "comingSoon": "Próximamente..."
+    "comingSoon": "Próximamente disponible..."
   },
   "draw": {
     "title": "Dibujar polígonos",
-    "startDrawing": "Empezar a dibujar",
+    "startDrawing": "Comenzar a dibujar",
     "addPolygon": "Añadir polígono",
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -625,32 +625,32 @@
     "points": "puntos",
     "polygonName": "Polígono {number}",
     "drawnPolygons": "Polígonos dibujados",
-    "emptyState": "Aún no hay polígonos dibujados",
-    "emptyStateHint": "Pulse para empezar a dibujar el área de búsqueda",
+    "emptyState": "No hay polígonos dibujados",
+    "emptyStateHint": "Haz clic para comenzar a dibujar el área de búsqueda",
     "drawingInstructions": "Instrucciones de dibujo:",
-    "clickToAddPoint": "Haga clic en el mapa para añadir puntos",
-    "dragToMovePoint": "Arrastre los puntos para cambiar la forma",
+    "clickToAddPoint": "Haz clic en el mapa para añadir puntos",
+    "dragToMovePoint": "Arrastra los puntos para cambiar la forma",
     "minThreePoints": "Mínimo 3 puntos para completar el polígono",
-    "maxPolygonsReached": "Se ha alcanzado el límite de 4 polígonos. Elimine uno existente para añadir uno nuevo."
+    "maxPolygonsReached": "Se alcanzó el límite de 4 polígonos. Elimina uno existente para añadir uno nuevo."
   },
   "chat": {
     "title": "Mensajes",
     "searchPlaceholder": "Buscar en chats...",
     "tabs": {
       "all": "Todos",
-      "aiAgent": "Agente de IA",
+      "aiAgent": "Agente IA",
       "support": "Soporte",
       "users": "Usuarios"
     },
     "aiAgent": {
-      "title": "Agente de IA",
+      "title": "Agente IA",
       "searching": "Buscando propiedades...",
-      "foundProperties": "Se han encontrado {count} nuevas propiedades",
-      "newBatch": "{count} nuevas propiedades mientras no estaba conectado",
+      "foundProperties": "Se encontraron {count} propiedades nuevas",
+      "newBatch": "{count} propiedades nuevas mientras estabas desconectado",
       "reviewedCount": "{reviewed} de {total} revisadas",
-      "noProperties": "No se han encontrado propiedades con los filtros seleccionados",
+      "noProperties": "No se encontraron propiedades con los filtros seleccionados",
       "settings": "Configuración del agente",
-      "started": "El agente de IA ha comenzado a monitorear sus filtros"
+      "started": "El agente IA comenzó a monitorear tus filtros"
     },
     "filters": {
       "today": "Hoy",
@@ -662,7 +662,7 @@
       "selectFilter": "Seleccionar filtro"
     },
     "settings": {
-      "title": "Configuración del agente de IA",
+      "title": "Configuración del agente IA",
       "searchParams": "Parámetros de búsqueda",
       "activeFilters": "Filtros activos",
       "editFilter": "Editar",
@@ -681,26 +681,26 @@
       "active": "Activo",
       "paused": "En pausa",
       "runningFor": "Funcionando {days} días",
-      "totalFound": "Total encontrado: {count}"
+      "totalFound": "Total encontradas: {count}"
     },
     "message": {
-      "placeholder": "Escriba un mensaje...",
+      "placeholder": "Escribe un mensaje...",
       "send": "Enviar",
       "support": "Soporte",
-      "supportGreeting": "¿En qué podemos ayudarle?",
-      "you": "Usted"
+      "supportGreeting": "¿En qué podemos ayudarte?",
+      "you": "Tú"
     },
     "actions": {
       "like": "Me gusta",
       "dislike": "No me gusta",
       "save": "Guardar",
       "saved": "Guardado",
-      "viewDetails": "Más detalles",
+      "viewDetails": "Ver detalles",
       "share": "Compartir"
     },
     "empty": {
-      "title": "Aún no hay mensajes",
-      "subtitle": "Inicie una conversación o espere a que el agente de IA encuentre propiedades"
+      "title": "No hay mensajes todavía",
+      "subtitle": "Inicia una conversación o espera hallazgos del agente IA"
     },
     "time": {
       "justNow": "ahora mismo",
@@ -712,13 +712,13 @@
     "online": "En línea",
     "offline": "Desconectado",
     "typing": "escribiendo...",
-    "selectConversation": "Seleccione un chat para comenzar la conversación",
+    "selectConversation": "Selecciona un chat para comenzar la conversación",
     "newProperties": "propiedades nuevas",
     "viewAll": "Ver todas",
-    "maxPolygonsReached": "Se ha alcanzado el límite de 4 polígonos. Elimine uno existente para añadir uno nuevo.",
-    "tapToStart": "Pulse en el mapa para añadir puntos",
+    "maxPolygonsReached": "Se alcanzó el límite de 4 polígonos. Elimina uno existente para añadir uno nuevo.",
+    "tapToStart": "Toca el mapa para añadir puntos",
     "pointsCount": "Puntos: {count}",
-    "needMorePoints": "Faltan {count} puntos más",
+    "needMorePoints": "Necesitas {count} puntos más",
     "toast": {
       "newProperty": "Nueva propiedad encontrada",
       "view": "Ver"
@@ -728,12 +728,12 @@
       "rooms": "hab.",
       "bedrooms": "dormitorios",
       "bathrooms": "baños",
-      "floor": "pl.",
+      "floor": "planta",
       "walkMin": "min a pie",
       "contact": "Contactar",
-      "notViewed": "Sin ver",
+      "notViewed": "No visto",
       "viewedGroup": "Visto",
-      "notViewedGroup": "Sin ver",
+      "notViewedGroup": "No visto",
       "today": "Hoy",
       "yesterday": "Ayer",
       "live": "EN TIEMPO REAL",
@@ -741,19 +741,19 @@
     }
   },
   "propertyDetail": {
-    "photos": "Fotografías",
+    "photos": "Fotos",
     "description": "Descripción",
     "location": "Ubicación",
-    "aboutFlat": "Sobre el piso",
+    "aboutFlat": "Sobre el apartamento",
     "aboutBuilding": "Sobre el edificio",
     "amenities": "Comodidades",
     "characteristics": "Características",
-    "deposit": "Fianza",
+    "deposit": "Depósito",
     "commission": "Comisión",
     "noCommission": "Sin comisión",
     "prepayment": "Prepago",
-    "utilitiesIncluded": "Suministros incluidos",
-    "utilitiesNotIncluded": "Suministros no incluidos",
+    "utilitiesIncluded": "Servicios incluidos",
+    "utilitiesNotIncluded": "Servicios no incluidos",
     "totalAtStart": "Total al inicio",
     "perMonth": "al mes",
     "showAllPhotos": "Todas las {count} fotos",
@@ -761,21 +761,21 @@
     "showLess": "Ocultar",
     "showOriginal": "Mostrar original",
     "showTranslation": "Mostrar traducción",
-    "translatedByAI": "Traducido",
+    "translatedByAI": "Traducción realizada",
     "showAllAmenities": "{count} comodidades más",
     "walkMinutes": "{min} min a pie",
     "showOnMap": "Ver en el mapa",
-    "panorama": "Panorámica",
+    "panorama": "Panorama",
     "infrastructure": "Infraestructura",
     "call": "Llamar",
     "message": "Escribir",
     "addToFavorites": "Añadir a favoritos",
     "inFavorites": "En favoritos",
     "share": "Compartir",
-    "note": "Añadir nota",
+    "note": "Dejar nota",
     "pdf": "PDF",
     "report": "Reportar",
-    "superAgent": "Superagente",
+    "superAgent": "Súper agente",
     "verified": "Verificado",
     "yearsOnPlatform": "{years} años en la plataforma",
     "objectsCount": "{count} propiedades",
@@ -786,19 +786,19 @@
     "kitchenArea": "Cocina",
     "ceilingHeight": "Techos",
     "buildingYear": "Año de construcción",
-    "petsAllowed": "Se admiten mascotas",
-    "childrenAllowed": "Se admiten niños",
-    "couplesAllowed": "Se admiten parejas",
+    "petsAllowed": "Se permiten mascotas",
+    "childrenAllowed": "Se permiten niños",
+    "couplesAllowed": "Se permiten parejas",
     "smokingAllowed": "Se permite fumar",
-    "studentsAllowed": "Se admiten estudiantes",
-    "gender": "Sexo",
+    "studentsAllowed": "Se permiten estudiantes",
+    "gender": "Género",
     "age": "Edad",
     "atmosphere": "Ambiente",
     "occupation": "Ocupación",
     "minRentalPeriod": "Desde {months} meses",
     "months": "meses",
     "from": "desde",
-    "fromYear": "Desde un año",
+    "fromYear": "Desde 1 año",
     "agency": "Agencia",
     "term": "Plazo de alquiler",
     "bathrooms": "Baños",
@@ -808,16 +808,16 @@
     "roommates": "Compañeros",
     "roomDetails": "Sobre la habitación",
     "aboutRoommates": "Sobre los compañeros",
-    "priceHistory": "Historial de precios",
+    "priceHistory": "Historial de precio",
     "trackPrice": "Seguir cambios de precio",
-    "offerYourPrice": "Proponga su precio",
-    "utilities": "Pago de suministros",
-    "utilitiesIncludedFull": "incluido (sin contadores)",
-    "utilitiesNotIncludedShort": "no incluido",
+    "offerYourPrice": "Ofrece tu precio",
+    "utilities": "Pago de servicios",
+    "utilitiesIncludedFull": "incluidos (sin contadores)",
+    "utilitiesNotIncludedShort": "no incluidos",
     "month_genitive": "mes",
     "rentalTerm": "Plazo de alquiler",
-    "longTerm": "desde un año",
-    "livingRules": "Condiciones de convivencia",
+    "longTerm": "desde 1 año",
+    "livingRules": "Condiciones de estancia",
     "noSpecialConditions": "por acuerdo",
     "navPhotos": "Fotos",
     "navDescription": "Descripción",
@@ -826,7 +826,7 @@
     "back": "Atrás",
     "showPhone": "Mostrar teléfono",
     "writeMessage": "Escribir",
-    "writeOnline": "Escríbale mientras está en línea",
+    "writeOnline": "Escribe mientras el usuario está en línea",
     "privateAgent": "Particular",
     "docsVerified": "Documentos verificados",
     "onPlatform": "En Realbro",
@@ -846,13 +846,13 @@
     "locationSection": {
       "categories": {
         "transport": "Transporte",
-        "schools": "Colegios y guarderías",
+        "schools": "Escuelas y guarderías",
         "medical": "Medicina",
-        "groceries": "Alimentación",
+        "groceries": "Supermercados",
         "shopping": "Compras",
         "restaurants": "Bares y restaurantes",
         "sports": "Deporte",
-        "parks": "Parques y jardines",
+        "parks": "Parques",
         "beauty": "Belleza y cuidado",
         "entertainment": "Cultura y ocio",
         "attractions": "Atracciones"
@@ -862,20 +862,20 @@
     "contact": "Contactar",
     "roomsShort": "hab.",
     "pricePerMeter": "€/m²",
-    "video": "Vídeo",
+    "video": "Video",
     "tour3d": "Tour 3D",
     "plan": "Plano",
-    "example": "Por ejemplo",
+    "example": "Ejemplo",
     "of": "de",
     "updated": "Actualizado",
-    "views": "visitas",
+    "views": "vistas",
     "viewsToday": "hoy",
-    "videoPresentation": "Vídeo presentación",
+    "videoPresentation": "Presentación en video",
     "yes": "Sí",
     "no": "No"
   },
   "characteristics": {
-    "propertyType": "Tipo de vivienda",
+    "propertyType": "Tipo de propiedad",
     "totalArea": "Superficie total",
     "livingArea": "Superficie habitable",
     "kitchenArea": "Superficie de cocina",
@@ -885,13 +885,13 @@
     "ceilingHeight": "Altura de techos",
     "bathroom": "Baño",
     "balcony": "Balcón",
-    "loggia": "Logia",
+    "loggia": "Terraza",
     "renovation": "Reforma",
-    "windowView": "Vista desde las ventanas",
+    "windowView": "Vista desde ventanas",
     "residentialComplex": "Complejo residencial",
     "buildingType": "Tipo de edificio",
     "buildingYear": "Año de construcción",
-    "floorsTotal": "Plantas del edificio",
+    "floorsTotal": "Plantas en el edificio",
     "elevator": "Ascensor",
     "parking": "Aparcamiento",
     "closedTerritory": "Territorio cerrado",
@@ -899,13 +899,13 @@
     "garbageChute": "Bajante de basura",
     "tenantPreferences": "A quién buscamos",
     "roommates": "Compañeros",
-    "gender": "Sexo",
+    "gender": "Género",
     "age": "Edad",
     "occupation": "Ocupación",
     "smokingAllowed": "Se permite fumar",
-    "couplesAllowed": "Se admiten parejas",
+    "couplesAllowed": "Se permiten parejas",
     "atmosphere": "Ambiente",
-    "ownerLivesIn": "El propietario vive en",
+    "ownerLivesIn": "El propietario vive aquí",
     "rentalConditions": "Condiciones de alquiler",
     "minRentalPeriod": "Plazo mínimo",
     "prepayment": "Prepago",
@@ -922,8 +922,8 @@
     "quiet": "Tranquilo",
     "friendly": "Amigable",
     "party": "Fiestas",
-    "visitsAllowed": "Se permiten visitas",
-    "furnished": "Amueblada",
+    "visitsAllowed": "Visitas permitidas",
+    "furnished": "Amueblado",
     "bedType": "Tipo de cama",
     "bedTypes": {
       "single": "Individual",
@@ -932,7 +932,7 @@
       "bunk": "Litera"
     },
     "types": {
-      "apartment": "Piso",
+      "apartment": "Apartamento",
       "studio": "Estudio",
       "penthouse": "Ático",
       "duplex": "Dúplex"
@@ -944,15 +944,15 @@
     },
     "renovationTypes": {
       "cosmetic": "Cosmético",
-      "euro": "Euroreforma",
-      "designer": "De diseño",
+      "euro": "Reforma europea",
+      "designer": "Diseñador",
       "requires-repair": "Requiere reforma",
       "none": "Sin acabados"
     },
     "windowViews": {
       "street": "A la calle",
       "yard": "Al patio",
-      "both": "A ambos lados"
+      "both": "Ambos lados"
     },
     "buildingTypes": {
       "brick": "Ladrillo",
@@ -965,7 +965,7 @@
       "underground": "Subterráneo",
       "ground": "En superficie",
       "street": "En la calle",
-      "none": "No"
+      "none": "Sin aparcamiento"
     }
   },
   "mapSidebar": {
@@ -974,28 +974,28 @@
     "showOnMap": "Mapa",
     "showAsList": "En lista",
     "resetCluster": "Mostrar todas",
-    "clusterObjects": "Propiedades del grupo",
+    "clusterObjects": "Propiedades del clúster",
     "sortBy": "Ordenar por",
     "sortPrice": "Precio",
     "sortArea": "Superficie",
     "sortDate": "Fecha",
     "sortAscending": "Orden ascendente",
     "sortDescending": "Orden descendente",
-    "noResults": "No se han encontrado propiedades",
+    "noResults": "No se encontraron propiedades",
     "loading": "Cargando...",
     "objectsCount": "{count} propiedades",
-    "changeSearchArea": "Cambie el área de búsqueda en el mapa"
+    "changeSearchArea": "Cambia el área de búsqueda en el mapa"
   },
   "amenities": {
     "wifi": "Wi-Fi",
     "internet": "Internet",
-    "tv": "Televisión",
+    "tv": "TV",
     "television": "Televisión",
     "airConditioning": "Aire acondicionado",
-    "ac": "Aire acondicionado",
-    "conditioner": "Aire acondicionado",
-    "refrigerator": "Frigorífico",
-    "fridge": "Frigorífico",
+    "ac": "A/A",
+    "conditioner": "Climatizador",
+    "refrigerator": "Refrigerador",
+    "fridge": "Nevera",
     "washingMachine": "Lavadora",
     "washer": "Lavadora",
     "dishwasher": "Lavavajillas",
@@ -1021,8 +1021,8 @@
     "garden": "Jardín",
     "gym": "Gimnasio",
     "pool": "Piscina",
-    "petsAllowed": "Se admiten mascotas",
-    "childFriendly": "Apto para niños",
+    "petsAllowed": "Se permiten mascotas",
+    "childFriendly": "Adecuado para niños",
     "smokingAllowed": "Se permite fumar",
     "elevator": "Ascensor"
   },
@@ -1030,12 +1030,12 @@
     "title": "Contactos",
     "loadingTitle": "Cargando contactos...",
     "authRequiredTitle": "Se requiere autorización",
-    "authRequiredDescription": "Inicie sesión para contactar con el agente",
-    "authRequiredOwnerDescription": "Para contactar con el propietario, inicie sesión",
+    "authRequiredDescription": "Inicia sesión para contactar con el agente",
+    "authRequiredOwnerDescription": "Para contactar con el propietario, por favor inicia sesión",
     "limitExceededTitle": "Límite agotado",
-    "limitExceededDescription": "Ha alcanzado el límite diario de visualizaciones de contactos. Cambie a una tarifa más adecuada para ampliar las posibilidades.",
+    "limitExceededDescription": "Has alcanzado el límite diario de visualización de contactos. Cambia a un plan más adecuado para ampliar las posibilidades.",
     "loginButton": "Iniciar sesión",
-    "upgradeButton": "Mejorar tarifa",
+    "upgradeButton": "Mejorar plan",
     "closeButton": "Cerrar",
     "phone": "Teléfono",
     "showPhone": "Mostrar teléfono",
@@ -1044,7 +1044,7 @@
     "telegram": "Telegram",
     "email": "Email",
     "website": "Sitio web",
-    "agencyProfile": "Perfil de la agencia",
+    "agencyProfile": "Perfil de agencia",
     "copySuccess": "Copiado",
     "owner": "Propietario",
     "agent": "Agente",
@@ -1059,7 +1059,7 @@
     "share": "Compartir",
     "copyLink": "Copiar enlace",
     "linkCopied": "Enlace copiado",
-    "addNote": "Añadir nota",
+    "addNote": "Dejar nota",
     "editNote": "Editar nota",
     "noteSaved": "Nota guardada",
     "downloadPdf": "Descargar PDF",
@@ -1067,8 +1067,8 @@
     "more": "Más",
     "noteModal": {
       "title": "Nota",
-      "description": "Sus notas personales sobre la propiedad",
-      "placeholder": "Escriba una nota...",
+      "description": "Tus notas personales sobre la propiedad",
+      "placeholder": "Escribe una nota...",
       "saveButton": "Guardar",
       "cancelButton": "Cancelar",
       "closeButton": "Cerrar",
@@ -1078,7 +1078,7 @@
   "agency": {
     "title": "Agencia inmobiliaria",
     "agencies": "Agencias inmobiliarias",
-    "searchAgencies": "Búsqueda de agencias",
+    "searchAgencies": "Buscar agencias",
     "allAgencies": "Todas las agencias",
     "verified": "Agencia verificada",
     "premium": "Premium",
@@ -1113,12 +1113,12 @@
     "writeReview": "Escribir reseña",
     "filterByLanguage": "Por idioma",
     "filterByPropertyType": "Por tipo de propiedad",
-    "searchByName": "Búsqueda por nombre",
-    "searchByPhone": "Búsqueda por teléfono",
+    "searchByName": "Buscar por nombre",
+    "searchByPhone": "Buscar por teléfono",
     "namePlaceholder": "Nombre de la agencia...",
     "phonePlaceholder": "Número de teléfono...",
-    "noAgenciesFound": "No se han encontrado agencias",
-    "tryChangeFilters": "Pruebe a cambiar los parámetros de búsqueda",
+    "noAgenciesFound": "No se encontraron agencias",
+    "tryChangeFilters": "Intenta cambiar los parámetros de búsqueda",
     "loadMore": "Cargar más",
     "sortBy": "Ordenar por",
     "sortRating": "Valoración",
@@ -1145,8 +1145,8 @@
       "legal": "Servicios jurídicos",
       "valuation": "Valoración"
     },
-    "noPropertiesFound": "No se han encontrado propiedades",
-    "noAgentsFound": "No se han encontrado agentes",
+    "noPropertiesFound": "No se encontraron propiedades",
+    "noAgentsFound": "No se encontraron agentes",
     "rooms": "hab.",
     "sqm": "m²"
   },
@@ -1178,11 +1178,11 @@
     "limitReached": "Límite alcanzado",
     "clearAll": "Limpiar todo",
     "addMore": "Añadir",
-    "emptySlot": "Seleccione una propiedad para comparar",
+    "emptySlot": "Selecciona una propiedad para comparar",
     "remove": "Eliminar",
     "backToSearch": "Volver a la búsqueda",
     "characteristics": "Características",
-    "selected": "seleccionado",
+    "selected": "seleccionadas",
     "outOf": "de",
     "openComparison": "Abrir comparación",
     "price": "Precio",
@@ -1191,16 +1191,16 @@
     "rooms": "Habitaciones",
     "floor": "Planta",
     "bathrooms": "Baños",
-    "deposit": "Fianza",
+    "deposit": "Depósito",
     "commission": "Comisión",
-    "minRentalPeriod": "Plazo mínimo de alquiler",
+    "minRentalPeriod": "Plazo mín. de alquiler",
     "elevator": "Ascensor",
     "balcony": "Balcón",
     "terrace": "Terraza",
     "airConditioning": "Aire acondicionado",
     "heating": "Calefacción",
     "furnished": "Con muebles",
-    "petFriendly": "Se admiten mascotas",
+    "petFriendly": "Se permiten mascotas",
     "parking": "Aparcamiento",
     "pool": "Piscina",
     "perMonth": "meses",
@@ -1213,16 +1213,16 @@
   "authRequired": {
     "title": "Se requiere autorización",
     "chat": {
-      "description": "Inicie sesión para usar el chat",
-      "action": "Iniciar sesión en el chat"
+      "description": "Inicia sesión para usar el chat",
+      "action": "Entrar al chat"
     },
     "profile": {
-      "description": "Inicie sesión para editar el perfil",
-      "action": "Iniciar sesión en el perfil"
+      "description": "Inicia sesión para editar tu perfil",
+      "action": "Entrar al perfil"
     },
     "favorites": {
-      "description": "Inicie sesión para ver los favoritos",
-      "action": "Iniciar sesión para ver"
+      "description": "Inicia sesión para ver favoritos",
+      "action": "Entrar para ver"
     }
   },
   "favorites": {
@@ -1234,19 +1234,19 @@
       "notes": "Notas"
     },
     "empty": {
-      "title": "Aún está vacío",
-      "description": "Añada propiedades favoritas para volver a ellas más tarde",
+      "title": "Todavía vacío",
+      "description": "Añade propiedades que te gusten a favoritos para volver a ellas más tarde",
       "professionals": {
         "title": "No hay profesionales guardados",
-        "description": "Añada agentes inmobiliarios y agencias favoritas"
+        "description": "Añade agentes inmobiliarios y agencias que te gusten a favoritos"
       },
       "filters": {
         "title": "No hay filtros guardados",
-        "description": "Guarde configuraciones de búsqueda para un acceso rápido"
+        "description": "Guarda configuraciones de búsqueda para acceso rápido"
       },
       "notes": {
         "title": "No hay notas",
-        "description": "Cree notas sobre propiedades y establezca recordatorios"
+        "description": "Crea notas para propiedades y establece recordatorios"
       }
     },
     "count": "{count} propiedades",
@@ -1255,7 +1255,7 @@
       "addNote": "Añadir nota",
       "editNote": "Editar nota",
       "deleteNote": "Eliminar nota",
-      "placeholder": "Introduzca una nota...",
+      "placeholder": "Escribe una nota...",
       "reminder": "Recordatorio",
       "setReminder": "Establecer recordatorio",
       "removeReminder": "Eliminar recordatorio",
@@ -1286,7 +1286,7 @@
       "owner": "Propietario",
       "activeListings": "{count} anuncios activos",
       "verified": "Verificado",
-      "superAgent": "Superagente",
+      "superAgent": "Súper agente",
       "yearsOnPlatform": "{count} años en la plataforma",
       "contact": "Contactar",
       "remove": "Eliminar de favoritos"
@@ -1297,11 +1297,11 @@
       "deleteFilter": "Eliminar",
       "editFilter": "Editar",
       "lastUsed": "Último uso: {date}",
-      "propertiesCount": "Se han encontrado {count} propiedades"
+      "propertiesCount": "{count} propiedades encontradas"
     },
     "authPrompt": {
-      "title": "Inicie sesión para guardar",
-      "description": "Inicie sesión para guardar favoritos y sincronizar entre dispositivos"
+      "title": "Inicia sesión para guardar",
+      "description": "Inicia sesión para guardar favoritos y sincronizar entre dispositivos"
     }
   },
   "complaint": {

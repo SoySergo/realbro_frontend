@@ -1,7 +1,7 @@
 /**
  * Поддерживаемые локали приложения
  */
-const LOCALES = ['ru', 'en', 'fr'] as const;
+const LOCALES = ['ru', 'en', 'fr', 'uk', 'de', 'pt', 'es', 'ca', 'it'] as const;
 
 export type Locale = typeof LOCALES[number];
 
