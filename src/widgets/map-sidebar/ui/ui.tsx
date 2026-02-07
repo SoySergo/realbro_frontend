@@ -438,13 +438,16 @@ export function MobileMapSidebar({
 
     // Состояние bottom sheet
     const [snapState, setSnapState] = useState<MobileSnapState>('collapsed');
-    const [dragOffset, setDragOffset] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-
+    
+    // Используем refs для производительности — избегаем ре-рендеров при драге
+    const dragOffset = useRef(0);
+    const isDragging = useRef(false);
     const dragStartY = useRef(0);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const sheetRef = useRef<HTMLDivElement>(null);
     const isScrollAtTop = useRef(true);
     const isDraggingFromContent = useRef(false);
+    const isTransitioning = useRef(false);
 
     const sortOptions: { value: PropertySortBy; label: string }[] = [
         { value: 'createdAt', label: tMapSidebar('sortDate') },
@@ -505,6 +508,13 @@ export function MobileMapSidebar({
             scrollRef.current.scrollTop = 0;
         }
     }, [snapState]);
+    
+    // Управление transition при изменении состояния
+    useEffect(() => {
+        if (sheetRef.current && !isDragging.current) {
+            sheetRef.current.style.transition = 'height 0.3s ease-out';
+        }
+    }, [snapState]);
 
     const handleSortChange = (value: string) => {
         setSortBy(value as PropertySortBy);
@@ -518,36 +528,57 @@ export function MobileMapSidebar({
     const handleHandleTouchStart = useCallback((e: ReactTouchEvent) => {
         dragStartY.current = e.touches[0].clientY;
         isDraggingFromContent.current = false;
-        setIsDragging(true);
+        isDragging.current = true;
+        
+        // Отключаем CSS transition во время драга
+        if (sheetRef.current) {
+            sheetRef.current.style.transition = 'none';
+        }
     }, []);
 
     const handleHandleTouchMove = useCallback(
         (e: ReactTouchEvent) => {
-            if (!isDragging) return;
+            if (!isDragging.current || !sheetRef.current) return;
+            
             const delta = e.touches[0].clientY - dragStartY.current;
 
             // В свёрнутом состоянии разрешаем только свайп вверх (отрицательный delta)
             if (snapState === 'collapsed') {
-                setDragOffset(Math.min(0, delta));
+                dragOffset.current = Math.min(0, delta);
             } else {
                 // В развёрнутом — разрешаем свайп вниз (положительный delta)
-                setDragOffset(Math.max(0, delta));
+                dragOffset.current = Math.max(0, delta);
             }
+            
+            // Прямое обновление DOM без ре-рендера
+            sheetRef.current.style.transform = `translateY(${dragOffset.current}px)`;
         },
-        [isDragging, snapState]
+        [snapState]
     );
 
     const handleHandleTouchEnd = useCallback(() => {
-        setIsDragging(false);
+        if (!sheetRef.current) return;
+        
+        isDragging.current = false;
+        isTransitioning.current = true;
+        
+        // Возвращаем CSS transition
+        sheetRef.current.style.transition = 'height 0.3s ease-out, transform 0.3s ease-out';
+        sheetRef.current.style.transform = 'translateY(0)';
 
-        if (snapState === 'collapsed' && dragOffset < -SNAP_THRESHOLD) {
+        if (snapState === 'collapsed' && dragOffset.current < -SNAP_THRESHOLD) {
             setSnapState('expanded');
-        } else if (snapState === 'expanded' && dragOffset > SNAP_THRESHOLD) {
+        } else if (snapState === 'expanded' && dragOffset.current > SNAP_THRESHOLD) {
             setSnapState('collapsed');
         }
 
-        setDragOffset(0);
-    }, [snapState, dragOffset]);
+        dragOffset.current = 0;
+        
+        // Сбрасываем флаг после анимации
+        setTimeout(() => {
+            isTransitioning.current = false;
+        }, 300);
+    }, [snapState]);
 
     // === Touch-обработчики для контента (overscroll → сворачивание) ===
     const handleContentTouchStart = useCallback((e: ReactTouchEvent) => {
@@ -557,15 +588,19 @@ export function MobileMapSidebar({
 
     const handleContentTouchMove = useCallback(
         (e: ReactTouchEvent) => {
-            if (snapState !== 'expanded') return;
+            if (snapState !== 'expanded' || !sheetRef.current) return;
 
             const delta = e.touches[0].clientY - dragStartY.current;
 
             // Если скролл в самом верху и тянем вниз — начинаем сворачивание
             if (isScrollAtTop.current && delta > 0) {
                 isDraggingFromContent.current = true;
-                setIsDragging(true);
-                setDragOffset(delta);
+                isDragging.current = true;
+                dragOffset.current = delta;
+                
+                // Отключаем transition и применяем transform
+                sheetRef.current.style.transition = 'none';
+                sheetRef.current.style.transform = `translateY(${delta}px)`;
                 e.preventDefault();
             }
         },
@@ -573,17 +608,27 @@ export function MobileMapSidebar({
     );
 
     const handleContentTouchEnd = useCallback(() => {
-        if (!isDraggingFromContent.current) return;
+        if (!isDraggingFromContent.current || !sheetRef.current) return;
 
-        setIsDragging(false);
+        isDragging.current = false;
         isDraggingFromContent.current = false;
+        isTransitioning.current = true;
+        
+        // Возвращаем CSS transition
+        sheetRef.current.style.transition = 'height 0.3s ease-out, transform 0.3s ease-out';
+        sheetRef.current.style.transform = 'translateY(0)';
 
-        if (dragOffset > SNAP_THRESHOLD) {
+        if (dragOffset.current > SNAP_THRESHOLD) {
             setSnapState('collapsed');
         }
 
-        setDragOffset(0);
-    }, [dragOffset]);
+        dragOffset.current = 0;
+        
+        // Сбрасываем флаг после анимации
+        setTimeout(() => {
+            isTransitioning.current = false;
+        }, 300);
+    }, []);
 
     // Отслеживание позиции скролла + infinite scroll
     const handleContentScroll = useCallback(
@@ -611,17 +656,15 @@ export function MobileMapSidebar({
 
     return (
         <div
+            ref={sheetRef}
             className={cn(
                 'fixed left-0 right-0 z-30 bg-background rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col',
-                !isDragging && 'transition-[height] duration-300 ease-out',
                 className
             )}
             style={{
                 bottom: `${BOTTOM_NAV_HEIGHT}px`,
                 height: sheetHeight,
-                transform: dragOffset !== 0
-                    ? `translateY(${dragOffset}px)`
-                    : undefined,
+                willChange: 'transform, height',
             }}
         >
             {/* Drag handle — всегда доступен для свайпа */}
@@ -629,7 +672,8 @@ export function MobileMapSidebar({
                 role="button"
                 tabIndex={0}
                 aria-label={isExpanded ? tMapSidebar('hidePanel') : tMapSidebar('showPanel')}
-                className="flex justify-center py-3 shrink-0 cursor-grab active:cursor-grabbing touch-none"
+                className="flex justify-center py-3 shrink-0 cursor-grab active:cursor-grabbing"
+                style={{ touchAction: 'none' }}
                 onTouchStart={handleHandleTouchStart}
                 onTouchMove={handleHandleTouchMove}
                 onTouchEnd={handleHandleTouchEnd}
@@ -712,6 +756,7 @@ export function MobileMapSidebar({
                     'flex-1 p-4 space-y-3',
                     isExpanded ? 'overflow-y-auto' : 'overflow-hidden'
                 )}
+                style={{ overscrollBehavior: 'contain' }}
                 onScroll={handleContentScroll}
                 onTouchStart={handleContentTouchStart}
                 onTouchMove={handleContentTouchMove}

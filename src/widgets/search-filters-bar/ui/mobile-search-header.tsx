@@ -32,11 +32,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
-import type { MarkerType } from '@/entities/filter';
 
 type MobileSearchHeaderProps = {
     onOpenFilters: () => void;
     className?: string;
+    currentCategory?: 'properties' | 'professionals';
 };
 
 // Высота основного хедера
@@ -45,7 +45,7 @@ const HEADER_HEIGHT = 56;
 /**
  * Мобильный хедер для страницы поиска
  */
-export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHeaderProps) {
+export function MobileSearchHeader({ onOpenFilters, className, currentCategory = 'properties' }: MobileSearchHeaderProps) {
     const { filtersCount, filters } = useSearchFilters();
     const t = useTranslations('sidebar');
     const tFilters = useTranslations('filters');
@@ -107,6 +107,8 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
     const handleCategoryChange = (value: string) => {
         if (value === 'professionals') {
             localizedRouter.push('/agencies');
+        } else if (value === 'properties') {
+            localizedRouter.push('/search/map');
         }
     };
 
@@ -128,28 +130,6 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
                             <span className="ml-2 text-xl font-bold text-text-primary leading-none">Realbro</span>
                         </Link>
                     </div>
-
-                    {/* Переключатель категории: Недвижимость / Агентства */}
-                    <Select value="properties" onValueChange={handleCategoryChange}>
-                        <SelectTrigger className="h-8 w-auto gap-1 text-xs border-border px-2 shrink-0">
-                            <Building2 className="w-3.5 h-3.5" />
-                            <SelectValue>{tCategory('properties')}</SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="properties">
-                                <span className="flex items-center gap-2">
-                                    <Building2 className="w-4 h-4" />
-                                    {tCategory('properties')}
-                                </span>
-                            </SelectItem>
-                            <SelectItem value="professionals">
-                                <span className="flex items-center gap-2">
-                                    <Users className="w-4 h-4" />
-                                    {tCategory('professionals')}
-                                </span>
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
 
                     {/* Actions Block */}
                     <div className="flex-[1_1_auto] flex items-center justify-end gap-2 min-w-0 pl-2">
@@ -240,13 +220,19 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
             <div style={{ height: HEADER_HEIGHT }} />
 
             {/* Плавающий блок фильтров */}
-            <MobileFiltersFloatingBar isMapMode={isMapMode} />
+            <MobileFiltersFloatingBar 
+                isMapMode={isMapMode} 
+                currentCategory={currentCategory}
+                onCategoryChange={handleCategoryChange}
+            />
         </div>
     );
 }
 
 type MobileFiltersFloatingBarProps = {
     isMapMode: boolean;
+    currentCategory?: 'properties' | 'professionals';
+    onCategoryChange: (value: string) => void;
 };
 
 /**
@@ -254,8 +240,9 @@ type MobileFiltersFloatingBarProps = {
  * - В режиме карты: всегда поверх карты, без фона
  * - В режиме списка: sticky под хедером, скрывается при скролле вниз
  */
-function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) {
+function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', onCategoryChange }: MobileFiltersFloatingBarProps) {
     const t = useTranslations('filters');
+    const tCategory = useTranslations('searchCategory');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { filters, setFilters, clearFilter } = useSearchFilters();
@@ -375,6 +362,7 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                 >
                     <FilterButtons
                         t={t}
+                        tCategory={tCategory}
                         sortOptions={sortOptions}
                         selectedSort={selectedSort}
                         sortOrder={sortOrder}
@@ -384,6 +372,8 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                         onRemoveChip={handleRemoveChip}
                         withShadow
                         prefersReducedMotion={prefersReducedMotion}
+                        currentCategory={currentCategory}
+                        onCategoryChange={onCategoryChange}
                     />
                 </div>
             </div>
@@ -422,6 +412,7 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                     <div className="flex items-center gap-2 px-3 py-2 w-max min-w-full">
                         <FilterButtons
                             t={t}
+                            tCategory={tCategory}
                             sortOptions={sortOptions}
                             selectedSort={selectedSort}
                             sortOrder={sortOrder}
@@ -430,6 +421,8 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
                             activeFilterChips={activeFilterChips}
                             onRemoveChip={handleRemoveChip}
                             prefersReducedMotion={prefersReducedMotion}
+                            currentCategory={currentCategory}
+                            onCategoryChange={onCategoryChange}
                         />
                     </div>
                 </div>
@@ -440,6 +433,7 @@ function MobileFiltersFloatingBar({ isMapMode }: MobileFiltersFloatingBarProps) 
 
 type FilterButtonsProps = {
     t: (key: string) => string;
+    tCategory: (key: string) => string;
     sortOptions: { value: string; label: string }[];
     selectedSort: string;
     sortOrder: string;
@@ -449,6 +443,8 @@ type FilterButtonsProps = {
     onRemoveChip: (key: string) => void;
     withShadow?: boolean;
     prefersReducedMotion?: boolean;
+    currentCategory?: 'properties' | 'professionals';
+    onCategoryChange: (value: string) => void;
 };
 
 /**
@@ -499,6 +495,7 @@ const FilterChip = memo(function FilterChip({
  */
 const FilterButtons = memo(function FilterButtons({
     t,
+    tCategory,
     sortOptions,
     selectedSort,
     sortOrder,
@@ -508,6 +505,8 @@ const FilterButtons = memo(function FilterButtons({
     onRemoveChip,
     withShadow = false,
     prefersReducedMotion = false,
+    currentCategory = 'properties',
+    onCategoryChange,
 }: FilterButtonsProps) {
     const shadowClass = withShadow ? 'shadow-md' : '';
 
@@ -556,6 +555,40 @@ const FilterButtons = memo(function FilterButtons({
                     )} />
                 </Button>
             </div>
+
+            {/* Переключатель категории: Недвижимость / Агентства */}
+            <Select value={currentCategory} onValueChange={onCategoryChange}>
+                <SelectTrigger className={cn(
+                    'h-9 w-auto gap-1 text-sm border-border px-3 shrink-0 touch-manipulation',
+                    shadowClass
+                )}>
+                    {currentCategory === 'properties' ? (
+                        <Building2 className="w-4 h-4" />
+                    ) : (
+                        <Users className="w-4 h-4" />
+                    )}
+                    <SelectValue>
+                        {currentCategory === 'properties' 
+                            ? tCategory('properties') 
+                            : tCategory('professionals')
+                        }
+                    </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="properties">
+                        <span className="flex items-center gap-2">
+                            <Building2 className="w-4 h-4" />
+                            {tCategory('properties')}
+                        </span>
+                    </SelectItem>
+                    <SelectItem value="professionals">
+                        <span className="flex items-center gap-2">
+                            <Users className="w-4 h-4" />
+                            {tCategory('professionals')}
+                        </span>
+                    </SelectItem>
+                </SelectContent>
+            </Select>
 
             {/* Активные фильтры */}
             {activeFilterChips.map((chip) => (

@@ -2,26 +2,16 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, Users } from 'lucide-react';
-import Image from 'next/image';
-import { Link, useRouter } from '@/shared/config/routing';
+import { Building2 } from 'lucide-react';
+import { useRouter } from '@/shared/config/routing';
 import { AgencyCard } from '@/entities/agency';
 import { AgencyFiltersBar } from '@/features/agency-filters';
 import { SearchCategorySwitcher } from '@/features/search-category';
+import { MobileSearchHeader } from '@/widgets/search-filters-bar';
 import { Button } from '@/shared/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/shared/ui/select';
 import { getAgenciesList } from '@/shared/api';
 import { cn } from '@/shared/lib/utils';
 import type { AgencyCardData, AgencyFilters } from '@/entities/agency';
-
-// Высота мобильного хедера
-const MOBILE_HEADER_HEIGHT = 56;
 
 interface AgenciesPageProps {
     locale: string;
@@ -38,13 +28,10 @@ interface AgenciesPageProps {
 export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps) {
     const t = useTranslations('agency');
     const tCommon = useTranslations('common');
-    const tCategory = useTranslations('searchCategory');
-    const router = useRouter();
 
     const [agencies, setAgencies] = useState<AgencyCardData[]>(initialAgencies);
     const [filters, setFilters] = useState<AgencyFilters>({});
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
@@ -66,7 +53,6 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     setAgencies(result.data);
                 }
                 
-                setTotalPages(result.pagination.totalPages);
                 setHasMore(pageNum < result.pagination.totalPages);
             } catch (error) {
                 console.error('Failed to load agencies:', error);
@@ -125,59 +111,21 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
         setPage(nextPage);
         loadAgencies(filters, nextPage, true);
     }, [page, filters, loadAgencies]);
-
-    // Обработчик смены категории поиска (мобилка)
-    const handleCategoryChange = (value: string) => {
-        if (value === 'properties') {
-            router.push('/search/map');
-        }
+    
+    // For agencies: empty filter handler (agency filters don't use MobileFiltersSheet)
+    const handleOpenFilters = () => {
+        // Agencies don't use MobileFiltersSheet, their filters are always visible
     };
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Мобильный хедер — фиксированный */}
-            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background-secondary border-b border-border">
-                <div className="flex items-center px-3 py-2 gap-2">
-                    {/* Logo */}
-                    <div className="flex-[0_0_auto]">
-                        <Link href="/" className="flex items-start">
-                            <Image
-                                src="/logo.svg"
-                                alt="Logo"
-                                width={24}
-                                height={24}
-                                className="w-6 h-6 object-contain"
-                            />
-                            <span className="ml-2 text-xl font-bold text-text-primary leading-none">Realbro</span>
-                        </Link>
-                    </div>
-
-                    {/* Переключатель категории: Недвижимость / Агентства */}
-                    <Select value="professionals" onValueChange={handleCategoryChange}>
-                        <SelectTrigger className="h-8 w-auto gap-1 text-xs border-border px-2 shrink-0">
-                            <Users className="w-3.5 h-3.5" />
-                            <SelectValue>{tCategory('professionals')}</SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="properties">
-                                <span className="flex items-center gap-2">
-                                    <Building2 className="w-4 h-4" />
-                                    {tCategory('properties')}
-                                </span>
-                            </SelectItem>
-                            <SelectItem value="professionals">
-                                <span className="flex items-center gap-2">
-                                    <Users className="w-4 h-4" />
-                                    {tCategory('professionals')}
-                                </span>
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+            {/* Мобильный хедер — используем MobileSearchHeader */}
+            <div className="md:hidden">
+                <MobileSearchHeader 
+                    onOpenFilters={handleOpenFilters}
+                    currentCategory="professionals"
+                />
             </div>
-
-            {/* Отступ для мобильного хедера */}
-            <div className="md:hidden" style={{ height: MOBILE_HEADER_HEIGHT }} />
 
             {/* Десктоп: заголовок с переключателем */}
             <div className="hidden md:block bg-background-secondary border-b border-border">
