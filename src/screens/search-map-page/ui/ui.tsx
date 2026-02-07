@@ -11,7 +11,7 @@ import {
     MobileViewToggle,
     MobileFiltersSheet,
 } from '@/widgets/search-filters-bar';
-import { MapSidebar, MobileMapSidebar } from '@/widgets/map-sidebar';
+import { MapSidebar, MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
 import { useSidebarStore } from '@/widgets/sidebar';
 import type { Property } from '@/entities/property';
 
@@ -44,6 +44,13 @@ export function SearchMapPage() {
 
     // Состояние мобильного sheet фильтров
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+    // Состояние мобильного сайдбара (collapsed / expanded)
+    const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('collapsed');
+    const mobileSidebarExpanded = mobileSidebarSnapState === 'expanded';
+    const handleToggleSidebar = useCallback(() => {
+        setMobileSidebarSnapState((prev) => (prev === 'collapsed' ? 'expanded' : 'collapsed'));
+    }, []);
 
     // Проверяем, нужно ли автоматически открыть режим локации
     const autoOpenDraw = searchParams.get('openDraw') === 'true';
@@ -87,7 +94,7 @@ export function SearchMapPage() {
     }, []);
 
     return (
-        <div className="flex h-dvh bg-background overscroll-none overflow-hidden">
+        <div className="flex h-dvh bg-background overflow-hidden">
             <main className="flex-1 md:ml-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер с фильтрами - только на мобильных */}
                 {!activeLocationMode && (
@@ -104,7 +111,10 @@ export function SearchMapPage() {
 
                 {/* Кнопка переключения карта/список - только на мобильных */}
                 <div className="md:hidden">
-                    <MobileViewToggle />
+                    <MobileViewToggle
+                        sidebarExpanded={mobileSidebarExpanded}
+                        onToggleSidebar={handleToggleSidebar}
+                    />
                 </div>
 
                 {/* Контейнер карты и фильтров */}
@@ -126,6 +136,8 @@ export function SearchMapPage() {
                 <div className="md:hidden">
                     <MobileMapSidebar
                         onPropertyClick={handlePropertyClick}
+                        snapState={mobileSidebarSnapState}
+                        onSnapStateChange={setMobileSidebarSnapState}
                     />
                 </div>
 

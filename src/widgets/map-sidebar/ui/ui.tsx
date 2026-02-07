@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef, type TouchEvent as ReactTouchEvent } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { List, type ListImperativeAPI } from 'react-window';
 import {
@@ -9,6 +9,7 @@ import {
     List as ListIcon,
     ChevronLeft,
     ChevronRight,
+    ChevronDown,
     MapPin,
     X,
 } from 'lucide-react';
@@ -47,6 +48,9 @@ interface MobileMapSidebarProps {
     selectedPropertyId?: string | null;
     clusterId?: string | null;
     onClusterReset?: () => void;
+    clusterPropertyIds?: string[];
+    snapState?: MobileSnapState;
+    onSnapStateChange?: (state: MobileSnapState) => void;
     className?: string;
 }
 
@@ -88,8 +92,8 @@ function PropertyRow({
                 ...style,
                 paddingLeft: 16,
                 paddingRight: 16,
-                paddingTop: index === 0 ? 16 : 8,
-                paddingBottom: 8,
+                paddingTop: index === 0 ? 20 : 20,
+                paddingBottom: 20,
             }}
             onMouseEnter={() => onPropertyHover(property)}
             onMouseLeave={() => onPropertyHover(null)}
@@ -399,28 +403,36 @@ export function MapSidebar({
 // Mobile Bottom Sheet Sidebar
 // =====================================
 
-type MobileSnapState = 'collapsed' | 'expanded';
+export type MobileSnapState = 'collapsed' | 'expanded';
 
-// Высота свёрнутого сайдбара: drag handle (48px) + 1 карточка (~200px) + отступ
-const COLLAPSED_HEIGHT = 260;
 // Высота нижней навигации
 const BOTTOM_NAV_HEIGHT = 64;
-// Порог для snap-переключения (px)
-const SNAP_THRESHOLD = 80;
+// Отступ от хедера (56px) + плавающий бар с чипсами (52px) — только для хедера
+const MOBILE_HEADER_INSET = 56 + 52;
+// Видимая часть в свёрнутом состоянии (35% экрана)
+const COLLAPSED_VISIBLE_PERCENT = 35;
+// Высота одной мобильной карточки для виртуализации (карточка ~420px + gap 20px сверху/снизу)
+const MOBILE_ITEM_HEIGHT = 460;
 
 /**
  * MobileMapSidebar - мобильный bottom sheet для карты
  *
  * Всегда виден на мобильном экране поверх карты.
- * Свёрнутое состояние: drag handle + 1 карточка внизу экрана.
- * Развёрнутое состояние: полный экран со скроллируемым списком.
- * Свайп вверх → раскрывается. Overscroll вниз на первом элементе → сворачивается.
+ * Свёрнутое состояние: 35% экрана — drag handle + счётчик + превью первой карточки.
+ * Развёрнутое состояние: полный экран со виртуализированным скроллируемым списком.
+ *
+ * Анимация через translateY (а не height) для плавности без "разрыва" контента.
+ * Касание контента в collapsed → раскрывается.
+ * Кнопка «Скрыть» в expanded → сворачивается.
  */
 export function MobileMapSidebar({
     onPropertyClick,
     selectedPropertyId,
     clusterId,
     onClusterReset,
+    clusterPropertyIds,
+    snapState: externalSnapState,
+    onSnapStateChange,
     className,
 }: MobileMapSidebarProps) {
     const tMapSidebar = useTranslations('mapSidebar');
@@ -436,24 +448,37 @@ export function MobileMapSidebar({
     const [hasMore, setHasMore] = useState(true);
     const loadingRef = useRef(false);
 
-    // Состояние bottom sheet
-    const [snapState, setSnapState] = useState<MobileSnapState>('collapsed');
-    
-    // Используем refs для производительности — избегаем ре-рендеров при драге
-    const dragOffset = useRef(0);
-    const isDragging = useRef(false);
-    const dragStartY = useRef(0);
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const sheetRef = useRef<HTMLDivElement>(null);
-    const isScrollAtTop = useRef(true);
-    const isDraggingFromContent = useRef(false);
-    const isTransitioning = useRef(false);
+    // Состояние bottom sheet — controlled или uncontrolled
+    const [internalSnapState, setInternalSnapState] = useState<MobileSnapState>('collapsed');
+    const snapState = externalSnapState ?? internalSnapState;
+    const setSnapState = useCallback((state: MobileSnapState) => {
+        if (onSnapStateChange) {
+            onSnapStateChange(state);
+        } else {
+            setInternalSnapState(state);
+        }
+    }, [onSnapStateChange]);
 
-    const sortOptions: { value: PropertySortBy; label: string }[] = [
-        { value: 'createdAt', label: tMapSidebar('sortDate') },
-        { value: 'price', label: tMapSidebar('sortPrice') },
-        { value: 'area', label: tMapSidebar('sortArea') },
-    ];
+    // Вычисляем translateY для collapsed состояния
+    const [collapsedTranslateY, setCollapsedTranslateY] = useState(0);
+
+    useEffect(() => {
+        const update = () => {
+            const fullHeight = window.innerHeight - BOTTOM_NAV_HEIGHT;
+            const visibleHeight = (window.innerHeight * COLLAPSED_VISIBLE_PERCENT) / 100;
+            setCollapsedTranslateY(fullHeight - visibleHeight);
+        };
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    }, []);
+
+    const sheetRef = useRef<HTMLDivElement>(null);
+    const mobileListRef = useRef<ListImperativeAPI>(null);
+    const listContainerRef = useRef<HTMLDivElement>(null);
+    const [listHeight, setListHeight] = useState(0);
+
+    const isExpanded = snapState === 'expanded';
 
     // Загрузка списка
     const fetchProperties = useCallback(
@@ -464,22 +489,36 @@ export function MobileMapSidebar({
             setIsLoading(true);
 
             try {
-                const response = await getPropertiesList({
-                    filters: currentFilters,
-                    page: pageNum,
-                    limit: 20,
-                    sortBy,
-                    sortOrder,
-                });
-
-                if (append) {
-                    setProperties((prev) => [...prev, ...response.data]);
+                // Если есть clusterPropertyIds — загружаем по IDs
+                if (clusterPropertyIds && clusterPropertyIds.length > 0) {
+                    const { getPropertiesByIds } = await import('@/shared/api');
+                    const data = await getPropertiesByIds(clusterPropertyIds);
+                    setProperties(data);
+                    setPagination({
+                        page: 1,
+                        limit: data.length,
+                        total: data.length,
+                        totalPages: 1,
+                    });
+                    setHasMore(false);
                 } else {
-                    setProperties(response.data);
-                }
+                    const response = await getPropertiesList({
+                        filters: currentFilters,
+                        page: pageNum,
+                        limit: 20,
+                        sortBy,
+                        sortOrder,
+                    });
 
-                setPagination(response.pagination);
-                setHasMore(pageNum < response.pagination.totalPages);
+                    if (append) {
+                        setProperties((prev) => [...prev, ...response.data]);
+                    } else {
+                        setProperties(response.data);
+                    }
+
+                    setPagination(response.pagination);
+                    setHasMore(pageNum < response.pagination.totalPages);
+                }
             } catch (error) {
                 console.error('Failed to fetch properties:', error);
             } finally {
@@ -487,7 +526,7 @@ export function MobileMapSidebar({
                 loadingRef.current = false;
             }
         },
-        [currentFilters, sortBy, sortOrder]
+        [currentFilters, sortBy, sortOrder, clusterPropertyIds]
     );
 
     // Начальная загрузка данных
@@ -504,139 +543,56 @@ export function MobileMapSidebar({
 
     // При раскрытии — скроллим к началу
     useEffect(() => {
-        if (snapState === 'expanded' && scrollRef.current) {
-            scrollRef.current.scrollTop = 0;
+        if (snapState === 'expanded' && mobileListRef.current) {
+            mobileListRef.current.scrollToRow({ index: 0 });
         }
     }, [snapState]);
-    
-    // Управление transition при изменении состояния
+
+    // Применяем translateY при изменении состояния
     useEffect(() => {
-        if (sheetRef.current && !isDragging.current) {
-            sheetRef.current.style.transition = 'height 0.3s ease-out';
-        }
-    }, [snapState]);
-
-    const handleSortChange = (value: string) => {
-        setSortBy(value as PropertySortBy);
-    };
-
-    const toggleSortOrder = () => {
-        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    };
-
-    // === Touch-обработчики для drag handle ===
-    const handleHandleTouchStart = useCallback((e: ReactTouchEvent) => {
-        dragStartY.current = e.touches[0].clientY;
-        isDraggingFromContent.current = false;
-        isDragging.current = true;
-        
-        // Отключаем CSS transition во время драга
         if (sheetRef.current) {
-            sheetRef.current.style.transition = 'none';
+            const translateY = snapState === 'collapsed' ? collapsedTranslateY : 0;
+            sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)';
+            sheetRef.current.style.transform = `translateY(${translateY}px)`;
         }
-    }, []);
+    }, [snapState, collapsedTranslateY]);
 
-    const handleHandleTouchMove = useCallback(
-        (e: ReactTouchEvent) => {
-            if (!isDragging.current || !sheetRef.current) return;
-            
-            const delta = e.touches[0].clientY - dragStartY.current;
-
-            // В свёрнутом состоянии разрешаем только свайп вверх (отрицательный delta)
-            if (snapState === 'collapsed') {
-                dragOffset.current = Math.min(0, delta);
-            } else {
-                // В развёрнутом — разрешаем свайп вниз (положительный delta)
-                dragOffset.current = Math.max(0, delta);
+    // Вычисляем высоту виртуализированного списка
+    useEffect(() => {
+        const measure = () => {
+            if (listContainerRef.current) {
+                const rect = listContainerRef.current.getBoundingClientRect();
+                if (rect.height > 0) {
+                    setListHeight(rect.height);
+                }
             }
-            
-            // Прямое обновление DOM без ре-рендера
-            sheetRef.current.style.transform = `translateY(${dragOffset.current}px)`;
-        },
-        [snapState]
-    );
+        };
 
-    const handleHandleTouchEnd = useCallback(() => {
-        if (!sheetRef.current) return;
-        
-        isDragging.current = false;
-        isTransitioning.current = true;
-        
-        // Возвращаем CSS transition
-        sheetRef.current.style.transition = 'height 0.3s ease-out, transform 0.3s ease-out';
-        sheetRef.current.style.transform = 'translateY(0)';
-
-        if (snapState === 'collapsed' && dragOffset.current < -SNAP_THRESHOLD) {
-            setSnapState('expanded');
-        } else if (snapState === 'expanded' && dragOffset.current > SNAP_THRESHOLD) {
-            setSnapState('collapsed');
+        if (isExpanded) {
+            measure();
+            const timer = setTimeout(measure, 350);
+            return () => clearTimeout(timer);
         }
+    }, [isExpanded]);
 
-        dragOffset.current = 0;
-        
-        // Сбрасываем флаг после анимации
-        setTimeout(() => {
-            isTransitioning.current = false;
-        }, 300);
-    }, [snapState]);
-
-    // === Touch-обработчики для контента (overscroll → сворачивание) ===
-    const handleContentTouchStart = useCallback((e: ReactTouchEvent) => {
-        dragStartY.current = e.touches[0].clientY;
-        isDraggingFromContent.current = false;
-    }, []);
-
-    const handleContentTouchMove = useCallback(
-        (e: ReactTouchEvent) => {
-            if (snapState !== 'expanded' || !sheetRef.current) return;
-
-            const delta = e.touches[0].clientY - dragStartY.current;
-
-            // Если скролл в самом верху и тянем вниз — начинаем сворачивание
-            if (isScrollAtTop.current && delta > 0) {
-                isDraggingFromContent.current = true;
-                isDragging.current = true;
-                dragOffset.current = delta;
-                
-                // Отключаем transition и применяем transform
-                sheetRef.current.style.transition = 'none';
-                sheetRef.current.style.transform = `translateY(${delta}px)`;
-                e.preventDefault();
+    // Also observe resize changes
+    useEffect(() => {
+        if (!listContainerRef.current) return;
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.contentRect.height > 0) {
+                    setListHeight(entry.contentRect.height);
+                }
             }
-        },
-        [snapState]
-    );
-
-    const handleContentTouchEnd = useCallback(() => {
-        if (!isDraggingFromContent.current || !sheetRef.current) return;
-
-        isDragging.current = false;
-        isDraggingFromContent.current = false;
-        isTransitioning.current = true;
-        
-        // Возвращаем CSS transition
-        sheetRef.current.style.transition = 'height 0.3s ease-out, transform 0.3s ease-out';
-        sheetRef.current.style.transform = 'translateY(0)';
-
-        if (dragOffset.current > SNAP_THRESHOLD) {
-            setSnapState('collapsed');
-        }
-
-        dragOffset.current = 0;
-        
-        // Сбрасываем флаг после анимации
-        setTimeout(() => {
-            isTransitioning.current = false;
-        }, 300);
+        });
+        observer.observe(listContainerRef.current);
+        return () => observer.disconnect();
     }, []);
 
-    // Отслеживание позиции скролла + infinite scroll
-    const handleContentScroll = useCallback(
+    // Infinite scroll для виртуализированного списка
+    const handleVirtualListScroll = useCallback(
         (e: React.UIEvent<HTMLDivElement>) => {
             const target = e.currentTarget;
-            isScrollAtTop.current = target.scrollTop <= 0;
-
-            // Infinite scroll
             const scrollPercentage =
                 (target.scrollTop + target.clientHeight) / target.scrollHeight;
             if (scrollPercentage > 0.8 && hasMore && !isLoading) {
@@ -648,99 +604,92 @@ export function MobileMapSidebar({
         [hasMore, isLoading, page, fetchProperties]
     );
 
-    // Вычисление высоты bottom sheet
-    const isExpanded = snapState === 'expanded';
-    const sheetHeight = isExpanded
-        ? `calc(100dvh - ${BOTTOM_NAV_HEIGHT}px)`
-        : `${COLLAPSED_HEIGHT}px`;
+    // Обработчики для мобильного PropertyRow
+    const handleMobilePropertyClick = useCallback(
+        (property: Property) => {
+            onPropertyClick?.(property);
+        },
+        [onPropertyClick]
+    );
+
+    const handleMobilePropertyHover = useCallback(
+        (_property: Property | null) => {
+            // no-op на мобильных
+        },
+        []
+    );
 
     return (
         <div
             ref={sheetRef}
             className={cn(
-                'fixed left-0 right-0 z-30 bg-background rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col',
+                'fixed left-0 right-0 z-30 bg-background rounded-t-lg shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col',
                 className
             )}
             style={{
                 bottom: `${BOTTOM_NAV_HEIGHT}px`,
-                height: sheetHeight,
-                willChange: 'transform, height',
+                height: `calc(100dvh - ${BOTTOM_NAV_HEIGHT}px)`,
+                transform: `translateY(${collapsedTranslateY}px)`,
+                willChange: 'transform',
             }}
         >
-            {/* Drag handle — всегда доступен для свайпа */}
+            {/* Drag handle — тап раскрывает/сворачивает */}
             <div
                 role="button"
                 tabIndex={0}
                 aria-label={isExpanded ? tMapSidebar('hidePanel') : tMapSidebar('showPanel')}
-                className="flex justify-center py-3 shrink-0 cursor-grab active:cursor-grabbing"
-                style={{ touchAction: 'none' }}
-                onTouchStart={handleHandleTouchStart}
-                onTouchMove={handleHandleTouchMove}
-                onTouchEnd={handleHandleTouchEnd}
+                className="flex justify-center py-3 shrink-0 cursor-pointer"
+                onClick={() => setSnapState(snapState === 'collapsed' ? 'expanded' : 'collapsed')}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        setSnapState((prev) => (prev === 'collapsed' ? 'expanded' : 'collapsed'));
+                        setSnapState(snapState === 'collapsed' ? 'expanded' : 'collapsed');
                     }
                 }}
             >
-                <div className="w-10 h-1.5 rounded-full bg-border" aria-hidden="true" />
+                <div className="w-10 h-1 rounded-full bg-border" aria-hidden="true" />
             </div>
 
-            {/* Header с сортировкой — только в развёрнутом состоянии */}
-            {isExpanded && (
-                <div className="px-4 pb-3 border-b border-border shrink-0">
-                    <div className="flex items-center justify-between">
-                        {pagination && (
-                            <span className="text-sm font-medium">
-                                {tMapSidebar('objectsCount', { count: pagination.total })}
-                            </span>
-                        )}
+            {/* Хедер со счётчиком + кнопка скрыть в expanded */}
+            <div className="px-4 pb-2 shrink-0" style={isExpanded ? { paddingTop: MOBILE_HEADER_INSET } : undefined}>
+                <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">
+                        {clusterPropertyIds && clusterPropertyIds.length > 0
+                            ? tMapSidebar('objectsCount', { count: clusterPropertyIds.length })
+                            : pagination
+                                ? tMapSidebar('objectsCount', { count: pagination.total })
+                                : ''}
+                    </span>
 
-                        <div className="flex items-center gap-2">
-                            <Select value={sortBy} onValueChange={handleSortChange}>
-                                <SelectTrigger className="w-[100px] h-9 text-xs">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {sortOptions.map((option) => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={toggleSortOrder}
-                                className="h-9 w-9 p-0"
-                            >
-                                <ArrowUpDown
-                                    className={cn(
-                                        'w-4 h-4 transition-transform',
-                                        sortOrder === 'asc' && 'rotate-180'
-                                    )}
-                                />
-                            </Button>
-                        </div>
-                    </div>
-
-                    {/* Кластер кнопка */}
-                    {clusterId && onClusterReset && (
+                    {/* Кнопка «Скрыть» — только в expanded */}
+                    {isExpanded && (
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            onClick={onClusterReset}
-                            className="mt-2 h-8 text-xs gap-1"
+                            onClick={() => setSnapState('collapsed')}
+                            className="h-8 w-8 p-0"
+                            aria-label={tMapSidebar('hidePanel')}
                         >
-                            <X className="w-3 h-3" />
-                            {tMapSidebar('resetCluster')}
+                            <ChevronDown className="w-5 h-5" />
                         </Button>
                     )}
                 </div>
-            )}
+
+                {/* Кнопка сброса кластера */}
+                {clusterPropertyIds && clusterPropertyIds.length > 0 && onClusterReset && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={onClusterReset}
+                        className="mt-2 h-8 text-xs gap-1"
+                    >
+                        <X className="w-3 h-3" />
+                        {tMapSidebar('resetCluster')}
+                    </Button>
+                )}
+            </div>
+
+            {isExpanded && <div className="border-b border-border shrink-0" />}
 
             {/* Загрузка */}
             {isLoading && properties.length === 0 && (
@@ -750,49 +699,67 @@ export function MobileMapSidebar({
             )}
 
             {/* Список карточек */}
-            <div
-                ref={scrollRef}
-                className={cn(
-                    'flex-1 p-4 space-y-3',
-                    isExpanded ? 'overflow-y-auto' : 'overflow-hidden'
-                )}
-                style={{ overscrollBehavior: 'contain' }}
-                onScroll={handleContentScroll}
-                onTouchStart={handleContentTouchStart}
-                onTouchMove={handleContentTouchMove}
-                onTouchEnd={handleContentTouchEnd}
-            >
-                {properties.map((property, index) => (
-                    <div
-                        key={property.id}
-                        className={cn(
-                            // В свёрнутом состоянии показываем только первую карточку
-                            !isExpanded && index > 0 && 'hidden'
-                        )}
-                    >
-                        <PropertyCardGrid
-                            property={property}
-                            onClick={() => onPropertyClick?.(property)}
-                            actions={<PropertyCompareButton property={property} />}
-                            menuItems={<PropertyCompareMenuItem property={property} />}
+            {isExpanded ? (
+                /* Развёрнутое состояние — виртуализированный список */
+                <div
+                    ref={listContainerRef}
+                    className="flex-1 min-h-0"
+                >
+                    {properties.length > 0 && listHeight > 0 && (
+                        <List
+                            listRef={mobileListRef}
+                            rowCount={properties.length}
+                            rowHeight={MOBILE_ITEM_HEIGHT}
+                            className="scrollbar-thin"
+                            style={{ height: listHeight }}
+                            rowComponent={PropertyRow}
+                            rowProps={{
+                                properties,
+                                selectedPropertyId: selectedPropertyId ?? null,
+                                onPropertyClick: handleMobilePropertyClick,
+                                onPropertyHover: handleMobilePropertyHover,
+                            }}
+                            onScroll={handleVirtualListScroll}
                         />
-                    </div>
-                ))}
+                    )}
 
-                {/* Loading indicator для infinite scroll */}
-                {isLoading && properties.length > 0 && (
-                    <div className="flex justify-center p-4">
-                        <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                    </div>
-                )}
+                    {/* Loading indicator для infinite scroll */}
+                    {isLoading && properties.length > 0 && (
+                        <div className="flex justify-center p-4">
+                            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                        </div>
+                    )}
 
-                {properties.length === 0 && !isLoading && (
-                    <div className="text-center py-8 text-muted-foreground">
-                        <MapPin className="w-10 h-10 mx-auto mb-2 opacity-30" />
-                        <p className="text-sm">{tMapSidebar('noResults')}</p>
-                    </div>
-                )}
-            </div>
+                    {properties.length === 0 && !isLoading && (
+                        <div className="text-center py-8 text-muted-foreground">
+                            <MapPin className="w-10 h-10 mx-auto mb-2 opacity-30" />
+                            <p className="text-sm">{tMapSidebar('noResults')}</p>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                /* Свёрнутое состояние — 1 карточка, тап раскрывает */
+                <div
+                    className="flex-1 p-4 overflow-hidden"
+                    onClick={() => setSnapState('expanded')}
+                >
+                    {properties[0] && (
+                        <PropertyCardGrid
+                            property={properties[0]}
+                            onClick={() => onPropertyClick?.(properties[0])}
+                            actions={<PropertyCompareButton property={properties[0]} />}
+                            menuItems={<PropertyCompareMenuItem property={properties[0]} />}
+                        />
+                    )}
+
+                    {properties.length === 0 && !isLoading && (
+                        <div className="text-center py-8 text-muted-foreground">
+                            <MapPin className="w-10 h-10 mx-auto mb-2 opacity-30" />
+                            <p className="text-sm">{tMapSidebar('noResults')}</p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

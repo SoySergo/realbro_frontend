@@ -45,8 +45,8 @@ export function TabsDemo() {
 
     const getTabName = (tab: typeof searchTabs[0]) => {
         if (tab.nameKey === 'nearWork') return t('nearWork');
-        if (tab.nameKey === 'byTransport') return t('byTransport', { min: tab.minutes });
-        if (tab.nameKey === 'district') return t('district', { name: tab.districtName });
+        if (tab.nameKey === 'byTransport') return t('byTransport', { min: tab.minutes ?? 0 });
+        if (tab.nameKey === 'district') return t('district', { name: tab.districtName ?? '' });
         return '';
     };
 

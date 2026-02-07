@@ -605,14 +605,19 @@ const FilterButtons = memo(function FilterButtons({
     );
 });
 
+type MobileViewToggleProps = {
+    sidebarExpanded?: boolean;
+    onToggleSidebar?: () => void;
+};
+
 /**
  * Плавающая кнопка переключения карта/список
  * Скрывается когда активен режим локации (draw, search, radius, isochrone)
  *
- * При клике на "Карта" из листинга - редирект на /search/map
- * При клике на "Список" с карты - редирект на /search/list
+ * На странице карты: toggle для сайдбара (Список ↔ Карта)
+ * На странице списка: навигация на /search/map
  */
-export function MobileViewToggle() {
+export function MobileViewToggle({ sidebarExpanded, onToggleSidebar }: MobileViewToggleProps) {
     const t = useTranslations('filters');
     const router = useRouter();
     const pathname = usePathname();
@@ -629,18 +634,25 @@ export function MobileViewToggle() {
     }
 
     const handleToggle = () => {
-        // Сохраняем текущие параметры фильтров
+        // На странице карты — toggle сайдбара
+        if (isMapPage && onToggleSidebar) {
+            onToggleSidebar();
+            return;
+        }
+
+        // На странице списка — навигация на карту
         const params = searchParams.toString();
         const queryString = params ? `?${params}` : '';
 
         if (isMapPage) {
-            // С карты на список
             router.push(`/search/list${queryString}`);
         } else {
-            // С листинга на карту
             router.push(`/search/map${queryString}`);
         }
     };
+
+    // На странице карты: показываем "Список" или "Карта" в зависимости от состояния сайдбара
+    const showMapIcon = isMapPage && sidebarExpanded;
 
     return (
         <Button
@@ -651,7 +663,12 @@ export function MobileViewToggle() {
                 'h-10 px-4 rounded-lg'
             )}
         >
-            {isMapPage ? (
+            {showMapIcon ? (
+                <>
+                    <Map className="w-5 h-5" />
+                    <span className="font-medium">{t('viewMap')}</span>
+                </>
+            ) : isMapPage ? (
                 <>
                     <List className="w-5 h-5" />
                     <span className="font-medium">{t('viewList')}</span>

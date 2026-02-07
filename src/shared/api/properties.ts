@@ -2,7 +2,7 @@
 
 import type { SearchFilters } from '@/entities/filter';
 import type { Property } from '@/entities/property';
-import { generateMockPropertiesPage } from './mocks/properties-mock';
+import { generateMockPropertiesPage, generateMockPropertiesByIds } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
 
 const API_BASE = '/api/properties';
@@ -146,6 +146,35 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
                 cardType: 'grid',
                 includeAuthor: true,
                 includeTransport: true
+            });
+        }
+        throw error;
+    }
+}
+
+/**
+ * Получить объекты по массиву IDs (клик по кластеру/маркеру)
+ */
+export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {
+    try {
+        const response = await fetch('/api/properties/by-ids', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('[API] Failed to get properties by ids:', error);
+        if (FEATURES.USE_MOCK_PROPERTIES) {
+            return generateMockPropertiesByIds(ids, {
+                cardType: 'grid',
+                includeAuthor: true,
+                includeTransport: true,
             });
         }
         throw error;

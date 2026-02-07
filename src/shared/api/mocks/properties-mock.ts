@@ -446,6 +446,21 @@ export function generateMockPropertiesPage(
 }
 
 /**
+ * Генерация мок-объектов по массиву IDs
+ */
+export function generateMockPropertiesByIds(
+    ids: string[],
+    config: MockPropertyConfig = {}
+): Property[] {
+    return ids.map((id, i) => {
+        // Используем хэш id для получения стабильного offset
+        const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const property = generateMockProperty(hash + i, config);
+        return { ...property, id };
+    });
+}
+
+/**
  * Генерация для конкретного кластера
  */
 export function generateMockClusterProperties(
