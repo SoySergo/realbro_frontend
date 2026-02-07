@@ -25,6 +25,7 @@
     "share": "Share",
     "downloadPdf": "Download PDF",
     "report": "Report"
+    "months": "mo."
   },
   "landing": {
     "hero": {
@@ -283,7 +284,9 @@
       "location": "Location",
       "features": "Features",
       "propertyType": "Property Type"
-    }
+    },
+    "newSearch": "New Search",
+    "saveFilter": "Save Filter"
   },
   "map": {
     "showMap": "Show Map",
@@ -473,7 +476,10 @@
     "unsavedChanges": "You have unsaved changes",
     "discardChanges": "Discard Changes",
     "errorSaving": "Error saving",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "errors": {
+      "passwordMismatch": "Passwords do not match"
+    }
   },
   "errors": {
     "general": "An error occurred. Please try again.",
@@ -506,7 +512,15 @@
     "sortByPrice": "By price",
     "sortByArea": "By area",
     "compare": "Compare",
-    "favorites": "Favorites"
+    "favorites": "Favorites",
+    "aiAgent": "AI Agent",
+    "area": "Area",
+    "category": "Category",
+    "price": "Price",
+    "rooms": "Rooms",
+    "sortDate": "By date",
+    "viewList": "List",
+    "viewMap": "Map"
   },
   "isochrone": {
     "title": "Travel Time",
@@ -531,7 +545,9 @@
     "time": {
       "minutes": "min",
       "hours": "h"
-    }
+    },
+    "emptyStateHint": "Search for an address or click on the map to select a starting point",
+    "pointName": "Point Name"
   },
   "radius": {
     "title": "Radius",
@@ -613,7 +629,11 @@
     "clickToAddPoint": "Click on the map to add points",
     "dragToMovePoint": "Drag points to change the shape",
     "minThreePoints": "Minimum 3 points to complete the polygon",
-    "maxPolygonsReached": "Maximum limit of 4 polygons reached. Delete one of the existing polygons to add a new one."
+    "maxPolygonsReached": "Maximum limit of 4 polygons reached. Delete one of the existing polygons to add a new one.",
+    "complete": "Complete",
+    "needMorePoints": "Need more points",
+    "pointsCount": "{count} points",
+    "tapToStart": "Tap to start"
   },
   "chat": {
     "title": "Messages",
@@ -788,7 +808,11 @@
         "restaurants": "Restaurants",
         "parks": "Parks",
         "beauty": "Beauty",
-        "attractions": "Attractions"
+        "attractions": "Attractions",
+        "entertainment": "Entertainment",
+        "groceries": "Groceries",
+        "shopping": "Shopping",
+        "sports": "Sports"
       },
       "showingObjects": "Showing objects within 1 km",
       "distance": "{distance} m"
@@ -819,7 +843,33 @@
     "like": "Like",
     "dislike": "Dislike",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "map": "Map",
+    "min": "min",
+    "objectsInWork": "Properties in work",
+    "privateAgent": "Private Agent",
+    "bathrooms": "Bathrooms",
+    "area": "Area",
+    "livingRules": "Living rules",
+    "atmosphere": "Atmosphere",
+    "noSpecialConditions": "By agreement",
+    "utilities": "Utilities payment",
+    "utilitiesIncludedFull": "included (no meters)",
+    "utilitiesNotIncludedShort": "not included",
+    "term": "Rental term",
+    "rentalTerm": "Rental term",
+    "longTerm": "from one year",
+    "fromYear": "From a year",
+    "priceHistory": "Price history",
+    "trackPrice": "Track price changes",
+    "offerYourPrice": "Offer your price",
+    "example": "For example",
+    "realtor": "Realtor",
+    "docsVerified": "Documents verified",
+    "onPlatform": "On Realbro",
+    "years_short": "years",
+    "writeOnline": "Write while user is online",
+    "sendMessage": "Send message"
   },
   "characteristics": {
     "propertyType": "Property type",
@@ -963,7 +1013,8 @@
     "pool": "Pool",
     "petsAllowed": "Pets allowed",
     "childFriendly": "Child-friendly",
-    "smokingAllowed": "Smoking allowed"
+    "smokingAllowed": "Smoking allowed",
+    "elevator": "Elevator"
   },
   "contact": {
     "title": "Contacts",
@@ -1271,5 +1322,20 @@
       "offensive": "Offensive content",
       "other": "Other"
     }
+  },
+  "footer": {
+    "aboutService": "About Service",
+    "agenciesSearch": "Agencies Search",
+    "agreement": "User Agreement",
+    "allRightsReserved": "All rights reserved",
+    "cookies": "Cookies",
+    "listSearch": "Search by List",
+    "mapSearch": "Search on Map",
+    "privacy": "Privacy Policy",
+    "profile": "Profile",
+    "search": "Search",
+    "support": "Support",
+    "tariffs": "Tariffs",
+    "terms": "Terms of Use"
   }
 }

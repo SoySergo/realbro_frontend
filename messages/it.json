@@ -300,7 +300,9 @@
       "location": "Posizione",
       "features": "Comfort",
       "propertyType": "Tipo di immobile"
-    }
+    },
+    "newSearch": "Nuova ricerca",
+    "saveFilter": "Salva filtro"
   },
   "map": {
     "showMap": "Mostra mappa",
@@ -490,7 +492,10 @@
     "unsavedChanges": "Ci sono modifiche non salvate",
     "discardChanges": "Annulla modifiche",
     "errorSaving": "Errore durante il salvataggio",
-    "tryAgain": "Riprova"
+    "tryAgain": "Riprova",
+    "errors": {
+      "passwordMismatch": "Le password non corrispondono"
+    }
   },
   "errors": {
     "general": "Si è verificato un errore. Riprova.",
@@ -523,7 +528,15 @@
     "sortByPrice": "Per prezzo",
     "sortByArea": "Per superficie",
     "compare": "Confronto",
-    "favorites": "Preferiti"
+    "favorites": "Preferiti",
+    "aiAgent": "Agente IA",
+    "area": "Superficie",
+    "category": "Categoria",
+    "price": "Prezzo",
+    "rooms": "Locali",
+    "sortDate": "Per data",
+    "viewList": "Elenco",
+    "viewMap": "Mappa"
   },
   "isochrone": {
     "title": "Tempo di viaggio",
@@ -548,7 +561,9 @@
     "time": {
       "minutes": "min",
       "hours": "h"
-    }
+    },
+    "emptyStateHint": "Cerca un indirizzo o fai clic sulla mappa per selezionare un punto di partenza",
+    "pointName": "Nome del punto"
   },
   "radius": {
     "title": "Raggio",
@@ -631,7 +646,10 @@
     "clickToAddPoint": "Clicca sulla mappa per aggiungere punti",
     "dragToMovePoint": "Trascina i punti per modificare la forma",
     "minThreePoints": "Minimo 3 punti per completare il poligono",
-    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno esistente per aggiungerne uno nuovo."
+    "maxPolygonsReached": "Raggiunto il limite di 4 poligoni. Elimina uno esistente per aggiungerne uno nuovo.",
+    "needMorePoints": "Servono più punti",
+    "pointsCount": "{count} punti",
+    "tapToStart": "Tocca per iniziare"
   },
   "chat": {
     "title": "Messaggi",
@@ -1208,7 +1226,8 @@
     "months": "mesi",
     "yes": "Sì",
     "no": "No",
-    "notSpecified": "Non specificato"
+    "notSpecified": "Non specificato",
+    "back": "Indietro"
   },
   "authRequired": {
     "title": "Autenticazione necessaria",
@@ -1277,7 +1296,11 @@
       "tomorrowLabel": "Domani",
       "rooms": "cam.",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "apply": "Applica",
+      "customDateTime": "Data e ora personalizzate",
+      "date": "Data",
+      "time": "Ora"
     },
     "professionals": {
       "title": "Professionisti",

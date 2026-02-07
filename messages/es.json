@@ -300,7 +300,9 @@
       "location": "Ubicación",
       "features": "Comodidades",
       "propertyType": "Tipo de propiedad"
-    }
+    },
+    "newSearch": "Nueva búsqueda",
+    "saveFilter": "Guardar filtro"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -490,7 +492,10 @@
     "unsavedChanges": "Hay cambios sin guardar",
     "discardChanges": "Descartar cambios",
     "errorSaving": "Error al guardar",
-    "tryAgain": "Intentar de nuevo"
+    "tryAgain": "Intentar de nuevo",
+    "errors": {
+      "passwordMismatch": "Las contraseñas no coinciden"
+    }
   },
   "errors": {
     "general": "Ocurrió un error. Inténtalo de nuevo.",
@@ -523,7 +528,15 @@
     "sortByPrice": "Por precio",
     "sortByArea": "Por superficie",
     "compare": "Comparar",
-    "favorites": "Favoritos"
+    "favorites": "Favoritos",
+    "aiAgent": "Agente IA",
+    "area": "Superficie",
+    "category": "Categoría",
+    "price": "Precio",
+    "rooms": "Habitaciones",
+    "sortDate": "Por fecha",
+    "viewList": "Lista",
+    "viewMap": "Mapa"
   },
   "isochrone": {
     "title": "Tiempo de viaje",
@@ -548,7 +561,9 @@
     "time": {
       "minutes": "min",
       "hours": "h"
-    }
+    },
+    "emptyStateHint": "Busca una dirección o haz clic en el mapa para seleccionar un punto de inicio",
+    "pointName": "Nombre del punto"
   },
   "radius": {
     "title": "Radio",
@@ -631,7 +646,10 @@
     "clickToAddPoint": "Haz clic en el mapa para añadir puntos",
     "dragToMovePoint": "Arrastra los puntos para cambiar la forma",
     "minThreePoints": "Mínimo 3 puntos para completar el polígono",
-    "maxPolygonsReached": "Se alcanzó el límite de 4 polígonos. Elimina uno existente para añadir uno nuevo."
+    "maxPolygonsReached": "Se alcanzó el límite de 4 polígonos. Elimina uno existente para añadir uno nuevo.",
+    "needMorePoints": "Necesitas más puntos",
+    "pointsCount": "{count} puntos",
+    "tapToStart": "Toca para empezar"
   },
   "chat": {
     "title": "Mensajes",
@@ -1208,7 +1226,8 @@
     "months": "meses",
     "yes": "Sí",
     "no": "No",
-    "notSpecified": "No especificado"
+    "notSpecified": "No especificado",
+    "back": "Atrás"
   },
   "authRequired": {
     "title": "Se requiere autorización",
@@ -1277,7 +1296,11 @@
       "tomorrowLabel": "Mañana",
       "rooms": "hab.",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "apply": "Aplicar",
+      "customDateTime": "Fecha y hora personalizadas",
+      "date": "Fecha",
+      "time": "Hora"
     },
     "professionals": {
       "title": "Profesionales",

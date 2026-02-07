@@ -184,7 +184,8 @@
     "aiStoriesTitle": "Nouvelles annonces de l'agent IA",
     "aiStoriesSubtitle": "Recevez de nouvelles offres et contactez avant tout le monde",
     "page": "Page",
-    "metaDescription": "Recherche de location immobilière à Barcelone avec agent IA"
+    "metaDescription": "Recherche de location immobilière à Barcelone avec agent IA",
+    "onMap": "Sur la carte"
   },
   "filters": {
     "title": "Filtres",
@@ -283,7 +284,9 @@
       "location": "Localisation",
       "features": "Équipements",
       "propertyType": "Type de propriété"
-    }
+    },
+    "newSearch": "Nouvelle recherche",
+    "saveFilter": "Sauvegarder le filtre"
   },
   "map": {
     "showMap": "Afficher la carte",
@@ -473,7 +476,10 @@
     "unsavedChanges": "Modifications non enregistrées",
     "discardChanges": "Annuler les modifications",
     "errorSaving": "Erreur lors de l'enregistrement",
-    "tryAgain": "Réessayer"
+    "tryAgain": "Réessayer",
+    "errors": {
+      "passwordMismatch": "Les mots de passe ne correspondent pas"
+    }
   },
   "errors": {
     "general": "Une erreur s'est produite. Veuillez réessayer.",
@@ -500,7 +506,15 @@
     "close": "Fermer",
     "bedrooms": "chambres",
     "compare": "Comparer",
-    "favorites": "Favoris"
+    "favorites": "Favoris",
+    "aiAgent": "Agent AI",
+    "area": "Surface",
+    "category": "Catégorie",
+    "price": "Prix",
+    "rooms": "Chambres",
+    "sortDate": "Par date",
+    "viewList": "Liste",
+    "viewMap": "Carte"
   },
   "isochrone": {
     "title": "Temps de trajet",
@@ -525,7 +539,9 @@
     "time": {
       "minutes": "min",
       "hours": "h"
-    }
+    },
+    "emptyStateHint": "Recherchez une adresse ou cliquez sur la carte pour sélectionner un point de départ",
+    "pointName": "Nom du point"
   },
   "radius": {
     "title": "Rayon",
@@ -607,7 +623,11 @@
     "clickToAddPoint": "Cliquez sur la carte pour ajouter des points",
     "dragToMovePoint": "Faites glisser les points pour changer la forme",
     "minThreePoints": "Minimum 3 points pour compléter le polygone",
-    "maxPolygonsReached": "Limite maximale de 4 polygones atteinte. Supprimez un polygone existant pour en ajouter un nouveau."
+    "maxPolygonsReached": "Limite maximale de 4 polygones atteinte. Supprimez un polygone existant pour en ajouter un nouveau.",
+    "complete": "Terminé",
+    "needMorePoints": "Besoin de plus de points",
+    "pointsCount": "{count} points",
+    "tapToStart": "Appuyez pour commencer"
   },
   "chat": {
     "title": "Messages",

@@ -53,7 +53,7 @@ function PropertyToastItem({ toast, onDismiss, onLike, onDislike, onOpen }: Prop
     const [isLeaving, setIsLeaving] = useState(false);
     const [progress, setProgress] = useState(100);
     const duration = toast.duration ?? 8000;
-    const intervalRef = useRef<number>();
+    const intervalRef = useRef<number | undefined>(undefined);
     const dismissedRef = useRef(false);
 
     const handleDismiss = useCallback(() => {

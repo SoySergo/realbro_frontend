@@ -296,7 +296,9 @@
       "location": "Standort",
       "features": "Ausstattung",
       "propertyType": "Objektart"
-    }
+    },
+    "newSearch": "Neue Suche",
+    "saveFilter": "Filter speichern"
   },
   "map": {
     "showMap": "Karte anzeigen",
@@ -486,7 +488,10 @@
     "unsavedChanges": "Es gibt ungespeicherte Änderungen",
     "discardChanges": "Änderungen verwerfen",
     "errorSaving": "Fehler beim Speichern",
-    "tryAgain": "Erneut versuchen"
+    "tryAgain": "Erneut versuchen",
+    "errors": {
+      "passwordMismatch": "Die Passwörter stimmen nicht überein"
+    }
   },
   "errors": {
     "general": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
@@ -519,7 +524,15 @@
     "sortByPrice": "Nach Preis",
     "sortByArea": "Nach Fläche",
     "compare": "Vergleich",
-    "favorites": "Favoriten"
+    "favorites": "Favoriten",
+    "aiAgent": "KI-Agent",
+    "area": "Fläche",
+    "category": "Kategorie",
+    "price": "Preis",
+    "rooms": "Zimmer",
+    "sortDate": "Nach Datum",
+    "viewList": "Liste",
+    "viewMap": "Karte"
   },
   "isochrone": {
     "title": "Fahrzeit",
@@ -544,7 +557,9 @@
     "time": {
       "minutes": "Min.",
       "hours": "Std."
-    }
+    },
+    "emptyStateHint": "Suchen Sie nach einer Adresse oder klicken Sie auf die Karte, um einen Startpunkt auszuwählen",
+    "pointName": "Punktname"
   },
   "radius": {
     "title": "Radius",
@@ -627,7 +642,10 @@
     "clickToAddPoint": "Klicken Sie auf die Karte, um Punkte hinzuzufügen",
     "dragToMovePoint": "Punkte ziehen, um die Form zu ändern",
     "minThreePoints": "Mindestens 3 Punkte zum Abschließen des Polygons",
-    "maxPolygonsReached": "Limit von 4 Polygonen erreicht. Löschen Sie ein bestehendes, um ein neues hinzuzufügen."
+    "maxPolygonsReached": "Limit von 4 Polygonen erreicht. Löschen Sie ein bestehendes, um ein neues hinzuzufügen.",
+    "needMorePoints": "Sie benötigen mehr Punkte",
+    "pointsCount": "{count} Punkte",
+    "tapToStart": "Tippen Sie zum Starten"
   },
   "chat": {
     "title": "Nachrichten",
@@ -1204,7 +1222,8 @@
     "months": "Mon.",
     "yes": "Ja",
     "no": "Nein",
-    "notSpecified": "Nicht angegeben"
+    "notSpecified": "Nicht angegeben",
+    "back": "Zurück"
   },
   "authRequired": {
     "title": "Anmeldung erforderlich",
@@ -1273,7 +1292,11 @@
       "tomorrowLabel": "Morgen",
       "rooms": "Zi.",
       "minutes": "Min.",
-      "km": "km"
+      "km": "km",
+      "apply": "Anwenden",
+      "customDateTime": "Benutzerdefiniertes Datum und Zeit",
+      "date": "Datum",
+      "time": "Zeit"
     },
     "professionals": {
       "title": "Profis",
@@ -1298,6 +1321,30 @@
     "authPrompt": {
       "title": "Anmelden zum Speichern",
       "description": "Melden Sie sich an, um Favoriten zu speichern und zwischen Geräten zu synchronisieren"
+    }
+  },
+  "complaint": {
+    "cancel": "Abbrechen",
+    "description": "Geben Sie den Grund für die Beschwerde und eine Beschreibung des Problems an",
+    "descriptionLabel": "Beschreibung",
+    "descriptionMinLength": "Die Beschreibung muss mindestens 10 Zeichen lang sein",
+    "descriptionPlaceholder": "Beschreiben Sie das Problem ausführlicher...",
+    "errorMessage": "Fehler beim Senden der Beschwerde",
+    "reasonLabel": "Grund für die Beschwerde",
+    "reasonPlaceholder": "Wählen Sie einen Grund aus",
+    "reasonRequired": "Bitte wählen Sie einen Grund für die Beschwerde aus",
+    "submit": "Beschwerde absenden",
+    "successMessage": "Beschwerde erfolgreich gesendet",
+    "title": "Beschwerde melden",
+    "reasons": {
+      "spam": "Spam oder unerwünschte Werbung",
+      "misleading": "Irreführende Informationen",
+      "duplicate": "Doppelte Anzeige",
+      "wrong_price": "Falscher Preis",
+      "wrong_photos": "Falsche Fotos",
+      "fraud": "Betrug oder Betrugsversuch",
+      "offensive": "Beleidigende oder unangemessene Inhalte",
+      "other": "Anderer Grund"
     }
   }
 }
