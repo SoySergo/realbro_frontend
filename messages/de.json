@@ -1335,6 +1335,16 @@
     "reasonRequired": "Bitte wählen Sie einen Grund für die Beschwerde aus",
     "submit": "Beschwerde absenden",
     "successMessage": "Beschwerde erfolgreich gesendet",
-    "title": "Beschwerde melden"
+    "title": "Beschwerde melden",
+    "reasons": {
+      "spam": "Spam oder unerwünschte Werbung",
+      "misleading": "Irreführende Informationen",
+      "duplicate": "Doppelte Anzeige",
+      "wrong_price": "Falscher Preis",
+      "wrong_photos": "Falsche Fotos",
+      "fraud": "Betrug oder Betrugsversuch",
+      "offensive": "Beleidigende oder unangemessene Inhalte",
+      "other": "Anderer Grund"
+    }
   }
 }

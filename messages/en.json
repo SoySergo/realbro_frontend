@@ -20,7 +20,8 @@
     "euro": "€",
     "back": "Back",
     "next": "Next",
-    "of": "of"
+    "of": "of",
+    "months": "mo."
   },
   "landing": {
     "hero": {
@@ -842,7 +843,29 @@
     "map": "Map",
     "min": "min",
     "objectsInWork": "Properties in work",
-    "privateAgent": "Private Agent"
+    "privateAgent": "Private Agent",
+    "bathrooms": "Bathrooms",
+    "area": "Area",
+    "livingRules": "Living rules",
+    "atmosphere": "Atmosphere",
+    "noSpecialConditions": "By agreement",
+    "utilities": "Utilities payment",
+    "utilitiesIncludedFull": "included (no meters)",
+    "utilitiesNotIncludedShort": "not included",
+    "term": "Rental term",
+    "rentalTerm": "Rental term",
+    "longTerm": "from one year",
+    "fromYear": "From a year",
+    "priceHistory": "Price history",
+    "trackPrice": "Track price changes",
+    "offerYourPrice": "Offer your price",
+    "example": "For example",
+    "realtor": "Realtor",
+    "docsVerified": "Documents verified",
+    "onPlatform": "On Realbro",
+    "years_short": "years",
+    "writeOnline": "Write while user is online",
+    "sendMessage": "Send message"
   },
   "characteristics": {
     "propertyType": "Property type",
@@ -986,7 +1009,8 @@
     "pool": "Pool",
     "petsAllowed": "Pets allowed",
     "childFriendly": "Child-friendly",
-    "smokingAllowed": "Smoking allowed"
+    "smokingAllowed": "Smoking allowed",
+    "elevator": "Elevator"
   },
   "contact": {
     "title": "Contacts",

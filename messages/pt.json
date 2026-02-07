@@ -162,7 +162,8 @@
     "share": "Compartilhar",
     "verified": "Verificado",
     "viewMore": "Ver mais",
-    "walkMin": "{min} min a pé"
+    "walkMin": "{min} min a pé",
+    "top": "TOP"
   },
   "propertyTypes": {
     "all": "Todos os tipos",
@@ -218,7 +219,8 @@
     "showOnMap": "Ver no mapa",
     "subtitle": "Encontrados {count} imóveis",
     "viewModeGrid": "Grade",
-    "viewModeList": "Lista"
+    "viewModeList": "Lista",
+    "metaDescription": "Busca de imóveis para alugar em Barcelona com agente de IA"
   },
   "filters": {
     "title": "Filtros",
@@ -525,7 +527,10 @@
     "selectSearch": "Selecione a busca",
     "sortDate": "Por data",
     "viewList": "Lista",
-    "viewMap": "Mapa"
+    "viewMap": "Mapa",
+    "favorites": "Favoritos",
+    "chat": "Chat",
+    "profile": "Perfil"
   },
   "isochrone": {
     "title": "Isócrona",
@@ -788,7 +793,72 @@
     "videoPresentation": "Apresentação em vídeo",
     "walkMinutes": "{min} min a pé",
     "writeMessage": "Enviar mensagem",
-    "yearsOnPlatform": "{years} anos na plataforma"
+    "yearsOnPlatform": "{years} anos na plataforma",
+    "back": "Voltar",
+    "navDescription": "Descrição",
+    "navCharacteristics": "Características",
+    "navMap": "Mapa",
+    "updated": "Atualizado",
+    "views": "Visualizações",
+    "viewsToday": "hoje",
+    "showAllPhotos": "Ver todas as {count} fotos",
+    "roomsShort": "qtos",
+    "ceilingHeight": "Altura do teto",
+    "pricePerMeter": "€/m²",
+    "showMore": "Mostrar mais",
+    "showLess": "Mostrar menos",
+    "showOriginal": "Ver original",
+    "showTranslation": "Ver tradução",
+    "translatedByAI": "Traduzido por IA",
+    "aboutFlat": "Sobre o apartamento",
+    "aboutBuilding": "Sobre o edifício",
+    "amenities": "Comodidades",
+    "showAllAmenities": "Ver todas as {count} comodidades",
+    "location": "Localização",
+    "infrastructure": "Infraestrutura",
+    "showOnMap": "Ver no mapa",
+    "tenantPreferences": "Quem procuramos",
+    "livingRules": "Regras de convivência",
+    "roommates": "Colegas de quarto",
+    "aboutRoommates": "Sobre os colegas de quarto",
+    "petsAllowed": "Aceita animais",
+    "childrenAllowed": "Aceita crianças",
+    "couplesAllowed": "Aceita casais",
+    "smokingAllowed": "Permite fumar",
+    "studentsAllowed": "Aceita estudantes",
+    "gender": "Gênero",
+    "age": "Idade",
+    "atmosphere": "Ambiente",
+    "occupation": "Profissão",
+    "noSpecialConditions": "Sem condições especiais",
+    "prepayment": "Pré-pagamento",
+    "utilities": "Pagamento de utilidades",
+    "utilitiesIncludedFull": "incluídas (sem medidores)",
+    "utilitiesNotIncludedShort": "não incluídas",
+    "minRentalPeriod": "Período mínimo de {months} meses",
+    "term": "Prazo de aluguel",
+    "rentalTerm": "Prazo de aluguel",
+    "longTerm": "a partir de um ano",
+    "months": "meses",
+    "fromYear": "A partir de um ano",
+    "priceHistory": "Histórico de preços",
+    "trackPrice": "Acompanhar mudanças de preço",
+    "offerYourPrice": "Oferecer seu preço",
+    "example": "Por exemplo",
+    "realtor": "Corretor",
+    "docsVerified": "Documentos verificados",
+    "onPlatform": "No Realbro",
+    "years_short": "anos",
+    "writeOnline": "Escrever enquanto usuário está online",
+    "sendMessage": "Enviar mensagem",
+    "like": "Curtir",
+    "dislike": "Não curtir",
+    "note": "Nota",
+    "pdf": "PDF",
+    "otherOffers": "Outras ofertas",
+    "similarProperties": "Imóveis similares",
+    "showAll": "Ver todos",
+    "from": "De"
   },
   "characteristics": {
     "heating": "Aquecimento",
@@ -809,7 +879,59 @@
     "new": "Novo",
     "good": "Bom",
     "needsRenovation": "Precisa reforma",
-    "renovated": "Reformado"
+    "renovated": "Reformado",
+    "propertyType": "Tipo de imóvel",
+    "totalArea": "Área total",
+    "livingArea": "Área habitável",
+    "kitchenArea": "Área da cozinha",
+    "rooms": "Quartos",
+    "floor": "Andar",
+    "of": "de",
+    "ceilingHeight": "Altura do teto",
+    "bathroom": "Banheiro",
+    "renovation": "Reforma",
+    "windowView": "Vista da janela",
+    "buildingType": "Tipo de construção",
+    "buildingYear": "Ano de construção",
+    "floorsTotal": "Total de andares",
+    "yes": "Sim",
+    "no": "Não",
+    "types": {
+      "apartment": "Apartamento",
+      "studio": "Estúdio",
+      "penthouse": "Cobertura",
+      "duplex": "Duplex"
+    },
+    "bathroomTypes": {
+      "combined": "Combinado",
+      "separate": "Separado",
+      "multiple": "Múltiplos"
+    },
+    "renovationTypes": {
+      "cosmetic": "Cosmética",
+      "euro": "Europeia",
+      "designer": "Designer",
+      "requires-repair": "Precisa de reforma",
+      "none": "Sem reforma"
+    },
+    "windowViews": {
+      "street": "Rua",
+      "yard": "Pátio",
+      "both": "Ambos"
+    },
+    "buildingTypes": {
+      "brick": "Tijolo",
+      "monolith": "Monolítico",
+      "panel": "Painel",
+      "block": "Bloco"
+    },
+    "parkingTypes": {
+      "underground": "Subterrâneo",
+      "ground": "Térreo",
+      "street": "Rua",
+      "none": "Nenhum"
+    },
+    "minRentalPeriod": "Período mínimo de aluguel"
   },
   "mapSidebar": {
     "filters": "Filtros",
@@ -848,7 +970,21 @@
     "concierge": "Porteiro",
     "petsAllowed": "Aceita animais",
     "furnished": "Mobiliado",
-    "equippedKitchen": "Cozinha equipada"
+    "equippedKitchen": "Cozinha equipada",
+    "wifi": "Wi-Fi",
+    "internet": "Internet",
+    "tv": "TV",
+    "refrigerator": "Geladeira",
+    "washingMachine": "Máquina de lavar",
+    "dishwasher": "Lava-louças",
+    "microwave": "Micro-ondas",
+    "coffeeMachine": "Cafeteira",
+    "kitchen": "Cozinha",
+    "furniture": "Mobília",
+    "bathtub": "Banheira",
+    "shower": "Chuveiro",
+    "intercom": "Interfone",
+    "gym": "Academia"
   },
   "contact": {
     "title": "Contato",
@@ -881,7 +1017,8 @@
     "telegram": "Telegram",
     "upgradeButton": "Melhorar plano",
     "website": "Site",
-    "whatsapp": "WhatsApp"
+    "whatsapp": "WhatsApp",
+    "limitInfo": "{current} de {max} usados"
   },
   "actions": {
     "save": "Salvar",
@@ -914,7 +1051,8 @@
       "description": "Adicione uma nota para este imóvel",
       "placeholder": "Escreva sua nota aqui...",
       "saveButton": "Salvar",
-      "title": "Nota"
+      "title": "Nota",
+      "characterCount": "{current}/{max}"
     },
     "noteSaved": "Nota salva",
     "report": "Denunciar"
@@ -970,7 +1108,16 @@
     "sqm": "m²",
     "team": "Equipe",
     "tryChangeFilters": "Tente alterar os filtros",
-    "writeMessage": "Escrever mensagem"
+    "writeMessage": "Escrever mensagem",
+    "propertyTypesLabels": {
+      "residential": "Residencial",
+      "commercial": "Comercial",
+      "luxury": "Luxo",
+      "newBuilding": "Novo",
+      "secondary": "Usado",
+      "rental": "Aluguel",
+      "sale": "Venda"
+    }
   },
   "searchCategory": {
     "all": "Todos",
@@ -991,7 +1138,9 @@
     "fr": "Francês",
     "it": "Italiano",
     "pt": "Português",
-    "de": "Alemão"
+    "de": "Alemão",
+    "zh": "Chinês",
+    "ar": "Árabe"
   },
   "comparison": {
     "title": "Comparação",
@@ -1132,6 +1281,16 @@
     "reasonRequired": "Selecione o motivo da denúncia",
     "submit": "Enviar denúncia",
     "successMessage": "Denúncia enviada com sucesso",
-    "title": "Denunciar anúncio"
+    "title": "Denunciar anúncio",
+    "reasons": {
+      "spam": "Spam ou publicidade indesejada",
+      "misleading": "Informações enganosas",
+      "duplicate": "Anúncio duplicado",
+      "wrong_price": "Preço incorreto",
+      "wrong_photos": "Fotos incorretas",
+      "fraud": "Fraude ou tentativa de fraude",
+      "offensive": "Conteúdo ofensivo ou inadequado",
+      "other": "Outro motivo"
+    }
   }
 }
