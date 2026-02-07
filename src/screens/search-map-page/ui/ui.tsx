@@ -11,7 +11,7 @@ import {
     MobileViewToggle,
     MobileFiltersSheet,
 } from '@/widgets/search-filters-bar';
-import { MapSidebar } from '@/widgets/map-sidebar';
+import { MapSidebar, MobileMapSidebar } from '@/widgets/map-sidebar';
 import { useSidebarStore } from '@/widgets/sidebar';
 import type { Property } from '@/entities/property';
 
@@ -120,6 +120,13 @@ export function SearchMapPage() {
                             <SearchMap />
                         </div>
                     </div>
+                </div>
+
+                {/* Мобильный сайдбар на карте — только на мобильных */}
+                <div className="md:hidden">
+                    <MobileMapSidebar
+                        onPropertyClick={handlePropertyClick}
+                    />
                 </div>
 
                 {/* Сайдбар со списком объектов - только на desktop */}
