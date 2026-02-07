@@ -1,0 +1,41 @@
+{
+  "comparison": {
+    "back": "Indietro"
+  },
+  "draw": {
+    "needMorePoints": "Servono più punti",
+    "pointsCount": "{count} punti",
+    "tapToStart": "Tocca per iniziare"
+  },
+  "favorites": {
+    "notes": {
+      "apply": "Applica",
+      "customDateTime": "Data e ora personalizzate",
+      "date": "Data",
+      "time": "Ora"
+    }
+  },
+  "filters": {
+    "newSearch": "Nuova ricerca",
+    "saveFilter": "Salva filtro"
+  },
+  "isochrone": {
+    "emptyStateHint": "Cerca un indirizzo o fai clic sulla mappa per selezionare un punto di partenza",
+    "pointName": "Nome del punto"
+  },
+  "profile": {
+    "errors": {
+      "passwordMismatch": "Le password non corrispondono"
+    }
+  },
+  "sidebar": {
+    "aiAgent": "Agente IA",
+    "area": "Superficie",
+    "category": "Categoria",
+    "price": "Prezzo",
+    "rooms": "Locali",
+    "sortDate": "Per data",
+    "viewList": "Elenco",
+    "viewMap": "Mappa"
+  }
+}

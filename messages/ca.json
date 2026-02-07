@@ -392,7 +392,9 @@
     "pets": "Mascotes",
     "applyFilters": "Aplicar filtres",
     "resetFilters": "Restablir filtres",
-    "moreFilters": "Més filtres"
+    "moreFilters": "Més filtres",
+    "newSearch": "Nova cerca",
+    "saveFilter": "Desar filtre"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -455,7 +457,13 @@
   },
   "profile": {
     "title": "Perfil",
-    "tabs": "Pestanyes de cerca",
+    "tabs": {
+      "appearance": "Aparença",
+      "general": "General",
+      "notifications": "Notificacions",
+      "security": "Seguretat",
+      "subscription": "Subscripció"
+    },
     "personalInfo": "Informació personal",
     "displayName": "Nom d'usuari",
     "displayNamePlaceholder": "Introdueix el nom",
@@ -507,7 +515,28 @@
         "priceChanges": "Canvis de preu"
       }
     },
-    "subscription": "Subscripció",
+    "subscription": {
+      "active": "Activa",
+      "aiFilters": "Filtres d'agent IA",
+      "cancelAtPeriodEnd": "Cancel·lar al final del període",
+      "cancelConfirmDescription": "Podràs fer servir el pla actual fins al final del període pagat.",
+      "cancelConfirmTitle": "Cancel·lar subscripció?",
+      "cancelSubscription": "Cancel·lar subscripció",
+      "canceled": "Cancel·lada",
+      "canceledOn": "Es cancel·larà el",
+      "changePlan": "Canviar pla",
+      "comparePlans": "Comparar plans",
+      "currentPlan": "Pla actual",
+      "currentPlanBadge": "Actual",
+      "expired": "Caducada",
+      "features": "Característiques del pla",
+      "noPlan": "Sense subscripció activa",
+      "ownerAccess": "Accés a propietaris",
+      "pastDue": "Vençuda",
+      "renewsOn": "Es renova el",
+      "searchTabs": "Pestanyes de cerca",
+      "selectPlan": "Seleccionar pla"
+    },
     "payments": {
       "title": "Historial de pagaments",
       "noPayments": "L'historial de pagaments està buit",
@@ -578,19 +607,12 @@
     "favorites": "Favorits",
     "history": "Historial",
     "billing": "Facturació",
-    "support": "Suport"
+    "support": "Suport",
+    "errors": {
+      "passwordMismatch": "Les contrasenyes no coincideixen"
+    }
   },
   "errors": {
-    "general": "S'ha produït un error. Torna-ho a provar.",
-    "notFound": "Pàgina no trobada",
-    "unauthorized": "Cal autorització",
-    "serverError": "Error del servidor",
-    "networkError": "Problema de connexió",
-    "invalidCredentials": "Email o contrasenya incorrectes",
-    "emailExists": "Ja existeix un usuari amb aquest email",
-    "weakPassword": "Contrasenya massa simple",
-    "passwordMismatch": "Les contrasenyes no coincideixen",
-    "sessionExpired": "Sessió caducada, torna a iniciar sessió",
     "404": {
       "title": "Pàgina no trobada",
       "description": "La pàgina que busques no existeix",
@@ -601,6 +623,16 @@
       "description": "Alguna cosa ha sortit malament",
       "button": "Actualitzar"
     },
+    "general": "S'ha produït un error. Torna-ho a provar.",
+    "notFound": "Pàgina no trobada",
+    "unauthorized": "Cal autorització",
+    "serverError": "Error del servidor",
+    "networkError": "Problema de connexió",
+    "invalidCredentials": "Email o contrasenya incorrectes",
+    "emailExists": "Ja existeix un usuari amb aquest email",
+    "weakPassword": "Contrasenya massa simple",
+    "passwordMismatch": "Les contrasenyes no coincideixen",
+    "sessionExpired": "Sessió caducada, torna a iniciar sessió",
     "generic": "Ha ocorregut un error",
     "network": "Error de xarxa",
     "tryAgain": "Tornar-ho a provar",
@@ -627,7 +659,15 @@
     "compare": "Comparar",
     "favorites": "Favorits",
     "history": "Historial",
-    "logout": "Tancar sessió"
+    "logout": "Tancar sessió",
+    "aiAgent": "Agent IA",
+    "area": "Superfície",
+    "category": "Categoria",
+    "price": "Preu",
+    "rooms": "Habitacions",
+    "sortDate": "Per data",
+    "viewList": "Llista",
+    "viewMap": "Mapa"
   },
   "isochrone": {
     "title": "Temps de viatge",
@@ -649,7 +689,9 @@
       "driving": "En cotxe",
       "drivingTraffic": "Amb trànsit"
     },
-    "time": "Temps",
+    "time": {
+      "minutes": "min"
+    },
     "from": "Des de",
     "minutes": "minuts",
     "transport": "Transport",
@@ -658,7 +700,9 @@
     "driving": "En cotxe",
     "publicTransport": "Transport públic",
     "calculate": "Calcular",
-    "selectPoint": "Selecciona un punt al mapa"
+    "selectPoint": "Selecciona un punt al mapa",
+    "emptyStateHint": "Cerca una adreça o fes clic al mapa per seleccionar un punt d'inici",
+    "pointName": "Nom del punt"
   },
   "radius": {
     "title": "Radi",
@@ -771,7 +815,10 @@
     "instructions": "Clica al mapa per dibuixar l'àrea de cerca",
     "polygon": "Dibuixar polígon",
     "circle": "Dibuixar cercle",
-    "rectangle": "Dibuixar rectangle"
+    "rectangle": "Dibuixar rectangle",
+    "needMorePoints": "Necessites més punts",
+    "pointsCount": "{count} punts",
+    "tapToStart": "Prem per començar"
   },
   "chat": {
     "title": "Xat",
@@ -1464,7 +1511,8 @@
     "max": "Màxim {count} immobles",
     "clear": "Netejar tot",
     "showDifferences": "Mostrar només diferències",
-    "showAll": "Mostrar tot"
+    "showAll": "Mostrar tot",
+    "back": "Enrere"
   },
   "authRequired": {
     "title": "Cal iniciar sessió",
@@ -1492,7 +1540,22 @@
       "filters": "Filtres",
       "notes": "Notes"
     },
-    "empty": "No tens immobles favorits",
+    "empty": {
+      "description": "Aquí apareixeran els teus immobles preferits",
+      "filters": {
+        "description": "Desa les teves cerques per accedir-hi ràpidament",
+        "title": "Filtres desats"
+      },
+      "notes": {
+        "description": "Afegeix notes als immobles per recordar detalls",
+        "title": "Notes"
+      },
+      "professionals": {
+        "description": "Aquí apareixeran els professionals que segueixis",
+        "title": "Professionals"
+      },
+      "title": "No tens preferits"
+    },
     "count": "{count} immobles",
     "notes": {
       "title": "Notes i recordatoris",
@@ -1521,7 +1584,11 @@
       "tomorrowLabel": "Demà",
       "rooms": "hab.",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "apply": "Aplicar",
+      "customDateTime": "Data i hora personalitzada",
+      "date": "Data",
+      "time": "Hora"
     },
     "professionals": {
       "title": "Professionals",

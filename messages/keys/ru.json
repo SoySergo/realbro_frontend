@@ -1,0 +1,30 @@
+{
+  "draw": {
+    "needMorePoints": "Нужно больше точек",
+    "pointsCount": "{count} точек",
+    "tapToStart": "Нажмите, чтобы начать"
+  },
+  "filters": {
+    "newSearch": "Новый поиск",
+    "saveFilter": "Сохранить фильтр"
+  },
+  "isochrone": {
+    "emptyStateHint": "Найдите адрес или нажмите на карту, чтобы выбрать начальную точку",
+    "pointName": "Название точки"
+  },
+  "profile": {
+    "errors": {
+      "passwordMismatch": "Пароли не совпадают"
+    }
+  },
+  "sidebar": {
+    "aiAgent": "AI Агент",
+    "area": "Площадь",
+    "category": "Категория",
+    "price": "Цена",
+    "rooms": "Комнат",
+    "sortDate": "По дате",
+    "viewList": "Списком",
+    "viewMap": "На карте"
+  }
+}

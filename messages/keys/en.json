@@ -1,0 +1,60 @@
+{
+  "draw": {
+    "complete": "Complete",
+    "needMorePoints": "Need more points",
+    "pointsCount": "{count} points",
+    "tapToStart": "Tap to start"
+  },
+  "filters": {
+    "newSearch": "New Search",
+    "saveFilter": "Save Filter"
+  },
+  "footer": {
+    "aboutService": "About Service",
+    "agenciesSearch": "Agencies Search",
+    "agreement": "User Agreement",
+    "allRightsReserved": "All rights reserved",
+    "cookies": "Cookies",
+    "listSearch": "Search by List",
+    "mapSearch": "Search on Map",
+    "privacy": "Privacy Policy",
+    "profile": "Profile",
+    "search": "Search",
+    "support": "Support",
+    "tariffs": "Tariffs",
+    "terms": "Terms of Use"
+  },
+  "isochrone": {
+    "emptyStateHint": "Search for an address or click on the map to select a starting point",
+    "pointName": "Point Name"
+  },
+  "profile": {
+    "errors": {
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+  "propertyDetail": {
+    "locationSection": {
+      "categories": {
+        "entertainment": "Entertainment",
+        "groceries": "Groceries",
+        "shopping": "Shopping",
+        "sports": "Sports"
+      }
+    },
+    "map": "Map",
+    "min": "min",
+    "objectsInWork": "Properties in work",
+    "privateAgent": "Private Agent"
+  },
+  "sidebar": {
+    "aiAgent": "AI Agent",
+    "area": "Area",
+    "category": "Category",
+    "price": "Price",
+    "rooms": "Rooms",
+    "sortDate": "By date",
+    "viewList": "List",
+    "viewMap": "Map"
+  }
+}

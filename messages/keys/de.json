@@ -1,0 +1,55 @@
+{
+  "comparison": {
+    "back": "Zurück"
+  },
+  "complaint": {
+    "cancel": "Abbrechen",
+    "description": "Geben Sie den Grund für die Beschwerde und eine Beschreibung des Problems an",
+    "descriptionLabel": "Beschreibung",
+    "descriptionMinLength": "Die Beschreibung muss mindestens 10 Zeichen lang sein",
+    "descriptionPlaceholder": "Beschreiben Sie das Problem ausführlicher...",
+    "errorMessage": "Fehler beim Senden der Beschwerde",
+    "reasonLabel": "Grund für die Beschwerde",
+    "reasonPlaceholder": "Wählen Sie einen Grund aus",
+    "reasonRequired": "Bitte wählen Sie einen Grund für die Beschwerde aus",
+    "submit": "Beschwerde absenden",
+    "successMessage": "Beschwerde erfolgreich gesendet",
+    "title": "Beschwerde melden"
+  },
+  "draw": {
+    "needMorePoints": "Sie benötigen mehr Punkte",
+    "pointsCount": "{count} Punkte",
+    "tapToStart": "Tippen Sie zum Starten"
+  },
+  "favorites": {
+    "notes": {
+      "apply": "Anwenden",
+      "customDateTime": "Benutzerdefiniertes Datum und Zeit",
+      "date": "Datum",
+      "time": "Zeit"
+    }
+  },
+  "filters": {
+    "newSearch": "Neue Suche",
+    "saveFilter": "Filter speichern"
+  },
+  "isochrone": {
+    "emptyStateHint": "Suchen Sie nach einer Adresse oder klicken Sie auf die Karte, um einen Startpunkt auszuwählen",
+    "pointName": "Punktname"
+  },
+  "profile": {
+    "errors": {
+      "passwordMismatch": "Die Passwörter stimmen nicht überein"
+    }
+  },
+  "sidebar": {
+    "aiAgent": "KI-Agent",
+    "area": "Fläche",
+    "category": "Kategorie",
+    "price": "Preis",
+    "rooms": "Zimmer",
+    "sortDate": "Nach Datum",
+    "viewList": "Liste",
+    "viewMap": "Karte"
+  }
+}
