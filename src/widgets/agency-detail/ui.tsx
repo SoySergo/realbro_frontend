@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { 
     Star, 
@@ -14,12 +16,28 @@ import {
     Building2,
     Users,
     Calendar,
-    MessageCircle
+    MessageCircle,
+    ArrowLeft,
+    ThumbsUp,
+    ThumbsDown,
+    MoreHorizontal,
+    Share2,
+    StickyNote,
+    Flag,
+    FileDown,
+    Copy
 } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
 import type { Agency, AgencyReview } from '@/entities/agency';
 import type { Property } from '@/entities/property';
@@ -38,15 +56,92 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
     const t = useTranslations('agency');
     const tLang = useTranslations('languages');
     const tCommon = useTranslations('common');
+    const router = useRouter();
+
+    // Состояние для показа телефона
+    const [showPhone, setShowPhone] = useState(false);
+    const [showSidebarPhone, setShowSidebarPhone] = useState(false);
 
     // Определяем стили для Premium агентства
     const isPremium = agency.isPremium;
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background pb-24">
+            {/* Мобильный хедер */}
+            <div className="fixed top-0 left-0 right-0 z-50 md:hidden bg-background/95 backdrop-blur-md border-b border-border h-14 flex items-center px-2 gap-2">
+                <button
+                    onClick={() => router.back()}
+                    className="p-2 rounded-full hover:bg-muted active:scale-95 transition-all"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <span className="flex-1 font-semibold text-sm truncate">{agency.name}</span>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <ThumbsUp className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <ThumbsDown className="w-5 h-5" />
+                </button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                            <MoreHorizontal className="w-5 h-5" />
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem>
+                            <StickyNote className="w-4 h-4 mr-2" />
+                            {tCommon('note')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Share2 className="w-4 h-4 mr-2" />
+                            {tCommon('share')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <FileDown className="w-4 h-4 mr-2" />
+                            {tCommon('downloadPdf')}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-error focus:text-error">
+                            <Flag className="w-4 h-4 mr-2" />
+                            {tCommon('report')}
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+
+            {/* Desktop хедер с кнопками действий */}
+            <div className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border h-14 items-center px-6 gap-2">
+                <button
+                    onClick={() => router.back()}
+                    className="p-2 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <span className="flex-1 font-semibold truncate">{agency.name}</span>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <ThumbsUp className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <ThumbsDown className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <StickyNote className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <Share2 className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                    <FileDown className="w-5 h-5" />
+                </button>
+                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground hover:text-error">
+                    <Flag className="w-5 h-5" />
+                </button>
+            </div>
+
             {/* Фоновое изображение (hero section) */}
             <div className={cn(
-                "relative h-48 md:h-64 lg:h-80",
+                "relative h-48 md:h-64 lg:h-80 mt-14",
                 isPremium 
                     ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" 
                     : "bg-background-secondary"
@@ -246,25 +341,82 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
 
                             {/* Кнопки действий */}
                             <div className="flex flex-col gap-2 shrink-0">
-                                <Button 
-                                    className={cn(
-                                        "gap-2",
-                                        isPremium && "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 hover:from-amber-500 hover:to-amber-600 shadow-lg shadow-amber-500/20"
-                                    )}
-                                >
-                                    <Phone className="w-4 h-4" />
-                                    {t('showPhone')}
-                                </Button>
-                                <Button 
-                                    variant="outline" 
-                                    className={cn(
-                                        "gap-2",
-                                        isPremium && "border-white/20 text-white hover:bg-white/10 hover:text-white"
-                                    )}
-                                >
-                                    <MessageCircle className="w-4 h-4" />
-                                    {t('writeMessage')}
-                                </Button>
+                                {/* Кнопка показа телефона */}
+                                {showPhone ? (
+                                    <a
+                                        href={`tel:${agency.contact.phone}`}
+                                        className={cn(
+                                            "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-9 px-4 py-2 transition-colors",
+                                            isPremium 
+                                                ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 hover:from-amber-500 hover:to-amber-600 shadow-lg shadow-amber-500/20"
+                                                : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                        )}
+                                    >
+                                        <Phone className="w-4 h-4" />
+                                        {agency.contact.phone}
+                                    </a>
+                                ) : (
+                                    <Button 
+                                        onClick={() => setShowPhone(true)}
+                                        className={cn(
+                                            "gap-2",
+                                            isPremium && "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 hover:from-amber-500 hover:to-amber-600 shadow-lg shadow-amber-500/20"
+                                        )}
+                                    >
+                                        <Phone className="w-4 h-4" />
+                                        {t('showPhone')}
+                                    </Button>
+                                )}
+
+                                {/* Кнопка написать с выбором мессенджера */}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button 
+                                            variant="outline" 
+                                            className={cn(
+                                                "gap-2 w-full",
+                                                isPremium && "border-white/20 text-white hover:bg-white/10 hover:text-white"
+                                            )}
+                                        >
+                                            <MessageCircle className="w-4 h-4" />
+                                            {t('writeMessage')}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-48">
+                                        {agency.contact.whatsapp && (
+                                            <DropdownMenuItem asChild>
+                                                <a
+                                                    href={`https://wa.me/${agency.contact.whatsapp.replace(/[^0-9]/g, '')}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <MessageCircle className="w-4 h-4 mr-2" />
+                                                    WhatsApp
+                                                </a>
+                                            </DropdownMenuItem>
+                                        )}
+                                        {agency.contact.telegram && (
+                                            <DropdownMenuItem asChild>
+                                                <a
+                                                    href={`https://t.me/${agency.contact.telegram.replace('@', '')}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <MessageCircle className="w-4 h-4 mr-2" />
+                                                    Telegram
+                                                </a>
+                                            </DropdownMenuItem>
+                                        )}
+                                        {agency.contact.email && (
+                                            <DropdownMenuItem asChild>
+                                                <a href={`mailto:${agency.contact.email}`}>
+                                                    <Mail className="w-4 h-4 mr-2" />
+                                                    Email
+                                                </a>
+                                            </DropdownMenuItem>
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
                         </div>
                     </div>
@@ -272,7 +424,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
 
                 {/* Табы с контентом */}
                 <Tabs defaultValue="about" className="mt-6">
-                    <TabsList className="w-full justify-start overflow-x-auto">
+                    <TabsList className="w-full justify-start overflow-x-auto scrollbar-hide">
                         <TabsTrigger value="about">{t('aboutAgency')}</TabsTrigger>
                         <TabsTrigger value="properties">
                             {t('agencyProperties')} ({agency.objectsCount})
@@ -345,15 +497,25 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                                 </h2>
 
                                 <div className="space-y-3">
-                                    {/* Телефон */}
+                                    {/* Телефон с маскировкой */}
                                     {agency.contact.phone && (
-                                        <a
-                                            href={`tel:${agency.contact.phone}`}
-                                            className="flex items-center gap-3 text-text-secondary hover:text-brand-primary transition-colors"
-                                        >
-                                            <Phone className="w-5 h-5 shrink-0" />
-                                            <span>{agency.contact.phone}</span>
-                                        </a>
+                                        showSidebarPhone ? (
+                                            <a
+                                                href={`tel:${agency.contact.phone}`}
+                                                className="flex items-center gap-3 text-text-secondary hover:text-brand-primary transition-colors"
+                                            >
+                                                <Phone className="w-5 h-5 shrink-0" />
+                                                <span>{agency.contact.phone}</span>
+                                            </a>
+                                        ) : (
+                                            <button
+                                                onClick={() => setShowSidebarPhone(true)}
+                                                className="flex items-center gap-3 text-text-secondary hover:text-brand-primary transition-colors w-full text-left"
+                                            >
+                                                <Phone className="w-5 h-5 shrink-0" />
+                                                <span>+34 *** ** **</span>
+                                            </button>
+                                        )
                                     )}
 
                                     {/* Email */}
@@ -526,7 +688,7 @@ function AgencyReviewsTab({
                                     className={cn(
                                         'w-5 h-5',
                                         star <= Math.round(rating)
-                                            ? 'text-yellow-500 fill-yellow-500'
+                                            ? 'text-amber-500 fill-amber-500'
                                             : 'text-text-tertiary'
                                     )}
                                 />
@@ -577,7 +739,7 @@ function AgencyReviewsTab({
                                                 className={cn(
                                                     'w-3.5 h-3.5',
                                                     star <= review.rating
-                                                        ? 'text-yellow-500 fill-yellow-500'
+                                                        ? 'text-amber-500 fill-amber-500'
                                                         : 'text-text-tertiary'
                                                 )}
                                             />
