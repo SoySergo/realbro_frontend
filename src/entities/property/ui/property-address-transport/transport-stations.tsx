@@ -122,7 +122,7 @@ export function TransportStationsDetailed({ stations, className }: TransportStat
                     });
 
                     return (
-                        <div key={station.id} className="flex-none w-[280px] sm:w-[320px] flex flex-col p-3 rounded-xl transition-all gap-2 snap-start">
+                        <div key={station.id} className="flex-none w-[280px] sm:w-[320px] flex flex-col p-3 rounded-xl bg-card border border-border/50 hover:border-border hover:shadow-sm transition-all gap-2 snap-start">
                             <div className="flex items-center justify-between">
                                 <span className="font-medium text-sm truncate pr-2">
                                     {station.name}

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import { CheckCircle2, Star, Building2 } from 'lucide-react';
+import { Link } from '@/shared/config/routing';
 import type { PropertyAuthor } from '../../model/types';
 import { Card } from '@/shared/ui/card';
 
@@ -69,9 +70,9 @@ export function PropertyAgentSidebarCard({
                         <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
                             {isAgency ? (t('agency') || 'Агентство недвижимости') : (t('privateAgent') || 'Частное лицо')}
                         </p>
-                        <h3 className="text-xl font-bold text-foreground">
+                        <Link href={`/agency/${agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
                             {isAgency ? agent.agencyName : agent.name}
-                        </h3>
+                        </Link>
                     </div>
 
                     {/* Stats Bar - Simplified */}

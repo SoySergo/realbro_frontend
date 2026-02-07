@@ -1,11 +1,11 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Home, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { PropertyCardGrid } from '@/entities/property/ui';
+import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import type { FavoriteProperty } from '@/entities/favorites/model/types';
 import { Link } from '@/shared/config/routing';
-import { useLocale } from 'next-intl';
 
 interface FavoritesPropertiesTabProps {
     properties: FavoriteProperty[];
@@ -17,7 +17,6 @@ interface FavoritesPropertiesTabProps {
  */
 export function FavoritesPropertiesTab({ properties, isEmpty }: FavoritesPropertiesTabProps) {
     const t = useTranslations('favorites');
-    const locale = useLocale();
 
     if (isEmpty) {
         return (
@@ -44,9 +43,12 @@ export function FavoritesPropertiesTab({ properties, isEmpty }: FavoritesPropert
                 >
                     <PropertyCardGrid
                         property={favProperty.property}
+                        actions={<PropertyCompareButton property={favProperty.property} />}
+                        menuItems={<PropertyCompareMenuItem property={favProperty.property} />}
                     />
                 </Link>
             ))}
         </div>
     );
 }
+

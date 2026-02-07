@@ -21,6 +21,8 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { NoteModal, saveNote, getNote, type NoteModalTranslations } from './note-modal';
 import { useToast } from '@/shared/ui/toast';
+import { PropertyCompareMenuItem } from '@/features/comparison';
+import type { Property } from '@/entities/property';
 
 // ============================================================================
 // Типы
@@ -46,6 +48,7 @@ export interface PropertyActionsMenuTranslations {
 interface PropertyActionsMenuProps {
     propertyId: string;
     propertyTitle?: string;
+    property?: Property;
     translations: PropertyActionsMenuTranslations;
     isLiked?: boolean;
     isDisliked?: boolean;
@@ -110,6 +113,7 @@ export function getReaction(propertyId: string): { liked: boolean; disliked: boo
 export function PropertyActionsMenu({
     propertyId,
     propertyTitle,
+    property,
     translations,
     isLiked: initialIsLiked,
     isDisliked: initialIsDisliked,
@@ -171,9 +175,35 @@ export function PropertyActionsMenu({
         }
     }, [isLiked, isDisliked, propertyId, onDislike, showToast, t.disliked]);
 
+    const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
+        // Clipboard API
+        if (navigator.clipboard) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch {
+                // Fallback ниже
+            }
+        }
+        // Fallback для старых браузеров и HTTP
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const success = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            return success;
+        } catch {
+            return false;
+        }
+    }, []);
+
     const handleShare = useCallback(async () => {
         const url = window.location.href;
-        
+
         // Пробуем нативный share API
         if (navigator.share) {
             try {
@@ -187,25 +217,25 @@ export function PropertyActionsMenu({
                 // Пользователь отменил или ошибка - fallback на копирование
             }
         }
-        
+
         // Fallback: копирование в буфер
-        try {
-            await navigator.clipboard.writeText(url);
+        const copied = await copyToClipboard(url);
+        if (copied) {
             showToast(t.linkCopied, 'success');
             onShare?.(propertyId);
-        } catch {
-            console.error('[Share] Failed to copy link');
+        } else {
+            showToast(t.linkCopied, 'error');
         }
-    }, [propertyId, propertyTitle, onShare, showToast, t.linkCopied]);
+    }, [propertyId, propertyTitle, onShare, showToast, t.linkCopied, copyToClipboard]);
 
     const handleCopyLink = useCallback(async () => {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
+        const copied = await copyToClipboard(window.location.href);
+        if (copied) {
             showToast(t.linkCopied, 'success');
-        } catch {
-            console.error('[Share] Failed to copy link');
+        } else {
+            showToast(t.linkCopied, 'error');
         }
-    }, [showToast, t.linkCopied]);
+    }, [showToast, t.linkCopied, copyToClipboard]);
 
     const handleOpenNote = useCallback(() => {
         const existingNote = getNote(propertyId) || '';
@@ -283,6 +313,12 @@ export function PropertyActionsMenu({
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
+                            {property && (
+                                <>
+                                    <PropertyCompareMenuItem property={property} />
+                                    <DropdownMenuSeparator />
+                                </>
+                            )}
                             <DropdownMenuItem onClick={handleCopyLink}>
                                 <Copy className="w-4 h-4 mr-2" />
                                 {t.copyLink}

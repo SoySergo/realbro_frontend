@@ -1299,5 +1299,29 @@
       "title": "Inicia sessió per desar",
       "description": "Autoritza't per desar els favorits i sincronitzar entre dispositius"
     }
+  },
+  "complaint": {
+    "title": "Denunciar anunci",
+    "description": "Selecciona el motiu i descriu el problema",
+    "reasonLabel": "Motiu",
+    "reasonPlaceholder": "Selecciona un motiu",
+    "reasonRequired": "Si us plau, selecciona un motiu",
+    "descriptionLabel": "Descripció",
+    "descriptionPlaceholder": "Descriu el problema amb més detall...",
+    "descriptionMinLength": "La descripció ha de tenir almenys 10 caràcters",
+    "submit": "Enviar denúncia",
+    "cancel": "Cancel·lar",
+    "successMessage": "Denúncia enviada correctament",
+    "errorMessage": "Error en enviar la denúncia",
+    "reasons": {
+      "spam": "Spam o estafa",
+      "misleading": "Informació enganyosa",
+      "duplicate": "Anunci duplicat",
+      "wrong_price": "Preu incorrecte",
+      "wrong_photos": "Fotos incorrectes o robades",
+      "fraud": "Sospita de frau",
+      "offensive": "Contingut ofensiu",
+      "other": "Altre"
+    }
   }
 }

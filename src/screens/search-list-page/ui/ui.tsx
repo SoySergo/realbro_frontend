@@ -16,6 +16,7 @@ import { ListingControls } from '@/widgets/listing-controls';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { MapPreview } from '@/widgets/map-preview';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
+import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import { Pagination } from '@/shared/ui/pagination';
 import type { PropertiesListResponse } from '@/shared/api/properties-server';
 import type { SearchFilters } from '@/entities/filter';
@@ -198,6 +199,8 @@ export function SearchListPage({
                                     key={property.id}
                                     property={property}
                                     onClick={() => handlePropertyClick(property)}
+                                    actions={<PropertyCompareButton property={property} />}
+                                    menuItems={<PropertyCompareMenuItem property={property} />}
                                 />
                             ))}
                         </div>
@@ -208,6 +211,7 @@ export function SearchListPage({
                                     key={property.id}
                                     property={property}
                                     onClick={() => handlePropertyClick(property)}
+                                    actions={<PropertyCompareButton property={property} size="md" />}
                                 />
                             ))}
                         </div>

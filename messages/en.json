@@ -1243,5 +1243,29 @@
       "title": "Sign in to save",
       "description": "Sign in to save favorites and sync across devices"
     }
+  },
+  "complaint": {
+    "title": "Report Listing",
+    "description": "Select the reason and describe the issue",
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "Select a reason",
+    "reasonRequired": "Please select a reason",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe the issue in detail...",
+    "descriptionMinLength": "Description must be at least 10 characters",
+    "submit": "Submit Report",
+    "cancel": "Cancel",
+    "successMessage": "Report submitted successfully",
+    "errorMessage": "Error submitting report",
+    "reasons": {
+      "spam": "Spam or scam",
+      "misleading": "Misleading information",
+      "duplicate": "Duplicate listing",
+      "wrong_price": "Incorrect price",
+      "wrong_photos": "Wrong or stolen photos",
+      "fraud": "Suspected fraud",
+      "offensive": "Offensive content",
+      "other": "Other"
+    }
   }
 }

@@ -1292,5 +1292,29 @@
       "title": "Connectez-vous pour sauvegarder",
       "description": "Connectez-vous pour sauvegarder vos favoris et les synchroniser entre vos appareils"
     }
+  },
+  "complaint": {
+    "title": "Signaler l'annonce",
+    "description": "Sélectionnez le motif et décrivez le problème",
+    "reasonLabel": "Motif",
+    "reasonPlaceholder": "Sélectionnez un motif",
+    "reasonRequired": "Veuillez sélectionner un motif",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Décrivez le problème en détail...",
+    "descriptionMinLength": "La description doit contenir au moins 10 caractères",
+    "submit": "Envoyer le signalement",
+    "cancel": "Annuler",
+    "successMessage": "Signalement envoyé avec succès",
+    "errorMessage": "Erreur lors de l'envoi du signalement",
+    "reasons": {
+      "spam": "Spam ou arnaque",
+      "misleading": "Informations trompeuses",
+      "duplicate": "Annonce dupliquée",
+      "wrong_price": "Prix incorrect",
+      "wrong_photos": "Photos incorrectes ou volées",
+      "fraud": "Suspicion de fraude",
+      "offensive": "Contenu offensant",
+      "other": "Autre"
+    }
   }
 }

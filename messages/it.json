@@ -1299,5 +1299,29 @@
       "title": "Accedi per salvare",
       "description": "Accedi per salvare i preferiti e sincronizzarli tra dispositivi"
     }
+  },
+  "complaint": {
+    "title": "Segnala annuncio",
+    "description": "Seleziona il motivo e descrivi il problema",
+    "reasonLabel": "Motivo",
+    "reasonPlaceholder": "Seleziona un motivo",
+    "reasonRequired": "Seleziona un motivo",
+    "descriptionLabel": "Descrizione",
+    "descriptionPlaceholder": "Descrivi il problema in dettaglio...",
+    "descriptionMinLength": "La descrizione deve contenere almeno 10 caratteri",
+    "submit": "Invia segnalazione",
+    "cancel": "Annulla",
+    "successMessage": "Segnalazione inviata con successo",
+    "errorMessage": "Errore durante l'invio della segnalazione",
+    "reasons": {
+      "spam": "Spam o truffa",
+      "misleading": "Informazioni fuorvianti",
+      "duplicate": "Annuncio duplicato",
+      "wrong_price": "Prezzo errato",
+      "wrong_photos": "Foto sbagliate o rubate",
+      "fraud": "Sospetta frode",
+      "offensive": "Contenuto offensivo",
+      "other": "Altro"
+    }
   }
 }

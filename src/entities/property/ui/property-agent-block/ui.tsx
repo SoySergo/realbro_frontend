@@ -4,6 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import { PropertyAuthor } from '../../model/types';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
+import { Link } from '@/shared/config/routing';
 import { Button } from '@/shared/ui/button';
 
 export interface PropertyAgentBlockTranslations {
@@ -94,9 +95,9 @@ export function PropertyAgentBlock({
                     <p className="text-xs uppercase tracking-wider font-medium text-muted-foreground">
                         {headerText}
                     </p>
-                    <h3 className="text-xl font-bold text-foreground">
+                    <Link href={`/agency/${agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
                         {agent.name}
-                    </h3>
+                    </Link>
                 </div>
 
                 {/* Rating & Verification */}

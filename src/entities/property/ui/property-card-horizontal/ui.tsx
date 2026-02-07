@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { Link } from '@/shared/config/routing';
 import {
     Check,
     Clock,
@@ -308,9 +309,13 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                         <p className="text-[10px] text-muted-foreground text-center mb-0.5 uppercase tracking-wide">
                             {property.author.type === 'agency' ? t('agency') : property.author.type === 'agent' ? t('agent') : t('owner')}
                         </p>
-                        <p className="text-sm font-medium text-center mb-1.5">
+                        <Link
+                            href={`/agency/${property.author.id}`}
+                            className="text-sm font-medium text-center mb-1.5 block hover:text-brand-primary transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             {property.author.agencyName || property.author.name}
-                        </p>
+                        </Link>
                         {property.author.isVerified && (
                             <div className="flex items-center justify-center gap-1 text-[11px] text-muted-foreground mb-2">
                                 <Check className="w-3 h-3 text-primary" />

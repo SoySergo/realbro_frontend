@@ -307,7 +307,7 @@ export function ComparisonPanel({
     return (
         <div className={cn('flex flex-col h-full', className)}>
             {/* Header */}
-            <div className="sticky top-0 z-10 bg-background border-b border-border px-4 md:px-6 py-4">
+            <div className="sticky top-0 z-20 bg-background border-b border-border px-4 md:px-6 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         {onBack && (

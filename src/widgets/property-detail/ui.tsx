@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
@@ -30,6 +30,7 @@ import { PropertyContactBar, ContactModal, useContactStore } from '@/features/pr
 import { PropertyActionsMenu } from '@/features/property-actions';
 import { PropertyCompareButton } from '@/features/comparison';
 import { PropertyNoteField } from '@/features/property-note';
+import { ComplaintModal } from '@/features/report-complaint';
 import type { AuthorType } from '@/shared/api/contacts';
 
 /**
@@ -122,9 +123,10 @@ export function PropertyDetailWidget({
         console.log('[Property] Shared', { propertyId });
     }, []);
 
-    const handleReport = useCallback((propertyId: string) => {
-        console.log('[Property] Reported', { propertyId });
-        // TODO: Открыть модалку жалобы
+    const [isComplaintOpen, setIsComplaintOpen] = useState(false);
+
+    const handleReport = useCallback((_propertyId: string) => {
+        setIsComplaintOpen(true);
     }, []);
 
     // Calculate rating (mock based on ID for consistency)
@@ -468,7 +470,7 @@ export function PropertyDetailWidget({
                     </div>
 
                     {/* Sidebar Column (Right) - Sticky */}
-                    <div className="hidden lg:block lg:col-span-4 sticky top-[60px] h-fit space-y-4">
+                    <div className="hidden lg:block lg:col-span-4 sticky top-[60px] h-fit space-y-4 pt-4">
                         <PropertySidebarConditions
                             price={property.price}
                             rentalConditions={property.rentalConditions}
@@ -557,6 +559,7 @@ export function PropertyDetailWidget({
                     <PropertyActionsMenu
                         propertyId={property.id}
                         propertyTitle={property.title}
+                        property={property}
                         variant="compact"
                         translations={actionsMenuTranslations}
                         onLike={handleLike}
@@ -569,6 +572,13 @@ export function PropertyDetailWidget({
             
             {/* Contact Modal */}
             <ContactModal translations={contactModalTranslations} />
+
+            {/* Complaint Modal */}
+            <ComplaintModal
+                propertyId={property.id}
+                isOpen={isComplaintOpen}
+                onClose={() => setIsComplaintOpen(false)}
+            />
         </div>
     );
 }

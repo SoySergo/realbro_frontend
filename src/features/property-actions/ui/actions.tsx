@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Heart, Share2, Pencil, FileDown, Flag, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { useToast } from '@/shared/ui/toast';
 
 export interface PropertyActionsTranslations {
     addToFavorites: string;
     inFavorites: string;
     share: string;
+    linkCopied: string;
     note: string;
     pdf: string;
     report: string;
@@ -33,9 +35,32 @@ export function PropertyActions({
     variant = 'row'
 }: PropertyActionsProps) {
     const t = translations;
+    const { showToast } = useToast();
     const [isLiked, setIsLiked] = useState(isFavorite);
     const [isDisliked, setIsDisliked] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
+
+    const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
+        if (navigator.clipboard) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch { /* fallback */ }
+        }
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const success = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            return success;
+        } catch {
+            return false;
+        }
+    }, []);
 
     const handleToggleFavorite = () => {
         const newLikedState = !isLiked;
@@ -57,24 +82,24 @@ export function PropertyActions({
     };
 
     const handleShare = async () => {
+        const url = window.location.href;
+
         if (navigator.share) {
             try {
                 await navigator.share({
                     title: document.title,
-                    url: window.location.href
+                    url,
                 });
-            } catch (err) {
-                // User cancelled or error
-                console.log('Share cancelled');
+                onShare?.(propertyId);
+                return;
+            } catch {
+                // Пользователь отменил — fallback на копирование
             }
-        } else {
-            // Fallback: copy to clipboard
-            try {
-                await navigator.clipboard.writeText(window.location.href);
-                // Could show toast notification here
-            } catch (err) {
-                console.error('Failed to copy');
-            }
+        }
+
+        const copied = await copyToClipboard(url);
+        if (copied) {
+            showToast(t.linkCopied, 'success');
         }
         onShare?.(propertyId);
     };

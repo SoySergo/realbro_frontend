@@ -55,6 +55,7 @@ export function PropertyNoteDialog({
     const [showCustomPicker, setShowCustomPicker] = useState(false);
     const [customDate, setCustomDate] = useState('');
     const [customTime, setCustomTime] = useState('12:00');
+    const [reminderOpen, setReminderOpen] = useState(false);
 
     const formatReminderDate = (date: Date) => {
         return format(new Date(date), 'd MMM yyyy, HH:mm', { 
@@ -99,6 +100,7 @@ export function PropertyNoteDialog({
         const date = new Date(Date.now() + hours * 60 * 60 * 1000);
         setReminderDate(date);
         setShowCustomPicker(false);
+        setReminderOpen(false);
     };
 
     const handleCustomDateTime = () => {
@@ -108,6 +110,7 @@ export function PropertyNoteDialog({
             date.setHours(hours, minutes, 0, 0);
             setReminderDate(date);
             setShowCustomPicker(false);
+            setReminderOpen(false);
         }
     };
 
@@ -135,7 +138,7 @@ export function PropertyNoteDialog({
                         className={cn(
                             "w-full bg-background border border-border rounded-lg px-3 py-2",
                             "text-sm text-text-primary placeholder:text-text-tertiary",
-                            "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+                            "focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary",
                             "resize-none min-h-[100px] transition-colors"
                         )}
                         rows={4}
@@ -144,7 +147,7 @@ export function PropertyNoteDialog({
 
                     {/* Напоминание */}
                     <div className="flex items-center gap-2">
-                        <Popover>
+                        <Popover open={reminderOpen} onOpenChange={setReminderOpen}>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant={reminderDate ? "secondary" : "outline"}
@@ -181,7 +184,7 @@ export function PropertyNoteDialog({
                                             onClick={() => setShowCustomPicker(true)}
                                             className={cn(
                                                 "w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2",
-                                                "hover:bg-background-secondary transition-colors text-primary"
+                                                "hover:bg-background-secondary transition-colors text-brand-primary"
                                             )}
                                         >
                                             <Calendar className="w-4 h-4" />
@@ -191,7 +194,10 @@ export function PropertyNoteDialog({
                                             <>
                                                 <hr className="my-2 border-border" />
                                                 <button
-                                                    onClick={() => setReminderDate(undefined)}
+                                                    onClick={() => {
+                                                        setReminderDate(undefined);
+                                                        setReminderOpen(false);
+                                                    }}
                                                     className="w-full text-left px-3 py-2 text-sm rounded-md text-error hover:bg-error/10 transition-colors"
                                                 >
                                                     {t('removeReminder')}
@@ -210,7 +216,7 @@ export function PropertyNoteDialog({
                                                 min={format(new Date(), 'yyyy-MM-dd')}
                                                 className={cn(
                                                     "w-full bg-background border border-border rounded-md px-3 py-2",
-                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                                                 )}
                                             />
                                         </div>
@@ -222,7 +228,7 @@ export function PropertyNoteDialog({
                                                 onChange={(e) => setCustomTime(e.target.value)}
                                                 className={cn(
                                                     "w-full bg-background border border-border rounded-md px-3 py-2",
-                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                                    "text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                                                 )}
                                             />
                                         </div>
@@ -261,7 +267,7 @@ export function PropertyNoteDialog({
                     <Button
                         onClick={handleSave}
                         disabled={!note.trim() || isSaving}
-                        className="gap-2"
+                        className="gap-2 bg-brand-primary hover:bg-brand-primary-hover text-white"
                     >
                         <Save className="w-4 h-4" />
                         {t('saveNote')}

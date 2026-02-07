@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { Link } from '@/shared/config/routing';
 import {
     ThumbsUp,
     ThumbsDown,
@@ -201,7 +202,11 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 {/* Author avatar and time */}
                 <div className="absolute top-2 right-2 z-10">
                     {mockProperty.author && (
-                        <div className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md">
+                        <Link
+                            href={`/agency/${mockProperty.author.id}`}
+                            className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Avatar className="w-5 h-5">
                                 <AvatarImage src={safeImageSrc(mockProperty.author.avatar)} />
                                 <AvatarFallback className="text-[10px]">
@@ -209,7 +214,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                 </AvatarFallback>
                             </Avatar>
                             <span className="text-[10px] text-text-secondary">{timeAgo}</span>
-                        </div>
+                        </Link>
                     )}
                 </div>
             </div>
@@ -219,11 +224,11 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 {/* Price and buttons */}
                 <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="min-w-0 flex-1">
-                        <div className="text-lg sm:text-base font-bold text-foreground truncate">
-                            {formatPrice(mockProperty.price)}
-                        </div>
-                        <div className="text-xs sm:text-[11px] text-muted-foreground">
-                            {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                        <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
+                            <span className="font-bold text-foreground">{formatPrice(mockProperty.price)}</span>
+                            <span className="text-xs sm:text-[11px] text-muted-foreground font-normal">
+                                {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                            </span>
                         </div>
                     </div>
 

@@ -49,10 +49,17 @@ const toastIcons = {
 };
 
 const toastStyles = {
-    success: 'bg-success/10 border-success/20 text-success dark:bg-success/20',
-    error: 'bg-error/10 border-error/20 text-error dark:bg-error/20',
-    warning: 'bg-warning/10 border-warning/20 text-warning dark:bg-warning/20',
-    info: 'bg-info/10 border-info/20 text-info dark:bg-info/20',
+    success: 'bg-white dark:bg-gray-900 border-border text-foreground',
+    error: 'bg-white dark:bg-gray-900 border-border text-foreground',
+    warning: 'bg-white dark:bg-gray-900 border-border text-foreground',
+    info: 'bg-white dark:bg-gray-900 border-border text-foreground',
+};
+
+const toastIconStyles = {
+    success: 'text-success',
+    error: 'text-error',
+    warning: 'text-warning',
+    info: 'text-info',
 };
 
 // ============================================================================
@@ -91,7 +98,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
     return (
         <div
             className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg backdrop-blur-sm',
+                'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg',
                 'transition-all duration-200 ease-out',
                 isVisible && !isLeaving
                     ? 'opacity-100 translate-y-0 scale-100'
@@ -99,13 +106,13 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
                 toastStyles[toast.type]
             )}
         >
-            <div className="shrink-0">
+            <div className={cn('shrink-0', toastIconStyles[toast.type])}>
                 {toastIcons[toast.type]}
             </div>
             <p className="text-sm font-medium flex-1">{toast.message}</p>
             <button
                 onClick={handleDismiss}
-                className="shrink-0 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                className="shrink-0 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-muted-foreground"
             >
                 <X className="w-3.5 h-3.5" />
             </button>
@@ -126,7 +133,7 @@ function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
     if (toasts.length === 0) return null;
 
     return (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 max-w-md w-full px-4 pointer-events-none">
+        <div className="fixed top-4 md:bottom-4 md:top-auto left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 max-w-md w-full px-4 pointer-events-none">
             {toasts.map((toast) => (
                 <div key={toast.id} className="pointer-events-auto">
                     <ToastItem toast={toast} onDismiss={onDismiss} />

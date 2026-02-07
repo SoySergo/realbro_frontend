@@ -1299,5 +1299,29 @@
       "title": "Inicie sesión para guardar",
       "description": "Inicie sesión para guardar favoritos y sincronizar entre dispositivos"
     }
+  },
+  "complaint": {
+    "title": "Reportar anuncio",
+    "description": "Seleccione el motivo y describa el problema",
+    "reasonLabel": "Motivo",
+    "reasonPlaceholder": "Seleccione un motivo",
+    "reasonRequired": "Por favor, seleccione un motivo",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Describa el problema con más detalle...",
+    "descriptionMinLength": "La descripción debe tener al menos 10 caracteres",
+    "submit": "Enviar reporte",
+    "cancel": "Cancelar",
+    "successMessage": "Reporte enviado correctamente",
+    "errorMessage": "Error al enviar el reporte",
+    "reasons": {
+      "spam": "Spam o estafa",
+      "misleading": "Información engañosa",
+      "duplicate": "Anuncio duplicado",
+      "wrong_price": "Precio incorrecto",
+      "wrong_photos": "Fotos incorrectas o robadas",
+      "fraud": "Sospecha de fraude",
+      "offensive": "Contenido ofensivo",
+      "other": "Otro"
+    }
   }
 }

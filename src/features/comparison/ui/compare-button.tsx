@@ -71,20 +71,20 @@ export const CompareButton = React.memo(function CompareButton({
         }
     };
 
-    // Размеры кнопки и иконки
+    // Размеры кнопки и иконки - matching like/dislike buttons
     const sizeClasses = {
         sm: {
-            button: 'p-1.5',
-            icon: 'w-3.5 h-3.5',
+            button: 'w-7 h-7',
+            icon: 'w-4 h-4',
             text: 'text-xs',
         },
         md: {
-            button: 'p-2',
-            icon: 'w-4 h-4',
+            button: 'w-10 h-10 sm:w-7 sm:h-7',
+            icon: 'w-5 h-5 sm:w-4 sm:h-4',
             text: 'text-sm',
         },
         lg: {
-            button: 'p-2.5',
+            button: 'w-10 h-10',
             icon: 'w-5 h-5',
             text: 'text-base',
         },
@@ -102,15 +102,15 @@ export const CompareButton = React.memo(function CompareButton({
         <button
             onClick={handleClick}
             className={cn(
-                'rounded-lg transition-all duration-200 cursor-pointer',
+                'flex items-center justify-center rounded-full transition-colors cursor-pointer',
                 currentSize.button,
                 isInComparison
-                    ? 'bg-brand-primary/15 text-brand-primary'
-                    : 'text-text-tertiary hover:text-brand-primary hover:bg-brand-primary/10',
+                    ? 'bg-brand-primary/20 text-brand-primary hover:bg-brand-primary/30'
+                    : 'text-muted-foreground hover:bg-brand-primary/20 hover:text-brand-primary',
                 isLimitReached && !isInComparison && 'opacity-50 cursor-not-allowed',
                 isAnimating && 'scale-110',
-                variant === 'full' && 'flex items-center gap-2 px-3',
-                variant === 'text' && 'px-3',
+                variant === 'full' && 'flex items-center gap-2 px-3 rounded-lg w-auto h-auto',
+                variant === 'text' && 'px-3 rounded-lg w-auto h-auto',
                 className
             )}
             title={showTooltip ? label : undefined}
@@ -121,7 +121,6 @@ export const CompareButton = React.memo(function CompareButton({
                 <Icon
                     className={cn(
                         currentSize.icon,
-                        isInComparison && 'fill-current',
                         isAnimating && 'animate-bounce'
                     )}
                 />
@@ -132,3 +131,4 @@ export const CompareButton = React.memo(function CompareButton({
         </button>
     );
 });
+

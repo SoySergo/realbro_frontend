@@ -45,7 +45,9 @@ export function ComparisonDialog({
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent 
                 className={cn(
-                    'max-w-6xl w-[95vw] h-[90vh] max-h-[90vh] p-0 overflow-hidden',
+                    'max-w-6xl w-full md:w-[95vw] h-[100dvh] md:h-[90vh] max-h-[100dvh] md:max-h-[90vh] p-0 overflow-hidden',
+                    'rounded-none md:rounded-lg',
+                    'pt-safe',
                     className
                 )}
             >
