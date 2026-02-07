@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server';
 import { HeroSection } from './hero-section';
 import { FeaturesSection } from './features-section';
 import { DemoSection } from './demo-section';
@@ -9,8 +8,8 @@ type Props = {
 };
 
 export async function HomePage({ params }: Props) {
-    const { locale } = await params;
-    const t = await getTranslations({ locale, namespace: 'landing' });
+    // Дожидаемся params для Next.js 15+
+    await params;
 
     return (
         <div className="min-h-screen bg-background">
