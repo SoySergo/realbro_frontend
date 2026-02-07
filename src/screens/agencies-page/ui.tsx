@@ -2,27 +2,16 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, Users } from 'lucide-react';
-import Image from 'next/image';
-import { Link, useRouter } from '@/shared/config/routing';
+import { Building2 } from 'lucide-react';
+import { useRouter } from '@/shared/config/routing';
 import { AgencyCard } from '@/entities/agency';
 import { AgencyFiltersBar } from '@/features/agency-filters';
 import { SearchCategorySwitcher } from '@/features/search-category';
 import { MobileSearchHeader } from '@/widgets/search-filters-bar';
 import { Button } from '@/shared/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/shared/ui/select';
 import { getAgenciesList } from '@/shared/api';
 import { cn } from '@/shared/lib/utils';
 import type { AgencyCardData, AgencyFilters } from '@/entities/agency';
-
-// Высота мобильного хедера
-const MOBILE_HEADER_HEIGHT = 56;
 
 interface AgenciesPageProps {
     locale: string;
@@ -39,13 +28,11 @@ interface AgenciesPageProps {
 export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps) {
     const t = useTranslations('agency');
     const tCommon = useTranslations('common');
-    const tCategory = useTranslations('searchCategory');
     const router = useRouter();
 
     const [agencies, setAgencies] = useState<AgencyCardData[]>(initialAgencies);
     const [filters, setFilters] = useState<AgencyFilters>({});
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
@@ -67,7 +54,6 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     setAgencies(result.data);
                 }
                 
-                setTotalPages(result.pagination.totalPages);
                 setHasMore(pageNum < result.pagination.totalPages);
             } catch (error) {
                 console.error('Failed to load agencies:', error);
@@ -126,13 +112,6 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
         setPage(nextPage);
         loadAgencies(filters, nextPage, true);
     }, [page, filters, loadAgencies]);
-
-    // Обработчик смены категории поиска (мобилка)
-    const handleCategoryChange = (value: string) => {
-        if (value === 'properties') {
-            router.push('/search/map');
-        }
-    };
     
     // Для агентств: пустой обработчик фильтров (фильтры агентств не через MobileFiltersSheet)
     const handleOpenFilters = () => {

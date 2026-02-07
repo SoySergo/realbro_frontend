@@ -32,7 +32,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
-import type { MarkerType } from '@/entities/filter';
 
 type MobileSearchHeaderProps = {
     onOpenFilters: () => void;
