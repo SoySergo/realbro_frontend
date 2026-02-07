@@ -87,8 +87,8 @@ export function SearchMapPage() {
     }, []);
 
     return (
-        <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+        <div className="flex h-dvh bg-background overscroll-none overflow-hidden">
+            <main className="flex-1 md:ml-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер с фильтрами - только на мобильных */}
                 {!activeLocationMode && (
                     <div className="md:hidden">
@@ -109,7 +109,7 @@ export function SearchMapPage() {
 
                 {/* Контейнер карты и фильтров */}
                 <div className="flex-1 relative">
-                    <div className="relative h-[calc(100dvh-8rem)] md:h-screen w-full">
+                    <div className="absolute inset-0 md:relative md:h-screen w-full">
                         {/* Панель фильтров поверх карты - только на desktop */}
                         <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
                             <SearchFiltersBar />
