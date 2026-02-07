@@ -28,7 +28,6 @@ interface AgenciesPageProps {
 export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps) {
     const t = useTranslations('agency');
     const tCommon = useTranslations('common');
-    const router = useRouter();
 
     const [agencies, setAgencies] = useState<AgencyCardData[]>(initialAgencies);
     const [filters, setFilters] = useState<AgencyFilters>({});
@@ -113,9 +112,9 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
         loadAgencies(filters, nextPage, true);
     }, [page, filters, loadAgencies]);
     
-    // Для агентств: пустой обработчик фильтров (фильтры агентств не через MobileFiltersSheet)
+    // For agencies: empty filter handler (agency filters don't use MobileFiltersSheet)
     const handleOpenFilters = () => {
-        // Агентства не используют MobileFiltersSheet, их фильтры всегда видны
+        // Agencies don't use MobileFiltersSheet, their filters are always visible
     };
 
     return (

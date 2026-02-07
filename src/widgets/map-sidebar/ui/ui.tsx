@@ -508,6 +508,13 @@ export function MobileMapSidebar({
             scrollRef.current.scrollTop = 0;
         }
     }, [snapState]);
+    
+    // Управление transition при изменении состояния
+    useEffect(() => {
+        if (sheetRef.current && !isDragging.current) {
+            sheetRef.current.style.transition = 'height 0.3s ease-out';
+        }
+    }, [snapState]);
 
     const handleSortChange = (value: string) => {
         setSortBy(value as PropertySortBy);
@@ -657,9 +664,7 @@ export function MobileMapSidebar({
             style={{
                 bottom: `${BOTTOM_NAV_HEIGHT}px`,
                 height: sheetHeight,
-                transition: 'height 0.3s ease-out',
                 willChange: 'transform, height',
-                touchAction: 'none',
             }}
         >
             {/* Drag handle — всегда доступен для свайпа */}
