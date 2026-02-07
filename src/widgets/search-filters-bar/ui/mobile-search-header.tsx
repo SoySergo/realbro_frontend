@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useCallback, type MouseEvent, memo } from 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Link } from '@/shared/config/routing';
+import { Link, useRouter as useLocalizedRouter } from '@/shared/config/routing';
 import { Button } from '@/shared/ui/button';
 import {
     SlidersHorizontal,
@@ -14,6 +14,8 @@ import {
     Map,
     List,
     CloudUpload,
+    Building2,
+    Users,
 } from 'lucide-react';
 import { CloudSyncIcon, CloudCheckIcon } from '@/shared/icons/cloude-sync';
 import { useSearchFilters } from '@/features/search-filters/model';
@@ -47,10 +49,12 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
     const { filtersCount, filters } = useSearchFilters();
     const t = useTranslations('sidebar');
     const tFilters = useTranslations('filters');
-    const tCommon = useTranslations('common'); // Assuming 'saving' and 'saved' are here or need to provide hardcoded/key
+    const tCommon = useTranslations('common');
+    const tCategory = useTranslations('searchCategory');
     // Используем оптимизированный селектор вместо полного стора
     const searchViewMode = useSearchViewMode();
     const router = useRouter();
+    const localizedRouter = useLocalizedRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     
@@ -99,13 +103,20 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
 
     const isMapMode = searchViewMode === 'map';
 
+    // Обработчик смены категории поиска
+    const handleCategoryChange = (value: string) => {
+        if (value === 'professionals') {
+            localizedRouter.push('/agencies');
+        }
+    };
+
     return (
         <div className={cn('', className)}>
             {/* Фиксированный хедер */}
             <div className="fixed top-0 left-0 right-0 z-101 bg-background-secondary">
                 <div className="flex items-center px-3 py-2 gap-2">
-                    {/* Logo Block - 1/3 (approx width to balance) */}
-                    <div className="flex-[0_0_auto] mr-auto">
+                    {/* Logo Block */}
+                    <div className="flex-[0_0_auto]">
                         <Link href="/" className="flex items-start">
                             <Image
                                 src="/logo.svg"
@@ -118,7 +129,29 @@ export function MobileSearchHeader({ onOpenFilters, className }: MobileSearchHea
                         </Link>
                     </div>
 
-                    {/* Actions Block - 2/3 (takes remaining space and aligns right) */}
+                    {/* Переключатель категории: Недвижимость / Агентства */}
+                    <Select value="properties" onValueChange={handleCategoryChange}>
+                        <SelectTrigger className="h-8 w-auto gap-1 text-xs border-border px-2 shrink-0">
+                            <Building2 className="w-3.5 h-3.5" />
+                            <SelectValue>{tCategory('properties')}</SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="properties">
+                                <span className="flex items-center gap-2">
+                                    <Building2 className="w-4 h-4" />
+                                    {tCategory('properties')}
+                                </span>
+                            </SelectItem>
+                            <SelectItem value="professionals">
+                                <span className="flex items-center gap-2">
+                                    <Users className="w-4 h-4" />
+                                    {tCategory('professionals')}
+                                </span>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    {/* Actions Block */}
                     <div className="flex-[1_1_auto] flex items-center justify-end gap-2 min-w-0 pl-2">
                         {isFirstTimeUser ? (
                             <>

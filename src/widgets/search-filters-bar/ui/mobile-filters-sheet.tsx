@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Label } from '@/shared/ui/label';
 import { X, Loader2 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { SearchCategorySwitcher } from '@/features/search-category';
 import { MarkerTypeFilterMobile } from '@/features/marker-type-filter';
 import { CategoryFilterMobile } from '@/features/category-filter';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
@@ -39,6 +40,7 @@ interface MobileFiltersSheetProps {
  */
 export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetProps) {
     const t = useTranslations('filters');
+    const locale = useLocale();
     const { filters, setFilters } = useSearchFilters();
 
     const { activeLocationMode, setLocationMode, currentFilters } = useFilterStore();
@@ -208,6 +210,15 @@ export function MobileFiltersSheet({ open, onOpenChange }: MobileFiltersSheetPro
                     }}
                 >
                     <div className="flex flex-col">
+                        {/* Переключатель: Недвижимость / Агентства */}
+                        <div className="px-4 py-3 border-b border-border">
+                            <SearchCategorySwitcher
+                                currentCategory="properties"
+                                locale={locale}
+                                className="w-full"
+                            />
+                        </div>
+
                         {/* Тип маркера */}
                         <FilterSection id="marker-type" title={t('markerType')}>
                             <div className="px-4">

@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
@@ -25,6 +25,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/shared/ui/popover';
+
+// Импорт переключателя категории поиска
+import { SearchCategorySwitcher } from '@/features/search-category';
 
 // Импорты фильтров
 import { MarkerTypeFilter, MarkerTypeFilterMobile } from '@/features/marker-type-filter';
@@ -56,6 +59,7 @@ function SearchFiltersBarContent() {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
     const tSidebar = useTranslations('sidebar');
+    const locale = useLocale();
     const { filtersCount, clearFilters, filters, setFilters } = useSearchFilters();
     const { currentFilters, setLocationMode } = useFilterStore();
     const { addQuery, updateQuery, activeQueryId, queries } = useSidebarStore();
@@ -220,6 +224,12 @@ function SearchFiltersBarContent() {
                     <FingerprintIcon className="w-4 h-4" />
                     <span className="hidden sm:inline">{t('aiAgent')}</span>
                 </Button>
+
+                {/* Разделитель */}
+                <div className="w-px h-6 bg-border shrink-0" />
+
+                {/* Переключатель: Недвижимость / Агентства */}
+                <SearchCategorySwitcher currentCategory="properties" locale={locale} />
 
                 {/* Разделитель */}
                 <div className="w-px h-6 bg-border shrink-0" />
