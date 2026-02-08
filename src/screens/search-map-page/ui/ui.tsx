@@ -119,7 +119,7 @@ export function SearchMapPage() {
                         </div>
 
                         {/* Карта (отступ сверху для фильтров на desktop) */}
-                        <div className="absolute z-10 inset-0 md:pt-[60px]">
+                        <div className="absolute z-10 inset-0 md:pt-14">
                             <SearchMap />
                         </div>
                     </div>
