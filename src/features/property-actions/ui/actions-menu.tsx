@@ -281,7 +281,7 @@ export function PropertyActionsMenu({
                         <ThumbsUp className={cn(
                             'w-5 h-5 transition-transform',
                             isLiked && 'fill-current',
-                            likeAnimating && 'scale-125'
+                            likeAnimating && 'animate-icon-pop'
                         )} />
                     </button>
                     
@@ -297,7 +297,7 @@ export function PropertyActionsMenu({
                         <ThumbsDown className={cn(
                             'w-5 h-5 transition-transform',
                             isDisliked && 'fill-current',
-                            dislikeAnimating && 'scale-125'
+                            dislikeAnimating && 'animate-icon-pop'
                         )} />
                     </button>
 
@@ -415,7 +415,7 @@ export function PropertyActionsMenu({
                     <ThumbsUp className={cn(
                         'w-5 h-5 transition-transform',
                         isLiked && 'fill-current',
-                        likeAnimating && 'scale-125'
+                        likeAnimating && 'animate-icon-pop'
                     )} />
                     {variant === 'full' && <span className="text-sm">{isLiked ? t.liked : t.like}</span>}
                 </button>
@@ -433,7 +433,7 @@ export function PropertyActionsMenu({
                     <ThumbsDown className={cn(
                         'w-5 h-5 transition-transform',
                         isDisliked && 'fill-current',
-                        dislikeAnimating && 'scale-125'
+                        dislikeAnimating && 'animate-icon-pop'
                     )} />
                     {variant === 'full' && <span className="text-sm">{isDisliked ? t.disliked : t.dislike}</span>}
                 </button>

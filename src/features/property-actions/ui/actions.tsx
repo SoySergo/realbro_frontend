@@ -184,7 +184,7 @@ export function PropertyActions({
                     className={cn(
                         'w-6 h-6 transition-transform',
                         isLiked && 'fill-current',
-                        isAnimating && 'scale-125'
+                        isAnimating && 'animate-icon-pop'
                     )}
                 />
             </button>

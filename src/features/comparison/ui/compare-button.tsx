@@ -121,7 +121,7 @@ export const CompareButton = React.memo(function CompareButton({
                 <Icon
                     className={cn(
                         currentSize.icon,
-                        isAnimating && 'animate-bounce'
+                        isAnimating && 'animate-icon-pop'
                     )}
                 />
             )}
