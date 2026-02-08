@@ -1223,7 +1223,8 @@
     "noPropertiesFound": "No se encontraron propiedades",
     "noAgentsFound": "No se encontraron agentes",
     "rooms": "hab.",
-    "sqm": "m²"
+    "sqm": "m²",
+    "recommendedAgencies": "Agencias recomendadas"
   },
   "searchCategory": {
     "title": "Categoría de búsqueda",

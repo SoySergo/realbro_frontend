@@ -1213,7 +1213,8 @@
     "noPropertiesFound": "Aucune propriété trouvée",
     "noAgentsFound": "Aucun agent trouvé",
     "rooms": "pièces",
-    "sqm": "m²"
+    "sqm": "m²",
+    "recommendedAgencies": "Agences recommandées"
   },
   "searchCategory": {
     "title": "Catégorie de recherche",

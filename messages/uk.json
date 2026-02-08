@@ -1399,7 +1399,8 @@
       "rental": "Оренда",
       "sale": "Продаж"
     },
-    "verified": "Перевірено"
+    "verified": "Перевірено",
+    "recommendedAgencies": "Рекомендовані агентства"
   },
   "chat": {
     "aiAgent": {

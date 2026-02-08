@@ -1174,7 +1174,8 @@
       "secondary": "Usado",
       "rental": "Aluguel",
       "sale": "Venda"
-    }
+    },
+    "recommendedAgencies": "Agências recomendadas"
   },
   "searchCategory": {
     "all": "Todos",
