@@ -321,7 +321,27 @@
       "propertyType": "Property Type"
     },
     "newSearch": "New Search",
-    "saveFilter": "Save Filter"
+    "saveFilter": "Save Filter",
+    "dealType": "Deal Type",
+    "dealTypeRent": "Rent",
+    "dealTypeSale": "Sale",
+    "propertyClass": "Property Type",
+    "propertyClassResidential": "Residential",
+    "propertyClassCommercial": "Commercial",
+    "propertyCategories": "Category",
+    "propertyCategoryApartment": "Apartment",
+    "propertyCategoryRoom": "Room",
+    "propertyCategoryHouse": "House",
+    "propertyCategoryVilla": "Villa",
+    "propertyCategoryPenthouse": "Penthouse",
+    "propertyCategoryTownhouse": "Townhouse",
+    "propertyCategoryStudio": "Studio",
+    "propertyCategoryOffice": "Office",
+    "propertyCategoryRetail": "Retail",
+    "propertyCategoryWarehouse": "Warehouse",
+    "propertyCategoryRestaurant": "Restaurant",
+    "propertyCategoryHotel": "Hotel",
+    "propertyCategoryLand": "Land"
   },
   "map": {
     "showMap": "Show Map",
@@ -1009,7 +1029,9 @@
     "noResults": "No properties found",
     "loading": "Loading...",
     "objectsCount": "{count} properties",
-    "changeSearchArea": "Change the search area on the map"
+    "changeSearchArea": "Change the search area on the map",
+    "expandPanel": "Expand",
+    "collapsePanel": "Collapse"
   },
   "amenities": {
     "wifi": "Wi-Fi",

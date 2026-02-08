@@ -321,7 +321,27 @@
       "propertyType": "Type de propriété"
     },
     "newSearch": "Nouvelle recherche",
-    "saveFilter": "Sauvegarder le filtre"
+    "saveFilter": "Sauvegarder le filtre",
+    "dealType": "Type d'opération",
+    "dealTypeRent": "Location",
+    "dealTypeSale": "Vente",
+    "propertyClass": "Type de bien",
+    "propertyClassResidential": "Résidentiel",
+    "propertyClassCommercial": "Commercial",
+    "propertyCategories": "Catégorie",
+    "propertyCategoryApartment": "Appartement",
+    "propertyCategoryRoom": "Chambre",
+    "propertyCategoryHouse": "Maison",
+    "propertyCategoryVilla": "Villa",
+    "propertyCategoryPenthouse": "Penthouse",
+    "propertyCategoryTownhouse": "Maison de ville",
+    "propertyCategoryStudio": "Studio",
+    "propertyCategoryOffice": "Bureau",
+    "propertyCategoryRetail": "Local commercial",
+    "propertyCategoryWarehouse": "Entrepôt",
+    "propertyCategoryRestaurant": "Restaurant",
+    "propertyCategoryHotel": "Hôtel",
+    "propertyCategoryLand": "Terrain"
   },
   "map": {
     "showMap": "Afficher la carte",
@@ -1027,7 +1047,9 @@
     "noResults": "Aucun bien trouvé",
     "loading": "Chargement...",
     "objectsCount": "{count} biens",
-    "changeSearchArea": "Modifier la zone de recherche sur la carte"
+    "changeSearchArea": "Modifier la zone de recherche sur la carte",
+    "expandPanel": "Ouvrir",
+    "collapsePanel": "Réduire"
   },
   "amenities": {
     "wifi": "Wi-Fi",

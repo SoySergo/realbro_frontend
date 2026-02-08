@@ -230,6 +230,17 @@ export async function getAgenciesList(
 }
 
 /**
+ * Получить количество агентств по фильтрам
+ */
+export async function getAgenciesCount(
+    filters: AgencyFilters = {},
+    locale: string = 'ru'
+): Promise<number> {
+    const result = await getAgenciesList(filters, 1, 1, locale);
+    return result.pagination.total;
+}
+
+/**
  * Получить объекты недвижимости агентства
  */
 export async function getAgencyProperties(

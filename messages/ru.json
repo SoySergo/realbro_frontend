@@ -337,7 +337,27 @@
       "propertyType": "Тип недвижимости"
     },
     "newSearch": "Новый поиск",
-    "saveFilter": "Сохранить фильтр"
+    "saveFilter": "Сохранить фильтр",
+    "dealType": "Тип сделки",
+    "dealTypeRent": "Аренда",
+    "dealTypeSale": "Продажа",
+    "propertyClass": "Тип недвижимости",
+    "propertyClassResidential": "Жилая",
+    "propertyClassCommercial": "Коммерческая",
+    "propertyCategories": "Категория",
+    "propertyCategoryApartment": "Квартира",
+    "propertyCategoryRoom": "Комната",
+    "propertyCategoryHouse": "Дом",
+    "propertyCategoryVilla": "Вилла",
+    "propertyCategoryPenthouse": "Пентхаус",
+    "propertyCategoryTownhouse": "Таунхаус",
+    "propertyCategoryStudio": "Студия",
+    "propertyCategoryOffice": "Офис",
+    "propertyCategoryRetail": "Торговое помещение",
+    "propertyCategoryWarehouse": "Склад",
+    "propertyCategoryRestaurant": "Ресторан",
+    "propertyCategoryHotel": "Отель",
+    "propertyCategoryLand": "Земельный участок"
   },
   "map": {
     "showMap": "Показать карту",
@@ -1037,7 +1057,9 @@
     "noResults": "Объекты не найдены",
     "loading": "Загрузка...",
     "objectsCount": "{count} объектов",
-    "changeSearchArea": "Измените область поиска на карте"
+    "changeSearchArea": "Измените область поиска на карте",
+    "expandPanel": "Открыть",
+    "collapsePanel": "Свернуть"
   },
   "amenities": {
     "wifi": "Wi-Fi",

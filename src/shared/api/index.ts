@@ -33,6 +33,7 @@ export {
     getAgencyById,
     getAgencyBySlug,
     getAgenciesList,
+    getAgenciesCount,
     getAgencyProperties,
     getAgencyReviews,
     searchAgenciesByPhone,

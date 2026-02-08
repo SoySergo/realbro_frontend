@@ -1,12 +1,18 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter, usePathname } from '@/shared/config/routing';
+import { useRouter } from '@/shared/config/routing';
 import { Building2, Users } from 'lucide-react';
-import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/toggle-group';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/shared/ui/select';
 import { cn } from '@/shared/lib/utils';
 
-type SearchCategory = 'properties' | 'professionals';
+export type SearchCategory = 'properties' | 'professionals';
 
 interface SearchCategorySwitcherProps {
     currentCategory: SearchCategory;
@@ -16,7 +22,7 @@ interface SearchCategorySwitcherProps {
 
 /**
  * Переключатель категории поиска: Недвижимость / Профессионалы
- * Изменяет URL при переключении
+ * Выпадающий список, стиль консистентен с кнопками-фильтрами
  */
 export function SearchCategorySwitcher({
     currentCategory,
@@ -26,8 +32,8 @@ export function SearchCategorySwitcher({
     const t = useTranslations('searchCategory');
     const router = useRouter();
 
-    const handleCategoryChange = (value: SearchCategory) => {
-        if (!value) return;
+    const handleCategoryChange = (value: string) => {
+        if (!value || value === currentCategory) return;
 
         if (value === 'properties') {
             router.push('/search/map');
@@ -36,29 +42,37 @@ export function SearchCategorySwitcher({
         }
     };
 
+    const CurrentIcon = currentCategory === 'properties' ? Building2 : Users;
+
     return (
-        <ToggleGroup
-            type="single"
-            value={currentCategory}
-            onValueChange={handleCategoryChange as (value: string) => void}
-            className={cn('bg-background-secondary rounded-lg p-1', className)}
-        >
-            <ToggleGroupItem
-                value="properties"
-                aria-label={t('properties')}
-                className="gap-2 data-[state=on]:bg-background data-[state=on]:shadow-sm"
+        <Select value={currentCategory} onValueChange={handleCategoryChange}>
+            <SelectTrigger
+                className={cn(
+                    'h-9 w-auto gap-2 text-sm border-border px-3 shrink-0',
+                    className
+                )}
             >
-                <Building2 className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('properties')}</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem
-                value="professionals"
-                aria-label={t('professionals')}
-                className="gap-2 data-[state=on]:bg-background data-[state=on]:shadow-sm"
-            >
-                <Users className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('professionals')}</span>
-            </ToggleGroupItem>
-        </ToggleGroup>
+                <CurrentIcon className="w-4 h-4" />
+                <SelectValue>
+                    {currentCategory === 'properties'
+                        ? t('properties')
+                        : t('professionals')}
+                </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="properties">
+                    <span className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4" />
+                        {t('properties')}
+                    </span>
+                </SelectItem>
+                <SelectItem value="professionals">
+                    <span className="flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        {t('professionals')}
+                    </span>
+                </SelectItem>
+            </SelectContent>
+        </Select>
     );
 }

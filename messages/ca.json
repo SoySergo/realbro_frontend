@@ -433,7 +433,27 @@
     "resetFilters": "Restablir filtres",
     "moreFilters": "Més filtres",
     "newSearch": "Nova cerca",
-    "saveFilter": "Desar filtre"
+    "saveFilter": "Desar filtre",
+    "dealType": "Tipus d'operació",
+    "dealTypeRent": "Lloguer",
+    "dealTypeSale": "Venda",
+    "propertyClass": "Tipus de propietat",
+    "propertyClassResidential": "Residencial",
+    "propertyClassCommercial": "Comercial",
+    "propertyCategories": "Categoria",
+    "propertyCategoryApartment": "Apartament",
+    "propertyCategoryRoom": "Habitació",
+    "propertyCategoryHouse": "Casa",
+    "propertyCategoryVilla": "Vila",
+    "propertyCategoryPenthouse": "Àtic",
+    "propertyCategoryTownhouse": "Casa adossada",
+    "propertyCategoryStudio": "Estudi",
+    "propertyCategoryOffice": "Oficina",
+    "propertyCategoryRetail": "Local comercial",
+    "propertyCategoryWarehouse": "Magatzem",
+    "propertyCategoryRestaurant": "Restaurant",
+    "propertyCategoryHotel": "Hotel",
+    "propertyCategoryLand": "Terreny"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -1263,7 +1283,9 @@
     "showMap": "Mostrar mapa",
     "sortRelevance": "Rellevància",
     "filters": "Filtres",
-    "results": "{count} immobles"
+    "results": "{count} immobles",
+    "expandPanel": "Obrir",
+    "collapsePanel": "Tancar"
   },
   "amenities": {
     "wifi": "Wi-Fi",

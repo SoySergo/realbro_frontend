@@ -256,7 +256,7 @@ export function MapSidebar({
             )}
         >
             {/* Sticky Header */}
-            <div className="p-3 border-b border-border shrink-0 sticky top-0 z-10 bg-background">
+            <div className="p-3 pt-4 border-b border-border shrink-0 sticky top-0 z-10 bg-background">
                 <div className="flex items-center gap-2 mb-2">
                     {/* Кнопка переключения на режим списка */}
                     <Button
@@ -597,19 +597,17 @@ export function MobileMapSidebar({
     return (
         <div
             className={cn(
-                'fixed left-0 right-0 z-30 bg-background shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col transition-[height,padding,border-radius] duration-300 ease-in-out',
+                'fixed left-0 right-0 bg-background shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col transition-[height,bottom,border-radius] duration-300 ease-in-out',
+                isExpanded ? 'z-110' : 'z-30',
                 !isExpanded && 'rounded-t-lg',
                 className
             )}
             style={{
-                bottom: `${BOTTOM_NAV_HEIGHT}px`,
-                // В развернутом виде: высота экрана - (меню снизу + хедер сверху)
-                height: isExpanded 
-                    ? `calc(100dvh - ${BOTTOM_NAV_HEIGHT}px - ${HEADER_HEIGHT}px)` 
+                bottom: isExpanded ? 0 : `${BOTTOM_NAV_HEIGHT}px`,
+                height: isExpanded
+                    ? '100dvh'
                     : '35%',
-                // В развернутом виде: отступ сверху под фильтры
-                paddingTop: isExpanded ? `${FILTERS_HEIGHT}px` : 0,
-                willChange: 'height, padding-top',
+                willChange: 'height, bottom',
             }}
         >
             {/* Хедер со счётчиком + шеврон */}
@@ -643,13 +641,16 @@ export function MobileMapSidebar({
                     variant="ghost"
                     size="sm"
                     onClick={toggleSnapState}
-                    className="h-8 w-8 p-0"
-                    aria-label={isExpanded ? tMapSidebar('hidePanel') : tMapSidebar('showPanel')}
+                    className="h-8 gap-1.5 px-2"
+                    aria-label={isExpanded ? tMapSidebar('collapsePanel') : tMapSidebar('expandPanel')}
                 >
+                    <span className="text-xs text-text-secondary">
+                        {isExpanded ? tMapSidebar('collapsePanel') : tMapSidebar('expandPanel')}
+                    </span>
                     {isExpanded ? (
-                        <ChevronDown className="w-5 h-5" />
+                        <ChevronDown className="w-4 h-4" />
                     ) : (
-                        <ChevronLeft className="w-5 h-5 rotate-90" /> 
+                        <ChevronLeft className="w-4 h-4 rotate-90" />
                     )}
                 </Button>
             </div>

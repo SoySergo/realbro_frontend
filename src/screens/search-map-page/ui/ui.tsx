@@ -47,10 +47,6 @@ export function SearchMapPage() {
 
     // Состояние мобильного сайдбара (collapsed / expanded)
     const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('collapsed');
-    const mobileSidebarExpanded = mobileSidebarSnapState === 'expanded';
-    const handleToggleSidebar = useCallback(() => {
-        setMobileSidebarSnapState((prev) => (prev === 'collapsed' ? 'expanded' : 'collapsed'));
-    }, []);
 
     // Проверяем, нужно ли автоматически открыть режим локации
     const autoOpenDraw = searchParams.get('openDraw') === 'true';
@@ -111,10 +107,7 @@ export function SearchMapPage() {
 
                 {/* Кнопка переключения карта/список - только на мобильных */}
                 <div className="md:hidden">
-                    <MobileViewToggle
-                        sidebarExpanded={mobileSidebarExpanded}
-                        onToggleSidebar={handleToggleSidebar}
-                    />
+                    <MobileViewToggle />
                 </div>
 
                 {/* Контейнер карты и фильтров */}

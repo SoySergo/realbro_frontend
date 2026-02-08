@@ -4,7 +4,6 @@ import { Suspense, useEffect, useState, useCallback, useRef, useMemo } from 'rea
 import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
 import {
     Search,
     SlidersHorizontal,
@@ -13,12 +12,11 @@ import {
     CloudCheck,
     CloudCog,
     FingerprintIcon,
-    X,
 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useFilterStore } from '../model/store';
 import { useSidebarStore } from '@/widgets/sidebar';
-import { getPropertiesCount } from '@/shared/api';
+import { getPropertiesCount, getAgenciesCount } from '@/shared/api';
 import { cn } from '@/shared/lib/utils';
 import {
     Popover,
@@ -26,45 +24,48 @@ import {
     PopoverTrigger,
 } from '@/shared/ui/popover';
 
-// Импорт переключателя категории поиска
-import { SearchCategorySwitcher } from '@/features/search-category';
+import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
+import { useAgencyFilters } from '@/features/agency-filters';
 
-// Импорты фильтров
-import { MarkerTypeFilter, MarkerTypeFilterMobile } from '@/features/marker-type-filter';
-import { LocationFilterButton, LocationFilterMobile } from '@/features/location-filter';
-import { CategoryFilter, CategoryFilterMobile } from '@/features/category-filter';
-import { PriceFilter, PriceFilterMobile } from '@/features/price-filter';
-import { RoomsFilter, RoomsFilterMobile } from '@/features/rooms-filter';
-import { AreaFilter, AreaFilterMobile } from '@/features/area-filter';
-import type { LocationFilterMode } from '@/features/location-filter/model';
+// Фильтры недвижимости
+import { MarkerTypeFilter } from '@/features/marker-type-filter';
+import { LocationFilterButton } from '@/features/location-filter';
+import { CategoryFilter } from '@/features/category-filter';
+import { PriceFilter } from '@/features/price-filter';
+import { RoomsFilter } from '@/features/rooms-filter';
+import { AreaFilter } from '@/features/area-filter';
 
-// Импорт улучшенной панели фильтров для desktop
+// Фильтры профессионалов
+import { ProfessionalFiltersGroup } from './professional-filters-group';
+
+// Панель "Все фильтры"
 import { FiltersDesktopPanel } from './filters-desktop-panel';
 
+interface SearchFiltersBarContentProps {
+    currentCategory?: SearchCategory;
+}
+
 /**
- * Widget: Панель фильтров поиска недвижимости
+ * Widget: Единая панель фильтров поиска
  *
- * Адаптивная панель с фильтрами для ПК:
- * - ИИ агент (первая кнопка)
- * - Фильтры с адаптивной видимостью по breakpoints
- * - Кнопки: очистить, сохранить/обновить, показать
+ * Поддерживает два режима:
+ * - properties: фильтры недвижимости (локация, категория, цена, комнаты, площадь)
+ * - professionals: фильтры профессионалов (имя, телефон, языки, типы недвижимости)
  *
- * Breakpoints:
- * - >= 1440px: все фильтры видны
- * - >= 1024px < 1440px: скрыта площадь
- * - >= 768px < 1024px: скрыты площадь и комнаты
- * - < 768px: мобильная версия (Sheet)
+ * Общие элементы: AI Agent, переключатель категории, маркеры
  */
-function SearchFiltersBarContent() {
+function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFiltersBarContentProps) {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
-    const tSidebar = useTranslations('sidebar');
     const locale = useLocale();
     const { filtersCount, clearFilters, filters, setFilters } = useSearchFilters();
     const { currentFilters, setLocationMode } = useFilterStore();
     const { addQuery, updateQuery, activeQueryId, queries } = useSidebarStore();
+    const agencyFilters = useAgencyFilters();
 
-    const [propertiesCount, setPropertiesCount] = useState<number | null>(null);
+    const isProperties = currentCategory === 'properties';
+
+    const [resultsCount, setResultsCount] = useState<number | null>(null);
     const [isLoadingCount, setIsLoadingCount] = useState(false);
     const [isFiltersPopupOpen, setIsFiltersPopupOpen] = useState(false);
     const [isSavePopoverOpen, setIsSavePopoverOpen] = useState(false);
@@ -97,83 +98,84 @@ function SearchFiltersBarContent() {
     // Есть ли несохранённые изменения
     const hasUnsavedChanges = useMemo(() => {
         if (!activeQuery) {
-            // Нет активного запроса - можно сохранить если есть фильтры
             return filtersCount > 0;
         }
-        // Если вкладка ещё не сохранена (isUnsaved: true), всегда показываем как несохранённую
         if (activeQuery.isUnsaved) {
             return true;
         }
-        // Есть активный запрос - сравниваем с сохранённым состоянием
         return savedFiltersSnapshot !== currentFiltersSnapshot;
     }, [activeQuery, savedFiltersSnapshot, currentFiltersSnapshot, filtersCount]);
 
-    const hasActiveFilters = filtersCount > 0;
+    // Определяем количество активных фильтров в зависимости от категории
+    const hasActiveFilters = isProperties
+        ? filtersCount > 0
+        : agencyFilters.filtersCount > 0;
 
-    // Функция для получения количества объектов
-    const fetchPropertiesCount = useCallback(async () => {
+    // Получение количества результатов
+    const fetchResultsCount = useCallback(async () => {
         setIsLoadingCount(true);
         try {
-            const mergedFilters = { ...filters, ...currentFilters };
-            const count = await getPropertiesCount(mergedFilters);
-            setPropertiesCount(count);
+            if (isProperties) {
+                const mergedFilters = { ...filters, ...currentFilters };
+                const count = await getPropertiesCount(mergedFilters);
+                setResultsCount(count);
+            } else {
+                const count = await getAgenciesCount(agencyFilters.filters, locale);
+                setResultsCount(count);
+            }
         } catch (error) {
-            console.error('Failed to fetch properties count:', error);
-            setPropertiesCount(null);
+            console.error('Failed to fetch results count:', error);
+            setResultsCount(null);
         } finally {
             setIsLoadingCount(false);
         }
-    }, [filters, currentFilters]);
+    }, [isProperties, filters, currentFilters, agencyFilters.filters, locale]);
 
     // Обновляем счётчик при изменении фильтров (с debounce)
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            fetchPropertiesCount();
+            fetchResultsCount();
         }, 300);
-
         return () => clearTimeout(timeoutId);
-    }, [fetchPropertiesCount]);
+    }, [fetchResultsCount]);
 
     const handleReset = () => {
-        clearFilters();
+        if (isProperties) {
+            clearFilters();
+        } else {
+            agencyFilters.resetFilters();
+        }
     };
 
     const handleShowResults = () => {
-        // 1. Закрыть попап полных фильтров
         setIsFiltersPopupOpen(false);
 
-        // 2. Объединить URL-фильтры с location/polygon фильтрами
-        const mergedFilters = { ...filters, ...currentFilters };
-
-        // 3. Обновить активную вкладку если есть
-        if (activeQueryId && activeQuery) {
-            updateQuery(activeQueryId, {
-                filters: mergedFilters,
-                resultsCount: propertiesCount ?? undefined,
-            });
+        if (isProperties) {
+            const mergedFilters = { ...filters, ...currentFilters };
+            if (activeQueryId && activeQuery) {
+                updateQuery(activeQueryId, {
+                    filters: mergedFilters,
+                    resultsCount: resultsCount ?? undefined,
+                });
+            }
+            setFilters(mergedFilters);
         }
-
-        // 4. Применить фильтры (обновить URL, это вызовет перезагрузку данных)
-        setFilters(mergedFilters);
+        // Для professionals — фильтры применяются автоматически через стор
     };
 
     const handleSave = () => {
         if (activeQuery) {
-            // Проверяем, является ли вкладка несохранённой (новой)
             if (activeQuery.isUnsaved) {
-                // Для несохранённых вкладок показываем диалог ввода названия
                 setIsSavePopoverOpen(true);
             } else {
-                // Обновляем существующий (уже сохранённый) фильтр
                 const mergedFilters = { ...filters, ...currentFilters };
                 updateQuery(activeQueryId!, {
                     filters: mergedFilters,
-                    resultsCount: propertiesCount ?? undefined,
+                    resultsCount: resultsCount ?? undefined,
                 });
                 setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
             }
         } else {
-            // Нет активного запроса - открываем popover для ввода названия нового фильтра
             setIsSavePopoverOpen(true);
         }
     };
@@ -183,20 +185,18 @@ function SearchFiltersBarContent() {
             const mergedFilters = { ...filters, ...currentFilters };
 
             if (activeQuery?.isUnsaved) {
-                // Для несохранённой вкладки обновляем title и снимаем флаг isUnsaved
                 updateQuery(activeQueryId!, {
                     title: filterName.trim(),
                     filters: mergedFilters,
-                    resultsCount: propertiesCount ?? undefined,
+                    resultsCount: resultsCount ?? undefined,
                     isUnsaved: false,
                 });
                 setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
             } else {
-                // Создаём новую вкладку с isUnsaved: false (сразу сохранённая)
                 addQuery({
                     title: filterName.trim(),
                     filters: mergedFilters,
-                    resultsCount: propertiesCount ?? undefined,
+                    resultsCount: resultsCount ?? undefined,
                     isUnsaved: false,
                 });
             }
@@ -205,18 +205,16 @@ function SearchFiltersBarContent() {
         }
     };
 
-    // Форматирование числа с разделителями
     const formatNumber = (num: number): string => {
         return num.toLocaleString('ru-RU');
     };
 
-    // Иконка для кнопки сохранения
     const SaveIcon = activeQuery ? (hasUnsavedChanges ? CloudCog : CloudCheck) : CloudUpload;
 
     return (
-        <div className="w-full bg-background-secondary border-b border-border relative z-50 ">
+        <div className="w-full bg-background-secondary border-b border-border relative z-50">
             <div className="flex items-center gap-2 px-4 py-2.5 fixed top-0 backdrop-blur-sm bg-background-secondary/85 w-full border-b border-border z-50">
-                {/* Кнопка ИИ агент - первая, синяя */}
+                {/* Кнопка ИИ агент */}
                 <Button
                     size="sm"
                     className="shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
@@ -225,47 +223,42 @@ function SearchFiltersBarContent() {
                     <span className="hidden sm:inline">{t('aiAgent')}</span>
                 </Button>
 
-                {/* Разделитель */}
                 <div className="w-px h-6 bg-border shrink-0" />
 
-                {/* Переключатель: Недвижимость / Агентства */}
-                <SearchCategorySwitcher currentCategory="properties" locale={locale} />
+                {/* Переключатель категории */}
+                <SearchCategorySwitcher currentCategory={currentCategory} locale={locale} />
 
-                {/* Разделитель */}
                 <div className="w-px h-6 bg-border shrink-0" />
 
-                {/* Фильтр маркеров (ИИ статусы) */}
+                {/* Фильтр маркеров — общий для обеих категорий */}
                 <MarkerTypeFilter />
 
-                {/* Основные фильтры - адаптивная видимость */}
+                {/* Зона фильтров — зависит от категории */}
                 <div
                     ref={filtersContainerRef}
                     className="hidden md:flex items-center gap-2 flex-1 min-w-0"
                 >
-                    {/* Локация - всегда видна на md+ */}
-                    <LocationFilterButton />
+                    {isProperties ? (
+                        <>
+                            <LocationFilterButton />
+                            <CategoryFilter />
+                            <div className="hidden lg:block">
+                                <PriceFilter />
+                            </div>
+                            <div className="hidden lg:block">
+                                <RoomsFilter />
+                            </div>
+                            <div className="hidden 2xl:block">
+                                <AreaFilter />
+                            </div>
+                        </>
+                    ) : (
+                        <ProfessionalFiltersGroup />
+                    )}
 
-                    {/* Категория - всегда видна на md+ */}
-                    <CategoryFilter />
-
-                    {/* Цена - скрыта на < 1024px */}
-                    <div className="hidden lg:block">
-                        <PriceFilter />
-                    </div>
-
-                    {/* Комнаты - скрыты на < 1024px */}
-                    <div className="hidden lg:block">
-                        <RoomsFilter />
-                    </div>
-
-                    {/* Площадь - скрыта на < 1440px */}
-                    <div className="hidden 2xl:block">
-                        <AreaFilter />
-                    </div>
-
-                    {/* Блок кнопок действий - рядом с фильтрами */}
+                    {/* Кнопки действий */}
                     <div className="flex items-center gap-1 shrink-0 ml-1">
-                        {/* Кнопка "Все фильтры" - иконка фильтра */}
+                        {/* Все фильтры */}
                         <Button
                             variant="ghost"
                             size="icon"
@@ -277,7 +270,7 @@ function SearchFiltersBarContent() {
                             <SlidersHorizontal className="w-4 h-4" />
                         </Button>
 
-                        {/* Кнопка "Очистить" - иконка корзины */}
+                        {/* Очистить */}
                         <Button
                             variant="ghost"
                             size="icon"
@@ -293,75 +286,75 @@ function SearchFiltersBarContent() {
                             <Trash2 className="w-4 h-4" />
                         </Button>
 
-                        {/* Кнопка "Сохранить/Обновить" */}
-                        {activeQuery ? (
-                            // Есть активный запрос - просто кнопка обновления
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={handleSave}
-                                disabled={!hasUnsavedChanges}
-                                className={cn(
-                                    "text-text-secondary",
-                                    hasUnsavedChanges && "hover:text-brand-primary hover:bg-brand-primary/10"
-                                )}
-                                title={hasUnsavedChanges ? tCommon('save') : t('title')}
-                            >
-                                <SaveIcon className="w-4 h-4" />
-                            </Button>
-                        ) : (
-                            // Нет активного запроса - popover для ввода названия
-                            <Popover open={isSavePopoverOpen} onOpenChange={setIsSavePopoverOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        disabled={!hasActiveFilters}
-                                        className={cn(
-                                            "text-text-secondary",
-                                            hasActiveFilters && "hover:text-brand-primary hover:bg-brand-primary/10"
-                                        )}
-                                        title={tCommon('save')}
-                                    >
-                                        <CloudUpload className="w-4 h-4" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent align="end" className="w-72 p-4">
-                                    <div className="space-y-3">
-                                        <h4 className="font-medium text-sm">{t('saveConfirmTitle')}</h4>
-                                        <Input
-                                            placeholder={t('title')}
-                                            value={filterName}
-                                            onChange={(e) => setFilterName(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    handleSaveNewFilter();
-                                                }
-                                            }}
-                                            autoFocus
-                                        />
-                                        <div className="flex gap-2 justify-end">
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => {
-                                                    setIsSavePopoverOpen(false);
-                                                    setFilterName('');
+                        {/* Сохранить/Обновить — только для properties */}
+                        {isProperties && (
+                            activeQuery ? (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={handleSave}
+                                    disabled={!hasUnsavedChanges}
+                                    className={cn(
+                                        "text-text-secondary",
+                                        hasUnsavedChanges && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                    )}
+                                    title={hasUnsavedChanges ? tCommon('save') : t('title')}
+                                >
+                                    <SaveIcon className="w-4 h-4" />
+                                </Button>
+                            ) : (
+                                <Popover open={isSavePopoverOpen} onOpenChange={setIsSavePopoverOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            disabled={!hasActiveFilters}
+                                            className={cn(
+                                                "text-text-secondary",
+                                                hasActiveFilters && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                            )}
+                                            title={tCommon('save')}
+                                        >
+                                            <CloudUpload className="w-4 h-4" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent align="end" className="w-72 p-4">
+                                        <div className="space-y-3">
+                                            <h4 className="font-medium text-sm">{t('saveConfirmTitle')}</h4>
+                                            <Input
+                                                placeholder={t('title')}
+                                                value={filterName}
+                                                onChange={(e) => setFilterName(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        handleSaveNewFilter();
+                                                    }
                                                 }}
-                                            >
-                                                {t('cancel')}
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                onClick={handleSaveNewFilter}
-                                                disabled={!filterName.trim()}
-                                            >
-                                                {tCommon('save')}
-                                            </Button>
+                                                autoFocus
+                                            />
+                                            <div className="flex gap-2 justify-end">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setIsSavePopoverOpen(false);
+                                                        setFilterName('');
+                                                    }}
+                                                >
+                                                    {t('cancel')}
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={handleSaveNewFilter}
+                                                    disabled={!filterName.trim()}
+                                                >
+                                                    {tCommon('save')}
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
+                                    </PopoverContent>
+                                </Popover>
+                            )
                         )}
 
                         {/* Кнопка "Показать" с счётчиком */}
@@ -380,7 +373,7 @@ function SearchFiltersBarContent() {
                                 <span className="animate-pulse">...</span>
                             ) : (
                                 <span>
-                                    {propertiesCount !== null ? formatNumber(propertiesCount) : tCommon('show')}
+                                    {resultsCount !== null ? formatNumber(resultsCount) : tCommon('show')}
                                 </span>
                             )}
                         </Button>
@@ -388,16 +381,22 @@ function SearchFiltersBarContent() {
                 </div>
             </div>
 
-            {/* Улучшенная панель фильтров для desktop */}
-            <FiltersDesktopPanel 
-                open={isFiltersPopupOpen} 
-                onOpenChange={setIsFiltersPopupOpen} 
-            />
+            {/* Панель "Все фильтры" — пока только для properties */}
+            {isProperties && (
+                <FiltersDesktopPanel
+                    open={isFiltersPopupOpen}
+                    onOpenChange={setIsFiltersPopupOpen}
+                />
+            )}
         </div>
     );
 }
 
-export function SearchFiltersBar() {
+interface SearchFiltersBarProps {
+    currentCategory?: SearchCategory;
+}
+
+export function SearchFiltersBar({ currentCategory = 'properties' }: SearchFiltersBarProps) {
     return (
         <Suspense fallback={
             <div className="w-full bg-background-secondary border-b border-border">
@@ -408,7 +407,7 @@ export function SearchFiltersBar() {
                 </div>
             </div>
         }>
-            <SearchFiltersBarContent />
+            <SearchFiltersBarContent currentCategory={currentCategory} />
         </Suspense>
     );
 }

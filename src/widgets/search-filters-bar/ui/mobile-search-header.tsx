@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { CloudSyncIcon, CloudCheckIcon } from '@/shared/icons/cloude-sync';
 import { useSearchFilters } from '@/features/search-filters/model';
+import { useAgencyFilters as useAgencyFiltersHook } from '@/features/agency-filters';
 import { useSearchViewMode, useActiveLocationMode } from '../model/store';
 import { QueriesSelect } from '@/widgets/sidebar/ui/queries-select';
 import { useSidebarStore } from '@/widgets/sidebar/model';
@@ -243,9 +244,14 @@ type MobileFiltersFloatingBarProps = {
 function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', onCategoryChange }: MobileFiltersFloatingBarProps) {
     const t = useTranslations('filters');
     const tCategory = useTranslations('searchCategory');
+    const tAgency = useTranslations('agency');
+    const tLang = useTranslations('languages');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { filters, setFilters, clearFilter } = useSearchFilters();
+    const agencyFilters = useAgencyFiltersHook();
+
+    const isProperties = currentCategory === 'properties';
 
     // Проверка предпочтения уменьшенного движения
     const prefersReducedMotion = useReducedMotion();
@@ -272,41 +278,62 @@ function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', o
         setFilters({ sortOrder: sortOrder === 'asc' ? 'desc' : 'asc' });
     };
 
-    // Активные фильтры
+    // Активные фильтры — зависят от категории
     const activeFilterChips: { key: string; label: string }[] = [];
 
-    if (filters.categoryIds && filters.categoryIds.length > 0) {
-        activeFilterChips.push({ key: 'categoryIds', label: `${t('category')}: ${filters.categoryIds.length}` });
-    }
-    if (filters.minPrice || filters.maxPrice) {
-        const priceLabel = filters.minPrice && filters.maxPrice
-            ? `${filters.minPrice}-${filters.maxPrice}€`
-            : filters.minPrice
-                ? `от ${filters.minPrice}€`
-                : `до ${filters.maxPrice}€`;
-        activeFilterChips.push({ key: 'price', label: priceLabel });
-    }
-    if (filters.rooms && filters.rooms.length > 0) {
-        activeFilterChips.push({ key: 'rooms', label: `${t('rooms')}: ${filters.rooms.join(', ')}` });
-    }
-    if (filters.minArea || filters.maxArea) {
-        const areaLabel = filters.minArea && filters.maxArea
-            ? `${filters.minArea}-${filters.maxArea} м²`
-            : filters.minArea
-                ? `от ${filters.minArea} м²`
-                : `до ${filters.maxArea} м²`;
-        activeFilterChips.push({ key: 'area', label: areaLabel });
+    if (isProperties) {
+        if (filters.categoryIds && filters.categoryIds.length > 0) {
+            activeFilterChips.push({ key: 'categoryIds', label: `${t('category')}: ${filters.categoryIds.length}` });
+        }
+        if (filters.minPrice || filters.maxPrice) {
+            const priceLabel = filters.minPrice && filters.maxPrice
+                ? `${filters.minPrice}-${filters.maxPrice}€`
+                : filters.minPrice
+                    ? `от ${filters.minPrice}€`
+                    : `до ${filters.maxPrice}€`;
+            activeFilterChips.push({ key: 'price', label: priceLabel });
+        }
+        if (filters.rooms && filters.rooms.length > 0) {
+            activeFilterChips.push({ key: 'rooms', label: `${t('rooms')}: ${filters.rooms.join(', ')}` });
+        }
+        if (filters.minArea || filters.maxArea) {
+            const areaLabel = filters.minArea && filters.maxArea
+                ? `${filters.minArea}-${filters.maxArea} м²`
+                : filters.minArea
+                    ? `от ${filters.minArea} м²`
+                    : `до ${filters.maxArea} м²`;
+            activeFilterChips.push({ key: 'area', label: areaLabel });
+        }
+    } else {
+        const af = agencyFilters.filters;
+        if (af.query) {
+            activeFilterChips.push({ key: 'query', label: af.query });
+        }
+        if (af.languages && af.languages.length > 0) {
+            const labels = af.languages.map((l) => tLang(l)).join(', ');
+            activeFilterChips.push({ key: 'languages', label: labels });
+        }
+        if (af.propertyTypes && af.propertyTypes.length > 0) {
+            activeFilterChips.push({ key: 'propertyTypes', label: `${tAgency('propertyTypes')}: ${af.propertyTypes.length}` });
+        }
     }
 
     const handleRemoveChip = (key: string) => {
-        if (key === 'price') {
-            setFilters({ minPrice: undefined, maxPrice: undefined });
-        } else if (key === 'area') {
-            setFilters({ minArea: undefined, maxArea: undefined });
+        if (isProperties) {
+            if (key === 'price') {
+                setFilters({ minPrice: undefined, maxPrice: undefined });
+            } else if (key === 'area') {
+                setFilters({ minArea: undefined, maxArea: undefined });
+            } else {
+                clearFilter(key as keyof typeof filters);
+            }
         } else {
-            clearFilter(key as keyof typeof filters);
+            agencyFilters.clearFilter(key as keyof typeof af);
         }
     };
+
+    // Alias for agency filters for closure
+    const af = agencyFilters.filters;
 
     // Обработчик скролла (только для режима списка)
     const handleScroll = useCallback(() => {
@@ -559,7 +586,7 @@ const FilterButtons = memo(function FilterButtons({
             {/* Переключатель категории: Недвижимость / Агентства */}
             <Select value={currentCategory} onValueChange={onCategoryChange}>
                 <SelectTrigger className={cn(
-                    'h-9 w-auto gap-1 text-sm border-border px-3 shrink-0 touch-manipulation',
+                    'h-9 w-auto gap-2 text-sm border-border px-3 shrink-0 touch-manipulation bg-background',
                     shadowClass
                 )}>
                     {currentCategory === 'properties' ? (
@@ -568,20 +595,20 @@ const FilterButtons = memo(function FilterButtons({
                         <Users className="w-4 h-4" />
                     )}
                     <SelectValue>
-                        {currentCategory === 'properties' 
-                            ? tCategory('properties') 
+                        {currentCategory === 'properties'
+                            ? tCategory('properties')
                             : tCategory('professionals')
                         }
                     </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="properties">
+                    <SelectItem value="properties" className="py-3 min-h-11">
                         <span className="flex items-center gap-2">
                             <Building2 className="w-4 h-4" />
                             {tCategory('properties')}
                         </span>
                     </SelectItem>
-                    <SelectItem value="professionals">
+                    <SelectItem value="professionals" className="py-3 min-h-11">
                         <span className="flex items-center gap-2">
                             <Users className="w-4 h-4" />
                             {tCategory('professionals')}
@@ -605,42 +632,27 @@ const FilterButtons = memo(function FilterButtons({
     );
 });
 
-type MobileViewToggleProps = {
-    sidebarExpanded?: boolean;
-    onToggleSidebar?: () => void;
-};
-
 /**
  * Плавающая кнопка переключения карта/список
  * Скрывается когда активен режим локации (draw, search, radius, isochrone)
  *
- * На странице карты: toggle для сайдбара (Список ↔ Карта)
+ * На странице карты: навигация на /search/list
  * На странице списка: навигация на /search/map
  */
-export function MobileViewToggle({ sidebarExpanded, onToggleSidebar }: MobileViewToggleProps) {
+export function MobileViewToggle() {
     const t = useTranslations('filters');
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    // Используем оптимизированный селектор вместо полного стора
     const activeLocationMode = useActiveLocationMode();
 
-    // Определяем текущий режим по URL
     const isMapPage = pathname.includes('/search/map');
 
-    // Скрываем кнопку когда активен любой режим локации
     if (activeLocationMode) {
         return null;
     }
 
     const handleToggle = () => {
-        // На странице карты — toggle сайдбара
-        if (isMapPage && onToggleSidebar) {
-            onToggleSidebar();
-            return;
-        }
-
-        // На странице списка — навигация на карту
         const params = searchParams.toString();
         const queryString = params ? `?${params}` : '';
 
@@ -651,9 +663,6 @@ export function MobileViewToggle({ sidebarExpanded, onToggleSidebar }: MobileVie
         }
     };
 
-    // На странице карты: показываем "Список" или "Карта" в зависимости от состояния сайдбара
-    const showMapIcon = isMapPage && sidebarExpanded;
-
     return (
         <Button
             onClick={handleToggle}
@@ -663,12 +672,7 @@ export function MobileViewToggle({ sidebarExpanded, onToggleSidebar }: MobileVie
                 'h-10 px-4 rounded-lg'
             )}
         >
-            {showMapIcon ? (
-                <>
-                    <Map className="w-5 h-5" />
-                    <span className="font-medium">{t('viewMap')}</span>
-                </>
-            ) : isMapPage ? (
+            {isMapPage ? (
                 <>
                     <List className="w-5 h-5" />
                     <span className="font-medium">{t('viewList')}</span>

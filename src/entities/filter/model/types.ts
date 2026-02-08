@@ -21,8 +21,15 @@ export interface SearchFilters {
     adminLevel9?: number[]; // Районы
     adminLevel10?: number[]; // Кварталы/микрорайоны
 
-    // Категории недвижимости
+    // Тип сделки
+    dealType?: DealType;
+
+    // Класс недвижимости (жилая / коммерческая)
+    propertyClass?: PropertyClass;
+
+    // Категории недвижимости (квартиры, комнаты, дома, офисы и т.д.)
     categoryIds?: number[];
+    propertyCategory?: PropertyCategory[];
 
     // Цена
     minPrice?: number;
@@ -60,6 +67,30 @@ export interface SearchFilters {
         adminLevel?: number;
     }>;
 }
+
+// Тип сделки
+export type DealType = 'rent' | 'sale';
+
+// Класс недвижимости
+export type PropertyClass = 'residential' | 'commercial';
+
+// Категория недвижимости
+export type PropertyCategory =
+    // Жилая
+    | 'apartment'
+    | 'room'
+    | 'house'
+    | 'villa'
+    | 'penthouse'
+    | 'townhouse'
+    | 'studio'
+    // Коммерческая
+    | 'office'
+    | 'retail'
+    | 'warehouse'
+    | 'restaurant'
+    | 'hotel'
+    | 'land';
 
 // Типы маркеров
 export type MarkerType = 'view' | 'no_view' | 'like' | 'dislike' | 'all';
