@@ -778,6 +778,14 @@
     "toast": {
       "newProperty": "Novo imóvel encontrado",
       "view": "Ver"
+    },
+    "actions": {
+      "like": "Gosto",
+      "dislike": "Não gosto",
+      "save": "Guardar",
+      "saved": "Guardado",
+      "viewDetails": "Ver detalhes",
+      "share": "Partilhar"
     }
   },
   "propertyDetail": {

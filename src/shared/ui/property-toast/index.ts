@@ -1,1 +1,1 @@
-export { PropertyToastContainer, type PropertyToast } from './ui';
+export { PropertyToastContainer, type PropertyToast, type PropertyToastLabels } from './ui';
