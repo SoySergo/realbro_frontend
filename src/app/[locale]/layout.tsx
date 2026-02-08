@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider, SimpleToastProvider, ComparisonBarProvider } from "@/app/providers";
+import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider, ComparisonBarProvider } from "@/app/providers";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
 import '../globals.css';
 import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { AuthModals } from '@/widgets/auth-modals';
+import { Toaster } from '@/shared/ui/sonner';
 
 // Основной шрифт - Inter (чистый, профессиональный)
 const inter = Inter({
@@ -69,18 +70,18 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <NextIntlClientProvider messages={messages}>
                         <AuthProvider>
                             <WebSocketProvider>
-                                <SimpleToastProvider>
-                                    <AuthErrorHandler />
-                                    {/* Sidebar (Desktop + Mobile) */}
-                                    <Sidebar />
-                                    {children}
-                                    {/* Auth Modals */}
-                                    <AuthModals />
-                                    {/* Comparison Floating Bar */}
-                                    <ComparisonBarProvider />
-                                    {/* Global Toast Notifications */}
-                                    <GlobalToastProvider />
-                                </SimpleToastProvider>
+                                <AuthErrorHandler />
+                                {/* Sidebar (Desktop + Mobile) */}
+                                <Sidebar />
+                                {children}
+                                {/* Auth Modals */}
+                                <AuthModals />
+                                {/* Comparison Floating Bar */}
+                                <ComparisonBarProvider />
+                                {/* Global Toast Notifications */}
+                                <GlobalToastProvider />
+                                {/* Sonner Toaster для пользовательских действий */}
+                                <Toaster position="top-center" closeButton richColors />
                             </WebSocketProvider>
                         </AuthProvider>
                     </NextIntlClientProvider>

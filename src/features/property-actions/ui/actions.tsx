@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { Heart, Share2, Pencil, FileDown, Flag, ThumbsUp, ThumbsDown } from 'lucide-react';
-import { useToast } from '@/shared/ui/toast';
+import { Heart, Share2, Pencil, FileDown, Flag, ThumbsUp, ThumbsDown, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 
 export interface PropertyActionsTranslations {
     addToFavorites: string;
@@ -35,7 +35,6 @@ export function PropertyActions({
     variant = 'row'
 }: PropertyActionsProps) {
     const t = translations;
-    const { showToast } = useToast();
     const [isLiked, setIsLiked] = useState(isFavorite);
     const [isDisliked, setIsDisliked] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -99,7 +98,7 @@ export function PropertyActions({
 
         const copied = await copyToClipboard(url);
         if (copied) {
-            showToast(t.linkCopied, 'success');
+            toast.success(t.linkCopied, { icon: <Copy className="w-4 h-4" /> });
         }
         onShare?.(propertyId);
     };

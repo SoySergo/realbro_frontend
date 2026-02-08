@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { CompareButton } from './compare-button';
-import { GitCompareArrows, Check } from 'lucide-react';
+import { Scale, Check } from 'lucide-react';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
@@ -84,7 +84,7 @@ export function PropertyCompareMenuItem({
     };
 
     const label = isInComparison ? t('inComparison') : t('compare');
-    const Icon = isInComparison ? Check : GitCompareArrows;
+    const Icon = isInComparison ? Check : Scale;
 
     return (
         <DropdownMenuItem

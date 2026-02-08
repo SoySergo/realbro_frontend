@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import Image from 'next/image';
-import { X, MapPin, GitCompareArrows, Trash2, Check, Minus, ArrowLeft, Info, Plus } from 'lucide-react';
+import { X, MapPin, Scale, Trash2, Check, Minus, ArrowLeft, Info, Plus } from 'lucide-react';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { ScrollArea } from '@/shared/ui/scroll-area';
@@ -290,7 +290,7 @@ export function ComparisonPanel({
         return (
             <div className={cn('flex flex-col items-center justify-center min-h-[60vh] gap-4', className)}>
                 <div className="w-20 h-20 rounded-full bg-background-secondary flex items-center justify-center">
-                    <GitCompareArrows className="w-10 h-10 text-text-tertiary" />
+                    <Scale className="w-10 h-10 text-text-tertiary" />
                 </div>
                 <p className="text-lg font-medium text-text-primary">{t.title}</p>
                 <p className="text-sm text-text-secondary text-center max-w-md">{t.subtitle}</p>
@@ -317,7 +317,7 @@ export function ComparisonPanel({
                         )}
                         <div>
                             <h1 className="text-xl md:text-2xl font-bold text-text-primary flex items-center gap-2">
-                                <GitCompareArrows className="w-6 h-6 text-brand-primary" />
+                                <Scale className="w-6 h-6 text-brand-primary" />
                                 {t.title}
                             </h1>
                             <p className="text-sm text-text-secondary">
@@ -478,7 +478,7 @@ function PropertyComparisonCard({
                         />
                     ) : (
                         <div className="w-full h-full bg-background-secondary flex items-center justify-center">
-                            <GitCompareArrows className="w-8 h-8 text-text-tertiary" />
+                            <Scale className="w-8 h-8 text-text-tertiary" />
                         </div>
                     )}
                 </div>

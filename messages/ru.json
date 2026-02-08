@@ -1407,5 +1407,24 @@
       "offensive": "Оскорбительный контент",
       "other": "Другое"
     }
+  },
+  "toasts": {
+    "likeAdded": "Добавлено в избранное",
+    "likeRemoved": "Удалено из избранного",
+    "dislikeAdded": "Добавлено в скрытые",
+    "dislikeRemoved": "Удалено из скрытых",
+    "noteSaved": "Заметка сохранена",
+    "noteDeleted": "Заметка удалена",
+    "linkCopied": "Ссылка скопирована",
+    "linkCopyError": "Не удалось скопировать ссылку",
+    "reportSent": "Жалоба отправлена",
+    "pdfDownloading": "Загрузка PDF...",
+    "reminderSet": "Напоминание установлено",
+    "reminderRemoved": "Напоминание удалено",
+    "addedToComparison": "Добавлено в сравнение",
+    "removedFromComparison": "Удалено из сравнения",
+    "comparisonLimitReached": "Достигнут лимит сравнения",
+    "error": "Что-то пошло не так",
+    "newPropertyFound": "Найден новый объект"
   }
 }

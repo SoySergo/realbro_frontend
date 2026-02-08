@@ -1407,5 +1407,24 @@
       "offensive": "Contenido ofensivo",
       "other": "Otro"
     }
+  },
+  "toasts": {
+    "likeAdded": "Añadido a favoritos",
+    "likeRemoved": "Eliminado de favoritos",
+    "dislikeAdded": "Añadido a ocultos",
+    "dislikeRemoved": "Eliminado de ocultos",
+    "noteSaved": "Nota guardada",
+    "noteDeleted": "Nota eliminada",
+    "linkCopied": "Enlace copiado",
+    "linkCopyError": "Error al copiar el enlace",
+    "reportSent": "Denuncia enviada",
+    "pdfDownloading": "Descargando PDF...",
+    "reminderSet": "Recordatorio establecido",
+    "reminderRemoved": "Recordatorio eliminado",
+    "addedToComparison": "Añadido a la comparación",
+    "removedFromComparison": "Eliminado de la comparación",
+    "comparisonLimitReached": "Límite de comparación alcanzado",
+    "error": "Algo salió mal",
+    "newPropertyFound": "Nuevo inmueble encontrado"
   }
 }

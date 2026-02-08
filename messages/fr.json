@@ -1397,5 +1397,24 @@
       "offensive": "Contenu offensant",
       "other": "Autre"
     }
+  },
+  "toasts": {
+    "likeAdded": "Ajouté aux favoris",
+    "likeRemoved": "Retiré des favoris",
+    "dislikeAdded": "Ajouté aux masqués",
+    "dislikeRemoved": "Retiré des masqués",
+    "noteSaved": "Note enregistrée",
+    "noteDeleted": "Note supprimée",
+    "linkCopied": "Lien copié",
+    "linkCopyError": "Erreur lors de la copie du lien",
+    "reportSent": "Signalement envoyé",
+    "pdfDownloading": "Téléchargement du PDF...",
+    "reminderSet": "Rappel défini",
+    "reminderRemoved": "Rappel supprimé",
+    "addedToComparison": "Ajouté à la comparaison",
+    "removedFromComparison": "Retiré de la comparaison",
+    "comparisonLimitReached": "Limite de comparaison atteinte",
+    "error": "Une erreur est survenue",
+    "newPropertyFound": "Nouveau bien trouvé"
   }
 }

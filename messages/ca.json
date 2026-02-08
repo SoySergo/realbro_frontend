@@ -434,7 +434,6 @@
     "moreFilters": "Més filtres",
     "newSearch": "Nova cerca",
     "saveFilter": "Desar filtre",
-    "dealType": "Tipus d'operació",
     "dealTypeRent": "Lloguer",
     "dealTypeSale": "Venda",
     "propertyClass": "Tipus de propietat",
@@ -1702,5 +1701,24 @@
       "offensive": "Contingut ofensiu",
       "other": "Altre"
     }
+  },
+  "toasts": {
+    "likeAdded": "Afegit a favorits",
+    "likeRemoved": "Eliminat de favorits",
+    "dislikeAdded": "Afegit a ocults",
+    "dislikeRemoved": "Eliminat d'ocults",
+    "noteSaved": "Nota desada",
+    "noteDeleted": "Nota eliminada",
+    "linkCopied": "Enllaç copiat",
+    "linkCopyError": "Error en copiar l'enllaç",
+    "reportSent": "Denúncia enviada",
+    "pdfDownloading": "Descarregant PDF...",
+    "reminderSet": "Recordatori establert",
+    "reminderRemoved": "Recordatori eliminat",
+    "addedToComparison": "Afegit a la comparació",
+    "removedFromComparison": "Eliminat de la comparació",
+    "comparisonLimitReached": "Límit de comparació assolit",
+    "error": "Alguna cosa ha anat malament",
+    "newPropertyFound": "Nou immoble trobat"
   }
 }

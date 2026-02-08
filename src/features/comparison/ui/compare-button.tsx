@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { GitCompareArrows, Check } from 'lucide-react';
+import { Scale, Check } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
 import type { Property } from '@/entities/property';
@@ -96,7 +96,7 @@ export const CompareButton = React.memo(function CompareButton({
 
     // Определяем текст и иконку
     const label = isInComparison ? t.inComparison : isLimitReached ? t.limitReached : t.compare;
-    const Icon = isInComparison ? Check : GitCompareArrows;
+    const Icon = isInComparison ? Check : Scale;
 
     return (
         <button
