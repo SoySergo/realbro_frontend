@@ -23,9 +23,7 @@ import {
     MoreHorizontal,
     Share2,
     StickyNote,
-    Flag,
-    FileDown,
-    Copy
+    Flag
 } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
@@ -77,10 +75,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                 </button>
                 <span className="flex-1 font-semibold text-sm truncate">{agency.name}</span>
                 <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <ThumbsUp className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <ThumbsDown className="w-5 h-5" />
+                    <Share2 className="w-4 h-4" />
                 </button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -90,16 +85,17 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuItem>
+                            <ThumbsUp className="w-4 h-4 mr-2" />
+                            {t('helpful')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <ThumbsDown className="w-4 h-4 mr-2" />
+                            {t('notHelpful')}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
                             <StickyNote className="w-4 h-4 mr-2" />
                             {tCommon('note')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Share2 className="w-4 h-4 mr-2" />
-                            {tCommon('share')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <FileDown className="w-4 h-4 mr-2" />
-                            {tCommon('downloadPdf')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-error focus:text-error">
@@ -111,7 +107,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
             </div>
 
             {/* Desktop хедер с кнопками действий */}
-            <div className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border h-14 items-center px-6 gap-2">
+            <div className="hidden md:flex fixed top-0 left-16 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border h-14 items-center px-6 gap-3">
                 <button
                     onClick={() => router.back()}
                     className="p-2 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
@@ -119,24 +115,43 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <span className="flex-1 font-semibold truncate">{agency.name}</span>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <ThumbsUp className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <ThumbsDown className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <StickyNote className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <Share2 className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <FileDown className="w-5 h-5" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground hover:text-error">
-                    <Flag className="w-5 h-5" />
-                </button>
+                
+                {/* Компактные действия */}
+                <div className="flex items-center gap-1">
+                    <button 
+                        className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground"
+                        title={tCommon('share')}
+                    >
+                        <Share2 className="w-4 h-4" />
+                    </button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
+                                <MoreHorizontal className="w-4 h-4" />
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem>
+                                <ThumbsUp className="w-4 h-4 mr-2" />
+                                {t('helpful')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <ThumbsDown className="w-4 h-4 mr-2" />
+                                {t('notHelpful')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <StickyNote className="w-4 h-4 mr-2" />
+                                {tCommon('note')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-error focus:text-error">
+                                <Flag className="w-4 h-4 mr-2" />
+                                {tCommon('report')}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
 
             {/* Фоновое изображение (hero section) */}
@@ -172,7 +187,7 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
             </div>
 
             {/* Основной контент */}
-            <div className="max-w-6xl mx-auto px-4 -mt-20 md:-mt-24 relative z-10">
+            <div className="max-w-6xl mx-auto px-4 md:pl-6 -mt-20 md:-mt-24 relative z-10">
                 {/* Шапка агентства */}
                 <Card className={cn(
                     "p-0 overflow-hidden",
