@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { toast } from 'sonner';
 import { Link } from '@/shared/config/routing';
 import {
     ThumbsUp,
@@ -121,11 +122,15 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         [currentImageIndex, displayImages.length]
     );
 
+    const tActions = useTranslations('actions');
+
     const handleLike = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setLikeAnimating(true);
         setTimeout(() => setLikeAnimating(false), 500);
+        // Мок отправки на бекенд
+        toast.success(tActions('liked'), { duration: 2000 });
     };
 
     const handleDislike = (e: React.MouseEvent) => {
@@ -133,6 +138,8 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         e.stopPropagation();
         setDislikeAnimating(true);
         setTimeout(() => setDislikeAnimating(false), 500);
+        // Мок отправки на бекенд
+        toast(tActions('disliked'), { duration: 2000 });
     };
 
     const formatPrice = (price: number): string => {
@@ -222,7 +229,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
             {/* Card content */}
             <div className="p-3">
                 {/* Price and buttons */}
-                <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
                             <span className="font-bold text-foreground">{formatPrice(mockProperty.price)}</span>
@@ -258,7 +265,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 </div>
 
                 {/* Characteristics */}
-                <div className="flex items-center gap-1.5 text-sm sm:text-xs text-foreground mb-2 flex-wrap">
+                <div className="flex items-center gap-1.5 text-sm sm:text-xs text-foreground mb-1 flex-wrap">
                     <span className="font-medium whitespace-nowrap">
                         {property.rooms} {t('roomsShort')}
                     </span>
@@ -278,12 +285,12 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 </div>
 
                 {/* Title - новое поле вместо типа */}
-                <div className="text-sm sm:text-xs font-medium text-foreground mb-2 line-clamp-2">
+                <div className="text-sm sm:text-xs font-medium text-foreground mb-1 line-clamp-2">
                     {property.title}
                 </div>
 
                 {/* Address */}
-                <div className="flex items-center gap-1 text-sm sm:text-xs text-muted-foreground mb-2">
+                <div className="flex items-center gap-1 text-sm sm:text-xs text-muted-foreground mb-1">
                     <MapPin className="w-3.5 h-3.5 sm:w-3 sm:h-3 flex-shrink-0" />
                     <span className="truncate">
                         {property.address}, {property.city}

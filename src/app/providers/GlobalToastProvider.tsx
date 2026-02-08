@@ -22,7 +22,7 @@ export function GlobalToastProvider() {
         view: t('toast.view'),
         like: t('actions.like'),
         dislike: t('actions.dislike'),
-        note: t('actions.save'),
+        note: tProperty('addNote'),
         rooms: tProperty('roomsShort'),
     };
 

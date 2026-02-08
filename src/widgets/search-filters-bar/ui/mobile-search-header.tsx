@@ -188,10 +188,13 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
                             </>
                         ) : (
                             <>
-                                {/* Вернувшийся пользователь: dropdown (компактный) + иконка фильтров */}
-                                <div className="min-w-0 shrink-0 max-w-[200px]">
+                                {/* Разделитель от логотипа */}
+                                <div className="w-px h-6 bg-border shrink-0" />
+
+                                {/* Вернувшийся пользователь: dropdown на всю ширину + иконка фильтров */}
+                                <div className="flex-1 min-w-0">
                                     <QueriesSelect
-                                        triggerClassName="h-10 text-base bg-background border border-border rounded-lg px-4 justify-between"
+                                        triggerClassName="h-10 w-full text-base bg-background border border-border rounded-lg px-4 justify-between"
                                     />
                                 </div>
 
@@ -636,8 +639,8 @@ const FilterButtons = memo(function FilterButtons({
  * Плавающая кнопка переключения карта/список
  * Скрывается когда активен режим локации (draw, search, radius, isochrone)
  *
- * На странице карты: навигация на /search/list
- * На странице списка: навигация на /search/map
+ * На странице карты: навигация на /search/list (или /search/agencies/list)
+ * На странице списка: навигация на /search/map (или /search/agencies/map)
  */
 export function MobileViewToggle() {
     const t = useTranslations('filters');
@@ -646,7 +649,8 @@ export function MobileViewToggle() {
     const searchParams = useSearchParams();
     const activeLocationMode = useActiveLocationMode();
 
-    const isMapPage = pathname.includes('/search/map');
+    const isAgenciesPage = pathname.includes('/agencies');
+    const isMapPage = pathname.includes('/map');
 
     if (activeLocationMode) {
         return null;
@@ -656,10 +660,18 @@ export function MobileViewToggle() {
         const params = searchParams.toString();
         const queryString = params ? `?${params}` : '';
 
-        if (isMapPage) {
-            router.push(`/search/list${queryString}`);
+        if (isAgenciesPage) {
+            if (isMapPage) {
+                router.push(`/search/agencies/list${queryString}`);
+            } else {
+                router.push(`/search/agencies/map${queryString}`);
+            }
         } else {
-            router.push(`/search/map${queryString}`);
+            if (isMapPage) {
+                router.push(`/search/list${queryString}`);
+            } else {
+                router.push(`/search/map${queryString}`);
+            }
         }
     };
 

@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { toast } from 'sonner';
 import { Link } from '@/shared/config/routing';
 import {
     Check,
@@ -48,6 +49,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     const t = useTranslations('property');
     const tTypes = useTranslations('propertyTypes');
     const tTransport = useTranslations('transport');
+    const tActions = useTranslations('actions');
 
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isHovering, setIsHovering] = useState(false);
@@ -341,7 +343,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                         className="p-2 text-muted-foreground hover:text-green-600 hover:bg-green-500/10 rounded transition-colors"
                         onClick={(e) => {
                             e.stopPropagation();
-                            console.log('Like');
+                            toast.success(tActions('liked'), { duration: 2000 });
                         }}
                         title={t('like')}
                     >
@@ -351,7 +353,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                         className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded transition-colors"
                         onClick={(e) => {
                             e.stopPropagation();
-                            console.log('Dislike');
+                            toast(tActions('disliked'), { duration: 2000 });
                         }}
                         title={t('dislike')}
                     >

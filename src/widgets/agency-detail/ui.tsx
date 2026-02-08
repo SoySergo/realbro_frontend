@@ -4,22 +4,20 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { 
-    Star, 
-    MapPin, 
-    BadgeCheck, 
-    Crown, 
-    Phone, 
-    Mail, 
-    Globe, 
+import {
+    Star,
+    MapPin,
+    BadgeCheck,
+    Crown,
+    Phone,
+    Mail,
+    Globe,
     Clock,
     Building2,
     Users,
     Calendar,
     MessageCircle,
     ArrowLeft,
-    ThumbsUp,
-    ThumbsDown,
     MoreHorizontal,
     Share2,
     StickyNote,
@@ -74,9 +72,6 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <span className="flex-1 font-semibold text-sm truncate">{agency.name}</span>
-                <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
-                    <Share2 className="w-4 h-4" />
-                </button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground">
@@ -85,17 +80,12 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuItem>
-                            <ThumbsUp className="w-4 h-4 mr-2" />
-                            {t('helpful')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <ThumbsDown className="w-4 h-4 mr-2" />
-                            {t('notHelpful')}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
                             <StickyNote className="w-4 h-4 mr-2" />
                             {tCommon('note')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Share2 className="w-4 h-4 mr-2" />
+                            {tCommon('share')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-error focus:text-error">
@@ -115,10 +105,10 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <span className="flex-1 font-semibold truncate">{agency.name}</span>
-                
+
                 {/* Компактные действия */}
                 <div className="flex items-center gap-1">
-                    <button 
+                    <button
                         className="p-2 rounded-full hover:bg-muted transition-all text-muted-foreground"
                         title={tCommon('share')}
                     >
@@ -131,15 +121,6 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem>
-                                <ThumbsUp className="w-4 h-4 mr-2" />
-                                {t('helpful')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <ThumbsDown className="w-4 h-4 mr-2" />
-                                {t('notHelpful')}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
                             <DropdownMenuItem>
                                 <StickyNote className="w-4 h-4 mr-2" />
                                 {tCommon('note')}

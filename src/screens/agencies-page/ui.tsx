@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from '@/shared/config/routing';
 import { useTranslations } from 'next-intl';
 import {
@@ -13,8 +13,9 @@ import {
 } from 'lucide-react';
 import { AgencyCard, AgencyCardHorizontal } from '@/entities/agency';
 import { useAgencyFilters } from '@/features/agency-filters';
-import { SearchFiltersBar, MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters-bar';
+import { SearchFiltersBar, MobileSearchHeader, MobileFiltersSheet, MobileViewToggle } from '@/widgets/search-filters-bar';
 import { AgencyStories } from '@/widgets/agency-stories';
+import { MapPreview } from '@/widgets/map-preview';
 import { Button } from '@/shared/ui/button';
 import {
     Select,
@@ -53,8 +54,27 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
     const [sortBy, setSortBy] = useState<AgencySortType>('rating');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [isMapVisible, setIsMapVisible] = useState(true);
+
+    const mapPreviewRef = useRef<HTMLDivElement>(null);
 
     const { filters } = useAgencyFilters();
+
+    // Track MapPreview visibility with IntersectionObserver
+    useEffect(() => {
+        const mapElement = mapPreviewRef.current;
+        if (!mapElement) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsMapVisible(entry.isIntersecting);
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(mapElement);
+        return () => observer.disconnect();
+    }, []);
 
     // Загрузка агентств
     const loadAgencies = useCallback(
@@ -241,6 +261,9 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     </div>
                 )}
 
+                {/* Map Preview (mobile only) — до рекомендаций агентств */}
+                <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
+
                 {/* Рекомендации агентств (истории) */}
                 <AgencyStories agencies={agencies.slice(0, 10)} locale={locale} />
 
@@ -329,6 +352,13 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     )}
                 </div>
             </main>
+
+            {/* Floating Map/List Button - visible when MapPreview is scrolled out of view */}
+            {!isMapVisible && !isMobileFiltersOpen && (
+                <div className="md:hidden">
+                    <MobileViewToggle />
+                </div>
+            )}
         </div>
     );
 }
