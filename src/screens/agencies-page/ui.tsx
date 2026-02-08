@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Building2 } from 'lucide-react';
 import { AgencyCard } from '@/entities/agency';
 import { useAgencyFilters } from '@/features/agency-filters';
-import { SearchFiltersBar, MobileSearchHeader } from '@/widgets/search-filters-bar';
+import { SearchFiltersBar, MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters-bar';
 import { Button } from '@/shared/ui/button';
 import { getAgenciesList } from '@/shared/api';
 import type { AgencyCardData } from '@/entities/agency';
@@ -27,6 +27,7 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     const { filters } = useAgencyFilters();
 
@@ -66,8 +67,10 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
         loadAgencies(nextPage, true);
     }, [page, loadAgencies]);
 
-    // For agencies: empty filter handler
-    const handleOpenFilters = () => {};
+    // For agencies: open mobile filters
+    const handleOpenFilters = () => {
+        setIsMobileFiltersOpen(true);
+    };
 
     return (
         <div className="min-h-screen bg-background">
@@ -78,6 +81,13 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     currentCategory="professionals"
                 />
             </div>
+
+            {/* Мобильный sheet фильтров */}
+            <MobileFiltersSheet
+                open={isMobileFiltersOpen}
+                onOpenChange={setIsMobileFiltersOpen}
+                currentCategory="professionals"
+            />
 
             {/* Десктоп: единый хедер фильтров */}
             <div className="hidden md:block">

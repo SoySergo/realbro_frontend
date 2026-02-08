@@ -12,6 +12,14 @@ export type AgencyPropertyType =
     | 'rental'           // Аренда
     | 'sale';            // Продажа
 
+// Доступные языки для фильтрации
+export const AVAILABLE_LANGUAGES = ['es', 'ca', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'uk', 'zh', 'ar'] as const;
+
+// Типы недвижимости для фильтрации
+export const AGENCY_PROPERTY_TYPES: AgencyPropertyType[] = [
+    'residential', 'commercial', 'luxury', 'newBuilding', 'secondary', 'rental', 'sale',
+];
+
 // Тип работы агентства
 export type AgencyServiceType =
     | 'rental'           // Аренда
