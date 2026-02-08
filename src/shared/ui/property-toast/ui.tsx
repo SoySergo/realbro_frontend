@@ -18,6 +18,7 @@ export interface PropertyToastLabels {
     like?: string;
     dislike?: string;
     note?: string;
+    rooms?: string;
 }
 
 interface PropertyToastItemProps {
@@ -163,7 +164,7 @@ function PropertyToastItem({ toast, onDismiss, onLike, onDislike, onNote, onOpen
                             {property.price.toLocaleString()} €
                         </p>
                         <p className="text-xs text-muted-foreground truncate">
-                            {property.rooms > 0 && `${property.rooms} комн. · `}
+                            {property.rooms > 0 && `${property.rooms} ${labels.rooms ?? 'комн.'} · `}
                             {property.area} m²
                         </p>
                         <p className="text-xs text-muted-foreground truncate">
