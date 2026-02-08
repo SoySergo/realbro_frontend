@@ -20,16 +20,12 @@ import { LocationFilterMobile } from '@/features/location-filter';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 import { FilterSection } from './filter-section';
 import { getPropertiesCount, getAgenciesCount } from '@/shared/api';
+import { AVAILABLE_LANGUAGES, AGENCY_PROPERTY_TYPES } from '@/entities/agency';
 import type { AgencyPropertyType } from '@/entities/agency';
 
 // Константы
 const MAX_PRICE = 20_000;
 const MAX_AREA = 500;
-
-const AVAILABLE_LANGUAGES = ['es', 'ca', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'uk', 'zh', 'ar'];
-const PROPERTY_TYPES: AgencyPropertyType[] = [
-    'residential', 'commercial', 'luxury', 'newBuilding', 'secondary', 'rental', 'sale',
-];
 
 interface MobileFiltersSheetProps {
     open: boolean;
@@ -411,7 +407,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                 {/* Типы недвижимости */}
                                 <FilterSection id="agency-property-types" title={tAgency('propertyTypes')}>
                                     <div className="px-4 space-y-2">
-                                        {PROPERTY_TYPES.map((type) => (
+                                        {AGENCY_PROPERTY_TYPES.map((type) => (
                                             <label
                                                 key={type}
                                                 className="flex items-center gap-3 py-1.5 min-h-[44px] cursor-pointer"

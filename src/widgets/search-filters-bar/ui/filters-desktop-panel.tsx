@@ -18,6 +18,7 @@ import { LocationFilterMobile } from '@/features/location-filter';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 import { FilterSection } from './filter-section';
 import { getPropertiesCount, getAgenciesCount } from '@/shared/api';
+import { AVAILABLE_LANGUAGES, AGENCY_PROPERTY_TYPES } from '@/entities/agency';
 import type { AgencyPropertyType } from '@/entities/agency';
 import type { SearchCategory } from '@/features/search-category';
 import { cn } from '@/shared/lib/utils';
@@ -25,11 +26,6 @@ import { cn } from '@/shared/lib/utils';
 // Константы
 const MAX_PRICE = 20_000;
 const MAX_AREA = 500;
-
-const AVAILABLE_LANGUAGES = ['es', 'ca', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'uk', 'zh', 'ar'];
-const PROPERTY_TYPES: AgencyPropertyType[] = [
-    'residential', 'commercial', 'luxury', 'newBuilding', 'secondary', 'rental', 'sale',
-];
 
 interface FiltersDesktopPanelProps {
     open: boolean;
@@ -416,7 +412,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                     {/* Типы недвижимости */}
                                     <FilterSection id="agency-property-types" title={tAgency('propertyTypes')}>
                                         <div className="pb-2 space-y-1">
-                                            {PROPERTY_TYPES.map((type) => (
+                                            {AGENCY_PROPERTY_TYPES.map((type) => (
                                                 <label
                                                     key={type}
                                                     className="flex items-center gap-2.5 py-1 cursor-pointer"

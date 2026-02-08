@@ -12,19 +12,8 @@ import {
 } from '@/shared/ui/popover';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { useAgencyFilters } from '@/features/agency-filters';
+import { AVAILABLE_LANGUAGES, AGENCY_PROPERTY_TYPES } from '@/entities/agency';
 import type { AgencyPropertyType } from '@/entities/agency';
-
-const AVAILABLE_LANGUAGES = ['es', 'ca', 'en', 'ru', 'fr', 'de', 'it', 'pt', 'uk', 'zh', 'ar'];
-
-const PROPERTY_TYPES: AgencyPropertyType[] = [
-    'residential',
-    'commercial',
-    'luxury',
-    'newBuilding',
-    'secondary',
-    'rental',
-    'sale',
-];
 
 /**
  * Группа десктоп-фильтров для поиска профессионалов.
@@ -140,7 +129,7 @@ export function ProfessionalFiltersGroup() {
                             <p className="text-sm font-medium text-text-primary mb-3">
                                 {t('filterByPropertyType')}
                             </p>
-                            {PROPERTY_TYPES.map((type) => (
+                            {AGENCY_PROPERTY_TYPES.map((type) => (
                                 <label
                                     key={type}
                                     className="flex items-center gap-2 cursor-pointer"
