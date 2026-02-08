@@ -1148,7 +1148,8 @@
       "cancelButton": "Annulla",
       "closeButton": "Chiudi",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Errore nella copia del link"
   },
   "agency": {
     "title": "Agenzia immobiliare",
@@ -1408,5 +1409,24 @@
       "offensive": "Contenuto offensivo",
       "other": "Altro"
     }
+  },
+  "toasts": {
+    "likeAdded": "Aggiunto ai preferiti",
+    "likeRemoved": "Rimosso dai preferiti",
+    "dislikeAdded": "Aggiunto ai nascosti",
+    "dislikeRemoved": "Rimosso dai nascosti",
+    "noteSaved": "Nota salvata",
+    "noteDeleted": "Nota eliminata",
+    "linkCopied": "Link copiato",
+    "linkCopyError": "Errore nella copia del link",
+    "reportSent": "Segnalazione inviata",
+    "pdfDownloading": "Download PDF...",
+    "reminderSet": "Promemoria impostato",
+    "reminderRemoved": "Promemoria rimosso",
+    "addedToComparison": "Aggiunto al confronto",
+    "removedFromComparison": "Rimosso dal confronto",
+    "comparisonLimitReached": "Limite confronto raggiunto",
+    "error": "Qualcosa è andato storto",
+    "newPropertyFound": "Nuovo immobile trovato"
   }
 }

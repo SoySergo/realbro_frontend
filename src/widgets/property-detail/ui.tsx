@@ -168,6 +168,7 @@ export function PropertyDetailWidget({
         share: tActions('share'),
         copyLink: tActions('copyLink'),
         linkCopied: tActions('linkCopied'),
+        linkCopyError: tActions('linkCopyError'),
         addNote: tActions('addNote'),
         editNote: tActions('editNote'),
         noteSaved: tActions('noteSaved'),

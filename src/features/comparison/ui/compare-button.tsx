@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { GitCompareArrows, Check } from 'lucide-react';
+import { Scale, Check } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
 import type { Property } from '@/entities/property';
@@ -10,6 +11,8 @@ export interface CompareButtonTranslations {
     compare: string;
     inComparison: string;
     limitReached: string;
+    addedToComparison?: string;
+    removedFromComparison?: string;
 }
 
 interface CompareButtonProps {
@@ -53,12 +56,18 @@ export const CompareButton = React.memo(function CompareButton({
             toggleComparison(property);
             setIsAnimating(true);
             setTimeout(() => setIsAnimating(false), 300);
+            if (t.removedFromComparison) {
+                toast(t.removedFromComparison, { icon: <Scale className="w-4 h-4" /> });
+            }
             return;
         }
 
         // Если лимит достигнут - показываем панель сравнения
         if (count >= COMPARISON_MAX_ITEMS) {
             setComparisonPanelOpen(true);
+            if (t.limitReached) {
+                toast.warning(t.limitReached);
+            }
             return;
         }
 
@@ -68,6 +77,9 @@ export const CompareButton = React.memo(function CompareButton({
         if (added) {
             setIsAnimating(true);
             setTimeout(() => setIsAnimating(false), 300);
+            if (t.addedToComparison) {
+                toast.success(t.addedToComparison, { icon: <Scale className="w-4 h-4" /> });
+            }
         }
     };
 
@@ -96,7 +108,7 @@ export const CompareButton = React.memo(function CompareButton({
 
     // Определяем текст и иконку
     const label = isInComparison ? t.inComparison : isLimitReached ? t.limitReached : t.compare;
-    const Icon = isInComparison ? Check : GitCompareArrows;
+    const Icon = isInComparison ? Check : Scale;
 
     return (
         <button
@@ -121,7 +133,7 @@ export const CompareButton = React.memo(function CompareButton({
                 <Icon
                     className={cn(
                         currentSize.icon,
-                        isAnimating && 'animate-bounce'
+                        isAnimating && 'animate-icon-pop'
                     )}
                 />
             )}

@@ -1120,7 +1120,8 @@
       "cancelButton": "Cancel",
       "closeButton": "Close",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Failed to copy link"
   },
   "agency": {
     "title": "Real Estate Agency",
@@ -1395,5 +1396,24 @@
     "support": "Support",
     "tariffs": "Tariffs",
     "terms": "Terms of Use"
+  },
+  "toasts": {
+    "likeAdded": "Added to favorites",
+    "likeRemoved": "Removed from favorites",
+    "dislikeAdded": "Added to hidden",
+    "dislikeRemoved": "Removed from hidden",
+    "noteSaved": "Note saved",
+    "noteDeleted": "Note deleted",
+    "linkCopied": "Link copied to clipboard",
+    "linkCopyError": "Failed to copy link",
+    "reportSent": "Report sent",
+    "pdfDownloading": "Downloading PDF...",
+    "reminderSet": "Reminder set",
+    "reminderRemoved": "Reminder removed",
+    "addedToComparison": "Added to comparison",
+    "removedFromComparison": "Removed from comparison",
+    "comparisonLimitReached": "Comparison limit reached",
+    "error": "Something went wrong",
+    "newPropertyFound": "New property found"
   }
 }

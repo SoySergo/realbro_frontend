@@ -1144,7 +1144,8 @@
       "cancelButton": "Abbrechen",
       "closeButton": "Schließen",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Fehler beim Kopieren des Links"
   },
   "agency": {
     "title": "Immobilienagentur",
@@ -1404,5 +1405,24 @@
       "offensive": "Beleidigende oder unangemessene Inhalte",
       "other": "Anderer Grund"
     }
+  },
+  "toasts": {
+    "likeAdded": "Zu Favoriten hinzugefügt",
+    "likeRemoved": "Aus Favoriten entfernt",
+    "dislikeAdded": "Zu versteckten hinzugefügt",
+    "dislikeRemoved": "Aus versteckten entfernt",
+    "noteSaved": "Notiz gespeichert",
+    "noteDeleted": "Notiz gelöscht",
+    "linkCopied": "Link kopiert",
+    "linkCopyError": "Fehler beim Kopieren des Links",
+    "reportSent": "Meldung gesendet",
+    "pdfDownloading": "PDF wird heruntergeladen...",
+    "reminderSet": "Erinnerung gesetzt",
+    "reminderRemoved": "Erinnerung entfernt",
+    "addedToComparison": "Zum Vergleich hinzugefügt",
+    "removedFromComparison": "Aus dem Vergleich entfernt",
+    "comparisonLimitReached": "Vergleichslimit erreicht",
+    "error": "Etwas ist schiefgelaufen",
+    "newPropertyFound": "Neue Immobilie gefunden"
   }
 }

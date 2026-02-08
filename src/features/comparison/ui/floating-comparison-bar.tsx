@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { X, GitCompareArrows, ChevronRight, Trash2 } from 'lucide-react';
+import { X, Scale, ChevronRight, Trash2 } from 'lucide-react';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { useComparisonStore, useComparisonCount, COMPARISON_MAX_ITEMS } from '../model';
@@ -71,7 +71,7 @@ export function FloatingComparisonBar({
                         key={`empty-${idx}`}
                         className="w-12 h-12 md:w-14 md:h-14 rounded-lg border-2 border-dashed border-border bg-background-secondary flex items-center justify-center flex-shrink-0"
                     >
-                        <GitCompareArrows className="w-4 h-4 text-text-tertiary" />
+                        <Scale className="w-4 h-4 text-text-tertiary" />
                     </div>
                 ))}
             </div>
@@ -101,7 +101,7 @@ export function FloatingComparisonBar({
                     className="gap-2 bg-brand-primary hover:bg-brand-primary-hover text-white"
                     disabled={count < 2}
                 >
-                    <GitCompareArrows className="w-4 h-4" />
+                    <Scale className="w-4 h-4" />
                     <span className="hidden sm:inline">{t.compare}</span>
                     <ChevronRight className="w-4 h-4 hidden sm:block" />
                 </Button>
@@ -133,7 +133,7 @@ function PropertyThumb({
                     />
                 ) : (
                     <div className="w-full h-full bg-background-secondary flex items-center justify-center">
-                        <GitCompareArrows className="w-4 h-4 text-text-tertiary" />
+                        <Scale className="w-4 h-4 text-text-tertiary" />
                     </div>
                 )}
             </div>

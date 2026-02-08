@@ -1350,7 +1350,8 @@
     "noteSaved": "Нотатку збережено",
     "report": "Поскаржитись",
     "share": "Поділитися",
-    "linkCopied": "Посилання скопійовано"
+    "linkCopied": "Посилання скопійовано",
+    "linkCopyError": "Не вдалося скопіювати посилання"
   },
   "agency": {
     "aboutAgency": "Про агентство",
@@ -1979,5 +1980,24 @@
     "uk": "Українська",
     "zh": "Китайська",
     "ar": "Арабська"
+  },
+  "toasts": {
+    "likeAdded": "Додано до обраного",
+    "likeRemoved": "Видалено з обраного",
+    "dislikeAdded": "Додано до прихованих",
+    "dislikeRemoved": "Видалено з прихованих",
+    "noteSaved": "Нотатку збережено",
+    "noteDeleted": "Нотатку видалено",
+    "linkCopied": "Посилання скопійовано",
+    "linkCopyError": "Не вдалося скопіювати посилання",
+    "reportSent": "Скаргу надіслано",
+    "pdfDownloading": "Завантаження PDF...",
+    "reminderSet": "Нагадування встановлено",
+    "reminderRemoved": "Нагадування видалено",
+    "addedToComparison": "Додано до порівняння",
+    "removedFromComparison": "Видалено з порівняння",
+    "comparisonLimitReached": "Досягнуто ліміт порівняння",
+    "error": "Щось пішло не так",
+    "newPropertyFound": "Знайдено новий об'єкт"
   }
 }

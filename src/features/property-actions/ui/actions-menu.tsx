@@ -11,6 +11,7 @@ import {
     Flag,
     FileDown,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,7 +21,6 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
 import { NoteModal, saveNote, getNote, type NoteModalTranslations } from './note-modal';
-import { useToast } from '@/shared/ui/toast';
 import { PropertyCompareMenuItem } from '@/features/comparison';
 import type { Property } from '@/entities/property';
 
@@ -36,6 +36,7 @@ export interface PropertyActionsMenuTranslations {
     share: string;
     copyLink: string;
     linkCopied: string;
+    linkCopyError?: string;
     addNote: string;
     editNote: string;
     noteSaved: string;
@@ -127,7 +128,6 @@ export function PropertyActionsMenu({
     variant = 'inline',
 }: PropertyActionsMenuProps) {
     const t = translations;
-    const { showToast } = useToast();
     
     // Состояние
     const [isLiked, setIsLiked] = useState(() => initialIsLiked ?? getReaction(propertyId).liked);
@@ -154,9 +154,11 @@ export function PropertyActionsMenu({
         onLike?.(propertyId, newLiked);
         
         if (newLiked) {
-            showToast(t.liked, 'success');
+            toast.success(t.liked, { icon: <ThumbsUp className="w-4 h-4 fill-current" /> });
+        } else {
+            toast(t.like, { icon: <ThumbsUp className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onLike, showToast, t.liked]);
+    }, [isLiked, isDisliked, propertyId, onLike, t.liked, t.like]);
 
     const handleDislike = useCallback(() => {
         const newDisliked = !isDisliked;
@@ -171,9 +173,11 @@ export function PropertyActionsMenu({
         onDislike?.(propertyId, newDisliked);
         
         if (newDisliked) {
-            showToast(t.disliked, 'info');
+            toast(t.disliked, { icon: <ThumbsDown className="w-4 h-4 fill-current" /> });
+        } else {
+            toast(t.dislike, { icon: <ThumbsDown className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onDislike, showToast, t.disliked]);
+    }, [isLiked, isDisliked, propertyId, onDislike, t.disliked, t.dislike]);
 
     const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
         // Clipboard API
@@ -221,21 +225,21 @@ export function PropertyActionsMenu({
         // Fallback: копирование в буфер
         const copied = await copyToClipboard(url);
         if (copied) {
-            showToast(t.linkCopied, 'success');
+            toast.success(t.linkCopied, { icon: <Copy className="w-4 h-4" /> });
             onShare?.(propertyId);
         } else {
-            showToast(t.linkCopied, 'error');
+            toast.error(t.linkCopyError ?? t.linkCopied);
         }
-    }, [propertyId, propertyTitle, onShare, showToast, t.linkCopied, copyToClipboard]);
+    }, [propertyId, propertyTitle, onShare, t.linkCopied, t.linkCopyError, copyToClipboard]);
 
     const handleCopyLink = useCallback(async () => {
         const copied = await copyToClipboard(window.location.href);
         if (copied) {
-            showToast(t.linkCopied, 'success');
+            toast.success(t.linkCopied, { icon: <Copy className="w-4 h-4" /> });
         } else {
-            showToast(t.linkCopied, 'error');
+            toast.error(t.linkCopyError ?? t.linkCopied);
         }
-    }, [showToast, t.linkCopied, copyToClipboard]);
+    }, [t.linkCopied, t.linkCopyError, copyToClipboard]);
 
     const handleOpenNote = useCallback(() => {
         const existingNote = getNote(propertyId) || '';
@@ -247,9 +251,9 @@ export function PropertyActionsMenu({
         saveNote(propertyId, note);
         setHasNote(!!note.trim());
         if (note.trim()) {
-            showToast(t.noteSaved, 'success');
+            toast.success(t.noteSaved, { icon: <StickyNote className="w-4 h-4" /> });
         }
-    }, [propertyId, showToast, t.noteSaved]);
+    }, [propertyId, t.noteSaved]);
 
     const handleReport = useCallback(() => {
         onReport?.(propertyId);
@@ -282,7 +286,7 @@ export function PropertyActionsMenu({
                         <ThumbsUp className={cn(
                             'w-5 h-5 transition-transform',
                             isLiked && 'fill-current',
-                            likeAnimating && 'scale-125'
+                            likeAnimating && 'animate-icon-pop'
                         )} />
                     </button>
                     
@@ -298,7 +302,7 @@ export function PropertyActionsMenu({
                         <ThumbsDown className={cn(
                             'w-5 h-5 transition-transform',
                             isDisliked && 'fill-current',
-                            dislikeAnimating && 'scale-125'
+                            dislikeAnimating && 'animate-icon-pop'
                         )} />
                     </button>
 
@@ -416,7 +420,7 @@ export function PropertyActionsMenu({
                     <ThumbsUp className={cn(
                         'w-5 h-5 transition-transform',
                         isLiked && 'fill-current',
-                        likeAnimating && 'scale-125'
+                        likeAnimating && 'animate-icon-pop'
                     )} />
                     {variant === 'full' && <span className="text-sm">{isLiked ? t.liked : t.like}</span>}
                 </button>
@@ -434,7 +438,7 @@ export function PropertyActionsMenu({
                     <ThumbsDown className={cn(
                         'w-5 h-5 transition-transform',
                         isDisliked && 'fill-current',
-                        dislikeAnimating && 'scale-125'
+                        dislikeAnimating && 'animate-icon-pop'
                     )} />
                     {variant === 'full' && <span className="text-sm">{isDisliked ? t.disliked : t.dislike}</span>}
                 </button>

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Flag, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
@@ -21,7 +22,6 @@ import {
 } from '@/shared/ui/select';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
-import { useToast } from '@/shared/ui/toast';
 import { complaintSchema, complaintReasons, type ComplaintFormData, type ComplaintReason } from '../model';
 
 interface ComplaintModalProps {
@@ -32,7 +32,6 @@ interface ComplaintModalProps {
 
 export function ComplaintModal({ propertyId, isOpen, onClose }: ComplaintModalProps) {
     const t = useTranslations('complaint');
-    const { showToast } = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
@@ -69,11 +68,11 @@ export function ComplaintModal({ propertyId, isOpen, onClose }: ComplaintModalPr
                 throw new Error('Failed to submit complaint');
             }
 
-            showToast(t('successMessage'), 'success');
+            toast.success(t('successMessage'), { icon: <Flag className="w-4 h-4" /> });
             reset();
             onClose();
         } catch {
-            showToast(t('errorMessage'), 'error');
+            toast.error(t('errorMessage'), { icon: <AlertCircle className="w-4 h-4" /> });
         } finally {
             setIsSubmitting(false);
         }
