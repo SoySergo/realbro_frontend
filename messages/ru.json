@@ -1148,7 +1148,8 @@
       "cancelButton": "Отмена",
       "closeButton": "Закрыть",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Не удалось скопировать ссылку"
   },
   "agency": {
     "title": "Агентство недвижимости",

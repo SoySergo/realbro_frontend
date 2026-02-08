@@ -1120,7 +1120,8 @@
       "characterCount": "{current}/{max}"
     },
     "noteSaved": "Nota salva",
-    "report": "Denunciar"
+    "report": "Denunciar",
+    "linkCopyError": "Erro ao copiar o link"
   },
   "agency": {
     "title": "Agência",

@@ -1148,7 +1148,8 @@
       "cancelButton": "Annulla",
       "closeButton": "Chiudi",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Errore nella copia del link"
   },
   "agency": {
     "title": "Agenzia immobiliare",

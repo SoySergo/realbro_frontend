@@ -36,6 +36,7 @@ export interface PropertyActionsMenuTranslations {
     share: string;
     copyLink: string;
     linkCopied: string;
+    linkCopyError?: string;
     addNote: string;
     editNote: string;
     noteSaved: string;
@@ -227,18 +228,18 @@ export function PropertyActionsMenu({
             toast.success(t.linkCopied, { icon: <Copy className="w-4 h-4" /> });
             onShare?.(propertyId);
         } else {
-            toast.error(t.linkCopied);
+            toast.error(t.linkCopyError ?? t.linkCopied);
         }
-    }, [propertyId, propertyTitle, onShare, t.linkCopied, copyToClipboard]);
+    }, [propertyId, propertyTitle, onShare, t.linkCopied, t.linkCopyError, copyToClipboard]);
 
     const handleCopyLink = useCallback(async () => {
         const copied = await copyToClipboard(window.location.href);
         if (copied) {
             toast.success(t.linkCopied, { icon: <Copy className="w-4 h-4" /> });
         } else {
-            toast.error(t.linkCopied);
+            toast.error(t.linkCopyError ?? t.linkCopied);
         }
-    }, [t.linkCopied, copyToClipboard]);
+    }, [t.linkCopied, t.linkCopyError, copyToClipboard]);
 
     const handleOpenNote = useCallback(() => {
         const existingNote = getNote(propertyId) || '';

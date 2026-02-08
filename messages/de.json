@@ -1144,7 +1144,8 @@
       "cancelButton": "Abbrechen",
       "closeButton": "Schließen",
       "characterCount": "{current}/{max}"
-    }
+    },
+    "linkCopyError": "Fehler beim Kopieren des Links"
   },
   "agency": {
     "title": "Immobilienagentur",

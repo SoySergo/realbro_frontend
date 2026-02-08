@@ -1414,7 +1414,8 @@
     "back": "Enrere",
     "next": "Següent",
     "previous": "Anterior",
-    "refresh": "Actualitzar"
+    "refresh": "Actualitzar",
+    "linkCopyError": "Error en copiar l'enllaç"
   },
   "agency": {
     "title": "Agència",
