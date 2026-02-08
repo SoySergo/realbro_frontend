@@ -1,12 +1,8 @@
 import { redirect } from 'next/navigation';
 
 /**
- * /search редиректит на /search/map по умолчанию
- *
- * Структура страниц поиска:
- * - /search/list - листинг списком (ISR, Server Components для SEO)
- * - /search/map - карта (клиентская, интерактивная)
+ * /search редиректит на /search/properties/map по умолчанию
  */
 export default function Page() {
-    redirect('./search/map');
+    redirect('./search/properties/map');
 }
