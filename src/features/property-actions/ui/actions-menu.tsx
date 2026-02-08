@@ -154,8 +154,10 @@ export function PropertyActionsMenu({
         
         if (newLiked) {
             toast.success(t.liked, { icon: <ThumbsUp className="w-4 h-4 fill-current" /> });
+        } else {
+            toast(t.like, { icon: <ThumbsUp className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onLike, t.liked]);
+    }, [isLiked, isDisliked, propertyId, onLike, t.liked, t.like]);
 
     const handleDislike = useCallback(() => {
         const newDisliked = !isDisliked;
@@ -171,8 +173,10 @@ export function PropertyActionsMenu({
         
         if (newDisliked) {
             toast(t.disliked, { icon: <ThumbsDown className="w-4 h-4 fill-current" /> });
+        } else {
+            toast(t.dislike, { icon: <ThumbsDown className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onDislike, t.disliked]);
+    }, [isLiked, isDisliked, propertyId, onDislike, t.disliked, t.dislike]);
 
     const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
         // Clipboard API
