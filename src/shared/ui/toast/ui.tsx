@@ -49,10 +49,10 @@ const toastIcons = {
 };
 
 const toastStyles = {
-    success: 'bg-white dark:bg-background-secondary border-border text-foreground',
-    error: 'bg-white dark:bg-background-secondary border-border text-foreground',
-    warning: 'bg-white dark:bg-background-secondary border-border text-foreground',
-    info: 'bg-white dark:bg-background-secondary border-border text-foreground',
+    success: 'bg-card border-border text-card-foreground',
+    error: 'bg-card border-border text-card-foreground',
+    warning: 'bg-card border-border text-card-foreground',
+    info: 'bg-card border-border text-card-foreground',
 };
 
 const toastIconStyles = {
@@ -133,7 +133,7 @@ function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
     if (toasts.length === 0) return null;
 
     return (
-        <div className="fixed top-4 md:bottom-4 md:top-auto left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 max-w-md w-full px-4 pointer-events-none">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 max-w-md w-full px-4 pointer-events-none">
             {toasts.map((toast) => (
                 <div key={toast.id} className="pointer-events-auto">
                     <ToastItem toast={toast} onDismiss={onDismiss} />
