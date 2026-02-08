@@ -381,13 +381,12 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                 </div>
             </div>
 
-            {/* Панель "Все фильтры" — пока только для properties */}
-            {isProperties && (
-                <FiltersDesktopPanel
-                    open={isFiltersPopupOpen}
-                    onOpenChange={setIsFiltersPopupOpen}
-                />
-            )}
+            {/* Панель "Все фильтры" */}
+            <FiltersDesktopPanel
+                open={isFiltersPopupOpen}
+                onOpenChange={setIsFiltersPopupOpen}
+                currentCategory={currentCategory}
+            />
         </div>
     );
 }
