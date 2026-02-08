@@ -12,6 +12,7 @@ import type { AgencyCardData } from '@/entities/agency';
  * Мини-карточка агентства в формате "истории"
  */
 function AgencyStoryCard({ agency, locale }: { agency: AgencyCardData; locale: string }) {
+    const t = useTranslations('agency');
     return (
         <Link
             href={`/agency/${agency.id}`}
@@ -51,7 +52,7 @@ function AgencyStoryCard({ agency, locale }: { agency: AgencyCardData; locale: s
                         {agency.name}
                     </p>
                     <p className="text-white/70 text-[10px] truncate">
-                        {agency.objectsCount} obj. · {agency.city}
+                        {agency.objectsCount} {t('objects')} · {agency.city}
                     </p>
                 </div>
 
