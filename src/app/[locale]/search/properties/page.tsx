@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 /**
- * Обратная совместимость: /search/map → /search/properties/map
+ * /search/properties → /search/properties/map по умолчанию
  */
 export default function Page() {
     redirect('./properties/map');

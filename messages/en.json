@@ -1195,7 +1195,8 @@
     "noPropertiesFound": "No properties found",
     "noAgentsFound": "No agents found",
     "rooms": "rooms",
-    "sqm": "sqm"
+    "sqm": "sqm",
+    "recommendedAgencies": "Recommended agencies"
   },
   "searchCategory": {
     "title": "Search category",

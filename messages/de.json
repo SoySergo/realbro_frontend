@@ -1219,7 +1219,8 @@
     "noPropertiesFound": "Keine Objekte gefunden",
     "noAgentsFound": "Keine Agenten gefunden",
     "rooms": "Zi.",
-    "sqm": "m²"
+    "sqm": "m²",
+    "recommendedAgencies": "Empfohlene Agenturen"
   },
   "searchCategory": {
     "title": "Suchkategorie",

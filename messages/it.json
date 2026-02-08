@@ -1223,7 +1223,8 @@
     "noPropertiesFound": "Nessun immobile trovato",
     "noAgentsFound": "Nessun agente trovato",
     "rooms": "cam.",
-    "sqm": "m²"
+    "sqm": "m²",
+    "recommendedAgencies": "Agenzie consigliate"
   },
   "searchCategory": {
     "title": "Categoria di ricerca",

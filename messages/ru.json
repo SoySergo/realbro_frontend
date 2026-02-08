@@ -1223,7 +1223,8 @@
     "noPropertiesFound": "Объекты не найдены",
     "noAgentsFound": "Агенты не найдены",
     "rooms": "комн.",
-    "sqm": "м²"
+    "sqm": "м²",
+    "recommendedAgencies": "Рекомендуемые агентства"
   },
   "searchCategory": {
     "title": "Категория поиска",

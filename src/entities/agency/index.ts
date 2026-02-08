@@ -1,2 +1,2 @@
 export * from './model';
-export { AgencyCard } from './ui';
+export { AgencyCard, AgencyCardHorizontal } from './ui';

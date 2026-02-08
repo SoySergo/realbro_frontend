@@ -434,7 +434,6 @@
     "moreFilters": "Més filtres",
     "newSearch": "Nova cerca",
     "saveFilter": "Desar filtre",
-    "dealType": "Tipus d'operació",
     "dealTypeRent": "Lloguer",
     "dealTypeSale": "Venda",
     "propertyClass": "Tipus de propietat",
@@ -1497,7 +1496,8 @@
     "email": "Correu electrònic",
     "website": "Lloc web",
     "properties": "Immobles",
-    "viewProfile": "Veure perfil"
+    "viewProfile": "Veure perfil",
+    "recommendedAgencies": "Agències recomanades"
   },
   "searchCategory": {
     "title": "Categoria de cerca",
