@@ -43,23 +43,27 @@ export function DesktopQueryItem({
             <button
                 onClick={onSelect}
                 className={cn(
-                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer relative',
-                    'transition-colors duration-150 border-2',
+                    'p-2 rounded-lg cursor-pointer relative overflow-hidden',
+                    'transition-all duration-150',
                     isActive
-                        ? 'bg-gradient-to-r from-brand-primary/15 to-transparent border-brand-primary text-brand-primary'
-                        : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
+                        ? 'text-brand-primary'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-background-secondary'
                 )}
             >
-                <QueryIcon queryType={query.queryType} className="w-5 h-5" />
+                {/* Градиентный фон для активного элемента */}
+                {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/15 to-transparent rounded-lg" />
+                )}
+                <QueryIcon queryType={query.queryType} className="w-[18px] h-[18px] relative" />
                 {/* Индикатор AI агента в режиме поиска */}
                 {query.hasAiAgent && query.aiAgentStatus === 'searching' && (
-                    <span className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
+                    <span className="absolute top-1 left-1 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
                 )}
                 {query.isUnsaved && (
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-warning" />
+                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-warning" />
                 )}
                 {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[10px] font-bold px-1">
+                    <span className="absolute -top-1 -right-1 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[10px] font-bold px-1">
                         {query.newResultsCount}
                     </span>
                 )}
@@ -71,14 +75,19 @@ export function DesktopQueryItem({
     return (
         <div
             className={cn(
-                'w-full flex items-center rounded-lg cursor-pointer relative',
-                'transition-colors duration-150 group border-2',
-                'gap-2 px-2 py-2',
+                'relative flex items-center justify-between rounded-lg cursor-pointer',
+                'transition-all duration-150 group overflow-hidden',
+                'gap-2 px-3 py-2.5 text-sm',
                 isActive
-                    ? 'bg-gradient-to-r from-brand-primary/15 to-transparent border-brand-primary text-text-primary'
-                    : 'border-transparent hover:bg-background-tertiary text-text-secondary'
+                    ? 'text-brand-primary'
+                    : 'text-text-primary hover:bg-background-secondary'
             )}
         >
+            {/* Градиентный фон для активного элемента */}
+            {isActive && (
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/15 to-transparent rounded-lg" />
+            )}
+
             {/* Кликабельная область для выбора query */}
             <div
                 onClick={onSelect}
@@ -86,52 +95,52 @@ export function DesktopQueryItem({
                 aria-label={`Select ${query.title}`}
             />
 
-            <div className="relative shrink-0 z-10 pointer-events-none">
+            <div className="relative flex items-center gap-2 min-w-0 z-10 pointer-events-none">
                 <QueryIcon
                     queryType={query.queryType}
                     className={cn(
-                        'w-5 h-5',
+                        'w-[15px] h-[15px] shrink-0',
                         isActive ? 'text-brand-primary' : 'text-text-tertiary'
                     )}
                 />
                 {/* Индикатор AI агента в режиме поиска */}
                 {query.hasAiAgent && query.aiAgentStatus === 'searching' && (
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
+                    <span className="absolute -top-0.5 -left-0.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
+                )}
+                <span className="truncate">{query.title}</span>
+                {query.isUnsaved && (
+                    <span
+                        className="w-2 h-2 rounded-full bg-warning shrink-0"
+                        title="Unsaved"
+                    />
                 )}
             </div>
-            <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
-                <div className="flex items-center gap-1.5">
-                    <span className="font-medium truncate text-sm">{query.title}</span>
-                    {query.isUnsaved && (
-                        <span
-                            className="w-2 h-2 rounded-full bg-warning shrink-0"
-                            title="Unsaved"
-                        />
-                    )}
-                </div>
-                <QueryStats query={query} className="mt-0.5 text-xs" />
+
+            <div className="relative flex items-center gap-1 z-10">
+                {/* Статистика результатов */}
+                <QueryStats query={query} className="text-xs" />
+
+                {/* Бейдж новых результатов */}
+                {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
+                    <span className="text-[10px] bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white px-1.5 py-0.5 rounded-full font-medium pointer-events-none">
+                        +{query.newResultsCount}
+                    </span>
+                )}
+
+                {/* Кнопка удаления */}
+                {canDelete && onDelete && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete();
+                        }}
+                        className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-0.5 rounded hover:bg-error/10 hover:text-error transition-all cursor-pointer relative z-10"
+                        aria-label={`Delete ${query.title}`}
+                    >
+                        <X className="w-3 h-3" />
+                    </button>
+                )}
             </div>
-
-            {/* Бейдж новых результатов */}
-            {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
-                <span className="min-w-[20px] h-5 flex items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[11px] font-bold px-1.5 relative z-10 pointer-events-none">
-                    +{query.newResultsCount}
-                </span>
-            )}
-
-            {/* Кнопка удаления */}
-            {canDelete && onDelete && (
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete();
-                    }}
-                    className="opacity-0 group-hover:opacity-100 focus:opacity-100 rounded flex items-center justify-center hover:bg-error/10 hover:text-error transition-all w-6 h-6 cursor-pointer relative z-10"
-                    aria-label={`Delete ${query.title}`}
-                >
-                    <X className="w-4 h-4" />
-                </button>
-            )}
         </div>
     );
 }

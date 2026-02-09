@@ -1,3 +1,3 @@
 export * from './types';
-export { useSidebarStore } from './store';
+export { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from './store';
 export { useAutosave } from './use-autosave';
