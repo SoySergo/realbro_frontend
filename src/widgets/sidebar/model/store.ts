@@ -4,6 +4,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SearchQuery, AiAgentStatus } from './types';
 
+// ID дефолтной вкладки поиска — не удаляется
+export const DEFAULT_SEARCH_QUERY_ID = 'default_search';
+
 type SidebarStore = {
     // Состояние раскрытия
     isExpanded: boolean;
@@ -31,13 +34,24 @@ type SidebarStore = {
 // Генерация ID
 const generateId = () => `query_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+// Дефолтная вкладка поиска (всегда первая, не удаляется)
+const createDefaultSearchQuery = (): SearchQuery => ({
+    id: DEFAULT_SEARCH_QUERY_ID,
+    title: '',
+    queryType: 'search',
+    filters: {},
+    isUnsaved: false,
+    createdAt: new Date(),
+    lastUpdated: new Date(),
+});
+
 export const useSidebarStore = create<SidebarStore>()(
     persist(
         (set, get) => ({
             // Начальное состояние
             isExpanded: false,
-            queries: [],
-            activeQueryId: null,
+            queries: [createDefaultSearchQuery()],
+            activeQueryId: DEFAULT_SEARCH_QUERY_ID,
 
             // Методы раскрытия
             setExpanded: (expanded) => set({ isExpanded: expanded }),
@@ -53,13 +67,23 @@ export const useSidebarStore = create<SidebarStore>()(
                     createdAt: new Date(),
                     lastUpdated: new Date(),
                 };
-                set((state) => ({
-                    queries: [newQuery, ...state.queries],
-                    activeQueryId: newQuery.id,
-                }));
+                set((state) => {
+                    // Вставляем после дефолтной вкладки поиска (она всегда первая)
+                    const defaultIndex = state.queries.findIndex(q => q.id === DEFAULT_SEARCH_QUERY_ID);
+                    const insertIndex = defaultIndex >= 0 ? defaultIndex + 1 : 0;
+                    const newQueries = [...state.queries];
+                    newQueries.splice(insertIndex, 0, newQuery);
+                    return {
+                        queries: newQueries,
+                        activeQueryId: newQuery.id,
+                    };
+                });
             },
 
             removeQuery: (id) => {
+                // Дефолтная вкладка поиска не удаляется
+                if (id === DEFAULT_SEARCH_QUERY_ID) return;
+
                 const state = get();
                 const newQueries = state.queries.filter((q) => q.id !== id);
 
@@ -127,6 +151,17 @@ export const useSidebarStore = create<SidebarStore>()(
                 queries: state.queries,
                 activeQueryId: state.activeQueryId,
             }),
+            // Гарантируем наличие дефолтной вкладки поиска после восстановления
+            onRehydrateStorage: () => (state) => {
+                if (!state) return;
+                const hasDefault = state.queries.some(q => q.id === DEFAULT_SEARCH_QUERY_ID);
+                if (!hasDefault) {
+                    state.queries = [createDefaultSearchQuery(), ...state.queries];
+                }
+                if (!state.activeQueryId && state.queries.length > 0) {
+                    state.activeQueryId = state.queries[0].id;
+                }
+            },
         }
     )
 );

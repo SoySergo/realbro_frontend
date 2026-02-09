@@ -13,8 +13,8 @@ export function ThemeSwitcher() {
     // Показываем fallback UI до монтирования компонента (избегаем гидратации несовпадений)
     if (!mounted) {
         return (
-            <button className="w-9 h-9 rounded-lg flex items-center justify-center text-text-secondary bg-background-tertiary border border-border">
-                <Sun className="w-5 h-5" />
+            <button className="w-9 h-9 rounded-lg flex items-center justify-center text-text-secondary">
+                <Sun className="w-[17px] h-[17px]" />
             </button>
         );
     }
@@ -24,13 +24,12 @@ export function ThemeSwitcher() {
             onClick={toggleTheme}
             className={cn(
                 'w-9 h-9 rounded-lg flex items-center justify-center',
-                'bg-background-tertiary border border-border',
-                'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light hover:border-brand-primary',
+                'text-text-secondary hover:text-brand-primary hover:bg-background-secondary',
                 'transition-colors duration-150'
             )}
             aria-label="Toggle theme"
         >
-            {currentTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {currentTheme === 'dark' ? <Sun className="w-[17px] h-[17px]" /> : <Moon className="w-[17px] h-[17px]" />}
         </button>
     );
 }

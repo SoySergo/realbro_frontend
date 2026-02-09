@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useSidebarStore } from '@/widgets/sidebar/model';
+import { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { Search, MessageCircle, User, Settings, Plus, LogIn, Scale, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageCircle, User, Settings, Plus, LogIn, Scale, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
@@ -17,9 +17,8 @@ import { Link } from '@/shared/config/routing';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-// Навигационные элементы
+// Навигационные элементы (без поиска — он в дефолтной вкладке)
 const navigationItems = [
-    { id: 'search', icon: Search, labelKey: 'search', href: '/search' },
     { id: 'compare', icon: Scale, labelKey: 'compare', href: '/compare' },
     { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat' },
     { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' },
@@ -194,7 +193,7 @@ export function DesktopSidebar() {
             className={cn(
                 'fixed left-0 top-0 h-screen bg-background border-r border-border',
                 'transition-all duration-300 ease-in-out z-60',
-                isExpanded ? 'w-80' : 'w-16'
+                isExpanded ? 'w-72' : 'w-14'
             )}
         >
             {/* Кнопка переключения сайдбара */}
@@ -218,21 +217,21 @@ export function DesktopSidebar() {
 
             <div className="flex flex-col h-full">
                 {/* Логотип с градиентным фоном */}
-                <div className="h-16 flex items-center px-4 shrink-0 bg-gradient-to-r from-brand-primary/10 to-transparent">
-                    <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                <div className="px-4 py-4 shrink-0 bg-gradient-to-r from-brand-primary/10 to-transparent">
+                    <div className="flex items-center gap-2">
                         <Image
                             src="/logo.svg"
                             alt="RealBro"
-                            width={32}
-                            height={32}
-                            className="w-full h-full"
+                            width={28}
+                            height={28}
+                            className="shrink-0"
                         />
+                        {isExpanded && (
+                            <span className="font-bold text-xl text-text-primary whitespace-nowrap animate-in fade-in slide-in-from-left-2 duration-300">
+                                RealBro
+                            </span>
+                        )}
                     </div>
-                    {isExpanded && (
-                        <span className="ml-3 font-bold text-xl text-text-primary whitespace-nowrap animate-in fade-in slide-in-from-left-2 duration-300">
-                            RealBro
-                        </span>
-                    )}
                 </div>
 
                 {/* Градиентный разделитель */}
@@ -241,35 +240,33 @@ export function DesktopSidebar() {
                 {/* Поисковые запросы */}
                 <div className="flex-1 flex flex-col min-h-0 relative">
                     {/* Заголовок секции поиска и кнопка добавления */}
-                    <div className="px-2 pt-2 pb-1 shrink-0 bg-background relative z-20">
+                    <div className="px-3 pt-3 pb-1 shrink-0 bg-background relative z-20">
                         {isExpanded ? (
-                            <div className="flex items-center justify-between px-1 mb-1">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs font-semibold text-text-secondary">
                                     {t('search')}
                                 </span>
                                 <button
                                     onClick={handleAddQuery}
                                     className={cn(
-                                        'w-6 h-6 flex items-center justify-center rounded-md cursor-pointer',
-                                        'text-text-secondary hover:text-brand-primary',
-                                        'hover:bg-brand-primary/10 transition-colors duration-150'
+                                        'p-1 rounded-md cursor-pointer',
+                                        'text-brand-primary hover:bg-brand-primary/10 transition-colors duration-150'
                                     )}
                                     aria-label={t('newSearch')}
                                 >
-                                    <Plus className="w-4 h-4" />
+                                    <Plus className="w-3.5 h-3.5" />
                                 </button>
                             </div>
                         ) : (
                             <button
                                 onClick={handleAddQuery}
                                 className={cn(
-                                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
-                                    'text-text-secondary hover:text-brand-primary',
-                                    'hover:bg-brand-primary/10 transition-colors duration-150'
+                                    'w-full flex items-center justify-center p-2 rounded-lg cursor-pointer',
+                                    'text-brand-primary hover:bg-brand-primary/10 transition-colors duration-150'
                                 )}
                                 aria-label={t('newSearch')}
                             >
-                                <Plus className="w-5 h-5 shrink-0" />
+                                <Plus className="w-[18px] h-[18px] shrink-0" />
                             </button>
                         )}
                     </div>
@@ -290,17 +287,18 @@ export function DesktopSidebar() {
                             onScroll={handleScroll}
                             className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
                         >
-                            <div className={cn('px-2 pt-1 pb-2', isExpanded ? 'space-y-1' : 'space-y-1 flex flex-col items-center')}>
+                            <div className={cn('px-3 pt-1 pb-2', isExpanded ? 'space-y-1.5' : 'space-y-1 flex flex-col items-center')}>
                                 {/* Список запросов - десктопная версия */}
                                 {queries.map((query) => {
                                     const isActive = activeQueryId === query.id;
+                                    const isDefaultQuery = query.id === DEFAULT_SEARCH_QUERY_ID;
 
                                     return (
                                         <DesktopQueryItem
                                             key={query.id}
-                                            query={query}
+                                            query={isDefaultQuery && !query.title ? { ...query, title: t('search') } : query}
                                             isActive={isActive}
-                                            canDelete={queries.length > 1}
+                                            canDelete={!isDefaultQuery}
                                             isExpanded={isExpanded}
                                             onSelect={() => setActiveQuery(query.id)}
                                             onDelete={() => removeQuery(query.id)}
@@ -325,7 +323,7 @@ export function DesktopSidebar() {
                 <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
 
                 {/* Нижняя навигация */}
-                <div className="p-2 space-y-1 shrink-0">
+                <div className="px-3 py-2 space-y-0.5 shrink-0">
                     {navigationItems.map((item) => {
                         // Условная навигация для профиля
                         // Показываем "Войти" если не смонтировано (для SSR) или если не авторизован
@@ -336,12 +334,12 @@ export function DesktopSidebar() {
                                     href="?modal=login"
                                     className={cn(
                                         'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                        'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
+                                        'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
                                         'transition-colors duration-150 relative',
-                                        isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
+                                        isExpanded ? 'px-3 py-2' : 'justify-center py-2'
                                     )}
                                 >
-                                    <LogIn className="w-5 h-5 shrink-0" />
+                                    <LogIn className="w-[18px] h-[18px] shrink-0" />
                                     {isExpanded && (
                                         <span className="text-sm font-medium">
                                             {tAuth('signIn')}
@@ -357,12 +355,12 @@ export function DesktopSidebar() {
                                 href={item.href}
                                 className={cn(
                                     'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                    'text-text-secondary hover:text-text-primary hover:bg-background-tertiary',
+                                    'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
                                     'transition-colors duration-150 relative focus-visible:outline-2 focus-visible:outline-brand-primary focus-visible:outline-offset-2',
-                                    isExpanded ? 'px-3 py-2.5' : 'h-12 justify-center'
+                                    isExpanded ? 'px-3 py-2' : 'justify-center py-2'
                                 )}
                             >
-                                <item.icon className="w-5 h-5 shrink-0" />
+                                <item.icon className="w-[18px] h-[18px] shrink-0" />
                                 {isExpanded && (
                                     <span className="text-sm font-medium">
                                         {t(item.labelKey)}
@@ -371,10 +369,10 @@ export function DesktopSidebar() {
                                 {item.id === 'chat' && isMounted && chatUnread > 0 && (
                                     <span
                                         className={cn(
-                                            'absolute w-5 h-5 rounded-full',
-                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-xs font-bold',
+                                            'absolute w-4 h-4 rounded-full',
+                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[10px] font-bold',
                                             'flex items-center justify-center',
-                                            isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
+                                            isExpanded ? 'top-1.5 right-2' : 'top-0.5 right-0.5'
                                         )}
                                     >
                                         {chatUnread > 9 ? '9+' : chatUnread}
@@ -383,10 +381,10 @@ export function DesktopSidebar() {
                                 {item.id === 'compare' && isMounted && comparisonCount > 0 && (
                                     <span
                                         className={cn(
-                                            'absolute w-5 h-5 rounded-full',
-                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-xs font-bold',
+                                            'absolute w-4 h-4 rounded-full',
+                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[10px] font-bold',
                                             'flex items-center justify-center',
-                                            isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
+                                            isExpanded ? 'top-1.5 right-2' : 'top-0.5 right-0.5'
                                         )}
                                     >
                                         {comparisonCount}
@@ -396,16 +394,23 @@ export function DesktopSidebar() {
                         );
                     })}
 
-                    {/* Переключатели темы и языка */}
-                    {isExpanded && (
-                        <>
-                            <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent my-2" />
-                            <div className="flex items-center gap-2 px-2">
-                                <ThemeSwitcher />
-                                <LanguageSwitcher />
-                            </div>
-                        </>
-                    )}
+                    {/* Переключатели темы и языка — видны всегда (как в demo-7) */}
+                    <div className="h-px bg-gradient-to-r from-brand-primary/20 via-brand-primary/5 to-transparent my-1.5" />
+                    <div className={cn(
+                        'flex gap-2 justify-center',
+                        isExpanded ? 'flex-row items-center px-2' : 'flex-col items-center'
+                    )}>
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
+                        {isExpanded && !isMounted ? null : isExpanded && !isAuthenticated && (
+                            <Link
+                                href="?modal=login"
+                                className="ml-auto text-xs text-brand-primary font-medium hover:underline"
+                            >
+                                {tAuth('signIn')}
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </div>
         </aside>

@@ -9,18 +9,14 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
 } from '@/shared/ui/select/ui';
 
 /**
  * Компонент для переключения языка интерфейса
- * Использует shadcn/ui Select для лучшего UX
- * Сохраняет текущий путь при смене языка
+ * Иконка-кнопка, открывающая Select при клике (стиль demo-7)
  */
 export function LanguageSwitcher() {
     const { currentLocale, changeLanguage, isPending } = useLanguageSwitcher();
-
-    const currentLanguage = LANGUAGES.find((lang) => lang.code === currentLocale);
 
     // Обработчик смены языка
     const handleLanguageChange = (locale: string) => {
@@ -35,22 +31,16 @@ export function LanguageSwitcher() {
         >
             <SelectTrigger
                 className={cn(
-                    'h-9 px-3 rounded-lg gap-2 border-border',
-                    'bg-background-tertiary',
-                    'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light hover:border-brand-primary',
+                    'w-9 h-9 p-0 rounded-lg border-0 shadow-none',
+                    'bg-transparent flex items-center justify-center',
+                    'text-text-secondary hover:text-brand-primary hover:bg-background-secondary',
                     'transition-colors duration-150',
-                    'focus-visible:ring-brand-primary/20'
+                    'focus-visible:ring-0 focus-visible:ring-offset-0',
+                    '[&>svg:last-child]:hidden'
                 )}
                 aria-label="Change language"
             >
-                <Languages className="w-5 h-5" />
-                <SelectValue>
-                    {currentLanguage && (
-                        <span className="text-sm font-medium">
-                            {currentLanguage.nativeName}
-                        </span>
-                    )}
-                </SelectValue>
+                <Languages className="w-[17px] h-[17px]" />
             </SelectTrigger>
             <SelectContent
                 className="max-h-[300px] overflow-y-auto"
