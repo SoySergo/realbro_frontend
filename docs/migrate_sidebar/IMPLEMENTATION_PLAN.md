@@ -6,44 +6,51 @@
 
 ---
 
-## Этап 1. Подготовка — Типы, стор, новые API-моки
+## Этап 1. Подготовка — Типы, стор, новые API-моки ✅
 
-### 1.1 Расширение типов сайдбара
-- [ ] Обновить `src/widgets/sidebar/model/types.ts`:
+### 1.1 Расширение типов сайдбара ✅
+- [x] Обновить `src/widgets/sidebar/model/types.ts`:
   - Добавить `SearchQueryType` enum: `'search' | 'residential_rooms' | 'residential_apartments' | 'residential_houses' | 'commercial' | 'agent'`
-  - Добавить `queryType: SearchQueryType` в `SearchQuery` — для динамической иконки вкладки
-  - Добавить `hasAiAgent: boolean` — привязан ли ИИ-агент к вкладке
-  - Добавить `aiAgentStatus: 'idle' | 'searching' | 'found'` — статус агента
-  - Добавить `maxTabs: number` в отдельный тип `UserSubscription`
+  - Добавить `queryType?: SearchQueryType` в `SearchQuery` — для динамической иконки вкладки (опционально, дефолт 'search')
+  - Добавить `hasAiAgent?: boolean` — привязан ли ИИ-агент к вкладке
+  - Добавить `aiAgentStatus?: AiAgentStatus` где `AiAgentStatus = 'idle' | 'searching' | 'found'` — статус агента
+  - Добавить тип `UserSubscription` с полями `plan`, `maxTabs`, `aiAgentEnabled`, `expiresAt`
 
 **Ссылки на код:**
-- [types.ts](my-app/src/widgets/sidebar/model/types.ts)
-- [store.ts](my-app/src/widgets/sidebar/model/store.ts)
+- [types.ts](my-app/src/widgets/sidebar/model/types.ts) ✅
+- [store.ts](my-app/src/widgets/sidebar/model/store.ts) ✅
 
-### 1.2 Новые API-моки (легко заменяемые на бекенд)
-- [ ] `src/app/api/subscription/route.ts` — GET текущий тариф, POST активация
+### 1.2 Новые API-моки (легко заменяемые на бекенд) ✅
+- [x] `src/app/api/subscription/route.ts` — GET текущий тариф + планы, POST активация
   - Возвращает: `{ plan: 'free'|'basic'|'pro', maxTabs: 1|5|20, aiAgentEnabled: boolean, expiresAt }`
-  - Мок: in-memory Map, паттерн `generateMock*`, поддержка `locale`
-- [ ] `src/app/api/subscription/check/route.ts` — GET проверка лимита вкладок
+  - Мок: in-memory Map, паттерн `generateMock*`, `subscription-mock.ts`
+- [x] `src/app/api/subscription/check/route.ts` — GET проверка лимита вкладок
   - Возвращает: `{ allowed: boolean, currentCount, maxCount, plan }`
-- [ ] `src/app/api/ai-agent/activate/route.ts` — POST активация агента для вкладки
+- [x] `src/app/api/ai-agent/activate/route.ts` — POST активация агента для вкладки
   - Принимает: `{ queryId, settings: { notifyFrom, notifyTo, frequency, offlineNotify } }`
   - Проверяет тариф (мок), возвращает `{ success, agentId }` или `{ error: 'no_subscription' }`
-- [ ] `src/app/api/payment/route.ts` — POST мок оплаты
+- [x] `src/app/api/payment/route.ts` — POST мок оплаты
   - Принимает: `{ planId }`, возвращает `{ success, transactionId }` после задержки 1.5с
 
-**Паттерн моков:** аналогичен существующим (`src/app/api/search-queries/route.ts`, `src/app/api/properties/route.ts`) — in-memory storage, NextResponse.json, легко заменяемый на реальный fetch.
+**Созданные моки:**
+- [subscription-mock.ts](my-app/src/shared/api/mocks/subscription-mock.ts) ✅
+- [ai-agent-mock.ts](my-app/src/shared/api/mocks/ai-agent-mock.ts) ✅
+- [payment-mock.ts](my-app/src/shared/api/mocks/payment-mock.ts) ✅
 
-### 1.3 Обновление стора сайдбара
-- [ ] В `src/widgets/sidebar/model/store.ts`:
-  - Интегрировать `queryType` при создании вкладки
+**Паттерн моков:** аналогичен существующим — in-memory storage, NextResponse.json, легко заменяемый на реальный fetch.
+
+### 1.3 Обновление стора сайдбара ✅
+- [x] В `src/widgets/sidebar/model/store.ts`:
+  - Интегрировать `queryType` при создании вкладки (дефолт `'search'`)
   - Добавить action `setAiAgent(queryId, status)` для обновления статуса агента
-  - Добавить selector для подсчёта вкладок
-  - Убрать `variant` (больше не нужен — используем только v7)
+  - Добавить selector `tabsCount()` для подсчёта вкладок
+  - Убрать `variant` и `SidebarVariant` (больше не нужен — используем только v7)
 
 **Ссылки на код:**
-- [store.ts](my-app/src/widgets/sidebar/model/store.ts)
+- [store.ts](my-app/src/widgets/sidebar/model/store.ts) ✅
 - [search-queries/route.ts](my-app/src/app/api/search-queries/route.ts)
+
+**TypeScript билд:** ✅ Проходит без ошибок
 
 ---
 

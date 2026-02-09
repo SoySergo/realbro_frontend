@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { SearchQuery, SidebarVariant } from './types';
+import type { SearchQuery, AiAgentStatus } from './types';
 
 type SidebarStore = {
     // Состояние раскрытия
@@ -19,11 +19,13 @@ type SidebarStore = {
     removeQuery: (id: string) => void;
     setActiveQuery: (id: string | null) => void;
     updateQuery: (id: string, updates: Partial<SearchQuery>) => void;
-    saveQuery: (id: string, title: string) => void; // Сохраняет вкладку (isUnsaved → false)
+    saveQuery: (id: string, title: string) => void;
 
-    // Вариант отображения
-    variant: SidebarVariant;
-    setVariant: (variant: SidebarVariant) => void;
+    // ИИ-агент
+    setAiAgent: (queryId: string, status: AiAgentStatus) => void;
+
+    // Селекторы
+    tabsCount: () => number;
 };
 
 // Генерация ID
@@ -36,7 +38,6 @@ export const useSidebarStore = create<SidebarStore>()(
             isExpanded: false,
             queries: [],
             activeQueryId: null,
-            variant: 'minimal',
 
             // Методы раскрытия
             setExpanded: (expanded) => set({ isExpanded: expanded }),
@@ -47,7 +48,8 @@ export const useSidebarStore = create<SidebarStore>()(
                 const newQuery: SearchQuery = {
                     ...query,
                     id: generateId(),
-                    isUnsaved: query.isUnsaved ?? true, // Новые вкладки по умолчанию несохранённые
+                    queryType: query.queryType ?? 'search',
+                    isUnsaved: query.isUnsaved ?? true,
                     createdAt: new Date(),
                     lastUpdated: new Date(),
                 };
@@ -88,8 +90,6 @@ export const useSidebarStore = create<SidebarStore>()(
                 }));
             },
 
-            setVariant: (variant) => set({ variant }),
-
             // Сохраняет вкладку с названием (переводит isUnsaved в false)
             saveQuery: (id, title) => {
                 set((state) => ({
@@ -100,6 +100,25 @@ export const useSidebarStore = create<SidebarStore>()(
                     ),
                 }));
             },
+
+            // Обновление статуса ИИ-агента на вкладке
+            setAiAgent: (queryId, status) => {
+                set((state) => ({
+                    queries: state.queries.map((q) =>
+                        q.id === queryId
+                            ? {
+                                ...q,
+                                hasAiAgent: true,
+                                aiAgentStatus: status,
+                                lastUpdated: new Date(),
+                            }
+                            : q
+                    ),
+                }));
+            },
+
+            // Количество вкладок
+            tabsCount: () => get().queries.length,
         }),
         {
             name: 'sidebar-storage',
@@ -107,7 +126,6 @@ export const useSidebarStore = create<SidebarStore>()(
             partialize: (state) => ({
                 queries: state.queries,
                 activeQueryId: state.activeQueryId,
-                variant: state.variant,
             }),
         }
     )
