@@ -3,9 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { Search, MessageCircle, User, Settings, Plus, LogIn, Scale } from 'lucide-react';
+import { Search, MessageCircle, User, Settings, Plus, LogIn, Scale, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import { Separator } from '@/shared/ui/separator';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
 import { useAuth } from '@/features/auth';
@@ -163,16 +162,33 @@ export function DesktopSidebar() {
     return (
         <aside
             className={cn(
-                'fixed left-0 top-0 h-screen bg-background-secondary border-r border-border',
+                'fixed left-0 top-0 h-screen bg-background border-r border-border',
                 'transition-all duration-300 ease-in-out z-60',
                 isExpanded ? 'w-80' : 'w-16'
             )}
-            onMouseEnter={() => setExpanded(true)}
-            onMouseLeave={() => setExpanded(false)}
         >
+            {/* Кнопка переключения сайдбара */}
+            <button
+                onClick={() => setExpanded(!isExpanded)}
+                className={cn(
+                    'absolute top-5 -right-3 z-10 w-6 h-6',
+                    'flex items-center justify-center rounded-full',
+                    'bg-background border border-border shadow-sm',
+                    'text-text-secondary hover:text-brand-primary hover:border-brand-primary',
+                    'transition-colors duration-150 cursor-pointer'
+                )}
+                aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+            >
+                {isExpanded ? (
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                ) : (
+                    <ChevronRight className="w-3.5 h-3.5" />
+                )}
+            </button>
+
             <div className="flex flex-col h-full">
-                {/* Логотип */}
-                <div className="h-16 flex items-center px-4 border-b border-border shrink-0">
+                {/* Логотип с градиентным фоном */}
+                <div className="h-16 flex items-center px-4 shrink-0 bg-gradient-to-r from-brand-primary/10 to-transparent">
                     <div className="w-8 h-8 flex items-center justify-center shrink-0">
                         <Image
                             src="/logo.svg"
@@ -189,27 +205,43 @@ export function DesktopSidebar() {
                     )}
                 </div>
 
-                {/* Поисковые запросы - карточки */}
+                {/* Градиентный разделитель */}
+                <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
+
+                {/* Поисковые запросы */}
                 <div className="flex-1 flex flex-col min-h-0 relative">
-                    {/* Кнопка добавления нового запроса - всегда сверху */}
-                    <div className="px-2 pt-2 pb-1 shrink-0 bg-background-secondary relative z-20">
-                        <button
-                            onClick={handleAddQuery}
-                            className={cn(
-                                'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                'text-text-secondary hover:text-brand-primary hover:bg-brand-primary-light',
-                                'border border-brand-primary/10 hover:border-brand-primary',
-                                'transition-colors duration-150',
-                                isExpanded ? 'px-3 py-3' : 'h-12 justify-center'
-                            )}
-                        >
-                            <Plus className="w-5 h-5 shrink-0" />
-                            {isExpanded && (
-                                <span className="text-sm font-medium">
-                                    {t('newSearch')}
+                    {/* Заголовок секции поиска и кнопка добавления */}
+                    <div className="px-2 pt-2 pb-1 shrink-0 bg-background relative z-20">
+                        {isExpanded ? (
+                            <div className="flex items-center justify-between px-1 mb-1">
+                                <span className="text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+                                    {t('search')}
                                 </span>
-                            )}
-                        </button>
+                                <button
+                                    onClick={handleAddQuery}
+                                    className={cn(
+                                        'w-6 h-6 flex items-center justify-center rounded-md cursor-pointer',
+                                        'text-text-secondary hover:text-brand-primary',
+                                        'hover:bg-brand-primary/10 transition-colors duration-150'
+                                    )}
+                                    aria-label={t('newSearch')}
+                                >
+                                    <Plus className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={handleAddQuery}
+                                className={cn(
+                                    'w-full h-12 flex items-center justify-center rounded-lg cursor-pointer',
+                                    'text-text-secondary hover:text-brand-primary',
+                                    'hover:bg-brand-primary/10 transition-colors duration-150'
+                                )}
+                                aria-label={t('newSearch')}
+                            >
+                                <Plus className="w-5 h-5 shrink-0" />
+                            </button>
+                        )}
                     </div>
 
                     {/* Контейнер со скроллом для списка запросов */}
@@ -218,7 +250,7 @@ export function DesktopSidebar() {
                         <div
                             className={cn(
                                 'absolute top-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
-                                'bg-linear-to-b from-background-secondary to-transparent',
+                                'bg-linear-to-b from-background to-transparent',
                                 showTopFade ? 'opacity-100' : 'opacity-0'
                             )}
                         />
@@ -228,7 +260,7 @@ export function DesktopSidebar() {
                             onScroll={handleScroll}
                             className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
                         >
-                            <div className="px-2 pt-1 pb-2 space-y-1">
+                            <div className={cn('px-2 pt-1 pb-2', isExpanded ? 'space-y-1' : 'space-y-1 flex flex-col items-center')}>
                                 {/* Список запросов - десктопная версия */}
                                 {queries.map((query) => {
                                     const isActive = activeQueryId === query.id;
@@ -252,15 +284,18 @@ export function DesktopSidebar() {
                         <div
                             className={cn(
                                 'absolute bottom-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
-                                'bg-linear-to-t from-background-secondary to-transparent',
+                                'bg-linear-to-t from-background to-transparent',
                                 showBottomFade ? 'opacity-100' : 'opacity-0'
                             )}
                         />
                     </div>
                 </div>
 
+                {/* Градиентный разделитель */}
+                <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
+
                 {/* Нижняя навигация */}
-                <div className="border-t border-border p-2 space-y-1 shrink-0">
+                <div className="p-2 space-y-1 shrink-0">
                     {navigationItems.map((item) => {
                         // Условная навигация для профиля
                         // Показываем "Войти" если не смонтировано (для SSR) или если не авторизован
@@ -307,7 +342,7 @@ export function DesktopSidebar() {
                                     <span
                                         className={cn(
                                             'absolute w-5 h-5 rounded-full',
-                                            'bg-error text-white text-xs font-bold',
+                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-xs font-bold',
                                             'flex items-center justify-center',
                                             isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
                                         )}
@@ -319,7 +354,7 @@ export function DesktopSidebar() {
                                     <span
                                         className={cn(
                                             'absolute w-5 h-5 rounded-full',
-                                            'bg-brand-primary text-white text-xs font-bold',
+                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-xs font-bold',
                                             'flex items-center justify-center',
                                             isExpanded ? 'top-2 right-2' : 'top-1.5 left-8'
                                         )}
@@ -334,7 +369,7 @@ export function DesktopSidebar() {
                     {/* Переключатели темы и языка */}
                     {isExpanded && (
                         <>
-                            <Separator className="my-2" />
+                            <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent my-2" />
                             <div className="flex items-center gap-2 px-2">
                                 <ThemeSwitcher />
                                 <LanguageSwitcher />
