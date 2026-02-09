@@ -452,7 +452,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                         }}
                                                     />
                                                     <span className="text-sm text-text-primary">
-                                                        {tAgency(`propertyType.${type}`)}
+                                                        {tAgency(`propertyTypes.${type}`)}
                                                     </span>
                                                 </label>
                                             ))}

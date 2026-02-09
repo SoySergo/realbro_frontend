@@ -424,7 +424,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                                         }}
                                                     />
                                                     <span className="text-base text-text-primary">
-                                                        {tAgency(`propertyType.${type}`)}
+                                                        {tAgency(`propertyTypes.${type}`)}
                                                     </span>
                                                 </label>
                                             ))}
@@ -435,7 +435,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                         <FilterSection id="marker-type" title={t('markerType')}>
                                             <div className="py-4">
                                                 <MarkerTypeFilterMobile
-                                                     value={localMarkerType}
+                                                    value={localMarkerType}
                                                     onChange={setLocalMarkerType}
                                                 />
                                             </div>
