@@ -1,28 +1,25 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 import { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { MessageCircle, User, Settings, Plus, LogIn, Scale, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageCircle, User, Heart, Plus, LogIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
 import { useAuth } from '@/features/auth';
 import { useChatStore } from '@/features/chat-messages';
-import { useComparisonCount } from '@/features/comparison';
 import { DesktopQueryItem } from '../desktop-query-item';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/shared/config/routing';
+import { Link, useRouter, usePathname } from '@/shared/config/routing';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
 // Навигационные элементы (без поиска — он в дефолтной вкладке)
 const navigationItems = [
-    { id: 'compare', icon: Scale, labelKey: 'compare', href: '/compare' },
+    { id: 'favorites', icon: Heart, labelKey: 'favorites', href: '/favorites' },
     { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat' },
     { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' },
-    { id: 'settings', icon: Settings, labelKey: 'settings', href: '/settings' },
 ] as const;
 
 export function DesktopSidebar() {
@@ -34,7 +31,6 @@ export function DesktopSidebar() {
     const [showLimitDialog, setShowLimitDialog] = useState(false);
     const [tabLimit, setTabLimit] = useState({ max: 1, current: 0 });
     const chatUnread = useChatStore((s) => s.totalUnread());
-    const comparisonCount = useComparisonCount();
     const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
@@ -135,7 +131,7 @@ export function DesktopSidebar() {
     const handleAddQuery = async () => {
         // Проверка авторизации
         if (!isAuthenticated) {
-            router.push(`${pathname}?modal=login`);
+            router.push(`${pathname ?? '/search'}?modal=login`);
             return;
         }
 
@@ -300,7 +296,13 @@ export function DesktopSidebar() {
                                             isActive={isActive}
                                             canDelete={!isDefaultQuery}
                                             isExpanded={isExpanded}
-                                            onSelect={() => setActiveQuery(query.id)}
+                                            onSelect={() => {
+                                                setActiveQuery(query.id);
+                                                // Навигация на страницу поиска если мы не на ней
+                                                if (!pathname?.includes('/search')) {
+                                                    router.push('/search/properties/map');
+                                                }
+                                            }}
                                             onDelete={() => removeQuery(query.id)}
                                         />
                                     );
@@ -376,18 +378,6 @@ export function DesktopSidebar() {
                                         )}
                                     >
                                         {chatUnread > 9 ? '9+' : chatUnread}
-                                    </span>
-                                )}
-                                {item.id === 'compare' && isMounted && comparisonCount > 0 && (
-                                    <span
-                                        className={cn(
-                                            'absolute w-4 h-4 rounded-full',
-                                            'bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[10px] font-bold',
-                                            'flex items-center justify-center',
-                                            isExpanded ? 'top-1.5 right-2' : 'top-0.5 right-0.5'
-                                        )}
-                                    >
-                                        {comparisonCount}
                                     </span>
                                 )}
                             </Link>

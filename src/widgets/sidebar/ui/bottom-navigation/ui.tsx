@@ -17,8 +17,8 @@ import { Link } from '@/shared/config/routing';
  */
 const navigationItems = [
     { id: 'search', icon: Search, label: 'search', href: '/search' },
-    { id: 'favorites', icon: Heart, label: 'favorites', href: '/favorites' },
     { id: 'chat', icon: MessageCircle, label: 'chat', href: '/chat' },
+    { id: 'favorites', icon: Heart, label: 'favorites', href: '/favorites' },
     { id: 'profile', icon: User, label: 'profile', href: '/profile' },
 ] as const;
 

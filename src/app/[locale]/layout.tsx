@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { AuthErrorHandler, ThemeProvider, AuthProvider, WebSocketProvider, GlobalToastProvider, ComparisonBarProvider } from "@/app/providers";
+import { ToastProvider } from "@/shared/ui/toast";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
@@ -70,18 +71,20 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <NextIntlClientProvider messages={messages}>
                         <AuthProvider>
                             <WebSocketProvider>
-                                <AuthErrorHandler />
-                                {/* Sidebar (Desktop + Mobile) */}
-                                <Sidebar />
-                                {children}
-                                {/* Auth Modals */}
-                                <AuthModals />
-                                {/* Comparison Floating Bar */}
-                                <ComparisonBarProvider />
-                                {/* Global Toast Notifications */}
-                                <GlobalToastProvider />
-                                {/* Sonner Toaster для пользовательских действий */}
-                                <Toaster position="top-center" closeButton richColors />
+                                <ToastProvider>
+                                    <AuthErrorHandler />
+                                    {/* Sidebar (Desktop + Mobile) */}
+                                    <Sidebar />
+                                    {children}
+                                    {/* Auth Modals */}
+                                    <AuthModals />
+                                    {/* Comparison Floating Bar */}
+                                    <ComparisonBarProvider />
+                                    {/* Global Toast Notifications */}
+                                    <GlobalToastProvider />
+                                    {/* Sonner Toaster для пользовательских действий */}
+                                    <Toaster position="top-center" closeButton richColors />
+                                </ToastProvider>
                             </WebSocketProvider>
                         </AuthProvider>
                     </NextIntlClientProvider>
