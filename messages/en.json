@@ -575,7 +575,20 @@
     "rooms": "Rooms",
     "sortDate": "By date",
     "viewList": "List",
-    "viewMap": "Map"
+    "viewMap": "Map",
+    "tabLimit": "Tab limit reached",
+    "tabLimitDescription": "You've reached the maximum of {max} tabs. Upgrade your plan or edit existing tabs.",
+    "upgradePlan": "Upgrade plan",
+    "editTab": "Edit tab",
+    "clearFilters": "Clear filters",
+    "assignAiAgent": "Assign AI agent",
+    "agentSearching": "Agent is searching...",
+    "agentNotifications": "You'll receive notifications from {startHour} to {endHour}",
+    "goToChat": "Go to chat with agent",
+    "continueSearch": "Continue searching",
+    "distanceToPoint": "Distance to point",
+    "loginRequired": "Authorization required to save filters",
+    "loginToSave": "Sign in"
   },
   "isochrone": {
     "title": "Travel Time",
@@ -1415,5 +1428,13 @@
     "comparisonLimitReached": "Comparison limit reached",
     "error": "Something went wrong",
     "newPropertyFound": "New property found"
+  },
+  "subscription": {
+    "choosePlan": "Choose a plan",
+    "free": "Free",
+    "basic": "Basic",
+    "pro": "Pro",
+    "paymentSuccess": "Payment successful",
+    "noSubscription": "Active subscription required"
   }
 }

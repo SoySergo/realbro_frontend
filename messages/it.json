@@ -591,7 +591,20 @@
     "rooms": "Locali",
     "sortDate": "Per data",
     "viewList": "Elenco",
-    "viewMap": "Mappa"
+    "viewMap": "Mappa",
+    "tabLimit": "Limite schede raggiunto",
+    "tabLimitDescription": "Hai raggiunto il massimo di {max} schede. Aggiorna il piano o modifica quelle esistenti.",
+    "upgradePlan": "Aggiornare il piano",
+    "editTab": "Modifica scheda",
+    "clearFilters": "Cancella filtri",
+    "assignAiAgent": "Assegnare agente IA",
+    "agentSearching": "L'agente sta cercando...",
+    "agentNotifications": "Riceverai notifiche dalle {startHour} alle {endHour}",
+    "goToChat": "Vai alla chat con l'agente",
+    "continueSearch": "Continua la ricerca",
+    "distanceToPoint": "Distanza dal punto",
+    "loginRequired": "Accesso necessario per salvare i filtri",
+    "loginToSave": "Accedi"
   },
   "isochrone": {
     "title": "Tempo di viaggio",
@@ -1428,5 +1441,13 @@
     "comparisonLimitReached": "Limite confronto raggiunto",
     "error": "Qualcosa è andato storto",
     "newPropertyFound": "Nuovo immobile trovato"
+  },
+  "subscription": {
+    "choosePlan": "Scegli un piano",
+    "free": "Gratuito",
+    "basic": "Base",
+    "pro": "Pro",
+    "paymentSuccess": "Pagamento completato",
+    "noSubscription": "Abbonamento attivo richiesto"
   }
 }

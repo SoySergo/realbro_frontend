@@ -591,7 +591,20 @@
     "rooms": "Habitaciones",
     "sortDate": "Por fecha",
     "viewList": "Lista",
-    "viewMap": "Mapa"
+    "viewMap": "Mapa",
+    "tabLimit": "Límite de pestañas alcanzado",
+    "tabLimitDescription": "Has alcanzado el máximo de {max} pestañas. Amplía tu plan o edita las existentes.",
+    "upgradePlan": "Ampliar plan",
+    "editTab": "Editar pestaña",
+    "clearFilters": "Limpiar filtros",
+    "assignAiAgent": "Asignar agente IA",
+    "agentSearching": "El agente está buscando...",
+    "agentNotifications": "Recibirás notificaciones de {startHour} a {endHour}",
+    "goToChat": "Ir al chat con agente",
+    "continueSearch": "Continuar buscando",
+    "distanceToPoint": "Distancia al punto",
+    "loginRequired": "Se requiere autorización para guardar filtros",
+    "loginToSave": "Iniciar sesión"
   },
   "isochrone": {
     "title": "Tiempo de viaje",
@@ -1428,5 +1441,13 @@
     "comparisonLimitReached": "Límite de comparación alcanzado",
     "error": "Algo salió mal",
     "newPropertyFound": "Nuevo inmueble encontrado"
+  },
+  "subscription": {
+    "choosePlan": "Elige un plan",
+    "free": "Gratis",
+    "basic": "Básico",
+    "pro": "Pro",
+    "paymentSuccess": "Pago exitoso",
+    "noSubscription": "Se requiere suscripción activa"
   }
 }

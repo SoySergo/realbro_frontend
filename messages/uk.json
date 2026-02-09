@@ -926,7 +926,20 @@
     "viewMap": "Карта",
     "favorites": "Вибране",
     "chat": "Чат",
-    "profile": "Профіль"
+    "profile": "Профіль",
+    "tabLimit": "Ліміт вкладок досягнуто",
+    "tabLimitDescription": "Ви досягли максимуму в {max} вкладок. Розширте тариф або відредагуйте існуючі.",
+    "upgradePlan": "Розширити тариф",
+    "editTab": "Редагувати вкладку",
+    "clearFilters": "Очистити фільтри",
+    "assignAiAgent": "Дати завдання ІІ-агенту",
+    "agentSearching": "Агент шукає...",
+    "agentNotifications": "Сповіщення з {startHour} до {endHour}",
+    "goToChat": "Перейти в чат з агентом",
+    "continueSearch": "Продовжити пошук",
+    "distanceToPoint": "Відстань до точки",
+    "loginRequired": "Для збереження фільтрів необхідна авторизація",
+    "loginToSave": "Увійти"
   },
   "listing": {
     "create": {
@@ -1999,5 +2012,13 @@
     "comparisonLimitReached": "Досягнуто ліміт порівняння",
     "error": "Щось пішло не так",
     "newPropertyFound": "Знайдено новий об'єкт"
+  },
+  "subscription": {
+    "choosePlan": "Оберіть тариф",
+    "free": "Безкоштовний",
+    "basic": "Базовий",
+    "pro": "Професійний",
+    "paymentSuccess": "Оплата виконана",
+    "noSubscription": "Потрібна активна підписка"
   }
 }

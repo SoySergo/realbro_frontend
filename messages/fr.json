@@ -569,7 +569,20 @@
     "rooms": "Chambres",
     "sortDate": "Par date",
     "viewList": "Liste",
-    "viewMap": "Carte"
+    "viewMap": "Carte",
+    "tabLimit": "Limite d'onglets atteinte",
+    "tabLimitDescription": "Vous avez atteint le maximum de {max} onglets. Améliorez votre plan ou modifiez les onglets existants.",
+    "upgradePlan": "Améliorer le plan",
+    "editTab": "Modifier l'onglet",
+    "clearFilters": "Effacer les filtres",
+    "assignAiAgent": "Assigner un agent IA",
+    "agentSearching": "L'agent recherche...",
+    "agentNotifications": "Vous recevrez des notifications de {startHour} à {endHour}",
+    "goToChat": "Aller au chat avec l'agent",
+    "continueSearch": "Continuer la recherche",
+    "distanceToPoint": "Distance au point",
+    "loginRequired": "Connexion requise pour sauvegarder les filtres",
+    "loginToSave": "Se connecter"
   },
   "isochrone": {
     "title": "Temps de trajet",
@@ -1418,5 +1431,13 @@
     "comparisonLimitReached": "Limite de comparaison atteinte",
     "error": "Une erreur est survenue",
     "newPropertyFound": "Nouveau bien trouvé"
+  },
+  "subscription": {
+    "choosePlan": "Choisissez un plan",
+    "free": "Gratuit",
+    "basic": "Basique",
+    "pro": "Pro",
+    "paymentSuccess": "Paiement réussi",
+    "noSubscription": "Abonnement actif requis"
   }
 }

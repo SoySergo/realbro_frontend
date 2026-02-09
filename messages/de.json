@@ -587,7 +587,20 @@
     "rooms": "Zimmer",
     "sortDate": "Nach Datum",
     "viewList": "Liste",
-    "viewMap": "Karte"
+    "viewMap": "Karte",
+    "tabLimit": "Tab-Limit erreicht",
+    "tabLimitDescription": "Sie haben das Maximum von {max} Tabs erreicht. Erweitern Sie Ihren Plan oder bearbeiten Sie bestehende Tabs.",
+    "upgradePlan": "Plan erweitern",
+    "editTab": "Tab bearbeiten",
+    "clearFilters": "Filter löschen",
+    "assignAiAgent": "KI-Agent zuweisen",
+    "agentSearching": "Agent sucht...",
+    "agentNotifications": "Sie erhalten Benachrichtigungen von {startHour} bis {endHour}",
+    "goToChat": "Zum Chat mit Agent",
+    "continueSearch": "Suche fortsetzen",
+    "distanceToPoint": "Entfernung zum Punkt",
+    "loginRequired": "Anmeldung erforderlich, um Filter zu speichern",
+    "loginToSave": "Anmelden"
   },
   "isochrone": {
     "title": "Fahrzeit",
@@ -1424,5 +1437,13 @@
     "comparisonLimitReached": "Vergleichslimit erreicht",
     "error": "Etwas ist schiefgelaufen",
     "newPropertyFound": "Neue Immobilie gefunden"
+  },
+  "subscription": {
+    "choosePlan": "Plan auswählen",
+    "free": "Kostenlos",
+    "basic": "Basis",
+    "pro": "Pro",
+    "paymentSuccess": "Zahlung erfolgreich",
+    "noSubscription": "Aktives Abonnement erforderlich"
   }
 }
