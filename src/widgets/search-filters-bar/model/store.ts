@@ -133,6 +133,13 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
         result.radiusKm = locationFilter.radius.radiusKm;
     }
 
+    // Изохрон (время до точки)
+    if (locationFilter.mode === 'isochrone' && locationFilter.isochrone) {
+        result.isochroneCenter = locationFilter.isochrone.center;
+        result.isochroneMinutes = locationFilter.isochrone.minutes;
+        result.isochroneProfile = locationFilter.isochrone.profile;
+    }
+
     return result;
 }
 
@@ -198,6 +205,18 @@ function convertFiltersToLocationFilter(
             radius: {
                 center: filters.radiusCenter,
                 radiusKm: filters.radiusKm,
+            },
+        };
+    }
+
+    // Проверяем изохрон
+    if (filters.isochroneCenter && filters.isochroneMinutes) {
+        return {
+            mode: 'isochrone',
+            isochrone: {
+                center: filters.isochroneCenter,
+                minutes: filters.isochroneMinutes,
+                profile: filters.isochroneProfile || 'walking',
             },
         };
     }
@@ -287,8 +306,24 @@ export const useFilterStore = create<FilterStore>()(
                 }));
 
                 console.log('Polygon added:', newPolygon.id);
-                // TODO: Отправка на бекенд (имитация)
-                // sendPolygonToBackend(newPolygon);
+
+                // Отправка геометрии на бекенд
+                fetch('/api/geometries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'polygon',
+                        geometry: newPolygon.points,
+                        name: newPolygon.id,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log('[GEO] Polygon saved to backend:', data.data?.id);
+                    })
+                    .catch((err) => {
+                        console.error('[GEO] Failed to save polygon:', err);
+                    });
 
                 return newPolygon;
             },

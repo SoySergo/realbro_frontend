@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
+
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { MapPin, ChevronDown, Pencil, Clock, Circle, Search } from 'lucide-react';
 import { useFilterStore } from '@/widgets/search-filters-bar';
@@ -24,6 +25,7 @@ const MAP_REQUIRED_MODES: LocationFilterMode[] = ['draw', 'isochrone', 'radius']
 export function LocationFilterButton() {
     const t = useTranslations('filters');
     const tLocationFilter = useTranslations('locationFilter.modes');
+    const tSidebar = useTranslations('sidebar');
     const { locationFilter, activeLocationMode, setLocationMode, searchViewMode } = useFilterStore();
     const router = useRouter();
     const pathname = usePathname();
@@ -45,7 +47,7 @@ export function LocationFilterButton() {
         {
             mode: 'isochrone' as LocationFilterMode,
             icon: Clock,
-            label: t('locationTimeFrom'),
+            label: tSidebar('distanceToPoint'),
             shortLabel: tLocationFilter('isochrone'),
         },
         {
