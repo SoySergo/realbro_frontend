@@ -15,8 +15,10 @@ const queryIconMap: Record<SearchQueryType, LucideIcon> = {
     agent: Users,
 };
 
-function getQueryIcon(queryType?: SearchQueryType): LucideIcon {
-    return queryIconMap[queryType ?? 'search'] ?? Search;
+// Рендер иконки по типу запроса
+function QueryIcon({ queryType, className }: { queryType?: SearchQueryType; className?: string }) {
+    const IconComponent = queryIconMap[queryType ?? 'search'] ?? Search;
+    return <IconComponent className={className} />;
 }
 
 type MobileQueryItemProps = {
@@ -30,8 +32,6 @@ type MobileQueryItemProps = {
 // Используем forwardRef для возможности скролла к элементу
 export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
     function MobileQueryItem({ query, isActive, canDelete, onSelect, onDelete }, ref) {
-        const Icon = getQueryIcon(query.queryType);
-
         return (
             <div
                 ref={ref}
@@ -52,7 +52,8 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                 />
 
                 <div className="relative shrink-0 z-10 pointer-events-none">
-                    <Icon
+                    <QueryIcon
+                        queryType={query.queryType}
                         className={cn(
                             'w-5 h-5',
                             isActive ? 'text-brand-primary' : 'text-text-tertiary'

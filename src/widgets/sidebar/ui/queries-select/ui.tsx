@@ -72,7 +72,6 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
         }
 
         // Проверка лимита вкладок
-        // Проверка лимита вкладок
         try {
             const res = await fetch('/api/subscription/check');
             if (res.ok) {

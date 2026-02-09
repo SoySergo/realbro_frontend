@@ -14,8 +14,10 @@ const queryIconMap: Record<SearchQueryType, LucideIcon> = {
     agent: Users,
 };
 
-function getQueryIcon(queryType?: SearchQueryType): LucideIcon {
-    return queryIconMap[queryType ?? 'search'] ?? Search;
+// Рендер иконки по типу запроса
+function QueryIcon({ queryType, className }: { queryType?: SearchQueryType; className?: string }) {
+    const IconComponent = queryIconMap[queryType ?? 'search'] ?? Search;
+    return <IconComponent className={className} />;
 }
 
 type DesktopQueryItemProps = {
@@ -35,8 +37,6 @@ export function DesktopQueryItem({
     onSelect,
     onDelete,
 }: DesktopQueryItemProps) {
-    const Icon = getQueryIcon(query.queryType);
-
     // Компактный вид для свёрнутого сайдбара
     if (!isExpanded) {
         return (
@@ -50,7 +50,7 @@ export function DesktopQueryItem({
                         : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
                 )}
             >
-                <Icon className="w-5 h-5" />
+                <QueryIcon queryType={query.queryType} className="w-5 h-5" />
                 {/* Индикатор AI агента в режиме поиска */}
                 {query.hasAiAgent && query.aiAgentStatus === 'searching' && (
                     <span className="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
@@ -87,7 +87,8 @@ export function DesktopQueryItem({
             />
 
             <div className="relative shrink-0 z-10 pointer-events-none">
-                <Icon
+                <QueryIcon
+                    queryType={query.queryType}
                     className={cn(
                         'w-5 h-5',
                         isActive ? 'text-brand-primary' : 'text-text-tertiary'
