@@ -22,7 +22,6 @@ import {
     EyeOff,
     ChevronLeft,
     ChevronRight,
-    Expand,
     Sparkles,
     Filter,
     X,
@@ -228,7 +227,7 @@ function ImageCarousel({
                                 key={i}
                                 className={cn(
                                     'h-1.5 w-1.5 rounded-full transition-colors',
-                                    i === current % 5 ? 'bg-white' : 'bg-white/50',
+                                    i === current % 5 ? 'bg-white' : 'bg-white/40',
                                 )}
                             />
                         ))}
@@ -444,7 +443,7 @@ function CardMinimal({
                         {filterName}
                     </Badge>
                 )}
-                <Expand className={cn('h-3.5 w-3.5 shrink-0 text-text-tertiary transition-transform', expanded && 'rotate-45')} />
+                <ChevronDown className={cn('h-3.5 w-3.5 shrink-0 text-text-tertiary transition-transform', expanded && 'rotate-180')} />
             </button>
 
             {/* Развёрнутое содержимое */}
@@ -557,7 +556,7 @@ function CardStory({ property }: { property: Property }) {
                             <div
                                 className={cn(
                                     'h-full rounded-full bg-white transition-all duration-300',
-                                    i < imgIdx % 5 ? 'w-full' : i === imgIdx % 5 ? 'w-full' : 'w-0',
+                                    i <= imgIdx % 5 ? 'w-full' : 'w-0',
                                 )}
                             />
                         </div>
