@@ -145,7 +145,7 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
             {isOpen && (
                 <div className="fixed inset-0 bg-background" style={{ zIndex: 100 }}>
                     {/* Заголовок с кнопкой закрытия */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                    <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-brand-primary/10 to-transparent border-b border-transparent" style={{ borderImage: 'linear-gradient(to right, hsl(var(--brand-primary) / 0.3), transparent) 1' }}>
                         <h2 className="text-lg font-semibold">{t('selectSearch')}</h2>
                         <button
                             onClick={() => setIsOpen(false)}
@@ -181,10 +181,10 @@ export function QueriesSelect({ triggerClassName }: QueriesSelectProps = {}) {
                     </div>
 
                     {/* Кнопка добавления нового запроса - всегда зафиксирована внизу над bottom nav */}
-                    <div className="absolute bottom-0 left-0 right-0 px-4 pt-2 pb-3 bg-background border-t border-border">
+                    <div className="absolute bottom-0 left-0 right-0 px-4 pt-2 pb-3 bg-background border-t border-transparent" style={{ borderImage: 'linear-gradient(to right, hsl(var(--brand-primary) / 0.3), transparent) 1' }}>
                         <button
                             onClick={handleAddQuery}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-primary text-white active:bg-brand-primary-hover transition-colors duration-150"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-brand-primary to-brand-primary/80 text-white active:opacity-90 transition-all duration-150"
                         >
                             <Plus className="w-5 h-5" />
                             <span className="text-base font-medium">{t('newSearch')}</span>
