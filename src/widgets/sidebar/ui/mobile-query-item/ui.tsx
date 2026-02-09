@@ -51,12 +51,18 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     aria-label={`Select ${query.title}`}
                 />
 
-                <Icon
-                    className={cn(
-                        'w-5 h-5 shrink-0 relative z-10 pointer-events-none',
-                        isActive ? 'text-brand-primary' : 'text-text-tertiary'
+                <div className="relative shrink-0 z-10 pointer-events-none">
+                    <Icon
+                        className={cn(
+                            'w-5 h-5',
+                            isActive ? 'text-brand-primary' : 'text-text-tertiary'
+                        )}
+                    />
+                    {/* Индикатор AI агента в режиме поиска */}
+                    {query.hasAiAgent && query.aiAgentStatus === 'searching' && (
+                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
                     )}
-                />
+                </div>
                 <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
                     <div className="flex items-center gap-1.5">
                         <span className="font-medium truncate text-base">{query.title}</span>

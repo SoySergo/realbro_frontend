@@ -23,6 +23,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/shared/ui/popover';
+import { useAuth } from '@/features/auth';
+import { useToast } from '@/shared/ui/toast';
 
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { useAgencyFilters } from '@/features/agency-filters';
@@ -57,11 +59,14 @@ interface SearchFiltersBarContentProps {
 function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFiltersBarContentProps) {
     const t = useTranslations('filters');
     const tCommon = useTranslations('common');
+    const tSidebar = useTranslations('sidebar');
     const locale = useLocale();
     const { filtersCount, clearFilters, filters, setFilters } = useSearchFilters();
     const { currentFilters, setLocationMode } = useFilterStore();
     const { addQuery, updateQuery, activeQueryId, queries } = useSidebarStore();
     const agencyFilters = useAgencyFilters();
+    const { isAuthenticated } = useAuth();
+    const { showToast } = useToast();
 
     const isProperties = currentCategory === 'properties';
 
@@ -163,7 +168,18 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         // Для professionals — фильтры применяются автоматически через стор
     };
 
+    // Проверка авторизации перед сохранением фильтра
+    const requireAuth = useCallback((): boolean => {
+        if (!isAuthenticated) {
+            showToast(tSidebar('loginRequired'), 'warning');
+            return false;
+        }
+        return true;
+    }, [isAuthenticated, showToast, tSidebar]);
+
     const handleSave = () => {
+        if (!requireAuth()) return;
+
         if (activeQuery) {
             if (activeQuery.isUnsaved) {
                 setIsSavePopoverOpen(true);
@@ -303,7 +319,10 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                                     <SaveIcon className="w-4 h-4" />
                                 </Button>
                             ) : (
-                                <Popover open={isSavePopoverOpen} onOpenChange={setIsSavePopoverOpen}>
+                                <Popover open={isSavePopoverOpen} onOpenChange={(open) => {
+                                    if (open && !requireAuth()) return;
+                                    setIsSavePopoverOpen(open);
+                                }}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="ghost"
