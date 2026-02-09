@@ -56,6 +56,11 @@ export interface SearchFilters {
     radiusCenter?: [number, number]; // [lng, lat]
     radiusKm?: number;
 
+    // Изохрон (время до точки)
+    isochroneCenter?: [number, number]; // [lng, lat]
+    isochroneMinutes?: number;
+    isochroneProfile?: 'walking' | 'cycling' | 'driving';
+
     // Сортировка
     sort?: string;
     sortOrder?: 'asc' | 'desc';

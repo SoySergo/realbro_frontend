@@ -585,7 +585,20 @@
     "viewMap": "Mapa",
     "favorites": "Favoritos",
     "chat": "Chat",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "tabLimit": "Limite de abas alcançado",
+    "tabLimitDescription": "Você alcançou o máximo de {max} abas. Atualize seu plano ou edite as existentes.",
+    "upgradePlan": "Atualizar plano",
+    "editTab": "Editar aba",
+    "clearFilters": "Limpar filtros",
+    "assignAiAgent": "Atribuir agente IA",
+    "agentSearching": "Agente buscando...",
+    "agentNotifications": "Você receberá notificações das {startHour} às {endHour}",
+    "goToChat": "Ir ao chat com agente",
+    "continueSearch": "Continuar buscando",
+    "distanceToPoint": "Distância ao ponto",
+    "loginRequired": "Login necessário para salvar filtros",
+    "loginToSave": "Fazer login"
   },
   "isochrone": {
     "title": "Isócrona",
@@ -1378,5 +1391,13 @@
     "comparisonLimitReached": "Limite de comparação atingido",
     "error": "Algo deu errado",
     "newPropertyFound": "Novo imóvel encontrado"
+  },
+  "subscription": {
+    "choosePlan": "Escolha um plano",
+    "free": "Grátis",
+    "basic": "Básico",
+    "pro": "Pro",
+    "paymentSuccess": "Pagamento efetuado",
+    "noSubscription": "Assinatura ativa necessária"
   }
 }

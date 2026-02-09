@@ -94,7 +94,8 @@ export function BottomNavigation() {
                             )}
                         >
                             <div className={cn(
-                                'relative',
+                                'relative rounded-lg px-3 py-1 transition-colors',
+                                isActive && 'bg-gradient-to-r from-brand-primary/15 to-transparent',
                                 isChatIcon && isAnimating && 'animate-chat-wiggle'
                             )}>
                                 <Icon className={cn(

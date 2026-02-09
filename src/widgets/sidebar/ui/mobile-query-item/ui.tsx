@@ -1,9 +1,25 @@
 'use client';
 
-import { MapPin, X } from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
-import type { SearchQuery } from '@/widgets/sidebar/model';
 import { forwardRef } from 'react';
+import { Search, BedDouble, Building2, Home, Store, Users, X, type LucideIcon } from 'lucide-react';
+import { cn } from '@/shared/lib/utils';
+import type { SearchQuery, SearchQueryType } from '@/widgets/sidebar/model';
+
+// Маппинг типа запроса на иконку
+const queryIconMap: Record<SearchQueryType, LucideIcon> = {
+    search: Search,
+    residential_rooms: BedDouble,
+    residential_apartments: Building2,
+    residential_houses: Home,
+    commercial: Store,
+    agent: Users,
+};
+
+// Рендер иконки по типу запроса
+function QueryIcon({ queryType, className }: { queryType?: SearchQueryType; className?: string }) {
+    const IconComponent = queryIconMap[queryType ?? 'search'] ?? Search;
+    return <IconComponent className={className} />;
+}
 
 type MobileQueryItemProps = {
     query: SearchQuery;
@@ -24,7 +40,7 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     'transition-colors duration-150 border-2',
                     'gap-3 px-4 py-3',
                     isActive
-                        ? 'bg-brand-primary-light border-brand-primary text-text-primary'
+                        ? 'bg-gradient-to-r from-brand-primary/15 to-transparent border-brand-primary text-text-primary'
                         : 'border-transparent text-text-secondary active:bg-background-tertiary'
                 )}
             >
@@ -35,12 +51,19 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     aria-label={`Select ${query.title}`}
                 />
 
-                <MapPin
-                    className={cn(
-                        'w-5 h-5 shrink-0 relative z-10 pointer-events-none',
-                        isActive ? 'text-brand-primary' : 'text-text-tertiary'
+                <div className="relative shrink-0 z-10 pointer-events-none">
+                    <QueryIcon
+                        queryType={query.queryType}
+                        className={cn(
+                            'w-5 h-5',
+                            isActive ? 'text-brand-primary' : 'text-text-tertiary'
+                        )}
+                    />
+                    {/* Индикатор AI агента в режиме поиска */}
+                    {query.hasAiAgent && query.aiAgentStatus === 'searching' && (
+                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
                     )}
-                />
+                </div>
                 <div className="flex-1 min-w-0 text-left relative z-10 pointer-events-none">
                     <div className="flex items-center gap-1.5">
                         <span className="font-medium truncate text-base">{query.title}</span>
@@ -53,6 +76,13 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     </div>
                     <QueryStats query={query} className="mt-0.5 text-sm" />
                 </div>
+
+                {/* Бейдж новых результатов */}
+                {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
+                    <span className="min-w-[20px] h-5 flex items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[11px] font-bold px-1.5 relative z-10 pointer-events-none">
+                        +{query.newResultsCount}
+                    </span>
+                )}
 
                 {/* Кнопка удаления */}
                 {canDelete && onDelete && (

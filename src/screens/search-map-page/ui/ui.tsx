@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import {
     SearchFiltersBar,
     useFilterStore,
+    useFilterUrlSync,
     MobileSearchHeader,
     MobileViewToggle,
     MobileFiltersSheet,
@@ -44,6 +45,9 @@ export function SearchMapPage() {
 
     // Состояние мобильного sheet фильтров
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+    // Синхронизация фильтров с URL-параметрами
+    useFilterUrlSync();
 
     // Состояние мобильного сайдбара (collapsed / expanded)
     const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('collapsed');

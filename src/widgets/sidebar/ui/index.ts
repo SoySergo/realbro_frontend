@@ -5,3 +5,4 @@ export { BottomNavigation } from './bottom-navigation';
 export { DesktopQueryItem } from './desktop-query-item';
 export { MobileQueryItem } from './mobile-query-item';
 export { QueriesSelect } from './queries-select';
+export { AiAgentDialog } from './ai-agent-dialog';

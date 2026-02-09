@@ -591,7 +591,20 @@
     "rooms": "Комнат",
     "sortDate": "По дате",
     "viewList": "Списком",
-    "viewMap": "На карте"
+    "viewMap": "На карте",
+    "tabLimit": "Лимит вкладок достигнут",
+    "tabLimitDescription": "Вы достигли максимума в {max} вкладок. Расширьте тариф или отредактируйте существующие.",
+    "upgradePlan": "Расширить тариф",
+    "editTab": "Редактировать вкладку",
+    "clearFilters": "Очистить фильтры",
+    "assignAiAgent": "Дать задание ИИ-агенту",
+    "agentSearching": "Агент ищет...",
+    "agentNotifications": "Уведомления с {startHour} до {endHour}",
+    "goToChat": "Перейти в чат с агентом",
+    "continueSearch": "Продолжить поиск",
+    "distanceToPoint": "Расстояние до точки",
+    "loginRequired": "Для сохранения фильтров необходима авторизация",
+    "loginToSave": "Войти"
   },
   "isochrone": {
     "title": "Время в пути",
@@ -1428,5 +1441,13 @@
     "comparisonLimitReached": "Достигнут лимит сравнения",
     "error": "Что-то пошло не так",
     "newPropertyFound": "Найден новый объект"
+  },
+  "subscription": {
+    "choosePlan": "Выберите тариф",
+    "free": "Бесплатный",
+    "basic": "Базовый",
+    "pro": "Профессиональный",
+    "paymentSuccess": "Оплата выполнена",
+    "noSubscription": "Требуется активная подписка"
   }
 }

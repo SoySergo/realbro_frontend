@@ -725,7 +725,20 @@
     "rooms": "Habitacions",
     "sortDate": "Per data",
     "viewList": "Llista",
-    "viewMap": "Mapa"
+    "viewMap": "Mapa",
+    "tabLimit": "Límit de pestanyes assolit",
+    "tabLimitDescription": "Has assolit el màxim de {max} pestanyes. Amplia el pla o edita les existents.",
+    "upgradePlan": "Ampliar pla",
+    "editTab": "Editar pestanya",
+    "clearFilters": "Netejar filtres",
+    "assignAiAgent": "Assignar agent IA",
+    "agentSearching": "L'agent està buscant...",
+    "agentNotifications": "Rebràs notificacions de {startHour} a {endHour}",
+    "goToChat": "Anar al xat amb agent",
+    "continueSearch": "Continuar buscant",
+    "distanceToPoint": "Distància al punt",
+    "loginRequired": "Cal iniciar sessió per desar filtres",
+    "loginToSave": "Iniciar sessió"
   },
   "isochrone": {
     "title": "Temps de viatge",
@@ -1722,5 +1735,13 @@
     "comparisonLimitReached": "Límit de comparació assolit",
     "error": "Alguna cosa ha anat malament",
     "newPropertyFound": "Nou immoble trobat"
+  },
+  "subscription": {
+    "choosePlan": "Tria un pla",
+    "free": "Gratuït",
+    "basic": "Bàsic",
+    "pro": "Pro",
+    "paymentSuccess": "Pagament completat",
+    "noSubscription": "Es requereix subscripció activa"
   }
 }
