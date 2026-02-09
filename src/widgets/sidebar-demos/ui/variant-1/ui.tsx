@@ -159,7 +159,10 @@ export function Variant1() {
       </div>
 
       {/* Переключатели темы и языка */}
-      <div className="border-t border-border px-3 py-2 flex items-center gap-2 justify-center">
+      <div className={cn(
+        'border-t border-border px-3 py-2 flex gap-2 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-2 rounded-lg hover:bg-background-secondary text-text-secondary transition-colors">
           <Sun size={16} />
         </button>

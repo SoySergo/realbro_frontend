@@ -168,7 +168,10 @@ export function Variant8() {
       <div className="border-t border-dashed border-border my-2" />
 
       {/* Переключатели */}
-      <div className="flex items-center gap-2 justify-center">
+      <div className={cn(
+        'flex gap-2 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-1.5 rounded border border-border hover:border-border-hover text-text-secondary transition-colors">
           <Sun size={14} />
         </button>

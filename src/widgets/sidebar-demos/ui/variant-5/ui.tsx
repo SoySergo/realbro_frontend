@@ -173,7 +173,10 @@ export function Variant5() {
       </div>
 
       {/* Переключатели */}
-      <div className="mt-2 flex items-center gap-2 justify-center bg-background-secondary rounded-2xl p-2">
+      <div className={cn(
+        'mt-2 flex gap-2 justify-center bg-background-secondary rounded-2xl p-2',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-2 rounded-xl hover:bg-background text-text-secondary transition-colors">
           <Sun size={15} />
         </button>

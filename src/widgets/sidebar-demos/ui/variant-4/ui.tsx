@@ -42,7 +42,7 @@ export function Variant4() {
   return (
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground">
       {/* Логотип */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-sidebar-border">
+      <div className="flex items-center justify-between px-4 py-4 border-b border-sidebar-border relative">
         <div className="flex items-center gap-2.5">
           <Image src="/logo.svg" alt="RealBro" width={30} height={30} />
           {isExpanded && (
@@ -53,7 +53,7 @@ export function Variant4() {
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1.5 rounded-lg hover:bg-sidebar-accent transition-colors"
+          className={`z-110 p-1.5 rounded-lg hover:bg-sidebar-accent transition-colors absolute top-4 right-2 ${isExpanded ? 'right-3' : 'left-12'}`}
         >
           {isExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
         </button>
@@ -161,7 +161,10 @@ export function Variant4() {
       </div>
 
       {/* Переключатели */}
-      <div className="border-t border-sidebar-border px-3 py-3 flex items-center gap-2 justify-center">
+      <div className={cn(
+        'border-t border-sidebar-border px-3 py-3 flex gap-2 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
           <Sun size={16} />
         </button>

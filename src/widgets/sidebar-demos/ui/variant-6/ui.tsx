@@ -226,7 +226,10 @@ export function Variant6() {
       )}
 
       {/* Нижняя панель */}
-      <div className="border-t border-border px-3 py-2 flex items-center justify-center gap-2">
+      <div className={cn(
+        'border-t border-border px-3 py-2 flex justify-center gap-2',
+        !isExpanded ? 'flex-col items-center' : 'flex-row items-center'
+      )}>
         {!isExpanded && (
           <>
             <button className="p-2 rounded-lg hover:bg-background-secondary text-text-secondary transition-colors">

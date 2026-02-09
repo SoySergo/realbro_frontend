@@ -169,7 +169,10 @@ export function Variant2() {
 
         {/* Переключатели */}
         <div className="mx-4 h-px bg-border/50" />
-        <div className="px-3 py-2.5 flex items-center gap-2 justify-center">
+        <div className={cn(
+          'px-3 py-2.5 flex gap-2 justify-center',
+          isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+        )}>
           <button className="p-2 rounded-full hover:bg-background-secondary/60 text-text-secondary transition-all">
             <Sun size={15} />
           </button>

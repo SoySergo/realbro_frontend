@@ -40,28 +40,28 @@ export function Variant7() {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="relative flex flex-col h-full bg-background">
+      {/* Кнопка свернуть/развернуть — абсолютная, на границе сайдбара */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="absolute top-5 -right-3 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-background border border-border shadow-md hover:bg-background-secondary text-text-secondary transition-colors"
+      >
+        {isExpanded ? (
+          <ChevronLeft size={12} />
+        ) : (
+          <ChevronRight size={12} />
+        )}
+      </button>
+
       {/* Логотип с градиентным фоном */}
       <div className="px-4 py-4 bg-gradient-to-r from-brand-primary/10 to-transparent">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image src="/logo.svg" alt="RealBro" width={28} height={28} />
-            {isExpanded && (
-              <span className="font-bold text-text-primary text-sm">
-                RealBro
-              </span>
-            )}
-          </div>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1 rounded-lg hover:bg-background-secondary text-text-secondary transition-colors"
-          >
-            {isExpanded ? (
-              <ChevronLeft size={16} />
-            ) : (
-              <ChevronRight size={16} />
-            )}
-          </button>
+        <div className="flex items-center gap-2">
+          <Image src="/logo.svg" alt="RealBro" width={28} height={28} />
+          {isExpanded && (
+            <span className="font-bold text-text-primary text-sm">
+              RealBro
+            </span>
+          )}
         </div>
       </div>
 
@@ -179,7 +179,10 @@ export function Variant7() {
 
       {/* Переключатели */}
       <div className="h-px bg-gradient-to-r from-brand-primary/20 via-brand-primary/5 to-transparent" />
-      <div className="px-3 py-2.5 flex items-center gap-2 justify-center">
+      <div className={cn(
+        'px-3 py-2.5 flex gap-2 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-2 rounded-lg hover:bg-background-secondary text-text-secondary transition-colors">
           <Sun size={15} />
         </button>

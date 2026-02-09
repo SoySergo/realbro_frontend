@@ -157,7 +157,10 @@ export function Variant3() {
       </div>
 
       {/* Переключатели */}
-      <div className="border-t border-border/50 px-2 py-1.5 flex items-center gap-1 justify-center">
+      <div className={cn(
+        'border-t border-border/50 px-2 py-1.5 flex gap-1 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="p-1 rounded text-text-tertiary hover:text-text-secondary transition-colors">
           <Sun size={12} />
         </button>

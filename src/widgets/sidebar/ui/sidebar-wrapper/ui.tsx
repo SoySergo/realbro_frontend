@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { DesktopSidebar } from '../desktop-sidebar';
 import { MobileSidebar } from '../mobile-sidebar';
 import { useAutosave } from '@/widgets/sidebar/model';
@@ -12,6 +13,13 @@ import { useAutosave } from '@/widgets/sidebar/model';
 export function SidebarWrapper() {
     // Автосохранение, Ctrl+S, предупреждение при закрытии
     useAutosave();
+
+    const pathname = usePathname();
+
+    // Скрываем основной сайдбар на странице демо-сайдбаров
+    if (pathname?.includes('/demo/sidebar')) {
+        return null;
+    }
 
     return (
         <>

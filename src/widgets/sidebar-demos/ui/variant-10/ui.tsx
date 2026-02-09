@@ -170,7 +170,10 @@ export function Variant10() {
       </div>
 
       {/* Переключатели */}
-      <div className="px-5 py-4 flex items-center gap-3 justify-center">
+      <div className={cn(
+        'px-5 py-4 flex gap-3 justify-center',
+        isExpanded ? 'flex-row items-center' : 'flex-col items-center'
+      )}>
         <button className="text-text-tertiary hover:text-text-secondary transition-colors">
           <Sun size={15} />
         </button>
