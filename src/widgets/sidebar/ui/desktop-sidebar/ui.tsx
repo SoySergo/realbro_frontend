@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { Search, MessageCircle, User, Settings, Plus, LogIn, Scale, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -14,6 +15,7 @@ import { DesktopQueryItem } from '../desktop-query-item';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/shared/config/routing';
 import Image from 'next/image';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
 // Навигационные элементы
 const navigationItems = [
@@ -28,6 +30,10 @@ export function DesktopSidebar() {
     const t = useTranslations('sidebar');
     const tAuth = useTranslations('auth');
     const { isAuthenticated } = useAuth();
+    const router = useRouter();
+    const pathname = usePathname();
+    const [showLimitDialog, setShowLimitDialog] = useState(false);
+    const [tabLimit, setTabLimit] = useState({ max: 1, current: 0 });
     const chatUnread = useChatStore((s) => s.totalUnread());
     const comparisonCount = useComparisonCount();
     const [isMounted, setIsMounted] = useState(false);
@@ -127,7 +133,31 @@ export function DesktopSidebar() {
     }, [queries.length, isExpanded]);
 
     // Обработчик добавления нового запроса с имитацией загрузки
-    const handleAddQuery = () => {
+    const handleAddQuery = async () => {
+        // Проверка авторизации
+        if (!isAuthenticated) {
+            router.push(`${pathname}?modal=login`);
+            return;
+        }
+
+        // Проверка лимита вкладок
+        // Проверка лимита вкладок
+        try {
+            const res = await fetch('/api/subscription/check');
+            if (res.ok) {
+                const data = await res.json();
+
+                if (!data.allowed) {
+                    setTabLimit({ max: data.maxCount, current: data.currentCount });
+                    setShowLimitDialog(true);
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to check subscription limit', error);
+        }
+
+        // Создание вкладки
         const currentLength = queries.length;
         const title = `${t('search')} ${currentLength + 1}`;
 
@@ -160,6 +190,7 @@ export function DesktopSidebar() {
     };
 
     return (
+        <>
         <aside
             className={cn(
                 'fixed left-0 top-0 h-screen bg-background border-r border-border',
@@ -379,5 +410,33 @@ export function DesktopSidebar() {
                 </div>
             </div>
         </aside>
+
+        {/* Диалог лимита вкладок */}
+        <Dialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t('tabLimit')}</DialogTitle>
+                    <DialogDescription>
+                        {t('tabLimitDescription', { max: tabLimit.max })}
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Link
+                        href="/pricing"
+                        className="inline-flex items-center justify-center rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover transition-colors"
+                        onClick={() => setShowLimitDialog(false)}
+                    >
+                        {t('upgradePlan')}
+                    </Link>
+                    <button
+                        onClick={() => setShowLimitDialog(false)}
+                        className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-background-tertiary transition-colors"
+                    >
+                        {t('editTab')}
+                    </button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+        </>
     );
 }
