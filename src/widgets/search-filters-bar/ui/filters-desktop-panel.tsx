@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Checkbox } from '@/shared/ui/checkbox';
-import { X, Loader2, SlidersHorizontal, Search, Phone } from 'lucide-react';
+import { X, Loader2, SlidersHorizontal, Search, Phone, Trash2 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useAgencyFilters } from '@/features/agency-filters';
 import { useFilterStore } from '@/widgets/search-filters-bar';
