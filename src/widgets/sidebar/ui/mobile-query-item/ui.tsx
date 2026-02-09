@@ -1,9 +1,23 @@
 'use client';
 
-import { MapPin, X } from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
-import type { SearchQuery } from '@/widgets/sidebar/model';
 import { forwardRef } from 'react';
+import { Search, BedDouble, Building2, Home, Store, Users, X, type LucideIcon } from 'lucide-react';
+import { cn } from '@/shared/lib/utils';
+import type { SearchQuery, SearchQueryType } from '@/widgets/sidebar/model';
+
+// Маппинг типа запроса на иконку
+const queryIconMap: Record<SearchQueryType, LucideIcon> = {
+    search: Search,
+    residential_rooms: BedDouble,
+    residential_apartments: Building2,
+    residential_houses: Home,
+    commercial: Store,
+    agent: Users,
+};
+
+function getQueryIcon(queryType?: SearchQueryType): LucideIcon {
+    return queryIconMap[queryType ?? 'search'] ?? Search;
+}
 
 type MobileQueryItemProps = {
     query: SearchQuery;
@@ -16,6 +30,8 @@ type MobileQueryItemProps = {
 // Используем forwardRef для возможности скролла к элементу
 export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
     function MobileQueryItem({ query, isActive, canDelete, onSelect, onDelete }, ref) {
+        const Icon = getQueryIcon(query.queryType);
+
         return (
             <div
                 ref={ref}
@@ -24,7 +40,7 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     'transition-colors duration-150 border-2',
                     'gap-3 px-4 py-3',
                     isActive
-                        ? 'bg-brand-primary-light border-brand-primary text-text-primary'
+                        ? 'bg-gradient-to-r from-brand-primary/15 to-transparent border-brand-primary text-text-primary'
                         : 'border-transparent text-text-secondary active:bg-background-tertiary'
                 )}
             >
@@ -35,7 +51,7 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     aria-label={`Select ${query.title}`}
                 />
 
-                <MapPin
+                <Icon
                     className={cn(
                         'w-5 h-5 shrink-0 relative z-10 pointer-events-none',
                         isActive ? 'text-brand-primary' : 'text-text-tertiary'
@@ -53,6 +69,13 @@ export const MobileQueryItem = forwardRef<HTMLDivElement, MobileQueryItemProps>(
                     </div>
                     <QueryStats query={query} className="mt-0.5 text-sm" />
                 </div>
+
+                {/* Бейдж новых результатов */}
+                {query.newResultsCount !== undefined && query.newResultsCount > 0 && (
+                    <span className="min-w-[20px] h-5 flex items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-primary/70 text-white text-[11px] font-bold px-1.5 relative z-10 pointer-events-none">
+                        +{query.newResultsCount}
+                    </span>
+                )}
 
                 {/* Кнопка удаления */}
                 {canDelete && onDelete && (
