@@ -328,25 +328,51 @@ export async function getContactAccess(
 
 ### Endpoint
 
+**Важно:** Данные о локациях (транспорт, POI) приходят с **отдельного бекенда локаций** и не привязаны к конкретному объекту недвижимости.
+
 ```
-GET /api/locations/tiles/:propertyId/{z}/{x}/{y}.pbf
+GET /api/locations/:category/{z}/{x}/{y}.pbf
+или
+GET /api/locations/:category/{z}/{x}/{y}.json
+```
+
+### Path параметры
+
+```typescript
+interface LocationTilesPath {
+  category: 
+    | 'transport'
+    | 'schools'
+    | 'medical'
+    | 'groceries'
+    | 'shopping'
+    | 'restaurants'
+    | 'sports'
+    | 'parks'
+    | 'beauty'
+    | 'entertainment'
+    | 'attractions';
+  z: number;  // zoom level
+  x: number;  // tile x coordinate
+  y: number;  // tile y coordinate
+}
 ```
 
 ### Query параметры
 
 ```typescript
 interface LocationTilesRequest {
-  categories?: string[]; // ['transport', 'schools', 'medical', ...]
-  radius?: number;       // радиус поиска в метрах (default: 1000)
-  lang?: string;
+  lang?: string;  // 'ru', 'en', 'es', etc.
 }
 ```
 
 ### PBF Vector Tiles
 
-**Источник:** Внешний сервис локаций (например, Overture Maps, OSM)
+**Источник:** Отдельный сервис локаций (например, Overture Maps, OSM)
 
-**Слои (layers):**
+**Базовый URL:** `NEXT_PUBLIC_LOCATIONS_API_URL` (отдельно от основного API)
+
+**Категории (запрашиваются отдельно):**
 
 1. **transport** — станции транспорта
 2. **schools** — школы
@@ -360,7 +386,7 @@ interface LocationTilesRequest {
 10. **entertainment** — развлечения
 11. **attractions** — достопримечательности
 
-### Свойства features в слое `transport`
+### Свойства features в категории `transport`
 
 ```typescript
 interface TransportFeature {
@@ -372,56 +398,79 @@ interface TransportFeature {
     name: string;
     color: string;
     type: 'metro' | 'train' | 'bus' | 'tram';
+    geometry?: GeoJSON.LineString; // геометрия линии для отображения
   }>;
-  distance: number;    // метры от объекта
-  walkTime: number;    // минуты пешком
   coordinates: [number, number]; // [lng, lat]
 }
 ```
 
-### Свойства features в слоях POI
+**Примечание:** Расчет расстояния и времени до объекта недвижимости производится **на фронтенде** на основе координат станции и координат объекта.
+
+### Свойства features в категориях POI
 
 ```typescript
 interface POIFeature {
   id: string;
   name: string;
   type: string;        // подтип (e.g., 'supermarket', 'pharmacy')
-  distance: number;
-  walkTime: number;
   rating?: number;
   address?: string;
-  coordinates: [number, number];
+  coordinates: [number, number]; // [lng, lat]
 }
 ```
 
-### Пример запроса
+**Примечание:** Расстояние и время пешком рассчитываются на фронтенде.
 
+### Примеры запросов
+
+**Транспорт (PBF):**
 ```
-GET /api/locations/tiles/prop-123/15/16384/12288.pbf?
-  categories=transport,schools,medical&
-  radius=1500&
-  lang=ru
+GET /api/locations/transport/15/16384/12288.pbf?lang=ru
+```
+
+**Школы (JSON):**
+```
+GET /api/locations/schools/15/16384/12288.json?lang=ru
+```
+
+**Рестораны (PBF):**
+```
+GET /api/locations/restaurants/14/8192/6144.pbf?lang=es
 ```
 
 ### Фронтенд-реализация (Mapbox GL)
 
 ```typescript
-// Добавление source для locations tiles
-map.addSource('nearby-locations', {
+// Базовый URL для локаций (отдельный бекенд)
+const LOCATIONS_API_URL = process.env.NEXT_PUBLIC_LOCATIONS_API_URL || 'https://locations-api.realbro.com';
+
+// Добавление source для каждой категории отдельно
+map.addSource('transport-source', {
   type: 'vector',
   tiles: [
-    `/api/locations/tiles/${propertyId}/{z}/{x}/{y}.pbf?categories=transport,schools,medical&radius=1500`
+    `${LOCATIONS_API_URL}/transport/{z}/{x}/{y}.pbf?lang=${locale}`
   ],
   minzoom: 12,
   maxzoom: 18,
 });
 
+map.addSource('schools-source', {
+  type: 'vector',
+  tiles: [
+    `${LOCATIONS_API_URL}/schools/{z}/{x}/{y}.pbf?lang=${locale}`
+  ],
+  minzoom: 13,
+  maxzoom: 18,
+});
+
+// И так далее для других категорий...
+
 // Layer для транспорта
 map.addLayer({
   id: 'transport-markers',
   type: 'symbol',
-  source: 'nearby-locations',
-  'source-layer': 'transport',
+  source: 'transport-source',
+  'source-layer': 'default',  // имя слоя в PBF
   layout: {
     'icon-image': [
       'match',
@@ -445,17 +494,34 @@ map.addLayer({
   },
 });
 
+// Расчет расстояния и времени на фронтенде
+function calculateDistance(from: [number, number], to: [number, number]): number {
+  // Haversine formula для расчета расстояния между координатами
+  // Возвращает расстояние в метрах
+}
+
+function calculateWalkTime(distanceMeters: number): number {
+  // Средняя скорость ходьбы ~5 км/ч = ~83 м/мин
+  return Math.ceil(distanceMeters / 83);
+}
+
 // Popup при клике
 map.on('click', 'transport-markers', (e) => {
   const feature = e.features[0];
-  const { name, lines, walkTime } = feature.properties;
+  const { name, lines } = feature.properties;
+  const stationCoords = feature.geometry.coordinates;
+  
+  // Расчет расстояния от объекта недвижимости до станции
+  const distance = calculateDistance(propertyCoordinates, stationCoords);
+  const walkTime = calculateWalkTime(distance);
   
   // Показать popup с информацией о станции
   showTransportPopup({
     name,
     lines: JSON.parse(lines),
+    distance,
     walkTime,
-    coordinates: feature.geometry.coordinates,
+    coordinates: stationCoords,
   });
 });
 ```
@@ -463,24 +529,56 @@ map.on('click', 'transport-markers', (e) => {
 ### Отображение линий транспорта при ховере
 
 ```typescript
-// При ховере на станцию
+// При ховере на станцию показываем линии метро/поездов
 map.on('mouseenter', 'transport-markers', (e) => {
   const feature = e.features[0];
   const lines = JSON.parse(feature.properties.lines);
   
-  // Показать линии
-  lines.forEach(line => {
-    // Добавить layer с линией на карту
-    addLineToMap(line.id, line.coordinates, line.color);
+  // Показать линии, если геометрия доступна
+  lines.forEach((line, index) => {
+    if (line.geometry) {
+      // Добавить source с геометрией линии
+      map.addSource(`temp-line-${line.id}`, {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          geometry: line.geometry,
+          properties: {}
+        }
+      });
+      
+      // Добавить layer для отображения линии
+      map.addLayer({
+        id: `temp-line-layer-${line.id}`,
+        type: 'line',
+        source: `temp-line-${line.id}`,
+        paint: {
+          'line-color': line.color || '#3b82f6',
+          'line-width': 3,
+          'line-opacity': 0.8,
+        }
+      });
+    }
   });
   
   // Изменить курсор
   map.getCanvas().style.cursor = 'pointer';
 });
 
-map.on('mouseleave', 'transport-markers', () => {
-  // Убрать линии
-  removeAllLinesFromMap();
+map.on('mouseleave', 'transport-markers', (e) => {
+  const feature = e.features[0];
+  const lines = JSON.parse(feature.properties.lines);
+  
+  // Убрать временные слои и источники
+  lines.forEach(line => {
+    if (map.getLayer(`temp-line-layer-${line.id}`)) {
+      map.removeLayer(`temp-line-layer-${line.id}`);
+    }
+    if (map.getSource(`temp-line-${line.id}`)) {
+      map.removeSource(`temp-line-${line.id}`);
+    }
+  });
+  
   map.getCanvas().style.cursor = '';
 });
 ```
