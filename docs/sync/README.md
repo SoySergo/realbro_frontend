@@ -8,8 +8,9 @@
 
 1. **Фильтры** (`/filters/`) — система фильтрации объектов недвижимости
 2. **Объекты** (`/properties/`) — отображение и взаимодействие с объектами
-3. **Вкладки** (`/tabs/`) — сохранение и управление поисковыми запросами
-4. **Кластеры** (`/clusters/`) — группировка объектов на карте
+3. **Детали объекта** (`/property-detail/`) — страница детального просмотра с получением по slug
+4. **Вкладки** (`/tabs/`) — сохранение и управление поисковыми запросами
+5. **Кластеры** (`/clusters/`) — группировка объектов на карте
 
 ---
 
@@ -610,7 +611,8 @@ export const generateMockProperties = (
 
 **Документация:**
 - Фильтры: [filters/README.md](./filters/README.md)
-- Объекты: [properties/README.md](./properties/README.md)
+- Объекты (листинг): [properties/README.md](./properties/README.md)
+- Детали объекта: [property-detail/README.md](./property-detail/README.md)
 - Вкладки: [tabs/README.md](./tabs/README.md)
 - Кластеры: [clusters/README.md](./clusters/README.md)
 
