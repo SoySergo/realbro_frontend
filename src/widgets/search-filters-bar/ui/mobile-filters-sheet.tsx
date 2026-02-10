@@ -239,23 +239,37 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                     <div className="w-12 h-1 rounded-full bg-text-tertiary" />
                 </div>
 
-                {/* Заголовок */}
-                <div className="px-4 py-3 border-b border-border shrink-0">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold text-text-primary">{t('title')}</h2>
+                {/* Заголовок - улучшенный */}
+                <div className="px-4 py-4 border-b border-border shrink-0 bg-background">
+                    <div className="flex items-center justify-between mb-3">
+                        <div>
+                            <h2 className="text-lg font-semibold text-text-primary">{t('title')}</h2>
+                            {resultsCount !== null && (
+                                <p className="text-xs text-text-secondary mt-1">
+                                    {t('resultsFound', { count: formatNumber(resultsCount) })}
+                                </p>
+                            )}
+                        </div>
                         <button
                             onClick={() => onOpenChange(false)}
-                            className="p-2 rounded-lg hover:bg-background-tertiary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                            className="p-2.5 rounded-lg hover:bg-background-tertiary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                             aria-label={t('cancel')}
                         >
                             <X className="w-5 h-5 text-text-secondary" />
                         </button>
                     </div>
+                    
+                    {/* Переключатель категорий - в хедере */}
+                    <SearchCategorySwitcher
+                        currentCategory={currentCategory}
+                        locale={locale}
+                        className="w-full"
+                    />
                 </div>
 
                 {/* Фильтры в вертикальной компоновке со скроллом */}
                 <div
-                    className="flex-1 overflow-y-auto"
+                    className="flex-1 overflow-y-auto px-4 py-2"
                     onScroll={() => {
                         // Скрываем клавиатуру при скролле на мобильных
                         if (document.activeElement instanceof HTMLElement) {
@@ -263,192 +277,192 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                         }
                     }}
                 >
-                    <div className="flex flex-col">
-                        {/* Переключатель: Недвижимость / Агентства */}
-                        <div className="px-4 py-3 border-b border-border">
-                            <SearchCategorySwitcher
-                                currentCategory={currentCategory}
-                                locale={locale}
-                                className="w-full"
-                            />
-                        </div>
-
-                        {/* Тип маркера — общий для обеих категорий */}
-                        <FilterSection id="marker-type" title={t('markerType')}>
-                            <div className="px-4">
-                                <MarkerTypeFilterMobile
-                                    value={localMarkerType}
-                                    onChange={setLocalMarkerType}
-                                />
-                            </div>
-                        </FilterSection>
-
-                        {isProperties ? (
-                            <>
-                                {/* Локация */}
-                                <FilterSection id="location" title={t('categories.location')}>
-                                    <div className="px-4">
-                                        <LocationFilterMobile
-                                            value={localLocationMode}
-                                            onChange={setLocalLocationMode}
-                                            onLaunch={(mode: LocationFilterMode) => {
-                                                // Активируем режим на карте и закрываем мобильное окно фильтров
-                                                setLocationMode(mode);
-                                                onOpenChange(false);
-                                            }}
-                                        />
-                                    </div>
-                                </FilterSection>
-
-                                {/* Категория */}
-                                <FilterSection id="category" title={t('category')}>
-                                    <div className="px-4">
-                                        <CategoryFilterMobile
-                                            value={localCategoryIds}
-                                            onChange={setLocalCategoryIds}
-                                        />
-                                    </div>
-                                </FilterSection>
-
-                                {/* Цена */}
-                                <FilterSection id="price" title={t('categories.price')}>
-                                    <div className="px-4">
-                                        <PriceFilterMobile
-                                            minPrice={localMinPrice}
-                                            maxPrice={localMaxPrice}
-                                            onMinPriceChange={setLocalMinPrice}
-                                            onMaxPriceChange={setLocalMaxPrice}
-                                        />
-                                    </div>
-                                </FilterSection>
-
-                                {/* Комнаты */}
-                                <FilterSection id="rooms" title={t('categories.rooms')}>
-                                    <div className="px-4">
-                                        <RoomsFilterMobile
-                                            value={localRooms}
-                                            onChange={setLocalRooms}
-                                        />
-                                    </div>
-                                </FilterSection>
-
-                                {/* Площадь */}
-                                <FilterSection id="area" title={t('categories.area')}>
-                                    <div className="px-4">
-                                        <AreaFilterMobile
-                                            minArea={localMinArea}
-                                            maxArea={localMaxArea}
-                                            onMinAreaChange={setLocalMinArea}
-                                            onMaxAreaChange={setLocalMaxArea}
-                                        />
-                                    </div>
-                                </FilterSection>
-                            </>
-                        ) : (
-                            <>
-                                {/* Поиск по названию */}
-                                <FilterSection id="agency-name" title={tAgency('searchByName')}>
-                                    <div className="px-4">
-                                        <div className="relative">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                                            <Input
-                                                type="text"
-                                                placeholder={tAgency('namePlaceholder')}
-                                                value={localQuery}
-                                                onChange={(e) => setLocalQuery(e.target.value)}
-                                                className="h-11 min-h-[44px] text-base pl-10"
-                                            />
-                                        </div>
-                                    </div>
-                                </FilterSection>
-
-                                {/* Поиск по телефону */}
-                                <FilterSection id="agency-phone" title={tAgency('searchByPhone')}>
-                                    <div className="px-4">
-                                        <div className="relative">
-                                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                                            <Input
-                                                type="tel"
-                                                placeholder={tAgency('phonePlaceholder')}
-                                                value={localPhone}
-                                                onChange={(e) => setLocalPhone(e.target.value)}
-                                                className="h-11 min-h-[44px] text-base pl-10"
-                                            />
-                                        </div>
-                                    </div>
-                                </FilterSection>
-
-                                {/* Языки */}
-                                <FilterSection id="agency-languages" title={tAgency('languages')}>
-                                    <div className="px-4 space-y-2">
-                                        {AVAILABLE_LANGUAGES.map((lang) => (
-                                            <label
-                                                key={lang}
-                                                className="flex items-center gap-3 py-1.5 min-h-[44px] cursor-pointer"
-                                            >
-                                                <Checkbox
-                                                    checked={localLanguages.includes(lang)}
-                                                    onCheckedChange={() => {
-                                                        setLocalLanguages((prev) =>
-                                                            prev.includes(lang)
-                                                                ? prev.filter((l) => l !== lang)
-                                                                : [...prev, lang]
-                                                        );
+                    <div className="flex flex-col gap-1">{isProperties ? (
+                                <>
+                                    {/* Локация - в приоритете */}
+                                    <div className="mb-1">
+                                        <FilterSection id="location" title={t('categories.location')}>
+                                            <div className="py-4">
+                                                <LocationFilterMobile
+                                                    value={localLocationMode}
+                                                    onChange={setLocalLocationMode}
+                                                    onLaunch={(mode: LocationFilterMode) => {
+                                                        setLocationMode(mode);
+                                                        onOpenChange(false);
                                                     }}
                                                 />
-                                                <span className="text-base text-text-secondary">
-                                                    {tLang(lang)}
-                                                </span>
-                                            </label>
-                                        ))}
+                                            </div>
+                                        </FilterSection>
                                     </div>
-                                </FilterSection>
 
-                                {/* Типы недвижимости */}
-                                <FilterSection id="agency-property-types" title={tAgency('propertyTypes')}>
-                                    <div className="px-4 space-y-2">
-                                        {AGENCY_PROPERTY_TYPES.map((type) => (
-                                            <label
-                                                key={type}
-                                                className="flex items-center gap-3 py-1.5 min-h-[44px] cursor-pointer"
-                                            >
-                                                <Checkbox
-                                                    checked={localPropertyTypes.includes(type)}
-                                                    onCheckedChange={() => {
-                                                        setLocalPropertyTypes((prev) =>
-                                                            prev.includes(type)
-                                                                ? prev.filter((t) => t !== type)
-                                                                : [...prev, type]
-                                                        );
-                                                    }}
+                                    {/* Основные фильтры */}
+                                    <FilterSection id="category" title={t('category')}>
+                                        <div className="py-4">
+                                            <CategoryFilterMobile
+                                                value={localCategoryIds}
+                                                onChange={setLocalCategoryIds}
+                                            />
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="price" title={t('categories.price')}>
+                                        <div className="py-4">
+                                            <PriceFilterMobile
+                                                minPrice={localMinPrice}
+                                                maxPrice={localMaxPrice}
+                                                onMinPriceChange={setLocalMinPrice}
+                                                onMaxPriceChange={setLocalMaxPrice}
+                                            />
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="rooms" title={t('categories.rooms')}>
+                                        <div className="py-4">
+                                            <RoomsFilterMobile
+                                                value={localRooms}
+                                                onChange={setLocalRooms}
+                                            />
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="area" title={t('categories.area')}>
+                                        <div className="py-4">
+                                            <AreaFilterMobile
+                                                minArea={localMinArea}
+                                                maxArea={localMaxArea}
+                                                onMinAreaChange={setLocalMinArea}
+                                                onMaxAreaChange={setLocalMaxArea}
+                                            />
+                                        </div>
+                                    </FilterSection>
+
+                                    {/* Дополнительные - отдельная группа */}
+                                    <div className="mt-2 pt-3 border-t border-border">
+                                        <FilterSection id="marker-type" title={t('markerType')}>
+                                            <div className="py-4">
+                                                <MarkerTypeFilterMobile
+                                                    value={localMarkerType}
+                                                    onChange={setLocalMarkerType}
                                                 />
-                                                <span className="text-base text-text-secondary">
-                                                    {tAgency(`propertyTypesLabels.${type}`)}
-                                                </span>
-                                            </label>
-                                        ))}
+                                            </div>
+                                        </FilterSection>
                                     </div>
-                                </FilterSection>
-                            </>
-                        )}
+                                </>
+                            ) : (
+                                <>
+                                    {/* Фильтры профессионалов */}
+                                    <FilterSection id="agency-name" title={tAgency('searchByName')}>
+                                        <div className="py-4">
+                                            <div className="relative">
+                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
+                                                <Input
+                                                    type="text"
+                                                    placeholder={tAgency('namePlaceholder')}
+                                                    value={localQuery}
+                                                    onChange={(e) => setLocalQuery(e.target.value)}
+                                                    className="h-11 min-h-[44px] text-base pl-10"
+                                                />
+                                            </div>
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="agency-phone" title={tAgency('searchByPhone')}>
+                                        <div className="py-4">
+                                            <div className="relative">
+                                                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
+                                                <Input
+                                                    type="tel"
+                                                    placeholder={tAgency('phonePlaceholder')}
+                                                    value={localPhone}
+                                                    onChange={(e) => setLocalPhone(e.target.value)}
+                                                    className="h-11 min-h-[44px] text-base pl-10"
+                                                />
+                                            </div>
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="agency-languages" title={tAgency('languages')}>
+                                        <div className="py-4 space-y-2">
+                                            {AVAILABLE_LANGUAGES.map((lang) => (
+                                                <label
+                                                    key={lang}
+                                                    className="flex items-center gap-3 py-1.5 cursor-pointer hover:bg-background-tertiary rounded-md px-2 -mx-2 transition-colors min-h-[44px]"
+                                                >
+                                                    <Checkbox
+                                                        checked={localLanguages.includes(lang)}
+                                                        onCheckedChange={() => {
+                                                            setLocalLanguages((prev) =>
+                                                                prev.includes(lang)
+                                                                    ? prev.filter((l) => l !== lang)
+                                                                    : [...prev, lang]
+                                                            );
+                                                        }}
+                                                    />
+                                                    <span className="text-base text-text-primary">
+                                                        {tLang(lang)}
+                                                    </span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="agency-property-types" title={tAgency('propertyTypes')}>
+                                        <div className="py-4 space-y-2">
+                                            {AGENCY_PROPERTY_TYPES.map((type) => (
+                                                <label
+                                                    key={type}
+                                                    className="flex items-center gap-3 py-1.5 cursor-pointer hover:bg-background-tertiary rounded-md px-2 -mx-2 transition-colors min-h-[44px]"
+                                                >
+                                                    <Checkbox
+                                                        checked={localPropertyTypes.includes(type)}
+                                                        onCheckedChange={() => {
+                                                            setLocalPropertyTypes((prev) =>
+                                                                prev.includes(type)
+                                                                    ? prev.filter((t) => t !== type)
+                                                                    : [...prev, type]
+                                                            );
+                                                        }}
+                                                    />
+                                                    <span className="text-base text-text-primary">
+                                                        {tAgency(`propertyTypes.${type}`)}
+                                                    </span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </FilterSection>
+
+                                    <div className="mt-2 pt-3 border-t border-border">
+                                        <FilterSection id="marker-type" title={t('markerType')}>
+                                            <div className="py-4">
+                                                <MarkerTypeFilterMobile
+                                                    value={localMarkerType}
+                                                    onChange={setLocalMarkerType}
+                                                />
+                                            </div>
+                                        </FilterSection>
+                                    </div>
+                                </>
+                            )}
                     </div>
                 </div>
 
-                {/* Футер с кнопками "Сбросить" и "Показать N вариантов" */}
-                <div className="px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-border shrink-0 bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+                {/* Sticky Footer - улучшенный */}
+                <div className="sticky bottom-0 px-4 py-3 border-t border-border bg-background shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+                    style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+                >
                     <div className="flex gap-3">
                         <Button
                             onClick={handleClear}
-                            className="h-11 min-h-[44px] text-text-secondary"
                             variant="ghost"
                             disabled={!hasLocalChanges}
+                            className="text-text-secondary hover:text-error hover:bg-error/10 min-h-[48px]"
                         >
-                            {t('resetAll')}
+                            {t('reset')}
                         </Button>
                         <Button
                             onClick={handleApply}
-                            className="flex-1 h-11 min-h-[44px] bg-brand-primary hover:bg-brand-primary-hover text-white font-medium"
                             variant="default"
+                            className="flex-1 bg-brand-primary hover:bg-brand-primary-hover text-white font-medium min-h-[48px]"
                             disabled={isLoadingCount}
                         >
                             {isLoadingCount ? (
@@ -462,7 +476,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                         ? t('showResults', { count: formatNumber(resultsCount) })
                                         : resultsCount === 0
                                         ? t('noResults')
-                                        : t('apply')}
+                                        : t('show')}
                                 </>
                             )}
                         </Button>
