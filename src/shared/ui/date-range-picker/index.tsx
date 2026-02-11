@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Calendar, X } from 'lucide-react';
 import { format } from 'date-fns';
@@ -43,6 +43,12 @@ export function DateRangePicker({ from, to, onSelect, placeholder, className }: 
     const [isOpen, setIsOpen] = useState(false);
     const [tempFrom, setTempFrom] = useState<string>(from ? format(from, 'yyyy-MM-dd') : '');
     const [tempTo, setTempTo] = useState<string>(to ? format(to, 'yyyy-MM-dd') : '');
+
+    // Синхронизируем локальное состояние с props
+    useEffect(() => {
+        setTempFrom(from ? format(from, 'yyyy-MM-dd') : '');
+        setTempTo(to ? format(to, 'yyyy-MM-dd') : '');
+    }, [from, to]);
 
     const handleApply = () => {
         const fromDate = tempFrom ? new Date(tempFrom) : undefined;
