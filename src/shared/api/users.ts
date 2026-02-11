@@ -1,5 +1,6 @@
 import env from '@/shared/config/env';
 import type { UserResponse, UpdateUserRequest } from '@/entities/user';
+import { updateUserRequestSchema } from '@/entities/user';
 
 const API_BASE = `${env.NEXT_PUBLIC_API_BASE_URL}/api/v1`;
 
@@ -9,7 +10,8 @@ const API_BASE = `${env.NEXT_PUBLIC_API_BASE_URL}/api/v1`;
 export class UsersApiError extends Error {
     constructor(
         message: string,
-        public statusCode: number
+        public statusCode: number,
+        public errors?: Record<string, string[]>
     ) {
         super(message);
         this.name = 'UsersApiError';
@@ -21,12 +23,19 @@ export class UsersApiError extends Error {
  */
 async function handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch(() => ({}));
         throw new UsersApiError(
-            error.message || error.error || 'Request failed',
-            response.status
+            errorData.message || errorData.error || 'Request failed',
+            response.status,
+            errorData.errors
         );
     }
+    
+    // Для DELETE запросов может не быть тела ответа
+    if (response.status === 204 || response.headers.get('content-length') === '0') {
+        return {} as T;
+    }
+    
     return response.json();
 }
 
@@ -55,34 +64,17 @@ class UsersApiService {
     async updateMe(data: UpdateUserRequest): Promise<UserResponse> {
         console.log('[Users API] Updating current user profile');
 
+        // Валидация данных перед отправкой
+        const validatedData = updateUserRequestSchema.parse(data);
+
         const response = await fetch(`${this.baseUrl}/me`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify(data),
+            body: JSON.stringify(validatedData),
         });
 
         return handleResponse<UserResponse>(response);
-    }
-
-    /**
-     * Удалить аккаунт текущего пользователя (токен берется из cookies автоматически)
-     */
-    async deleteMe(): Promise<void> {
-        console.log('[Users API] Deleting current user account');
-
-        const response = await fetch(`${this.baseUrl}/me`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
-            throw new UsersApiError(
-                error.message || 'Failed to delete account',
-                response.status
-            );
-        }
     }
 
     /**

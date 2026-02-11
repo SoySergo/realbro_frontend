@@ -7,7 +7,6 @@ import {
     Shield, 
     Key, 
     LogOut, 
-    Trash2, 
     Loader2,
     Monitor,
     Smartphone,
@@ -17,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { authApi } from '@/shared/api/auth';
-import { usersApi } from '@/shared/api/users';
 import { getUserSessions, terminateSession } from '@/shared/api/mocks/user-profile';
 import type { UserSession } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
@@ -27,17 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/sha
 import { Alert } from '@/shared/ui/alert';
 import { Separator } from '@/shared/ui/separator';
 import { Badge } from '@/shared/ui/badge';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/shared/ui/alert-dialog';
+
 import { cn } from '@/shared/lib/utils';
 
 type ProfileSecurityTabProps = {
@@ -133,16 +121,7 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
         router.push('/login');
     };
 
-    // Удаление аккаунта
-    const handleDeleteAccount = async () => {
-        try {
-            await usersApi.deleteMe();
-            await logout();
-            router.push('/');
-        } catch (err) {
-            console.error('Failed to delete account:', err);
-        }
-    };
+
 
     // Форматирование даты
     const formatDate = (dateString: string) => {
@@ -318,49 +297,7 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
                 </CardContent>
             </Card>
 
-            {/* Опасная зона */}
-            <Card className="border-error/50">
-                <CardHeader>
-                    <CardTitle className="text-lg text-error">
-                        {t('dangerZone')}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-text-secondary mb-4">
-                        {t('deleteAccountWarning')}
-                    </p>
 
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant="destructive" className="w-full">
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                {t('deleteAccount')}
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    {t('confirmDeleteTitle')}
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    {t('confirmDeleteDescription')}
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>
-                                    {t('cancel')}
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDeleteAccount}
-                                    className="bg-error hover:bg-error/90"
-                                >
-                                    {t('confirmDelete')}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </CardContent>
-            </Card>
         </div>
     );
 }
