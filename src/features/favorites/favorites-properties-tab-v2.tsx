@@ -26,7 +26,7 @@ interface FavoritesPropertiesTabProps {
 /**
  * Улучшенный таб избранных объектов с фильтрацией и grid-отображением
  */
-export function FavoritesPropertiesTab({ properties, isEmpty }: FavoritesPropertiesTabProps) {
+export function FavoritesPropertiesTabV2({ properties, isEmpty }: FavoritesPropertiesTabProps) {
     const t = useTranslations('favorites');
     const tProperty = useTranslations('property');
     const tFilters = useTranslations('filters');
