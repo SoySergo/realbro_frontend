@@ -41,7 +41,11 @@
     "note": "Nota",
     "share": "Condividi",
     "downloadPdf": "Scarica PDF",
-    "report": "Segnala"
+    "report": "Segnala",
+    "selectDate": "Seleziona data",
+    "from": "Da",
+    "to": "A",
+    "clear": "Cancella"
   },
   "landing": {
     "hero": {
@@ -357,7 +361,9 @@
     "propertyCategoryWarehouse": "Magazzino",
     "propertyCategoryRestaurant": "Ristorante",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Terreno"
+    "propertyCategoryLand": "Terreno",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Mostra mappa",
@@ -1392,7 +1398,25 @@
       "deleteFilter": "Elimina",
       "editFilter": "Modifica",
       "lastUsed": "Ultimo utilizzo: {date}",
-      "propertiesCount": "{count} immobili trovati"
+      "propertiesCount": "{count} immobili trovati",
+      "all": "Tutti",
+      "liked": "Mi piace",
+      "disliked": "Non mi piace",
+      "unsorted": "Non ordinati",
+      "selectDateRange": "Seleziona periodo",
+      "advanced": "Avanzati",
+      "advancedFilters": "Filtri avanzati",
+      "clearAll": "Cancella tutto",
+      "showing": "Visualizzazione di {count} su {total}",
+      "noResults": "Nessun risultato per i filtri selezionati",
+      "sort": {
+        "newestFirst": "Prima i più recenti",
+        "oldestFirst": "Prima i più vecchi",
+        "priceLowToHigh": "Prezzo: crescente",
+        "priceHighToLow": "Prezzo: decrescente",
+        "areaLargest": "Area: più grande",
+        "areaSmallest": "Area: più piccola"
+      }
     },
     "authPrompt": {
       "title": "Accedi per salvare",

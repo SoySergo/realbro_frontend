@@ -41,7 +41,11 @@
     "note": "Nota",
     "share": "Compartir",
     "downloadPdf": "Descarregar PDF",
-    "report": "Reportar"
+    "report": "Reportar",
+    "selectDate": "Seleccionar data",
+    "from": "Des de",
+    "to": "Fins a",
+    "clear": "Esborrar"
   },
   "landing": {
     "hero": {
@@ -452,7 +456,9 @@
     "propertyCategoryWarehouse": "Magatzem",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Terreny"
+    "propertyCategoryLand": "Terreny",
+    "min": "Mín",
+    "max": "Màx"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -1683,7 +1689,25 @@
       "deleteFilter": "Eliminar",
       "editFilter": "Editar",
       "lastUsed": "Últim ús: {date}",
-      "propertiesCount": "{count} immobles trobats"
+      "propertiesCount": "{count} immobles trobats",
+      "all": "Tots",
+      "liked": "M'agrada",
+      "disliked": "No m'agrada",
+      "unsorted": "Sense classificar",
+      "selectDateRange": "Seleccionar període",
+      "advanced": "Avançats",
+      "advancedFilters": "Filtres avançats",
+      "clearAll": "Esborrar tot",
+      "showing": "Mostrant {count} de {total}",
+      "noResults": "No hi ha resultats per als filtres seleccionats",
+      "sort": {
+        "newestFirst": "Més recents primer",
+        "oldestFirst": "Més antics primer",
+        "priceLowToHigh": "Preu: de menor a major",
+        "priceHighToLow": "Preu: de major a menor",
+        "areaLargest": "Àrea: major",
+        "areaSmallest": "Àrea: menor"
+      }
     },
     "authPrompt": {
       "title": "Inicia sessió per desar",

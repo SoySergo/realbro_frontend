@@ -78,13 +78,25 @@ const MOCK_PROFESSIONALS: PropertyAuthor[] = [
  * Генерация избранных профессионалов
  */
 export function generateMockFavoriteProfessionals(count: number = 5): FavoriteProfessional[] {
-    return MOCK_PROFESSIONALS.slice(0, count).map((professional, index) => ({
-        id: `fav_prof_${index}`,
-        professional,
-        addedAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000),
-        activeListingsCount: professional.objectsCount,
-        avgResponseTime: index % 2 === 0 ? '< 1 hour' : '< 24 hours',
-    }));
+    return MOCK_PROFESSIONALS.slice(0, count).map((professional, index) => {
+        const daysAgo = index * 24 * 60 * 60 * 1000;
+        const hasViewed = index % 2 === 0;
+        const hasContacted = index % 3 === 0;
+        const hasMessaged = index % 2 === 1;
+        const hasReviewed = index === 0;
+
+        return {
+            id: `fav_prof_${index}`,
+            professional,
+            addedAt: new Date(Date.now() - daysAgo),
+            activeListingsCount: professional.objectsCount,
+            avgResponseTime: index % 2 === 0 ? '< 1 hour' : '< 24 hours',
+            viewedAt: hasViewed ? new Date(Date.now() - daysAgo / 2) : undefined,
+            contactRequestedAt: hasContacted ? new Date(Date.now() - daysAgo / 3) : undefined,
+            messagesSent: hasMessaged ? Math.floor(Math.random() * 5) + 1 : undefined,
+            reviewWritten: hasReviewed,
+        };
+    });
 }
 
 /**
@@ -198,6 +210,7 @@ export function generateMockSavedFilters(count: number = 4): SavedFilter[] {
  */
 export function generateMockFavoriteProperties(count: number = 6): FavoriteProperty[] {
     const notes = generateMockNotes(3);
+    const markTypes: ('like' | 'dislike' | 'unsorted')[] = ['like', 'dislike', 'unsorted'];
     
     return Array.from({ length: count }, (_, index) => {
         const property = generateMockProperty(index * 3, { cardType: 'grid' });
@@ -209,6 +222,7 @@ export function generateMockFavoriteProperties(count: number = 6): FavoritePrope
             addedAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000),
             property,
             note: index < 3 ? notes[index] : undefined,
+            markType: markTypes[index % 3],
         };
     });
 }

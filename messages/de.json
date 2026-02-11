@@ -37,7 +37,11 @@
     "back": "Zurück",
     "next": "Weiter",
     "of": "von",
-    "months": "Mon."
+    "months": "Mon.",
+    "selectDate": "Datum auswählen",
+    "from": "Von",
+    "to": "Bis",
+    "clear": "Löschen"
   },
   "landing": {
     "hero": {
@@ -353,7 +357,9 @@
     "propertyCategoryWarehouse": "Lager",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Grundstück"
+    "propertyCategoryLand": "Grundstück",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Karte anzeigen",
@@ -1388,7 +1394,25 @@
       "deleteFilter": "Löschen",
       "editFilter": "Bearbeiten",
       "lastUsed": "Zuletzt verwendet: {date}",
-      "propertiesCount": "{count} Objekte gefunden"
+      "propertiesCount": "{count} Objekte gefunden",
+      "all": "Alle",
+      "liked": "Gefällt mir",
+      "disliked": "Gefällt mir nicht",
+      "unsorted": "Nicht sortiert",
+      "selectDateRange": "Zeitraum auswählen",
+      "advanced": "Erweitert",
+      "advancedFilters": "Erweiterte Filter",
+      "clearAll": "Alles löschen",
+      "showing": "{count} von {total} angezeigt",
+      "noResults": "Keine Ergebnisse für die ausgewählten Filter",
+      "sort": {
+        "newestFirst": "Neueste zuerst",
+        "oldestFirst": "Älteste zuerst",
+        "priceLowToHigh": "Preis: aufsteigend",
+        "priceHighToLow": "Preis: absteigend",
+        "areaLargest": "Fläche: größte",
+        "areaSmallest": "Fläche: kleinste"
+      }
     },
     "authPrompt": {
       "title": "Anmelden zum Speichern",

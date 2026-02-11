@@ -41,7 +41,11 @@
     "note": "Nota",
     "share": "Compartir",
     "downloadPdf": "Descargar PDF",
-    "report": "Reportar"
+    "report": "Reportar",
+    "selectDate": "Seleccionar fecha",
+    "from": "Desde",
+    "to": "Hasta",
+    "clear": "Limpiar"
   },
   "landing": {
     "hero": {
@@ -357,7 +361,9 @@
     "propertyCategoryWarehouse": "Almacén",
     "propertyCategoryRestaurant": "Restaurante",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Terreno"
+    "propertyCategoryLand": "Terreno",
+    "min": "Mín",
+    "max": "Máx"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -1392,7 +1398,25 @@
       "deleteFilter": "Eliminar",
       "editFilter": "Editar",
       "lastUsed": "Último uso: {date}",
-      "propertiesCount": "{count} propiedades encontradas"
+      "propertiesCount": "{count} propiedades encontradas",
+      "all": "Todos",
+      "liked": "Me gusta",
+      "disliked": "No me gusta",
+      "unsorted": "Sin clasificar",
+      "selectDateRange": "Seleccionar período",
+      "advanced": "Avanzados",
+      "advancedFilters": "Filtros avanzados",
+      "clearAll": "Limpiar todo",
+      "showing": "Mostrando {count} de {total}",
+      "noResults": "No hay resultados para los filtros seleccionados",
+      "sort": {
+        "newestFirst": "Más recientes primero",
+        "oldestFirst": "Más antiguos primero",
+        "priceLowToHigh": "Precio: de menor a mayor",
+        "priceHighToLow": "Precio: de mayor a menor",
+        "areaLargest": "Área: mayor",
+        "areaSmallest": "Área: menor"
+      }
     },
     "authPrompt": {
       "title": "Inicia sesión para guardar",

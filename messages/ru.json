@@ -41,7 +41,11 @@
     "note": "Заметка",
     "share": "Поделиться",
     "downloadPdf": "Скачать PDF",
-    "report": "Пожаловаться"
+    "report": "Пожаловаться",
+    "selectDate": "Выбрать дату",
+    "from": "От",
+    "to": "До",
+    "clear": "Очистить"
   },
   "landing": {
     "hero": {
@@ -357,7 +361,9 @@
     "propertyCategoryWarehouse": "Склад",
     "propertyCategoryRestaurant": "Ресторан",
     "propertyCategoryHotel": "Отель",
-    "propertyCategoryLand": "Земельный участок"
+    "propertyCategoryLand": "Земельный участок",
+    "min": "Мин",
+    "max": "Макс"
   },
   "map": {
     "showMap": "Показать карту",
@@ -1392,7 +1398,25 @@
       "deleteFilter": "Удалить",
       "editFilter": "Редактировать",
       "lastUsed": "Последнее использование: {date}",
-      "propertiesCount": "{count} объектов найдено"
+      "propertiesCount": "{count} объектов найдено",
+      "all": "Все",
+      "liked": "Нравится",
+      "disliked": "Не нравится",
+      "unsorted": "Не разобранные",
+      "selectDateRange": "Выбрать период",
+      "advanced": "Расширенные",
+      "advancedFilters": "Расширенные фильтры",
+      "clearAll": "Очистить все",
+      "showing": "Показано {count} из {total}",
+      "noResults": "Нет результатов по заданным фильтрам",
+      "sort": {
+        "newestFirst": "Сначала новые",
+        "oldestFirst": "Сначала старые",
+        "priceLowToHigh": "Цена: по возрастанию",
+        "priceHighToLow": "Цена: по убыванию",
+        "areaLargest": "Площадь: наибольшая",
+        "areaSmallest": "Площадь: наименьшая"
+      }
     },
     "authPrompt": {
       "title": "Войдите для сохранения",

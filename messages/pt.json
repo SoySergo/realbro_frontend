@@ -37,7 +37,11 @@
     "back": "Voltar",
     "next": "Próximo",
     "of": "de",
-    "months": "meses"
+    "months": "meses",
+    "selectDate": "Selecionar data",
+    "from": "De",
+    "to": "Até",
+    "clear": "Limpar"
   },
   "landing": {
     "hero": {
@@ -346,7 +350,9 @@
     "sortDate": "Por data",
     "studio": "Estúdio",
     "viewList": "Lista",
-    "viewMap": "Mapa"
+    "viewMap": "Mapa",
+    "min": "Mín",
+    "max": "Máx"
   },
   "map": {
     "title": "Mapa",
@@ -1306,7 +1312,25 @@
     "filters": {
       "applyFilter": "Aplicar filtro",
       "lastUsed": "Último uso",
-      "propertiesCount": "{count} imóveis"
+      "propertiesCount": "{count} imóveis",
+      "all": "Todos",
+      "liked": "Gostei",
+      "disliked": "Não gostei",
+      "unsorted": "Não ordenados",
+      "selectDateRange": "Selecionar período",
+      "advanced": "Avançados",
+      "advancedFilters": "Filtros avançados",
+      "clearAll": "Limpar tudo",
+      "showing": "Mostrando {count} de {total}",
+      "noResults": "Nenhum resultado para os filtros selecionados",
+      "sort": {
+        "newestFirst": "Mais recentes primeiro",
+        "oldestFirst": "Mais antigos primeiro",
+        "priceLowToHigh": "Preço: crescente",
+        "priceHighToLow": "Preço: decrescente",
+        "areaLargest": "Área: maior",
+        "areaSmallest": "Área: menor"
+      }
     },
     "notes": {
       "addNote": "Adicionar nota",

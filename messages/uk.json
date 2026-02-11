@@ -85,8 +85,8 @@
     "no": "Ні",
     "or": "або",
     "and": "та",
-    "from": "від",
-    "to": "до",
+    "from": "Від",
+    "to": "До",
     "perMonth": "на місяць",
     "perYear": "на рік",
     "total": "Усього",
@@ -109,7 +109,8 @@
     "less": "Менше",
     "free": "Безкоштовно",
     "euro": "€",
-    "months": "міс."
+    "months": "міс.",
+    "selectDate": "Вибрати дату"
   },
   "landing": {
     "hero": {
@@ -609,7 +610,9 @@
     "sortDate": "За датою",
     "studio": "Студія",
     "viewList": "Список",
-    "viewMap": "Карта"
+    "viewMap": "Карта",
+    "min": "Мін",
+    "max": "Макс"
   },
   "map": {
     "title": "Карта",
@@ -1608,7 +1611,25 @@
     "filters": {
       "applyFilter": "Застосувати фільтр",
       "lastUsed": "Останнє використання",
-      "propertiesCount": "{count} об'єктів"
+      "propertiesCount": "{count} об'єктів",
+      "all": "Всі",
+      "liked": "Подобається",
+      "disliked": "Не подобається",
+      "unsorted": "Не розібрані",
+      "selectDateRange": "Вибрати період",
+      "advanced": "Розширені",
+      "advancedFilters": "Розширені фільтри",
+      "clearAll": "Очистити все",
+      "showing": "Показано {count} з {total}",
+      "noResults": "Немає результатів за заданими фільтрами",
+      "sort": {
+        "newestFirst": "Спочатку нові",
+        "oldestFirst": "Спочатку старі",
+        "priceLowToHigh": "Ціна: за зростанням",
+        "priceHighToLow": "Ціна: за спаданням",
+        "areaLargest": "Площа: найбільша",
+        "areaSmallest": "Площа: найменша"
+      }
     },
     "notes": {
       "addNote": "Додати нотатку",

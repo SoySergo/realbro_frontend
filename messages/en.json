@@ -25,7 +25,11 @@
     "share": "Share",
     "downloadPdf": "Download PDF",
     "report": "Report",
-    "months": "mo."
+    "months": "mo.",
+    "selectDate": "Select date",
+    "from": "From",
+    "to": "To",
+    "clear": "Clear"
   },
   "landing": {
     "hero": {
@@ -341,7 +345,9 @@
     "propertyCategoryWarehouse": "Warehouse",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Land"
+    "propertyCategoryLand": "Land",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Show Map",
@@ -1364,7 +1370,25 @@
       "deleteFilter": "Delete",
       "editFilter": "Edit",
       "lastUsed": "Last used: {date}",
-      "propertiesCount": "{count} properties found"
+      "propertiesCount": "{count} properties found",
+      "all": "All",
+      "liked": "Liked",
+      "disliked": "Disliked",
+      "unsorted": "Unsorted",
+      "selectDateRange": "Select date range",
+      "advanced": "Advanced",
+      "advancedFilters": "Advanced filters",
+      "clearAll": "Clear all",
+      "showing": "Showing {count} of {total}",
+      "noResults": "No results for the selected filters",
+      "sort": {
+        "newestFirst": "Newest first",
+        "oldestFirst": "Oldest first",
+        "priceLowToHigh": "Price: low to high",
+        "priceHighToLow": "Price: high to low",
+        "areaLargest": "Area: largest",
+        "areaSmallest": "Area: smallest"
+      }
     },
     "authPrompt": {
       "title": "Sign in to save",

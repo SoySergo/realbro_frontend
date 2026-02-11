@@ -25,7 +25,11 @@
     "note": "Note",
     "share": "Partager",
     "downloadPdf": "Télécharger PDF",
-    "report": "Signaler"
+    "report": "Signaler",
+    "selectDate": "Sélectionner une date",
+    "from": "De",
+    "to": "À",
+    "clear": "Effacer"
   },
   "landing": {
     "hero": {
@@ -341,7 +345,9 @@
     "propertyCategoryWarehouse": "Entrepôt",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hôtel",
-    "propertyCategoryLand": "Terrain"
+    "propertyCategoryLand": "Terrain",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Afficher la carte",
@@ -1382,7 +1388,25 @@
       "deleteFilter": "Supprimer",
       "editFilter": "Modifier",
       "lastUsed": "Dernière utilisation: {date}",
-      "propertiesCount": "{count} propriétés trouvées"
+      "propertiesCount": "{count} propriétés trouvées",
+      "all": "Tous",
+      "liked": "J'aime",
+      "disliked": "Je n'aime pas",
+      "unsorted": "Non triés",
+      "selectDateRange": "Sélectionner une période",
+      "advanced": "Avancés",
+      "advancedFilters": "Filtres avancés",
+      "clearAll": "Tout effacer",
+      "showing": "Affichage de {count} sur {total}",
+      "noResults": "Aucun résultat pour les filtres sélectionnés",
+      "sort": {
+        "newestFirst": "Plus récents d'abord",
+        "oldestFirst": "Plus anciens d'abord",
+        "priceLowToHigh": "Prix : croissant",
+        "priceHighToLow": "Prix : décroissant",
+        "areaLargest": "Surface : la plus grande",
+        "areaSmallest": "Surface : la plus petite"
+      }
     },
     "authPrompt": {
       "title": "Connectez-vous pour sauvegarder",
