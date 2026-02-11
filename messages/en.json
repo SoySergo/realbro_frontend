@@ -1350,7 +1350,29 @@
       "tomorrowLabel": "Tomorrow",
       "rooms": "rooms",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "listView": "List",
+      "calendarView": "Calendar",
+      "filters": {
+        "allTypes": "All types",
+        "propertyNotes": "Property notes",
+        "agencyNotes": "Agency notes",
+        "generalNotes": "General notes",
+        "all": "All",
+        "withReminder": "With reminder",
+        "noReminder": "No reminder"
+      },
+      "sort": {
+        "recentlyUpdated": "Recently updated",
+        "upcomingReminders": "Upcoming reminders"
+      },
+      "noteText": "Note text",
+      "optional": "optional",
+      "create": "Create",
+      "deleteConfirm": "Delete note?",
+      "deleteDescription": "This action cannot be undone. The note will be permanently deleted.",
+      "delete": "Delete",
+      "calendarViewComingSoon": "Calendar view is coming soon"
     },
     "professionals": {
       "title": "Professionals",

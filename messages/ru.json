@@ -1378,7 +1378,29 @@
       "tomorrowLabel": "Завтра",
       "rooms": "комн.",
       "minutes": "мин",
-      "km": "км"
+      "km": "км",
+      "listView": "Список",
+      "calendarView": "Календарь",
+      "filters": {
+        "allTypes": "Все типы",
+        "propertyNotes": "Об объектах",
+        "agencyNotes": "Об агентствах",
+        "generalNotes": "Общие",
+        "all": "Все",
+        "withReminder": "С напоминанием",
+        "noReminder": "Без напоминания"
+      },
+      "sort": {
+        "recentlyUpdated": "Недавно обновленные",
+        "upcomingReminders": "Ближайшие напоминания"
+      },
+      "noteText": "Текст заметки",
+      "optional": "необязательно",
+      "create": "Создать",
+      "deleteConfirm": "Удалить заметку?",
+      "deleteDescription": "Это действие нельзя отменить. Заметка будет удалена безвозвратно.",
+      "delete": "Удалить",
+      "calendarViewComingSoon": "Представление календаря скоро будет доступно"
     },
     "professionals": {
       "title": "Профессионалы",

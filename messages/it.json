@@ -1378,7 +1378,29 @@
       "apply": "Applica",
       "customDateTime": "Data e ora personalizzate",
       "date": "Data",
-      "time": "Ora"
+      "time": "Ora",
+      "listView": "Elenco",
+      "calendarView": "Calendario",
+      "filters": {
+        "allTypes": "Tutti i tipi",
+        "propertyNotes": "Sulle proprietà",
+        "agencyNotes": "Sulle agenzie",
+        "generalNotes": "Generali",
+        "all": "Tutte",
+        "withReminder": "Con promemoria",
+        "noReminder": "Senza promemoria"
+      },
+      "sort": {
+        "recentlyUpdated": "Aggiornate di recente",
+        "upcomingReminders": "Promemoria imminenti"
+      },
+      "noteText": "Testo della nota",
+      "optional": "opzionale",
+      "create": "Crea",
+      "deleteConfirm": "Eliminare la nota?",
+      "deleteDescription": "Questa azione non può essere annullata. La nota verrà eliminata definitivamente.",
+      "delete": "Elimina",
+      "calendarViewComingSoon": "La vista calendario sarà presto disponibile"
     },
     "professionals": {
       "title": "Professionisti",

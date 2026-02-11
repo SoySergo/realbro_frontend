@@ -1654,7 +1654,29 @@
       "setReminder": "Встановити нагадування",
       "time": "Час",
       "today": "Сьогодні",
-      "tomorrowLabel": "Завтра"
+      "tomorrowLabel": "Завтра",
+      "listView": "Список",
+      "calendarView": "Календар",
+      "filters": {
+        "allTypes": "Усі типи",
+        "propertyNotes": "Про об'єкти",
+        "agencyNotes": "Про агентства",
+        "generalNotes": "Загальні",
+        "all": "Усі",
+        "withReminder": "З нагадуванням",
+        "noReminder": "Без нагадування"
+      },
+      "sort": {
+        "recentlyUpdated": "Нещодавно оновлені",
+        "upcomingReminders": "Найближчі нагадування"
+      },
+      "noteText": "Текст нотатки",
+      "optional": "необов'язково",
+      "create": "Створити",
+      "deleteConfirm": "Видалити нотатку?",
+      "deleteDescription": "Цю дію не можна скасувати. Нотатку буде видалено назавжди.",
+      "delete": "Видалити",
+      "calendarViewComingSoon": "Вигляд календаря скоро буде доступний"
     },
     "professionals": {
       "activeListings": "Активні оголошення",

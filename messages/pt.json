@@ -1355,7 +1355,29 @@
       "setReminder": "Definir lembrete",
       "time": "Hora",
       "today": "Hoje",
-      "tomorrowLabel": "Amanhã"
+      "tomorrowLabel": "Amanhã",
+      "listView": "Lista",
+      "calendarView": "Calendário",
+      "filters": {
+        "allTypes": "Todos os tipos",
+        "propertyNotes": "Sobre propriedades",
+        "agencyNotes": "Sobre agências",
+        "generalNotes": "Gerais",
+        "all": "Todas",
+        "withReminder": "Com lembrete",
+        "noReminder": "Sem lembrete"
+      },
+      "sort": {
+        "recentlyUpdated": "Atualizadas recentemente",
+        "upcomingReminders": "Próximos lembretes"
+      },
+      "noteText": "Texto da nota",
+      "optional": "opcional",
+      "create": "Criar",
+      "deleteConfirm": "Excluir nota?",
+      "deleteDescription": "Esta ação não pode ser desfeita. A nota será excluída permanentemente.",
+      "delete": "Excluir",
+      "calendarViewComingSoon": "A visualização de calendário estará disponível em breve"
     },
     "professionals": {
       "activeListings": "Anúncios ativos",

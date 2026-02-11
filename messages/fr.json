@@ -1368,7 +1368,29 @@
       "tomorrowLabel": "Demain",
       "rooms": "pièces",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "listView": "Liste",
+      "calendarView": "Calendrier",
+      "filters": {
+        "allTypes": "Tous les types",
+        "propertyNotes": "Sur les propriétés",
+        "agencyNotes": "Sur les agences",
+        "generalNotes": "Générales",
+        "all": "Toutes",
+        "withReminder": "Avec rappel",
+        "noReminder": "Sans rappel"
+      },
+      "sort": {
+        "recentlyUpdated": "Récemment mises à jour",
+        "upcomingReminders": "Rappels à venir"
+      },
+      "noteText": "Texte de la note",
+      "optional": "facultatif",
+      "create": "Créer",
+      "deleteConfirm": "Supprimer la note?",
+      "deleteDescription": "Cette action ne peut pas être annulée. La note sera supprimée définitivement.",
+      "delete": "Supprimer",
+      "calendarViewComingSoon": "La vue calendrier sera bientôt disponible"
     },
     "professionals": {
       "title": "Professionnels",

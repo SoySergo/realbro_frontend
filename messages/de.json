@@ -1374,7 +1374,29 @@
       "apply": "Anwenden",
       "customDateTime": "Benutzerdefiniertes Datum und Zeit",
       "date": "Datum",
-      "time": "Zeit"
+      "time": "Zeit",
+      "listView": "Liste",
+      "calendarView": "Kalender",
+      "filters": {
+        "allTypes": "Alle Typen",
+        "propertyNotes": "Über Immobilien",
+        "agencyNotes": "Über Agenturen",
+        "generalNotes": "Allgemein",
+        "all": "Alle",
+        "withReminder": "Mit Erinnerung",
+        "noReminder": "Ohne Erinnerung"
+      },
+      "sort": {
+        "recentlyUpdated": "Kürzlich aktualisiert",
+        "upcomingReminders": "Bevorstehende Erinnerungen"
+      },
+      "noteText": "Notiztext",
+      "optional": "optional",
+      "create": "Erstellen",
+      "deleteConfirm": "Notiz löschen?",
+      "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Die Notiz wird dauerhaft gelöscht.",
+      "delete": "Löschen",
+      "calendarViewComingSoon": "Die Kalenderansicht wird bald verfügbar sein"
     },
     "professionals": {
       "title": "Profis",

@@ -1669,7 +1669,29 @@
       "apply": "Aplicar",
       "customDateTime": "Data i hora personalitzada",
       "date": "Data",
-      "time": "Hora"
+      "time": "Hora",
+      "listView": "Llista",
+      "calendarView": "Calendari",
+      "filters": {
+        "allTypes": "Tots els tipus",
+        "propertyNotes": "Sobre propietats",
+        "agencyNotes": "Sobre agències",
+        "generalNotes": "General",
+        "all": "Tots",
+        "withReminder": "Amb recordatori",
+        "noReminder": "Sense recordatori"
+      },
+      "sort": {
+        "recentlyUpdated": "Actualitzats recentment",
+        "upcomingReminders": "Propers recordatoris"
+      },
+      "noteText": "Text de nota",
+      "optional": "opcional",
+      "create": "Crear",
+      "deleteConfirm": "Eliminar nota?",
+      "deleteDescription": "Aquesta acció no es pot desfer. La nota s'eliminarà permanentment.",
+      "delete": "Eliminar",
+      "calendarViewComingSoon": "La vista de calendari estarà disponible aviat"
     },
     "professionals": {
       "title": "Professionals",
