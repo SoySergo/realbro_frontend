@@ -124,7 +124,7 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
 
 
     // Форматирование даты
-    const formatDate = (dateString: string) => {
+    const formatDate = useCallback((dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString(undefined, {
             month: 'short',
@@ -132,10 +132,10 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
             hour: '2-digit',
             minute: '2-digit',
         });
-    };
+    }, []);
 
     // Иконка устройства
-    const getDeviceIcon = (device: string) => {
+    const getDeviceIcon = useCallback((device: string) => {
         const deviceLower = device.toLowerCase();
         if (deviceLower.includes('iphone') || deviceLower.includes('android') || deviceLower.includes('mobile')) {
             return <Smartphone className="w-5 h-5" />;
@@ -144,7 +144,7 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
             return <Laptop className="w-5 h-5" />;
         }
         return <Monitor className="w-5 h-5" />;
-    };
+    }, []);
 
     return (
         <div className="space-y-6">

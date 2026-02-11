@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Bell, Mail, Smartphone, MessageCircle, Save, Loader2 } from 'lucide-react';
 import type { NotificationSettings } from '@/entities/user';
 import { updateNotificationSettings } from '@/shared/api/mocks/user-profile';
+import { useDebouncedCallback } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Switch } from '@/shared/ui/switch';
@@ -29,23 +30,55 @@ export function ProfileNotificationsTab({ settings, onUpdate }: ProfileNotificat
     // Локальное состояние настроек
     const [localSettings, setLocalSettings] = useState<NotificationSettings>(settings);
     const [isSaving, setIsSaving] = useState(false);
+    const [isAutoSaving, setIsAutoSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
+    // Обновление начального состояния при изменении props
+    useEffect(() => {
+        setLocalSettings(settings);
+    }, [settings]);
+
+    // Автосохранение с дебаунсингом
+    const autoSave = useDebouncedCallback(
+        async (newSettings: NotificationSettings) => {
+            setIsAutoSaving(true);
+            setError(null);
+            
+            try {
+                await updateNotificationSettings(newSettings);
+                setSuccess(tProfile('saved'));
+                onUpdate();
+                setTimeout(() => setSuccess(null), 2000);
+            } catch (err) {
+                console.error('Failed to auto-save notification settings:', err);
+                setError(tProfile('errorSaving'));
+            } finally {
+                setIsAutoSaving(false);
+            }
+        },
+        1000 // Дебаунс 1 секунда
+    );
+
     // Обновление локальных настроек
-    const updateSetting = <T extends keyof NotificationSettings>(
+    const updateSetting = useCallback(<T extends keyof NotificationSettings>(
         category: T,
         key: keyof NotificationSettings[T],
         value: boolean
     ) => {
-        setLocalSettings(prev => ({
-            ...prev,
-            [category]: {
-                ...prev[category],
-                [key]: value,
-            },
-        }));
-    };
+        setLocalSettings(prev => {
+            const updated = {
+                ...prev,
+                [category]: {
+                    ...prev[category],
+                    [key]: value,
+                },
+            };
+            // Автоматическое сохранение при изменении
+            autoSave(updated);
+            return updated;
+        });
+    }, [autoSave]);
 
     // Сохранение настроек
     const handleSave = async () => {
@@ -71,6 +104,14 @@ export function ProfileNotificationsTab({ settings, onUpdate }: ProfileNotificat
 
     return (
         <div className="space-y-6">
+            {/* Индикатор автосохранения */}
+            {isAutoSaving && (
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>{tProfile('savingChanges')}</span>
+                </div>
+            )}
+
             {/* Сообщения */}
             {error && (
                 <Alert variant="destructive">{error}</Alert>
