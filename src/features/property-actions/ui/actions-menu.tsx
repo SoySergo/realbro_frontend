@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
     ThumbsUp,
     ThumbsDown,
@@ -23,6 +23,7 @@ import { cn } from '@/shared/lib/utils';
 import { NoteModal, saveNote, getNote, type NoteModalTranslations } from './note-modal';
 import { PropertyCompareMenuItem } from '@/features/comparison';
 import type { Property } from '@/entities/property';
+import { usePropertyActions } from '@/entities/user-actions';
 
 // ============================================================================
 // Типы
@@ -51,60 +52,19 @@ interface PropertyActionsMenuProps {
     propertyTitle?: string;
     property?: Property;
     translations: PropertyActionsMenuTranslations;
+    // Эти props теперь не нужны - берем из централизованного store
+    // но оставляем для обратной совместимости
     isLiked?: boolean;
     isDisliked?: boolean;
     hasNote?: boolean;
-    onLike?: (propertyId: string, isLiked: boolean) => void;
-    onDislike?: (propertyId: string, isDisliked: boolean) => void;
+    // Callbacks теперь необязательны - будем использовать централизованную логику
+    onLike?: () => void;
+    onDislike?: () => void;
     onShare?: (propertyId: string) => void;
     onReport?: (propertyId: string) => void;
     onDownloadPdf?: (propertyId: string) => void;
     className?: string;
     variant?: 'inline' | 'compact' | 'full' | 'mediaActions';
-}
-
-// ============================================================================
-// Локальное хранилище лайков/дизлайков
-// ============================================================================
-
-const STORAGE_KEY = 'realbro_property_reactions';
-
-interface StoredReactions {
-    [propertyId: string]: {
-        liked: boolean;
-        disliked: boolean;
-        updatedAt: string;
-    };
-}
-
-function getStoredReactions(): StoredReactions {
-    if (typeof window === 'undefined') return {};
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        return stored ? JSON.parse(stored) : {};
-    } catch {
-        return {};
-    }
-}
-
-function saveReaction(propertyId: string, liked: boolean, disliked: boolean): void {
-    if (typeof window === 'undefined') return;
-    try {
-        const reactions = getStoredReactions();
-        reactions[propertyId] = {
-            liked,
-            disliked,
-            updatedAt: new Date().toISOString(),
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reactions));
-    } catch {
-        console.error('[Reactions] Failed to save reaction');
-    }
-}
-
-export function getReaction(propertyId: string): { liked: boolean; disliked: boolean } {
-    const reactions = getStoredReactions();
-    return reactions[propertyId] || { liked: false, disliked: false };
 }
 
 // ============================================================================
@@ -116,11 +76,8 @@ export function PropertyActionsMenu({
     propertyTitle,
     property,
     translations,
-    isLiked: initialIsLiked,
-    isDisliked: initialIsDisliked,
-    hasNote: initialHasNote,
-    onLike,
-    onDislike,
+    onLike: externalOnLike,
+    onDislike: externalOnDislike,
     onShare,
     onReport,
     onDownloadPdf,
@@ -129,55 +86,55 @@ export function PropertyActionsMenu({
 }: PropertyActionsMenuProps) {
     const t = translations;
     
-    // Состояние
-    const [isLiked, setIsLiked] = useState(() => initialIsLiked ?? getReaction(propertyId).liked);
-    const [isDisliked, setIsDisliked] = useState(() => initialIsDisliked ?? getReaction(propertyId).disliked);
-    const [hasNote, setHasNote] = useState(() => initialHasNote ?? !!getNote(propertyId));
+    // Используем централизованный store для состояния
+    const { isLiked, isDisliked, hasNote: storeHasNote, toggleLike, toggleDislike } = usePropertyActions(propertyId);
+    
+    // Локальное состояние только для UI (анимации, модалки)
+    const [hasNote, setHasNote] = useState(() => storeHasNote || !!getNote(propertyId));
     const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
     const [currentNote, setCurrentNote] = useState('');
     
     // Анимации
     const [likeAnimating, setLikeAnimating] = useState(false);
     const [dislikeAnimating, setDislikeAnimating] = useState(false);
+    
+    // Синхронизируем hasNote с store
+    useEffect(() => {
+        setHasNote(storeHasNote || !!getNote(propertyId));
+    }, [storeHasNote, propertyId]);
 
-    // Обработчики
+    // Обработчики - используем централизованную логику
     const handleLike = useCallback(() => {
-        const newLiked = !isLiked;
-        const newDisliked = newLiked ? false : isDisliked;
-        
-        setIsLiked(newLiked);
-        setIsDisliked(newDisliked);
         setLikeAnimating(true);
         setTimeout(() => setLikeAnimating(false), 300);
         
-        saveReaction(propertyId, newLiked, newDisliked);
-        onLike?.(propertyId, newLiked);
+        // Используем централизованную логику
+        toggleLike();
         
-        if (newLiked) {
+        // Вызываем внешний callback если он есть
+        externalOnLike?.();
+        
+        // Тост с правильным сообщением
+        if (!isLiked) {
             toast.success(t.liked, { icon: <ThumbsUp className="w-4 h-4 fill-current" /> });
-        } else {
-            toast(t.like, { icon: <ThumbsUp className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onLike, t.liked, t.like]);
+    }, [isLiked, toggleLike, externalOnLike, t.liked]);
 
     const handleDislike = useCallback(() => {
-        const newDisliked = !isDisliked;
-        const newLiked = newDisliked ? false : isLiked;
-        
-        setIsDisliked(newDisliked);
-        setIsLiked(newLiked);
         setDislikeAnimating(true);
         setTimeout(() => setDislikeAnimating(false), 300);
         
-        saveReaction(propertyId, newLiked, newDisliked);
-        onDislike?.(propertyId, newDisliked);
+        // Используем централизованную логику
+        toggleDislike();
         
-        if (newDisliked) {
+        // Вызываем внешний callback если он есть
+        externalOnDislike?.();
+        
+        // Тост с правильным сообщением
+        if (!isDisliked) {
             toast(t.disliked, { icon: <ThumbsDown className="w-4 h-4 fill-current" /> });
-        } else {
-            toast(t.dislike, { icon: <ThumbsDown className="w-4 h-4" /> });
         }
-    }, [isLiked, isDisliked, propertyId, onDislike, t.disliked, t.dislike]);
+    }, [isDisliked, toggleDislike, externalOnDislike, t.disliked]);
 
     const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
         // Clipboard API

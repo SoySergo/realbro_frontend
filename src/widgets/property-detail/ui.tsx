@@ -6,6 +6,7 @@ import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
 import type { PropertyPageTranslations } from '@/shared/lib/get-property-translations';
 import type { NearbyPlaces, AgentPropertyCard, SimilarPropertyCard } from '@/shared/api';
+import { usePropertyActions } from '@/entities/user-actions';
 
 // Entity components
 import {
@@ -88,6 +89,9 @@ export function PropertyDetailWidget({
     
     // Contact store
     const { openContactModal } = useContactStore();
+    
+    // Централизованные действия пользователя
+    const { isLiked, isDisliked, toggleLike, toggleDislike } = usePropertyActions(property.id);
 
     // Открыть модалку контактов
     const handleOpenContacts = useCallback(() => {
@@ -110,14 +114,14 @@ export function PropertyDetailWidget({
         // TODO: Implement message functionality - открыть чат
     }, []);
 
-    // Обработчики действий
-    const handleLike = useCallback((propertyId: string, isLiked: boolean) => {
-        console.log('[Property] Like toggled', { propertyId, isLiked });
-    }, []);
+    // Обработчики действий - используем централизованную логику
+    const handleLike = useCallback(() => {
+        toggleLike();
+    }, [toggleLike]);
 
-    const handleDislike = useCallback((propertyId: string, isDisliked: boolean) => {
-        console.log('[Property] Dislike toggled', { propertyId, isDisliked });
-    }, []);
+    const handleDislike = useCallback(() => {
+        toggleDislike();
+    }, [toggleDislike]);
 
     const handleShare = useCallback((propertyId: string) => {
         console.log('[Property] Shared', { propertyId });
