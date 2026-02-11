@@ -41,7 +41,10 @@
     "note": "Nota",
     "share": "Compartir",
     "downloadPdf": "Descarregar PDF",
-    "report": "Reportar"
+    "report": "Reportar",
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -249,7 +252,12 @@
     "favorite": "Afegir a favorits",
     "unfavorite": "Eliminar de favorits",
     "viewOnMap": "Veure al mapa",
-    "similarProperties": "Propietats similars"
+    "similarProperties": "Propietats similars",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "apartment": "Apartament",
@@ -1511,7 +1519,13 @@
     "website": "Lloc web",
     "properties": "Immobles",
     "viewProfile": "Veure perfil",
-    "recommendedAgencies": "Agències recomanades"
+    "recommendedAgencies": "Agències recomanades",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "title": "Categoria de cerca",
