@@ -24,14 +24,40 @@ export async function generateMetadata({ params }: AgencyPageProps): Promise<Met
         };
     }
 
+    // Формирование keywords
+    const keywords = [
+        agency.name,
+        'агентство недвижимости',
+        'real estate agency',
+        ...agency.languages,
+        ...agency.propertyTypes,
+        ...(agency.offices.length > 0 ? [agency.offices[0].city] : []),
+    ].join(', ');
+
     return {
-        title: agency.name,
+        title: `${agency.name} - ${agency.offices[0]?.city || 'Real Estate Agency'}`,
         description: agency.descriptionShort || agency.description.substring(0, 160),
+        keywords,
         openGraph: {
             title: agency.name,
             description: agency.descriptionShort || agency.description.substring(0, 160),
             images: agency.logo ? [agency.logo] : [],
             type: 'website',
+            locale: locale,
+            siteName: 'RealBro',
+        },
+        alternates: {
+            canonical: `/${locale}/agency/${id}`,
+        },
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
         },
     };
 }
