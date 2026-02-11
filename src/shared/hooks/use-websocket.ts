@@ -11,6 +11,8 @@ interface UseWebSocketOptions {
     autoConnect?: boolean;
     reconnectInterval?: number;
     maxReconnectAttempts?: number;
+    heartbeatInterval?: number;
+    heartbeatTimeout?: number;
 }
 
 interface UseWebSocketReturn {
@@ -18,11 +20,17 @@ interface UseWebSocketReturn {
     connect: () => void;
     disconnect: () => void;
     isConnected: boolean;
+    reconnectAttempts: number;
 }
 
 /**
- * WebSocket hook for real-time property updates from AI Agent
- * Falls back to polling simulation if WebSocket is unavailable
+ * WebSocket hook для real-time уведомлений о новых объектах от AI агента
+ * 
+ * Особенности:
+ * - Автоматическое переподключение с exponential backoff
+ * - Heartbeat (ping/pong) для поддержания соединения
+ * - Fallback на simulation режим если WebSocket недоступен
+ * - Оптимизирован для продакшена
  */
 export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketReturn {
     const {
@@ -30,14 +38,20 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         autoConnect = true,
         reconnectInterval = 3000,
         maxReconnectAttempts = 5,
+        heartbeatInterval = 30000, // 30 секунд
+        heartbeatTimeout = 10000,  // 10 секунд на ответ
     } = options;
 
     const [status, setStatus] = useState<WebSocketStatus>('disconnected');
+    const [reconnectAttempts, setReconnectAttempts] = useState(0);
+    
     const wsRef = useRef<WebSocket | null>(null);
-    const reconnectAttemptsRef = useRef(0);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const heartbeatTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const simulationIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const propertyCounterRef = useRef(200);
+    const isIntentionalCloseRef = useRef(false);
 
     const { addIncomingMessage, conversations } = useChatStore();
 
@@ -93,6 +107,65 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             simulationIntervalRef.current = null;
         }
     }, []);
+    
+    // Остановить heartbeat
+    const stopHeartbeat = useCallback(() => {
+        if (heartbeatIntervalRef.current) {
+            clearInterval(heartbeatIntervalRef.current);
+            heartbeatIntervalRef.current = null;
+        }
+        if (heartbeatTimeoutRef.current) {
+            clearTimeout(heartbeatTimeoutRef.current);
+            heartbeatTimeoutRef.current = null;
+        }
+    }, []);
+    
+    // Отправить ping
+    const sendPing = useCallback(() => {
+        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+        
+        try {
+            wsRef.current.send(JSON.stringify({
+                type: 'ping',
+                timestamp: Date.now(),
+            }));
+            
+            // Установить timeout на pong
+            heartbeatTimeoutRef.current = setTimeout(() => {
+                console.log('[WebSocket] Heartbeat timeout - no pong received');
+                wsRef.current?.close();
+            }, heartbeatTimeout);
+        } catch (error) {
+            console.error('[WebSocket] Failed to send ping:', error);
+        }
+    }, [heartbeatTimeout]);
+    
+    // Запустить heartbeat
+    const startHeartbeat = useCallback(() => {
+        stopHeartbeat();
+        
+        // Первый ping сразу
+        sendPing();
+        
+        // Затем регулярно
+        heartbeatIntervalRef.current = setInterval(() => {
+            sendPing();
+        }, heartbeatInterval);
+    }, [heartbeatInterval, sendPing, stopHeartbeat]);
+    
+    // Обработать pong
+    const handlePong = useCallback(() => {
+        // Отменить timeout
+        if (heartbeatTimeoutRef.current) {
+            clearTimeout(heartbeatTimeoutRef.current);
+            heartbeatTimeoutRef.current = null;
+        }
+    }, []);
+    
+    // Вычислить задержку для переподключения (exponential backoff)
+    const getReconnectDelay = useCallback((attempt: number): number => {
+        return Math.min(reconnectInterval * Math.pow(2, attempt), 60000); // Макс 60 секунд
+    }, [reconnectInterval]);
 
     // Connect to WebSocket
     const connect = useCallback(() => {
@@ -100,35 +173,51 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
         setStatus('connecting');
+        isIntentionalCloseRef.current = false;
 
         try {
-            // Try to connect to WebSocket
             const ws = new WebSocket(url);
             wsRef.current = ws;
 
             ws.onopen = () => {
-                console.log('[WebSocket] Connected');
+                console.log('[WebSocket] Connected successfully');
                 setStatus('connected');
-                reconnectAttemptsRef.current = 0;
+                setReconnectAttempts(0);
                 stopSimulation();
+                startHeartbeat();
             };
 
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    if (data.type === 'property') {
-                        const conversationId = getAIConversationId();
-                        addIncomingMessage({
-                            id: `msg_ws_${Date.now()}`,
-                            conversationId,
-                            senderId: 'ai-agent',
-                            type: 'property',
-                            content: '',
-                            properties: [data.property],
-                            status: 'delivered',
-                            createdAt: new Date().toISOString(),
-                            metadata: data.metadata,
-                        });
+                    
+                    // Обработка разных типов сообщений
+                    switch (data.type) {
+                        case 'pong':
+                            handlePong();
+                            break;
+                            
+                        case 'property':
+                            const conversationId = getAIConversationId();
+                            addIncomingMessage({
+                                id: `msg_ws_${Date.now()}`,
+                                conversationId,
+                                senderId: 'ai-agent',
+                                type: 'property',
+                                content: '',
+                                properties: [data.property],
+                                status: 'delivered',
+                                createdAt: new Date().toISOString(),
+                                metadata: data.metadata,
+                            });
+                            break;
+                            
+                        case 'error':
+                            console.error('[WebSocket] Server error:', data);
+                            break;
+                            
+                        default:
+                            console.log('[WebSocket] Unknown message type:', data.type);
                     }
                 } catch (err) {
                     console.error('[WebSocket] Parse error:', err);
@@ -136,40 +225,67 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             };
 
             ws.onerror = (error) => {
-                console.log('[WebSocket] Error, falling back to simulation:', error);
+                console.log('[WebSocket] Error occurred:', error);
                 setStatus('error');
             };
 
-            ws.onclose = () => {
-                console.log('[WebSocket] Closed');
+            ws.onclose = (event) => {
+                console.log('[WebSocket] Connection closed', {
+                    code: event.code,
+                    reason: event.reason,
+                    wasClean: event.wasClean,
+                });
+                
+                stopHeartbeat();
                 setStatus('disconnected');
                 wsRef.current = null;
 
-                // Try to reconnect or fall back to simulation
-                if (reconnectAttemptsRef.current < maxReconnectAttempts) {
-                    reconnectAttemptsRef.current++;
-                    reconnectTimeoutRef.current = setTimeout(() => {
-                        connect();
-                    }, reconnectInterval);
-                } else {
-                    // Fall back to simulation
-                    startSimulation();
+                // Переподключение если не был преднамеренный дисконнект
+                if (!isIntentionalCloseRef.current) {
+                    if (reconnectAttempts < maxReconnectAttempts) {
+                        const delay = getReconnectDelay(reconnectAttempts);
+                        console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})`);
+                        
+                        setReconnectAttempts(prev => prev + 1);
+                        reconnectTimeoutRef.current = setTimeout(() => {
+                            connect();
+                        }, delay);
+                    } else {
+                        console.log('[WebSocket] Max reconnect attempts reached, falling back to simulation');
+                        startSimulation();
+                    }
                 }
             };
         } catch (error) {
-            console.log('[WebSocket] Failed to create, using simulation:', error);
+            console.log('[WebSocket] Failed to create connection, using simulation:', error);
             startSimulation();
         }
-    }, [url, maxReconnectAttempts, reconnectInterval, addIncomingMessage, getAIConversationId, startSimulation, stopSimulation]);
+    }, [
+        url,
+        maxReconnectAttempts,
+        reconnectAttempts,
+        addIncomingMessage,
+        getAIConversationId,
+        startSimulation,
+        stopSimulation,
+        startHeartbeat,
+        stopHeartbeat,
+        handlePong,
+        getReconnectDelay,
+    ]);
+
 
     // Disconnect from WebSocket
     const disconnect = useCallback(() => {
+        isIntentionalCloseRef.current = true;
+        
         if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current);
             reconnectTimeoutRef.current = null;
         }
         
         stopSimulation();
+        stopHeartbeat();
         
         if (wsRef.current) {
             wsRef.current.close();
@@ -177,7 +293,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         }
         
         setStatus('disconnected');
-    }, [stopSimulation]);
+        setReconnectAttempts(0);
+    }, [stopSimulation, stopHeartbeat]);
 
     // Auto-connect on mount
     useEffect(() => {
@@ -204,5 +321,6 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         connect,
         disconnect,
         isConnected: status === 'connected',
+        reconnectAttempts,
     };
 }
