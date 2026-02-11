@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Save, Loader2, User, BarChart3 } from 'lucide-react';
-import { usersApi } from '@/shared/api/users';
+import { usersApi, UsersApiError } from '@/shared/api/users';
 import { UserAvatar } from '@/entities/user';
 import type { ExtendedUserProfile } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
@@ -30,22 +30,24 @@ export function ProfileGeneralTab({ profile, onUpdate }: ProfileGeneralTabProps)
     const [displayName, setDisplayName] = useState(profile.settings.display_name || '');
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [success, setSuccess] = useState<string | null>(null);
 
     // Форматирование даты регистрации
-    const formatDate = (dateString: string) => {
+    const formatDate = useCallback((dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString(undefined, {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         });
-    };
+    }, []);
 
     // Сохранение изменений
     const handleSave = async () => {
         setIsSaving(true);
         setError(null);
+        setFieldErrors({});
         setSuccess(null);
 
         try {
@@ -62,7 +64,18 @@ export function ProfileGeneralTab({ profile, onUpdate }: ProfileGeneralTabProps)
             setTimeout(() => setSuccess(null), 3000);
         } catch (err) {
             console.error('Failed to save profile:', err);
-            setError(t('errorSaving'));
+            
+            if (err instanceof UsersApiError) {
+                // Обработка ошибок валидации
+                if (err.errors) {
+                    setFieldErrors(Object.fromEntries(
+                        Object.entries(err.errors).map(([key, msgs]) => [key, msgs[0]])
+                    ));
+                }
+                setError(err.message);
+            } else {
+                setError(t('errorSaving'));
+            }
         } finally {
             setIsSaving(false);
         }
@@ -128,7 +141,13 @@ export function ProfileGeneralTab({ profile, onUpdate }: ProfileGeneralTabProps)
                                 value={displayName}
                                 onChange={(e) => setDisplayName(e.target.value)}
                                 placeholder={t('displayNamePlaceholder')}
+                                className={cn(fieldErrors['settings.display_name'] && 'border-error')}
                             />
+                            {fieldErrors['settings.display_name'] && (
+                                <p className="text-sm text-error">
+                                    {fieldErrors['settings.display_name']}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -194,7 +213,7 @@ export function ProfileGeneralTab({ profile, onUpdate }: ProfileGeneralTabProps)
 }
 
 // Компонент карточки статистики
-function StatCard({ label, value }: { label: string; value: number }) {
+const StatCard = memo(function StatCard({ label, value }: { label: string; value: number }) {
     return (
         <div className={cn(
             "text-center p-4 rounded-lg",
@@ -208,4 +227,4 @@ function StatCard({ label, value }: { label: string; value: number }) {
             </p>
         </div>
     );
-}
+});
