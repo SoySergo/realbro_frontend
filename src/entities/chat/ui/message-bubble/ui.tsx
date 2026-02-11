@@ -1,16 +1,17 @@
 'use client';
 
-import { Check, CheckCheck, Clock, AlertCircle, Search } from 'lucide-react';
+import { Check, CheckCheck, Clock, AlertCircle, Search, RefreshCw } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import type { ChatMessage } from '../../model/types';
 
 interface MessageBubbleProps {
     message: ChatMessage;
     isOwn: boolean;
+    onRetry?: (messageId: string) => void;
     className?: string;
 }
 
-export function MessageBubble({ message, isOwn, className }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwn, onRetry, className }: MessageBubbleProps) {
     if (message.type === 'system') {
         return (
             <div className={cn('flex justify-center py-2', className)}>
@@ -34,6 +35,20 @@ export function MessageBubble({ message, isOwn, className }: MessageBubbleProps)
 
     const StatusIcon = () => {
         if (!isOwn) return null;
+        
+        if (message.status === 'error') {
+            return (
+                <button
+                    onClick={() => onRetry?.(message.id)}
+                    className="flex items-center gap-1 text-error hover:text-error/80 transition-colors"
+                    title="Retry sending"
+                >
+                    <AlertCircle className="w-3 h-3" />
+                    <RefreshCw className="w-3 h-3" />
+                </button>
+            );
+        }
+        
         switch (message.status) {
             case 'sending':
                 return <Clock className="w-3 h-3 text-text-tertiary" />;
@@ -43,8 +58,6 @@ export function MessageBubble({ message, isOwn, className }: MessageBubbleProps)
                 return <CheckCheck className="w-3 h-3 text-text-tertiary" />;
             case 'read':
                 return <CheckCheck className="w-3 h-3 text-brand-primary" />;
-            case 'error':
-                return <AlertCircle className="w-3 h-3 text-error" />;
             default:
                 return null;
         }

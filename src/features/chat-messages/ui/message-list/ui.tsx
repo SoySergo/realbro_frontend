@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { MessageBubble, PropertyBatchCard, PropertyBatchCarousel, TypingIndicator } from '@/entities/chat';
 import { PropertyActionButtons } from '@/features/chat-property-actions/ui/property-action-buttons';
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
+import { MessageListSkeleton } from './message-list-skeleton';
 import type { ChatMessage } from '@/entities/chat';
 import type { Property } from '@/entities/property';
 
@@ -14,10 +15,12 @@ interface MessageListProps {
     isLoading: boolean;
     isTyping?: boolean;
     typingLabel?: string;
+    onRetryMessage?: (messageId: string) => void;
     className?: string;
 }
 
-function DateSeparator({ date }: { date: string }) {
+// Мемоизация DateSeparator для предотвращения ререндеров
+const DateSeparator = ({ date }: { date: string }) => {
     const d = new Date(date);
     const now = new Date();
     const isToday = d.toDateString() === now.toDateString();
@@ -44,20 +47,30 @@ export function MessageList({
     isLoading,
     isTyping,
     typingLabel,
+    onRetryMessage,
     className,
 }: MessageListProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const { viewedIds } = usePropertyActionsStore();
-    const viewedSet = new Set(viewedIds);
+    
+    // Мемоизация viewedSet для предотвращения создания нового Set при каждом рендере
+    const viewedSet = useMemo(() => new Set(viewedIds), [viewedIds]);
 
     // Auto-scroll to bottom on new messages
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
-        el.scrollTop = el.scrollHeight;
+        // Используем requestAnimationFrame для плавного скролла
+        requestAnimationFrame(() => {
+            el.scrollTo({
+                top: el.scrollHeight,
+                behavior: 'smooth',
+            });
+        });
     }, [messages.length]);
 
-    const renderPropertyMessage = (message: ChatMessage) => {
+    // Мемоизация функции рендеринга для предотвращения пересоздания
+    const renderPropertyMessage = useCallback((message: ChatMessage) => {
         if (!message.properties?.length) return null;
 
         if (message.type === 'property' && message.properties.length === 1) {
@@ -94,14 +107,10 @@ export function MessageList({
         }
 
         return null;
-    };
+    }, [viewedSet]);
 
     if (isLoading) {
-        return (
-            <div className={cn('flex-1 flex items-center justify-center', className)}>
-                <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
-            </div>
-        );
+        return <MessageListSkeleton className={className} />;
     }
 
     let lastDateStr = '';
@@ -130,7 +139,11 @@ export function MessageList({
                         {message.type === 'property' || message.type === 'property-batch' ? (
                             renderPropertyMessage(message)
                         ) : (
-                            <MessageBubble message={message} isOwn={isOwn} />
+                            <MessageBubble 
+                                message={message} 
+                                isOwn={isOwn}
+                                onRetry={onRetryMessage}
+                            />
                         )}
                     </div>
                 );

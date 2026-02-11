@@ -44,6 +44,7 @@ export function ChatWindow({
         activeConversationId,
         messages,
         isLoadingMessages,
+        retryMessage,
     } = useChatStore();
 
     const activeConversation = conversations.find(
@@ -93,6 +94,7 @@ export function ChatWindow({
                 <MessageList
                     messages={conversationMessages}
                     isLoading={isLoadingMessages}
+                    onRetryMessage={(messageId) => retryMessage(messageId, activeConversationId)}
                     className="flex-1"
                 />
             )}
