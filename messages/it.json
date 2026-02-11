@@ -41,7 +41,10 @@
     "note": "Nota",
     "share": "Condividi",
     "downloadPdf": "Scarica PDF",
-    "report": "Segnala"
+    "report": "Segnala",
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -205,7 +208,12 @@
     "daysAgo": "{count} g fa",
     "agent": "Agente",
     "owner": "Proprietario",
-    "agency": "Agenzia"
+    "agency": "Agenzia",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "apartment": "Appartamento",
@@ -1238,7 +1246,13 @@
     "noAgentsFound": "Nessun agente trovato",
     "rooms": "cam.",
     "sqm": "m²",
-    "recommendedAgencies": "Agenzie consigliate"
+    "recommendedAgencies": "Agenzie consigliate",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "title": "Categoria di ricerca",

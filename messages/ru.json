@@ -41,7 +41,10 @@
     "note": "Заметка",
     "share": "Поделиться",
     "downloadPdf": "Скачать PDF",
-    "report": "Пожаловаться"
+    "report": "Пожаловаться",
+    "filters": "Фильтры",
+    "resetFilters": "Сбросить фильтры",
+    "all": "Все"
   },
   "landing": {
     "hero": {
@@ -205,7 +208,12 @@
     "daysAgo": "{count} дн назад",
     "agent": "Агент",
     "owner": "Собственник",
-    "agency": "Агентство"
+    "agency": "Агентство",
+    "found": "найдено",
+    "minPrice": "Минимальная цена",
+    "maxPrice": "Максимальная цена",
+    "selectRooms": "Выберите количество комнат",
+    "room": "комната"
   },
   "propertyTypes": {
     "apartment": "Квартира",
@@ -1238,7 +1246,13 @@
     "noAgentsFound": "Агенты не найдены",
     "rooms": "комн.",
     "sqm": "м²",
-    "recommendedAgencies": "Рекомендуемые агентства"
+    "recommendedAgencies": "Рекомендуемые агентства",
+    "propertiesCount": "Найдено {count} объектов",
+    "filterPropertiesDescription": "Фильтруйте объекты по цене, комнатам и агенту",
+    "noPropertiesMatchFilters": "Не найдено объектов, соответствующих выбранным фильтрам",
+    "agent": "Агент",
+    "selectAgent": "Выберите агента",
+    "allAgents": "Все сотрудники"
   },
   "searchCategory": {
     "title": "Категория поиска",

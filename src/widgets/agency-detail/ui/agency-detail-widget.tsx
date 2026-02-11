@@ -37,6 +37,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import type { Agency, AgencyReview } from '@/entities/agency';
 import type { Property } from '@/entities/property';
+import { AgencyPropertiesSection } from './agency-properties-section';
 
 interface AgencyDetailProps {
     agency: Agency;
@@ -575,8 +576,11 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
 
                     {/* Объекты */}
                     <TabsContent value="properties" className="mt-4">
-                        <AgencyPropertiesTab
+                        <AgencyPropertiesSection
                             properties={properties}
+                            agents={agency.agents || []}
+                            agencyId={agency.id}
+                            locale={locale}
                         />
                     </TabsContent>
 
@@ -595,63 +599,6 @@ export function AgencyDetail({ agency, properties = [], locale }: AgencyDetailPr
                     </TabsContent>
                 </Tabs>
             </div>
-        </div>
-    );
-}
-
-// Компонент для таба с объектами
-function AgencyPropertiesTab({
-    properties,
-}: {
-    properties: Property[];
-}) {
-    const t = useTranslations('agency');
-    const tCommon = useTranslations('common');
-
-    if (properties.length === 0) {
-        return (
-            <div className="bg-background border border-border rounded-xl p-8 text-center">
-                <Building2 className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-                <p className="text-text-secondary">{t('noPropertiesFound')}</p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {properties.map((property) => (
-                <div
-                    key={property.id}
-                    className="bg-background border border-border rounded-xl overflow-hidden hover:border-border-hover transition-colors"
-                >
-                    {/* Изображение */}
-                    <div className="relative aspect-[4/3]">
-                        {property.images[0] && (
-                            <Image
-                                src={property.images[0]}
-                                alt={property.title}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                        )}
-                    </div>
-
-                    {/* Контент */}
-                    <div className="p-3">
-                        <p className="font-semibold text-price">
-                            {property.price.toLocaleString()} €
-                            <span className="text-text-tertiary font-normal text-sm">{tCommon('perMonth')}</span>
-                        </p>
-                        <h3 className="text-sm font-medium text-text-primary truncate mt-1">
-                            {property.title}
-                        </h3>
-                        <p className="text-xs text-text-secondary mt-1">
-                            {property.rooms} {t('rooms')} · {property.area} {t('sqm')}
-                        </p>
-                    </div>
-                </div>
-            ))}
         </div>
     );
 }

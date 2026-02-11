@@ -25,7 +25,10 @@
     "share": "Share",
     "downloadPdf": "Download PDF",
     "report": "Report",
-    "months": "mo."
+    "months": "mo.",
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -189,7 +192,12 @@
     "daysAgo": "{count}d ago",
     "agent": "Agent",
     "owner": "Owner",
-    "agency": "Agency"
+    "agency": "Agency",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "apartment": "Apartment",
@@ -1210,7 +1218,13 @@
     "noAgentsFound": "No agents found",
     "rooms": "rooms",
     "sqm": "sqm",
-    "recommendedAgencies": "Recommended agencies"
+    "recommendedAgencies": "Recommended agencies",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "title": "Search category",
