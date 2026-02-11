@@ -42,6 +42,9 @@
     "from": "De",
     "to": "Até",
     "clear": "Limpar"
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -202,7 +205,12 @@
     "verified": "Verificado",
     "viewMore": "Ver mais",
     "walkMin": "{min} min a pé",
-    "top": "TOP"
+    "top": "TOP",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "all": "Todos os tipos",
@@ -1203,7 +1211,13 @@
       "rental": "Aluguel",
       "sale": "Venda"
     },
-    "recommendedAgencies": "Agências recomendadas"
+    "recommendedAgencies": "Agências recomendadas",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "all": "Todos",

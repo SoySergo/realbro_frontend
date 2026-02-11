@@ -30,6 +30,9 @@
     "from": "De",
     "to": "À",
     "clear": "Effacer"
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -193,7 +196,12 @@
     "daysAgo": "il y a {count}j",
     "agent": "Agent",
     "owner": "Propriétaire",
-    "agency": "Agence"
+    "agency": "Agence",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "apartment": "Appartement",
@@ -1234,7 +1242,13 @@
     "noAgentsFound": "Aucun agent trouvé",
     "rooms": "pièces",
     "sqm": "m²",
-    "recommendedAgencies": "Agences recommandées"
+    "recommendedAgencies": "Agences recommandées",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "title": "Catégorie de recherche",

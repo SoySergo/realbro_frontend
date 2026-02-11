@@ -42,6 +42,9 @@
     "from": "Von",
     "to": "Bis",
     "clear": "Löschen"
+    "filters": "Filters",
+    "resetFilters": "Reset filters",
+    "all": "All"
   },
   "landing": {
     "hero": {
@@ -205,7 +208,12 @@
     "daysAgo": "vor {count} T.",
     "agent": "Makler",
     "owner": "Eigentümer",
-    "agency": "Agentur"
+    "agency": "Agentur",
+    "found": "found",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "selectRooms": "Select number of rooms",
+    "room": "room"
   },
   "propertyTypes": {
     "apartment": "Wohnung",
@@ -1240,7 +1248,13 @@
     "noAgentsFound": "Keine Agenten gefunden",
     "rooms": "Zi.",
     "sqm": "m²",
-    "recommendedAgencies": "Empfohlene Agenturen"
+    "recommendedAgencies": "Empfohlene Agenturen",
+    "propertiesCount": "{count} properties found",
+    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+    "noPropertiesMatchFilters": "No properties found matching selected filters",
+    "agent": "Agent",
+    "selectAgent": "Select agent",
+    "allAgents": "All agents"
   },
   "searchCategory": {
     "title": "Suchkategorie",

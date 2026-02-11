@@ -252,6 +252,7 @@ export async function getAgencyProperties(
         maxPrice?: number;
         rooms?: number[];
         propertyType?: string[];
+        agentId?: string;
     } = {}
 ): Promise<{
     data: Property[];
@@ -285,6 +286,9 @@ export async function getAgencyProperties(
         if (filters.rooms && filters.rooms.length > 0) {
             properties = properties.filter(p => filters.rooms!.includes(p.rooms));
         }
+        if (filters.agentId) {
+            properties = properties.filter(p => p.author?.id === filters.agentId);
+        }
 
         const offset = (page - 1) * limit;
         const data = properties.slice(offset, offset + limit);
@@ -309,6 +313,7 @@ export async function getAgencyProperties(
         if (filters.minPrice) params.append('minPrice', filters.minPrice.toString());
         if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString());
         if (filters.rooms) params.append('rooms', filters.rooms.join(','));
+        if (filters.agentId) params.append('agentId', filters.agentId);
 
         const response = await fetch(`${API_BASE}/agencies/${agencyId}/properties?${params}`, {
             next: { revalidate: 300 },
