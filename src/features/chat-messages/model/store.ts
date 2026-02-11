@@ -23,6 +23,7 @@ interface ChatStore {
     fetchConversations: () => Promise<void>;
     fetchMessages: (conversationId: string) => Promise<void>;
     sendMessage: (conversationId: string, content: string) => Promise<void>;
+    retryMessage: (messageId: string, conversationId: string) => Promise<void>;
     addIncomingMessage: (message: ChatMessage) => void;
     markAsRead: (conversationId: string) => void;
     startSimulation: () => void;
@@ -103,35 +104,93 @@ export const useChatStore = create<ChatStore>()(
                     ),
                 }));
 
-                const result = await sendMessageAPI(conversationId, content);
+                try {
+                    const result = await sendMessageAPI(conversationId, content);
 
-                // Replace optimistic with real
+                    // Replace optimistic with real
+                    set((state) => ({
+                        messages: {
+                            ...state.messages,
+                            [conversationId]: state.messages[conversationId]?.map((m) =>
+                                m.id === optimisticMessage.id
+                                    ? { ...result, status: 'sent' as const }
+                                    : m
+                            ) || [],
+                        },
+                        isSending: false,
+                    }));
+
+                    // Simulate reply for support/p2p after a delay
+                    const conv = get().conversations.find((c) => c.id === conversationId);
+                    if (conv && conv.type === 'support') {
+                        setTimeout(() => {
+                            get().addIncomingMessage({
+                                id: `msg_reply_${Date.now()}`,
+                                conversationId,
+                                senderId: 'support',
+                                type: 'text',
+                                content: 'Thank you for your message! Our team will review it shortly.',
+                                status: 'delivered',
+                                createdAt: new Date().toISOString(),
+                            });
+                        }, 1500);
+                    }
+                } catch (error) {
+                    console.error('[Chat] Failed to send message', error);
+                    // Mark message as error
+                    set((state) => ({
+                        messages: {
+                            ...state.messages,
+                            [conversationId]: state.messages[conversationId]?.map((m) =>
+                                m.id === optimisticMessage.id
+                                    ? { ...m, status: 'error' as const }
+                                    : m
+                            ) || [],
+                        },
+                        isSending: false,
+                    }));
+                }
+            },
+
+            retryMessage: async (messageId, conversationId) => {
+                const message = get().messages[conversationId]?.find((m) => m.id === messageId);
+                if (!message || message.status !== 'error') return;
+
+                // Update status to sending
                 set((state) => ({
                     messages: {
                         ...state.messages,
                         [conversationId]: state.messages[conversationId]?.map((m) =>
-                            m.id === optimisticMessage.id
-                                ? { ...result, status: 'sent' as const }
-                                : m
+                            m.id === messageId ? { ...m, status: 'sending' as const } : m
                         ) || [],
                     },
-                    isSending: false,
                 }));
 
-                // Simulate reply for support/p2p after a delay
-                const conv = get().conversations.find((c) => c.id === conversationId);
-                if (conv && conv.type === 'support') {
-                    setTimeout(() => {
-                        get().addIncomingMessage({
-                            id: `msg_reply_${Date.now()}`,
-                            conversationId,
-                            senderId: 'support',
-                            type: 'text',
-                            content: 'Thank you for your message! Our team will review it shortly.',
-                            status: 'delivered',
-                            createdAt: new Date().toISOString(),
-                        });
-                    }, 1500);
+                try {
+                    const result = await sendMessageAPI(conversationId, message.content);
+                    
+                    // Replace with successful message
+                    set((state) => ({
+                        messages: {
+                            ...state.messages,
+                            [conversationId]: state.messages[conversationId]?.map((m) =>
+                                m.id === messageId
+                                    ? { ...result, status: 'sent' as const }
+                                    : m
+                            ) || [],
+                        },
+                    }));
+                } catch (error) {
+                    console.error('[Chat] Failed to retry message', error);
+                    // Mark as error again
+                    set((state) => ({
+                        messages: {
+                            ...state.messages,
+                            [conversationId]: state.messages[conversationId]?.map((m) =>
+                                m.id === messageId ? { ...m, status: 'error' as const } : m
+                            ) || [],
+                        },
+                    }));
                 }
             },
 

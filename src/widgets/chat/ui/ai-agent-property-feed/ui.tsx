@@ -12,6 +12,7 @@ import { PropertyActionButtons } from '@/features/chat-property-actions/ui/prope
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
 import { PropertyCompareButton } from '@/features/comparison';
 import { ScrollToBottomButton } from '@/shared/ui/scroll-to-bottom';
+import { AIAgentPropertyFeedSkeleton } from './skeleton';
 import type { ChatMessage } from '@/entities/chat';
 import type { Property } from '@/entities/property';
 import { Loader2 } from 'lucide-react';
@@ -418,11 +419,7 @@ export function AIAgentPropertyFeed({
     ), [objectsLabel, viewedSet, renderPropertyCard]);
 
     if (isLoadingMessages) {
-        return (
-            <div className={cn('flex-1 flex items-center justify-center', className)}>
-                <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
-            </div>
-        );
+        return <AIAgentPropertyFeedSkeleton className={className} />;
     }
 
     const hasViewedGroups = viewedGroups.length > 0;

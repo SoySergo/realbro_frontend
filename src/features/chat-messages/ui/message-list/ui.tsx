@@ -6,6 +6,7 @@ import { cn } from '@/shared/lib/utils';
 import { MessageBubble, PropertyBatchCard, PropertyBatchCarousel, TypingIndicator } from '@/entities/chat';
 import { PropertyActionButtons } from '@/features/chat-property-actions/ui/property-action-buttons';
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
+import { MessageListSkeleton } from './message-list-skeleton';
 import type { ChatMessage } from '@/entities/chat';
 import type { Property } from '@/entities/property';
 
@@ -14,6 +15,7 @@ interface MessageListProps {
     isLoading: boolean;
     isTyping?: boolean;
     typingLabel?: string;
+    onRetryMessage?: (messageId: string) => void;
     className?: string;
 }
 
@@ -45,6 +47,7 @@ export function MessageList({
     isLoading,
     isTyping,
     typingLabel,
+    onRetryMessage,
     className,
 }: MessageListProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -107,11 +110,7 @@ export function MessageList({
     }, [viewedSet]);
 
     if (isLoading) {
-        return (
-            <div className={cn('flex-1 flex items-center justify-center', className)}>
-                <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
-            </div>
-        );
+        return <MessageListSkeleton className={className} />;
     }
 
     let lastDateStr = '';
@@ -140,7 +139,11 @@ export function MessageList({
                         {message.type === 'property' || message.type === 'property-batch' ? (
                             renderPropertyMessage(message)
                         ) : (
-                            <MessageBubble message={message} isOwn={isOwn} />
+                            <MessageBubble 
+                                message={message} 
+                                isOwn={isOwn}
+                                onRetry={onRetryMessage}
+                            />
                         )}
                     </div>
                 );
