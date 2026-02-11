@@ -11,6 +11,7 @@
 3. **Детали объекта** (`/property-detail/`) — страница детального просмотра с получением по slug
 4. **Вкладки** (`/tabs/`) — сохранение и управление поисковыми запросами
 5. **Кластеры** (`/clusters/`) — группировка объектов на карте
+6. **Чат** (`/chat/`) — система чата с AI агентом и поддержкой
 
 ---
 
@@ -172,6 +173,20 @@ export const apiClient = async <T>(
 | `/api/properties/cluster` | POST | Объекты кластера |
 | `/api/properties/cluster/:id/expansion-zoom` | GET | Зум распада кластера |
 | `/api/properties/cluster/:id/stats` | GET | Статистика кластера |
+
+### Чат
+
+См. подробнее: [chat/README.md](./chat/README.md)
+
+| Endpoint | Метод | Описание |
+|----------|-------|----------|
+| `/api/chat/conversations` | GET | Список бесед |
+| `/api/chat/messages/:id` | GET | Сообщения с пагинацией |
+| `/api/chat/messages` | POST | Отправка сообщения |
+| `/api/chat/conversations/:id/read` | POST | Отметить как прочитанное |
+| `/api/chat/ai-properties` | GET | Объекты от AI агента |
+| `/api/chat/ai-settings` | GET/PUT | Настройки AI агента |
+| `wss://api/ws/chat` | WebSocket | Real-time обновления чата |
 
 ---
 
@@ -615,6 +630,7 @@ export const generateMockProperties = (
 - Детали объекта: [property-detail/README.md](./property-detail/README.md)
 - Вкладки: [tabs/README.md](./tabs/README.md)
 - Кластеры: [clusters/README.md](./clusters/README.md)
+- Чат: [chat/README.md](./chat/README.md)
 
 **API документация (Swagger):**
 - Staging: https://api-staging.realbro.com/docs
