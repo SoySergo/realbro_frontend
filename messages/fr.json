@@ -1380,7 +1380,22 @@
       "superAgent": "Super agent",
       "yearsOnPlatform": "{count} ans sur la plateforme",
       "contact": "Contacter",
-      "remove": "Retirer des favoris"
+      "remove": "Retirer des favoris",
+      "filters": {
+        "all": "Tous",
+        "viewed": "Consultés",
+        "contacted": "Contactés",
+        "messaged": "Avec messages",
+        "reviewed": "Avec avis"
+      },
+      "sort": {
+        "recentInteraction": "Interactions récentes",
+        "mostMessages": "Plus de messages"
+      },
+      "viewed": "Consulté",
+      "contactRequested": "Contact demandé",
+      "messages": "{count} messages",
+      "reviewWritten": "Avis écrit"
     },
     "filters": {
       "title": "Filtres Sauvegardés",

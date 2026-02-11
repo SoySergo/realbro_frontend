@@ -1681,7 +1681,22 @@
       "superAgent": "Superagent",
       "yearsOnPlatform": "{count} anys a la plataforma",
       "contact": "Contactar",
-      "remove": "Eliminar dels favorits"
+      "remove": "Eliminar dels favorits",
+      "filters": {
+        "all": "Tots",
+        "viewed": "Vistos",
+        "contacted": "Contactats",
+        "messaged": "Amb missatges",
+        "reviewed": "Amb ressenya"
+      },
+      "sort": {
+        "recentInteraction": "Interaccions recents",
+        "mostMessages": "Més missatges"
+      },
+      "viewed": "Vist",
+      "contactRequested": "Contacte sol·licitat",
+      "messages": "{count} missatges",
+      "reviewWritten": "Ressenya escrita"
     },
     "filters": {
       "title": "Filtres desats",

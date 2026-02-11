@@ -1362,7 +1362,22 @@
       "superAgent": "Super agent",
       "yearsOnPlatform": "{count} years on platform",
       "contact": "Contact",
-      "remove": "Remove from favorites"
+      "remove": "Remove from favorites",
+      "filters": {
+        "all": "All",
+        "viewed": "Viewed",
+        "contacted": "Contacted",
+        "messaged": "Messaged",
+        "reviewed": "Reviewed"
+      },
+      "sort": {
+        "recentInteraction": "Recent interactions",
+        "mostMessages": "Most messages"
+      },
+      "viewed": "Viewed",
+      "contactRequested": "Contact requested",
+      "messages": "{count} messages",
+      "reviewWritten": "Review written"
     },
     "filters": {
       "title": "Saved Filters",

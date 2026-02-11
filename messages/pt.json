@@ -1364,7 +1364,22 @@
       "contact": "Contato",
       "owner": "Proprietário",
       "superAgent": "Super Agente",
-      "yearsOnPlatform": "Anos na plataforma"
+      "yearsOnPlatform": "Anos na plataforma",
+      "filters": {
+        "all": "Todos",
+        "viewed": "Visualizados",
+        "contacted": "Contactados",
+        "messaged": "Com mensagens",
+        "reviewed": "Com avaliação"
+      },
+      "sort": {
+        "recentInteraction": "Interações recentes",
+        "mostMessages": "Mais mensagens"
+      },
+      "viewed": "Visualizado",
+      "contactRequested": "Contacto solicitado",
+      "messages": "{count} mensagens",
+      "reviewWritten": "Avaliação escrita"
     },
     "tabs": {
       "filters": "Filtros",

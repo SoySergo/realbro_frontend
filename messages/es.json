@@ -1390,7 +1390,22 @@
       "superAgent": "Súper agente",
       "yearsOnPlatform": "{count} años en la plataforma",
       "contact": "Contactar",
-      "remove": "Eliminar de favoritos"
+      "remove": "Eliminar de favoritos",
+      "filters": {
+        "all": "Todos",
+        "viewed": "Vistos",
+        "contacted": "Contactados",
+        "messaged": "Con mensajes",
+        "reviewed": "Con reseña"
+      },
+      "sort": {
+        "recentInteraction": "Interacciones recientes",
+        "mostMessages": "Más mensajes"
+      },
+      "viewed": "Visto",
+      "contactRequested": "Contacto solicitado",
+      "messages": "{count} mensajes",
+      "reviewWritten": "Reseña escrita"
     },
     "filters": {
       "title": "Filtros guardados",

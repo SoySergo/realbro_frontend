@@ -1663,7 +1663,22 @@
       "contact": "Контакт",
       "owner": "Власник",
       "superAgent": "Супер Агент",
-      "yearsOnPlatform": "Років на платформі"
+      "yearsOnPlatform": "Років на платформі",
+      "filters": {
+        "all": "Всі",
+        "viewed": "Переглянуті",
+        "contacted": "Запитані контакти",
+        "messaged": "З листуванням",
+        "reviewed": "З відгуком"
+      },
+      "sort": {
+        "recentInteraction": "Останні взаємодії",
+        "mostMessages": "Більше повідомлень"
+      },
+      "viewed": "Переглянутий",
+      "contactRequested": "Контакти запитані",
+      "messages": "{count} повідомлень",
+      "reviewWritten": "Відгук написаний"
     },
     "tabs": {
       "filters": "Фільтри",

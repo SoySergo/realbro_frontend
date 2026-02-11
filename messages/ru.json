@@ -1390,7 +1390,22 @@
       "superAgent": "Супер-агент",
       "yearsOnPlatform": "{count} лет на платформе",
       "contact": "Связаться",
-      "remove": "Удалить из избранного"
+      "remove": "Удалить из избранного",
+      "filters": {
+        "all": "Все",
+        "viewed": "Просмотренные",
+        "contacted": "Запрошены контакты",
+        "messaged": "С перепиской",
+        "reviewed": "С отзывом"
+      },
+      "sort": {
+        "recentInteraction": "Последние взаимодействия",
+        "mostMessages": "Больше сообщений"
+      },
+      "viewed": "Просмотрен",
+      "contactRequested": "Контакты запрошены",
+      "messages": "{count} сообщений",
+      "reviewWritten": "Отзыв написан"
     },
     "filters": {
       "title": "Сохраненные фильтры",
