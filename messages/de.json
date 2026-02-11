@@ -38,6 +38,10 @@
     "next": "Weiter",
     "of": "von",
     "months": "Mon.",
+    "selectDate": "Datum auswählen",
+    "from": "Von",
+    "to": "Bis",
+    "clear": "Löschen"
     "filters": "Filters",
     "resetFilters": "Reset filters",
     "all": "All"
@@ -361,7 +365,9 @@
     "propertyCategoryWarehouse": "Lager",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Grundstück"
+    "propertyCategoryLand": "Grundstück",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Karte anzeigen",
@@ -1382,7 +1388,29 @@
       "apply": "Anwenden",
       "customDateTime": "Benutzerdefiniertes Datum und Zeit",
       "date": "Datum",
-      "time": "Zeit"
+      "time": "Zeit",
+      "listView": "Liste",
+      "calendarView": "Kalender",
+      "filters": {
+        "allTypes": "Alle Typen",
+        "propertyNotes": "Über Immobilien",
+        "agencyNotes": "Über Agenturen",
+        "generalNotes": "Allgemein",
+        "all": "Alle",
+        "withReminder": "Mit Erinnerung",
+        "noReminder": "Ohne Erinnerung"
+      },
+      "sort": {
+        "recentlyUpdated": "Kürzlich aktualisiert",
+        "upcomingReminders": "Bevorstehende Erinnerungen"
+      },
+      "noteText": "Notiztext",
+      "optional": "optional",
+      "create": "Erstellen",
+      "deleteConfirm": "Notiz löschen?",
+      "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Die Notiz wird dauerhaft gelöscht.",
+      "delete": "Löschen",
+      "calendarViewComingSoon": "Die Kalenderansicht wird bald verfügbar sein"
     },
     "professionals": {
       "title": "Profis",
@@ -1394,7 +1422,22 @@
       "superAgent": "Super-Agent",
       "yearsOnPlatform": "{count} Jahre auf der Plattform",
       "contact": "Kontaktieren",
-      "remove": "Aus Favoriten entfernen"
+      "remove": "Aus Favoriten entfernen",
+      "filters": {
+        "all": "Alle",
+        "viewed": "Angesehen",
+        "contacted": "Kontaktiert",
+        "messaged": "Mit Nachrichten",
+        "reviewed": "Mit Bewertung"
+      },
+      "sort": {
+        "recentInteraction": "Letzte Interaktionen",
+        "mostMessages": "Mehr Nachrichten"
+      },
+      "viewed": "Angesehen",
+      "contactRequested": "Kontakt angefragt",
+      "messages": "{count} Nachrichten",
+      "reviewWritten": "Bewertung geschrieben"
     },
     "filters": {
       "title": "Gespeicherte Filter",
@@ -1402,7 +1445,25 @@
       "deleteFilter": "Löschen",
       "editFilter": "Bearbeiten",
       "lastUsed": "Zuletzt verwendet: {date}",
-      "propertiesCount": "{count} Objekte gefunden"
+      "propertiesCount": "{count} Objekte gefunden",
+      "all": "Alle",
+      "liked": "Gefällt mir",
+      "disliked": "Gefällt mir nicht",
+      "unsorted": "Nicht sortiert",
+      "selectDateRange": "Zeitraum auswählen",
+      "advanced": "Erweitert",
+      "advancedFilters": "Erweiterte Filter",
+      "clearAll": "Alles löschen",
+      "showing": "{count} von {total} angezeigt",
+      "noResults": "Keine Ergebnisse für die ausgewählten Filter",
+      "sort": {
+        "newestFirst": "Neueste zuerst",
+        "oldestFirst": "Älteste zuerst",
+        "priceLowToHigh": "Preis: aufsteigend",
+        "priceHighToLow": "Preis: absteigend",
+        "areaLargest": "Fläche: größte",
+        "areaSmallest": "Fläche: kleinste"
+      }
     },
     "authPrompt": {
       "title": "Anmelden zum Speichern",

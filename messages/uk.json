@@ -85,8 +85,8 @@
     "no": "Ні",
     "or": "або",
     "and": "та",
-    "from": "від",
-    "to": "до",
+    "from": "Від",
+    "to": "До",
     "perMonth": "на місяць",
     "perYear": "на рік",
     "total": "Усього",
@@ -110,6 +110,7 @@
     "free": "Безкоштовно",
     "euro": "€",
     "months": "міс.",
+    "selectDate": "Вибрати дату"
     "resetFilters": "Reset filters"
   },
   "landing": {
@@ -615,7 +616,9 @@
     "sortDate": "За датою",
     "studio": "Студія",
     "viewList": "Список",
-    "viewMap": "Карта"
+    "viewMap": "Карта",
+    "min": "Мін",
+    "max": "Макс"
   },
   "map": {
     "title": "Карта",
@@ -1620,7 +1623,25 @@
     "filters": {
       "applyFilter": "Застосувати фільтр",
       "lastUsed": "Останнє використання",
-      "propertiesCount": "{count} об'єктів"
+      "propertiesCount": "{count} об'єктів",
+      "all": "Всі",
+      "liked": "Подобається",
+      "disliked": "Не подобається",
+      "unsorted": "Не розібрані",
+      "selectDateRange": "Вибрати період",
+      "advanced": "Розширені",
+      "advancedFilters": "Розширені фільтри",
+      "clearAll": "Очистити все",
+      "showing": "Показано {count} з {total}",
+      "noResults": "Немає результатів за заданими фільтрами",
+      "sort": {
+        "newestFirst": "Спочатку нові",
+        "oldestFirst": "Спочатку старі",
+        "priceLowToHigh": "Ціна: за зростанням",
+        "priceHighToLow": "Ціна: за спаданням",
+        "areaLargest": "Площа: найбільша",
+        "areaSmallest": "Площа: найменша"
+      }
     },
     "notes": {
       "addNote": "Додати нотатку",
@@ -1645,7 +1666,29 @@
       "setReminder": "Встановити нагадування",
       "time": "Час",
       "today": "Сьогодні",
-      "tomorrowLabel": "Завтра"
+      "tomorrowLabel": "Завтра",
+      "listView": "Список",
+      "calendarView": "Календар",
+      "filters": {
+        "allTypes": "Усі типи",
+        "propertyNotes": "Про об'єкти",
+        "agencyNotes": "Про агентства",
+        "generalNotes": "Загальні",
+        "all": "Усі",
+        "withReminder": "З нагадуванням",
+        "noReminder": "Без нагадування"
+      },
+      "sort": {
+        "recentlyUpdated": "Нещодавно оновлені",
+        "upcomingReminders": "Найближчі нагадування"
+      },
+      "noteText": "Текст нотатки",
+      "optional": "необов'язково",
+      "create": "Створити",
+      "deleteConfirm": "Видалити нотатку?",
+      "deleteDescription": "Цю дію не можна скасувати. Нотатку буде видалено назавжди.",
+      "delete": "Видалити",
+      "calendarViewComingSoon": "Вигляд календаря скоро буде доступний"
     },
     "professionals": {
       "activeListings": "Активні оголошення",
@@ -1654,7 +1697,22 @@
       "contact": "Контакт",
       "owner": "Власник",
       "superAgent": "Супер Агент",
-      "yearsOnPlatform": "Років на платформі"
+      "yearsOnPlatform": "Років на платформі",
+      "filters": {
+        "all": "Всі",
+        "viewed": "Переглянуті",
+        "contacted": "Запитані контакти",
+        "messaged": "З листуванням",
+        "reviewed": "З відгуком"
+      },
+      "sort": {
+        "recentInteraction": "Останні взаємодії",
+        "mostMessages": "Більше повідомлень"
+      },
+      "viewed": "Переглянутий",
+      "contactRequested": "Контакти запитані",
+      "messages": "{count} повідомлень",
+      "reviewWritten": "Відгук написаний"
     },
     "tabs": {
       "filters": "Фільтри",

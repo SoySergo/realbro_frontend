@@ -42,6 +42,10 @@
     "share": "Compartir",
     "downloadPdf": "Descargar PDF",
     "report": "Reportar",
+    "selectDate": "Seleccionar fecha",
+    "from": "Desde",
+    "to": "Hasta",
+    "clear": "Limpiar"
     "filters": "Filters",
     "resetFilters": "Reset filters",
     "all": "All"
@@ -365,7 +369,9 @@
     "propertyCategoryWarehouse": "Almacén",
     "propertyCategoryRestaurant": "Restaurante",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Terreno"
+    "propertyCategoryLand": "Terreno",
+    "min": "Mín",
+    "max": "Máx"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -1386,7 +1392,29 @@
       "apply": "Aplicar",
       "customDateTime": "Fecha y hora personalizadas",
       "date": "Fecha",
-      "time": "Hora"
+      "time": "Hora",
+      "listView": "Lista",
+      "calendarView": "Calendario",
+      "filters": {
+        "allTypes": "Todos los tipos",
+        "propertyNotes": "Sobre propiedades",
+        "agencyNotes": "Sobre agencias",
+        "generalNotes": "General",
+        "all": "Todos",
+        "withReminder": "Con recordatorio",
+        "noReminder": "Sin recordatorio"
+      },
+      "sort": {
+        "recentlyUpdated": "Actualizados recientemente",
+        "upcomingReminders": "Próximos recordatorios"
+      },
+      "noteText": "Texto de nota",
+      "optional": "opcional",
+      "create": "Crear",
+      "deleteConfirm": "¿Eliminar nota?",
+      "deleteDescription": "Esta acción no se puede deshacer. La nota se eliminará permanentemente.",
+      "delete": "Eliminar",
+      "calendarViewComingSoon": "La vista de calendario estará disponible próximamente"
     },
     "professionals": {
       "title": "Profesionales",
@@ -1398,7 +1426,22 @@
       "superAgent": "Súper agente",
       "yearsOnPlatform": "{count} años en la plataforma",
       "contact": "Contactar",
-      "remove": "Eliminar de favoritos"
+      "remove": "Eliminar de favoritos",
+      "filters": {
+        "all": "Todos",
+        "viewed": "Vistos",
+        "contacted": "Contactados",
+        "messaged": "Con mensajes",
+        "reviewed": "Con reseña"
+      },
+      "sort": {
+        "recentInteraction": "Interacciones recientes",
+        "mostMessages": "Más mensajes"
+      },
+      "viewed": "Visto",
+      "contactRequested": "Contacto solicitado",
+      "messages": "{count} mensajes",
+      "reviewWritten": "Reseña escrita"
     },
     "filters": {
       "title": "Filtros guardados",
@@ -1406,7 +1449,25 @@
       "deleteFilter": "Eliminar",
       "editFilter": "Editar",
       "lastUsed": "Último uso: {date}",
-      "propertiesCount": "{count} propiedades encontradas"
+      "propertiesCount": "{count} propiedades encontradas",
+      "all": "Todos",
+      "liked": "Me gusta",
+      "disliked": "No me gusta",
+      "unsorted": "Sin clasificar",
+      "selectDateRange": "Seleccionar período",
+      "advanced": "Avanzados",
+      "advancedFilters": "Filtros avanzados",
+      "clearAll": "Limpiar todo",
+      "showing": "Mostrando {count} de {total}",
+      "noResults": "No hay resultados para los filtros seleccionados",
+      "sort": {
+        "newestFirst": "Más recientes primero",
+        "oldestFirst": "Más antiguos primero",
+        "priceLowToHigh": "Precio: de menor a mayor",
+        "priceHighToLow": "Precio: de mayor a menor",
+        "areaLargest": "Área: mayor",
+        "areaSmallest": "Área: menor"
+      }
     },
     "authPrompt": {
       "title": "Inicia sesión para guardar",

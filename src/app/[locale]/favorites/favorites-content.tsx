@@ -10,10 +10,10 @@ import { Link } from '@/shared/config/routing';
 import { cn } from '@/shared/lib/utils';
 import type { FavoritesTab } from '@/entities/favorites/model/types';
 import {
-    FavoritesPropertiesTab,
-    FavoritesProfessionalsTab,
+    FavoritesPropertiesTabV2,
+    FavoritesProfessionalsTabV2,
     FavoritesFiltersTab,
-    FavoritesNotesTab,
+    FavoritesNotesTabV2,
 } from '@/features/favorites';
 import {
     generateMockFavoriteProperties,
@@ -173,7 +173,7 @@ export function FavoritesContent() {
                 {/* Контент табов */}
                 <TabsContent value="properties">
                     {isAuthenticated ? (
-                        <FavoritesPropertiesTab 
+                        <FavoritesPropertiesTabV2 
                             properties={favoriteProperties}
                             isEmpty={favoriteProperties.length === 0}
                         />
@@ -184,7 +184,7 @@ export function FavoritesContent() {
 
                 <TabsContent value="professionals">
                     {isAuthenticated ? (
-                        <FavoritesProfessionalsTab 
+                        <FavoritesProfessionalsTabV2 
                             professionals={favoriteProfessionals}
                             isEmpty={favoriteProfessionals.length === 0}
                             onRemove={handleRemoveProfessional}
@@ -211,7 +211,7 @@ export function FavoritesContent() {
 
                 <TabsContent value="notes">
                     {isAuthenticated ? (
-                        <FavoritesNotesTab 
+                        <FavoritesNotesTabV2 
                             notes={notes}
                             isEmpty={notes.length === 0}
                             onDelete={handleDeleteNote}

@@ -8,7 +8,7 @@ import type { Property, PropertyAuthor } from '@/entities/property/model/types';
 // Заметка к объекту недвижимости
 export interface PropertyNote {
     id: string;
-    propertyId: string;
+    propertyId?: string; // Опциональный - заметка может быть не привязана к объекту
     userId: string;
     text: string;
     createdAt: Date;
@@ -16,6 +16,10 @@ export interface PropertyNote {
     reminder?: Reminder;
     // Связанный объект для отображения в списке
     property?: Property;
+    // Связанное агентство (если заметка об агентстве)
+    agency?: PropertyAuthor;
+    // Тип заметки
+    type?: 'property' | 'agency' | 'general';
 }
 
 // Напоминание
@@ -35,6 +39,11 @@ export interface FavoriteProfessional {
     // Дополнительная статистика
     activeListingsCount?: number;
     avgResponseTime?: string;
+    // История взаимодействий
+    viewedAt?: Date; // Когда просматривалась страница агента
+    contactRequestedAt?: Date; // Когда запрашивали контакты
+    messagesSent?: number; // Количество отправленных сообщений
+    reviewWritten?: boolean; // Написан ли отзыв
 }
 
 // Тип локации для сохраненного фильтра
@@ -99,6 +108,8 @@ export interface FavoriteProperty {
     addedAt: Date;
     property: Property;
     note?: PropertyNote;
+    // Тип отметки (для фильтрации)
+    markType?: 'like' | 'dislike' | 'unsorted';
 }
 
 // Типы для API запросов
@@ -121,3 +132,47 @@ export interface CreateReminderRequest {
 
 // Табы избранного
 export type FavoritesTab = 'properties' | 'professionals' | 'filters' | 'notes';
+
+// Типы фильтров для вкладок
+
+// Фильтры для объектов
+export interface FavoritesPropertiesFilters {
+    // Диапазон дат добавления
+    dateFrom?: Date;
+    dateTo?: Date;
+    // Тип отметки
+    markType?: 'all' | 'like' | 'dislike' | 'unsorted';
+    // Основные фильтры из листинга
+    minPrice?: number;
+    maxPrice?: number;
+    rooms?: number[];
+    minArea?: number;
+    maxArea?: number;
+    propertyCategory?: string[];
+    // Сортировка
+    sortBy?: 'addedAt' | 'price' | 'area' | 'updatedAt';
+    sortOrder?: 'asc' | 'desc';
+}
+
+// Фильтры для профессионалов
+export interface FavoritesProfessionalsFilters {
+    // Фильтр по типу взаимодействия
+    interactionType?: 'all' | 'viewed' | 'contacted' | 'messaged' | 'reviewed';
+    // Сортировка
+    sortBy?: 'addedAt' | 'lastInteraction' | 'messagesCount';
+    sortOrder?: 'asc' | 'desc';
+}
+
+// Фильтры для заметок
+export interface FavoritesNotesFilters {
+    // Диапазон дат
+    dateFrom?: Date;
+    dateTo?: Date;
+    // Тип заметки
+    noteType?: 'all' | 'property' | 'agency' | 'general';
+    // Наличие напоминания
+    hasReminder?: boolean;
+    // Сортировка
+    sortBy?: 'createdAt' | 'updatedAt' | 'reminderDate';
+    sortOrder?: 'asc' | 'desc';
+}

@@ -42,6 +42,10 @@
     "share": "Compartir",
     "downloadPdf": "Descarregar PDF",
     "report": "Reportar",
+    "selectDate": "Seleccionar data",
+    "from": "Des de",
+    "to": "Fins a",
+    "clear": "Esborrar"
     "filters": "Filters",
     "resetFilters": "Reset filters",
     "all": "All"
@@ -460,7 +464,9 @@
     "propertyCategoryWarehouse": "Magatzem",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Terreny"
+    "propertyCategoryLand": "Terreny",
+    "min": "Mín",
+    "max": "Màx"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -1677,7 +1683,29 @@
       "apply": "Aplicar",
       "customDateTime": "Data i hora personalitzada",
       "date": "Data",
-      "time": "Hora"
+      "time": "Hora",
+      "listView": "Llista",
+      "calendarView": "Calendari",
+      "filters": {
+        "allTypes": "Tots els tipus",
+        "propertyNotes": "Sobre propietats",
+        "agencyNotes": "Sobre agències",
+        "generalNotes": "General",
+        "all": "Tots",
+        "withReminder": "Amb recordatori",
+        "noReminder": "Sense recordatori"
+      },
+      "sort": {
+        "recentlyUpdated": "Actualitzats recentment",
+        "upcomingReminders": "Propers recordatoris"
+      },
+      "noteText": "Text de nota",
+      "optional": "opcional",
+      "create": "Crear",
+      "deleteConfirm": "Eliminar nota?",
+      "deleteDescription": "Aquesta acció no es pot desfer. La nota s'eliminarà permanentment.",
+      "delete": "Eliminar",
+      "calendarViewComingSoon": "La vista de calendari estarà disponible aviat"
     },
     "professionals": {
       "title": "Professionals",
@@ -1689,7 +1717,22 @@
       "superAgent": "Superagent",
       "yearsOnPlatform": "{count} anys a la plataforma",
       "contact": "Contactar",
-      "remove": "Eliminar dels favorits"
+      "remove": "Eliminar dels favorits",
+      "filters": {
+        "all": "Tots",
+        "viewed": "Vistos",
+        "contacted": "Contactats",
+        "messaged": "Amb missatges",
+        "reviewed": "Amb ressenya"
+      },
+      "sort": {
+        "recentInteraction": "Interaccions recents",
+        "mostMessages": "Més missatges"
+      },
+      "viewed": "Vist",
+      "contactRequested": "Contacte sol·licitat",
+      "messages": "{count} missatges",
+      "reviewWritten": "Ressenya escrita"
     },
     "filters": {
       "title": "Filtres desats",
@@ -1697,7 +1740,25 @@
       "deleteFilter": "Eliminar",
       "editFilter": "Editar",
       "lastUsed": "Últim ús: {date}",
-      "propertiesCount": "{count} immobles trobats"
+      "propertiesCount": "{count} immobles trobats",
+      "all": "Tots",
+      "liked": "M'agrada",
+      "disliked": "No m'agrada",
+      "unsorted": "Sense classificar",
+      "selectDateRange": "Seleccionar període",
+      "advanced": "Avançats",
+      "advancedFilters": "Filtres avançats",
+      "clearAll": "Esborrar tot",
+      "showing": "Mostrant {count} de {total}",
+      "noResults": "No hi ha resultats per als filtres seleccionats",
+      "sort": {
+        "newestFirst": "Més recents primer",
+        "oldestFirst": "Més antics primer",
+        "priceLowToHigh": "Preu: de menor a major",
+        "priceHighToLow": "Preu: de major a menor",
+        "areaLargest": "Àrea: major",
+        "areaSmallest": "Àrea: menor"
+      }
     },
     "authPrompt": {
       "title": "Inicia sessió per desar",

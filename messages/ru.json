@@ -42,6 +42,10 @@
     "share": "Поделиться",
     "downloadPdf": "Скачать PDF",
     "report": "Пожаловаться",
+    "selectDate": "Выбрать дату",
+    "from": "От",
+    "to": "До",
+    "clear": "Очистить"
     "filters": "Фильтры",
     "resetFilters": "Сбросить фильтры",
     "all": "Все"
@@ -365,7 +369,9 @@
     "propertyCategoryWarehouse": "Склад",
     "propertyCategoryRestaurant": "Ресторан",
     "propertyCategoryHotel": "Отель",
-    "propertyCategoryLand": "Земельный участок"
+    "propertyCategoryLand": "Земельный участок",
+    "min": "Мин",
+    "max": "Макс"
   },
   "map": {
     "showMap": "Показать карту",
@@ -1386,7 +1392,29 @@
       "tomorrowLabel": "Завтра",
       "rooms": "комн.",
       "minutes": "мин",
-      "km": "км"
+      "km": "км",
+      "listView": "Список",
+      "calendarView": "Календарь",
+      "filters": {
+        "allTypes": "Все типы",
+        "propertyNotes": "Об объектах",
+        "agencyNotes": "Об агентствах",
+        "generalNotes": "Общие",
+        "all": "Все",
+        "withReminder": "С напоминанием",
+        "noReminder": "Без напоминания"
+      },
+      "sort": {
+        "recentlyUpdated": "Недавно обновленные",
+        "upcomingReminders": "Ближайшие напоминания"
+      },
+      "noteText": "Текст заметки",
+      "optional": "необязательно",
+      "create": "Создать",
+      "deleteConfirm": "Удалить заметку?",
+      "deleteDescription": "Это действие нельзя отменить. Заметка будет удалена безвозвратно.",
+      "delete": "Удалить",
+      "calendarViewComingSoon": "Представление календаря скоро будет доступно"
     },
     "professionals": {
       "title": "Профессионалы",
@@ -1398,7 +1426,22 @@
       "superAgent": "Супер-агент",
       "yearsOnPlatform": "{count} лет на платформе",
       "contact": "Связаться",
-      "remove": "Удалить из избранного"
+      "remove": "Удалить из избранного",
+      "filters": {
+        "all": "Все",
+        "viewed": "Просмотренные",
+        "contacted": "Запрошены контакты",
+        "messaged": "С перепиской",
+        "reviewed": "С отзывом"
+      },
+      "sort": {
+        "recentInteraction": "Последние взаимодействия",
+        "mostMessages": "Больше сообщений"
+      },
+      "viewed": "Просмотрен",
+      "contactRequested": "Контакты запрошены",
+      "messages": "{count} сообщений",
+      "reviewWritten": "Отзыв написан"
     },
     "filters": {
       "title": "Сохраненные фильтры",
@@ -1406,7 +1449,25 @@
       "deleteFilter": "Удалить",
       "editFilter": "Редактировать",
       "lastUsed": "Последнее использование: {date}",
-      "propertiesCount": "{count} объектов найдено"
+      "propertiesCount": "{count} объектов найдено",
+      "all": "Все",
+      "liked": "Нравится",
+      "disliked": "Не нравится",
+      "unsorted": "Не разобранные",
+      "selectDateRange": "Выбрать период",
+      "advanced": "Расширенные",
+      "advancedFilters": "Расширенные фильтры",
+      "clearAll": "Очистить все",
+      "showing": "Показано {count} из {total}",
+      "noResults": "Нет результатов по заданным фильтрам",
+      "sort": {
+        "newestFirst": "Сначала новые",
+        "oldestFirst": "Сначала старые",
+        "priceLowToHigh": "Цена: по возрастанию",
+        "priceHighToLow": "Цена: по убыванию",
+        "areaLargest": "Площадь: наибольшая",
+        "areaSmallest": "Площадь: наименьшая"
+      }
     },
     "authPrompt": {
       "title": "Войдите для сохранения",

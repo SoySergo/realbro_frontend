@@ -26,6 +26,10 @@
     "downloadPdf": "Download PDF",
     "report": "Report",
     "months": "mo.",
+    "selectDate": "Select date",
+    "from": "From",
+    "to": "To",
+    "clear": "Clear"
     "filters": "Filters",
     "resetFilters": "Reset filters",
     "all": "All"
@@ -349,7 +353,9 @@
     "propertyCategoryWarehouse": "Warehouse",
     "propertyCategoryRestaurant": "Restaurant",
     "propertyCategoryHotel": "Hotel",
-    "propertyCategoryLand": "Land"
+    "propertyCategoryLand": "Land",
+    "min": "Min",
+    "max": "Max"
   },
   "map": {
     "showMap": "Show Map",
@@ -1358,7 +1364,29 @@
       "tomorrowLabel": "Tomorrow",
       "rooms": "rooms",
       "minutes": "min",
-      "km": "km"
+      "km": "km",
+      "listView": "List",
+      "calendarView": "Calendar",
+      "filters": {
+        "allTypes": "All types",
+        "propertyNotes": "Property notes",
+        "agencyNotes": "Agency notes",
+        "generalNotes": "General notes",
+        "all": "All",
+        "withReminder": "With reminder",
+        "noReminder": "No reminder"
+      },
+      "sort": {
+        "recentlyUpdated": "Recently updated",
+        "upcomingReminders": "Upcoming reminders"
+      },
+      "noteText": "Note text",
+      "optional": "optional",
+      "create": "Create",
+      "deleteConfirm": "Delete note?",
+      "deleteDescription": "This action cannot be undone. The note will be permanently deleted.",
+      "delete": "Delete",
+      "calendarViewComingSoon": "Calendar view is coming soon"
     },
     "professionals": {
       "title": "Professionals",
@@ -1370,7 +1398,22 @@
       "superAgent": "Super agent",
       "yearsOnPlatform": "{count} years on platform",
       "contact": "Contact",
-      "remove": "Remove from favorites"
+      "remove": "Remove from favorites",
+      "filters": {
+        "all": "All",
+        "viewed": "Viewed",
+        "contacted": "Contacted",
+        "messaged": "Messaged",
+        "reviewed": "Reviewed"
+      },
+      "sort": {
+        "recentInteraction": "Recent interactions",
+        "mostMessages": "Most messages"
+      },
+      "viewed": "Viewed",
+      "contactRequested": "Contact requested",
+      "messages": "{count} messages",
+      "reviewWritten": "Review written"
     },
     "filters": {
       "title": "Saved Filters",
@@ -1378,7 +1421,25 @@
       "deleteFilter": "Delete",
       "editFilter": "Edit",
       "lastUsed": "Last used: {date}",
-      "propertiesCount": "{count} properties found"
+      "propertiesCount": "{count} properties found",
+      "all": "All",
+      "liked": "Liked",
+      "disliked": "Disliked",
+      "unsorted": "Unsorted",
+      "selectDateRange": "Select date range",
+      "advanced": "Advanced",
+      "advancedFilters": "Advanced filters",
+      "clearAll": "Clear all",
+      "showing": "Showing {count} of {total}",
+      "noResults": "No results for the selected filters",
+      "sort": {
+        "newestFirst": "Newest first",
+        "oldestFirst": "Oldest first",
+        "priceLowToHigh": "Price: low to high",
+        "priceHighToLow": "Price: high to low",
+        "areaLargest": "Area: largest",
+        "areaSmallest": "Area: smallest"
+      }
     },
     "authPrompt": {
       "title": "Sign in to save",
