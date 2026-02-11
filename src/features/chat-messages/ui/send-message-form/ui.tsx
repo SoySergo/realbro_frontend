@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Send } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore } from '../../model/store';
@@ -20,7 +20,8 @@ export function SendMessageForm({
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const { sendMessage, isSending } = useChatStore();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    // Мемоизация обработчика отправки
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         const trimmed = message.trim();
         if (!trimmed || isSending) return;
@@ -28,14 +29,22 @@ export function SendMessageForm({
         setMessage('');
         await sendMessage(conversationId, trimmed);
         inputRef.current?.focus();
-    };
+    }, [message, isSending, conversationId, sendMessage]);
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Мемоизация обработчика клавиш
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSubmit(e);
         }
-    };
+    }, [handleSubmit]);
+
+    // Автоматическое изменение высоты textarea
+    const handleInput = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
+        const target = e.target as HTMLTextAreaElement;
+        target.style.height = 'auto';
+        target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
+    }, []);
 
     return (
         <form
@@ -60,11 +69,7 @@ export function SendMessageForm({
                     'scrollbar-hide'
                 )}
                 style={{ minHeight: '40px' }}
-                onInput={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    target.style.height = 'auto';
-                    target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
-                }}
+                onInput={handleInput}
             />
             <button
                 type="submit"

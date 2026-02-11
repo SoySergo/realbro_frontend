@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Bot, CreditCard, CheckCircle, MessageCircle, Search } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
@@ -42,7 +42,7 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Начальная активация при открытии
-    const handleActivate = async () => {
+    const handleActivate = useCallback(async () => {
         if (!queryId) return;
 
         setStep('activating');
@@ -62,6 +62,11 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                     },
                 }),
             });
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
             const data = await res.json();
 
             if (data.error === 'no_subscription') {
@@ -71,15 +76,16 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                 setStep('complete');
             }
         } catch (error) {
-            console.error('Failed to activate AI agent', error);
-            showToast('Failed to activate AI agent', 'error');
+            console.error('[AI Dialog] Failed to activate AI agent', error);
+            showToast(t('activationError') || 'Failed to activate AI agent', 'error');
+            onOpenChange(false); // Закрываем диалог при ошибке
         } finally {
             setIsProcessing(false);
         }
-    };
+    }, [queryId, settings, setAiAgent, showToast, t, onOpenChange]);
 
     // Оплата тарифа
-    const handlePayment = async (planId: string) => {
+    const handlePayment = useCallback(async (planId: string) => {
         setStep('paying');
         setIsProcessing(true);
 
@@ -89,6 +95,11 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ planId }),
             });
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
             const data = await res.json();
 
             if (data.success) {
@@ -96,15 +107,16 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                 setStep('settings');
             }
         } catch (error) {
-            console.error('Payment failed', error);
-            showToast('Payment failed', 'error');
+            console.error('[AI Dialog] Payment failed', error);
+            showToast(tSub('paymentError') || 'Payment failed', 'error');
+            setStep('pricing'); // Возвращаемся на выбор тарифа
         } finally {
             setIsProcessing(false);
         }
-    };
+    }, [showToast, tSub]);
 
     // Сохранение настроек и активация агента
-    const handleSaveSettings = async () => {
+    const handleSaveSettings = useCallback(async () => {
         if (!queryId) return;
 
         setIsProcessing(true);
@@ -122,6 +134,11 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                     },
                 }),
             });
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
             const data = await res.json();
 
             if (data.success) {
@@ -129,22 +146,24 @@ export function AiAgentDialog({ open, onOpenChange, queryId }: AiAgentDialogProp
                 setStep('complete');
             }
         } catch (error) {
-            console.error('Failed to activate AI agent', error);
+            console.error('[AI Dialog] Failed to activate AI agent', error);
+            showToast(t('activationError') || 'Failed to save settings', 'error');
         } finally {
             setIsProcessing(false);
         }
-    };
+    }, [queryId, settings, setAiAgent, showToast, t]);
 
     // Сброс при открытии
-    const handleOpenChange = (newOpen: boolean) => {
+    const handleOpenChange = useCallback((newOpen: boolean) => {
         if (newOpen) {
             handleActivate();
         } else {
+            // Сброс состояния при закрытии
             setStep('activating');
             setIsProcessing(false);
         }
         onOpenChange(newOpen);
-    };
+    }, [handleActivate, onOpenChange]);
 
     // Метки для компонента NotificationSettings
     const notificationLabels = {
