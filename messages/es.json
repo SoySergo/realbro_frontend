@@ -1524,5 +1524,83 @@
     "pro": "Pro",
     "paymentSuccess": "Pago exitoso",
     "noSubscription": "Se requiere suscripción activa"
+  },
+  "autosearch": {
+    "title": "Búsqueda Automática",
+    "createTask": "Crear Tarea",
+    "editTask": "Editar Tarea",
+    "taskName": "Nombre de la Tarea",
+    "taskNamePlaceholder": "ej., Apartamentos en el Centro de Barcelona",
+    "selectFilter": "Seleccionar Filtro",
+    "filterRequired": "Selecciona un filtro de búsqueda",
+    "channels": {
+      "title": "Canales de Notificación",
+      "online": "Online (WebSocket)",
+      "telegram": "Telegram",
+      "push": "Notificaciones Push",
+      "email": "Email",
+      "selectChannels": "Selecciona al menos un canal"
+    },
+    "frequency": {
+      "title": "Frecuencia de Notificaciones",
+      "instant": "Instantáneo",
+      "daily": "Diario",
+      "weekly": "Semanal"
+    },
+    "schedule": {
+      "title": "Horario de Notificaciones (Horas Silenciosas)",
+      "description": "Fuera de este período, las notificaciones se acumulan y se envían como resumen",
+      "startHour": "Enviar desde",
+      "endHour": "Enviar hasta",
+      "timezone": "Zona Horaria",
+      "autoDetected": "Auto-detectado",
+      "from": "Desde",
+      "to": "Hasta"
+    },
+    "status": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "error": "Error"
+    },
+    "actions": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
+    },
+    "list": {
+      "title": "Mis Tareas",
+      "empty": "Aún no tienes tareas",
+      "emptyDescription": "Crea una tarea para la búsqueda automática y recibe notificaciones sobre nuevos inmuebles",
+      "loading": "Cargando tareas...",
+      "taskCount": "{count} tareas"
+    },
+    "feed": {
+      "title": "Recomendaciones de IA",
+      "noProperties": "Aún no hay nuevos inmuebles. Cuando el agente encuentre opciones adecuadas, aparecerán aquí.",
+      "newProperty": "Nuevo Inmueble",
+      "propertyCount": "{count} inmuebles"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar tarea?",
+      "description": "Ya no recibirás notificaciones para esta tarea",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "createFailed": "Error al crear la tarea",
+      "updateFailed": "Error al actualizar la tarea",
+      "deleteFailed": "Error al eliminar la tarea",
+      "loadFailed": "Error al cargar las tareas"
+    },
+    "success": {
+      "created": "Tarea creada",
+      "updated": "Tarea actualizada",
+      "deleted": "Tarea eliminada",
+      "activated": "Tarea activada",
+      "deactivated": "Tarea desactivada"
+    }
   }
 }
