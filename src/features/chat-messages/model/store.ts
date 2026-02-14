@@ -7,7 +7,6 @@ import {
     getConversations,
     getMessages,
     sendMessage as sendMessageAPI,
-    generateMockProperty,
 } from '@/shared/api/chat';
 
 interface ChatStore {
@@ -17,7 +16,6 @@ interface ChatStore {
     isLoadingConversations: boolean;
     isLoadingMessages: boolean;
     isSending: boolean;
-    simulationInterval: ReturnType<typeof setInterval> | null;
 
     setActiveConversation: (id: string | null) => void;
     fetchConversations: () => Promise<void>;
@@ -26,9 +24,6 @@ interface ChatStore {
     retryMessage: (messageId: string, conversationId: string) => Promise<void>;
     addIncomingMessage: (message: ChatMessage) => void;
     markAsRead: (conversationId: string) => void;
-    startSimulation: () => void;
-    stopSimulation: () => void;
-    initializeDemoScenario: () => Promise<void>;
     totalUnread: () => number;
 }
 
@@ -41,7 +36,6 @@ export const useChatStore = create<ChatStore>()(
             isLoadingConversations: false,
             isLoadingMessages: false,
             isSending: false,
-            simulationInterval: null,
 
             setActiveConversation: (id) => {
                 set({ activeConversationId: id });
@@ -236,149 +230,6 @@ export const useChatStore = create<ChatStore>()(
                         c.id === conversationId ? { ...c, unreadCount: 0 } : c
                     ),
                 }));
-            },
-
-            initializeDemoScenario: async () => {
-                const state = get();
-                const aiConv = state.conversations.find((c) => c.type === 'ai-agent');
-                
-                if (!aiConv) {
-                    await state.fetchConversations();
-                    // Retry once
-                    const retryConv = get().conversations.find((c) => c.type === 'ai-agent');
-                    if (!retryConv) return;
-                    
-                    // Recursive call with fresh state
-                    get().initializeDemoScenario();
-                    return;
-                }
-
-                // Clear existing messages for this conversation to ensure clean demo state
-                set((state) => ({
-                    messages: {
-                        ...state.messages,
-                        [aiConv.id]: [],
-                    }
-                }));
-
-                const now = new Date();
-                const messages: ChatMessage[] = [];
-                let msgIdCounter = 1000;
-
-                // Helper to create batch message
-                const createBatch = (count: number, date: Date, startId: number) => {
-                    const properties = [];
-                    for (let i = 0; i < count; i++) {
-                        properties.push(generateMockProperty(startId + i));
-                    }
-                    
-                    // Create multiple messages or one batch? 
-                    // Requirement: "Grouped". The current UI groups by time.
-                    // Let's create individual messages closely timed so they group.
-                    
-                    const msgs: ChatMessage[] = [];
-                    const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
-                    
-                    // We'll create one message per property to allow existing grouping logic to work,
-                    // or we could create batch messages if the backend supports it.
-                    // Looking at the code, it supports 'property' type with multiple properties array?
-                    // "msg.properties?.length || 1" implies it handles arrays.
-                    // But to ensure "grouped" UI (which groups by time), individual messages might be better tested.
-                    // valid types: 'text' | 'property' | 'property-batch'
-                    
-                    // Let's simulate distinct messages to rely on the frontend grouping logic we saw in AIAgentPropertyFeed
-                    // (getGroupKey function)
-                    
-                    for (let i = 0; i < count; i++) {
-                        const property = properties[i];
-                        const filterIdx = i % 3;
-                        
-                        msgs.push({
-                            id: `msg_demo_${startId + i}`,
-                            conversationId: aiConv.id,
-                            senderId: 'ai-agent',
-                            type: 'property',
-                            content: '',
-                            properties: [property],
-                            status: 'delivered',
-                            createdAt: date.toISOString(),
-                            metadata: {
-                                filterName: filterNames[filterIdx],
-                                filterId: `filter_${filterIdx}`,
-                            },
-                        });
-                    }
-                    return msgs;
-                };
-
-                // 1. Yesterday: 10 objects
-                const yesterday = new Date(now);
-                yesterday.setDate(yesterday.getDate() - 1);
-                yesterday.setHours(14, 0, 0, 0); // Yesterday 2 PM
-                messages.push(...createBatch(10, yesterday, 2000));
-
-                // 2. Today: 20 objects (grouped)
-                const today = new Date(now);
-                today.setHours(10, 0, 0, 0); // Today 10 AM
-                messages.push(...createBatch(20, today, 3000));
-
-                // Update store with historical data
-                set((state) => ({
-                    messages: {
-                        ...state.messages,
-                        [aiConv.id]: messages
-                    }
-                }));
-
-                // 3. Start simulation: New object every 5 seconds
-                get().startSimulation();
-            },
-
-            startSimulation: () => {
-                const existing = get().simulationInterval;
-                if (existing) return;
-
-                let counter = 5000;
-                const interval = setInterval(() => {
-                    const state = get();
-                    const aiConv = state.conversations.find(
-                        (c) => c.type === 'ai-agent'
-                    );
-                    if (!aiConv) return;
-
-                    counter++;
-                    const property = generateMockProperty(counter);
-                    // Add "NEW" flag to property or handle via isRealTime
-                    property.isNew = true; 
-
-                    const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
-                    const filterIdx = counter % 3;
-
-                    state.addIncomingMessage({
-                        id: `msg_sim_${Date.now()}`,
-                        conversationId: aiConv.id,
-                        senderId: 'ai-agent',
-                        type: 'property',
-                        content: '',
-                        properties: [property],
-                        status: 'delivered',
-                        createdAt: new Date().toISOString(),
-                        metadata: {
-                            filterName: filterNames[filterIdx],
-                            filterId: `filter_${filterIdx}`,
-                        },
-                    });
-                }, 5000); // Every 5 seconds
-
-                set({ simulationInterval: interval });
-            },
-
-            stopSimulation: () => {
-                const interval = get().simulationInterval;
-                if (interval) {
-                    clearInterval(interval);
-                    set({ simulationInterval: null });
-                }
             },
 
             totalUnread: () => {

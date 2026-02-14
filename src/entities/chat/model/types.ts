@@ -2,14 +2,12 @@ import type { Property } from '@/entities/property';
 
 // === Chat Types ===
 
-export type ChatType = 'p2p' | 'support' | 'ai-agent';
+export type ChatType = 'p2p' | 'support';
 
 export type MessageType =
     | 'text'
     | 'property'
-    | 'property-batch'
-    | 'system'
-    | 'ai-status';
+    | 'system';
 
 export type MessageStatus = 'sending' | 'sent' | 'delivered' | 'read' | 'error';
 
@@ -56,24 +54,6 @@ export interface Conversation {
     isPinned: boolean;
     createdAt: string;
     updatedAt: string;
-    aiSettings?: AIAgentSettings;
-}
-
-export interface AIAgentSettings {
-    isActive: boolean;
-    notificationStartHour: number;
-    notificationEndHour: number;
-    notificationFrequency: NotificationFrequency;
-    linkedFilterIds: string[];
-}
-
-export interface PropertyBatch {
-    id: string;
-    properties: Property[];
-    filterId?: string;
-    filterName?: string;
-    receivedAt: string;
-    isViewed: boolean;
 }
 
 export interface ChatFilterState {
