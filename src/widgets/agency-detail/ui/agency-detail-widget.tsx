@@ -36,12 +36,12 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
 import type { Agency, AgencyReview } from '@/entities/agency';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 import { AgencyPropertiesSection } from './agency-properties-section';
 
 interface AgencyDetailProps {
     agency: Agency;
-    properties?: Property[];
+    properties?: PropertyGridCard[];
     locale: string;
 }
 

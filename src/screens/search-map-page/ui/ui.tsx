@@ -14,7 +14,7 @@ import {
 } from '@/widgets/search-filters-bar';
 import { MapSidebar, MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
 import { useSidebarStore } from '@/widgets/sidebar';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 
 // Lazy load Mapbox для оптимизации
 const SearchMap = dynamic(
@@ -82,12 +82,12 @@ export function SearchMapPage() {
     const router = useRouter();
 
     // Обработчик клика на объект - центрировать карту
-    const handlePropertyClick = useCallback((property: Property) => {
+    const handlePropertyClick = useCallback((property: PropertyGridCard) => {
         router.push(`/property/${property.id}`);
     }, [router]);
 
     // Обработчик наведения - подсветить на карте
-    const handlePropertyHover = useCallback((property: Property | null) => {
+    const handlePropertyHover = useCallback((property: PropertyGridCard | null) => {
         if (property) {
             console.log('Property hover:', property.id);
         }

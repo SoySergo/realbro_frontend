@@ -2,11 +2,11 @@
 
 import { AgencyDetail } from '@/widgets/agency-detail';
 import type { Agency } from '@/entities/agency';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 
 interface AgencyDetailPageProps {
     agency: Agency;
-    properties: Property[];
+    properties: PropertyGridCard[];
     locale: string;
 }
 
