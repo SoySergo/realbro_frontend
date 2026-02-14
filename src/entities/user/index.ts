@@ -36,5 +36,17 @@ export type {
     UserSession,
 } from './model';
 
+export {
+    updateUserRequestSchema,
+    registerRequestSchema,
+    loginRequestSchema,
+    changePasswordRequestSchema,
+    passwordResetRequestSchema,
+    resetPasswordRequestSchema,
+    updateNotificationSettingsRequestSchema,
+    updateSubscriptionRequestSchema,
+    cancelSubscriptionRequestSchema,
+} from './model';
+
 // UI
 export { UserAvatar } from './ui';

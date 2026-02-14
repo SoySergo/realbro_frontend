@@ -2,16 +2,16 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Users, Phone, MessageSquare, Star, Trash2, CheckCircle, Eye, Mail, MessageCircle, ArrowUpDown } from 'lucide-react';
+import { Users, Phone, MessageSquare, Star, Trash2, CheckCircle, Eye, MessageCircle, ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/toggle-group';
 import type { FavoriteProfessional, FavoritesProfessionalsFilters } from '@/entities/favorites/model/types';
-import { cn, safeImageSrc } from '@/shared/lib/utils';
+import { safeImageSrc } from '@/shared/lib/utils';
 import { format } from 'date-fns';
-import { ru, enUS } from 'date-fns/locale';
+import { ru, enUS, es, fr, de, it, pt, ca, uk, type Locale } from 'date-fns/locale';
 import { useLocale } from 'next-intl';
 
 interface FavoritesProfessionalsTabProps {
@@ -24,16 +24,23 @@ interface FavoritesProfessionalsTabProps {
 const dateLocales: Record<string, Locale> = {
     ru,
     en: enUS,
+    es,
+    fr,
+    de,
+    it,
+    pt,
+    ca,
+    uk,
 };
 
 /**
  * Улучшенный таб избранных профессионалов с отслеживанием взаимодействий
  */
-export function FavoritesProfessionalsTabV2({ 
-    professionals, 
+export function FavoritesProfessionalsTabV2({
+    professionals,
     isEmpty,
     onRemove,
-    onContact 
+    onContact
 }: FavoritesProfessionalsTabProps) {
     const t = useTranslations('favorites');
     const locale = useLocale();
@@ -125,26 +132,26 @@ export function FavoritesProfessionalsTabV2({
                     type="single"
                     value={filters.interactionType || 'all'}
                     onValueChange={(value) =>
-                        value && setFilters({ ...filters, interactionType: value as any })
+                        value && setFilters({ ...filters, interactionType: value as FavoritesProfessionalsFilters['interactionType'] })
                     }
                     className="border border-border rounded-lg p-1"
                 >
-                    <ToggleGroupItem value="all" size="sm" className="text-xs">
+                    <ToggleGroupItem value="all" className="text-xs">
                         {t('professionals.filters.all')}
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="viewed" size="sm" className="text-xs">
+                    <ToggleGroupItem value="viewed" className="text-xs">
                         <Eye className="w-3 h-3 mr-1" />
                         {t('professionals.filters.viewed')}
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="contacted" size="sm" className="text-xs">
+                    <ToggleGroupItem value="contacted" className="text-xs">
                         <Phone className="w-3 h-3 mr-1" />
                         {t('professionals.filters.contacted')}
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="messaged" size="sm" className="text-xs">
+                    <ToggleGroupItem value="messaged" className="text-xs">
                         <MessageSquare className="w-3 h-3 mr-1" />
                         {t('professionals.filters.messaged')}
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="reviewed" size="sm" className="text-xs">
+                    <ToggleGroupItem value="reviewed" className="text-xs">
                         <Star className="w-3 h-3 mr-1" />
                         {t('professionals.filters.reviewed')}
                     </ToggleGroupItem>
@@ -155,7 +162,11 @@ export function FavoritesProfessionalsTabV2({
                     value={`${filters.sortBy}-${filters.sortOrder}`}
                     onValueChange={(value) => {
                         const [sortBy, sortOrder] = value.split('-');
-                        setFilters({ ...filters, sortBy: sortBy as any, sortOrder: sortOrder as any });
+                        setFilters({
+                            ...filters,
+                            sortBy: sortBy as FavoritesProfessionalsFilters['sortBy'],
+                            sortOrder: sortOrder as FavoritesProfessionalsFilters['sortOrder']
+                        });
                     }}
                 >
                     <SelectTrigger className="w-[200px] h-9 text-xs">
@@ -187,7 +198,7 @@ export function FavoritesProfessionalsTabV2({
                     {filteredProfessionals.map((favProfessional) => {
                         const prof = favProfessional.professional;
                         return (
-                            <div 
+                            <div
                                 key={favProfessional.id}
                                 className="bg-card rounded-xl border border-border p-4 hover:border-primary transition-colors"
                             >
@@ -207,7 +218,7 @@ export function FavoritesProfessionalsTabV2({
                                                 {prof.name}
                                             </h3>
                                             {prof.isVerified && (
-                                                <CheckCircle className="w-4 h-4 text-success flex-shrink-0" />
+                                                <CheckCircle className="w-4 h-4 text-success shrink-0" />
                                             )}
                                             {prof.isSuperAgent && (
                                                 <Badge variant="secondary" className="text-xs">
@@ -269,9 +280,9 @@ export function FavoritesProfessionalsTabV2({
 
                                 {/* Действия */}
                                 <div className="flex items-center gap-2 mt-4">
-                                    <Button 
-                                        variant="default" 
-                                        size="sm" 
+                                    <Button
+                                        variant="default"
+                                        size="sm"
                                         className="flex-1"
                                         onClick={() => onContact?.(favProfessional.id)}
                                     >

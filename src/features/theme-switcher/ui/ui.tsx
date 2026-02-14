@@ -6,18 +6,11 @@ import { useThemeSwitcher } from '../model';
 
 /**
  * Компонент для переключения темы оформления (светлая/темная)
+ * Рендерит обе иконки всегда, переключает видимость через CSS —
+ * это исключает hydration mismatch между сервером и клиентом.
  */
 export function ThemeSwitcher() {
-    const { currentTheme, toggleTheme, mounted } = useThemeSwitcher();
-
-    // Показываем fallback UI до монтирования компонента (избегаем гидратации несовпадений)
-    if (!mounted) {
-        return (
-            <button className="w-9 h-9 rounded-lg flex items-center justify-center text-text-secondary">
-                <Sun className="w-[17px] h-[17px]" />
-            </button>
-        );
-    }
+    const { toggleTheme } = useThemeSwitcher();
 
     return (
         <button
@@ -29,7 +22,10 @@ export function ThemeSwitcher() {
             )}
             aria-label="Toggle theme"
         >
-            {currentTheme === 'dark' ? <Sun className="w-[17px] h-[17px]" /> : <Moon className="w-[17px] h-[17px]" />}
+            {/* Sun — видна только в dark mode */}
+            <Sun className="w-[17px] h-[17px] hidden dark:block" />
+            {/* Moon — видна только в light mode */}
+            <Moon className="w-[17px] h-[17px] block dark:hidden" />
         </button>
     );
 }

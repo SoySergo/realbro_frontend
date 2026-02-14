@@ -69,3 +69,11 @@ export interface ChatUser {
     isOnline: boolean;
     lastSeen?: string;
 }
+
+export interface AIAgentSettings {
+    isActive: boolean;
+    notificationStartHour: number;
+    notificationEndHour: number;
+    notificationFrequency: NotificationFrequency;
+    linkedFilterIds: string[];
+}

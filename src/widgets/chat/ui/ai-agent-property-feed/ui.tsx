@@ -15,7 +15,6 @@ import { ScrollToBottomButton } from '@/shared/ui/scroll-to-bottom';
 import { AIAgentPropertyFeedSkeleton } from './skeleton';
 import type { ChatMessage } from '@/entities/chat';
 import type { Property } from '@/entities/property';
-import { Loader2 } from 'lucide-react';
 
 interface AIAgentPropertyFeedProps {
     conversationId: string;
@@ -49,8 +48,8 @@ function getGroupKey(date: Date, dayFilter: string): string {
 
 // Format group label with localization support
 function formatGroupLabel(
-    date: Date, 
-    dayFilter: string, 
+    date: Date,
+    dayFilter: string,
     locale = 'ru',
     todayLabel = 'Сегодня',
     yesterdayLabel = 'Вчера'
@@ -58,14 +57,14 @@ function formatGroupLabel(
     if (dayFilter === 'today' || dayFilter === 'yesterday') {
         return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
     }
-    
+
     const now = new Date();
     const isToday = date.toDateString() === now.toDateString();
     const isYesterday = date.toDateString() === new Date(now.getTime() - 86400000).toDateString();
-    
+
     if (isToday) return todayLabel;
     if (isYesterday) return yesterdayLabel;
-    
+
     return date.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
 }
 
@@ -89,9 +88,8 @@ export function AIAgentPropertyFeed({
     const [unseenIds, setUnseenIds] = useState<Set<string>>(new Set());
     const prevMessageCountRef = useRef(0);
     const observerRef = useRef<IntersectionObserver | null>(null);
-    const initializedRef = useRef(false);
-    
-    const { messages, isLoadingMessages, initializeDemoScenario } = useChatStore();
+
+    const { messages, isLoadingMessages } = useChatStore();
     const { dayFilter, selectedFilterIds, showAllFilters } = useChatFilterStore();
     const { viewedIds } = usePropertyActionsStore();
     // Memoize viewedSet to prevent recreating Set on every render
@@ -104,29 +102,24 @@ export function AIAgentPropertyFeed({
     const liveFeedLabel = labels.propertyCard?.live || labels.aiAgent?.liveFeed || 'LIVE';
     const notViewedLabel = labels.propertyCard?.notViewedGroup || 'Не просмотрено';
 
-    // Initialize demo data on mount (only once)
-    useEffect(() => {
-        if (!initializedRef.current) {
-            initializedRef.current = true;
-            initializeDemoScenario();
-        }
-    }, [initializeDemoScenario]);
-
-    const conversationMessages = messages[conversationId] || [];
+    const conversationMessages = useMemo(
+        () => messages[conversationId] || [],
+        [messages, conversationId]
+    );
 
     // Check if user is at bottom of scroll
     const checkScrollPosition = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         const { scrollTop, scrollHeight, clientHeight } = el;
         const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-        
+
         // 50px threshold - forgiving for smooth scroll and sub-pixel rendering
         const atBottom = distanceFromBottom <= 50;
         setIsAtBottom(atBottom);
         isAtBottomRef.current = atBottom;
-        
+
         // Reset new message count when at bottom
         if (atBottom) {
             setUnseenIds(new Set());
@@ -137,7 +130,7 @@ export function AIAgentPropertyFeed({
     const scrollToBottom = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         el.scrollTo({
             top: el.scrollHeight,
             behavior: 'smooth',
@@ -151,7 +144,7 @@ export function AIAgentPropertyFeed({
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         el.addEventListener('scroll', checkScrollPosition, { passive: true });
         return () => el.removeEventListener('scroll', checkScrollPosition);
     }, [checkScrollPosition]);
@@ -161,7 +154,7 @@ export function AIAgentPropertyFeed({
         const filterMap = new Map<string, { id: string; name: string; count: number }>();
         conversationMessages.forEach((msg) => {
             if (
-                (msg.type === 'property' || msg.type === 'property-batch') &&
+                msg.type === 'property' &&
                 msg.metadata?.filterId &&
                 msg.metadata?.filterName
             ) {
@@ -185,8 +178,8 @@ export function AIAgentPropertyFeed({
     const filteredMessages = useMemo(() => {
         return conversationMessages.filter((msg) => {
             // Only property messages
-            if (msg.type !== 'property' && msg.type !== 'property-batch') return false;
-            
+            if (msg.type !== 'property') return false;
+
             // Day filter
             if (dayFilter !== 'all') {
                 const msgDate = new Date(msg.createdAt);
@@ -238,13 +231,13 @@ export function AIAgentPropertyFeed({
                 const date = new Date(msg.createdAt);
                 const groupKey = getGroupKey(date, dayFilter);
                 const properties = msg.properties || [];
-                
+
                 // Разделяем properties на просмотренные и непросмотренные
                 properties.forEach(prop => {
                     const isViewed = viewedSet.has(prop.id);
                     const targetMap = isViewed ? viewedGroupMap : notViewedGroupMap;
                     const key = `${groupKey}-${isViewed ? 'viewed' : 'not-viewed'}`;
-                    
+
                     if (targetMap.has(key)) {
                         targetMap.get(key)!.properties.push(prop);
                     } else {
@@ -264,24 +257,24 @@ export function AIAgentPropertyFeed({
         // Сортируем группы по дате (сначала старые для просмотренных, сначала новые для непросмотренных)
         const viewed = Array.from(viewedGroupMap.values())
             .sort((a, b) => a.date.getTime() - b.date.getTime());
-        
+
         const notViewed = Array.from(notViewedGroupMap.values())
             .sort((a, b) => b.date.getTime() - a.date.getTime()); // Сначала новые для непросмотренных
 
-        return { 
-            realTimeMessages: realTime, 
+        return {
+            realTimeMessages: realTime,
             viewedGroups: viewed,
-            notViewedGroups: notViewed 
+            notViewedGroups: notViewed
         };
     }, [filteredMessages, dayFilter, viewedSet, todayLabel, yesterdayLabel]);
 
     // Handle new real-time messages - Telegram-like behavior
     useEffect(() => {
         const currentCount = realTimeMessages.length;
-        
+
         if (currentCount > prevMessageCountRef.current) {
             const newMsgs = realTimeMessages.slice(prevMessageCountRef.current);
-            
+
             // Use ref for reliable reading (state may be stale)
             if (isAtBottomRef.current) {
                 // If at bottom, auto-scroll to show new messages (Telegram-like)
@@ -300,7 +293,7 @@ export function AIAgentPropertyFeed({
                 });
             }
         }
-        
+
         prevMessageCountRef.current = currentCount;
     }, [realTimeMessages]);
 
@@ -357,7 +350,7 @@ export function AIAgentPropertyFeed({
         return () => {
             observerRef.current?.disconnect();
         };
-    }, [unseenIds.size, realTimeMessages.length]);
+    }, [unseenIds, realTimeMessages.length]);
 
     // Memoize renderPropertyCard to prevent function recreation on every render
     const renderPropertyCard = useCallback((property: Property) => (
@@ -385,15 +378,15 @@ export function AIAgentPropertyFeed({
                 {showViewedBadge && (
                     <span className={cn(
                         "ml-auto flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded",
-                        group.isViewed 
-                            ? "text-success bg-success/10" 
+                        group.isViewed
+                            ? "text-success bg-success/10"
                             : "text-warning bg-warning/10"
                     )}>
                         {group.isViewed ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                     </span>
                 )}
             </div>
-            
+
             {/* Carousel or single card */}
             {group.properties.length === 1 ? (
                 <PropertyBatchCard
@@ -497,7 +490,7 @@ export function AIAgentPropertyFeed({
 
                     {/* Real-time messages - OPEN View */}
                     {realTimeMessages.map((msg: ChatMessage, index: number) => (
-                        <div 
+                        <div
                             key={msg.id}
                             data-message-id={msg.id}
                             className={cn(

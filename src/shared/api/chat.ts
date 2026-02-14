@@ -4,6 +4,7 @@ import type { Property } from '@/entities/property';
 import type {
     ChatMessage,
     Conversation,
+    AIAgentSettings,
 } from '@/entities/chat';
 
 const API_BASE = '/api/chat';
@@ -66,6 +67,47 @@ export async function sendMessage(
             content,
             status: 'sent',
             createdAt: new Date().toISOString(),
+        };
+    }
+}
+
+export async function getAISettings(): Promise<AIAgentSettings> {
+    try {
+        const response = await fetch(`${API_BASE}/ai-settings`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('[API] Failed to get AI settings:', error);
+        // Return default settings
+        return {
+            isActive: true,
+            notificationStartHour: 7,
+            notificationEndHour: 22,
+            notificationFrequency: '30min',
+            linkedFilterIds: [],
+        };
+    }
+}
+
+export async function updateAISettings(settings: Partial<AIAgentSettings>): Promise<AIAgentSettings> {
+    try {
+        const response = await fetch(`${API_BASE}/ai-settings`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settings),
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('[API] Failed to update AI settings:', error);
+        // Return the updated settings merged with defaults
+        return {
+            isActive: true,
+            notificationStartHour: 7,
+            notificationEndHour: 22,
+            notificationFrequency: '30min',
+            linkedFilterIds: [],
+            ...settings,
         };
     }
 }
