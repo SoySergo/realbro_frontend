@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import type { ComparableProperty } from './compare-button';
 import { CompareButton } from './compare-button';
 import { Scale, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
-import type { Property } from '@/entities/property';
 
 interface PropertyCompareButtonProps {
-    property: Property;
+    property: ComparableProperty;
     variant?: 'icon' | 'text' | 'full';
     size?: 'sm' | 'md' | 'lg';
     className?: string;
@@ -52,7 +52,7 @@ export function PropertyCompareButton({
 }
 
 interface PropertyCompareMenuItemProps {
-    property: Property;
+    property: ComparableProperty;
     className?: string;
 }
 

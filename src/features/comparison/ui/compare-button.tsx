@@ -5,7 +5,11 @@ import { Scale, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/shared/lib/utils';
 import { useComparisonStore, useIsInComparison, COMPARISON_MAX_ITEMS } from '../model';
-import type { Property } from '@/entities/property';
+
+// Минимальный интерфейс для работы с объектами сравнения
+export interface ComparableProperty {
+    id: string;
+}
 
 export interface CompareButtonTranslations {
     compare: string;
@@ -16,7 +20,7 @@ export interface CompareButtonTranslations {
 }
 
 interface CompareButtonProps {
-    property: Property;
+    property: ComparableProperty;
     translations: CompareButtonTranslations;
     className?: string;
     variant?: 'icon' | 'text' | 'full';

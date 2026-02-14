@@ -2,7 +2,11 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Property } from '@/entities/property';
+
+// Минимальный интерфейс для добавления в сравнение из разных карточек
+interface ComparableProperty {
+    id: string;
+}
 
 // Максимальное количество объектов для сравнения
 const MAX_COMPARISON_ITEMS = 4;
@@ -11,18 +15,18 @@ interface ComparisonStore {
     // ID объектов в сравнении
     comparisonIds: string[];
     // Полные данные объектов (кэш для быстрого доступа)
-    comparisonProperties: Record<string, Property>;
+    comparisonProperties: Record<string, ComparableProperty>;
     // Флаг показа панели сравнения
     isComparisonPanelOpen: boolean;
 
     // Добавить объект к сравнению
-    addToComparison: (property: Property) => boolean;
+    addToComparison: (property: ComparableProperty) => boolean;
     // Удалить объект из сравнения
     removeFromComparison: (propertyId: string) => void;
     // Проверить, находится ли объект в сравнении
     isInComparison: (propertyId: string) => boolean;
     // Переключить состояние объекта в сравнении
-    toggleComparison: (property: Property) => boolean;
+    toggleComparison: (property: ComparableProperty) => boolean;
     // Очистить все объекты из сравнения
     clearComparison: () => void;
     // Открыть/закрыть панель сравнения
@@ -31,7 +35,7 @@ interface ComparisonStore {
     // Получить количество объектов в сравнении
     getComparisonCount: () => number;
     // Получить все объекты для сравнения
-    getComparisonProperties: () => Property[];
+    getComparisonProperties: () => ComparableProperty[];
 }
 
 export const useComparisonStore = create<ComparisonStore>()(
@@ -41,7 +45,7 @@ export const useComparisonStore = create<ComparisonStore>()(
             comparisonProperties: {},
             isComparisonPanelOpen: false,
 
-            addToComparison: (property: Property) => {
+            addToComparison: (property: ComparableProperty) => {
                 const { comparisonIds, comparisonProperties } = get();
 
                 // Проверяем лимит
@@ -86,7 +90,7 @@ export const useComparisonStore = create<ComparisonStore>()(
                 return get().comparisonIds.includes(propertyId);
             },
 
-            toggleComparison: (property: Property) => {
+            toggleComparison: (property: ComparableProperty) => {
                 const { isInComparison, addToComparison, removeFromComparison } = get();
 
                 if (isInComparison(property.id)) {
@@ -121,7 +125,7 @@ export const useComparisonStore = create<ComparisonStore>()(
                 const { comparisonIds, comparisonProperties } = get();
                 return comparisonIds
                     .map((id) => comparisonProperties[id])
-                    .filter(Boolean) as Property[];
+                    .filter(Boolean) as ComparableProperty[];
             },
         }),
         {

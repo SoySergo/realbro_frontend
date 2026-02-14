@@ -6,7 +6,7 @@ import { X, Scale, ChevronRight, Trash2 } from 'lucide-react';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { useComparisonStore, useComparisonCount, COMPARISON_MAX_ITEMS } from '../model';
-import type { Property } from '@/entities/property';
+import type { ComparableProperty } from './compare-button';
 
 export interface FloatingComparisonBarTranslations {
     compare: string;
@@ -117,16 +117,23 @@ function PropertyThumb({
     property,
     onRemove,
 }: {
-    property: Property;
+    property: ComparableProperty;
     onRemove: () => void;
 }) {
+    // Поддержка обоих форматов изображений: строка или объект с url
+    const data = property as Record<string, unknown>;
+    const images = data.images as Array<string | { url: string }> | undefined;
+    const firstImage = images?.[0];
+    const imageSrc = typeof firstImage === 'string' ? firstImage : firstImage?.url;
+    const title = (data.title as string) || '';
+
     return (
         <div className="relative group flex-shrink-0">
             <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden border-2 border-border">
-                {property.images[0] ? (
+                {imageSrc ? (
                     <Image
-                        src={safeImageSrc(property.images[0])}
-                        alt={property.title}
+                        src={safeImageSrc(imageSrc)}
+                        alt={title}
                         width={56}
                         height={56}
                         className="w-full h-full object-cover"
