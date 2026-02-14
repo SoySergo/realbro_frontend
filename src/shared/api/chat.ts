@@ -4,9 +4,6 @@ import type { Property } from '@/entities/property';
 import type {
     ChatMessage,
     Conversation,
-    AIAgentSettings,
-    PropertyBatch,
-    DayFilter,
 } from '@/entities/chat';
 
 const API_BASE = '/api/chat';
@@ -69,72 +66,6 @@ export async function sendMessage(
             content,
             status: 'sent',
             createdAt: new Date().toISOString(),
-        };
-    }
-}
-
-export async function getAIProperties(params: {
-    dayFilter?: DayFilter;
-    filterIds?: string[];
-}): Promise<{ batches: PropertyBatch[]; totalProperties: number }> {
-    try {
-        const searchParams = new URLSearchParams();
-        if (params.dayFilter) searchParams.set('dayFilter', params.dayFilter);
-        if (params.filterIds?.length)
-            searchParams.set('filterIds', params.filterIds.join(','));
-
-        const response = await fetch(
-            `${API_BASE}/ai-properties?${searchParams.toString()}`
-        );
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('[API] Failed to get AI properties:', error);
-        const batches = generateMockPropertyBatches();
-        return {
-            batches,
-            totalProperties: batches.reduce((acc, b) => acc + b.properties.length, 0),
-        };
-    }
-}
-
-export async function getAISettings(): Promise<AIAgentSettings> {
-    try {
-        const response = await fetch(`${API_BASE}/settings`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('[API] Failed to get AI settings:', error);
-        return {
-            isActive: true,
-            notificationStartHour: 7,
-            notificationEndHour: 22,
-            notificationFrequency: '30min',
-            linkedFilterIds: ['filter_1', 'filter_2'],
-        };
-    }
-}
-
-export async function updateAISettings(
-    settings: Partial<AIAgentSettings>
-): Promise<AIAgentSettings> {
-    try {
-        const response = await fetch(`${API_BASE}/settings`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(settings),
-        });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
-    } catch (error) {
-        console.error('[API] Failed to update AI settings:', error);
-        return {
-            isActive: true,
-            notificationStartHour: 7,
-            notificationEndHour: 22,
-            notificationFrequency: '30min',
-            linkedFilterIds: ['filter_1', 'filter_2'],
-            ...settings,
         };
     }
 }
@@ -263,33 +194,6 @@ export function generateMockConversations(): Conversation[] {
     const now = new Date();
     return [
         {
-            id: 'conv_ai_agent',
-            type: 'ai-agent',
-            title: 'AI Agent',
-            participants: ['current_user', 'ai-agent'],
-            lastMessage: {
-                id: 'msg_ai_last',
-                conversationId: 'conv_ai_agent',
-                senderId: 'ai-agent',
-                type: 'property-batch',
-                content: '5 new properties matching "Barcelona Center"',
-                properties: Array.from({ length: 5 }, (_, i) => generateMockProperty(i)),
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 30 * 60000).toISOString(),
-            },
-            unreadCount: 5,
-            isPinned: true,
-            createdAt: '2026-01-01T00:00:00Z',
-            updatedAt: new Date(now.getTime() - 30 * 60000).toISOString(),
-            aiSettings: {
-                isActive: true,
-                notificationStartHour: 7,
-                notificationEndHour: 22,
-                notificationFrequency: '30min',
-                linkedFilterIds: ['filter_1', 'filter_2'],
-            },
-        },
-        {
             id: 'conv_support',
             type: 'support',
             title: 'Support',
@@ -374,97 +278,6 @@ export function generateMockConversations(): Conversation[] {
 export function generateMockMessages(conversationId: string): ChatMessage[] {
     const now = new Date();
 
-    if (conversationId === 'conv_ai_agent') {
-        return [
-            {
-                id: 'msg_ai_1',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'system',
-                content: 'AI Agent started monitoring your search filters',
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 7 * 24 * 3600000).toISOString(),
-            },
-            {
-                id: 'msg_ai_2',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'ai-status',
-                content: 'Searching for properties matching "Barcelona Center, 2+ rooms, up to 1500 EUR"...',
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 6 * 24 * 3600000).toISOString(),
-            },
-            {
-                id: 'msg_ai_3',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'property',
-                content: '',
-                properties: [generateMockProperty(10)],
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 5 * 24 * 3600000).toISOString(),
-                metadata: { filterName: 'Barcelona Center', filterId: 'filter_1' },
-            },
-            {
-                id: 'msg_ai_4',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'property',
-                content: '',
-                properties: [generateMockProperty(11)],
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 4 * 24 * 3600000).toISOString(),
-                metadata: { filterName: 'Barcelona Center', filterId: 'filter_1' },
-            },
-            {
-                id: 'msg_ai_5',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'property-batch',
-                content: '3 new properties while you were away',
-                properties: [
-                    generateMockProperty(20),
-                    generateMockProperty(21),
-                    generateMockProperty(22),
-                ],
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 2 * 24 * 3600000).toISOString(),
-                metadata: { batchId: 'batch_1', filterName: 'Gracia Budget', filterId: 'filter_2' },
-            },
-            {
-                id: 'msg_ai_6',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'ai-status',
-                content: 'Found 2 new properties matching your filters',
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 24 * 3600000).toISOString(),
-            },
-            {
-                id: 'msg_ai_7',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'property',
-                content: '',
-                properties: [generateMockProperty(30)],
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 20 * 3600000).toISOString(),
-                metadata: { filterName: 'Barcelona Center', filterId: 'filter_1' },
-            },
-            {
-                id: 'msg_ai_8',
-                conversationId,
-                senderId: 'ai-agent',
-                type: 'property-batch',
-                content: '5 new properties while you were away',
-                properties: Array.from({ length: 5 }, (_, i) => generateMockProperty(40 + i)),
-                status: 'delivered',
-                createdAt: new Date(now.getTime() - 30 * 60000).toISOString(),
-                metadata: { batchId: 'batch_2', filterName: 'Barcelona Center', filterId: 'filter_1' },
-            },
-        ];
-    }
-
     if (conversationId === 'conv_support') {
         return [
             {
@@ -535,36 +348,6 @@ export function generateMockMessages(conversationId: string): ChatMessage[] {
             content: 'Perfect, see you then!',
             status: 'delivered',
             createdAt: new Date(now.getTime() - 5 * 3600000).toISOString(),
-        },
-    ];
-}
-
-export function generateMockPropertyBatches(): PropertyBatch[] {
-    const now = new Date();
-    return [
-        {
-            id: 'batch_today_1',
-            properties: Array.from({ length: 5 }, (_, i) => generateMockProperty(100 + i)),
-            filterId: 'filter_1',
-            filterName: 'Barcelona Center',
-            receivedAt: new Date(now.getTime() - 30 * 60000).toISOString(),
-            isViewed: false,
-        },
-        {
-            id: 'batch_today_2',
-            properties: Array.from({ length: 3 }, (_, i) => generateMockProperty(110 + i)),
-            filterId: 'filter_2',
-            filterName: 'Gracia Budget',
-            receivedAt: new Date(now.getTime() - 2 * 3600000).toISOString(),
-            isViewed: false,
-        },
-        {
-            id: 'batch_yesterday_1',
-            properties: Array.from({ length: 4 }, (_, i) => generateMockProperty(120 + i)),
-            filterId: 'filter_1',
-            filterName: 'Barcelona Center',
-            receivedAt: new Date(now.getTime() - 24 * 3600000).toISOString(),
-            isViewed: true,
         },
     ];
 }

@@ -1511,5 +1511,83 @@
     "pro": "Pro",
     "paymentSuccess": "Payment successful",
     "noSubscription": "Active subscription required"
+  },
+  "autosearch": {
+    "title": "Auto-Selection",
+    "createTask": "Create Task",
+    "editTask": "Edit Task",
+    "taskName": "Task Name",
+    "taskNamePlaceholder": "e.g., Apartments in Barcelona Center",
+    "selectFilter": "Select Filter",
+    "filterRequired": "Select a search filter",
+    "channels": {
+      "title": "Notification Channels",
+      "online": "Online (WebSocket)",
+      "telegram": "Telegram",
+      "push": "Push Notifications",
+      "email": "Email",
+      "selectChannels": "Select at least one channel"
+    },
+    "frequency": {
+      "title": "Notification Frequency",
+      "instant": "Instant",
+      "daily": "Daily",
+      "weekly": "Weekly"
+    },
+    "schedule": {
+      "title": "Notification Schedule (Quiet Hours)",
+      "description": "Outside this period, notifications accumulate and are sent as a digest",
+      "startHour": "Send from",
+      "endHour": "Send until",
+      "timezone": "Timezone",
+      "autoDetected": "Auto-detected",
+      "from": "From",
+      "to": "To"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "error": "Error"
+    },
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "list": {
+      "title": "My Tasks",
+      "empty": "You don't have any tasks yet",
+      "emptyDescription": "Create a task for auto-selection and receive notifications about new properties",
+      "loading": "Loading tasks...",
+      "taskCount": "{count} tasks"
+    },
+    "feed": {
+      "title": "AI Recommendations",
+      "noProperties": "No new properties yet. When the agent finds suitable options, they will appear here.",
+      "newProperty": "New Property",
+      "propertyCount": "{count} properties"
+    },
+    "deleteConfirm": {
+      "title": "Delete task?",
+      "description": "You will no longer receive notifications for this task",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "createFailed": "Failed to create task",
+      "updateFailed": "Failed to update task",
+      "deleteFailed": "Failed to delete task",
+      "loadFailed": "Failed to load tasks"
+    },
+    "success": {
+      "created": "Task created",
+      "updated": "Task updated",
+      "deleted": "Task deleted",
+      "activated": "Task activated",
+      "deactivated": "Task deactivated"
+    }
   }
 }

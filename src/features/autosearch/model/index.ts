@@ -1,0 +1,1 @@
+export { useAutosearchStore } from './store';
