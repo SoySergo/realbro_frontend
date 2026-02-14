@@ -258,7 +258,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                 {property.transport_station && (
                     <div className="flex items-center gap-2 py-1">
                         <TransportIcon className="w-4 h-4 text-text-tertiary" />
-                        {property.transport_station.lines[0] && (
+                        {property.transport_station.lines?.[0] && (
                             <span
                                 className="w-3 h-3 rounded-full shrink-0"
                                 style={{ backgroundColor: property.transport_station.lines[0].color || '#6c757d' }}

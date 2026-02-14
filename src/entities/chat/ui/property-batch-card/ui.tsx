@@ -118,7 +118,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                 {property.transport_station && (
                     <div className="flex items-center gap-1.5 text-[11px] text-text-tertiary">
                         <TransportIcon className="w-3 h-3" />
-                        {property.transport_station.lines[0] && (
+                        {property.transport_station.lines?.[0] && (
                             <span
                                 className="w-2 h-2 rounded-full"
                                 style={{ backgroundColor: property.transport_station.lines[0].color }}

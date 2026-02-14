@@ -280,7 +280,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         <div className="flex items-center gap-2 text-sm sm:text-xs min-w-0">
                             {/* Линии транспорта */}
                             <div className="flex items-center gap-1 flex-shrink-0">
-                                {property.transport_station.lines.map((line, idx) => (
+                                {property.transport_station.lines?.map((line, idx) => (
                                     <div
                                         key={idx}
                                         className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"

@@ -101,10 +101,13 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     }, [property.video, property.floor_plan, property.tour_3d, property.images]);
 
     // Расширенная информация об авторе (если доступна)
-    const authorAgencyLogo = property.author && 'agency_logo' in property.author ? (property.author as PropertyHorizontalCardAuthor).agency_logo : undefined;
-    const authorAgencyName = property.author && 'agency_name' in property.author ? (property.author as PropertyHorizontalCardAuthor).agency_name : undefined;
-    const authorIsSuperAgent = property.author && 'is_super_agent' in property.author ? (property.author as PropertyHorizontalCardAuthor).is_super_agent : undefined;
-    const authorPhone = property.author && 'phone' in property.author ? (property.author as PropertyHorizontalCardAuthor).phone : undefined;
+    const extAuthor = property.author && 'agency_name' in property.author
+        ? (property.author as PropertyHorizontalCardAuthor)
+        : undefined;
+    const authorAgencyLogo = extAuthor?.agency_logo;
+    const authorAgencyName = extAuthor?.agency_name;
+    const authorIsSuperAgent = extAuthor?.is_super_agent;
+    const authorPhone = extAuthor?.phone;
 
     const formatPrice = (price: number): string => {
         return `${price.toLocaleString('ru-RU')} €`;
