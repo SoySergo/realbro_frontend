@@ -14,7 +14,7 @@ import { PropertyCompareButton } from '@/features/comparison';
 import { ScrollToBottomButton } from '@/shared/ui/scroll-to-bottom';
 import { AIAgentPropertyFeedSkeleton } from './skeleton';
 import type { ChatMessage } from '@/entities/chat';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 
 interface AIAgentPropertyFeedProps {
     conversationId: string;
@@ -72,7 +72,7 @@ interface PropertyGroup {
     key: string;
     label: string;
     date: Date;
-    properties: Property[];
+    properties: PropertyChatCard[];
     filterName?: string;
     isViewed: boolean; // Группа просмотренных или нет
 }
@@ -353,7 +353,7 @@ export function AIAgentPropertyFeed({
     }, [unseenIds, realTimeMessages.length]);
 
     // Memoize renderPropertyCard to prevent function recreation on every render
-    const renderPropertyCard = useCallback((property: Property) => (
+    const renderPropertyCard = useCallback((property: PropertyChatCard) => (
         <PropertyBatchCard
             property={property}
             actions={
@@ -498,7 +498,7 @@ export function AIAgentPropertyFeed({
                                 index === realTimeMessages.length - 1 && 'mb-2'
                             )}
                         >
-                            {msg.properties?.map((property: Property) => (
+                            {msg.properties?.map((property: PropertyChatCard) => (
                                 <PropertyOpenCard
                                     key={property.id}
                                     property={property}

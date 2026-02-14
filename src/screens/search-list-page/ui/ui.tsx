@@ -20,7 +20,7 @@ import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/compa
 import { Pagination } from '@/shared/ui/pagination';
 import type { PropertiesListResponse } from '@/shared/api/properties-server';
 import type { SearchFilters } from '@/entities/filter';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
@@ -48,7 +48,7 @@ export function SearchListPage({
     const tListing = useTranslations('listing');
 
     // State
-    const [properties] = useState<Property[]>(initialData.data);
+    const [properties] = useState<PropertyGridCard[]>(initialData.data);
     const [pagination] = useState(initialData.pagination);
     const [page, setPage] = useState(initialPage);
     const [sortBy, setSortBy] = useState<PropertySortBy>(initialSortBy);
@@ -126,7 +126,7 @@ export function SearchListPage({
     };
 
     const handlePropertyClick = useCallback(
-        (property: Property) => {
+        (property: PropertyGridCard) => {
             router.push(`/property/${property.id}`);
         },
         [router]

@@ -4,10 +4,10 @@ import React from 'react';
 import { MapPin, Bed, Maximize, Train, Bus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 
 interface PropertyBatchCardProps {
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     actions?: React.ReactNode;
     onClick?: () => void;
@@ -27,7 +27,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
 }: PropertyBatchCardProps) {
     const mainImage = property.images?.[0];
 
-    const TransportIcon = property.nearbyTransport?.type === 'bus' ? Bus : Train;
+    const TransportIcon = property.transport_station?.type === 'bus' ? Bus : Train;
 
     return (
         <div
@@ -43,8 +43,8 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
             <div className="relative h-[160px] overflow-hidden">
                 {mainImage ? (
                     <img
-                        src={mainImage}
-                        alt={property.title}
+                        src={mainImage.url}
+                        alt={mainImage.alt || property.title}
                         className="w-full h-full object-cover"
                     />
                 ) : (
@@ -55,7 +55,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
 
                 {/* Badges */}
                 <div className="absolute top-2 left-2 flex gap-1.5">
-                    {property.isNew && (
+                    {property.is_new && (
                         <Badge variant="primary" className="text-[10px] px-1.5 py-0.5">
                             NEW
                         </Badge>
@@ -82,9 +82,9 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                     <span className="text-lg font-bold text-brand-primary">
                         {property.price.toLocaleString()} €
                     </span>
-                    {property.pricePerMeter && (
+                    {property.price_per_meter && (
                         <span className="text-[10px] text-text-tertiary">
-                            {property.pricePerMeter} €/m²
+                            {property.price_per_meter} €/m²
                         </span>
                     )}
                 </div>
@@ -103,7 +103,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                     </span>
                     {property.floor && (
                         <span className="text-text-tertiary">
-                            {property.floor}/{property.totalFloors} fl.
+                            {property.floor}/{property.total_floors} fl.
                         </span>
                     )}
                 </div>
@@ -115,15 +115,17 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                 </p>
 
                 {/* Transport */}
-                {property.nearbyTransport && (
+                {property.transport_station && (
                     <div className="flex items-center gap-1.5 text-[11px] text-text-tertiary">
                         <TransportIcon className="w-3 h-3" />
-                        <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: property.nearbyTransport.color }}
-                        />
-                        <span className="truncate">{property.nearbyTransport.name}</span>
-                        <span>{property.nearbyTransport.walkMinutes} min</span>
+                        {property.transport_station.lines?.[0] && (
+                            <span
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: property.transport_station.lines[0].color }}
+                            />
+                        )}
+                        <span className="truncate">{property.transport_station.station_name}</span>
+                        <span>{property.transport_station.walk_minutes} min</span>
                     </div>
                 )}
 

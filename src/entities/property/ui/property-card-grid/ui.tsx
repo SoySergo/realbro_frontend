@@ -23,14 +23,14 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { PropertyNoteDialog } from '@/features/property-note';
-import type { Property } from '../../model/types';
+import type { PropertyGridCard } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
 const MAX_HOVER_IMAGES = 6;
 const DEFAULT_METRO_LINE_COLOR = '#E50914';
 
 interface PropertyCardGridProps {
-    property: Property;
+    property: PropertyGridCard;
     onClick?: () => void;
     // Слот для дополнительных действий (например, кнопка сравнения)
     actions?: React.ReactNode;
@@ -48,32 +48,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
 
-    const mockProperty = useMemo(
-        () => ({
-            ...property,
-            totalFloors: property.totalFloors ?? 5,
-            pricePerMeter: property.pricePerMeter ?? Math.round(property.price / property.area),
-            nearbyTransport: property.nearbyTransport ?? {
-                type: 'metro' as const,
-                name: 'Diagonal',
-                line: 'L3',
-                color: '#339933',
-                walkMinutes: 5,
-            },
-            author: property.author ?? {
-                id: '1',
-                name: 'Maria Garcia',
-                avatar: `https://i.pravatar.cc/150?u=${property.id}`,
-                type: 'agent' as const,
-                isVerified: true,
-            },
-        }),
-        [property]
-    );
-
     const timeAgo = useMemo(() => {
         const now = new Date();
-        const created = new Date(property.createdAt);
+        const created = new Date(property.created_at);
         const diffMs = now.getTime() - created.getTime();
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
@@ -83,7 +60,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         if (diffMins < 60) return t('minutesAgo', { count: diffMins });
         if (diffHours < 24) return t('hoursAgo', { count: diffHours });
         return t('daysAgo', { count: diffDays });
-    }, [property.createdAt, t]);
+    }, [property.created_at, t]);
 
     const displayImages = property.images.slice(0, MAX_HOVER_IMAGES);
     const extraImagesCount = property.images.length - MAX_HOVER_IMAGES;
@@ -171,10 +148,10 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <Image
                     src={
                         displayImages[currentImageIndex]
-                            ? safeImageSrc(displayImages[currentImageIndex])
+                            ? safeImageSrc(displayImages[currentImageIndex].url)
                             : '/placeholder-property.jpg'
                     }
-                    alt={property.title}
+                    alt={displayImages[currentImageIndex]?.alt || property.title}
                     fill
                     className="object-cover transition-opacity duration-200"
                     sizes="(max-width: 480px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -208,16 +185,16 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
 
                 {/* Author avatar and time */}
                 <div className="absolute top-2 right-2 z-10">
-                    {mockProperty.author && (
+                    {property.author && (
                         <Link
-                            href={`/agency/${mockProperty.author.id}`}
+                            href={`/agency/${property.author.id}`}
                             className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Avatar className="w-5 h-5">
-                                <AvatarImage src={safeImageSrc(mockProperty.author.avatar)} />
+                                <AvatarImage src={safeImageSrc(property.author.avatar)} />
                                 <AvatarFallback className="text-[10px]">
-                                    {mockProperty.author.name.charAt(0)}
+                                    {property.author.name.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
                             <span className="text-[10px] text-text-secondary">{timeAgo}</span>
@@ -232,9 +209,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
-                            <span className="font-bold text-foreground">{formatPrice(mockProperty.price)}</span>
+                            <span className="font-bold text-foreground">{formatPrice(property.price)}</span>
                             <span className="text-xs sm:text-[11px] text-muted-foreground font-normal">
-                                {mockProperty.pricePerMeter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                                {property.price_per_meter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
                             </span>
                         </div>
                     </div>
@@ -271,13 +248,13 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                     </span>
                     <span className="text-muted-foreground">·</span>
                     <span className="whitespace-nowrap">{property.area} m²</span>
-                    {mockProperty.floor && mockProperty.totalFloors && (
+                    {property.floor && property.total_floors && (
                         <>
                             <span className="text-muted-foreground">·</span>
                             <span className="whitespace-nowrap">
                                 {t('floorOf', {
-                                    floor: mockProperty.floor,
-                                    total: mockProperty.totalFloors,
+                                    floor: property.floor,
+                                    total: property.total_floors,
                                 })}
                             </span>
                         </>
@@ -293,34 +270,37 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <div className="flex items-center gap-1 text-sm sm:text-xs text-muted-foreground mb-1">
                     <MapPin className="w-3.5 h-3.5 sm:w-3 sm:h-3 flex-shrink-0" />
                     <span className="truncate">
-                        {property.address}, {property.city}
+                        {property.address}
                     </span>
                 </div>
 
                 {/* Transport and menu */}
                 <div className="flex items-center justify-between gap-2">
-                    {mockProperty.nearbyTransport ? (
+                    {property.transport_station ? (
                         <div className="flex items-center gap-2 text-sm sm:text-xs min-w-0">
-                            {/* Линии метро */}
+                            {/* Линии транспорта */}
                             <div className="flex items-center gap-1 flex-shrink-0">
-                                <div
-                                    className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
-                                    style={{
-                                        backgroundColor: mockProperty.nearbyTransport.color || DEFAULT_METRO_LINE_COLOR,
-                                    }}
-                                >
-                                    {mockProperty.nearbyTransport.line || 'M'}
-                                </div>
+                                {property.transport_station.lines?.map((line, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
+                                        style={{
+                                            backgroundColor: line.color || DEFAULT_METRO_LINE_COLOR,
+                                        }}
+                                    >
+                                        {line.name || 'M'}
+                                    </div>
+                                ))}
                             </div>
                             {/* Название станции */}
                             <span className="text-foreground truncate font-normal">
-                                {mockProperty.nearbyTransport.name}
+                                {property.transport_station.station_name}
                             </span>
                             {/* Время в пути */}
                             <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
                                 <Clock className="w-3 h-3" />
                                 <span>
-                                    {t('walkMin', { min: mockProperty.nearbyTransport.walkMinutes })}
+                                    {t('walkMin', { min: property.transport_station.walk_minutes })}
                                 </span>
                             </div>
                         </div>

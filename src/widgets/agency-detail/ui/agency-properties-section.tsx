@@ -25,12 +25,12 @@ import {
     SheetTrigger,
 } from '@/shared/ui/sheet';
 import { cn } from '@/shared/lib/utils';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 import type { AgencyAgent } from '@/entities/agency';
 
 interface AgencyPropertiesSectionProps {
     /** Объекты недвижимости агентства */
-    properties: Property[];
+    properties: PropertyGridCard[];
     /** Агенты агентства (если есть) */
     agents?: AgencyAgent[];
     /** ID агентства */
@@ -135,7 +135,7 @@ export function AgencyPropertiesSection({
 
     // Обработчик клика на карточку
     const handlePropertyClick = useCallback(
-        (property: Property) => {
+        (property: PropertyGridCard) => {
             startTransition(() => {
                 router.push(`/${locale}/property/${property.id}`);
             });

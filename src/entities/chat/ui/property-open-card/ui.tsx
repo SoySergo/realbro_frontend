@@ -9,7 +9,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import type { Property, PropertyFeature } from '@/entities/property';
+import type { PropertyChatCard, PropertyFeature } from '@/entities/property';
 
 export interface PropertyCardLabels {
     perMonth?: string;
@@ -29,7 +29,7 @@ export interface PropertyCardLabels {
 }
 
 interface PropertyOpenCardProps {
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     actions?: React.ReactNode;
     className?: string;
@@ -116,7 +116,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
         }
     };
 
-    const TransportIcon = property.nearbyTransport?.type === 'bus' ? Bus : Train;
+    const TransportIcon = property.transport_station?.type === 'bus' ? Bus : Train;
     const displayFeatures = property.features?.slice(0, 6) || [];
 
     return (
@@ -142,13 +142,13 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                             )}
                         >
                             <img
-                                src={image}
-                                alt={`${property.title} ${index + 1}`}
+                                src={image.url}
+                                alt={image.alt || `${property.title} ${index + 1}`}
                                 className="w-full h-full object-cover"
                             />
                             
                             {/* NEW badge on first image */}
-                            {index === 0 && (isNew || property.isNew) && (
+                            {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-3 left-3 shadow-lg">
                                     NEW
                                 </Badge>
@@ -220,9 +220,9 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                      <div className="text-2xl font-bold text-text-primary">
                          {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{perMonth}</span>
                      </div>
-                     {property.pricePerMeter && (
+                     {property.price_per_meter && (
                         <div className="text-sm text-text-tertiary">
-                            {property.pricePerMeter} €/m²
+                            {property.price_per_meter} €/m²
                         </div>
                      )}
                 </div>
@@ -245,28 +245,30 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                              <span className="text-sm font-medium text-text-secondary">{property.bathrooms} {bathrooms}</span>
                         </div>
                     )}
-                    {property.floor && property.totalFloors && (
+                    {property.floor && property.total_floors && (
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-text-secondary">
-                                {property.floor}/{property.totalFloors} {floor}
+                                {property.floor}/{property.total_floors} {floor}
                             </span>
                         </div>
                     )}
                 </div>
 
                 {/* 4. Transport info */}
-                {property.nearbyTransport && (
+                {property.transport_station && (
                     <div className="flex items-center gap-2 py-1">
                         <TransportIcon className="w-4 h-4 text-text-tertiary" />
-                        <span
-                            className="w-3 h-3 rounded-full shrink-0"
-                            style={{ backgroundColor: property.nearbyTransport.color || '#6c757d' }}
-                        />
+                        {property.transport_station.lines?.[0] && (
+                            <span
+                                className="w-3 h-3 rounded-full shrink-0"
+                                style={{ backgroundColor: property.transport_station.lines[0].color || '#6c757d' }}
+                            />
+                        )}
                         <span className="text-sm text-text-secondary">
-                            {property.nearbyTransport.name}
+                            {property.transport_station.station_name}
                         </span>
                         <span className="text-sm text-text-tertiary">
-                            • {property.nearbyTransport.walkMinutes} {walkMin}
+                            • {property.transport_station.walk_minutes} {walkMin}
                         </span>
                     </div>
                 )}

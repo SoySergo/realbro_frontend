@@ -4,14 +4,14 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 
 interface PropertyBatchCarouselProps {
-    properties: Property[];
+    properties: PropertyChatCard[];
     batchLabel?: string;
     filterName?: string;
     viewedIds?: Set<string>;
-    renderCard: (property: Property, index: number) => React.ReactNode;
+    renderCard: (property: PropertyChatCard, index: number) => React.ReactNode;
     className?: string;
 }
 

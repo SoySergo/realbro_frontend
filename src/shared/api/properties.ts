@@ -1,8 +1,8 @@
 'use client';
 
 import type { SearchFilters } from '@/entities/filter';
-import type { Property } from '@/entities/property';
-import { generateMockPropertiesPage, generateMockPropertiesByIds } from './mocks/properties-mock';
+import type { PropertyGridCard } from '@/entities/property';
+import { generateMockGridCardsPage, generateMockGridCardsByIds } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
 
 const API_BASE = '/api/properties';
@@ -12,7 +12,7 @@ export interface PropertiesCountResponse {
 }
 
 export interface PropertiesListResponse {
-    data: Property[];
+    data: PropertyGridCard[];
     pagination: {
         page: number;
         limit: number;
@@ -142,7 +142,7 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
         console.error('[API] Failed to get properties list:', error);
         // Return mock data in development
         if (FEATURES.USE_MOCK_PROPERTIES) {
-            return generateMockPropertiesPage(page, limit, 500, {
+            return generateMockGridCardsPage(page, limit, 500, {
                 cardType: 'grid',
                 includeAuthor: true,
                 includeTransport: true
@@ -155,7 +155,7 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
 /**
  * Получить объекты по массиву IDs (клик по кластеру/маркеру)
  */
-export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {
+export async function getPropertiesByIds(ids: string[]): Promise<PropertyGridCard[]> {
     try {
         const response = await fetch('/api/properties/by-ids', {
             method: 'POST',
@@ -171,7 +171,7 @@ export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {
     } catch (error) {
         console.error('[API] Failed to get properties by ids:', error);
         if (FEATURES.USE_MOCK_PROPERTIES) {
-            return generateMockPropertiesByIds(ids, {
+            return generateMockGridCardsByIds(ids, {
                 cardType: 'grid',
                 includeAuthor: true,
                 includeTransport: true,

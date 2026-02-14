@@ -28,7 +28,7 @@ import {
     Home,
 } from 'lucide-react';
 
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 import { generateMockProperty } from '@/shared/api/chat';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
@@ -42,7 +42,7 @@ interface DemoMessage {
     content: string;
     timestamp: Date;
     isOwn: boolean;
-    property?: Property;
+    property?: PropertyChatCard;
     filterName?: string;
     isViewed?: boolean;
     isNew?: boolean;
@@ -258,21 +258,21 @@ function ActionButtons({ compact = false }: { compact?: boolean }) {
 
 // === ВАРИАНТ 1: Compact Bubble ===
 
-function CardCompactBubble({ property, filterName }: { property: Property; filterName?: string }) {
+function CardCompactBubble({ property, filterName }: { property: PropertyChatCard; filterName?: string }) {
     return (
         <div className="max-w-xs rounded-2xl rounded-tl-sm bg-card p-2 shadow-sm">
             <div className="flex gap-2">
                 {/* Миниатюра */}
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
                     <Image
-                        src={property.images[0]}
+                        src={property.images[0]?.url}
                         alt={property.title}
                         fill
                         className="object-cover"
                         sizes="80px"
                         unoptimized
                     />
-                    {property.isNew && (
+                    {property.is_new && (
                         <span className="absolute top-1 left-1 rounded bg-brand-primary px-1 py-0.5 text-[10px] font-bold text-white">
                             NEW
                         </span>
@@ -310,13 +310,13 @@ function CardCompactBubble({ property, filterName }: { property: Property; filte
 
 // === ВАРИАНТ 2: Horizontal Card ===
 
-function CardHorizontal({ property, filterName }: { property: Property; filterName?: string }) {
+function CardHorizontal({ property, filterName }: { property: PropertyChatCard; filterName?: string }) {
     return (
         <div className="flex max-w-sm overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             {/* Изображение слева */}
             <div className="relative h-auto w-[120px] shrink-0">
                 <ImageCarousel
-                    images={property.images}
+                    images={property.images.map(img => img.url)}
                     aspectRatio=""
                     className="h-full w-full"
                 />
@@ -342,10 +342,10 @@ function CardHorizontal({ property, filterName }: { property: Property; filterNa
                         {property.area}m²
                         <span className="mx-1">·</span>
                         <Building2 className="mr-0.5 inline h-3 w-3" />
-                        {property.floor}/{property.totalFloors}
+                        {property.floor}/{property.total_floors}
                     </p>
                     <p className="mt-0.5 truncate text-xs text-text-tertiary">
-                        {property.address}, {property.neighborhood || property.city}
+                        {property.address}
                     </p>
                 </div>
                 <ActionButtons compact />
@@ -356,16 +356,16 @@ function CardHorizontal({ property, filterName }: { property: Property; filterNa
 
 // === ВАРИАНТ 3: Gallery Card ===
 
-function CardGallery({ property, filterName }: { property: Property; filterName?: string }) {
+function CardGallery({ property, filterName }: { property: PropertyChatCard; filterName?: string }) {
     return (
         <div className="max-w-sm overflow-hidden rounded-xl border border-border bg-card shadow-md">
             {/* Карусель */}
             <ImageCarousel
-                images={property.images}
+                images={property.images.map(img => img.url)}
                 aspectRatio="aspect-video"
                 overlay={
                     <div className="absolute top-2 left-2 flex gap-1">
-                        {property.isNew && (
+                        {property.is_new && (
                             <span className="rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-bold text-white shadow">
                                 NEW
                             </span>
@@ -413,7 +413,7 @@ function CardMinimal({
     filterName,
     isViewed,
 }: {
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     isViewed?: boolean;
 }) {
@@ -435,7 +435,7 @@ function CardMinimal({
             >
                 <Home className="h-4 w-4 shrink-0 text-brand-primary" />
                 <span className="flex-1 truncate text-sm text-text-primary">
-                    {property.neighborhood || 'Barcelona'}, {property.rooms}BR, {property.area}m²,{' '}
+                    {property.address || 'Barcelona'}, {property.rooms}BR, {property.area}m²,{' '}
                     {formatPrice(property.price)}
                 </span>
                 {filterName && (
@@ -449,7 +449,7 @@ function CardMinimal({
             {/* Развёрнутое содержимое */}
             {expanded && (
                 <div className="animate-message-slide-in border-t border-border p-2">
-                    <ImageCarousel images={property.images} aspectRatio="aspect-video" className="rounded-lg" />
+                    <ImageCarousel images={property.images.map(img => img.url)} aspectRatio="aspect-video" className="rounded-lg" />
                     <div className="mt-2 flex items-center justify-between">
                         <div className="text-xs text-text-secondary">
                             <BedDouble className="mr-0.5 inline h-3 w-3" />
@@ -458,7 +458,7 @@ function CardMinimal({
                             <Bath className="mr-0.5 inline h-3 w-3" />
                             {property.bathrooms} bath
                             <span className="mx-1">·</span>
-                            Floor {property.floor}/{property.totalFloors}
+                            Floor {property.floor}/{property.total_floors}
                         </div>
                         <ActionButtons compact />
                     </div>
@@ -471,13 +471,13 @@ function CardMinimal({
 
 // === ВАРИАНТ 5: Map Preview Card ===
 
-function CardMapPreview({ property, filterName }: { property: Property; filterName?: string }) {
+function CardMapPreview({ property, filterName }: { property: PropertyChatCard; filterName?: string }) {
     return (
         <div className="max-w-xs overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             {/* Изображение с оверлеем района */}
             <div className="relative aspect-[2/1] overflow-hidden">
                 <Image
-                    src={property.images[0]}
+                    src={property.images[0]?.url}
                     alt={property.title}
                     fill
                     className="object-cover"
@@ -487,7 +487,7 @@ function CardMapPreview({ property, filterName }: { property: Property; filterNa
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                 <div className="absolute bottom-2 left-2">
                     <p className="text-sm font-bold text-white">
-                        {property.neighborhood || property.district || 'Barcelona'}
+                        {'Barcelona'}
                     </p>
                 </div>
                 {filterName && (
@@ -506,10 +506,10 @@ function CardMapPreview({ property, filterName }: { property: Property; filterNa
                     <span className="rounded-full bg-background-secondary px-2 py-0.5 text-[10px] text-text-secondary">
                         {property.area}m²
                     </span>
-                    {property.nearbyTransport && (
+                    {property.transport_station && (
                         <span className="rounded-full bg-background-secondary px-2 py-0.5 text-[10px] text-text-secondary">
                             <Train className="mr-0.5 inline h-2.5 w-2.5" />
-                            {property.nearbyTransport.walkMinutes} min
+                            {property.transport_station.walk_minutes} min
                         </span>
                     )}
                 </div>
@@ -527,7 +527,7 @@ function CardMapPreview({ property, filterName }: { property: Property; filterNa
 
 // === ВАРИАНТ 6: Story Card ===
 
-function CardStory({ property }: { property: Property }) {
+function CardStory({ property }: { property: PropertyChatCard }) {
     const [imgIdx, setImgIdx] = useState(0);
 
     // Переключение по клику
@@ -542,7 +542,7 @@ function CardStory({ property }: { property: Property }) {
         >
             <div className="relative aspect-[3/4]">
                 <Image
-                    src={property.images[imgIdx]}
+                    src={property.images[imgIdx]?.url}
                     alt={property.title}
                     fill
                     className="object-cover transition-all duration-300"
@@ -577,7 +577,7 @@ function CardStory({ property }: { property: Property }) {
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-8">
                     <p className="text-lg font-bold text-white">{formatPrice(property.price)}</p>
                     <p className="truncate text-xs text-white/80">
-                        {property.neighborhood || property.city}
+                        {property.address}
                     </p>
                 </div>
             </div>
@@ -594,7 +594,7 @@ function PropertyCardRenderer({
     isViewed,
 }: {
     variant: CardVariant;
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     isViewed?: boolean;
 }) {
@@ -973,7 +973,7 @@ function LayoutSplitCards({
                                     {msg.property!.rooms}BR · {msg.property!.area}m²
                                 </p>
                                 <p className="truncate text-[10px] text-text-tertiary">
-                                    {msg.property!.neighborhood || msg.property!.address}
+                                    {msg.property!.address}
                                 </p>
                             </div>
                             {/* Статус */}
@@ -1026,16 +1026,16 @@ function LayoutSplitCards({
                                     <div className="rounded-lg bg-background-secondary p-2">
                                         <p className="text-text-tertiary">Floor</p>
                                         <p className="font-semibold text-text-primary">
-                                            {selectedMsg.property.floor}/{selectedMsg.property.totalFloors}
+                                            {selectedMsg.property.floor}/{selectedMsg.property.total_floors}
                                         </p>
                                     </div>
                                 </div>
-                                {selectedMsg.property.nearbyTransport && (
+                                {selectedMsg.property.transport_station && (
                                     <div className="mt-3 flex items-center gap-1.5 text-xs text-text-secondary">
                                         <Train className="h-3.5 w-3.5" />
-                                        {selectedMsg.property.nearbyTransport.name}
+                                        {selectedMsg.property.transport_station.station_name}
                                         <span className="text-text-tertiary">
-                                            · {selectedMsg.property.nearbyTransport.walkMinutes} min walk
+                                            · {selectedMsg.property.transport_station.walk_minutes} min walk
                                         </span>
                                     </div>
                                 )}

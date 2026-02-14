@@ -1,4 +1,4 @@
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard, PropertyHorizontalCard, PropertyChatCard } from '@/entities/property';
 
 export interface ApiResponse<T> {
     data: T;
@@ -16,5 +16,7 @@ export interface PaginatedResponse<T> {
     };
 }
 
-export type PropertiesResponse = ApiResponse<PaginatedResponse<Property>>;
-export type PropertyResponse = ApiResponse<Property>;
+// Ответы API для разных типов карточек
+export type PropertiesGridResponse = ApiResponse<PaginatedResponse<PropertyGridCard>>;
+export type PropertiesHorizontalResponse = ApiResponse<PaginatedResponse<PropertyHorizontalCard>>;
+export type PropertiesChatResponse = ApiResponse<PaginatedResponse<PropertyChatCard>>;

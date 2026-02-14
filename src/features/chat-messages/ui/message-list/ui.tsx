@@ -8,7 +8,7 @@ import { PropertyActionButtons } from '@/features/chat-property-actions/ui/prope
 import { usePropertyActionsStore } from '@/features/chat-property-actions';
 import { MessageListSkeleton } from './message-list-skeleton';
 import type { ChatMessage } from '@/entities/chat';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 
 interface MessageListProps {
     messages: ChatMessage[];
@@ -94,7 +94,7 @@ export function MessageList({
                         batchLabel={message.content || `${message.properties.length} properties`}
                         filterName={message.metadata?.filterName}
                         viewedIds={viewedSet}
-                        renderCard={(property: Property) => (
+                        renderCard={(property: PropertyChatCard) => (
                             <PropertyBatchCard
                                 property={property}
                                 filterName={message.metadata?.filterName}

@@ -13,7 +13,7 @@ import {
 import { MapSidebar } from '@/widgets/map-sidebar';
 import { PropertyListing } from '@/widgets/property-listing';
 import { useSidebarStore } from '@/widgets/sidebar';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 
 /**
  * SearchPage - страница поиска недвижимости
@@ -55,7 +55,7 @@ function SearchPageContent() {
 
     // Обработчик клика на объект - центрировать карту
     const handlePropertyClick = useCallback(
-        (property: Property) => {
+        (property: PropertyGridCard) => {
             console.log('Property clicked:', property.id);
             // TODO: Центрировать карту на координатах объекта
         },
@@ -63,7 +63,7 @@ function SearchPageContent() {
     );
 
     // Обработчик наведения - подсветить на карте
-    const handlePropertyHover = useCallback((property: Property | null) => {
+    const handlePropertyHover = useCallback((property: PropertyGridCard | null) => {
         // TODO: Подсветить маркер на карте
         if (property) {
             console.log('Property hover:', property.id);

@@ -29,11 +29,11 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import type { Property } from '../../model/types';
+import type { PropertyHorizontalCard, PropertyHorizontalCardAuthor } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
 interface PropertyCardHorizontalProps {
-    property: Property;
+    property: PropertyHorizontalCard;
     onClick?: () => void;
     // Слот для дополнительных действий (например, кнопка сравнения)
     actions?: React.ReactNode;
@@ -57,7 +57,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     // Вычисление времени с момента публикации
     const timeAgo = useMemo(() => {
         const now = new Date();
-        const created = new Date(property.createdAt);
+        const created = new Date(property.created_at);
         const diffMs = now.getTime() - created.getTime();
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
@@ -67,7 +67,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
         if (diffMins < 60) return t('minutesAgo', { count: diffMins });
         if (diffHours < 24) return t('hoursAgo', { count: diffHours });
         return t('daysAgo', { count: diffDays });
-    }, [property.createdAt, t]);
+    }, [property.created_at, t]);
 
     // Показываем максимум 6 секций для hover навигации
     const maxSections = Math.min(property.images.length, 6);
@@ -82,23 +82,32 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
             thumbnails.push({ type: 'video', src: property.video.thumbnail, label: 'Video' });
         }
 
-        if (property.floorPlan) {
-            thumbnails.push({ type: 'floorPlan', src: property.floorPlan, label: 'Plan' });
+        if (property.floor_plan) {
+            thumbnails.push({ type: 'floorPlan', src: property.floor_plan, label: 'Plan' });
         }
 
-        if (property.tour3d) {
-            thumbnails.push({ type: 'tour3d', src: property.tour3d.thumbnail, label: '3D' });
+        if (property.tour_3d) {
+            thumbnails.push({ type: 'tour3d', src: property.tour_3d.thumbnail, label: '3D' });
         }
 
         const remainingSlots = 3 - thumbnails.length;
         if (remainingSlots > 0 && property.images.length > 1) {
             property.images.slice(1, 1 + remainingSlots).forEach((img) => {
-                thumbnails.push({ type: 'photo', src: img });
+                thumbnails.push({ type: 'photo', src: img.url });
             });
         }
 
         return thumbnails.slice(0, 3);
-    }, [property.video, property.floorPlan, property.tour3d, property.images]);
+    }, [property.video, property.floor_plan, property.tour_3d, property.images]);
+
+    // Расширенная информация об авторе (если доступна)
+    const extAuthor = property.author && 'agency_name' in property.author
+        ? (property.author as PropertyHorizontalCardAuthor)
+        : undefined;
+    const authorAgencyLogo = extAuthor?.agency_logo;
+    const authorAgencyName = extAuthor?.agency_name;
+    const authorIsSuperAgent = extAuthor?.is_super_agent;
+    const authorPhone = extAuthor?.phone;
 
     const formatPrice = (price: number): string => {
         return `${price.toLocaleString('ru-RU')} €`;
@@ -110,7 +119,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                 return (
                     <span
                         className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: property.nearbyTransport?.color || '#E50914' }}
+                        style={{ backgroundColor: property.transport_station?.lines[0]?.color || '#E50914' }}
                     />
                 );
             case 'train':
@@ -135,8 +144,8 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                     }}
                 >
                     <Image
-                        src={safeImageSrc(property.images[currentImageIndex])}
-                        alt={property.title}
+                        src={safeImageSrc(property.images[currentImageIndex]?.url)}
+                        alt={property.images[currentImageIndex]?.alt || property.title}
                         width={375}
                         height={280}
                         className="w-full h-[280px] object-cover rounded"
@@ -231,20 +240,20 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                 </a>
                 <p className="text-sm text-muted-foreground mb-2">
                     {property.rooms} {t('roomsShort')} • {property.area} м²
-                    {property.floor && property.totalFloors && (
-                        <> • {t('floorOf', { floor: property.floor, total: property.totalFloors })}</>
+                    {property.floor && property.total_floors && (
+                        <> • {t('floorOf', { floor: property.floor, total: property.total_floors })}</>
                     )}
                 </p>
 
                 {/* Badges */}
                 <div className="flex gap-2 mb-2">
-                    {property.author?.isSuperAgent && (
+                    {authorIsSuperAgent && (
                         <Badge variant="success" className="text-xs py-0.5">
                             <Check className="w-3 h-3 mr-1" />
                             {t('agent')}
                         </Badge>
                     )}
-                    {property.noCommission && (
+                    {property.no_commission && (
                         <Badge variant="outline" className="text-xs py-0.5">
                             Без комиссии
                         </Badge>
@@ -257,15 +266,15 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                 </div>
 
                 {/* Транспорт */}
-                {property.nearbyTransport && (
+                {property.transport_station && (
                     <div className="flex items-center gap-3 mb-1">
                         <div className="flex items-center gap-1.5">
-                            {getTransportIcon(property.nearbyTransport.type)}
-                            <span className="text-sm">{property.nearbyTransport.name}</span>
+                            {getTransportIcon(property.transport_station.type)}
+                            <span className="text-sm">{property.transport_station.station_name}</span>
                         </div>
                         <div className="flex items-center gap-1 text-muted-foreground text-sm">
                             <Clock className="w-3.5 h-3.5" />
-                            {t('walkMin', { min: property.nearbyTransport.walkMinutes })}
+                            {t('walkMin', { min: property.transport_station.walk_minutes })}
                         </div>
                     </div>
                 )}
@@ -302,7 +311,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                     <div className="border border-border rounded-lg p-3">
                         <div className="flex items-center justify-center mb-2">
                             <Avatar className="w-10 h-10">
-                                <AvatarImage src={safeImageSrc(property.author.agencyLogo || property.author.avatar)} />
+                                <AvatarImage src={safeImageSrc(authorAgencyLogo || property.author.avatar)} />
                                 <AvatarFallback>
                                     {property.author.name.charAt(0)}
                                 </AvatarFallback>
@@ -316,17 +325,17 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                             className="text-sm font-medium text-center mb-1.5 block hover:text-brand-primary transition-colors"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            {property.author.agencyName || property.author.name}
+                            {authorAgencyName || property.author.name}
                         </Link>
-                        {property.author.isVerified && (
+                        {property.author.is_verified && (
                             <div className="flex items-center justify-center gap-1 text-[11px] text-muted-foreground mb-2">
                                 <Check className="w-3 h-3 text-primary" />
                                 {t('verified')}
                             </div>
                         )}
-                        {property.author.phone && (
+                        {authorPhone && (
                             <Button className="w-full mb-1.5 text-xs h-8" size="sm">
-                                {property.author.phone}
+                                {authorPhone}
                             </Button>
                         )}
                         <Button variant="ghost" className="w-full text-primary text-xs h-7" size="sm">
