@@ -8,10 +8,10 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
-import type { Property, PropertyFeature } from '@/entities/property';
+import type { PropertyChatCard, PropertyFeature } from '@/entities/property';
 
 interface PropertyExpandedCardProps {
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     actions?: React.ReactNode;
     className?: string;
@@ -77,7 +77,7 @@ export function PropertyExpandedCard({
         setCurrentImageIndex(Math.min(newIndex, images.length - 1));
     };
 
-    const TransportIcon = property.nearbyTransport?.type === 'bus' ? Bus : Train;
+    const TransportIcon = property.transport_station?.type === 'bus' ? Bus : Train;
     const displayFeatures = property.features?.slice(0, 6) || [];
 
     return (
@@ -104,13 +104,13 @@ export function PropertyExpandedCard({
                             className="relative shrink-0 snap-start rounded-xl overflow-hidden w-[80%] md:w-[75%] aspect-4/3"
                         >
                             <img
-                                src={image}
-                                alt={`${property.title} ${index + 1}`}
+                                src={image.url}
+                                alt={image.alt || `${property.title} ${index + 1}`}
                                 className="w-full h-full object-cover"
                             />
                             
                             {/* NEW badge on first image */}
-                            {index === 0 && (isNew || property.isNew) && (
+                            {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-2 left-2 text-xs">
                                     NEW
                                 </Badge>
@@ -190,9 +190,9 @@ export function PropertyExpandedCard({
                     <span className="text-2xl font-bold text-brand-primary">
                         {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">/мес</span>
                     </span>
-                    {property.pricePerMeter && (
+                    {property.price_per_meter && (
                         <span className="text-xs text-text-tertiary">
-                            {property.pricePerMeter} €/m²
+                            {property.price_per_meter} €/m²
                         </span>
                     )}
                 </div>
@@ -217,7 +217,7 @@ export function PropertyExpandedCard({
                     </span>
                     {property.floor && (
                         <span className="text-text-tertiary">
-                            {property.floor}/{property.totalFloors} эт.
+                            {property.floor}/{property.total_floors} эт.
                         </span>
                     )}
                 </div>
@@ -229,15 +229,17 @@ export function PropertyExpandedCard({
                 </p>
 
                 {/* Transport */}
-                {property.nearbyTransport && (
+                {property.transport_station && (
                     <div className="flex items-center gap-2 text-sm text-text-tertiary">
                         <TransportIcon className="w-4 h-4" />
-                        <span
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: property.nearbyTransport.color }}
-                        />
-                        <span>{property.nearbyTransport.name}</span>
-                        <span>• {property.nearbyTransport.walkMinutes} мин пешком</span>
+                        {property.transport_station.lines[0] && (
+                            <span
+                                className="w-3 h-3 rounded-full"
+                                style={{ backgroundColor: property.transport_station.lines[0].color }}
+                            />
+                        )}
+                        <span>{property.transport_station.station_name}</span>
+                        <span>• {property.transport_station.walk_minutes} мин пешком</span>
                     </div>
                 )}
 

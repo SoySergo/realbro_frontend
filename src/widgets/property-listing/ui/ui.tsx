@@ -20,7 +20,7 @@ import {
 } from '@/shared/ui/select';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { getPropertiesList, type PropertiesListResponse } from '@/shared/api';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import { cn } from '@/shared/lib/utils';
@@ -29,7 +29,7 @@ type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
 
 type PropertyListingProps = {
-    onPropertyClick?: (property: Property) => void;
+    onPropertyClick?: (property: PropertyGridCard) => void;
     className?: string;
 };
 
@@ -45,7 +45,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
 
     const { currentFilters, setSearchViewMode, listingViewMode, setListingViewMode } = useFilterStore();
 
-    const [properties, setProperties] = useState<Property[]>([]);
+    const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [pagination, setPagination] =
         useState<PropertiesListResponse['pagination'] | null>(null);
     const [isLoading, setIsLoading] = useState(false);

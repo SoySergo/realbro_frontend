@@ -1,12 +1,12 @@
 import type { SearchFilters } from '@/entities/filter';
-import type { Property } from '@/entities/property';
-import { generateMockPropertiesPage, generateMockProperty } from './mocks/properties-mock';
+import type { Property, PropertyGridCard } from '@/entities/property';
+import { generateMockGridCardsPage, generateMockProperty } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
 
 const API_BASE = process.env.BACKEND_URL || 'http://localhost:3001/api';
 
 export interface PropertiesListResponse {
-    data: Property[];
+    data: PropertyGridCard[];
     pagination: {
         page: number;
         limit: number;
@@ -59,7 +59,7 @@ export async function getPropertiesListServer(
 
     // Return mock immediately if mock mode is enabled
     if (FEATURES.USE_MOCK_PROPERTIES) {
-        return generateMockPropertiesPage(page, limit, 500, {
+        return generateMockGridCardsPage(page, limit, 500, {
             cardType: 'grid',
             includeAuthor: true,
             includeTransport: true

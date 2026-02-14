@@ -4,7 +4,14 @@ import type {
     NearbyTransport, 
     RentalConditions, 
     TenantPreferences, 
-    BuildingInfo 
+    BuildingInfo,
+    PropertyGridCard,
+    PropertyHorizontalCard,
+    PropertyChatCard,
+    PropertyCardImage,
+    PropertyCardTransportStation,
+    PropertyCardAuthor,
+    PropertyHorizontalCardAuthor,
 } from '@/entities/property';
 
 // Конфигурация для генерации моков
@@ -107,6 +114,20 @@ const MOCK_TRANSPORT: NearbyTransport[] = [
     { type: 'train', name: 'Arc de Triomf', line: 'R1', color: '#009B3A', walkMinutes: 6 },
     { type: 'bus', name: 'Via Augusta', line: '22', color: '#FFC72C', walkMinutes: 2 },
     { type: 'bus', name: 'Gran Via', line: '55', color: '#FFC72C', walkMinutes: 3 }
+];
+
+// Транспортные станции для карточек (новый формат с массивом линий)
+const MOCK_TRANSPORT_STATIONS: PropertyCardTransportStation[] = [
+    { type: 'metro', station_name: 'Diagonal', lines: [{ name: 'L3', color: '#339933' }, { name: 'L5', color: '#0066CC' }], walk_minutes: 5 },
+    { type: 'metro', station_name: 'Passeig de Gràcia', lines: [{ name: 'L2', color: '#9B59B6' }, { name: 'L3', color: '#339933' }, { name: 'L4', color: '#FCBC1D' }], walk_minutes: 3 },
+    { type: 'metro', station_name: 'Lesseps', lines: [{ name: 'L3', color: '#339933' }], walk_minutes: 7 },
+    { type: 'metro', station_name: 'Fontana', lines: [{ name: 'L3', color: '#339933' }], walk_minutes: 4 },
+    { type: 'metro', station_name: 'Sagrada Familia', lines: [{ name: 'L2', color: '#9B59B6' }, { name: 'L5', color: '#0066CC' }], walk_minutes: 6 },
+    { type: 'metro', station_name: 'Catalunya', lines: [{ name: 'L1', color: '#EE352E' }, { name: 'L3', color: '#339933' }], walk_minutes: 8 },
+    { type: 'train', station_name: 'Sants Estació', lines: [{ name: 'R2', color: '#005EB8' }], walk_minutes: 10 },
+    { type: 'train', station_name: 'Arc de Triomf', lines: [{ name: 'R1', color: '#009B3A' }], walk_minutes: 6 },
+    { type: 'bus', station_name: 'Via Augusta', lines: [{ name: '22', color: '#FFC72C' }], walk_minutes: 2 },
+    { type: 'bus', station_name: 'Gran Via', lines: [{ name: '55', color: '#FFC72C' }], walk_minutes: 3 }
 ];
 
 // Коллекции изображений (реалистичные интерьеры квартир)
@@ -475,4 +496,186 @@ export function generateMockClusterProperties(
     return Array.from({ length: count }, (_, i) => 
         generateMockProperty(offset + i, config)
     );
+}
+
+// === Хелперы для генерации данных карточек ===
+
+/**
+ * Конвертация URL в PropertyCardImage
+ */
+function toCardImages(urls: string[]): PropertyCardImage[] {
+    return urls.map((url, idx) => ({
+        id: `img_${idx}_${url.slice(-8)}`,
+        url,
+        width: 800,
+        height: 600,
+        alt: `Property photo ${idx + 1}`,
+    }));
+}
+
+/**
+ * Конвертация автора в формат карточки
+ */
+function toCardAuthor(author: PropertyAuthor): PropertyCardAuthor {
+    return {
+        id: author.id,
+        name: author.name,
+        avatar: author.avatar,
+        type: author.type,
+        is_verified: author.isVerified,
+    };
+}
+
+/**
+ * Конвертация автора в расширенный формат горизонтальной карточки
+ */
+function toHorizontalCardAuthor(author: PropertyAuthor): PropertyHorizontalCardAuthor {
+    return {
+        ...toCardAuthor(author),
+        agency_name: author.agencyName,
+        agency_logo: author.agencyLogo,
+        is_super_agent: author.isSuperAgent,
+        phone: author.phone,
+    };
+}
+
+/**
+ * Генерация мок грид-карточки
+ */
+export function generateMockGridCard(index: number, config: MockPropertyConfig = {}): PropertyGridCard {
+    const property = generateMockProperty(index, { ...config, cardType: 'grid' });
+    const collectionIdx = index % IMAGE_COLLECTIONS.length;
+    const images = IMAGE_COLLECTIONS[collectionIdx];
+    const transport = config.includeTransport !== false ? MOCK_TRANSPORT_STATIONS[index % MOCK_TRANSPORT_STATIONS.length] : undefined;
+    const author = config.includeAuthor !== false ? MOCK_AUTHORS[index % MOCK_AUTHORS.length] : undefined;
+
+    return {
+        id: property.id,
+        title: property.title,
+        type: property.type,
+        price: property.price,
+        price_per_meter: property.pricePerMeter,
+        rooms: property.rooms,
+        area: property.area,
+        floor: property.floor,
+        total_floors: property.totalFloors,
+        address: property.address,
+        images: toCardImages(images),
+        transport_station: transport,
+        author: author ? toCardAuthor(author) : undefined,
+        is_new: property.isNew,
+        created_at: property.createdAt instanceof Date ? property.createdAt.toISOString() : String(property.createdAt),
+    };
+}
+
+/**
+ * Генерация мок горизонтальной карточки
+ */
+export function generateMockHorizontalCard(index: number, config: MockPropertyConfig = {}): PropertyHorizontalCard {
+    const property = generateMockProperty(index, { ...config, cardType: 'horizontal' });
+    const collectionIdx = index % IMAGE_COLLECTIONS.length;
+    const images = IMAGE_COLLECTIONS[collectionIdx];
+    const transport = config.includeTransport !== false ? MOCK_TRANSPORT_STATIONS[index % MOCK_TRANSPORT_STATIONS.length] : undefined;
+    const author = config.includeAuthor !== false ? MOCK_AUTHORS[index % MOCK_AUTHORS.length] : undefined;
+
+    return {
+        id: property.id,
+        title: property.title,
+        type: property.type,
+        price: property.price,
+        price_per_meter: property.pricePerMeter,
+        rooms: property.rooms,
+        bathrooms: property.bathrooms,
+        area: property.area,
+        floor: property.floor,
+        total_floors: property.totalFloors,
+        address: property.address,
+        description: property.description,
+        images: toCardImages(images),
+        amenities: property.amenities,
+        transport_station: transport,
+        author: author ? toHorizontalCardAuthor(author) : undefined,
+        is_new: property.isNew,
+        is_verified: property.isVerified,
+        no_commission: property.noCommission,
+        exclusive: property.exclusive,
+        video: property.video,
+        floor_plan: property.floorPlan,
+        tour_3d: property.tour3d,
+        created_at: property.createdAt instanceof Date ? property.createdAt.toISOString() : String(property.createdAt),
+    };
+}
+
+/**
+ * Генерация мок чат-карточки
+ */
+export function generateMockChatCard(index: number, config: MockPropertyConfig = {}): PropertyChatCard {
+    const property = generateMockProperty(index, config);
+    const collectionIdx = index % IMAGE_COLLECTIONS.length;
+    const images = IMAGE_COLLECTIONS[collectionIdx];
+    const transport = config.includeTransport !== false ? MOCK_TRANSPORT_STATIONS[index % MOCK_TRANSPORT_STATIONS.length] : undefined;
+
+    return {
+        id: property.id,
+        title: property.title,
+        type: property.type,
+        price: property.price,
+        price_per_meter: property.pricePerMeter,
+        rooms: property.rooms,
+        bathrooms: property.bathrooms,
+        area: property.area,
+        floor: property.floor,
+        total_floors: property.totalFloors,
+        address: property.address,
+        description: property.description,
+        images: toCardImages(images),
+        features: property.features,
+        transport_station: transport,
+        is_new: property.isNew,
+        is_verified: property.isVerified,
+        created_at: property.createdAt instanceof Date ? property.createdAt.toISOString() : String(property.createdAt),
+    };
+}
+
+/**
+ * Генерация страницы грид-карточек
+ */
+export function generateMockGridCardsPage(
+    page: number,
+    limit: number,
+    total: number,
+    config: MockPropertyConfig = {}
+): {
+    data: PropertyGridCard[];
+    pagination: { page: number; limit: number; total: number; totalPages: number };
+} {
+    const offset = (page - 1) * limit;
+    return {
+        data: Array.from({ length: limit }, (_, i) => generateMockGridCard(offset + i, config)),
+        pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
+}
+
+/**
+ * Генерация грид-карточек по ID
+ */
+export function generateMockGridCardsByIds(
+    ids: string[],
+    config: MockPropertyConfig = {}
+): PropertyGridCard[] {
+    return ids.map((id, i) => {
+        const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const card = generateMockGridCard(hash + i, config);
+        return { ...card, id };
+    });
+}
+
+/**
+ * Генерация чат-карточек
+ */
+export function generateMockChatCards(
+    count: number,
+    config: MockPropertyConfig = {}
+): PropertyChatCard[] {
+    return Array.from({ length: count }, (_, i) => generateMockChatCard(i, config));
 }

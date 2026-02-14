@@ -1,4 +1,4 @@
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 
 // === Chat Types ===
 
@@ -28,7 +28,7 @@ export interface ChatMessage {
     senderId: string;
     type: MessageType;
     content: string;
-    properties?: Property[];
+    properties?: PropertyChatCard[];
     status: MessageStatus;
     createdAt: string;
     readAt?: string;

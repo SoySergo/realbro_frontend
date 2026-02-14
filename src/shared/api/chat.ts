@@ -1,6 +1,6 @@
 'use client';
 
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property';
 import type {
     ChatMessage,
     Conversation,
@@ -168,7 +168,7 @@ const imageCollections = [
     ],
 ];
 
-export function generateMockProperty(index: number): Property {
+export function generateMockProperty(index: number): PropertyChatCard {
     const types = ['apartment', 'studio', 'house', 'penthouse', 'duplex'] as const;
     const neighborhoods = [
         'Eixample', 'Gothic Quarter', 'Gracia', 'Sarrià-Sant Gervasi',
@@ -182,7 +182,7 @@ export function generateMockProperty(index: number): Property {
     const type = types[index % types.length];
     const neighborhood = neighborhoods[index % neighborhoods.length];
     const street = streets[index % streets.length];
-    const images = imageCollections[index % imageCollections.length];
+    const imageUrls = imageCollections[index % imageCollections.length];
 
     const bedrooms = type === 'studio' ? 0 : Math.floor(Math.random() * 3) + 2;
     const area = Math.floor(Math.random() * 80) + (bedrooms > 1 ? 80 : 40);
@@ -193,42 +193,36 @@ export function generateMockProperty(index: number): Property {
         title: `${neighborhood} - ${type === 'studio' ? 'Estudio' : bedrooms + 'BR'} ${type}`,
         type,
         price,
-        pricePerMeter: Math.round(price / area),
+        price_per_meter: Math.round(price / area),
         rooms: bedrooms,
         bathrooms: Math.floor(Math.random() * 2) + 1,
         area,
         floor: Math.floor(Math.random() * 6) + 1,
-        totalFloors: Math.floor(Math.random() * 4) + 5,
-        address: `${street}, ${Math.floor(Math.random() * 200) + 1}`,
-        city: 'Barcelona',
-        province: 'Barcelona',
-        coordinates: {
-            lat: 41.3851 + (Math.random() - 0.5) * 0.08,
-            lng: 2.1734 + (Math.random() - 0.5) * 0.08,
-        },
+        total_floors: Math.floor(Math.random() * 4) + 5,
+        address: `${street}, ${Math.floor(Math.random() * 200) + 1}, Barcelona`,
         description: `Beautiful ${type} in the heart of Barcelona. Perfect for professionals and families.`,
         features: ['parking', 'elevator', 'airConditioning', 'balcony', 'furnished'],
-        images,
-        isNew: Math.random() > 0.7,
-        isVerified: Math.random() > 0.3,
-        nearbyTransport: {
+        images: imageUrls.map((url, idx) => ({
+            id: `img_chat_${index}_${idx}`,
+            url,
+            width: 800,
+            height: 600,
+            alt: `Property photo ${idx + 1}`,
+        })),
+        is_new: Math.random() > 0.7,
+        is_verified: Math.random() > 0.3,
+        transport_station: {
             type: (['metro', 'train', 'bus'] as const)[Math.floor(Math.random() * 3)],
-            name: ['Diagonal', 'Passeig de Gràcia', 'Lesseps', 'Fontana'][
+            station_name: ['Diagonal', 'Passeig de Gràcia', 'Lesseps', 'Fontana'][
                 Math.floor(Math.random() * 4)
             ],
-            line: `L${Math.floor(Math.random() * 5) + 1}`,
-            color: ['#EE352E', '#0066CC', '#FFC72C', '#339933'][Math.floor(Math.random() * 4)],
-            walkMinutes: Math.floor(Math.random() * 12) + 2,
+            lines: [{
+                name: `L${Math.floor(Math.random() * 5) + 1}`,
+                color: ['#EE352E', '#0066CC', '#FFC72C', '#339933'][Math.floor(Math.random() * 4)],
+            }],
+            walk_minutes: Math.floor(Math.random() * 12) + 2,
         },
-        author: {
-            id: `agent_${index % 5}`,
-            name: ['Maria Garcia', 'José Martinez', 'Ana López', 'Carlos Rodríguez', 'Isabel Fernández'][index % 5],
-            avatar: `https://i.pravatar.cc/150?u=agent_${index % 5}`,
-            type: (['agent', 'owner', 'agency'] as const)[Math.floor(Math.random() * 3)],
-            isVerified: Math.random() > 0.4,
-        },
-        createdAt: new Date(Date.now() - Math.floor(Math.random() * 7 * 24 * 60 * 60 * 1000)),
-        updatedAt: new Date(Date.now() - Math.floor(Math.random() * 3 * 24 * 60 * 60 * 1000)),
+        created_at: new Date(Date.now() - Math.floor(Math.random() * 7 * 24 * 60 * 60 * 1000)).toISOString(),
     };
 }
 
