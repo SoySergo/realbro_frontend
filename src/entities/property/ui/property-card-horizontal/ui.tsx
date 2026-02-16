@@ -54,10 +54,12 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isHovering, setIsHovering] = useState(false);
 
-    // Вычисление времени с момента публикации
+    // Дата публикации: приоритет published_at (бекенд), fallback на created_at (legacy)
     const timeAgo = useMemo(() => {
+        const dateStr = property.published_at || property.created_at;
+        if (!dateStr) return '';
         const now = new Date();
-        const created = new Date(property.created_at);
+        const created = new Date(dateStr);
         const diffMs = now.getTime() - created.getTime();
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
@@ -67,7 +69,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
         if (diffMins < 60) return t('minutesAgo', { count: diffMins });
         if (diffHours < 24) return t('hoursAgo', { count: diffHours });
         return t('daysAgo', { count: diffDays });
-    }, [property.created_at, t]);
+    }, [property.published_at, property.created_at, t]);
 
     // Показываем максимум 6 секций для hover навигации
     const maxSections = Math.min(property.images.length, 6);
@@ -318,7 +320,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                             </Avatar>
                         </div>
                         <p className="text-[10px] text-muted-foreground text-center mb-0.5 uppercase tracking-wide">
-                            {property.author.type === 'agency' ? t('agency') : property.author.type === 'agent' ? t('agent') : t('owner')}
+                            {('author_type' in property.author ? property.author.author_type : property.author.type) === 'agency' ? t('agency') : ('author_type' in property.author ? property.author.author_type : property.author.type) === 'agent' ? t('agent') : t('owner')}
                         </p>
                         <Link
                             href={`/agency/${property.author.id}`}

@@ -1,12 +1,49 @@
 // Общие типы для карточек недвижимости (данные приходят с бекенда в snake_case)
 
-// Тип недвижимости
+import type {
+    PropertyShortListingDTO,
+    PropertyEnrichedListingDTO,
+    MediaResponseDTO,
+    MediaItemDTO,
+    AuthorShortDTO,
+    AuthorLongDTO,
+    LocationShortDTO,
+    NearestStationDTO,
+    TransportLineDTO,
+    AttributeDTO,
+    PropertyTypeCode,
+    PropertyKindCode,
+    CategoryCode,
+    SubcategoryCode,
+} from './api-types';
+
+// Реэкспорт DTO-типов для удобства
+export type {
+    PropertyShortListingDTO,
+    PropertyEnrichedListingDTO,
+    MediaResponseDTO,
+    MediaItemDTO,
+    AuthorShortDTO,
+    AuthorLongDTO,
+    LocationShortDTO,
+    NearestStationDTO,
+    TransportLineDTO,
+    AttributeDTO,
+    PropertyTypeCode,
+    PropertyKindCode,
+    CategoryCode,
+    SubcategoryCode,
+};
+
+// === Типы для обратной совместимости (deprecated — будут удалены) ===
+
+// Тип недвижимости (deprecated → используй CategoryCode + SubcategoryCode)
 export type PropertyType = 'apartment' | 'studio' | 'house' | 'penthouse' | 'duplex';
 
-// Тип транспорта
+// Тип транспорта (deprecated → используй NearestStationDTO.type)
 export type TransportType = 'metro' | 'train' | 'bus';
 
-// Фото объекта — с бекенда приходит id, размеры, alt
+// Фото объекта (deprecated → используй MediaItemDTO)
 export interface PropertyCardImage {
     id: string;
     url: string;
@@ -15,13 +52,13 @@ export interface PropertyCardImage {
     alt: string;
 }
 
-// Линия транспорта (у одной станции может быть несколько линий)
+// Линия транспорта (deprecated → используй TransportLineDTO)
 export interface TransportLine {
     name: string;
     color: string;
 }
 
-// Ближайшая станция транспорта для карточки
+// Ближайшая станция для карточки (deprecated → используй NearestStationDTO)
 export interface PropertyCardTransportStation {
     type: TransportType;
     station_name: string;
@@ -29,7 +66,7 @@ export interface PropertyCardTransportStation {
     walk_minutes: number;
 }
 
-// Автор объявления в карточке (минимальная информация)
+// Автор (deprecated → используй AuthorShortDTO)
 export interface PropertyCardAuthor {
     id: string;
     name: string;
@@ -39,27 +76,49 @@ export interface PropertyCardAuthor {
 }
 
 // === Грид-карточка (компактная, для поисковой выдачи) ===
+// Приведена к PropertyShortListingDTO с обратной совместимостью
 export interface PropertyGridCard {
     id: string;
     title: string;
-    type: PropertyType;
+    slug?: string;
+    // Новые поля из бекенда
+    property_type?: PropertyTypeCode;
+    property_kind?: PropertyKindCode;
+    category?: CategoryCode;
+    sub_category?: SubcategoryCode;
+    currency?: string;
+    // Основные характеристики
     price: number;
     price_per_meter?: number;
+    price_per_month?: number;
     rooms: number;
+    bathrooms?: number;
     area: number;
     floor?: number;
     total_floors?: number;
     address: string;
+    // Медиа (новый формат из бекенда)
+    media?: MediaResponseDTO;
+    // Медиа (legacy формат)
     images: PropertyCardImage[];
+    // Локация (новый формат из бекенда)
+    location?: LocationShortDTO;
+    // Транспорт (legacy формат)
     transport_station?: PropertyCardTransportStation;
-    author?: PropertyCardAuthor;
+    // Автор (новый формат из бекенда)
+    author?: AuthorShortDTO | PropertyCardAuthor;
     is_new?: boolean;
-    created_at: string;
+    // Даты
+    published_at?: string;
+    created_at?: string;
+    updated_at?: string;
+    // Legacy
+    type?: PropertyType;
 }
 
 // === Горизонтальная карточка (расширенная, для списка) ===
 
-// Расширенный автор для горизонтальной карточки
+// Расширенный автор для горизонтальной карточки (deprecated → используй AuthorLongDTO)
 export interface PropertyHorizontalCardAuthor extends PropertyCardAuthor {
     agency_name?: string;
     agency_logo?: string;
@@ -67,13 +126,13 @@ export interface PropertyHorizontalCardAuthor extends PropertyCardAuthor {
     phone?: string;
 }
 
-// Видео превью
+// Видео превью (deprecated → используй MediaResponseDTO)
 export interface PropertyCardVideo {
     url: string;
     thumbnail: string;
 }
 
-// 3D тур превью
+// 3D тур превью (deprecated → используй MediaResponseDTO)
 export interface PropertyCardTour3d {
     url: string;
     thumbnail: string;
@@ -82,9 +141,17 @@ export interface PropertyCardTour3d {
 export interface PropertyHorizontalCard {
     id: string;
     title: string;
-    type: PropertyType;
+    slug?: string;
+    // Новые поля из бекенда
+    property_type?: PropertyTypeCode;
+    property_kind?: PropertyKindCode;
+    category?: CategoryCode;
+    sub_category?: SubcategoryCode;
+    currency?: string;
+    // Основные характеристики
     price: number;
     price_per_meter?: number;
+    price_per_month?: number;
     rooms: number;
     bathrooms?: number;
     area: number;
@@ -92,18 +159,35 @@ export interface PropertyHorizontalCard {
     total_floors?: number;
     address: string;
     description?: string;
+    short_description?: string;
+    // Медиа (новый формат)
+    media?: MediaResponseDTO;
+    // Медиа (legacy)
     images: PropertyCardImage[];
+    // Атрибуты (новый формат)
+    characteristics?: AttributeDTO[];
+    // Legacy удобства
     amenities?: string[];
+    // Локация (новый формат)
+    location?: LocationShortDTO;
+    // Транспорт (legacy)
     transport_station?: PropertyCardTransportStation;
-    author?: PropertyCardAuthor | PropertyHorizontalCardAuthor;
+    // Автор
+    author?: PropertyCardAuthor | PropertyHorizontalCardAuthor | AuthorShortDTO;
     is_new?: boolean;
     is_verified?: boolean;
+    // Legacy флаги (deprecated → будут в characteristics)
     no_commission?: boolean;
     exclusive?: boolean;
     video?: PropertyCardVideo;
     floor_plan?: string;
     tour_3d?: PropertyCardTour3d;
-    created_at: string;
+    // Даты
+    published_at?: string;
+    created_at?: string;
+    updated_at?: string;
+    // Legacy
+    type?: PropertyType;
 }
 
 // === Карточка для чата (AI-предложения) ===
@@ -122,7 +206,13 @@ export type PropertyFeature =
 export interface PropertyChatCard {
     id: string;
     title: string;
-    type: PropertyType;
+    slug?: string;
+    // Новые поля из бекенда
+    property_type?: PropertyTypeCode;
+    property_kind?: PropertyKindCode;
+    category?: CategoryCode;
+    sub_category?: SubcategoryCode;
+    // Основные
     price: number;
     price_per_meter?: number;
     rooms: number;
@@ -132,10 +222,21 @@ export interface PropertyChatCard {
     total_floors?: number;
     address: string;
     description?: string;
+    // Медиа
+    media?: MediaResponseDTO;
     images: PropertyCardImage[];
+    // Атрибуты
+    characteristics?: AttributeDTO[];
     features?: PropertyFeature[];
+    // Локация / транспорт
+    location?: LocationShortDTO;
     transport_station?: PropertyCardTransportStation;
     is_new?: boolean;
     is_verified?: boolean;
-    created_at: string;
+    // Даты
+    published_at?: string;
+    created_at?: string;
+    updated_at?: string;
+    // Legacy
+    type?: PropertyType;
 }

@@ -48,9 +48,12 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
 
+    // Дата публикации: приоритет published_at (бекенд), fallback на created_at (legacy)
     const timeAgo = useMemo(() => {
+        const dateStr = property.published_at || property.created_at;
+        if (!dateStr) return '';
         const now = new Date();
-        const created = new Date(property.created_at);
+        const created = new Date(dateStr);
         const diffMs = now.getTime() - created.getTime();
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
@@ -60,7 +63,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         if (diffMins < 60) return t('minutesAgo', { count: diffMins });
         if (diffHours < 24) return t('hoursAgo', { count: diffHours });
         return t('daysAgo', { count: diffDays });
-    }, [property.created_at, t]);
+    }, [property.published_at, property.created_at, t]);
 
     const displayImages = property.images.slice(0, MAX_HOVER_IMAGES);
     const extraImagesCount = property.images.length - MAX_HOVER_IMAGES;
