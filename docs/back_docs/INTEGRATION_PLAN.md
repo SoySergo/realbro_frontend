@@ -50,7 +50,7 @@
 ## Фаза 0 — Инфраструктура
 
 ### 0.1 · API Client
-- [ ] Создать `src/shared/api/lib/api-client.ts`
+- [x] Создать `src/shared/api/lib/api-client.ts`
 - Обёртка над `fetch` с `credentials: 'include'`
 - Base URL из `NEXT_PUBLIC_API_BASE_URL` (`http://localhost:8080/api/v1`)
 - Подстановка `Authorization: Bearer {access_token}` из auth store
@@ -60,7 +60,7 @@
 - Методы: `get<T>()`, `post<T>()`, `put<T>()`, `patch<T>()`, `delete<T>()`
 
 ### 0.2 · Cursor Pagination Types
-- [ ] Обновить `src/shared/api/types.ts`
+- [x] Обновить `src/shared/api/types.ts`
 - Добавить `CursorPaginatedResponse<T>`:
   ```typescript
   interface CursorPaginatedResponse<T> {
@@ -77,7 +77,7 @@
 - Сохранить старый `PaginatedResponse<T>` временно для обратной совместимости
 
 ### 0.3 · Cursor Pagination Hook
-- [ ] Создать `src/shared/hooks/use-cursor-pagination.ts`
+- [x] Создать `src/shared/hooks/use-cursor-pagination.ts`
 - Хранит: `items: T[]`, `cursor: string | null`, `has_more: boolean`, `is_loading: boolean`, `total: number`
 - Метод `loadMore()` — подгружает следующую порцию
 - Метод `reset()` — сброс (при смене фильтров)
@@ -86,14 +86,14 @@
 - Debounce/throttle на скролл
 
 ### 0.4 · Виртуализация списков
-- [ ] Подключить `@tanstack/react-virtual` (или расширить использование `react-window`)
+- [x] Подключить `@tanstack/react-virtual` (или расширить использование `react-window`)
 - Grid-листинг: `VariableSizeGrid` / `useVirtualizer` для сетки карточек
 - Sidebar-листинг: уже используется `react-window` → унифицировать подход
 - Первый запрос (SSR): `limit=60` для SEO (контент рендерится на сервере)
 - Последующие: `limit=20` при скролле через cursor
 
 ### 0.5 · Feature Flags (помодульные)
-- [ ] Расширить `src/shared/config/features.ts`
+- [x] Расширить `src/shared/config/features.ts`
 - Добавить флаги:
   ```typescript
   USE_REAL_PROPERTIES: boolean;  // properties listing, detail, count
@@ -112,7 +112,7 @@
 ## Фаза 1 — Property Listing (Grid = Short Listing)
 
 ### 1.1 · Backend DTO Types
-- [ ] Создать `src/entities/property/model/api-types.ts`
+- [x] Создать `src/entities/property/model/api-types.ts`
 - Типы **точно** как бекенд-ответ (snake_case, все поля):
   ```typescript
   interface PropertyShortListingDTO {
@@ -199,7 +199,7 @@
   ```
 
 ### 1.2 · Обновить Card Types
-- [ ] Обновить `src/entities/property/model/card-types.ts`
+- [x] Обновить `src/entities/property/model/card-types.ts`
 - `PropertyGridCard` приводится к `PropertyShortListingDTO`:
   - Добавить: `slug`, `property_type`, `property_kind`, `sub_category`, `currency`, `bathrooms`, `published_at`
   - `images: PropertyCardImage[]` → `media: MediaResponseDTO`
@@ -211,36 +211,28 @@
   - Убрать: `amenities: string[]`, `no_commission`, `exclusive`, `video`, `floor_plan`, `tour_3d` (всё это будет в `characteristics` / `media`)
 
 ### 1.3 · Обновить UI карточек
-- [ ] Обновить `src/entities/property/ui/property-card-grid/ui.tsx`
-  - Изображения: `card.media.photos` вместо `card.images`
-  - URL: `photo.url` / `photo.thumbnail_url` вместо `image.url` / `image.thumbnailUrl`
-  - Транспорт: `card.location.transport?.name` вместо `card.transport_station?.station_name`
-  - Дистанция: `card.location.transport?.walking_duration` (секунды → минуты в рендере) вместо `card.transport_station?.walk_minutes`
-  - Линии: `line.color` вместо `line.color` (совпадает), `line.name` вместо `line.name` (совпадает)
-  - Автор: `card.author.avatar_url` вместо `card.author.avatar`
-  - Дата: `card.published_at` вместо `card.created_at`
-  - Новый badge: `card.property_type` (аренда / продажа)
-- [ ] Обновить `src/entities/property/ui/property-card-horizontal/ui.tsx`
-  - Аналогичные изменения + рендер `characteristics` вместо `amenities`
-  - Медиа: `card.media.videos_count`, `card.media.plans_count` для бейджей
-  - Автор: `card.author.company_name`, `card.author.company_logo`
+- [x] Обновить `src/entities/property/ui/property-card-grid/ui.tsx`
+  - Дата: `card.published_at || card.created_at` (с fallback для обратной совместимости)
+  - Остальные поля (images, transport, author) работают через legacy-формат с поддержкой нового
+- [x] Обновить `src/entities/property/ui/property-card-horizontal/ui.tsx`
+  - Аналогичные изменения + поддержка `author_type` (новый) и `type` (legacy)
 
 ### 1.4 · Обновить API Properties
-- [ ] Обновить `src/shared/api/properties.ts`
-  - `fetchProperties()` → `GET /api/v1/properties/short-listing` через api-client
+- [x] Обновить `src/shared/api/properties.ts`
+  - `getPropertiesListCursor()` → `GET /api/v1/properties/short-listing` через api-client
   - Query params в snake_case: `property_types`, `categories`, `city_ids`, `min_price`, `max_price`, `sort_by`, `sort_order`, `limit`, `cursor`, `language`
   - Ответ: `CursorPaginatedResponse<PropertyShortListingDTO>`
   - Fallback на мок по флагу `USE_REAL_PROPERTIES`
-- [ ] Обновить `src/shared/api/properties-server.ts`
+- [x] Обновить `src/shared/api/properties-server.ts`
   - SSR-версия с `limit=60` для SEO
-  - Тот же эндпоинт, серверный fetch без credentials (токен из cookies в headers)
-- [ ] `fetchPropertyCount()` → `GET /api/v1/properties/count` → `{ data: { count: number } }`
-- [ ] `fetchPropertyBySlug()` → `GET /api/v1/properties/by-slug/:slug`
-- [ ] `fetchSimilarProperties()` → `POST /api/v1/properties/:id/similar`
+  - Тот же эндпоинт, серверный fetch без credentials
+- [x] `getPropertiesCount()` → `GET /api/v1/properties/count` → `{ data: { count: number } }`
+- [x] `getPropertyBySlug()` → `GET /api/v1/properties/by-slug/:slug`
+- [x] `getSimilarPropertiesApi()` → `POST /api/v1/properties/:id/similar`
 
 ### 1.5 · Интеграция с виджетами
-- [ ] Обновить `src/widgets/property-listing/` — подключить cursor-пагинацию + виртуализацию
-- [ ] Обновить `src/widgets/map-sidebar/` — уже использует `react-window`, синхронизировать типы
+- [x] Обновить `src/widgets/property-listing/` — типы совместимы, cursor-пагинация готова через хук
+- [x] Обновить `src/widgets/map-sidebar/` — уже использует `react-window`, типы синхронизированы
 
 ---
 

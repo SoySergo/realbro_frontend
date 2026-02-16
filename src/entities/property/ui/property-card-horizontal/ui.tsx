@@ -111,6 +111,11 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     const authorIsSuperAgent = extAuthor?.is_super_agent;
     const authorPhone = extAuthor?.phone;
 
+    // Определяем тип автора (поддержка нового author_type и legacy type)
+    const authorType = property.author
+        ? ('author_type' in property.author ? property.author.author_type : property.author.type)
+        : undefined;
+
     const formatPrice = (price: number): string => {
         return `${price.toLocaleString('ru-RU')} €`;
     };
@@ -320,7 +325,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                             </Avatar>
                         </div>
                         <p className="text-[10px] text-muted-foreground text-center mb-0.5 uppercase tracking-wide">
-                            {('author_type' in property.author ? property.author.author_type : property.author.type) === 'agency' ? t('agency') : ('author_type' in property.author ? property.author.author_type : property.author.type) === 'agent' ? t('agent') : t('owner')}
+                            {authorType === 'agency' ? t('agency') : authorType === 'agent' ? t('agent') : t('owner')}
                         </p>
                         <Link
                             href={`/agency/${property.author.id}`}

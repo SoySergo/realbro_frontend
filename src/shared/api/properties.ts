@@ -3,6 +3,7 @@
 import type { SearchFilters } from '@/entities/filter';
 import type { PropertyGridCard } from '@/entities/property';
 import type { PropertyShortListingDTO } from '@/entities/property/model/api-types';
+import { dtosToGridCards } from '@/entities/property/model/converters';
 import type { CursorPaginatedResponse, ApiDataResponse } from './types';
 import { generateMockGridCardsPage, generateMockGridCardsByIds } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
@@ -208,7 +209,7 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
         });
         // Конвертируем cursor-ответ в legacy формат для обратной совместимости
         return {
-            data: response.data as unknown as PropertyGridCard[],
+            data: dtosToGridCards(response.data),
             pagination: {
                 page: 1,
                 limit: response.pagination.limit,
@@ -279,7 +280,7 @@ export async function getPropertiesByIds(ids: string[]): Promise<PropertyGridCar
             '/properties/short-listing',
             { params: { include_ids: ids.join(',') } }
         );
-        return response.data as unknown as PropertyGridCard[];
+        return dtosToGridCards(response.data);
     }
 
     try {

@@ -1,6 +1,7 @@
 import type { SearchFilters } from '@/entities/filter';
 import type { Property, PropertyGridCard } from '@/entities/property';
 import type { PropertyShortListingDTO } from '@/entities/property/model/api-types';
+import { dtosToGridCards } from '@/entities/property/model/converters';
 import type { CursorPaginatedResponse } from './types';
 import { generateMockGridCardsPage, generateMockProperty } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
@@ -116,7 +117,7 @@ export async function getPropertiesListServer(
 
             const cursorResponse: CursorPaginatedResponse<PropertyShortListingDTO> = await response.json();
             return {
-                data: cursorResponse.data as unknown as PropertyGridCard[],
+                data: dtosToGridCards(cursorResponse.data),
                 pagination: {
                     page: 1,
                     limit: cursorResponse.pagination.limit,
