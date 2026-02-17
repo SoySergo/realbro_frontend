@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { useLocalLocationState } from '@/features/location-filter/model/use-local-location-state';
+import { getDisplayName } from '@/features/location-search-mode/lib/boundaries-helpers';
+import { getLocationType } from '@/entities/boundary';
 import type { BoundaryFeature } from '@/entities/boundary';
 import type { LocationItem } from '@/entities/location';
 
@@ -64,43 +66,7 @@ export function BoundariesSync({ map, isActive }: BoundariesSyncProps) {
 
             // Определяем язык пользователя для выбора правильного имени
             const userLang = document.documentElement.lang || 'en';
-            let displayName = props.name;
-
-            if (userLang === 'ru' && props.name_ru) {
-                displayName = String(props.name_ru);
-            } else if (userLang === 'fr' && props.name_fr) {
-                displayName = String(props.name_fr);
-            } else if (userLang === 'en' && props.name_en) {
-                displayName = String(props.name_en);
-            } else if (userLang === 'es' && props.name_es) {
-                displayName = String(props.name_es);
-            } else if (userLang === 'ca' && props.name_ca) {
-                displayName = String(props.name_ca);
-            }
-
-            // Преобразуем admin_level в тип локации
-            const getLocationType = (
-                adminLevel: number
-            ): 'country' | 'province' | 'city' | 'district' | 'neighborhood' => {
-                switch (adminLevel) {
-                    case 2:
-                        return 'country';
-                    case 4:
-                        return 'province';
-                    case 6:
-                        return 'province'; // регион
-                    case 7:
-                        return 'city';
-                    case 8:
-                        return 'city';
-                    case 9:
-                        return 'district';
-                    case 10:
-                        return 'neighborhood';
-                    default:
-                        return 'neighborhood';
-                }
-            };
+            const displayName = getDisplayName(props, userLang);
 
             // Создаём объект локации
             const newLocation: LocationItem = {

@@ -466,7 +466,9 @@
     "propertyCategoryHotel": "Hotel",
     "propertyCategoryLand": "Terreny",
     "min": "Mín",
-    "max": "Màx"
+    "max": "Màx",
+    "bathrooms": "Banys",
+    "bathroomCount": "Nombre de banys"
   },
   "map": {
     "showMap": "Mostrar mapa",

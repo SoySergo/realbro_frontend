@@ -1,39 +1,6 @@
 import type { BoundaryFeatureProperties } from '@/entities/boundary';
+import { getLocationType } from '@/entities/boundary';
 import type { LocationItem } from '@/entities/location';
-
-/**
- * Преобразует admin_level в тип локации
- * OSM admin_level иерархия:
- * 2 - country (страна)
- * 4 - region (регион/область)
- * 6 - province (провинция)
- * 7 - comarca (комарка/субрегион)
- * 8 - city (город)
- * 9 - district (район города)
- * 10 - neighborhood (квартал/микрорайон)
- */
-export function getLocationType(
-    adminLevel: number
-): 'country' | 'region' | 'province' | 'comarca' | 'city' | 'district' | 'neighborhood' {
-    switch (adminLevel) {
-        case 2:
-            return 'country';
-        case 4:
-            return 'region';
-        case 6:
-            return 'province';
-        case 7:
-            return 'comarca';
-        case 8:
-            return 'city';
-        case 9:
-            return 'district';
-        case 10:
-            return 'neighborhood';
-        default:
-            return 'neighborhood';
-    }
-}
 
 /**
  * Получает локализованное имя из properties границы

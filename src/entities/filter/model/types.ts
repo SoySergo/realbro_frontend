@@ -68,9 +68,58 @@ export interface SearchFilters {
     // Мета-информация о локациях (для восстановления границ)
     locationsMeta?: Array<{
         id: number;
+        name?: string;
         wikidata?: string;
         adminLevel?: number;
     }>;
+
+    // === Бекенд-совместимые поля (snake_case) ===
+
+    // Тип сделки (бекенд: 'sale' | 'rent' | 'sale,rent')
+    property_types?: string;
+    // Вид недвижимости (1=residential, 2=commercial, 3=industrial, 4=land, 5=other)
+    property_kind_ids?: number[];
+    // Категория (1=room, 2=apartment, 3=house)
+    categories?: number[];
+    // Подкатегория (4=piso, 5=studio, 6=loft, ...)
+    sub_categories?: number[];
+
+    // Локации (snake_case — маппинг admin_level)
+    country_ids?: number[];
+    region_ids?: number[];
+    province_ids?: number[];
+    city_ids?: number[];             // admin_level 7 и 8 → city_ids
+    district_ids?: number[];
+    neighborhood_ids?: number[];
+
+    // Ванные
+    bathrooms?: number[];
+
+    // Геолокация
+    bbox?: string;                   // 'minLat,minLng,maxLat,maxLng'
+    radius?: number;                 // метры
+    radius_lat?: number;
+    radius_lng?: number;
+    geojson?: string;                // inline GeoJSON
+    polygon_ids?: string[];          // UUID[] сохранённых геометрий
+
+    // Включение / исключение
+    include_ids?: string[];          // UUID[]
+    exclude_ids?: string[];          // UUID[]
+
+    // Сортировка (snake_case)
+    sort_by?: string;                // 'published_at' | 'price' | 'area' | 'created_at'
+    sort_order_backend?: 'asc' | 'desc';
+
+    // Пагинация
+    limit?: number;
+    cursor?: string;
+
+    // Язык
+    language?: string;
+
+    // Маркеры (для saved filters)
+    exclude_marker_types?: string[]; // 'dislike', 'hidden'
 }
 
 // Тип сделки
@@ -98,7 +147,7 @@ export type PropertyCategory =
     | 'land';
 
 // Типы маркеров
-export type MarkerType = 'view' | 'no_view' | 'like' | 'dislike' | 'all';
+export type MarkerType = 'view' | 'no_view' | 'like' | 'dislike' | 'saved' | 'hidden' | 'to_review' | 'to_think' | 'all';
 
 // Deprecated - старые типы для обратной совместимости
 export interface PropertyFilters {

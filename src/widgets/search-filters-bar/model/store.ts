@@ -7,6 +7,7 @@ import type { SearchFilters } from '@/entities/filter/model/types';
 import type { DrawPolygon } from '@/entities/map-draw/model/types';
 import type { LocationFilter } from '@/features/location-filter/model/types';
 import type { LocationItem } from '@/entities/location/model/types';
+import { adminLevelToLocationField } from '@/entities/boundary';
 import { useSidebarStore } from '@/widgets/sidebar';
 
 // Режим отображения поиска: карта (с сайдбаром) или список (без карты)
@@ -119,6 +120,17 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
         if (groupedByLevel[8]) result.adminLevel8 = groupedByLevel[8];
         if (groupedByLevel[9]) result.adminLevel9 = groupedByLevel[9];
         if (groupedByLevel[10]) result.adminLevel10 = groupedByLevel[10];
+
+        // Также заполняем snake_case поля бекенда
+        for (const [levelStr, ids] of Object.entries(groupedByLevel)) {
+            const field = adminLevelToLocationField(Number(levelStr));
+            const existing = result[field as keyof SearchFilters] as number[] | undefined;
+            if (existing) {
+                (result as Record<string, unknown>)[field] = [...existing, ...ids];
+            } else {
+                (result as Record<string, unknown>)[field] = ids;
+            }
+        }
 
         // Сохраняем мета-информацию
         result.locationsMeta = locationsMeta;
@@ -393,6 +405,17 @@ export const useFilterStore = create<FilterStore>()(
                         if (groupedByLevel[8]) filterUpdates.adminLevel8 = groupedByLevel[8];
                         if (groupedByLevel[9]) filterUpdates.adminLevel9 = groupedByLevel[9];
                         if (groupedByLevel[10]) filterUpdates.adminLevel10 = groupedByLevel[10];
+
+                        // Устанавливаем snake_case поля бекенда через единый маппинг
+                        for (const [levelStr, ids] of Object.entries(groupedByLevel)) {
+                            const field = adminLevelToLocationField(Number(levelStr));
+                            const existing = filterUpdates[field as keyof SearchFilters] as number[] | undefined;
+                            if (existing) {
+                                (filterUpdates as Record<string, unknown>)[field] = [...existing, ...ids];
+                            } else {
+                                (filterUpdates as Record<string, unknown>)[field] = ids;
+                            }
+                        }
 
                         console.log('Applying admin_level filters:', filterUpdates);
 

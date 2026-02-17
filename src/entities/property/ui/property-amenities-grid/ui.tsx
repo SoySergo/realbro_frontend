@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
+import type { AttributeDTO } from '@/entities/property/model/api-types';
+import { DynamicIcon } from '@/shared/ui/dynamic-icon';
 import {
     Wifi,
     Tv,
@@ -81,6 +83,7 @@ interface AmenitiesTranslations {
 
 interface PropertyAmenitiesGridProps {
     amenities: string[];
+    amenitiesDto?: AttributeDTO[];  // Атрибуты из бекенда
     maxVisible?: number;
     className?: string;
     translations?: AmenitiesTranslations;
@@ -88,6 +91,7 @@ interface PropertyAmenitiesGridProps {
 
 export function PropertyAmenitiesGrid({
     amenities,
+    amenitiesDto,
     maxVisible = 8,
     className,
     translations
@@ -103,10 +107,12 @@ export function PropertyAmenitiesGrid({
 
     const [isExpanded, setIsExpanded] = useState(false);
 
-    if (!amenities.length) return null;
+    if (!amenities.length && (!amenitiesDto || !amenitiesDto.length)) return null;
 
+    const useDto = amenitiesDto && amenitiesDto.length > 0;
+    const totalItems = useDto ? amenitiesDto.length : amenities.length;
     const visibleAmenities = isExpanded ? amenities : amenities.slice(0, maxVisible);
-    const hiddenCount = amenities.length - maxVisible;
+    const actualHiddenCount = totalItems - maxVisible;
 
     return (
         <div className={cn('flex flex-col gap-4 bg-secondary rounded-2xl p-6', className)}>
@@ -116,40 +122,48 @@ export function PropertyAmenitiesGrid({
 
             {/* SEO: Amenities list is rendered immediately for indexing */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {visibleAmenities.map((amenity, index) => {
-                    // Try to find icon for amenity
-                    const Icon = Object.entries(amenityIcons)
-                        .sort((a, b) => b[0].length - a[0].length)
-                        .find(([key]) => amenity.toLowerCase().includes(key.toLowerCase()))?.[1] || Home;
-
-                    // Get translated name from props or fallback
-                    let displayName: string;
-                    if (t.items[amenity]) {
-                        displayName = t.items[amenity];
-                    } else {
-                        // Fallback: capitalize and split camelCase
-                        displayName = amenity
-                            .replace(/([A-Z])/g, ' $1')
-                            .replace(/^./, str => str.toUpperCase())
-                            .trim();
-                    }
-
-                    return (
-                        <div
-                            key={index}
-                            className="flex items-center gap-2 text-sm"
-                        >
-                            <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
-                            <span className="text-foreground truncate">
-                                {displayName}
-                            </span>
+                {useDto ? (
+                    // Рендер из бекенд AttributeDTO[] через DynamicIcon
+                    (isExpanded ? amenitiesDto : amenitiesDto.slice(0, maxVisible)).map((attr, index) => (
+                        <div key={`${attr.value}-${index}`} className="flex items-center gap-2 text-sm">
+                            <DynamicIcon name={attr.icon_type} size={16} className="text-muted-foreground shrink-0" />
+                            <span className="text-foreground truncate">{attr.label}</span>
                         </div>
-                    );
-                })}
+                    ))
+                ) : (
+                    // Legacy рендер из string[] с поиском иконки по ключу
+                    visibleAmenities.map((amenity, index) => {
+                        const Icon = Object.entries(amenityIcons)
+                            .sort((a, b) => b[0].length - a[0].length)
+                            .find(([key]) => amenity.toLowerCase().includes(key.toLowerCase()))?.[1] || Home;
+
+                        let displayName: string;
+                        if (t.items[amenity]) {
+                            displayName = t.items[amenity];
+                        } else {
+                            displayName = amenity
+                                .replace(/([A-Z])/g, ' $1')
+                                .replace(/^./, str => str.toUpperCase())
+                                .trim();
+                        }
+
+                        return (
+                            <div
+                                key={index}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
+                                <span className="text-foreground truncate">
+                                    {displayName}
+                                </span>
+                            </div>
+                        );
+                    })
+                )}
             </div>
 
             {/* Show more button */}
-            {hiddenCount > 0 && (
+            {actualHiddenCount > 0 && (
                 <button
                     onClick={() => setIsExpanded(!isExpanded)}
                     className="flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors"
@@ -157,7 +171,7 @@ export function PropertyAmenitiesGrid({
                     <span>
                         {isExpanded
                             ? t.showLess
-                            : `${t.showAllAmenities} (+${hiddenCount})`
+                            : `${t.showAllAmenities} (+${actualHiddenCount})`
                         }
                     </span>
                     <ChevronDown

@@ -428,10 +428,11 @@ export function PropertyDetailWidget({
                         </section>
 
                         {/* Amenities - SEO Critical */}
-                        {property.amenities && property.amenities.length > 0 && (
+                        {(!!property.amenities?.length || !!property.amenities_dto?.length) && (
                             <section className="border-t border-border/50 pt-6">
                                 <PropertyAmenitiesGrid
-                                    amenities={property.amenities}
+                                    amenities={property.amenities || []}
+                                    amenitiesDto={property.amenities_dto}
                                     translations={amenitiesTranslations}
                                 />
                             </section>

@@ -371,7 +371,9 @@
     "propertyCategoryHotel": "Hotel",
     "propertyCategoryLand": "Terreno",
     "min": "Mín",
-    "max": "Máx"
+    "max": "Máx",
+    "bathrooms": "Baños",
+    "bathroomCount": "Número de baños"
   },
   "map": {
     "showMap": "Mostrar mapa",
