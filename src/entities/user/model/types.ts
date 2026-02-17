@@ -46,8 +46,9 @@ export type UserSettings = {
 
 /**
  * Роли пользователей
+ * Синхронизировано с бекендом: user, agent, agency, developer, admin
  */
-export type UserRole = 'user' | 'admin' | 'moderator';
+export type UserRole = 'user' | 'agent' | 'agency' | 'developer' | 'admin';
 
 /**
  * Запрос на обновление пользователя

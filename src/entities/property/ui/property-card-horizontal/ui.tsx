@@ -31,6 +31,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import type { PropertyHorizontalCard, PropertyHorizontalCardAuthor } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
+import { useUserActionsStore } from '@/entities/user-actions';
 
 interface PropertyCardHorizontalProps {
     property: PropertyHorizontalCard;
@@ -49,7 +50,6 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
     const t = useTranslations('property');
     const tTypes = useTranslations('propertyTypes');
     const tTransport = useTranslations('transport');
-    const tActions = useTranslations('actions');
 
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isHovering, setIsHovering] = useState(false);
@@ -355,26 +355,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                 <div className="flex items-center justify-center gap-3 mt-3">
                     {/* Слот для дополнительных действий (например, сравнение) */}
                     {actions}
-                    <button
-                        className="p-2 text-muted-foreground hover:text-green-600 hover:bg-green-500/10 rounded transition-colors"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            toast.success(tActions('liked'), { duration: 2000 });
-                        }}
-                        title={t('like')}
-                    >
-                        <ThumbsUp className="w-5 h-5" />
-                    </button>
-                    <button
-                        className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded transition-colors"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            toast(tActions('disliked'), { duration: 2000 });
-                        }}
-                        title={t('dislike')}
-                    >
-                        <ThumbsDown className="w-5 h-5" />
-                    </button>
+                    <LikeDislikeButtons propertyId={property.id} />
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -414,5 +395,58 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                 <p className="text-[11px] text-muted-foreground text-right mt-2">{timeAgo}</p>
             </div>
         </div>
+    );
+}
+
+/**
+ * Компонент like/dislike кнопок с централизованным стором
+ */
+function LikeDislikeButtons({ propertyId }: { propertyId: string }) {
+    const t = useTranslations('property');
+    const tActions = useTranslations('actions');
+    const { getReaction, setReaction } = useUserActionsStore();
+    const currentReaction = getReaction(propertyId);
+
+    return (
+        <>
+            <button
+                className={cn(
+                    'p-2 rounded transition-colors',
+                    currentReaction === 'like'
+                        ? 'text-green-600 bg-green-500/10'
+                        : 'text-muted-foreground hover:text-green-600 hover:bg-green-500/10'
+                )}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    const newReaction = currentReaction === 'like' ? null : 'like';
+                    setReaction(propertyId, newReaction);
+                    if (newReaction === 'like') {
+                        toast.success(tActions('liked'), { duration: 2000 });
+                    }
+                }}
+                title={t('like')}
+            >
+                <ThumbsUp className="w-5 h-5" />
+            </button>
+            <button
+                className={cn(
+                    'p-2 rounded transition-colors',
+                    currentReaction === 'dislike'
+                        ? 'text-red-500 bg-red-500/10'
+                        : 'text-muted-foreground hover:text-red-500 hover:bg-red-500/10'
+                )}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    const newReaction = currentReaction === 'dislike' ? null : 'dislike';
+                    setReaction(propertyId, newReaction);
+                    if (newReaction === 'dislike') {
+                        toast(tActions('disliked'), { duration: 2000 });
+                    }
+                }}
+                title={t('dislike')}
+            >
+                <ThumbsDown className="w-5 h-5" />
+            </button>
+        </>
     );
 }

@@ -1,5 +1,5 @@
-import env from '@/shared/config/env';
 import type {
+    AuthResponse,
     LoginRequest,
     RegisterRequest,
     ChangePasswordRequest,
@@ -8,8 +8,7 @@ import type {
     SessionsResponse,
     GoogleOAuthURLResponse,
 } from '@/entities/user';
-
-const API_BASE = `${env.NEXT_PUBLIC_API_BASE_URL}/api/v1`;
+import { apiClient, ApiError } from '@/shared/api/lib/api-client';
 
 /**
  * Кастомная ошибка авторизации
@@ -26,125 +25,102 @@ export class AuthError extends Error {
 }
 
 /**
- * Обработка ответа API
- */
-async function handleResponse<T>(response: Response): Promise<T> {
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-
-        // Бекенд возвращает формат: { success: false, error: { code, message, details } }
-        if (errorData.error) {
-            throw new AuthError(
-                errorData.error.message || 'Request failed',
-                response.status,
-                errorData.error.code
-            );
-        }
-
-        // Fallback для старого формата
-        throw new AuthError(
-            errorData.message || 'Request failed',
-            response.status,
-            errorData.code
-        );
-    }
-    return response.json();
-}
-
-/**
  * Класс для работы с Auth API
+ * Централизовано на Bearer token:
+ * - access_token хранится in-memory (Zustand, не persist)
+ * - refresh_token — httpOnly cookie (бекенд устанавливает)
+ * - API-client подставляет Authorization: Bearer {access_token}
+ * - При 401 → api-client вызывает /auth/refresh → повтор запроса
  */
 class AuthApiService {
-    // Прямые запросы к бекенду
-    private baseUrl = `${API_BASE}/auth`;
-
     /**
      * Регистрация нового пользователя
+     * Возвращает AuthResponse с access_token + user
      */
-    async register(data: RegisterRequest): Promise<UserInfo> {
+    async register(data: RegisterRequest): Promise<AuthResponse> {
         console.log('[Auth API] Registering user:', data.email);
-
-        const response = await fetch(`${this.baseUrl}/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(data),
-        });
-
-        return handleResponse<UserInfo>(response);
+        try {
+            return await apiClient.post<AuthResponse>('/auth/register', data, { skipAuth: true });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 
     /**
      * Вход в систему
+     * Возвращает AuthResponse с access_token + user
      */
-    async login(data: LoginRequest): Promise<UserInfo> {
+    async login(data: LoginRequest): Promise<AuthResponse> {
         console.log('[Auth API] Logging in user:', data.email);
-
-        const response = await fetch(`${this.baseUrl}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(data),
-        });
-
-        return handleResponse<UserInfo>(response);
+        try {
+            return await apiClient.post<AuthResponse>('/auth/login', data, { skipAuth: true });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 
     /**
-     * Обновление токена (токен берется из cookies автоматически)
+     * Обновление токена (refresh_token из httpOnly cookie)
+     * Возвращает AuthResponse с новым access_token + user
      */
-    async refresh(): Promise<UserInfo> {
+    async refresh(): Promise<AuthResponse> {
         console.log('[Auth API] Refreshing tokens');
-
-        const response = await fetch(`${this.baseUrl}/refresh`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-        });
-
-        return handleResponse<UserInfo>(response);
+        try {
+            return await apiClient.post<AuthResponse>('/auth/refresh', undefined, { skipAuth: true });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 
     /**
-     * Инициация Google OAuth flow - получение URL для редиректа
+     * Инициация Google OAuth flow — GET /auth/google/login?return_url=...
      */
     async getGoogleAuthUrl(returnUrl?: string): Promise<GoogleOAuthURLResponse> {
         console.log('[Auth API] Getting Google OAuth URL');
-
-        const url = returnUrl
-            ? `${this.baseUrl}/google/login?return_url=${encodeURIComponent(returnUrl)}`
-            : `${this.baseUrl}/google/login`;
-
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-        });
-
-        return handleResponse<GoogleOAuthURLResponse>(response);
+        try {
+            return await apiClient.get<GoogleOAuthURLResponse>('/auth/google/login', {
+                params: returnUrl ? { return_url: returnUrl } : undefined,
+                skipAuth: true,
+            });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 
     /**
-     * Выход из системы (токен берется из cookies автоматически)
+     * Выход из системы
      */
     async logout(): Promise<void> {
         console.log('[Auth API] Logging out');
-
-        await fetch(`${this.baseUrl}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-        });
+        try {
+            await apiClient.post<void>('/auth/logout');
+        } catch {
+            // Игнорируем ошибки при logout
+        }
     }
 
     /**
-     * Выход со всех устройств (токен берется из cookies автоматически)
+     * Выход со всех устройств
      */
     async logoutAll(): Promise<void> {
         console.log('[Auth API] Logging out from all devices');
-
-        await fetch(`${this.baseUrl}/logout-all`, {
-            method: 'POST',
-            credentials: 'include',
-        });
+        try {
+            await apiClient.post<void>('/auth/logout-all');
+        } catch {
+            // Игнорируем ошибки при logout
+        }
     }
 
     /**
@@ -152,19 +128,13 @@ class AuthApiService {
      */
     async requestPasswordReset(email: string): Promise<void> {
         console.log('[Auth API] Requesting password reset for:', email);
-
-        const response = await fetch(`${this.baseUrl}/password/reset-request`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
-            throw new AuthError(
-                error.message || 'Password reset request failed',
-                response.status
-            );
+        try {
+            await apiClient.post<void>('/auth/password/reset-request', { email }, { skipAuth: true });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
         }
     }
 
@@ -173,68 +143,59 @@ class AuthApiService {
      */
     async resetPassword(data: ResetPasswordRequest): Promise<void> {
         console.log('[Auth API] Resetting password');
-
-        const response = await fetch(`${this.baseUrl}/password/reset`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
-            throw new AuthError(
-                error.message || 'Password reset failed',
-                response.status
-            );
+        try {
+            await apiClient.post<void>('/auth/password/reset', data, { skipAuth: true });
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
         }
     }
 
     /**
-     * Смена пароля (токен берется из cookies автоматически)
+     * Смена пароля
      */
     async changePassword(data: ChangePasswordRequest): Promise<void> {
         console.log('[Auth API] Changing password');
-
-        const response = await fetch(`${this.baseUrl}/password/change`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
-            throw new AuthError(
-                error.message || 'Password change failed',
-                response.status
-            );
+        try {
+            await apiClient.post<void>('/auth/password/change', data);
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
         }
     }
 
     /**
-     * Получить информацию о текущем пользователе (токен берется из cookies автоматически)
+     * Получить информацию о текущем пользователе (GET /auth/me)
      */
     async getMeFromCookies(): Promise<UserInfo> {
-        console.log('[Auth API] Getting current user info from cookies');
-
-        const response = await fetch(`${this.baseUrl}/me`, {
-            credentials: 'include',
-        });
-
-        return handleResponse<UserInfo>(response);
+        console.log('[Auth API] Getting current user info');
+        try {
+            return await apiClient.get<UserInfo>('/auth/me');
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 
     /**
-     * Получить количество активных сессий (токен берется из cookies автоматически)
+     * Получить количество активных сессий
      */
     async getSessions(): Promise<SessionsResponse> {
         console.log('[Auth API] Getting active sessions');
-
-        const response = await fetch(`${this.baseUrl}/sessions`, {
-            credentials: 'include',
-        });
-
-        return handleResponse<SessionsResponse>(response);
+        try {
+            return await apiClient.get<SessionsResponse>('/auth/sessions');
+        } catch (error) {
+            if (error instanceof ApiError) {
+                throw new AuthError(error.message, error.statusCode, error.errorCode);
+            }
+            throw error;
+        }
     }
 }
 

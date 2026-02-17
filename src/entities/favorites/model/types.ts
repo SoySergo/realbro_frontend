@@ -1,50 +1,106 @@
 /**
  * Типы для избранного
+ * Синхронизированы с BACKEND_API_DOCS.md (секции 13, 14)
  * Включает заметки, напоминания, сохраненные фильтры и профессионалов
  */
 
 import type { Property, PropertyAuthor } from '@/entities/property/model/types';
 
-// Заметка к объекту недвижимости
+// === Backend API Types (snake_case) ===
+
+/**
+ * Заметка к объекту недвижимости (бекенд формат)
+ * Эндпоинт: /api/v1/favorites/notes
+ */
 export interface PropertyNote {
     id: string;
-    propertyId?: string; // Опциональный - заметка может быть не привязана к объекту
-    userId: string;
-    text: string;
-    createdAt: Date;
-    updatedAt: Date;
-    reminder?: Reminder;
-    // Связанный объект для отображения в списке
+    user_id: string;
+    property_id: string;
+    content: string;
+    tags: string[];
+    note_type: 'property' | 'agency';
+    is_private: boolean;
+    reminder?: ReminderResponse;
+    created_at: string;
+    updated_at: string;
+    // Связанный объект для отображения в списке (опциональный, фронтенд)
     property?: Property;
     // Связанное агентство (если заметка об агентстве)
     agency?: PropertyAuthor;
-    // Тип заметки
-    type?: 'property' | 'agency' | 'general';
 }
 
-// Напоминание
-export interface Reminder {
+/**
+ * Напоминание (бекенд формат)
+ */
+export interface ReminderResponse {
     id: string;
-    noteId: string;
-    date: Date;
-    isCompleted: boolean;
-    notificationSent: boolean;
+    note_id: string;
+    remind_at: string;
+    completed_at?: string;
+    message: string;
+    is_notified: boolean;
 }
 
-// Профессионал (агент/агентство/владелец) в избранном
+/**
+ * Запрос на создание заметки
+ */
+export interface CreateNoteRequest {
+    property_id: string;
+    content: string;
+    tags?: string[];
+    note_type: 'property' | 'agency';
+    reminder_at?: string;
+    reminder_message?: string;
+}
+
+/**
+ * Запрос на обновление заметки
+ */
+export interface UpdateNoteRequest {
+    content?: string;
+    tags?: string[];
+}
+
+/**
+ * Профессионал (агент/агентство) в избранном (бекенд формат)
+ * Эндпоинт: /api/v1/favorites/professionals
+ */
 export interface FavoriteProfessional {
     id: string;
-    professional: PropertyAuthor;
-    addedAt: Date;
-    // Дополнительная статистика
-    activeListingsCount?: number;
-    avgResponseTime?: string;
-    // История взаимодействий
-    viewedAt?: Date; // Когда просматривалась страница агента
-    contactRequestedAt?: Date; // Когда запрашивали контакты
-    messagesSent?: number; // Количество отправленных сообщений
-    reviewWritten?: boolean; // Написан ли отзыв
+    user_id: string;
+    contact_id: string;
+    professional_type: 'agent' | 'agency';
+    // Inline-данные профессионала (бекенд возвращает inline)
+    name: string;
+    avatar_url?: string;
+    company_name?: string;
+    phone?: string;
+    notes: string;
+    contact_requested_at?: string;
+    messages_count: number;
+    properties_count: number;
+    created_at: string;
+    updated_at: string;
 }
+
+/**
+ * Запрос на добавление профессионала в избранное
+ */
+export interface CreateFavProfRequest {
+    contact_id: string;
+    professional_type: 'agent' | 'agency';
+}
+
+/**
+ * Запрос на обновление взаимодействий с профессионалом
+ */
+export interface UpdateInteractionsRequest {
+    contact_requested?: boolean;
+    increment_messages?: boolean;
+    notes?: string;
+}
+
+// === Frontend UI Types ===
 
 // Тип локации для сохраненного фильтра
 export type SavedFilterLocationType = 'search' | 'draw' | 'isochrone' | 'radius';
@@ -110,24 +166,6 @@ export interface FavoriteProperty {
     note?: PropertyNote;
     // Тип отметки (для фильтрации)
     markType?: 'like' | 'dislike' | 'unsorted';
-}
-
-// Типы для API запросов
-export interface CreateNoteRequest {
-    propertyId: string;
-    text: string;
-    reminderDate?: Date;
-}
-
-export interface UpdateNoteRequest {
-    id: string;
-    text?: string;
-    reminderDate?: Date | null;
-}
-
-export interface CreateReminderRequest {
-    noteId: string;
-    date: Date;
 }
 
 // Табы избранного

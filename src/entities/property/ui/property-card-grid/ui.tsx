@@ -25,6 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { PropertyNoteDialog } from '@/features/property-note';
 import type { PropertyGridCard } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
+import { useUserActionsStore } from '@/entities/user-actions';
 
 const MAX_HOVER_IMAGES = 6;
 const DEFAULT_METRO_LINE_COLOR = '#E50914';
@@ -104,13 +105,20 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
 
     const tActions = useTranslations('actions');
 
+    const { getReaction, setReaction: setStoreReaction } = useUserActionsStore();
+    const currentReaction = getReaction(property.id);
+
     const handleLike = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setLikeAnimating(true);
         setTimeout(() => setLikeAnimating(false), 500);
-        // Мок отправки на бекенд
-        toast.success(tActions('liked'), { duration: 2000 });
+        // Переключение: если уже like → сброс, иначе → like
+        const newReaction = currentReaction === 'like' ? null : 'like';
+        setStoreReaction(property.id, newReaction);
+        if (newReaction === 'like') {
+            toast.success(tActions('liked'), { duration: 2000 });
+        }
     };
 
     const handleDislike = (e: React.MouseEvent) => {
@@ -118,8 +126,12 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         e.stopPropagation();
         setDislikeAnimating(true);
         setTimeout(() => setDislikeAnimating(false), 500);
-        // Мок отправки на бекенд
-        toast(tActions('disliked'), { duration: 2000 });
+        // Переключение: если уже dislike → сброс, иначе → dislike
+        const newReaction = currentReaction === 'dislike' ? null : 'dislike';
+        setStoreReaction(property.id, newReaction);
+        if (newReaction === 'dislike') {
+            toast(tActions('disliked'), { duration: 2000 });
+        }
     };
 
     const formatPrice = (price: number): string => {
@@ -224,7 +236,12 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         {/* Слот для дополнительных действий (например, сравнение) */}
                         {actions}
                         <button
-                            className="w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full hover:bg-green-500/20 hover:text-green-600 text-muted-foreground transition-colors"
+                            className={cn(
+                                'w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full transition-colors',
+                                currentReaction === 'like'
+                                    ? 'bg-green-500/20 text-green-600'
+                                    : 'hover:bg-green-500/20 hover:text-green-600 text-muted-foreground'
+                            )}
                             onClick={handleLike}
                             title={t('like')}
                         >
@@ -233,7 +250,12 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             />
                         </button>
                         <button
-                            className="w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full hover:bg-red-500/20 hover:text-red-500 text-muted-foreground transition-colors"
+                            className={cn(
+                                'w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full transition-colors',
+                                currentReaction === 'dislike'
+                                    ? 'bg-red-500/20 text-red-500'
+                                    : 'hover:bg-red-500/20 hover:text-red-500 text-muted-foreground'
+                            )}
                             onClick={handleDislike}
                             title={t('dislike')}
                         >
