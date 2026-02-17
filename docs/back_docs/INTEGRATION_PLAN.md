@@ -239,7 +239,7 @@
 ## Фаза 2 — Property Detail + Enriched Listing + Иконки
 
 ### 2.1 · Расширить DTO Types
-- [ ] Добавить в `src/entities/property/model/api-types.ts`:
+- [x] Добавить в `src/entities/property/model/api-types.ts`:
   ```typescript
   interface PropertyEnrichedListingDTO extends PropertyShortListingDTO {
     characteristics: AttributeDTO[];
@@ -318,7 +318,7 @@
   ```
 
 ### 2.2 · Синхронизировать Property Entity Types
-- [ ] Обновить `src/entities/property/model/types.ts`
+- [x] Обновить `src/entities/property/model/types.ts`
 - Привести `Property` к snake_case
 - Убрать поля которых нет на бекенде: `amenities: string[]` (теперь `AttributeDTO[]`), `noCommission`, `exclusive` (в атрибутах), `features: PropertyFeature[]` (заменены на `characteristics`)
 - Добавить: `description_original`, `estate_info`, `energy_efficiency`, `tenants`, `seo_*`
@@ -326,19 +326,19 @@
 - **Проверить**: если у бекенда не хватает полей для группировки атрибутов (какие — удобства, какие — характеристики, какие — требования к арендатору) → записать в `BACKEND_REQUESTS.md`
 
 ### 2.3 · Dynamic Icon Component
-- [ ] Создать `src/shared/ui/dynamic-icon/ui.tsx`
+- [x] Создать `src/shared/ui/dynamic-icon/ui.tsx`
   ```typescript
   // <DynamicIcon name="bath" size={18} />
   // Бекенд шлёт icon_type (ключ lucide: 'bath', 'bed', 'ruler', ...)
   // Маппинг: { bath: Bath, bed: Bed, ruler: Ruler, ... } с fallback
   ```
-- [ ] Создать `src/shared/ui/dynamic-icon/icon-map.ts` — объект маппинга string → LucideIcon
+- [x] Создать `src/shared/ui/dynamic-icon/icon-map.ts` — объект маппинга string → LucideIcon
 - Ключи совпадают с теми, что уже используются на фронте (бекенд шлёт те же)
 - Fallback-иконка при неизвестном ключе (например `HelpCircle`)
 - **Не** dynamic import — статический маппинг для tree-shaking
 
 ### 2.4 · Обновить Property Detail Widget
-- [ ] Обновить `src/widgets/property-detail/ui.tsx`
+- [x] Обновить `src/widgets/property-detail/ui.tsx`
 - Рендерить `characteristics: AttributeDTO[]` через `<DynamicIcon name={attr.icon_type} />`
 - Показывать первые N атрибутов (например 3-4), рядом лейбл `+X` для раскрытия
 - Секции: характеристики, удобства, информация о здании, энергоэффективность, арендаторы — каждая с collapse
@@ -347,8 +347,8 @@
 - `author` → `AuthorLongDTO` с `object_count`, `rating`, `review_count`
 
 ### 2.5 · Обновить sub-components
-- [ ] `PropertyCharacteristics` — рендер `AttributeDTO[]` с `<DynamicIcon>`
-- [ ] `PropertyAmenitiesGrid` — рендер `amenities: AttributeDTO[]`
+- [x] `PropertyCharacteristics` — рендер `AttributeDTO[]` с `<DynamicIcon>`
+- [x] `PropertyAmenitiesGrid` — рендер `amenities: AttributeDTO[]`
 - [ ] Transport section — рендер `location.transport: NearestStationDTO[]`
 - [ ] Author card — `AuthorLongDTO` поля
 - [ ] Rental conditions — плоские поля `deposit_months`, `agency_fee`, `min_term`, `max_term`
@@ -361,7 +361,7 @@
 
 
 ### 3.1 · Обновить Filter Types
-- [ ] Обновить `src/entities/filter/model/types.ts`
+- [x] Обновить `src/entities/filter/model/types.ts`
 - Новая структура `SearchFilters`:
   ```typescript
   interface SearchFilters {
@@ -418,7 +418,7 @@
   ```
 
 ### 3.2 · Унифицировать mapAdminLevelToType
-- [ ] Оставить **единственную** реализацию в `src/entities/boundary/lib/boundary-utils.ts`
+- [x] Оставить **единственную** реализацию в `src/entities/boundary/lib/boundary-utils.ts`
 - Маппинг:
   ```typescript
   function adminLevelToLocationField(admin_level: number): string {
@@ -434,7 +434,7 @@
     }
   }
   ```
-- [ ] Удалить дубли из:
+- [x] Удалить дубли из:
   - `src/app/api/boundaries/search/route.ts`
   - `src/features/location-search-mode/lib/boundaries-helpers.ts`
   - `src/features/location-search-mode/ui/boundaries-sync/ui.tsx`
@@ -442,7 +442,7 @@
 - Все используют импорт из `@/entities/boundary`
 
 ### 3.3 · Обновить convert-filters
-- [ ] Обновить `src/entities/filter/lib/convert-filters.ts`
+- [x] Обновить `src/entities/filter/lib/convert-filters.ts`
 - `locationToFilters()` — группировка `locations_meta` по `admin_level` → `country_ids`, `city_ids`, etc.
 - `filtersToLocation()` — обратная конвертация
 - `filtersToQueryString(filters: SearchFilters): string` — формирует query params:
@@ -454,7 +454,7 @@
 - UUID массивы → CSV: `["uuid1", "uuid2"]` → `"uuid1,uuid2"`
 
 ### 3.4 · Обновить Filter Store
-- [ ] Обновить `src/widgets/search-filters-bar/model/store.ts`
+- [x] Обновить `src/widgets/search-filters-bar/model/store.ts`
 - `SearchFilters` с новыми именами полей
 - Убрать inline `mapAdminLevelToType` — импорт из `@/entities/boundary`
 - `convertFiltersToQuery()` → вызов `filtersToQueryString()`
@@ -462,14 +462,14 @@
 - Производительность: `shallow` comparison для предотвращения лишних ререндеров
 
 ### 3.5 · Обновить Feature-фильтры
-- [ ] `src/features/price-filter/` — поля `min_price`, `max_price`
-- [ ] `src/features/rooms-filter/` — поле `rooms: number[]`
-- [ ] `src/features/area-filter/` — поля `min_area`, `max_area`
-- [ ] `src/features/category-filter/` — поля `property_kind_ids`, `categories`, `sub_categories`
+- [x] `src/features/price-filter/` — поля `min_price`, `max_price`
+- [x] `src/features/rooms-filter/` — поле `rooms: number[]`
+- [x] `src/features/area-filter/` — поля `min_area`, `max_area`
+- [x] `src/features/category-filter/` — поля `property_kind_ids`, `categories`, `sub_categories`
 - [ ] `src/features/location-filter/` — поля `country_ids`...`neighborhood_ids`, `radius`, `radius_lat`, `radius_lng`, `polygon_ids`, `geojson`
-- [ ] `src/features/marker-type-filter/` — поле `exclude_marker_types`
-- [ ] `src/features/search-category/` — `property_types` (sale/rent)
-- [ ] Добавить `src/features/bathrooms-filter/` — поле `bathrooms: number[]` (новый фильтр)
+- [x] `src/features/marker-type-filter/` — поле `exclude_marker_types`
+- [x] `src/features/search-category/` — `property_types` (sale/rent)
+- [x] Добавить `src/features/bathrooms-filter/` — поле `bathrooms: number[]` (новый фильтр)
 
 ---
 

@@ -43,6 +43,39 @@ interface CharacteristicsTranslations {
     parkingTypes: Record<string, string>;
 }
 
+// Таблица атрибутов из бекенда (AttributeDTO[])
+function AttributesTable({
+    title,
+    attributes
+}: {
+    title: string;
+    attributes: AttributeDTO[];
+}) {
+    if (!attributes.length) return null;
+
+    return (
+        <div className="space-y-3">
+            <h3 className="font-semibold text-foreground text-lg">{title}</h3>
+            <div className="space-y-2">
+                {attributes.map((attr, index) => (
+                    <div
+                        key={`${attr.value}-${index}`}
+                        className="flex justify-between gap-4 text-sm py-2 border-b border-border/40 last:border-0"
+                    >
+                        <span className="flex items-center gap-2 text-muted-foreground">
+                            <DynamicIcon name={attr.icon_type} size={16} className="shrink-0" />
+                            {attr.label}
+                        </span>
+                        <span className="font-medium text-foreground text-right">
+                            {attr.value}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 interface PropertyCharacteristicsProps {
     property: Property;
     className?: string;
@@ -196,39 +229,6 @@ export function PropertyCharacteristics({
         }
     ].filter(c => c.show && c.value) : [];
 
-
-    // Таблица атрибутов из бекенда (AttributeDTO[])
-    const AttributesTable = ({
-        title,
-        attributes
-    }: {
-        title: string;
-        attributes: AttributeDTO[];
-    }) => {
-        if (!attributes.length) return null;
-
-        return (
-            <div className="space-y-3">
-                <h3 className="font-semibold text-foreground text-lg">{title}</h3>
-                <div className="space-y-2">
-                    {attributes.map((attr, index) => (
-                        <div
-                            key={`${attr.value}-${index}`}
-                            className="flex justify-between gap-4 text-sm py-2 border-b border-border/40 last:border-0"
-                        >
-                            <span className="flex items-center gap-2 text-muted-foreground">
-                                <DynamicIcon name={attr.icon_type} size={16} className="shrink-0" />
-                                {attr.label}
-                            </span>
-                            <span className="font-medium text-foreground text-right">
-                                {attr.value}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    };
 
     const CharacteristicsTable = ({
         title,
