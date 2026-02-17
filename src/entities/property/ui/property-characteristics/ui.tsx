@@ -1,5 +1,7 @@
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
+import type { AttributeDTO } from '@/entities/property/model/api-types';
+import { DynamicIcon } from '@/shared/ui/dynamic-icon';
 
 // SEO-critical component - NO 'use client' to ensure translations are in HTML
 
@@ -195,6 +197,39 @@ export function PropertyCharacteristics({
     ].filter(c => c.show && c.value) : [];
 
 
+    // Таблица атрибутов из бекенда (AttributeDTO[])
+    const AttributesTable = ({
+        title,
+        attributes
+    }: {
+        title: string;
+        attributes: AttributeDTO[];
+    }) => {
+        if (!attributes.length) return null;
+
+        return (
+            <div className="space-y-3">
+                <h3 className="font-semibold text-foreground text-lg">{title}</h3>
+                <div className="space-y-2">
+                    {attributes.map((attr, index) => (
+                        <div
+                            key={`${attr.value}-${index}`}
+                            className="flex justify-between gap-4 text-sm py-2 border-b border-border/40 last:border-0"
+                        >
+                            <span className="flex items-center gap-2 text-muted-foreground">
+                                <DynamicIcon name={attr.icon_type} size={16} className="shrink-0" />
+                                {attr.label}
+                            </span>
+                            <span className="font-medium text-foreground text-right">
+                                {attr.value}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const CharacteristicsTable = ({
         title,
         items
@@ -242,6 +277,28 @@ export function PropertyCharacteristics({
                     />
                 )}
             </div>
+
+            {/* Атрибуты из бекенда (AttributeDTO[]) */}
+            {property.characteristics && property.characteristics.length > 0 && (
+                <AttributesTable
+                    title={t.aboutFlat}
+                    attributes={property.characteristics}
+                />
+            )}
+
+            {property.estate_info && property.estate_info.length > 0 && (
+                <AttributesTable
+                    title={t.aboutBuilding}
+                    attributes={property.estate_info}
+                />
+            )}
+
+            {property.energy_efficiency && property.energy_efficiency.length > 0 && (
+                <AttributesTable
+                    title="Energy Efficiency"
+                    attributes={property.energy_efficiency}
+                />
+            )}
         </div>
     );
 }
