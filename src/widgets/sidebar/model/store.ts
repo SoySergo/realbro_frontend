@@ -74,7 +74,7 @@ function debouncedSaveToBackend(tabId: string, updates: Partial<SearchQuery>) {
             });
             console.log('[SYNC] Tab saved to backend:', tabId);
         } catch (error) {
-            console.error('[SYNC] Failed to save tab to backend:', error);
+            console.error('[SYNC] Failed to save tab to backend:', { tabId, error });
         }
     }, SAVE_DEBOUNCE_MS);
 }

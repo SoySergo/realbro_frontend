@@ -23,7 +23,7 @@ import {
     SelectValue,
 } from '@/shared/ui/select';
 import { useCurrentFilters, useViewModeActions } from '@/widgets/search-filters-bar';
-import { getPropertiesList, type PropertiesListResponse } from '@/shared/api';
+import { getPropertiesList, getPropertiesByIds, type PropertiesListResponse } from '@/shared/api';
 import type { PropertyGridCard } from '@/entities/property';
 import { PropertyCardGrid } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
@@ -162,7 +162,7 @@ export function MapSidebar({
             try {
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
-                    const { getPropertiesByIds } = await import('@/shared/api');
+                    
                     const data = await getPropertiesByIds(clusterPropertyIds);
                     setProperties(data);
                     setPagination({
@@ -499,7 +499,7 @@ export function MobileMapSidebar({
             try {
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
-                    const { getPropertiesByIds } = await import('@/shared/api');
+                    
                     const data = await getPropertiesByIds(clusterPropertyIds);
                     setProperties(data);
                     setPagination({

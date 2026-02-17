@@ -18,9 +18,6 @@ const PROPERTIES_LAYER_CLUSTERS = 'properties-clusters';
 const PROPERTIES_LAYER_CLUSTER_COUNT = 'properties-cluster-count';
 const PROPERTIES_LAYER_POINTS = 'properties-points';
 
-// Порог зума для кластеров (z ≤ 15 — кластеры, z > 15 — индивидуальные)
-const CLUSTER_ZOOM_THRESHOLD = 15;
-
 type SearchMapProps = {
     /** Начальный центр карты [lng, lat] */
     initialCenter?: [number, number];
@@ -53,6 +50,8 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     const { activeLocationMode } = useFilterStore();
     const currentFilters = useCurrentFilters();
     const layersInitializedRef = useRef(false);
+    const currentFiltersRef = useRef(currentFilters);
+    currentFiltersRef.current = currentFilters;
 
     /**
      * Инициализация MVT source и layers на карте
@@ -60,7 +59,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     const initializePropertyLayers = useCallback((map: mapboxgl.Map) => {
         if (layersInitializedRef.current) return;
 
-        const tileUrl = buildTileUrl(currentFilters);
+        const tileUrl = buildTileUrl(currentFiltersRef.current);
 
         // Добавляем vector tile source
         map.addSource(PROPERTIES_SOURCE, {
@@ -128,7 +127,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
         layersInitializedRef.current = true;
         console.log('[SearchMap] MVT tile layers initialized');
-    }, [currentFilters]);
+    }, []);
 
     // Колбэк при загрузке карты
     const handleMapLoad = useCallback((map: mapboxgl.Map) => {
@@ -168,10 +167,16 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
             if (properties?.property_ids) {
                 // Малые кластеры — property_ids в feature properties
-                const propertyIds = typeof properties.property_ids === 'string'
-                    ? JSON.parse(properties.property_ids)
-                    : properties.property_ids;
-                onClusterClick?.(propertyIds as string[]);
+                try {
+                    const propertyIds = typeof properties.property_ids === 'string'
+                        ? JSON.parse(properties.property_ids)
+                        : properties.property_ids;
+                    if (Array.isArray(propertyIds)) {
+                        onClusterClick?.(propertyIds as string[]);
+                    }
+                } catch {
+                    console.error('[SearchMap] Failed to parse property_ids from cluster feature');
+                }
             } else if (properties?.cluster_id) {
                 // Большие кластеры — зуммируем к кластеру
                 const geometry = feature.geometry;

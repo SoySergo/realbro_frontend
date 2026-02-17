@@ -23,9 +23,6 @@ export interface GeometryDTO {
     createdAt: string;
 }
 
-// NIL UUID для guest-геометрий
-const GUEST_FILTER_ID = '00000000-0000-0000-0000-000000000000';
-
 const MOCK_API_BASE = '/api/geometries';
 
 // === Реальный API (привязанные к фильтру) ===
@@ -160,8 +157,9 @@ export async function createGeometry(data: {
             : JSON.stringify(data.geometry);
 
         const result = await createGuestGeometry(geojsonStr);
+        const parsedId = parseInt(result.id);
         return {
-            id: parseInt(result.id) || Date.now(),
+            id: Number.isNaN(parsedId) ? Date.now() : parsedId,
             type: data.type,
             geometry: data.geometry,
             name: data.name || '',
