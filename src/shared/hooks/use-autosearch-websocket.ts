@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useAutosearchStore } from '@/features/autosearch';
+import { useAuthStore } from '@/features/auth/model/store';
 import type { AutosearchPropertyMessage, AutosearchProperty } from '@/entities/autosearch';
 import type { Property } from '@/entities/property';
 
@@ -9,7 +10,6 @@ export type AutosearchWebSocketStatus = 'connecting' | 'connected' | 'disconnect
 
 interface UseAutosearchWebSocketOptions {
     url?: string;
-    userId?: string;
     autoConnect?: boolean;
     reconnectInterval?: number;
     maxReconnectAttempts?: number;
@@ -41,15 +41,18 @@ export function useAutosearchWebSocket(
 ): UseAutosearchWebSocketReturn {
     const {
         url = typeof window !== 'undefined' 
-            ? `${window.location.protocol === 'https:' : 'wss:' : 'ws:'}//${window.location.host}/api/websocket/autosearch` 
+            ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/websocket/autosearch` 
             : '',
-        userId = 'current_user', // TODO: Получать из auth store
         autoConnect = true,
         reconnectInterval = 3000,
         maxReconnectAttempts = 5,
         heartbeatInterval = 30000,
         heartbeatTimeout = 10000,
     } = options;
+
+    // Получаем userId из auth store
+    const user = useAuthStore((state) => state.user);
+    const userId = user?.id;
 
     const [status, setStatus] = useState<AutosearchWebSocketStatus>('disconnected');
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
@@ -169,6 +172,7 @@ export function useAutosearchWebSocket(
     // Connect to WebSocket
     const connect = useCallback(() => {
         if (typeof window === 'undefined') return;
+        if (!userId) return;
         if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
         setStatus('connecting');

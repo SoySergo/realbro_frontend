@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Users, Phone, MessageSquare, Star, Trash2, CheckCircle, Eye, MessageCircle, ArrowUpDown } from 'lucide-react';
+import { Users, Phone, MessageSquare, Star, Trash2, Eye, MessageCircle, ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
@@ -61,14 +61,10 @@ export function FavoritesProfessionalsTabV2({
         if (filters.interactionType && filters.interactionType !== 'all') {
             result = result.filter((item) => {
                 switch (filters.interactionType) {
-                    case 'viewed':
-                        return item.viewedAt !== undefined;
                     case 'contacted':
-                        return item.contactRequestedAt !== undefined;
+                        return item.contact_requested_at !== undefined;
                     case 'messaged':
-                        return item.messagesSent && item.messagesSent > 0;
-                    case 'reviewed':
-                        return item.reviewWritten === true;
+                        return item.messages_count > 0;
                     default:
                         return true;
                 }
@@ -81,21 +77,17 @@ export function FavoritesProfessionalsTabV2({
 
             switch (filters.sortBy) {
                 case 'addedAt':
-                    comparison = new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+                    comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
                     break;
                 case 'lastInteraction':
-                    const aLastInteraction = Math.max(
-                        a.viewedAt?.getTime() || 0,
-                        a.contactRequestedAt?.getTime() || 0
-                    );
-                    const bLastInteraction = Math.max(
-                        b.viewedAt?.getTime() || 0,
-                        b.contactRequestedAt?.getTime() || 0
-                    );
+                    const aLastInteraction = a.contact_requested_at
+                        ? new Date(a.contact_requested_at).getTime() : 0;
+                    const bLastInteraction = b.contact_requested_at
+                        ? new Date(b.contact_requested_at).getTime() : 0;
                     comparison = aLastInteraction - bLastInteraction;
                     break;
                 case 'messagesCount':
-                    comparison = (a.messagesSent || 0) - (b.messagesSent || 0);
+                    comparison = (a.messages_count || 0) - (b.messages_count || 0);
                     break;
                 default:
                     comparison = 0;
@@ -196,7 +188,6 @@ export function FavoritesProfessionalsTabV2({
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {filteredProfessionals.map((favProfessional) => {
-                        const prof = favProfessional.professional;
                         return (
                             <div
                                 key={favProfessional.id}
@@ -205,9 +196,9 @@ export function FavoritesProfessionalsTabV2({
                                 <div className="flex items-start gap-4">
                                     {/* Аватар */}
                                     <Avatar className="w-16 h-16">
-                                        <AvatarImage src={safeImageSrc(prof.avatar)} />
+                                        <AvatarImage src={safeImageSrc(favProfessional.avatar_url || '')} />
                                         <AvatarFallback className="text-lg">
-                                            {prof.name.charAt(0)}
+                                            {favProfessional.name.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
 
@@ -215,63 +206,36 @@ export function FavoritesProfessionalsTabV2({
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap">
                                             <h3 className="font-semibold text-text-primary truncate">
-                                                {prof.name}
+                                                {favProfessional.name}
                                             </h3>
-                                            {prof.isVerified && (
-                                                <CheckCircle className="w-4 h-4 text-success shrink-0" />
-                                            )}
-                                            {prof.isSuperAgent && (
-                                                <Badge variant="secondary" className="text-xs">
-                                                    <Star className="w-3 h-3 mr-1" />
-                                                    {t('professionals.superAgent')}
-                                                </Badge>
-                                            )}
                                         </div>
 
                                         <p className="text-sm text-text-secondary">
-                                            {prof.type === 'agent' && t('professionals.agent')}
-                                            {prof.type === 'agency' && t('professionals.agency')}
-                                            {prof.type === 'owner' && t('professionals.owner')}
-                                            {prof.agencyName && prof.type !== 'agency' && ` • ${prof.agencyName}`}
+                                            {favProfessional.professional_type === 'agent' && t('professionals.agent')}
+                                            {favProfessional.professional_type === 'agency' && t('professionals.agency')}
+                                            {favProfessional.company_name && favProfessional.professional_type !== 'agency' && ` • ${favProfessional.company_name}`}
                                         </p>
 
                                         <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
-                                            {prof.objectsCount && (
+                                            {favProfessional.properties_count > 0 && (
                                                 <span>
-                                                    {t('professionals.activeListings', { count: prof.objectsCount })}
-                                                </span>
-                                            )}
-                                            {prof.yearsOnPlatform && (
-                                                <span>
-                                                    {t('professionals.yearsOnPlatform', { count: prof.yearsOnPlatform })}
+                                                    {t('professionals.activeListings', { count: favProfessional.properties_count })}
                                                 </span>
                                             )}
                                         </div>
 
                                         {/* История взаимодействий */}
                                         <div className="flex flex-wrap gap-2 mt-3">
-                                            {favProfessional.viewedAt && (
-                                                <Badge variant="outline" className="text-xs gap-1">
-                                                    <Eye className="w-3 h-3" />
-                                                    {t('professionals.viewed')} {format(favProfessional.viewedAt, 'd MMM', { locale: dateLocale })}
-                                                </Badge>
-                                            )}
-                                            {favProfessional.contactRequestedAt && (
+                                            {favProfessional.contact_requested_at && (
                                                 <Badge variant="outline" className="text-xs gap-1">
                                                     <Phone className="w-3 h-3" />
-                                                    {t('professionals.contactRequested')} {format(favProfessional.contactRequestedAt, 'd MMM', { locale: dateLocale })}
+                                                    {t('professionals.contactRequested')} {format(new Date(favProfessional.contact_requested_at), 'd MMM', { locale: dateLocale })}
                                                 </Badge>
                                             )}
-                                            {favProfessional.messagesSent && favProfessional.messagesSent > 0 && (
+                                            {favProfessional.messages_count > 0 && (
                                                 <Badge variant="outline" className="text-xs gap-1">
                                                     <MessageCircle className="w-3 h-3" />
-                                                    {t('professionals.messages', { count: favProfessional.messagesSent })}
-                                                </Badge>
-                                            )}
-                                            {favProfessional.reviewWritten && (
-                                                <Badge variant="outline" className="text-xs gap-1">
-                                                    <Star className="w-3 h-3" />
-                                                    {t('professionals.reviewWritten')}
+                                                    {t('professionals.messages', { count: favProfessional.messages_count })}
                                                 </Badge>
                                             )}
                                         </div>

@@ -570,28 +570,28 @@
 ## Фаза 6 — Auth, Профиль, Маркеры, Избранное, Автопоиск
 
 ### 6.1 · Auth → Bearer Token
-- [ ] Обновить `src/shared/api/auth.ts`
+- [x] Обновить `src/shared/api/auth.ts`
 - Централизовать на Bearer:
   - `access_token` хранится в Zustand store (in-memory, не persist — безопасность)
   - `refresh_token` — httpOnly cookie (бекенд устанавливает)
   - API-client подставляет `Authorization: Bearer {access_token}` из store
   - При 401 → вызов `POST /auth/refresh` → получение нового `access_token` → повтор запроса
-- [ ] Обновить `src/features/auth/model/store.ts`
+- [x] Обновить `src/features/auth/model/store.ts`
   - Хранить `access_token` + `user` (persist только `user` в localStorage)
   - `initAuth()`: попытка refresh → если ок → сохранить `access_token` + `user`
   - `login()` → сохранить `access_token` из `AuthResponse`
   - `logout()` → очистить `access_token`, вызвать `POST /auth/logout`
-- [ ] Google OAuth: `GET /auth/google/login?return_url=...` → редирект → callback
+- [x] Google OAuth: `GET /auth/google/login?return_url=...` → редирект → callback
 - **→ BACKEND_REQUESTS.md**: расширить `role` до `'user' | 'agent' | 'agency' | 'developer' | 'admin'`
 
 ### 6.2 · User Types
-- [ ] Обновить `src/entities/user/model/types.ts`
+- [x] Обновить `src/entities/user/model/types.ts`
 - Привести к snake_case, синхронизировать с `UserResponse`, `UserSettings`, `NotificationSettings`
 - Убрать `role: 'moderator'`
 - Добавить роли: `'user' | 'agent' | 'agency' | 'developer' | 'admin'` (→ BACKEND_REQUESTS.md)
 
 ### 6.3 · Markers API + UI
-- [ ] Создать `src/shared/api/markers.ts`
+- [x] Создать `src/shared/api/markers.ts`
   - `POST /markers` — установить маркер (`{ property_id, marker_type }`)
   - `GET /markers/:property_id` — получить маркер
   - `DELETE /markers/:property_id?type=like` — удалить
@@ -599,8 +599,8 @@
   - `GET /markers/stats` — статистика
   - `GET /markers/property-ids?types=like,saved` — ID объектов
 - Типы: `like`, `dislike`, `saved`, `hidden`, `to_review`, `to_think`
-- [ ] Обновить `src/entities/user-actions/model/store.ts` — подключить реальный API
-- [ ] Обновить UI карточек:
+- [x] Обновить `src/entities/user-actions/model/store.ts` — подключить реальный API
+- [x] Обновить UI карточек:
   - Убрать дублирующуюся логику like/dislike из `property-card-grid/ui.tsx` и `property-card-horizontal/ui.tsx`
   - Использовать централизованный `useUserActionsStore`
   - Добавить 3-dot меню (⋮) с действиями: `saved`, `hidden`, `to_review`, `to_think`
@@ -608,33 +608,33 @@
   - Тестировать UX: inline кнопки vs dropdown vs swipe (mobile)
 
 ### 6.4 · Favorites (Notes + Professionals)
-- [ ] Обновить `src/entities/favorites/model/types.ts`
+- [x] Обновить `src/entities/favorites/model/types.ts`
   - `PropertyNote`: `text` → `content`, добавить `property_id` (required), `tags: string[]`
   - `FavoriteProfessional`: хранить `contact_id` + `professional_type`, данные автора подтягиваются
   - Недостающие поля → BACKEND_REQUESTS.md
-- [ ] API: подключить `/api/v1/favorites/notes`, `/api/v1/favorites/professionals`
+- [x] API: подключить `/api/v1/favorites/notes`, `/api/v1/favorites/professionals`
 
 ### 6.5 · Autosearch + WebSocket Online
-- [ ] Обновить `src/entities/autosearch/model/types.ts`
+- [x] Обновить `src/entities/autosearch/model/types.ts`
   - Сохранить `frequency: 'online'` (→ BACKEND_REQUESTS.md для поддержки на бекенде)
   - Привязка к `filter_id`
-- [ ] Обновить `src/shared/hooks/use-autosearch-websocket.ts`
+- [x] Обновить `src/shared/hooks/use-autosearch-websocket.ts`
   - Режим **online**: если пользователь онлайн + автоподбор активен → держать WS-соединение на `autosearch:user_{id}`
   - Новые объекты пушатся в реальном времени → уведомление + добавление в ленту
   - Режим **offline**: бекенд пушит push-уведомление / telegram (серверная логика)
-- [ ] API: `POST/GET/PUT/DELETE /api/v1/autosearch`, `/api/v1/autosearch/:id/activate|deactivate`
+- [x] API: `POST/GET/PUT/DELETE /api/v1/autosearch`, `/api/v1/autosearch/:id/activate|deactivate`
 
 ### 6.6 · Views (Просмотры)
-- [ ] Создать `src/shared/api/views.ts`
+- [x] Создать `src/shared/api/views.ts`
   - `POST /views/:property_id` — записать просмотр при открытии detail
   - `GET /views` — история с cursor
   - `POST /views/unseen` — проверить непросмотренные из списка ID
 
 ### 6.7 · Subscriptions & Payments
-- [ ] Создать `src/shared/api/subscriptions.ts`
+- [x] Создать `src/shared/api/subscriptions.ts`
   - `GET /subscription/plans`, `/subscription/current`
   - `POST /subscription/change`, `/subscription/cancel`
-- [ ] Создать `src/shared/api/payments.ts`
+- [x] Создать `src/shared/api/payments.ts`
   - `GET /payments/history`, `/payments/methods`
   - `POST /payments/methods`, `DELETE /payments/methods/:id`
 

@@ -162,18 +162,18 @@ export function PropertyNoteField({
                             <div className="flex items-start justify-between gap-2">
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm text-text-primary whitespace-pre-wrap">
-                                        {savedNote.text}
+                                        {savedNote.content}
                                     </p>
                                     <div className="flex items-center gap-3 mt-2">
                                         <span className="text-xs text-text-tertiary">
-                                            {format(new Date(savedNote.createdAt), 'd MMM yyyy, HH:mm', {
+                                            {format(new Date(savedNote.created_at), 'd MMM yyyy, HH:mm', {
                                                 locale: dateLocales[locale] || enUS,
                                             })}
                                         </span>
                                         {savedNote.reminder && (
                                             <span className="inline-flex items-center gap-1 text-xs text-brand-primary">
                                                 <Bell className="w-3 h-3" />
-                                                {formatReminderDate(savedNote.reminder.date)}
+                                                {formatReminderDate(new Date(savedNote.reminder.remind_at))}
                                             </span>
                                         )}
                                     </div>

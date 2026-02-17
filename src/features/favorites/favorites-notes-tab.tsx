@@ -114,22 +114,22 @@ export function FavoritesNotesTab({
 
                             {/* Текст заметки */}
                             <p className="text-sm text-text-secondary line-clamp-2 mb-2">
-                                {note.text}
+                                {note.content}
                             </p>
 
                             {/* Мета информация */}
                             <div className="flex items-center gap-4 text-xs text-text-tertiary">
                                 <span className="flex items-center gap-1">
                                     <Clock className="w-3 h-3" />
-                                    {formatDate(note.updatedAt)}
+                                    {formatDate(new Date(note.updated_at))}
                                 </span>
                                 {note.reminder && (
                                     <Badge 
-                                        variant={new Date(note.reminder.date) < new Date() ? 'destructive' : 'secondary'}
+                                        variant={new Date(note.reminder.remind_at) < new Date() ? 'destructive' : 'secondary'}
                                         className="text-xs"
                                     >
                                         <Bell className="w-3 h-3 mr-1" />
-                                        {formatReminderDate(note.reminder.date)}
+                                        {formatReminderDate(new Date(note.reminder.remind_at))}
                                     </Badge>
                                 )}
                             </div>
