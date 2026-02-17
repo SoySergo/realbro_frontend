@@ -415,6 +415,7 @@ POST /api/v1/properties/550e8400-.../similar
 | `polygon_ids` | string (csv UUID) | `uuid1,uuid2` | ID сохранённых геометрий фильтров |
 | `include_ids` | string (csv UUID) | `uuid1,uuid2` | Включить только эти объекты |
 | `exclude_ids` | string (csv UUID) | `uuid1,uuid2` | Исключить эти объекты |
+| `viewed` | boolean | `true` или `false` | Фильтр по просмотренности (только для авторизованных) |
 | `sort_by` | string | `price` | Поле сортировки |
 | `sort_order` | string | `asc` | Направление: `asc` или `desc` |
 | `limit` | int | `20` | Размер страницы (1–100, default: 20) |
@@ -914,14 +915,14 @@ interface CreateAutosearchRequest {
   filter_id: string;                            // UUID, required
   name: string;                                 // required, max 100
   notification_channels: ("email" | "push" | "telegram")[];  // required, min 1
-  send_frequency: "instant" | "daily" | "weekly";            // required
+  send_frequency: "online" | "instant" | "daily" | "weekly";            // required
   is_active: boolean;
 }
 
 interface UpdateAutosearchRequest {
   name?: string;
   notification_channels?: string[];
-  send_frequency?: "instant" | "daily" | "weekly";
+  send_frequency?: "online" | "instant" | "daily" | "weekly";
 }
 
 interface AutosearchResponse {
@@ -1117,6 +1118,10 @@ interface FavoriteProfessionalResponse {
   user_id: string;
   contact_id: string;
   professional_type: "agent" | "agency";
+  name: string;
+  avatar_url?: string;
+  company_name?: string;
+  phone?: string;
   notes: string;
   contact_requested_at?: string;
   messages_count: number;
@@ -1387,7 +1392,7 @@ interface TelegramNotifications {
 interface UserResponse {
   id: string;
   email: string;
-  role: "user" | "admin";
+  role: "user" | "agent" | "agency" | "developer" | "admin";
   is_active: boolean;
   settings: UserSettings;
   created_at: string;
@@ -1575,6 +1580,9 @@ interface ErrorResponse {
 | `GET` | `/properties/by-slug/:slug` | Детали по slug *(auth optional)* |
 | `POST` | `/properties/:id/similar` | Похожие |
 | `GET` | `/properties/tiles/:z/:x/:y.pbf` | MVT тайлы |
+| `POST` | `/filters/guest/geometry` | Создать guest-геометрию (без авторизации) |
+| `GET` | `/filters/guest/geometry/:id` | Получить guest-геометрию (без авторизации) |
+| `DELETE` | `/filters/guest/geometry/:id` | Удалить guest-геометрию (без авторизации) |
 | `GET` | `/dictionaries/categories` | Категории |
 | `GET` | `/dictionaries/categories/:id/subcategories` | Подкатегории |
 | `GET` | `/dictionaries/attributes` | Атрибуты |
