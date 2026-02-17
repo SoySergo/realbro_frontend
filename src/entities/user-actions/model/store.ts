@@ -91,6 +91,9 @@ export const useUserActionsStore = create<UserActionsStore>()(
             
             // Сеттеры — обновляют локальное состояние и отправляют на бекенд
             setReaction: (propertyId: string, reaction: PropertyReaction) => {
+                // Запоминаем предыдущую реакцию перед обновлением
+                const prevReaction = get().reactions[propertyId]?.reaction ?? null;
+
                 // Обновляем локально сразу (optimistic update)
                 set((state) => {
                     const newReactions = { ...state.reactions };
@@ -115,9 +118,11 @@ export const useUserActionsStore = create<UserActionsStore>()(
                             (error) => console.error('[UserActions] Failed to set marker:', error)
                         );
                     } else {
-                        // Удаляем оба типа маркеров при сбросе реакции
-                        deleteMarker(propertyId, 'like').catch(() => {});
-                        deleteMarker(propertyId, 'dislike').catch(() => {});
+                        // Удаляем предыдущий маркер при сбросе реакции
+                        const prevMarkerType = reactionToMarkerType(prevReaction);
+                        if (prevMarkerType) {
+                            deleteMarker(propertyId, prevMarkerType).catch(() => {});
+                        }
                     }
                 }
             },
