@@ -1,9 +1,13 @@
 import type { SearchFilters } from '@/entities/filter';
 import type { Property, PropertyGridCard } from '@/entities/property';
+import type { PropertyShortListingDTO } from '@/entities/property/model/api-types';
+import { dtosToGridCards } from '@/entities/property/model/converters';
+import type { CursorPaginatedResponse } from './types';
 import { generateMockGridCardsPage, generateMockProperty } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
 
 const API_BASE = process.env.BACKEND_URL || 'http://localhost:3001/api';
+const API_V1_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 export interface PropertiesListResponse {
     data: PropertyGridCard[];
@@ -19,12 +23,12 @@ export interface PropertiesListParams {
     filters: SearchFilters;
     page?: number;
     limit?: number;
-    sortBy?: 'price' | 'area' | 'createdAt';
+    sortBy?: 'price' | 'area' | 'createdAt' | 'published_at';
     sortOrder?: 'asc' | 'desc';
 }
 
 /**
- * Сериализация фильтров в URLSearchParams
+ * Сериализация фильтров в URLSearchParams (legacy)
  */
 function serializeFilters(filters: SearchFilters, params: URLSearchParams): void {
     if (filters.minPrice) params.set('minPrice', String(filters.minPrice));
@@ -49,8 +53,33 @@ function serializeFilters(filters: SearchFilters, params: URLSearchParams): void
 }
 
 /**
+ * Сериализация фильтров для реального API (snake_case)
+ */
+function serializeFiltersForBackend(filters: SearchFilters, params: URLSearchParams): void {
+    if (filters.dealType) params.set('property_types', filters.dealType);
+    if (filters.categoryIds?.length) params.set('categories', filters.categoryIds.join(','));
+    if (filters.minPrice) params.set('min_price', String(filters.minPrice));
+    if (filters.maxPrice) params.set('max_price', String(filters.maxPrice));
+    if (filters.minArea) params.set('min_area', String(filters.minArea));
+    if (filters.maxArea) params.set('max_area', String(filters.maxArea));
+    if (filters.rooms?.length) params.set('rooms', filters.rooms.join(','));
+
+    // Локации по admin_level
+    if (filters.adminLevel2?.length) params.set('country_ids', filters.adminLevel2.join(','));
+    if (filters.adminLevel4?.length) params.set('region_ids', filters.adminLevel4.join(','));
+    if (filters.adminLevel6?.length) params.set('province_ids', filters.adminLevel6.join(','));
+    const cityIds = [...(filters.adminLevel7 || []), ...(filters.adminLevel8 || [])];
+    if (cityIds.length) params.set('city_ids', cityIds.join(','));
+    if (filters.adminLevel9?.length) params.set('district_ids', filters.adminLevel9.join(','));
+    if (filters.adminLevel10?.length) params.set('neighborhood_ids', filters.adminLevel10.join(','));
+
+    if (filters.geometryIds?.length) params.set('polygon_ids', filters.geometryIds.join(','));
+}
+
+/**
  * Серверная функция для получения списка объектов (для ISR/SSR)
  * Используется в Server Components
+ * SSR: увеличенный limit=60 для SEO
  */
 export async function getPropertiesListServer(
     params: PropertiesListParams
@@ -64,6 +93,42 @@ export async function getPropertiesListServer(
             includeAuthor: true,
             includeTransport: true
         });
+    }
+
+    // Реальный API с cursor-пагинацией
+    if (FEATURES.USE_REAL_PROPERTIES) {
+        try {
+            const searchParams = new URLSearchParams();
+            // SSR: увеличенный limit для SEO
+            searchParams.set('limit', String(Math.max(limit, 60)));
+            const sort_by = sortBy === 'createdAt' ? 'published_at' : sortBy;
+            searchParams.set('sort_by', sort_by);
+            searchParams.set('sort_order', sortOrder);
+            serializeFiltersForBackend(filters, searchParams);
+
+            const response = await fetch(
+                `${API_V1_BASE}/api/v1/properties/short-listing?${searchParams.toString()}`,
+                { next: { revalidate: 60 } }
+            );
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const cursorResponse: CursorPaginatedResponse<PropertyShortListingDTO> = await response.json();
+            return {
+                data: dtosToGridCards(cursorResponse.data),
+                pagination: {
+                    page: 1,
+                    limit: cursorResponse.pagination.limit,
+                    total: cursorResponse.pagination.total,
+                    totalPages: Math.ceil(cursorResponse.pagination.total / cursorResponse.pagination.limit),
+                },
+            };
+        } catch (error) {
+            console.error('[API Server] Failed to get properties list from real API:', error);
+            throw error;
+        }
     }
 
     try {
@@ -100,6 +165,28 @@ export async function getPropertiesCountServer(filters: SearchFilters): Promise<
     // Return mock immediately if mock mode is enabled
     if (FEATURES.USE_MOCK_PROPERTIES) {
         return 500;
+    }
+
+    // Реальный API
+    if (FEATURES.USE_REAL_PROPERTIES) {
+        try {
+            const params = new URLSearchParams();
+            serializeFiltersForBackend(filters, params);
+
+            const response = await fetch(`${API_V1_BASE}/api/v1/properties/count?${params.toString()}`, {
+                next: { revalidate: 60 },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.data?.count ?? data.count;
+        } catch (error) {
+            console.error('[API Server] Failed to get properties count from real API:', error);
+            throw error;
+        }
     }
 
     try {

@@ -8,6 +8,9 @@ export * from './search-queries';
 export * from './geometries';
 export * from './contacts';
 
+// API Client
+export { apiClient, ApiError, setAccessToken, getAccessToken } from './lib/api-client';
+
 // Property detail mock/real API
 export {
     getPropertyDetailById,
