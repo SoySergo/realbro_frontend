@@ -86,3 +86,23 @@ export const getLocationType = (adminLevel?: number): string => {
 export const getWikidataId = (boundary: BoundaryFeature): string | undefined => {
     return boundary.properties.wikidata;
 };
+
+/**
+ * Маппинг admin_level на поля бекенд-фильтров (snake_case)
+ * Единственная версия в проекте — все дубли должны импортировать отсюда
+ * 
+ * admin_level 7 и 8 оба маппятся на city_ids —
+ * бекенд принимает и комарки и города в одном параметре
+ */
+export function adminLevelToLocationField(admin_level: number): string {
+    switch (admin_level) {
+        case 2: return 'country_ids';
+        case 4: return 'region_ids';
+        case 6: return 'province_ids';
+        case 7:
+        case 8: return 'city_ids';
+        case 9: return 'district_ids';
+        case 10: return 'neighborhood_ids';
+        default: return 'city_ids';
+    }
+}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import env from '@/shared/config/env';
+import { getLocationType } from '@/entities/boundary';
 
 /**
  * API для поиска границ (boundaries) по названию
@@ -15,29 +16,6 @@ interface SearchResult {
     center_lat: number;
     center_lon: number;
     area_sq_km?: number;
-}
-
-// Типы для фронтенда
-type LocationType = 'country' | 'province' | 'city' | 'district' | 'neighborhood';
-
-// Маппинг admin_level в тип локации
-function mapAdminLevelToType(adminLevel?: number): LocationType {
-    if (!adminLevel) return 'city';
-
-    switch (adminLevel) {
-        case 2:
-            return 'country';
-        case 4:
-            return 'province';
-        case 6:
-            return 'city';
-        case 8:
-            return 'district';
-        case 10:
-            return 'neighborhood';
-        default:
-            return 'city';
-    }
 }
 
 export async function GET(request: NextRequest) {
@@ -97,7 +75,7 @@ export async function GET(request: NextRequest) {
             const transformedResults = data.results.map((result: SearchResult) => ({
                 id: parseInt(result.id),
                 name: result.name,
-                type: mapAdminLevelToType(result.admin_level),
+                type: getLocationType(result.admin_level),
                 centerLat: result.center_lat,
                 centerLon: result.center_lon,
                 areaSqKm: result.area_sq_km,
@@ -113,7 +91,7 @@ export async function GET(request: NextRequest) {
             const transformedResults = data.map((result: SearchResult) => ({
                 id: parseInt(result.id),
                 name: result.name,
-                type: mapAdminLevelToType(result.admin_level),
+                type: getLocationType(result.admin_level),
                 centerLat: result.center_lat,
                 centerLon: result.center_lon,
                 areaSqKm: result.area_sq_km,
