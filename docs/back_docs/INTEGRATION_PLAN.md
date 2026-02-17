@@ -476,7 +476,7 @@
 ## Фаза 4 — Карта (MVT Тайлы + Кластеры + Сайдбар)
 
 ### 4.1 · MVT Tile Source
-- [ ] Обновить `src/features/map/` — vector tile source:
+- [x] Обновить `src/features/map/` — vector tile source:
   ```typescript
   map.addSource('properties', {
     type: 'vector',
@@ -490,29 +490,29 @@
 - При изменении фильтров — обновлять URL source и делать `map.getSource('properties').setTiles([...])`
 
 ### 4.2 · Кластеры
-- [ ] Логика кластеризации: `z ≤ 15` — кластеры (бекенд группирует), `z > 15` — индивидуальные точки
-- [ ] При клике на кластер:
+- [x] Логика кластеризации: `z ≤ 15` — кластеры (бекенд группирует), `z > 15` — индивидуальные точки
+- [x] При клике на кластер:
   1. Забрать `property_ids` из feature properties тайла
   2. Запросить `GET /api/v1/properties/short-listing?include_ids=id1,id2,...`
   3. Отобразить в sidebar через виртуализированный список (нужно учитывать что если объектов много, то делить доп и запрашивать при прокрутке сайдбара)
-- [ ] При клике на индивидуальную точку — popup с кратким описанием или переход в detail (карточка как в grid стиле на листинге или в сайдбаре. Запрашиваем та к же как для кластера, просто в массив айди 1 даём)
+- [x] При клике на индивидуальную точку — popup с кратким описанием или переход в detail (карточка как в grid стиле на листинге или в сайдбаре. Запрашиваем та к же как для кластера, просто в массив айди 1 даём)
 
 ### 4.3 · Sidebar (Map)
-- [ ] Обновить `src/widgets/map-sidebar/` — типы карточек = `PropertyShortListingDTO`
-- [ ] Виртуализация уже есть (`react-window`) — синхронизировать типы
-- [ ] Infinite scroll в sidebar: cursor-пагинация при скролле вниз
+- [x] Обновить `src/widgets/map-sidebar/` — типы карточек = `PropertyShortListingDTO`
+- [x] Виртуализация уже есть (`react-window`) — синхронизировать типы
+- [x] Infinite scroll в sidebar: cursor-пагинация при скролле вниз
 
 ### 4.4 · Boundaries
-- [ ] Boundaries остаются на текущем сервисе (separate location service)
-- [ ] Унифицировать маппинг `admin_level` через единую функцию (п.3.2)
-- [ ] `src/app/api/boundaries/search/route.ts` — убрать дубль маппинга
+- [x] Boundaries остаются на текущем сервисе (separate location service)
+- [x] Унифицировать маппинг `admin_level` через единую функцию (п.3.2)
+- [x] `src/app/api/boundaries/search/route.ts` — убрать дубль маппинга
 
 ---
 
 ## Фаза 5 — Search Tabs + Сохранённые фильтры + Геометрии
 
 ### 5.1 · Обновить Tab Types
-- [ ] Обновить `src/widgets/sidebar/model/types.ts`
+- [x] Обновить `src/widgets/sidebar/model/types.ts`
 - Расширить `SearchQuery`:
   ```typescript
   interface SearchQuery {
@@ -538,7 +538,7 @@
 - При переключении табов → фильтры из таба применяются в `useSearchFiltersStore` → обновляется запрос объектов и тайлов
 
 ### 5.2 · Обновить API Search Tabs
-- [ ] Обновить `src/shared/api/search-queries.ts`
+- [x] Обновить `src/shared/api/search-queries.ts`
 - CRUD: `GET/POST/PUT/DELETE /api/v1/search-tabs`
 - `POST /api/v1/search-tabs/reorder` — изменение порядка
 - `POST /api/v1/search-tabs/:id/usage` — отметка использования
@@ -547,7 +547,7 @@
 - **→ BACKEND_REQUESTS.md**: объединить tabs и saved filters — каждый таб содержит свой фильтр. Инициализация фильтра при создании таба.
 
 ### 5.3 · Геометрии
-- [ ] Обновить `src/shared/api/geometries.ts`
+- [x] Обновить `src/shared/api/geometries.ts`
 - Эндпоинт: `POST/GET/PUT/DELETE /api/v1/filters/:filter_id/geometry`
 - `id: string` (UUID)
 - **Неавторизованные**: `filter_id = "0"` (временная геометрия, очищается)
@@ -555,7 +555,7 @@
 - Фронтенд при создании вкладки → инициализирует фильтр → привязывает геометрию к фильтру
 
 ### 5.4 · Sidebar Store Sync
-- [ ] Обновить `src/widgets/sidebar/model/store.ts`
+- [x] Обновить `src/widgets/sidebar/model/store.ts`
 - При переключении таба:
   1. `setActiveQuery(tabId)` → загрузить фильтры таба
   2. `useSearchFiltersStore.getState().setFilters(tab.filters)` → применить

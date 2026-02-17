@@ -28,6 +28,17 @@ export type SearchQuery = {
     isUnsaved?: boolean; // Флаг несохранённой вкладки (для новых вкладок)
     hasAiAgent?: boolean; // Привязан ли ИИ-агент к вкладке
     aiAgentStatus?: AiAgentStatus; // Статус работы ИИ-агента
+    // Поля из бекенд TabResponse
+    view_mode?: string; // 'map' | 'list'
+    listing_view_mode?: string; // режим карточек
+    map_state?: Record<string, unknown>; // zoom, center и т.д.
+    is_pinned?: boolean; // закреплённая вкладка
+    is_default?: boolean; // дефолтная вкладка
+    folder_id?: string; // ID папки
+    usage_count?: number; // счётчик использований
+    description?: string; // описание вкладки
+    icon?: string; // иконка вкладки
+    color?: string; // цвет вкладки
     createdAt: Date;
     lastUpdated: Date;
 };
@@ -58,3 +69,50 @@ export type UserSubscription = {
     aiAgentEnabled: boolean;
     expiresAt: string | null; // ISO string
 };
+
+// === Бекенд DTO типы ===
+
+// Ответ бекенда для вкладки поиска
+export interface TabResponseDTO {
+    id: string;
+    userId: string;
+    folderId?: string;
+    filterId?: string; // ID связанного сохранённого фильтра
+    title: string;
+    description?: string;
+    icon?: string;
+    color?: string;
+    filters: Record<string, unknown>; // JSON — параметры фильтра
+    viewMode: string;
+    listingViewMode?: string;
+    sort?: string;
+    sortOrder?: string;
+    mapState?: Record<string, unknown>; // JSON — zoom, center и т.д.
+    isPinned: boolean;
+    isDefault: boolean;
+    resultsCount?: number;
+    lastUsedAt: string; // ISO 8601
+    usageCount: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// Ответ бекенда для папки вкладок
+export interface FolderResponseDTO {
+    id: string;
+    userId: string;
+    name: string;
+    icon?: string;
+    color?: string;
+    sortPosition: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// Ответ бекенда для списка вкладок + папок
+export interface TabsListResponseDTO {
+    data: {
+        tabs: TabResponseDTO[];
+        folders: FolderResponseDTO[];
+    };
+}

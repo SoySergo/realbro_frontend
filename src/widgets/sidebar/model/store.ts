@@ -3,9 +3,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SearchQuery, AiAgentStatus } from './types';
+import { FEATURES } from '@/shared/config/features';
 
 // ID дефолтной вкладки поиска — не удаляется
 export const DEFAULT_SEARCH_QUERY_ID = 'default_search';
+
+// Таймер для debounced сохранения на бекенд
+let saveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+const SAVE_DEBOUNCE_MS = 1500;
 
 type SidebarStore = {
     // Состояние раскрытия
@@ -24,6 +29,9 @@ type SidebarStore = {
     updateQuery: (id: string, updates: Partial<SearchQuery>) => void;
     saveQuery: (id: string, title: string) => void;
 
+    // Синхронизация с фильтрами
+    syncFiltersToTab: (tabId: string, filters: Record<string, unknown>) => void;
+
     // ИИ-агент
     setAiAgent: (queryId: string, status: AiAgentStatus) => void;
 
@@ -41,9 +49,35 @@ const createDefaultSearchQuery = (): SearchQuery => ({
     queryType: 'search',
     filters: {},
     isUnsaved: false,
+    is_default: true,
     createdAt: new Date(),
     lastUpdated: new Date(),
 });
+
+/**
+ * Debounced сохранение таба на бекенд
+ */
+function debouncedSaveToBackend(tabId: string, updates: Partial<SearchQuery>) {
+    if (!FEATURES.USE_REAL_TABS) return;
+    if (tabId === DEFAULT_SEARCH_QUERY_ID) return;
+
+    if (saveDebounceTimer) {
+        clearTimeout(saveDebounceTimer);
+    }
+
+    saveDebounceTimer = setTimeout(async () => {
+        try {
+            const { updateSearchQuery } = await import('@/shared/api/search-queries');
+            await updateSearchQuery(tabId, {
+                title: updates.title,
+                filters: updates.filters,
+            });
+            console.log('[SYNC] Tab saved to backend:', tabId);
+        } catch (error) {
+            console.error('[SYNC] Failed to save tab to backend:', { tabId, error });
+        }
+    }, SAVE_DEBOUNCE_MS);
+}
 
 export const useSidebarStore = create<SidebarStore>()(
     persist(
@@ -123,6 +157,26 @@ export const useSidebarStore = create<SidebarStore>()(
                             : q
                     ),
                 }));
+
+                // Сохраняем на бекенд
+                const query = get().queries.find(q => q.id === id);
+                if (query) {
+                    debouncedSaveToBackend(id, { title, filters: query.filters });
+                }
+            },
+
+            // Синхронизация фильтров в таб (вызывается из filterStore)
+            syncFiltersToTab: (tabId, filters) => {
+                set((state) => ({
+                    queries: state.queries.map((q) =>
+                        q.id === tabId
+                            ? { ...q, filters: filters as SearchQuery['filters'], lastUpdated: new Date() }
+                            : q
+                    ),
+                }));
+
+                // Debounced сохранение на бекенд
+                debouncedSaveToBackend(tabId, { filters: filters as SearchQuery['filters'] });
             },
 
             // Обновление статуса ИИ-агента на вкладке
