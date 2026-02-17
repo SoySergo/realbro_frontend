@@ -2,12 +2,19 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { FEATURES } from '@/shared/config/features';
+import {
+    setMarker,
+    deleteMarker,
+    getMarkerPropertyIds,
+    type MarkerType,
+} from '@/shared/api/markers';
 import type { PropertyReaction, StoredReactions, StoredNotes } from './types';
 
 /**
  * Централизованный store для действий пользователя
  * Управляет лайками, дизлайками и заметками
- * Синхронизируется с localStorage и бекендом
+ * Синхронизируется с localStorage и бекендом (через Markers API)
  */
 interface UserActionsStore {
     // Состояние
@@ -33,10 +40,22 @@ interface UserActionsStore {
     setReactions: (reactions: StoredReactions) => void;
     setNotes: (notes: StoredNotes) => void;
     
+    // Синхронизация с бекендом
+    syncFromBackend: () => Promise<void>;
+    
     // Служебные методы
     setLoading: (isLoading: boolean) => void;
     setSyncing: (isSyncing: boolean) => void;
     clearAll: () => void;
+}
+
+/**
+ * Конвертация PropertyReaction в MarkerType для бекенда
+ */
+function reactionToMarkerType(reaction: PropertyReaction): MarkerType | null {
+    if (reaction === 'like') return 'like';
+    if (reaction === 'dislike') return 'dislike';
+    return null;
 }
 
 export const useUserActionsStore = create<UserActionsStore>()(
@@ -70,16 +89,18 @@ export const useUserActionsStore = create<UserActionsStore>()(
                 return note != null && note.text.trim().length > 0;
             },
             
-            // Сеттеры
+            // Сеттеры — обновляют локальное состояние и отправляют на бекенд
             setReaction: (propertyId: string, reaction: PropertyReaction) => {
+                // Запоминаем предыдущую реакцию перед обновлением
+                const prevReaction = get().reactions[propertyId]?.reaction ?? null;
+
+                // Обновляем локально сразу (optimistic update)
                 set((state) => {
                     const newReactions = { ...state.reactions };
                     
                     if (reaction === null) {
-                        // Удалить реакцию
                         delete newReactions[propertyId];
                     } else {
-                        // Установить/обновить реакцию
                         newReactions[propertyId] = {
                             reaction,
                             updatedAt: new Date().toISOString(),
@@ -88,6 +109,22 @@ export const useUserActionsStore = create<UserActionsStore>()(
                     
                     return { reactions: newReactions };
                 });
+
+                // Синхронизируем с бекендом если включен реальный API
+                if (FEATURES.USE_REAL_MARKERS) {
+                    const markerType = reactionToMarkerType(reaction);
+                    if (markerType) {
+                        setMarker({ property_id: propertyId, marker_type: markerType }).catch(
+                            (error) => console.error('[UserActions] Failed to set marker:', error)
+                        );
+                    } else {
+                        // Удаляем предыдущий маркер при сбросе реакции
+                        const prevMarkerType = reactionToMarkerType(prevReaction);
+                        if (prevMarkerType) {
+                            deleteMarker(propertyId, prevMarkerType).catch(() => {});
+                        }
+                    }
+                }
             },
             
             setNote: (propertyId: string, text: string) => {
@@ -119,6 +156,32 @@ export const useUserActionsStore = create<UserActionsStore>()(
                 set({ notes });
             },
             
+            // Синхронизация с бекендом — загрузить маркеры пользователя
+            syncFromBackend: async () => {
+                if (!FEATURES.USE_REAL_MARKERS) return;
+                
+                set({ isSyncing: true });
+                try {
+                    const response = await getMarkerPropertyIds(['like', 'dislike']);
+                    const newReactions: StoredReactions = {};
+                    
+                    for (const item of response.property_ids) {
+                        if (item.marker_type === 'like' || item.marker_type === 'dislike') {
+                            newReactions[item.property_id] = {
+                                reaction: item.marker_type,
+                                updatedAt: new Date().toISOString(),
+                            };
+                        }
+                    }
+                    
+                    set({ reactions: newReactions });
+                } catch (error) {
+                    console.error('[UserActions] Failed to sync from backend:', error);
+                } finally {
+                    set({ isSyncing: false });
+                }
+            },
+            
             // Служебные методы
             setLoading: (isLoading: boolean) => {
                 set({ isLoading });
@@ -134,7 +197,6 @@ export const useUserActionsStore = create<UserActionsStore>()(
         }),
         {
             name: 'user-actions-storage',
-            // Версия для миграций в будущем
             version: 1,
         }
     )

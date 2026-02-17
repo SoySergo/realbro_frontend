@@ -9,8 +9,9 @@ export type NotificationChannel = 'online' | 'telegram' | 'push' | 'email';
 
 /**
  * Частота отправки уведомлений
+ * Включает 'online' для realtime через WebSocket (→ BACKEND_REQUESTS.md #3)
  */
-export type SendFrequency = 'instant' | 'daily' | 'weekly';
+export type SendFrequency = 'online' | 'instant' | 'daily' | 'weekly';
 
 /**
  * Статус задания AutoSearch

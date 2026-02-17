@@ -117,10 +117,10 @@ export function FavoritesNotesTabV2({
 
         // Фильтр по дате
         if (filters.dateFrom) {
-            result = result.filter((note) => new Date(note.createdAt) >= filters.dateFrom!);
+            result = result.filter((note) => new Date(note.created_at) >= filters.dateFrom!);
         }
         if (filters.dateTo) {
-            result = result.filter((note) => new Date(note.createdAt) <= filters.dateTo!);
+            result = result.filter((note) => new Date(note.created_at) <= filters.dateTo!);
         }
 
         // Сортировка
@@ -129,14 +129,14 @@ export function FavoritesNotesTabV2({
 
             switch (filters.sortBy) {
                 case 'createdAt':
-                    comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+                    comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
                     break;
                 case 'updatedAt':
-                    comparison = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+                    comparison = new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime();
                     break;
                 case 'reminderDate':
-                    const aReminder = a.reminder?.date?.getTime() || 0;
-                    const bReminder = b.reminder?.date?.getTime() || 0;
+                    const aReminder = a.reminder ? new Date(a.reminder.remind_at).getTime() : 0;
+                    const bReminder = b.reminder ? new Date(b.reminder.remind_at).getTime() : 0;
                     comparison = aReminder - bReminder;
                     break;
                 default:
@@ -152,9 +152,9 @@ export function FavoritesNotesTabV2({
     // Обработчики диалогов
     const handleOpenEdit = (note: PropertyNote) => {
         setSelectedNote(note);
-        setFormText(note.text);
-        setFormReminderDate(note.reminder ? format(new Date(note.reminder.date), 'yyyy-MM-dd') : '');
-        setFormReminderTime(note.reminder ? format(new Date(note.reminder.date), 'HH:mm') : '');
+        setFormText(note.content);
+        setFormReminderDate(note.reminder ? format(new Date(note.reminder.remind_at), 'yyyy-MM-dd') : '');
+        setFormReminderTime(note.reminder ? format(new Date(note.reminder.remind_at), 'HH:mm') : '');
         setEditDialogOpen(true);
     };
 
@@ -391,22 +391,22 @@ export function FavoritesNotesTabV2({
 
                                     {/* Текст заметки */}
                                     <p className="text-sm text-text-secondary line-clamp-2 mb-2">
-                                        {note.text}
+                                        {note.content}
                                     </p>
 
                                     {/* Мета информация */}
                                     <div className="flex items-center gap-4 text-xs text-text-tertiary">
                                         <span className="flex items-center gap-1">
                                             <Clock className="w-3 h-3" />
-                                            {formatDate(note.updatedAt)}
+                                            {formatDate(new Date(note.updated_at))}
                                         </span>
                                         {note.reminder && (
                                             <Badge 
-                                                variant={new Date(note.reminder.date) < new Date() ? 'destructive' : 'secondary'}
+                                                variant={new Date(note.reminder.remind_at) < new Date() ? 'destructive' : 'secondary'}
                                                 className="text-xs"
                                             >
                                                 <Bell className="w-3 h-3 mr-1" />
-                                                {formatReminderDate(note.reminder.date)}
+                                                {formatReminderDate(new Date(note.reminder.remind_at))}
                                             </Badge>
                                         )}
                                     </div>

@@ -75,32 +75,34 @@ const MOCK_PROFESSIONALS: PropertyAuthor[] = [
 ];
 
 /**
- * Генерация избранных профессионалов
+ * Генерация избранных профессионалов (бекенд формат)
  */
 export function generateMockFavoriteProfessionals(count: number = 5): FavoriteProfessional[] {
     return MOCK_PROFESSIONALS.slice(0, count).map((professional, index) => {
         const daysAgo = index * 24 * 60 * 60 * 1000;
-        const hasViewed = index % 2 === 0;
         const hasContacted = index % 3 === 0;
-        const hasMessaged = index % 2 === 1;
-        const hasReviewed = index === 0;
 
         return {
             id: `fav_prof_${index}`,
-            professional,
-            addedAt: new Date(Date.now() - daysAgo),
-            activeListingsCount: professional.objectsCount,
-            avgResponseTime: index % 2 === 0 ? '< 1 hour' : '< 24 hours',
-            viewedAt: hasViewed ? new Date(Date.now() - daysAgo / 2) : undefined,
-            contactRequestedAt: hasContacted ? new Date(Date.now() - daysAgo / 3) : undefined,
-            messagesSent: hasMessaged ? Math.floor(Math.random() * 5) + 1 : undefined,
-            reviewWritten: hasReviewed,
+            user_id: 'user_1',
+            contact_id: professional.id,
+            professional_type: (professional.type === 'agency' ? 'agency' : 'agent') as 'agent' | 'agency',
+            name: professional.name,
+            avatar_url: professional.avatar,
+            company_name: professional.agencyName,
+            phone: professional.phone,
+            notes: '',
+            contact_requested_at: hasContacted ? new Date(Date.now() - daysAgo / 3).toISOString() : undefined,
+            messages_count: index % 2 === 1 ? Math.floor(Math.random() * 5) + 1 : 0,
+            properties_count: professional.objectsCount || 0,
+            created_at: new Date(Date.now() - daysAgo).toISOString(),
+            updated_at: new Date(Date.now() - daysAgo).toISOString(),
         };
     });
 }
 
 /**
- * Генерация заметок
+ * Генерация заметок (бекенд формат)
  */
 export function generateMockNotes(count: number = 5): PropertyNote[] {
     const noteTexts = [
@@ -122,18 +124,21 @@ export function generateMockNotes(count: number = 5): PropertyNote[] {
 
         return {
             id: `note_${index}`,
-            propertyId: property.id,
-            userId: 'user_1',
-            text: noteTexts[index % noteTexts.length],
-            createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000),
-            updatedAt: new Date(Date.now() - index * 12 * 60 * 60 * 1000),
+            user_id: 'user_1',
+            property_id: property.id,
+            content: noteTexts[index % noteTexts.length],
+            tags: index % 2 === 0 ? ['важно', 'проверить'] : [],
+            note_type: 'property' as const,
+            is_private: true,
+            created_at: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date(Date.now() - index * 12 * 60 * 60 * 1000).toISOString(),
             property,
             reminder: hasReminder ? {
                 id: `reminder_${index}`,
-                noteId: `note_${index}`,
-                date: reminderDate!,
-                isCompleted: false,
-                notificationSent: false,
+                note_id: `note_${index}`,
+                remind_at: reminderDate!.toISOString(),
+                message: 'Не забыть проверить',
+                is_notified: false,
             } : undefined,
         };
     });

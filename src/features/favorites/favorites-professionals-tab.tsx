@@ -1,10 +1,9 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Users, Phone, MessageSquare, Star, Trash2, CheckCircle } from 'lucide-react';
+import { Users, MessageSquare, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import { Badge } from '@/shared/ui/badge';
 import type { FavoriteProfessional } from '@/entities/favorites/model/types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 
@@ -45,7 +44,6 @@ export function FavoritesProfessionalsTab({
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {professionals.map((favProfessional) => {
-                const prof = favProfessional.professional;
                 return (
                     <div 
                         key={favProfessional.id}
@@ -54,9 +52,9 @@ export function FavoritesProfessionalsTab({
                         <div className="flex items-start gap-4">
                             {/* Аватар */}
                             <Avatar className="w-16 h-16">
-                                <AvatarImage src={safeImageSrc(prof.avatar)} />
+                                <AvatarImage src={safeImageSrc(favProfessional.avatar_url || '')} />
                                 <AvatarFallback className="text-lg">
-                                    {prof.name.charAt(0)}
+                                    {favProfessional.name.charAt(0)}
                                 </AvatarFallback>
                             </Avatar>
 
@@ -64,35 +62,20 @@ export function FavoritesProfessionalsTab({
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
                                     <h3 className="font-semibold text-text-primary truncate">
-                                        {prof.name}
+                                        {favProfessional.name}
                                     </h3>
-                                    {prof.isVerified && (
-                                        <CheckCircle className="w-4 h-4 text-success flex-shrink-0" />
-                                    )}
-                                    {prof.isSuperAgent && (
-                                        <Badge variant="secondary" className="text-xs">
-                                            <Star className="w-3 h-3 mr-1" />
-                                            {t('professionals.superAgent')}
-                                        </Badge>
-                                    )}
                                 </div>
 
                                 <p className="text-sm text-text-secondary">
-                                    {prof.type === 'agent' && t('professionals.agent')}
-                                    {prof.type === 'agency' && t('professionals.agency')}
-                                    {prof.type === 'owner' && t('professionals.owner')}
-                                    {prof.agencyName && prof.type !== 'agency' && ` • ${prof.agencyName}`}
+                                    {favProfessional.professional_type === 'agent' && t('professionals.agent')}
+                                    {favProfessional.professional_type === 'agency' && t('professionals.agency')}
+                                    {favProfessional.company_name && favProfessional.professional_type !== 'agency' && ` • ${favProfessional.company_name}`}
                                 </p>
 
                                 <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
-                                    {prof.objectsCount && (
+                                    {favProfessional.properties_count > 0 && (
                                         <span>
-                                            {t('professionals.activeListings', { count: prof.objectsCount })}
-                                        </span>
-                                    )}
-                                    {prof.yearsOnPlatform && (
-                                        <span>
-                                            {t('professionals.yearsOnPlatform', { count: prof.yearsOnPlatform })}
+                                            {t('professionals.activeListings', { count: favProfessional.properties_count })}
                                         </span>
                                     )}
                                 </div>

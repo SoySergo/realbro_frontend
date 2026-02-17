@@ -29,7 +29,7 @@ role: "user" | "agent" | "agency" | "developer" | "admin"
 - Доступные действия (публикация объектов, доступ к статистике)
 - Тарифные планы
 
-**Статус**: ⏳ pending
+**Статус**: ✅ done (бекенд реализовал, фронтенд обновил UserRole в types.ts)
 
 ---
 
@@ -73,7 +73,7 @@ send_frequency: "online" | "instant" | "daily" | "weekly"
 **Если пользователь offline**:
 - Переключение на push-уведомления (mobile) или telegram
 
-**Статус**: ⏳ pending
+**Статус**: ✅ done (бекенд реализовал, фронтенд обновил SendFrequency + WS hook)
 
 ---
 
@@ -197,7 +197,7 @@ interface FavoriteProfessionalResponse {
 
 Или использовать `exclude_marker_types` / `include_marker_types` для этого.
 
-**Статус**: ⏳ pending
+**Статус**: ✅ done (бекенд добавил `viewed=true|false` query param)
 
 ---
 
@@ -207,3 +207,4 @@ interface FavoriteProfessionalResponse {
 |------|----------|
 | 2026-02-16 | Первичное заполнение при составлении Integration Plan |
 | 2026-02-17 | Обновлены статусы #2 (Tabs+Filters) и #5 (Guest-геометрии) → ✅ done |
+| 2026-02-17 | Обновлены статусы #1 (Роли), #3 (Autosearch online), #8 (viewed filter) → ✅ done |

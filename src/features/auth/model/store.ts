@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { UserInfo } from '@/entities/user';
 import { authApi, AuthError } from '@/shared/api/auth';
+import { setAccessToken } from '@/shared/api/lib/api-client';
 import { FEATURES, MOCK_USER } from '@/shared/config/features';
 
 type AuthState = {
@@ -47,6 +48,7 @@ export const useAuthStore = create<AuthState>()(
 
             // Очистка авторизации
             clearAuth: () => {
+                setAccessToken(null);
                 set({
                     user: null,
                     error: null,
@@ -62,7 +64,7 @@ export const useAuthStore = create<AuthState>()(
                 return !!user;
             },
 
-            // Инициализация - проверка сессии через бекенд
+            // Инициализация — попытка refresh → сохранить access_token + user
             initialize: async () => {
                 set({ isLoading: true });
 
@@ -74,23 +76,36 @@ export const useAuthStore = create<AuthState>()(
                 }
 
                 try {
-                    // Всегда проверяем сессию через бекенд (токен в cookies)
-                    const user = await authApi.getMeFromCookies();
-                    set({ user, isInitialized: true });
+                    // Попытка refresh — refresh_token в httpOnly cookie
+                    const authResponse = await authApi.refresh();
+                    if (authResponse.access_token) {
+                        setAccessToken(authResponse.access_token);
+                    }
+                    set({ user: authResponse.user, isInitialized: true });
                 } catch {
-                    // Нет валидной сессии - это нормально
-                    set({ user: null, isInitialized: true });
+                    // Refresh не удался — пробуем получить user из cookies
+                    try {
+                        const user = await authApi.getMeFromCookies();
+                        set({ user, isInitialized: true });
+                    } catch {
+                        // Нет валидной сессии - это нормально
+                        setAccessToken(null);
+                        set({ user: null, isInitialized: true });
+                    }
                 } finally {
                     set({ isLoading: false });
                 }
             },
 
-            // Логин
+            // Логин — сохраняем access_token из AuthResponse
             login: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
-                    const user = await authApi.login({ email, password });
-                    set({ user });
+                    const authResponse = await authApi.login({ email, password });
+                    if (authResponse.access_token) {
+                        setAccessToken(authResponse.access_token);
+                    }
+                    set({ user: authResponse.user });
                 } catch (error) {
                     const message =
                         error instanceof AuthError
@@ -103,12 +118,15 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            // Регистрация
+            // Регистрация — сохраняем access_token из AuthResponse
             register: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
-                    const user = await authApi.register({ email, password });
-                    set({ user });
+                    const authResponse = await authApi.register({ email, password });
+                    if (authResponse.access_token) {
+                        setAccessToken(authResponse.access_token);
+                    }
+                    set({ user: authResponse.user });
                 } catch (error) {
                     const message =
                         error instanceof AuthError
@@ -121,7 +139,7 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            // Выход
+            // Выход — очистить access_token, вызвать POST /auth/logout
             logout: async () => {
                 const { clearAuth } = get();
                 set({ isLoading: true });
@@ -145,11 +163,12 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            // OAuth Google - инициация flow
+            // OAuth Google — GET /auth/google/login?return_url=... → редирект
             initiateGoogleOAuth: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const { url } = await authApi.getGoogleAuthUrl();
+                    const returnUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+                    const { url } = await authApi.getGoogleAuthUrl(returnUrl);
                     // Редирект на страницу авторизации Google
                     window.location.href = url;
                 } catch (error) {
@@ -166,15 +185,25 @@ export const useAuthStore = create<AuthState>()(
             initializeFromCookies: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const user = await authApi.getMeFromCookies();
-                    set({ user, isInitialized: true });
-                } catch (error) {
-                    const message =
-                        error instanceof AuthError
-                            ? error.message
-                            : 'Failed to initialize session';
-                    set({ error: message });
-                    throw error;
+                    // После OAuth callback — пробуем refresh для получения access_token
+                    const authResponse = await authApi.refresh();
+                    if (authResponse.access_token) {
+                        setAccessToken(authResponse.access_token);
+                    }
+                    set({ user: authResponse.user, isInitialized: true });
+                } catch {
+                    // Fallback — получаем user из cookies
+                    try {
+                        const user = await authApi.getMeFromCookies();
+                        set({ user, isInitialized: true });
+                    } catch (error) {
+                        const message =
+                            error instanceof AuthError
+                                ? error.message
+                                : 'Failed to initialize session';
+                        set({ error: message });
+                        throw error;
+                    }
                 } finally {
                     set({ isLoading: false });
                 }
@@ -183,6 +212,7 @@ export const useAuthStore = create<AuthState>()(
         {
             name: 'auth-storage',
             storage: createJSONStorage(() => localStorage),
+            // Persist только user в localStorage (access_token хранится in-memory)
             partialize: (state) => ({
                 user: state.user,
             }),
