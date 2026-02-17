@@ -1,3 +1,5 @@
+import type { AttributeDTO } from './api-types';
+
 // Типы для недвижимости
 export type PropertyType = 'apartment' | 'studio' | 'house' | 'penthouse' | 'duplex';
 
@@ -198,6 +200,38 @@ export interface Property {
     viewsCount?: number;
     viewsToday?: number; // New field
     favoritesCount?: number;
+
+    // Бекенд-поля (snake_case) — используются при работе с backend DTO
+    slug?: string;
+    property_type?: 'sale' | 'rent';
+    property_kind?: string;
+    category?: string;
+    sub_category?: string;
+    currency?: string;
+    description_original?: string;     // Описание на оригинальном языке
+
+    // Атрибуты из бекенда (AttributeDTO[])
+    characteristics?: AttributeDTO[];
+    estate_info?: AttributeDTO[];
+    energy_efficiency?: AttributeDTO[];
+    amenities_dto?: AttributeDTO[];    // amenities_dto чтобы не конфликтовать с amenities: string[]
+    tenant_preferences_dto?: AttributeDTO[];
+    tenants_dto?: AttributeDTO[];
+
+    // SEO
+    seo_title?: string;
+    seo_description?: string;
+    seo_keywords?: string[];
+
+    // Дополнительные поля бекенда
+    area_useful?: number;
+    area_kitchen?: number;
+    deposit_months?: number;
+    deposit?: number;
+    agency_fee?: number;
+    min_term?: number;
+    max_term?: number;
+    published_at_iso?: string;   // ISO 8601 строка
 }
 
 export type PropertyFeature =
