@@ -223,13 +223,13 @@ export function filtersToQueryString(filters: SearchFilters): string {
         }
     }
     
-    // Также добавляем прямые snake_case поля, если они заданы
-    if (filters.country_ids?.length) params.set('country_ids', filters.country_ids.join(','));
-    if (filters.region_ids?.length) params.set('region_ids', filters.region_ids.join(','));
-    if (filters.province_ids?.length) params.set('province_ids', filters.province_ids.join(','));
-    if (filters.city_ids?.length) params.set('city_ids', filters.city_ids.join(','));
-    if (filters.district_ids?.length) params.set('district_ids', filters.district_ids.join(','));
-    if (filters.neighborhood_ids?.length) params.set('neighborhood_ids', filters.neighborhood_ids.join(','));
+    // Также добавляем прямые snake_case поля, если они заданы и ещё не установлены
+    if (filters.country_ids?.length && !params.has('country_ids')) params.set('country_ids', filters.country_ids.join(','));
+    if (filters.region_ids?.length && !params.has('region_ids')) params.set('region_ids', filters.region_ids.join(','));
+    if (filters.province_ids?.length && !params.has('province_ids')) params.set('province_ids', filters.province_ids.join(','));
+    if (filters.city_ids?.length && !params.has('city_ids')) params.set('city_ids', filters.city_ids.join(','));
+    if (filters.district_ids?.length && !params.has('district_ids')) params.set('district_ids', filters.district_ids.join(','));
+    if (filters.neighborhood_ids?.length && !params.has('neighborhood_ids')) params.set('neighborhood_ids', filters.neighborhood_ids.join(','));
 
     // Цена
     if (filters.minPrice !== undefined) params.set('min_price', String(filters.minPrice));
