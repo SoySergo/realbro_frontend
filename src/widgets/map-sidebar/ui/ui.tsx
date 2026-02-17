@@ -38,6 +38,7 @@ interface MapSidebarProps {
     selectedPropertyId?: string | null;
     clusterId?: string | null;
     onClusterReset?: () => void;
+    clusterPropertyIds?: string[];
     isVisible?: boolean;
     onVisibilityChange?: (visible: boolean) => void;
     className?: string;
@@ -120,6 +121,7 @@ export function MapSidebar({
     selectedPropertyId,
     clusterId,
     onClusterReset,
+    clusterPropertyIds,
     isVisible = true,
     onVisibilityChange,
     className,
@@ -158,22 +160,36 @@ export function MapSidebar({
             setIsLoading(true);
             
             try {
-                const response = await getPropertiesList({
-                    filters: currentFilters,
-                    page: pageNum,
-                    limit: 20,
-                    sortBy,
-                    sortOrder,
-                });
-
-                if (append) {
-                    setProperties((prev) => [...prev, ...response.data]);
+                // Если есть clusterPropertyIds — загружаем по IDs
+                if (clusterPropertyIds && clusterPropertyIds.length > 0) {
+                    const { getPropertiesByIds } = await import('@/shared/api');
+                    const data = await getPropertiesByIds(clusterPropertyIds);
+                    setProperties(data);
+                    setPagination({
+                        page: 1,
+                        limit: data.length,
+                        total: data.length,
+                        totalPages: 1,
+                    });
+                    setHasMore(false);
                 } else {
-                    setProperties(response.data);
+                    const response = await getPropertiesList({
+                        filters: currentFilters,
+                        page: pageNum,
+                        limit: 20,
+                        sortBy,
+                        sortOrder,
+                    });
+
+                    if (append) {
+                        setProperties((prev) => [...prev, ...response.data]);
+                    } else {
+                        setProperties(response.data);
+                    }
+                    
+                    setPagination(response.pagination);
+                    setHasMore(pageNum < response.pagination.totalPages);
                 }
-                
-                setPagination(response.pagination);
-                setHasMore(pageNum < response.pagination.totalPages);
             } catch (error) {
                 console.error('Failed to fetch properties:', error);
             } finally {
@@ -181,7 +197,7 @@ export function MapSidebar({
                 loadingRef.current = false;
             }
         },
-        [currentFilters, sortBy, sortOrder]
+        [currentFilters, sortBy, sortOrder, clusterPropertyIds]
     );
 
     useEffect(() => {
@@ -321,7 +337,7 @@ export function MapSidebar({
 
                 {/* Кластер и счётчик */}
                 <div className="flex items-center justify-between">
-                    {clusterId && onClusterReset ? (
+                    {(clusterId || (clusterPropertyIds && clusterPropertyIds.length > 0)) && onClusterReset ? (
                         <Button
                             variant="outline"
                             size="sm"
