@@ -371,7 +371,9 @@
     "propertyCategoryHotel": "Отель",
     "propertyCategoryLand": "Земельный участок",
     "min": "Мин",
-    "max": "Макс"
+    "max": "Макс",
+    "bathrooms": "Ванные",
+    "bathroomCount": "Количество ванных"
   },
   "map": {
     "showMap": "Показать карту",

@@ -43,7 +43,10 @@ export function CategoryFilterMobile({ value, onChange }: CategoryFilterMobilePr
             onChange(newIds);
         } else {
             // Неконтролируемый режим - обновляем store
-            setFilters({ categoryIds: newIds.length > 0 ? newIds : undefined });
+            setFilters({
+                categoryIds: newIds.length > 0 ? newIds : undefined,
+                categories: newIds.length > 0 ? newIds : undefined,
+            });
             console.log('Categories updated:', newIds);
         }
     };

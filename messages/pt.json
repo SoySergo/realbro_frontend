@@ -360,7 +360,8 @@
     "viewList": "Lista",
     "viewMap": "Mapa",
     "min": "Mín",
-    "max": "Máx"
+    "max": "Máx",
+    "bathroomCount": "Número de banheiros"
   },
   "map": {
     "title": "Mapa",

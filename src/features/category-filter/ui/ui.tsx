@@ -37,7 +37,10 @@ export function CategoryFilter() {
             ? selectedIds.filter((i: number) => i !== id)
             : [...selectedIds, id];
 
-        setFilters({ categoryIds: newIds.length > 0 ? newIds : undefined });
+        setFilters({
+            categoryIds: newIds.length > 0 ? newIds : undefined,
+            categories: newIds.length > 0 ? newIds : undefined,
+        });
         console.log('Categories updated:', newIds);
     };
 
