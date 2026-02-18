@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { MessageCircle, User, Heart, Plus, LogIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageCircle, User, Heart, Plus, LogIn } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
@@ -34,7 +34,6 @@ export function DesktopSidebar() {
     const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
-        setExpanded,
         queries,
         activeQueryId,
         setActiveQuery,
@@ -192,46 +191,32 @@ export function DesktopSidebar() {
                 isExpanded ? 'w-72' : 'w-14'
             )}
         >
-            {/* Кнопка переключения сайдбара */}
-            <button
-                onClick={() => setExpanded(!isExpanded)}
-                className={cn(
-                    'absolute top-5 -right-3 z-10 w-6 h-6',
-                    'flex items-center justify-center rounded-full',
-                    'bg-background border border-border shadow-sm',
-                    'text-text-secondary hover:text-brand-primary hover:border-brand-primary',
-                    'transition-colors duration-150 cursor-pointer'
-                )}
-                aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-            >
-                {isExpanded ? (
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                ) : (
-                    <ChevronRight className="w-3.5 h-3.5" />
-                )}
-            </button>
-
             <div className="flex flex-col h-full">
-                {/* Логотип с градиентным фоном */}
-                <div className="px-4 py-4 shrink-0 bg-gradient-to-r from-brand-primary/10 to-transparent">
-                    <div className="flex items-center gap-2">
-                        <Image
-                            src="/logo.svg"
-                            alt="RealBro"
-                            width={28}
-                            height={28}
-                            className="shrink-0"
-                        />
-                        {isExpanded && (
+                {/* Логотип — виден только в развёрнутом виде, высота совпадает с хедером */}
+                <div className={cn(
+                    'shrink-0 h-[52px] flex items-center border-b border-border transition-all duration-300',
+                    isExpanded
+                        ? 'px-4 bg-gradient-to-r from-brand-primary/10 to-transparent'
+                        : 'justify-center'
+                )}>
+                    {isExpanded ? (
+                        <Link href="/" className="flex items-center gap-2">
+                            <Image
+                                src="/logo.svg"
+                                alt="RealBro"
+                                width={28}
+                                height={28}
+                                className="shrink-0"
+                            />
                             <span className="font-bold text-xl text-text-primary whitespace-nowrap animate-in fade-in slide-in-from-left-2 duration-300">
                                 RealBro
                             </span>
-                        )}
-                    </div>
+                        </Link>
+                    ) : (
+                        /* Пустая область при свёрнутом сайдбаре — лого в хедере */
+                        <div className="w-7 h-7" />
+                    )}
                 </div>
-
-                {/* Градиентный разделитель */}
-                <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
 
                 {/* Поисковые запросы */}
                 <div className="flex-1 flex flex-col min-h-0 relative">

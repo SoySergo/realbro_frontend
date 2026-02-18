@@ -13,6 +13,7 @@ import {
 import { MapSidebar } from '@/widgets/map-sidebar';
 import { PropertyListing } from '@/widgets/property-listing';
 import { useSidebarStore } from '@/widgets/sidebar';
+import { HeaderSlot } from '@/widgets/app-header';
 import type { PropertyGridCard } from '@/entities/property';
 
 /**
@@ -72,8 +73,13 @@ function SearchPageContent() {
 
     return (
         <div className="flex min-h-screen bg-background">
+            {/* Фильтры в общем хедере — только desktop */}
+            <HeaderSlot>
+                <SearchFiltersBar />
+            </HeaderSlot>
+
             {/* Основной контент */}
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер с фильтрами - только на мобильных */}
                 {!activeLocationMode && (
                     <div className="md:hidden">
@@ -97,17 +103,11 @@ function SearchPageContent() {
                 {searchViewMode === 'map' ? (
                     // === РЕЖИМ КАРТЫ ===
                     <>
-                        {/* Контейнер карты и фильтров */}
+                        {/* Контейнер карты */}
                         <div className="flex-1 relative">
-                            {/* Контейнер карты и фильтров */}
                             <div className="relative h-[calc(100vh-8rem)] md:h-screen w-full">
-                                {/* Панель фильтров поверх карты - только на desktop */}
-                                <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
-                                    <SearchFiltersBar />
-                                </div>
-
-                                {/* Карта (отступ сверху для фильтров на desktop) */}
-                                <div className="absolute z-10 inset-0 md:pt-[60px]">
+                                {/* Карта (отступ сверху для хедера на desktop) */}
+                                <div className="absolute z-10 inset-0 md:pt-[52px]">
                                     <SearchMap />
                                 </div>
                             </div>
@@ -124,12 +124,7 @@ function SearchPageContent() {
                     </>
                 ) : (
                     // === РЕЖИМ СПИСКА ===
-                    <div className="flex-1 flex flex-col">
-                        {/* Панель фильтров вверху - только на desktop */}
-                        <div className="shrink-0 hidden md:block">
-                            <SearchFiltersBar />
-                        </div>
-
+                    <div className="flex-1 flex flex-col md:pt-[52px]">
                         {/* Листинг объектов */}
                         <div className="flex-1 overflow-hidden">
                             <PropertyListing
@@ -158,7 +153,7 @@ export function SearchPage() {
 function SearchPageSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Скелетон мобильного хедера */}
                 <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background-secondary border-b border-border">
                     <div className="flex items-center gap-2 px-3 py-2.5">

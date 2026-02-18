@@ -14,6 +14,7 @@ import {
 import { AgencyCard, AgencyCardHorizontal } from '@/entities/agency';
 import { useAgencyFilters } from '@/features/agency-filters';
 import { SearchFiltersBar, MobileSearchHeader, MobileFiltersSheet, MobileViewToggle } from '@/widgets/search-filters-bar';
+import { HeaderSlot } from '@/widgets/app-header';
 import { AgencyStories } from '@/widgets/agency-stories';
 import { MapPreview } from '@/widgets/map-preview';
 import { Button } from '@/shared/ui/button';
@@ -139,7 +140,12 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
 
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col min-w-0">
+            {/* Фильтры в общем хедере — только desktop */}
+            <HeaderSlot>
+                <SearchFiltersBar currentCategory="professionals" />
+            </HeaderSlot>
+
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col min-w-0">
                 {/* Мобильный хедер */}
                 <div className="md:hidden">
                     <MobileSearchHeader
@@ -155,13 +161,8 @@ export function AgenciesPage({ locale, initialAgencies = [] }: AgenciesPageProps
                     currentCategory="professionals"
                 />
 
-                {/* Десктоп: единый хедер фильтров */}
-                <div className="hidden md:block">
-                    <SearchFiltersBar currentCategory="professionals" />
-                </div>
-
                 {/* Заголовок страницы (Desktop) */}
-                <div className="hidden md:block mt-14 px-6 pt-6">
+                <div className="hidden md:block mt-[52px] px-6 pt-6">
                     <h1 className="text-2xl font-bold text-text-primary">
                         {t('searchAgencies')}
                     </h1>

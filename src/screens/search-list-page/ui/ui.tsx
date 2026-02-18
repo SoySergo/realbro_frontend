@@ -12,6 +12,7 @@ import {
     MobileViewToggle,
     useViewModeActions,
 } from '@/widgets/search-filters-bar';
+import { HeaderSlot } from '@/widgets/app-header';
 import { ListingControls } from '@/widgets/listing-controls';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { MapPreview } from '@/widgets/map-preview';
@@ -136,19 +137,19 @@ export function SearchListPage({
 
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col min-w-0">
+            {/* Фильтры в общем хедере — только desktop */}
+            <HeaderSlot>
+                <SearchFiltersBar />
+            </HeaderSlot>
+
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col min-w-0">
                 {/* Mobile header */}
                 <div className="md:hidden">
                     <MobileSearchHeader onOpenFilters={() => setIsMobileFiltersOpen(true)} />
                 </div>
 
-                {/* Filters Bar (desktop only - fixed at top) */}
-                <div className="hidden md:block">
-                    <SearchFiltersBar />
-                </div>
-
                 {/* Page Title (Desktop) */}
-                <div className="hidden md:block mt-14 px-6 pt-6">
+                <div className="hidden md:block mt-[52px] px-6 pt-6">
                     <h1 className="text-2xl font-bold text-text-primary">
                         {tListing('title')}
                     </h1>

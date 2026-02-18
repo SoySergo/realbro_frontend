@@ -20,6 +20,7 @@ import {
     MobileFiltersSheet,
     MobileViewToggle,
 } from '@/widgets/search-filters-bar';
+import { HeaderSlot } from '@/widgets/app-header';
 import { AgencyCard } from '@/entities/agency';
 import { useAgencyFilters } from '@/features/agency-filters';
 import { getAgenciesList } from '@/shared/api';
@@ -144,7 +145,12 @@ export function AgenciesMapPage() {
 
     return (
         <div className="flex h-dvh bg-background overflow-hidden">
-            <main className="flex-1 md:ml-16 md:pb-0 flex flex-col md:flex-row">
+            {/* Фильтры в общем хедере — только desktop */}
+            <HeaderSlot>
+                <SearchFiltersBar currentCategory="professionals" />
+            </HeaderSlot>
+
+            <main className="flex-1 md:ml-14 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер */}
                 <div className="md:hidden">
                     <MobileSearchHeader
@@ -168,13 +174,8 @@ export function AgenciesMapPage() {
                 {/* Контейнер карты */}
                 <div className="flex-1 relative">
                     <div className="absolute inset-0 md:relative md:h-screen w-full">
-                        {/* Панель фильтров поверх карты — только desktop */}
-                        <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
-                            <SearchFiltersBar currentCategory="professionals" />
-                        </div>
-
-                        {/* Карта */}
-                        <div className="absolute z-10 inset-0 md:pt-14">
+                        {/* Карта (отступ сверху для хедера на desktop) */}
+                        <div className="absolute z-10 inset-0 md:pt-[52px]">
                             <SearchMap />
                         </div>
                     </div>
