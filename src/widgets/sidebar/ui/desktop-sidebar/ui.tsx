@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { MessageCircle, User, Heart, Plus, LogIn } from 'lucide-react';
+import { MessageCircle, User, Heart, Plus, LogIn, Menu, X } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
@@ -34,6 +34,7 @@ export function DesktopSidebar() {
     const [isMounted, setIsMounted] = useState(false);
     const {
         isExpanded,
+        toggleExpanded,
         queries,
         activeQueryId,
         setActiveQuery,
@@ -192,14 +193,32 @@ export function DesktopSidebar() {
             )}
         >
             <div className="flex flex-col h-full">
-                {/* Логотип — виден только в развёрнутом виде, высота совпадает с хедером */}
+                {/* Верхняя секция: бургер/крестик + лого (при развёрнутом) */}
                 <div className={cn(
                     'shrink-0 h-[52px] flex items-center border-b border-border transition-all duration-300',
                     isExpanded
-                        ? 'px-4 bg-gradient-to-r from-brand-primary/10 to-transparent'
+                        ? 'px-3 gap-3 bg-gradient-to-r from-brand-primary/10 to-transparent'
                         : 'justify-center'
                 )}>
-                    {isExpanded ? (
+                    {/* Кнопка бургер / крестик — всегда в одном месте (левый край) */}
+                    <button
+                        onClick={toggleExpanded}
+                        className={cn(
+                            'shrink-0 p-2 rounded-lg cursor-pointer',
+                            'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
+                            'transition-colors duration-150'
+                        )}
+                        aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+                    >
+                        {isExpanded ? (
+                            <X className="w-5 h-5" />
+                        ) : (
+                            <Menu className="w-5 h-5" />
+                        )}
+                    </button>
+
+                    {/* Лого + название — видны только при развёрнутом сайдбаре */}
+                    {isExpanded && (
                         <Link href="/" className="flex items-center gap-2">
                             <Image
                                 src="/logo.svg"
@@ -212,9 +231,6 @@ export function DesktopSidebar() {
                                 RealBro
                             </span>
                         </Link>
-                    ) : (
-                        /* Пустая область при свёрнутом сайдбаре — лого в хедере */
-                        <div className="w-7 h-7" />
                     )}
                 </div>
 

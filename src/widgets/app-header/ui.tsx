@@ -2,7 +2,6 @@
 
 import { useCallback } from 'react';
 import Image from 'next/image';
-import { Menu } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { useHeaderSlotStore } from './model';
@@ -11,15 +10,12 @@ import { Link } from '@/shared/config/routing';
 /**
  * AppHeader — общий хедер приложения (desktop, md+).
  *
- * Механика как на YouTube:
- * - Кнопка-гамбургер слева для открытия/закрытия сайдбара
- * - Лого и название справа от кнопки (видны когда сайдбар свёрнут)
+ * - Лого и название видны когда сайдбар свёрнут (бургер находится в сайдбаре)
  * - Когда сайдбар развёрнут — лого/название скрываются из хедера (они в сайдбаре)
  * - Справа от лого — динамический слот для контента страниц (фильтры, навигация и т.д.)
  */
 export function AppHeader() {
     const isExpanded = useSidebarStore((s) => s.isExpanded);
-    const toggleExpanded = useSidebarStore((s) => s.toggleExpanded);
     const setPortalTarget = useHeaderSlotStore((s) => s.setPortalTarget);
 
     // Callback ref для портал-слота
@@ -41,19 +37,6 @@ export function AppHeader() {
             )}
         >
             <div className="flex items-center h-full w-full px-3 gap-3">
-                {/* Кнопка-гамбургер для сайдбара */}
-                <button
-                    onClick={toggleExpanded}
-                    className={cn(
-                        'shrink-0 p-2 rounded-lg cursor-pointer',
-                        'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
-                        'transition-colors duration-150'
-                    )}
-                    aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-                >
-                    <Menu className="w-5 h-5" />
-                </button>
-
                 {/* Лого + название — видны только когда сайдбар свёрнут */}
                 <Link
                     href="/"
