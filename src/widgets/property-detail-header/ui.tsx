@@ -47,6 +47,8 @@ interface PropertyDetailHeaderProps {
     translations: HeaderTranslations;
     mainInfoTranslations: MainInfoTranslations;
     locale?: string;
+    /** Режим рендера: по умолчанию — полный fixed header, 'headerSlot' — встроен в AppHeader */
+    variant?: 'default' | 'headerSlot';
 }
 
 // Get Intl locale from app locale
@@ -72,7 +74,8 @@ export function PropertyDetailHeader({
     currency = '€',
     translations: t,
     mainInfoTranslations,
-    locale
+    locale,
+    variant = 'default',
 }: PropertyDetailHeaderProps) {
     const router = useRouter();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -125,6 +128,73 @@ export function PropertyDetailHeader({
     const formattedPrice = price ? new Intl.NumberFormat(intlLocale).format(price) : '';
     const pricePerMeter = price && area ? Math.round(price / area) : null;
 
+    // Режим headerSlot — встроенный контент без собственного fixed-обёртки
+    if (variant === 'headerSlot') {
+        return (
+            <div className={cn("flex items-center justify-between w-full h-full gap-2 px-2", className)}>
+                {/* Кнопка назад */}
+                <div className="flex items-center shrink-0">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => router.back()}
+                        className="rounded-full transition-all h-9 w-9 active:scale-95 hover:bg-brand-primary-light text-brand-primary"
+                        title={t.back}
+                    >
+                        <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
+                    </Button>
+                </div>
+
+                {/* Навигация по секциям */}
+                <nav className="flex items-center gap-1 bg-background/50 backdrop-blur-sm p-1 rounded-full border border-border/10 shadow-sm">
+                    {navItems.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => scrollToSection(item.id)}
+                            className={cn(
+                                "px-3 py-1 rounded-full text-sm font-medium transition-all",
+                                activeSection === item.id
+                                    ? "bg-brand-primary text-white shadow-sm"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                            )}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </nav>
+
+                {/* Навигация по листингу */}
+                <div className="flex items-center justify-end shrink-0">
+                    {hasListingContext ? (
+                        <div className="flex items-center gap-2 p-1 rounded-full transition-all">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                            >
+                                <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                            >
+                                <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="flex gap-2">
+                            <Button variant="ghost" size="icon" className="text-brand-primary h-9 w-9">
+                                <Share2 className="w-5 h-5" />
+                            </Button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    // Режим default — полный fixed-хедер (мобильная версия)
     return (
         <header 
             className={cn(
@@ -146,26 +216,8 @@ export function PropertyDetailHeader({
                     </Button>
                 </div>
 
-                {/* Center: Section Navigation (Desktop) */}
-                <nav className="hidden md:flex items-center gap-1 bg-background/50 backdrop-blur-sm p-1 rounded-full border border-border/10 shadow-sm">
-                    {navItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => scrollToSection(item.id)}
-                            className={cn(
-                                "px-4 py-1.5 rounded-full text-sm font-medium transition-all",
-                                activeSection === item.id
-                                    ? "bg-brand-primary text-white shadow-sm"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                            )}
-                        >
-                            {item.label}
-                        </button>
-                    ))}
-                </nav>
-
                 {/* Mobile Info */}
-                <div className="md:hidden flex-1 relative h-full mx-2 ">
+                <div className="flex-1 relative h-full mx-2 ">
                      {/* Logo State (Not Scrolled) */}
                     <div className={cn(
                         "absolute inset-0 flex items-center justify-start transition-all duration-200",

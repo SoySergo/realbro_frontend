@@ -1,4 +1,3 @@
-import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
 import { ProfileWidget } from '@/widgets/profile';
@@ -22,9 +21,7 @@ export default async function ProfilePage({ params }: Props) {
 
     return (
         <div className="flex min-h-screen bg-background">
-            <Sidebar />
-
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 md:pt-[52px]">
                 <ProfileWidget />
             </main>
         </div>

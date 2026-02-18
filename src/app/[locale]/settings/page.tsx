@@ -1,4 +1,3 @@
-import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { setRequestLocale } from 'next-intl/server';
 
 type Props = {
@@ -11,9 +10,7 @@ export default async function SettingsPage({ params }: Props) {
 
     return (
         <div className="flex min-h-screen bg-background">
-            <Sidebar />
-
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 md:pt-[52px]">
                 <div className="p-6">
                     <h1 className="text-3xl font-bold text-text-primary mb-4">
                         ⚙️ Settings Page

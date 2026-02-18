@@ -228,8 +228,8 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
     const SaveIcon = activeQuery ? (hasUnsavedChanges ? CloudCog : CloudCheck) : CloudUpload;
 
     return (
-        <div className="w-full bg-background-secondary border-b border-border relative z-50">
-            <div className="flex items-center gap-2 px-4 py-2.5 fixed top-0 backdrop-blur-sm bg-background-secondary/85 w-full border-b border-border z-50">
+        <div className="w-full relative z-50">
+            <div className="flex items-center gap-2 px-2 w-full">
                 {/* Кнопка ИИ агент */}
                 <Button
                     size="sm"

@@ -14,6 +14,7 @@ import {
 } from '@/widgets/search-filters-bar';
 import { MapSidebar, MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
 import { useSidebarStore } from '@/widgets/sidebar';
+import { HeaderSlot } from '@/widgets/app-header';
 import type { PropertyGridCard } from '@/entities/property';
 
 // Lazy load Mapbox для оптимизации
@@ -95,7 +96,12 @@ export function SearchMapPage() {
 
     return (
         <div className="flex h-dvh bg-background overflow-hidden">
-            <main className="flex-1 md:ml-16 md:pb-0 flex flex-col md:flex-row">
+            {/* Фильтры в общем хедере — только desktop */}
+            <HeaderSlot>
+                <SearchFiltersBar />
+            </HeaderSlot>
+
+            <main className="flex-1 md:ml-14 md:pb-0 flex flex-col md:flex-row">
                 {/* Мобильный хедер с фильтрами - только на мобильных */}
                 {!activeLocationMode && (
                     <div className="md:hidden">
@@ -114,16 +120,11 @@ export function SearchMapPage() {
                     <MobileViewToggle />
                 </div>
 
-                {/* Контейнер карты и фильтров */}
+                {/* Контейнер карты */}
                 <div className="flex-1 relative">
                     <div className="absolute inset-0 md:relative md:h-screen w-full">
-                        {/* Панель фильтров поверх карты - только на desktop */}
-                        <div className="hidden md:block absolute top-0 left-0 right-0 z-50">
-                            <SearchFiltersBar />
-                        </div>
-
-                        {/* Карта (отступ сверху для фильтров на desktop) */}
-                        <div className="absolute z-10 inset-0 md:pt-14">
+                        {/* Карта (отступ сверху для хедера на desktop) */}
+                        <div className="absolute z-10 inset-0 md:pt-[52px]">
                             <SearchMap />
                         </div>
                     </div>

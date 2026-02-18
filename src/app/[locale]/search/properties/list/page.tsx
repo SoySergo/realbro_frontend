@@ -66,7 +66,7 @@ export default async function Page({
 function SearchListSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:pt-[52px]">
                 {/* Skeleton header */}
                 <div className="shrink-0 hidden md:block">
                     <div className="w-full bg-background-secondary border-b border-border">

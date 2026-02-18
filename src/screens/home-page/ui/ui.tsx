@@ -12,8 +12,8 @@ export async function HomePage({ params }: Props) {
     await params;
 
     return (
-        <div className="min-h-screen bg-background">
-            <main className="flex flex-col">
+        <div className="min-h-screen bg-background md:ml-14">
+            <main className="flex flex-col md:pt-[52px]">
                 <HeroSection />
                 <FeaturesSection />
                 <DemoSection />

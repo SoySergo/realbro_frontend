@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
 import '../globals.css';
 import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
+import { AppHeader } from '@/widgets/app-header';
 import { AuthModals } from '@/widgets/auth-modals';
 import { Toaster } from '@/shared/ui/sonner';
 
@@ -75,6 +76,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     <AuthErrorHandler />
                                     {/* Sidebar (Desktop + Mobile) */}
                                     <Sidebar />
+                                    {/* AppHeader — общий хедер для десктопа (md+) */}
+                                    <div className="hidden md:block">
+                                        <AppHeader />
+                                    </div>
                                     {children}
                                     {/* Auth Modals */}
                                     <AuthModals />

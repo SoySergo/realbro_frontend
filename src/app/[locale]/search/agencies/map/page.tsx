@@ -17,9 +17,9 @@ export default function Page() {
 function AgenciesMapSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:flex-row">
                 <div className="flex-1 relative">
-                    <div className="absolute z-10 inset-0 md:pt-14">
+                    <div className="absolute z-10 inset-0 md:pt-[52px]">
                         <div className="w-full h-full bg-background-secondary animate-pulse flex items-center justify-center">
                             <div className="text-text-tertiary">
                                 <svg

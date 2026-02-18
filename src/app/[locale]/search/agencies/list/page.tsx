@@ -46,7 +46,7 @@ export default async function Page({
 function AgenciesListSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:pt-[52px]">
                 <div className="flex-1 p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {Array.from({ length: 6 }).map((_, i) => (

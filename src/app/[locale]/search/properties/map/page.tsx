@@ -21,7 +21,7 @@ export default function Page() {
 function SearchMapSkeleton() {
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-16 pb-16 md:pb-0 flex flex-col md:flex-row">
+            <main className="flex-1 md:ml-14 pb-16 md:pb-0 flex flex-col md:flex-row">
                 {/* Mobile header skeleton */}
                 <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background-secondary border-b border-border">
                     <div className="flex items-center gap-2 px-3 py-2.5">
@@ -51,7 +51,7 @@ function SearchMapSkeleton() {
                     </div>
 
                     {/* Map skeleton */}
-                    <div className="absolute z-10 inset-0 md:pt-[60px]">
+                    <div className="absolute z-10 inset-0 md:pt-[52px]">
                         <div className="w-full h-full bg-background-secondary animate-pulse flex items-center justify-center">
                             <div className="text-text-tertiary">
                                 <svg
