@@ -6,11 +6,10 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    // Allow Unsplash and Pravatar avatars used in mock data
-    domains: ['images.unsplash.com', 'i.pravatar.cc'],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'i.pravatar.cc' },
+      { protocol: 'https', hostname: 'pub-f67a53a3781145cbad4879e6d6900be5.r2.dev' },
     ],
   },
   async rewrites() {

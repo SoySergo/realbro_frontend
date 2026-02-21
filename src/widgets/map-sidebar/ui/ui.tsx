@@ -155,14 +155,14 @@ export function MapSidebar({
     const fetchProperties = useCallback(
         async (pageNum: number, append = false) => {
             if (loadingRef.current) return;
-            
+
             loadingRef.current = true;
             setIsLoading(true);
-            
+
             try {
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
-                    
+
                     const data = await getPropertiesByIds(clusterPropertyIds);
                     setProperties(data);
                     setPagination({
@@ -186,7 +186,7 @@ export function MapSidebar({
                     } else {
                         setProperties(response.data);
                     }
-                    
+
                     setPagination(response.pagination);
                     setHasMore(pageNum < response.pagination.totalPages);
                 }
@@ -223,7 +223,7 @@ export function MapSidebar({
 
     const handleSwitchToList = () => {
         setSearchViewMode('list');
-        router.push('/search/list');
+        router.push('/search/properties/list');
     };
 
     const handlePropertyClick = useCallback(
@@ -435,7 +435,7 @@ const MOBILE_ITEM_HEIGHT = 500;
 // Высота хедера мобильного приложения
 const HEADER_HEIGHT = 56;
 // Высота блока с фильтрами (чипсами)
-const FILTERS_HEIGHT = 52; 
+const FILTERS_HEIGHT = 52;
 
 /**
  * MobileMapSidebar - мобильный bottom sheet для карты
@@ -499,7 +499,7 @@ export function MobileMapSidebar({
             try {
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
-                    
+
                     const data = await getPropertiesByIds(clusterPropertyIds);
                     setProperties(data);
                     setPagination({
@@ -552,7 +552,7 @@ export function MobileMapSidebar({
     // Вычисляем высоту виртуализированного списка
     useEffect(() => {
         if (!listContainerRef.current) return;
-        
+
         const updateHeight = () => {
             if (listContainerRef.current) {
                 setListHeight(listContainerRef.current.clientHeight);
@@ -561,14 +561,14 @@ export function MobileMapSidebar({
 
         // Initial measurement
         updateHeight();
-        
+
         // Measure on resize
         const observer = new ResizeObserver(updateHeight);
         observer.observe(listContainerRef.current);
-        
+
         // Also measure after transition
         const timer = setTimeout(updateHeight, 350);
-        
+
         return () => {
             observer.disconnect();
             clearTimeout(timer);

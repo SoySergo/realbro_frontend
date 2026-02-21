@@ -18,9 +18,9 @@ export function Footer({ className }: FooterProps) {
         { label: t('aboutService'), href: '/' },
         { label: t('tariffs'), href: '/tariffs' },
         { label: t('profile'), href: '/profile' },
-        { label: t('mapSearch'), href: '/map' },
-        { label: t('listSearch'), href: '/listing' },
-        { label: t('agenciesSearch'), href: '/agencies' },
+        { label: t('mapSearch'), href: '/search/properties/map' },
+        { label: t('listSearch'), href: '/search/properties/list' },
+        { label: t('agenciesSearch'), href: '/search/agencies/list' },
     ];
 
     const supportItems = [
@@ -37,16 +37,16 @@ export function Footer({ className }: FooterProps) {
                     {/* Brand Column */}
                     <div className="flex flex-col gap-4 md:col-span-1">
                         <Link href="/" className="flex items-center gap-3">
-                             <Image
+                            <Image
                                 src="/logo.svg"
                                 alt="Realbro"
                                 width={32}
                                 height={32}
-                                className="h-8 w-8 text-primary" 
-                             />
-                             <span className="text-xl font-bold text-foreground">
+                                className="h-8 w-8 text-primary"
+                            />
+                            <span className="text-xl font-bold text-foreground">
                                 Realbro
-                             </span>
+                            </span>
                         </Link>
                         <div className="text-sm text-muted-foreground mt-2 space-y-2">
                             <p>© {new Date().getFullYear()} Realbro. {t('allRightsReserved')}</p>
@@ -61,7 +61,7 @@ export function Footer({ className }: FooterProps) {
                             <h4 className="font-semibold text-foreground">{t('aboutService')}</h4>
                             <nav className="flex flex-col gap-3">
                                 {menuItems.slice(0, 3).map((link) => (
-                                    <Link 
+                                    <Link
                                         key={link.label}
                                         href={link.href}
                                         className="text-sm text-muted-foreground hover:text-primary transition-colors w-fit"
@@ -72,12 +72,12 @@ export function Footer({ className }: FooterProps) {
                             </nav>
                         </div>
 
-                         {/* Search */}
-                         <div className="flex flex-col gap-4">
+                        {/* Search */}
+                        <div className="flex flex-col gap-4">
                             <h4 className="font-semibold text-foreground">{t('search')}</h4>
                             <nav className="flex flex-col gap-3">
                                 {menuItems.slice(3).map((link) => (
-                                    <Link 
+                                    <Link
                                         key={link.label}
                                         href={link.href}
                                         className="text-sm text-muted-foreground hover:text-primary transition-colors w-fit"
@@ -88,12 +88,12 @@ export function Footer({ className }: FooterProps) {
                             </nav>
                         </div>
 
-                         {/* Support & Legal (No Title) */}
-                         <div className="flex flex-col gap-4">
+                        {/* Support & Legal (No Title) */}
+                        <div className="flex flex-col gap-4">
                             {/* Spacer removed to align with headers */}
                             <nav className="flex flex-col gap-3">
                                 {supportItems.map((link) => (
-                                    <Link 
+                                    <Link
                                         key={link.label}
                                         href={link.href}
                                         className="text-sm text-muted-foreground hover:text-primary transition-colors w-fit"

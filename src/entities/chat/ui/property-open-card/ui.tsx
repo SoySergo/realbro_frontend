@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { 
-    MapPin, Bed, Bath, Maximize, Train, Bus, 
-    ChevronLeft, ChevronRight, Wifi, Snowflake, 
+import {
+    MapPin, Bed, Bath, Maximize, Train, Bus,
+    ChevronLeft, ChevronRight, Wifi, Snowflake,
     Car, Sofa, Dumbbell, Waves, Trees, Phone
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import type { PropertyChatCard, PropertyFeature } from '@/entities/property';
+import { getImageUrl, getImageAlt } from '@/entities/property/model/card-types';
 
 export interface PropertyCardLabels {
     perMonth?: string;
@@ -78,11 +79,11 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
     const scrollImages = (direction: 'left' | 'right') => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         const imageWidth = el.clientWidth * 0.85; // 85% width per image
         const scrollAmount = direction === 'left' ? -imageWidth : imageWidth;
         el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        
+
         // Update index based on scroll position - approximate
         setTimeout(() => handleScroll(), 300);
     };
@@ -90,14 +91,14 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
     const handleScroll = () => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         // Simple logic to find center-most image
         const center = el.scrollLeft + (el.clientWidth / 2);
         const children = Array.from(el.children) as HTMLElement[];
-        
+
         let closestIndex = 0;
         let minDist = Infinity;
-        
+
         children.forEach((child, index) => {
             const childCenter = child.offsetLeft + (child.offsetWidth / 2);
             const dist = Math.abs(center - childCenter);
@@ -106,7 +107,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                 closestIndex = index;
             }
         });
-        
+
         setCurrentImageIndex(closestIndex);
     };
 
@@ -138,22 +139,22 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                             key={index}
                             className={cn(
                                 "relative shrink-0 snap-center rounded-2xl overflow-hidden aspect-4/3 shadow-sm",
-                                "w-[85vw] md:w-[320px]" 
+                                "w-[85vw] md:w-[320px]"
                             )}
                         >
                             <img
-                                src={image.url}
-                                alt={image.alt || `${property.title} ${index + 1}`}
+                                src={getImageUrl(image)}
+                                alt={getImageAlt(image, `${property.title} ${index + 1}`)}
                                 className="w-full h-full object-cover"
                             />
-                            
+
                             {/* NEW badge on first image */}
                             {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-3 left-3 shadow-lg">
                                     NEW
                                 </Badge>
                             )}
-                            
+
                             {/* Image counter overlay */}
                             <div className="absolute bottom-3 right-3 bg-black/40 backdrop-blur-md text-white/90 text-[10px] font-medium px-2 py-1 rounded-full">
                                 {index + 1}/{images.length}
@@ -200,14 +201,14 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                 {/* 1. Title & Address */}
                 <div className="flex flex-col gap-0.5">
                     <div className="flex items-start justify-between">
-                         <h3 className="text-base md:text-lg font-medium text-text-primary leading-tight">
-                             {property.title}
-                         </h3>
-                         {filterName && (
-                             <div className="text-[10px] font-semibold text-brand-primary uppercase tracking-wide bg-brand-primary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
-                                 {filterName}
-                             </div>
-                         )}
+                        <h3 className="text-base md:text-lg font-medium text-text-primary leading-tight">
+                            {property.title}
+                        </h3>
+                        {filterName && (
+                            <div className="text-[10px] font-semibold text-brand-primary uppercase tracking-wide bg-brand-primary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
+                                {filterName}
+                            </div>
+                        )}
                     </div>
                     <div className="flex items-center gap-1.5 text-xs md:text-sm text-text-secondary">
                         <MapPin className="w-3.5 h-3.5" />
@@ -217,14 +218,14 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
 
                 {/* 2. Price Section (Below Title/Address) */}
                 <div className="flex items-baseline gap-2">
-                     <div className="text-2xl font-bold text-text-primary">
-                         {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{perMonth}</span>
-                     </div>
-                     {property.price_per_meter && (
+                    <div className="text-2xl font-bold text-text-primary">
+                        {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{perMonth}</span>
+                    </div>
+                    {property.price_per_meter && (
                         <div className="text-sm text-text-tertiary">
                             {property.price_per_meter} €/m²
                         </div>
-                     )}
+                    )}
                 </div>
 
                 {/* 3. Key Stats Row - Minimalist (No separators) */}
@@ -235,14 +236,14 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                     </div>
                     {property.rooms > 0 && (
                         <div className="flex items-center gap-2">
-                             <Bed className="w-4 h-4 text-text-tertiary" />
-                             <span className="text-sm font-medium text-text-secondary">{property.rooms} {bedrooms}</span>
+                            <Bed className="w-4 h-4 text-text-tertiary" />
+                            <span className="text-sm font-medium text-text-secondary">{property.rooms} {bedrooms}</span>
                         </div>
                     )}
                     {property.bathrooms > 0 && (
                         <div className="flex items-center gap-2">
-                             <Bath className="w-4 h-4 text-text-tertiary" />
-                             <span className="text-sm font-medium text-text-secondary">{property.bathrooms} {bathrooms}</span>
+                            <Bath className="w-4 h-4 text-text-tertiary" />
+                            <span className="text-sm font-medium text-text-secondary">{property.bathrooms} {bathrooms}</span>
                         </div>
                     )}
                     {property.floor && property.total_floors && (
@@ -279,8 +280,8 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                         {displayFeatures.map((feature) => {
                             const Icon = featureIcons[feature] || Wifi;
                             return (
-                                <div 
-                                    key={feature} 
+                                <div
+                                    key={feature}
                                     className="flex items-center gap-1 text-[10px] md:text-xs text-text-secondary bg-background-secondary/40 px-2.5 py-1.5 rounded-lg"
                                 >
                                     <Icon className="w-3.5 h-3.5 shrink-0 text-text-tertiary" />
@@ -300,7 +301,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
 
                 {/* 7. Contact Button + Actions */}
                 <div className="flex items-center gap-3 pt-2">
-                    <Button 
+                    <Button
                         variant="default"
                         size="sm"
                         onClick={handleContact}
@@ -309,7 +310,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                         <Phone className="w-4 h-4" />
                         {contact}
                     </Button>
-                    
+
                     {actions && (
                         <div className="flex items-center">
                             {actions}

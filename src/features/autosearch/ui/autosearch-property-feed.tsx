@@ -33,7 +33,7 @@ export function AutosearchPropertyFeed({
     const scrollRef = useRef<HTMLDivElement>(null);
     const [isAtBottom, setIsAtBottom] = useState(true);
     const isAtBottomRef = useRef(true);
-    
+
     const { incomingProperties, markPropertyAsViewed } = useAutosearchStore();
     const { viewedIds } = usePropertyActionsStore();
 
@@ -41,10 +41,10 @@ export function AutosearchPropertyFeed({
     const checkScrollPosition = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         const { scrollTop, scrollHeight, clientHeight } = el;
         const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-        
+
         const atBottom = distanceFromBottom <= 50;
         setIsAtBottom(atBottom);
         isAtBottomRef.current = atBottom;
@@ -54,7 +54,7 @@ export function AutosearchPropertyFeed({
     const scrollToBottom = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         el.scrollTo({
             top: el.scrollHeight,
             behavior: 'smooth',
@@ -66,10 +66,10 @@ export function AutosearchPropertyFeed({
     useEffect(() => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         el.addEventListener('scroll', checkScrollPosition);
         checkScrollPosition();
-        
+
         return () => {
             el.removeEventListener('scroll', checkScrollPosition);
         };
@@ -110,7 +110,7 @@ export function AutosearchPropertyFeed({
             </div>
 
             {/* Лента объектов */}
-            <div 
+            <div
                 ref={scrollRef}
                 className="flex-1 overflow-y-auto px-4 py-4 relative"
             >
@@ -124,8 +124,8 @@ export function AutosearchPropertyFeed({
                 ) : (
                     <div className="space-y-4">
                         {incomingProperties.map((property) => (
-                            <div 
-                                key={property.id} 
+                            <div
+                                key={property.id}
                                 className={cn(
                                     'transition-all duration-300',
                                     property.autosearchMetadata.isNew && 'animate-fade-in'
@@ -134,16 +134,16 @@ export function AutosearchPropertyFeed({
                             >
                                 <PropertyOpenCard
                                     property={property}
-                                    renderActions={() => (
+                                    actions={(
                                         <div className="flex items-center gap-2">
                                             <PropertyActionButtons propertyId={property.id} />
-                                            <PropertyCompareButton propertyId={property.id} />
+                                            <PropertyCompareButton property={property} />
                                         </div>
                                     )}
                                     labels={labels.propertyCard}
                                     isNew={property.autosearchMetadata.isNew}
                                 />
-                                
+
                                 {/* Метаданные AutoSearch */}
                                 {property.autosearchMetadata.filterNames.length > 0 && (
                                     <div className="mt-2 flex items-center gap-2 flex-wrap">
@@ -164,7 +164,7 @@ export function AutosearchPropertyFeed({
 
                 {/* Кнопка скролла вниз */}
                 {!isAtBottom && incomingProperties.length > 0 && (
-                    <ScrollToBottomButton onClick={scrollToBottom} />
+                    <ScrollToBottomButton show={true} onClick={scrollToBottom} />
                 )}
             </div>
         </div>

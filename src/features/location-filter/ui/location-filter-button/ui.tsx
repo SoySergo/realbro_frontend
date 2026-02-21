@@ -62,10 +62,10 @@ export function LocationFilterButton() {
         console.log('Location filter mode selected:', mode);
 
         // Если выбран режим, требующий карту, и мы на странице листинга — редирект на карту
-        const isOnListPage = pathname?.includes('/search/list');
+        const isOnListPage = pathname?.includes('/search/properties/list') || pathname?.includes('/search/agencies/list');
         if (MAP_REQUIRED_MODES.includes(mode) && isOnListPage) {
             setLocationMode(mode);
-            router.push(`/search/map?openMode=${mode}`);
+            router.push(`/search/properties/map?openMode=${mode}`);
             setOpen(false);
             return;
         }

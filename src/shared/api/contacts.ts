@@ -159,11 +159,11 @@ function incrementAnonymousViewCount(): void {
         const today = new Date().toDateString();
         const stored = localStorage.getItem(STORAGE_ANONYMOUS_KEY);
         let data: DailyViewCount = stored ? JSON.parse(stored) : { date: today, owners: 0, agents: 0, agencies: 0 };
-        
+
         if (data.date !== today) {
             data = { date: today, owners: 0, agents: 0, agencies: 0 };
         }
-        
+
         data.agencies++;
         localStorage.setItem(STORAGE_ANONYMOUS_KEY, JSON.stringify(data));
     } catch {
@@ -192,7 +192,7 @@ const MOCK_CONTACTS: Record<string, ContactInfo> = {
         phone: '+34 933 456 789',
         email: 'info@bcn-realty.es',
         website: 'https://bcn-realty.es',
-        agencyProfile: '/agencies/bcn-realty',
+        agencyProfile: '/agency/bcn-realty',
     },
 };
 
@@ -209,7 +209,7 @@ function generateMockContacts(authorId: string, authorType: AuthorType): Contact
     const hash = authorId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const phoneBase = 600000000 + (hash % 99999999);
     const phoneStr = String(phoneBase).padStart(9, '0');
-    
+
     const contacts: ContactInfo = {
         phone: `+34 ${phoneStr.slice(0, 3)} ${phoneStr.slice(3, 6)} ${phoneStr.slice(6, 9)}`,
     };
@@ -314,11 +314,11 @@ export async function getContactAccess(
     // Для авторизованных проверяем лимит тарифа
     if (isAuthenticated) {
         const limits = LIMITS[userTariff];
-        
+
         // Мок: всегда разрешаем в dev режиме или возвращаем ошибку с вероятностью 10%
         if (FEATURES.USE_MOCK_PROPERTIES) {
             const shouldFail = Math.random() < 0.1;
-            
+
             if (shouldFail) {
                 console.log('[Contacts API] Mock limit exceeded');
                 // Определяем ключ лимита на основе типа автора

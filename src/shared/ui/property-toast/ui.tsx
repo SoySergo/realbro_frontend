@@ -4,11 +4,12 @@ import { useCallback, useRef, useState, memo, useEffect } from 'react';
 import { toast as sonnerToast } from 'sonner';
 import { X, ThumbsUp, ThumbsDown, StickyNote, Home, User2 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property/model/card-types';
+import { getImageUrl } from '@/entities/property/model/card-types';
 
 export interface PropertyToast {
     id: string;
-    property: Property;
+    property: PropertyChatCard;
     filterName?: string;
     timestamp: number;
 }
@@ -28,7 +29,7 @@ interface PropertyToastContentProps {
     onLike?: (propertyId: string) => void;
     onDislike?: (propertyId: string) => void;
     onNote?: (propertyId: string) => void;
-    onOpen?: (property: Property) => void;
+    onOpen?: (property: PropertyChatCard) => void;
     labels: PropertyToastLabels;
 }
 
@@ -47,7 +48,7 @@ const PropertyToastContent = memo(function PropertyToastContent({
     labels,
 }: PropertyToastContentProps) {
     const { property, filterName } = propertyToast;
-    const mainImage = property.images?.[0];
+    const mainImage = property.images?.[0] ? getImageUrl(property.images[0]) : undefined;
 
     // Свайп-поддержка
     const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -68,15 +69,15 @@ const PropertyToastContent = memo(function PropertyToastContent({
 
     const handleTouchMove = useCallback((e: React.TouchEvent) => {
         if (!touchStartRef.current) return;
-        
+
         const deltaX = e.touches[0].clientX - touchStartRef.current.x;
         const deltaY = e.touches[0].clientY - touchStartRef.current.y;
-        
+
         // Отмечаем что началась drag gesture
         if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
             isDragging.current = true;
         }
-        
+
         setSwipeOffset({
             x: deltaX,
             y: Math.min(0, deltaY),
@@ -86,13 +87,13 @@ const PropertyToastContent = memo(function PropertyToastContent({
     const handleTouchEnd = useCallback(() => {
         const threshold = 80;
         const shouldDismiss = Math.abs(swipeOffset.x) > threshold || swipeOffset.y < -threshold;
-        
+
         if (shouldDismiss) {
             handleDismiss();
         } else {
             setSwipeOffset({ x: 0, y: 0 });
         }
-        
+
         touchStartRef.current = null;
         // Сбрасываем флаг с небольшой задержкой чтобы не сработал клик
         setTimeout(() => {
@@ -103,7 +104,7 @@ const PropertyToastContent = memo(function PropertyToastContent({
     const handleClick = useCallback(() => {
         // Не открываем если идет свайп
         if (isDragging.current) return;
-        
+
         onOpen?.(property);
         handleDismiss();
     }, [property, onOpen, handleDismiss]);
@@ -227,7 +228,7 @@ interface PropertyToastContainerProps {
     onLike?: (propertyId: string) => void;
     onDislike?: (propertyId: string) => void;
     onNote?: (propertyId: string) => void;
-    onOpen?: (property: Property) => void;
+    onOpen?: (property: PropertyChatCard) => void;
     labels: PropertyToastLabels;
 }
 
@@ -253,11 +254,11 @@ export const PropertyToastContainer = memo(function PropertyToastContainer({
     useEffect(() => {
         const prevIds = new Set(prevToastsRef.current.map(t => t.id));
         const currentIds = new Set(toasts.map(t => t.id));
-        
+
         // Показываем новые тосты
         toasts.forEach((propertyToast) => {
             if (shownRef.current.has(propertyToast.id)) return;
-            
+
             // Добавляем в отслеживаемые
             shownRef.current.add(propertyToast.id);
 
@@ -294,7 +295,7 @@ export const PropertyToastContainer = memo(function PropertyToastContainer({
                 }
             );
         });
-        
+
         // Убираем тосты, которые были удалены из массива
         shownRef.current.forEach((id) => {
             if (!currentIds.has(id) && prevIds.has(id)) {
@@ -302,7 +303,7 @@ export const PropertyToastContainer = memo(function PropertyToastContainer({
                 shownRef.current.delete(id);
             }
         });
-        
+
         prevToastsRef.current = toasts;
     }, [toasts, onDismiss, onLike, onDislike, onNote, onOpen, labels]);
 

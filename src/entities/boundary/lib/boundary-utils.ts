@@ -59,7 +59,7 @@ export const formatBoundaryName = (boundary: BoundaryFeature): string => {
 /**
  * Получает тип локации по admin_level
  */
-export const getLocationType = (adminLevel?: number): string => {
+export const getLocationType = (adminLevel?: number): 'country' | 'region' | 'province' | 'comarca' | 'city' | 'district' | 'neighborhood' => {
     switch (adminLevel) {
         case 2:
             return 'country';
@@ -76,7 +76,7 @@ export const getLocationType = (adminLevel?: number): string => {
         case 10:
             return 'neighborhood';
         default:
-            return 'location';
+            return 'city';
     }
 };
 

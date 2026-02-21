@@ -23,6 +23,7 @@ interface AutosearchTaskListProps {
         channels: string;
         frequency: string;
         schedule: string;
+        online: string;
         instant: string;
         daily: string;
         weekly: string;
@@ -125,6 +126,7 @@ export function AutosearchTaskList({
                                     channels: labels.channels,
                                     frequency: labels.frequency,
                                     schedule: labels.schedule,
+                                    online: labels.online,
                                     instant: labels.instant,
                                     daily: labels.daily,
                                     weekly: labels.weekly,

@@ -25,7 +25,7 @@ export function AgencyCardHorizontal({ agency, locale, className }: AgencyCardHo
 
     return (
         <Link
-            href={`/agency/${agency.id}`}
+            href={`/agency/${agency.slug}`}
             locale={locale}
             className={cn('group block', className)}
         >

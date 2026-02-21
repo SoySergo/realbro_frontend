@@ -84,7 +84,7 @@ export function SearchMapPage() {
 
     // Обработчик клика на объект - центрировать карту
     const handlePropertyClick = useCallback((property: PropertyGridCard) => {
-        router.push(`/property/${property.id}`);
+        router.push(`/property/${property.slug || property.id}`);
     }, [router]);
 
     // Обработчик наведения - подсветить на карте

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Calendar, X } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, type Locale } from 'date-fns';
 import { ru, enUS, es, ca, uk, fr, it, pt, de } from 'date-fns/locale';
 import { useLocale } from 'next-intl';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';

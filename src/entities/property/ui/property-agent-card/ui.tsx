@@ -81,10 +81,10 @@ export function PropertyAgentCard({
                             {t('agency') || 'Агентство'}
                         </p>
                     )}
-                    
+
                     {/* Name */}
                     <Link
-                        href={`/agency/${agent.id}`}
+                        href={`/agency/${agent.slug || agent.id}`}
                         className={cn("font-semibold text-foreground truncate hover:text-brand-primary transition-colors block", compact && "text-sm")}
                         onClick={(e) => e.stopPropagation()}
                     >

@@ -36,9 +36,9 @@ export function SearchCategorySwitcher({
         if (!value || value === currentCategory) return;
 
         if (value === 'properties') {
-            router.push('/search/map');
+            router.push('/search/properties/map');
         } else if (value === 'professionals') {
-            router.push('/agencies');
+            router.push('/search/agencies/list');
         }
     };
 

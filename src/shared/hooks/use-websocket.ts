@@ -46,7 +46,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
 
     const [status, setStatus] = useState<WebSocketStatus>('disconnected');
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
-    
+
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -54,9 +54,6 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     const isIntentionalCloseRef = useRef(false);
 
     const { addIncomingMessage } = useChatStore();
-        const filterIds = ['filter_1', 'filter_2', 'filter_3'];
-        const filterIdx = propertyCounterRef.current % 3;
-
 
     // Остановить heartbeat
     const stopHeartbeat = useCallback(() => {
@@ -69,17 +66,17 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             heartbeatTimeoutRef.current = null;
         }
     }, []);
-    
+
     // Отправить ping
     const sendPing = useCallback(() => {
         if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-        
+
         try {
             wsRef.current.send(JSON.stringify({
                 type: 'ping',
                 timestamp: Date.now(),
             }));
-            
+
             // Установить timeout на pong
             heartbeatTimeoutRef.current = setTimeout(() => {
                 console.log('[WebSocket] Heartbeat timeout - no pong received');
@@ -89,20 +86,20 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             console.error('[WebSocket] Failed to send ping:', error);
         }
     }, [heartbeatTimeout]);
-    
+
     // Запустить heartbeat
     const startHeartbeat = useCallback(() => {
         stopHeartbeat();
-        
+
         // Первый ping сразу
         sendPing();
-        
+
         // Затем регулярно
         heartbeatIntervalRef.current = setInterval(() => {
             sendPing();
         }, heartbeatInterval);
     }, [heartbeatInterval, sendPing, stopHeartbeat]);
-    
+
     // Обработать pong
     const handlePong = useCallback(() => {
         // Отменить timeout
@@ -111,7 +108,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             heartbeatTimeoutRef.current = null;
         }
     }, []);
-    
+
     // Вычислить задержку для переподключения (exponential backoff)
     const getReconnectDelay = useCallback((attempt: number): number => {
         return Math.min(reconnectInterval * Math.pow(2, attempt), 60000); // Макс 60 секунд
@@ -139,22 +136,22 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    
+
                     // Обработка разных типов сообщений
                     switch (data.type) {
                         case 'pong':
                             handlePong();
                             break;
-                            
+
                         case 'chat:message':
                             // Новое сообщение в чате
                             addIncomingMessage(data.message);
                             break;
-                            
+
                         case 'error':
                             console.error('[Chat WS] Server error:', data);
                             break;
-                            
+
                         default:
                             console.log('[Chat WS] Unknown message type:', data.type);
                     }
@@ -174,7 +171,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
                     reason: event.reason,
                     wasClean: event.wasClean,
                 });
-                
+
                 stopHeartbeat();
                 setStatus('disconnected');
                 wsRef.current = null;
@@ -184,7 +181,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
                     if (reconnectAttempts < maxReconnectAttempts) {
                         const delay = getReconnectDelay(reconnectAttempts);
                         console.log(`[Chat WS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})`);
-                        
+
                         setReconnectAttempts(prev => prev + 1);
                         reconnectTimeoutRef.current = setTimeout(() => {
                             connect();
@@ -214,19 +211,19 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     // Disconnect from WebSocket
     const disconnect = useCallback(() => {
         isIntentionalCloseRef.current = true;
-        
+
         if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current);
             reconnectTimeoutRef.current = null;
         }
-        
+
         stopHeartbeat();
-        
+
         if (wsRef.current) {
             wsRef.current.close();
             wsRef.current = null;
         }
-        
+
         setStatus('disconnected');
         setReconnectAttempts(0);
     }, [stopHeartbeat]);

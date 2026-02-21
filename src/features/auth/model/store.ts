@@ -6,6 +6,7 @@ import type { UserInfo } from '@/entities/user';
 import { authApi, AuthError } from '@/shared/api/auth';
 import { setAccessToken } from '@/shared/api/lib/api-client';
 import { FEATURES, MOCK_USER } from '@/shared/config/features';
+import { saveReturnUrl } from './navigation';
 
 type AuthState = {
     // Состояние
@@ -168,6 +169,10 @@ export const useAuthStore = create<AuthState>()(
                 set({ isLoading: true, error: null });
                 try {
                     const returnUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+                    // Сохраняем pathname в sessionStorage как fallback (бэкенд может не вернуть return_url)
+                    if (typeof window !== 'undefined') {
+                        saveReturnUrl(window.location.pathname);
+                    }
                     const { url } = await authApi.getGoogleAuthUrl(returnUrl);
                     // Редирект на страницу авторизации Google
                     window.location.href = url;

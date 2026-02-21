@@ -18,6 +18,7 @@ interface AutosearchTaskCardProps {
         channels: string;
         frequency: string;
         schedule: string;
+        online: string;
         instant: string;
         daily: string;
         weekly: string;
@@ -44,6 +45,7 @@ export function AutosearchTaskCard({
     labels,
 }: AutosearchTaskCardProps) {
     const frequencyLabel = {
+        online: labels.online,
         instant: labels.instant,
         daily: labels.daily,
         weekly: labels.weekly,

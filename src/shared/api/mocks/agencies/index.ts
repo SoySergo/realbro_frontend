@@ -31,7 +31,7 @@ export * from './agencies-mock';
 // ============================================================================
 
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.example.com';
+const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/api/v1`;
 
 // ============================================================================
 // API Functions
@@ -43,20 +43,20 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.example.com';
 export async function getAgencyById(id: string, locale: string = 'ru'): Promise<Agency | null> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         // Извлекаем индекс из ID
         const index = parseInt(id.replace('agency_', ''), 10) || 0;
-        const agency = generateMockAgency(index, { 
+        const agency = generateMockAgency(index, {
             locale: locale as 'ru' | 'en' | 'es' | 'fr',
             includeAgents: true,
             includeReviews: true,
         });
-        
+
         return { ...agency, id };
     }
 
     try {
-        const response = await fetch(`${API_BASE}/agencies/${id}?lang=${locale}`, {
+        const response = await fetch(`${API_BASE}/companies/${id}?lang=${locale}`, {
             next: { revalidate: 3600 }, // ISR: 1 час
         });
 
@@ -78,10 +78,10 @@ export async function getAgencyById(id: string, locale: string = 'ru'): Promise<
 export async function getAgencyBySlug(slug: string, locale: string = 'ru'): Promise<Agency | null> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         // Ищем агентство по slug в моках
         for (let i = 0; i < 15; i++) {
-            const agency = generateMockAgency(i, { 
+            const agency = generateMockAgency(i, {
                 locale: locale as 'ru' | 'en' | 'es' | 'fr',
                 includeAgents: true,
                 includeReviews: true,
@@ -94,7 +94,7 @@ export async function getAgencyBySlug(slug: string, locale: string = 'ru'): Prom
     }
 
     try {
-        const response = await fetch(`${API_BASE}/agencies/slug/${slug}?lang=${locale}`, {
+        const response = await fetch(`${API_BASE}/companies/${slug}?lang=${locale}`, {
             next: { revalidate: 3600 },
         });
 
@@ -129,15 +129,15 @@ export async function getAgenciesList(
 }> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 150));
-        
-        let allAgencies = generateMockAgencyCards(50, { 
-            locale: locale as 'ru' | 'en' | 'es' | 'fr' 
+
+        let allAgencies = generateMockAgencyCards(50, {
+            locale: locale as 'ru' | 'en' | 'es' | 'fr'
         });
 
         // Применяем фильтры
         if (filters.query) {
             const query = filters.query.toLowerCase();
-            allAgencies = allAgencies.filter(a => 
+            allAgencies = allAgencies.filter(a =>
                 a.name.toLowerCase().includes(query)
             );
         }
@@ -211,7 +211,7 @@ export async function getAgenciesList(
         if (filters.sort) params.append('sort', filters.sort);
         if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
 
-        const response = await fetch(`${API_BASE}/agencies?${params}`, {
+        const response = await fetch(`${API_BASE}/companies?${params}`, {
             next: { revalidate: 300 }, // ISR: 5 минут
         });
 
@@ -265,7 +265,7 @@ export async function getAgencyProperties(
 }> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         // Генерируем объекты для агентства
         const config: MockPropertyConfig = {
             includeAuthor: true,
@@ -315,7 +315,7 @@ export async function getAgencyProperties(
         if (filters.rooms) params.append('rooms', filters.rooms.join(','));
         if (filters.agentId) params.append('agentId', filters.agentId);
 
-        const response = await fetch(`${API_BASE}/agencies/${agencyId}/properties?${params}`, {
+        const response = await fetch(`${API_BASE}/companies/${agencyId}/properties?${params}`, {
             next: { revalidate: 300 },
         });
 
@@ -353,7 +353,7 @@ export async function getAgencyReviews(
 }> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         const agency = generateMockAgency(
             parseInt(agencyId.replace('agency_', ''), 10) || 0,
             { locale: locale as 'ru' | 'en' | 'es' | 'fr', includeReviews: true }
@@ -383,7 +383,7 @@ export async function getAgencyReviews(
             lang: locale,
         });
 
-        const response = await fetch(`${API_BASE}/agencies/${agencyId}/reviews?${params}`, {
+        const response = await fetch(`${API_BASE}/companies/${agencyId}/reviews?${params}`, {
             next: { revalidate: 600 }, // ISR: 10 минут
         });
 
@@ -411,25 +411,25 @@ export async function searchAgenciesByPhone(
 ): Promise<AgencyCardData[]> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         // Нормализуем телефон
         const normalizedPhone = phone.replace(/\D/g, '');
-        
-        const allAgencies = generateMockAgencyCards(50, { 
-            locale: locale as 'ru' | 'en' | 'es' | 'fr' 
+
+        const allAgencies = generateMockAgencyCards(50, {
+            locale: locale as 'ru' | 'en' | 'es' | 'fr'
         });
 
         // В моках просто возвращаем первое агентство, если телефон похож
         if (normalizedPhone.length >= 6) {
             return allAgencies.slice(0, 1);
         }
-        
+
         return [];
     }
 
     try {
         const response = await fetch(
-            `${API_BASE}/agencies/search/phone?phone=${encodeURIComponent(phone)}&lang=${locale}`,
+            `${API_BASE}/companies/search/phone?phone=${encodeURIComponent(phone)}&lang=${locale}`,
             { next: { revalidate: 300 } }
         );
 

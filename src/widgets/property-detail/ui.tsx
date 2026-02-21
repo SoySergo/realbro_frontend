@@ -86,17 +86,17 @@ export function PropertyDetailWidget({
     const t = translations;
     const tContact = useTranslations('contact');
     const tActions = useTranslations('actions');
-    
+
     // Contact store
     const { openContactModal } = useContactStore();
-    
+
     // Централизованные действия пользователя
     const { isLiked, isDisliked, toggleLike, toggleDislike } = usePropertyActions(property.id);
 
     // Открыть модалку контактов
     const handleOpenContacts = useCallback(() => {
         if (!property.author) return;
-        
+
         openContactModal({
             propertyId: property.id,
             authorId: property.author.id,
@@ -135,7 +135,7 @@ export function PropertyDetailWidget({
 
     // Calculate rating (mock based on ID for consistency)
     const mockRating = 4.5 + (property.id.length % 5) / 10;
-    
+
     // Переводы для модалки контактов
     const contactModalTranslations = {
         title: tContact('title'),
@@ -162,7 +162,7 @@ export function PropertyDetailWidget({
         agency: tContact('agency'),
         limitInfo: tContact.raw('limitInfo') as string,
     };
-    
+
     // Переводы для действий
     const actionsMenuTranslations = {
         like: tActions('like'),
@@ -504,8 +504,8 @@ export function PropertyDetailWidget({
                             locale={locale}
                             onCall={handleCall}
                             onMessage={handleMessage}
-                            onLike={() => handleLike(property.id, true)}
-                            onDislike={() => handleDislike(property.id, true)}
+                            onLike={() => handleLike()}
+                            onDislike={() => handleDislike()}
                             onShare={() => handleShare(property.id)}
                             compareButton={<PropertyCompareButton property={property} variant="icon" size="sm" />}
                             author={property.author}
@@ -575,7 +575,7 @@ export function PropertyDetailWidget({
                     />
                 }
             />
-            
+
             {/* Contact Modal */}
             <ContactModal translations={contactModalTranslations} />
 

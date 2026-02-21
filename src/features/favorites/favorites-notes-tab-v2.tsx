@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { 
-    StickyNote, Bell, Trash2, Edit, Clock, ExternalLink, 
-    Calendar as CalendarIcon, Filter as FilterIcon, Plus, ArrowUpDown 
+import {
+    StickyNote, Bell, Trash2, Edit, Clock, ExternalLink,
+    Calendar as CalendarIcon, Filter as FilterIcon, Plus, ArrowUpDown
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
@@ -19,7 +19,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/tabs';
 import { DateRangePicker } from '@/shared/ui/date-range-picker';
 import type { PropertyNote, FavoritesNotesFilters } from '@/entities/favorites/model/types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
-import { format } from 'date-fns';
+import { format, type Locale } from 'date-fns';
 import { ru, enUS, es, ca, uk, fr, it, pt, de } from 'date-fns/locale';
 import { useLocale } from 'next-intl';
 import { Link } from '@/shared/config/routing';
@@ -48,12 +48,12 @@ const dateLocales: Record<string, Locale> = {
 /**
  * Улучшенный таб заметок с редактированием и календарным представлением
  */
-export function FavoritesNotesTabV2({ 
-    notes, 
+export function FavoritesNotesTabV2({
+    notes,
     isEmpty,
     onDelete,
     onEdit,
-    onCreate 
+    onCreate
 }: FavoritesNotesTabProps) {
     const t = useTranslations('favorites');
     const tNotes = useTranslations('favorites.notes');
@@ -67,13 +67,13 @@ export function FavoritesNotesTabV2({
         sortBy: 'createdAt',
         sortOrder: 'desc',
     });
-    
+
     // Состояния диалогов
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedNote, setSelectedNote] = useState<PropertyNote | null>(null);
-    
+
     // Форма редактирования/создания
     const [formText, setFormText] = useState('');
     const [formReminderDate, setFormReminderDate] = useState('');
@@ -88,7 +88,7 @@ export function FavoritesNotesTabV2({
         const reminderDate = new Date(date);
         const isToday = reminderDate.toDateString() === now.toDateString();
         const isTomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toDateString() === reminderDate.toDateString();
-        
+
         if (isToday) return tNotes('today');
         if (isTomorrow) return tNotes('tomorrowLabel');
         return format(reminderDate, 'd MMM yyyy', { locale: dateLocale });
@@ -172,12 +172,12 @@ export function FavoritesNotesTabV2({
 
     const handleSaveEdit = () => {
         if (!selectedNote) return;
-        
+
         let reminderDate: Date | null = null;
         if (formReminderDate && formReminderTime) {
             reminderDate = new Date(`${formReminderDate}T${formReminderTime}`);
         }
-        
+
         onEdit?.(selectedNote.id, formText, reminderDate);
         setEditDialogOpen(false);
         setSelectedNote(null);
@@ -188,7 +188,7 @@ export function FavoritesNotesTabV2({
         if (formReminderDate && formReminderTime) {
             reminderDate = new Date(`${formReminderDate}T${formReminderTime}`);
         }
-        
+
         onCreate?.(formText, undefined, reminderDate);
         setCreateDialogOpen(false);
     };
@@ -234,11 +234,11 @@ export function FavoritesNotesTabV2({
                         onValueChange={(value) => value && setViewMode(value as any)}
                         className="border border-border rounded-lg p-1"
                     >
-                        <ToggleGroupItem value="list" size="sm">
+                        <ToggleGroupItem value="list">
                             <StickyNote className="w-4 h-4 mr-1" />
                             {tNotes('listView')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="calendar" size="sm">
+                        <ToggleGroupItem value="calendar">
                             <CalendarIcon className="w-4 h-4 mr-1" />
                             {tNotes('calendarView')}
                         </ToggleGroupItem>
@@ -280,14 +280,14 @@ export function FavoritesNotesTabV2({
                         }}
                         className="border border-border rounded-lg p-1"
                     >
-                        <ToggleGroupItem value="all" size="sm" className="text-xs">
+                        <ToggleGroupItem value="all" className="text-xs">
                             {tNotes('filters.all')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="with" size="sm" className="text-xs">
+                        <ToggleGroupItem value="with" className="text-xs">
                             <Bell className="w-3 h-3 mr-1" />
                             {tNotes('filters.withReminder')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="without" size="sm" className="text-xs">
+                        <ToggleGroupItem value="without" className="text-xs">
                             {tNotes('filters.noReminder')}
                         </ToggleGroupItem>
                     </ToggleGroup>
@@ -336,7 +336,7 @@ export function FavoritesNotesTabV2({
                 // Список заметок
                 <div className="space-y-4">
                     {filteredNotes.map((note) => (
-                        <div 
+                        <div
                             key={note.id}
                             className="bg-card rounded-xl border border-border p-4 hover:border-primary transition-colors"
                         >
@@ -345,7 +345,7 @@ export function FavoritesNotesTabV2({
                                 {(note.property || note.agency) && (
                                     <div className="flex-shrink-0">
                                         {note.property && (
-                                            <Link href={`/property/${note.property.id}`}>
+                                            <Link href={`/property/${note.property.slug || note.property.id}`}>
                                                 <div className="relative w-24 h-24 rounded-lg overflow-hidden group">
                                                     <Image
                                                         src={safeImageSrc(note.property.images[0])}
@@ -377,7 +377,7 @@ export function FavoritesNotesTabV2({
                                 <div className="flex-1 min-w-0">
                                     {/* Заголовок */}
                                     {note.property && (
-                                        <Link href={`/property/${note.property.id}`}>
+                                        <Link href={`/property/${note.property.slug || note.property.id}`}>
                                             <h3 className="font-medium text-text-primary hover:text-primary transition-colors line-clamp-1 mb-1">
                                                 {note.property.title}
                                             </h3>
@@ -401,7 +401,7 @@ export function FavoritesNotesTabV2({
                                             {formatDate(new Date(note.updated_at))}
                                         </span>
                                         {note.reminder && (
-                                            <Badge 
+                                            <Badge
                                                 variant={new Date(note.reminder.remind_at) < new Date() ? 'destructive' : 'secondary'}
                                                 className="text-xs"
                                             >

@@ -28,19 +28,19 @@ const dateLocales: Record<string, Locale> = {
 /**
  * Таб заметок и напоминаний
  */
-export function FavoritesNotesTab({ 
-    notes, 
+export function FavoritesNotesTab({
+    notes,
     isEmpty,
     onDelete,
-    onEdit 
+    onEdit
 }: FavoritesNotesTabProps) {
     const t = useTranslations('favorites');
     const tNotes = useTranslations('favorites.notes');
     const locale = useLocale();
 
     const formatDate = (date: Date) => {
-        return format(new Date(date), 'd MMM yyyy, HH:mm', { 
-            locale: dateLocales[locale] || enUS 
+        return format(new Date(date), 'd MMM yyyy, HH:mm', {
+            locale: dateLocales[locale] || enUS
         });
     };
 
@@ -49,11 +49,11 @@ export function FavoritesNotesTab({
         const reminderDate = new Date(date);
         const isToday = reminderDate.toDateString() === now.toDateString();
         const isTomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toDateString() === reminderDate.toDateString();
-        
+
         if (isToday) return tNotes('today');
         if (isTomorrow) return tNotes('tomorrowLabel');
-        return format(reminderDate, 'd MMM yyyy', { 
-            locale: dateLocales[locale] || enUS 
+        return format(reminderDate, 'd MMM yyyy', {
+            locale: dateLocales[locale] || enUS
         });
     };
 
@@ -76,15 +76,15 @@ export function FavoritesNotesTab({
     return (
         <div className="space-y-4">
             {notes.map((note) => (
-                <div 
+                <div
                     key={note.id}
                     className="bg-card rounded-xl border border-border p-4 hover:border-primary transition-colors"
                 >
                     <div className="flex gap-4">
                         {/* Превью объекта */}
                         {note.property && (
-                            <Link 
-                                href={`/property/${note.property.id}`}
+                            <Link
+                                href={`/property/${note.property.slug || note.property.id}`}
                                 className="flex-shrink-0"
                             >
                                 <div className="relative w-24 h-24 rounded-lg overflow-hidden group">
@@ -105,7 +105,7 @@ export function FavoritesNotesTab({
                         <div className="flex-1 min-w-0">
                             {/* Заголовок объекта */}
                             {note.property && (
-                                <Link href={`/property/${note.property.id}`}>
+                                <Link href={`/property/${note.property.slug || note.property.id}`}>
                                     <h3 className="font-medium text-text-primary hover:text-primary transition-colors line-clamp-1 mb-1">
                                         {note.property.title}
                                     </h3>
@@ -124,7 +124,7 @@ export function FavoritesNotesTab({
                                     {formatDate(new Date(note.updated_at))}
                                 </span>
                                 {note.reminder && (
-                                    <Badge 
+                                    <Badge
                                         variant={new Date(note.reminder.remind_at) < new Date() ? 'destructive' : 'secondary'}
                                         className="text-xs"
                                     >

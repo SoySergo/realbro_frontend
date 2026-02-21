@@ -3,6 +3,7 @@
 import { useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/model/store';
+import { getRedirectAfterAuth } from '@/features/auth/model/navigation';
 import { ensureLocalePrefix, getLocaleFromPathname } from '@/shared/lib/locale-utils';
 import { Loader2 } from 'lucide-react';
 
@@ -18,8 +19,9 @@ function GoogleCallbackContent() {
         if (processedRef.current) return;
         processedRef.current = true;
 
-        // Получаем return_url из query params (переданный бекендом)
-        const returnUrl = searchParams.get('return_url') || '/search';
+        // Получаем return_url: 1) query param от бекенда, 2) sessionStorage, 3) fallback /search/properties/map
+        const backendReturnUrl = searchParams.get('return_url');
+        const returnUrl = backendReturnUrl || getRedirectAfterAuth(null, '/search/properties/map');
         const locale = getLocaleFromPathname(pathname);
 
         // Токены уже установлены в cookies бекендом

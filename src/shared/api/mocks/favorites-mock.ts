@@ -3,11 +3,11 @@
  * Централизованные данные для профессионалов, заметок, фильтров
  */
 
-import type { 
-    PropertyNote, 
-    FavoriteProfessional, 
-    SavedFilter, 
-    FavoriteProperty 
+import type {
+    PropertyNote,
+    FavoriteProfessional,
+    SavedFilter,
+    FavoriteProperty
 } from '@/entities/favorites/model/types';
 import type { PropertyAuthor } from '@/entities/property/model/types';
 import { generateMockProperty } from './properties-mock';
@@ -118,7 +118,7 @@ export function generateMockNotes(count: number = 5): PropertyNote[] {
     return Array.from({ length: count }, (_, index) => {
         const property = generateMockProperty(index, { cardType: 'grid' });
         const hasReminder = index % 3 === 0;
-        const reminderDate = hasReminder 
+        const reminderDate = hasReminder
             ? new Date(Date.now() + (index + 1) * 24 * 60 * 60 * 1000)
             : undefined;
 
@@ -216,10 +216,10 @@ export function generateMockSavedFilters(count: number = 4): SavedFilter[] {
 export function generateMockFavoriteProperties(count: number = 6): FavoriteProperty[] {
     const notes = generateMockNotes(3);
     const markTypes: ('like' | 'dislike' | 'unsorted')[] = ['like', 'dislike', 'unsorted'];
-    
+
     return Array.from({ length: count }, (_, index) => {
         const property = generateMockProperty(index * 3, { cardType: 'grid' });
-        
+
         return {
             id: `fav_prop_${index}`,
             propertyId: property.id,
@@ -238,50 +238,56 @@ export const favoritesApi = {
     async createNote(propertyId: string, text: string, reminderDate?: Date): Promise<PropertyNote> {
         // Имитация задержки сети
         await new Promise(resolve => setTimeout(resolve, 300));
-        
+
         const property = generateMockProperty(0, { cardType: 'grid' });
         const note: PropertyNote = {
             id: `note_${Date.now()}`,
-            propertyId,
-            userId: 'user_1',
-            text,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            user_id: 'user_1',
+            property_id: propertyId,
+            content: text,
+            tags: [],
+            note_type: 'property',
+            is_private: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
             property,
             reminder: reminderDate ? {
                 id: `reminder_${Date.now()}`,
-                noteId: `note_${Date.now()}`,
-                date: reminderDate,
-                isCompleted: false,
-                notificationSent: false,
+                note_id: `note_${Date.now()}`,
+                remind_at: reminderDate.toISOString(),
+                message: text,
+                is_notified: false,
             } : undefined,
         };
-        
+
         console.log('Note created:', note);
         return note;
     },
 
     async updateNote(noteId: string, text: string, reminderDate?: Date | null): Promise<PropertyNote> {
         await new Promise(resolve => setTimeout(resolve, 300));
-        
+
         const property = generateMockProperty(0, { cardType: 'grid' });
         const note: PropertyNote = {
             id: noteId,
-            propertyId: property.id,
-            userId: 'user_1',
-            text,
-            createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-            updatedAt: new Date(),
+            user_id: 'user_1',
+            property_id: property.id,
+            content: text,
+            tags: [],
+            note_type: 'property',
+            is_private: true,
+            created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+            updated_at: new Date().toISOString(),
             property,
             reminder: reminderDate ? {
                 id: `reminder_${Date.now()}`,
-                noteId,
-                date: reminderDate,
-                isCompleted: false,
-                notificationSent: false,
+                note_id: noteId,
+                remind_at: reminderDate.toISOString(),
+                message: text,
+                is_notified: false,
             } : undefined,
         };
-        
+
         console.log('Note updated:', note);
         return note;
     },
@@ -294,15 +300,24 @@ export const favoritesApi = {
     // Профессионалы
     async addProfessionalToFavorites(professionalId: string): Promise<FavoriteProfessional> {
         await new Promise(resolve => setTimeout(resolve, 300));
-        
+
         const professional = MOCK_PROFESSIONALS.find(p => p.id === professionalId) || MOCK_PROFESSIONALS[0];
         const favProfessional: FavoriteProfessional = {
             id: `fav_prof_${Date.now()}`,
-            professional,
-            addedAt: new Date(),
-            activeListingsCount: professional.objectsCount,
+            user_id: 'user_1',
+            contact_id: professionalId,
+            professional_type: 'agent',
+            name: professional.name,
+            avatar_url: professional.avatar,
+            company_name: professional.agencyName,
+            phone: professional.phone,
+            notes: '',
+            messages_count: 0,
+            properties_count: professional.objectsCount ?? 0,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
         };
-        
+
         console.log('Professional added to favorites:', favProfessional);
         return favProfessional;
     },
@@ -315,7 +330,7 @@ export const favoritesApi = {
     // Фильтры
     async saveFilter(filter: Omit<SavedFilter, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<SavedFilter> {
         await new Promise(resolve => setTimeout(resolve, 300));
-        
+
         const savedFilter: SavedFilter = {
             ...filter,
             id: `filter_${Date.now()}`,
@@ -323,7 +338,7 @@ export const favoritesApi = {
             createdAt: new Date(),
             updatedAt: new Date(),
         };
-        
+
         console.log('Filter saved:', savedFilter);
         return savedFilter;
     },
@@ -336,7 +351,7 @@ export const favoritesApi = {
     // Свойства
     async addPropertyToFavorites(propertyId: string): Promise<FavoriteProperty> {
         await new Promise(resolve => setTimeout(resolve, 300));
-        
+
         const property = generateMockProperty(0, { cardType: 'grid' });
         const favProperty: FavoriteProperty = {
             id: `fav_prop_${Date.now()}`,
@@ -345,7 +360,7 @@ export const favoritesApi = {
             addedAt: new Date(),
             property,
         };
-        
+
         console.log('Property added to favorites:', favProperty);
         return favProperty;
     },

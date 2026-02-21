@@ -129,7 +129,7 @@ export function AgenciesMapPage() {
 
     const handleAgencyClick = useCallback(
         (agency: AgencyCardData) => {
-            router.push(`/agency/${agency.id}`);
+            router.push(`/agency/${agency.slug}`);
         },
         [router]
     );

@@ -7,7 +7,7 @@ import { PropertyToastContainer } from '@/shared/ui/property-toast';
 import { useToastStore } from '@/features/chat-messages';
 import { useUserActionsStore } from '@/entities/user-actions';
 import { setPropertyReaction } from '@/entities/user-actions/api';
-import type { Property } from '@/entities/property';
+import type { PropertyChatCard } from '@/entities/property/model/card-types';
 
 /**
  * Глобальный провайдер для отображения тостов с уведомлениями о новых объектах
@@ -18,7 +18,7 @@ export function GlobalToastProvider() {
     const tProperty = useTranslations('property');
     const { toasts, removeToast } = useToastStore();
     const router = useRouter();
-    
+
     // Получаем методы из store
     const { getReaction, setReaction } = useUserActionsStore();
 
@@ -31,18 +31,18 @@ export function GlobalToastProvider() {
         rooms: tProperty('roomsShort'),
     };
 
-    const handleOpen = useCallback((property: Property) => {
-        router.push(`/property/${property.id}`);
+    const handleOpen = useCallback((property: PropertyChatCard) => {
+        router.push(`/property/${property.slug || property.id}`);
     }, [router]);
 
     // Централизованные обработчики действий
     const handleLike = useCallback(async (propertyId: string) => {
         const currentReaction = getReaction(propertyId);
         const newReaction = currentReaction === 'like' ? null : 'like';
-        
+
         // Оптимистичное обновление
         setReaction(propertyId, newReaction);
-        
+
         // Синхронизация с бекендом
         try {
             await setPropertyReaction(propertyId, newReaction);
@@ -56,10 +56,10 @@ export function GlobalToastProvider() {
     const handleDislike = useCallback(async (propertyId: string) => {
         const currentReaction = getReaction(propertyId);
         const newReaction = currentReaction === 'dislike' ? null : 'dislike';
-        
+
         // Оптимистичное обновление
         setReaction(propertyId, newReaction);
-        
+
         // Синхронизация с бекендом
         try {
             await setPropertyReaction(propertyId, newReaction);

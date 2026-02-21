@@ -2,11 +2,13 @@ import type { PropertyChatCard } from '@/entities/property';
 
 // === Chat Types ===
 
-export type ChatType = 'p2p' | 'support';
+export type ChatType = 'p2p' | 'support' | 'ai-agent';
 
 export type MessageType =
     | 'text'
     | 'property'
+    | 'property-batch'
+    | 'ai-status'
     | 'system';
 
 export type MessageStatus = 'sending' | 'sent' | 'delivered' | 'read' | 'error';

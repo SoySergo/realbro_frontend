@@ -1,14 +1,15 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { 
-    MapPin, Bed, Bath, Maximize, Train, Bus, 
-    ChevronLeft, ChevronRight, Wifi, Snowflake, 
+import {
+    MapPin, Bed, Bath, Maximize, Train, Bus,
+    ChevronLeft, ChevronRight, Wifi, Snowflake,
     Car, Sofa, Dumbbell, Shield, Waves, Trees
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import type { PropertyChatCard, PropertyFeature } from '@/entities/property';
+import { getImageUrl, getImageAlt } from '@/entities/property/model/card-types';
 
 interface PropertyExpandedCardProps {
     property: PropertyChatCard;
@@ -56,13 +57,13 @@ export function PropertyExpandedCard({
     const scrollImages = (direction: 'left' | 'right') => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         const imageWidth = el.clientWidth * 0.85; // 85% width per image
         const scrollAmount = direction === 'left' ? -imageWidth : imageWidth;
         el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        
+
         // Update index based on scroll position
-        const newIndex = direction === 'left' 
+        const newIndex = direction === 'left'
             ? Math.max(0, currentImageIndex - 1)
             : Math.min(images.length - 1, currentImageIndex + 1);
         setCurrentImageIndex(newIndex);
@@ -71,7 +72,7 @@ export function PropertyExpandedCard({
     const handleScroll = () => {
         const el = scrollRef.current;
         if (!el) return;
-        
+
         const imageWidth = el.clientWidth * 0.85;
         const newIndex = Math.round(el.scrollLeft / imageWidth);
         setCurrentImageIndex(Math.min(newIndex, images.length - 1));
@@ -99,16 +100,16 @@ export function PropertyExpandedCard({
                     className="flex gap-2 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory touch-pan-x px-3 py-3"
                 >
                     {images.map((image, index) => (
-                    <div
+                        <div
                             key={index}
                             className="relative shrink-0 snap-start rounded-xl overflow-hidden w-[80%] md:w-[75%] aspect-4/3"
                         >
                             <img
-                                src={image.url}
-                                alt={image.alt || `${property.title} ${index + 1}`}
+                                src={getImageUrl(image)}
+                                alt={getImageAlt(image, `${property.title} ${index + 1}`)}
                                 className="w-full h-full object-cover"
                             />
-                            
+
                             {/* NEW badge on first image */}
                             {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-2 left-2 text-xs">
@@ -250,8 +251,8 @@ export function PropertyExpandedCard({
                             const Icon = featureIcons[feature] || Wifi;
                             const label = featureLabels[feature] || feature.replace(/([A-Z])/g, ' $1').trim();
                             return (
-                                <div 
-                                    key={feature} 
+                                <div
+                                    key={feature}
                                     className="flex items-center gap-1.5 text-xs text-text-secondary bg-background-secondary px-2 py-1.5 rounded-lg"
                                 >
                                     <Icon className="w-3.5 h-3.5 shrink-0" />

@@ -1,8 +1,9 @@
 import { Skeleton } from '@/shared/ui/skeleton';
+import { cn } from '@/shared/lib/utils';
 
-export function MessageListSkeleton() {
+export function MessageListSkeleton({ className }: { className?: string }) {
     return (
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        <div className={cn("flex-1 overflow-y-auto px-4 py-6 space-y-4", className)}>
             {/* Отправленное сообщение */}
             <div className="flex justify-end">
                 <div className="max-w-[70%] space-y-2">

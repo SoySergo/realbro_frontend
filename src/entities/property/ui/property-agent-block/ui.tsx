@@ -31,10 +31,10 @@ export function PropertyAgentBlock({
     onMessage
 }: PropertyAgentBlockProps) {
     const t = translations;
-    
+
     // Determine the role text
     const roleText = agent.type === 'agency' ? t.agency : t.realtor;
-        
+
     const agencyText = agent.agencyName ? ` · ${agent.agencyName}` : '';
     const headerText = `${roleText}${agencyText}`;
 
@@ -51,10 +51,10 @@ export function PropertyAgentBlock({
                     {/* Main Avatar */}
                     <div className="h-24 w-24 rounded-full border-4 border-card bg-card overflow-hidden relative shadow-xs">
                         {agent.avatar ? (
-                            <Image 
-                                src={agent.avatar} 
-                                alt={agent.name} 
-                                fill 
+                            <Image
+                                src={agent.avatar}
+                                alt={agent.name}
+                                fill
                                 className="object-cover"
                             />
                         ) : (
@@ -63,25 +63,25 @@ export function PropertyAgentBlock({
                             </div>
                         )}
                     </div>
-                    
+
                     {/* Agency Logo Badge (if exists) */}
                     {(agent.agencyLogo || agent.type === 'agency') && (
                         <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-0 shadow-sm">
-                             <div className="h-9 w-9 rounded-lg border-2 border-card bg-card flex items-center justify-center overflow-hidden">
+                            <div className="h-9 w-9 rounded-lg border-2 border-card bg-card flex items-center justify-center overflow-hidden">
                                 {agent.agencyLogo ? (
-                                    <Image 
-                                        src={agent.agencyLogo} 
-                                        alt={agent.agencyName || 'Agency'} 
-                                        width={32} 
-                                        height={32} 
+                                    <Image
+                                        src={agent.agencyLogo}
+                                        alt={agent.agencyName || 'Agency'}
+                                        width={32}
+                                        height={32}
                                         className="object-contain p-0.5"
                                     />
                                 ) : (
                                     <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-                                       <span className="text-[10px] font-bold text-primary">A</span>
+                                        <span className="text-[10px] font-bold text-primary">A</span>
                                     </div>
                                 )}
-                             </div>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -89,13 +89,13 @@ export function PropertyAgentBlock({
 
             {/* Content */}
             <div className="px-6 pb-8 space-y-5">
-                
+
                 {/* Name & Role */}
                 <div className="space-y-1">
                     <p className="text-xs uppercase tracking-wider font-medium text-muted-foreground">
                         {headerText}
                     </p>
-                    <Link href={`/agency/${agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
+                    <Link href={`/agency/${agent.slug || agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
                         {agent.name}
                     </Link>
                 </div>

@@ -59,11 +59,11 @@ export function ComparisonPage({ locale }: ComparisonPageProps) {
     };
 
     const handlePropertyClick = (property: Property) => {
-        router.push(`/${locale}/property/${property.id}`);
+        router.push(`/${locale}/property/${property.slug || property.id}`);
     };
 
     const handleAddMore = () => {
-        router.push(`/${locale}/search`);
+        router.push(`/${locale}/search/properties/map`);
     };
 
     return (

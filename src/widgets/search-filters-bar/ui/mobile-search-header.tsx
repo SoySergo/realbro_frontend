@@ -58,16 +58,16 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
     const localizedRouter = useLocalizedRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    
+
     // Auth state
     const { isAuthenticated } = useAuth();
     const [isSaving, setIsSaving] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    
+
     // Получаем queries для определения первого визита
     const { queries, addQuery } = useSidebarStore();
     const isFirstTimeUser = queries.length === 0;
-    
+
     // Обработчик сохранения фильтра
     const handleSaveFilter = async () => {
         if (!isAuthenticated) {
@@ -84,13 +84,13 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
         // Имитация асинхронного сохранения на бекенд
         try {
             await new Promise(resolve => setTimeout(resolve, 1500));
-            
+
             addQuery({
                 title: t('newSearch'),
                 filters: filters,
                 isUnsaved: true, // В будущем это будет false, когда будет реальное сохранение
             });
-            
+
             setIsSuccess(true);
             setTimeout(() => {
                 setIsSuccess(false);
@@ -107,9 +107,9 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
     // Обработчик смены категории поиска
     const handleCategoryChange = (value: string) => {
         if (value === 'professionals') {
-            localizedRouter.push('/agencies');
+            localizedRouter.push('/search/agencies/list');
         } else if (value === 'properties') {
-            localizedRouter.push('/search/map');
+            localizedRouter.push('/search/properties/map');
         }
     };
 
@@ -156,17 +156,17 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
                                     ) : (
                                         <CloudUpload className="w-5 h-5" />
                                     )}
-                                    
+
                                     <span>
-                                        {isSaving 
-                                            ? tCommon('saving') 
-                                            : isSuccess 
-                                                ? tCommon('saved') 
+                                        {isSaving
+                                            ? tCommon('saving')
+                                            : isSuccess
+                                                ? tCommon('saved')
                                                 : t('saveFilter')
                                         }
                                     </span>
                                 </Button>
-                                
+
                                 <Button
                                     variant="outline"
                                     onClick={onOpenFilters}
@@ -224,8 +224,8 @@ export function MobileSearchHeader({ onOpenFilters, className, currentCategory =
             <div style={{ height: HEADER_HEIGHT }} />
 
             {/* Плавающий блок фильтров */}
-            <MobileFiltersFloatingBar 
-                isMapMode={isMapMode} 
+            <MobileFiltersFloatingBar
+                isMapMode={isMapMode}
                 currentCategory={currentCategory}
                 onCategoryChange={handleCategoryChange}
             />
@@ -424,9 +424,9 @@ function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', o
                     prefersReducedMotion
                         ? (isVisible ? 'translate-y-0' : '-translate-y-full')
                         : cn(
-                              'transition-transform duration-200 ease-out',
-                              isVisible ? 'translate-y-0' : '-translate-y-full'
-                          )
+                            'transition-transform duration-200 ease-out',
+                            isVisible ? 'translate-y-0' : '-translate-y-full'
+                        )
                 )}
                 style={{ top: HEADER_HEIGHT }}
             >
@@ -639,8 +639,8 @@ const FilterButtons = memo(function FilterButtons({
  * Плавающая кнопка переключения карта/список
  * Скрывается когда активен режим локации (draw, search, radius, isochrone)
  *
- * На странице карты: навигация на /search/list (или /search/agencies/list)
- * На странице списка: навигация на /search/map (или /search/agencies/map)
+ * На странице карты: навигация на /search/properties/list (или /search/agencies/list)
+ * На странице списка: навигация на /search/properties/map (или /search/agencies/map)
  */
 export function MobileViewToggle() {
     const t = useTranslations('filters');
@@ -668,9 +668,9 @@ export function MobileViewToggle() {
             }
         } else {
             if (isMapPage) {
-                router.push(`/search/list${queryString}`);
+                router.push(`/search/properties/list${queryString}`);
             } else {
-                router.push(`/search/map${queryString}`);
+                router.push(`/search/properties/map${queryString}`);
             }
         }
     };

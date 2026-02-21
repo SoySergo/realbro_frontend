@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 
 import type { PropertyChatCard } from '@/entities/property';
+import { getImageUrl } from '@/entities/property/model/card-types';
 import { generateMockProperty } from '@/shared/api/chat';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
@@ -265,7 +266,7 @@ function CardCompactBubble({ property, filterName }: { property: PropertyChatCar
                 {/* Миниатюра */}
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
                     <Image
-                        src={property.images[0]?.url}
+                        src={property.images[0] ? getImageUrl(property.images[0]) : ''}
                         alt={property.title}
                         fill
                         className="object-cover"
@@ -316,7 +317,7 @@ function CardHorizontal({ property, filterName }: { property: PropertyChatCard; 
             {/* Изображение слева */}
             <div className="relative h-auto w-[120px] shrink-0">
                 <ImageCarousel
-                    images={property.images.map(img => img.url)}
+                    images={property.images.map(img => getImageUrl(img))}
                     aspectRatio=""
                     className="h-full w-full"
                 />
@@ -361,7 +362,7 @@ function CardGallery({ property, filterName }: { property: PropertyChatCard; fil
         <div className="max-w-sm overflow-hidden rounded-xl border border-border bg-card shadow-md">
             {/* Карусель */}
             <ImageCarousel
-                images={property.images.map(img => img.url)}
+                images={property.images.map(img => getImageUrl(img))}
                 aspectRatio="aspect-video"
                 overlay={
                     <div className="absolute top-2 left-2 flex gap-1">
@@ -449,7 +450,7 @@ function CardMinimal({
             {/* Развёрнутое содержимое */}
             {expanded && (
                 <div className="animate-message-slide-in border-t border-border p-2">
-                    <ImageCarousel images={property.images.map(img => img.url)} aspectRatio="aspect-video" className="rounded-lg" />
+                    <ImageCarousel images={property.images.map(img => getImageUrl(img))} aspectRatio="aspect-video" className="rounded-lg" />
                     <div className="mt-2 flex items-center justify-between">
                         <div className="text-xs text-text-secondary">
                             <BedDouble className="mr-0.5 inline h-3 w-3" />
@@ -477,7 +478,7 @@ function CardMapPreview({ property, filterName }: { property: PropertyChatCard; 
             {/* Изображение с оверлеем района */}
             <div className="relative aspect-[2/1] overflow-hidden">
                 <Image
-                    src={property.images[0]?.url}
+                    src={property.images[0] ? getImageUrl(property.images[0]) : ''}
                     alt={property.title}
                     fill
                     className="object-cover"
@@ -542,7 +543,7 @@ function CardStory({ property }: { property: PropertyChatCard }) {
         >
             <div className="relative aspect-[3/4]">
                 <Image
-                    src={property.images[imgIdx]?.url}
+                    src={property.images[imgIdx] ? getImageUrl(property.images[imgIdx]) : ''}
                     alt={property.title}
                     fill
                     className="object-cover transition-all duration-300"
@@ -953,7 +954,7 @@ function LayoutSplitCards({
                             {/* Миниатюра */}
                             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg">
                                 <Image
-                                    src={msg.property!.images[0]}
+                                    src={msg.property!.images[0] ? getImageUrl(msg.property!.images[0]) : ''}
                                     alt=""
                                     fill
                                     className="object-cover"

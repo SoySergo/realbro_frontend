@@ -165,16 +165,16 @@ export function FavoritesPropertiesTabV2({ properties, isEmpty }: FavoritesPrope
                         }
                         className="border border-border rounded-lg p-1"
                     >
-                        <ToggleGroupItem value="all" size="sm" className="text-xs">
+                        <ToggleGroupItem value="all" className="text-xs">
                             {t('filters.all')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="like" size="sm" className="text-xs">
+                        <ToggleGroupItem value="like" className="text-xs">
                             {t('filters.liked')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="dislike" size="sm" className="text-xs">
+                        <ToggleGroupItem value="dislike" className="text-xs">
                             {t('filters.disliked')}
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="unsorted" size="sm" className="text-xs">
+                        <ToggleGroupItem value="unsorted" className="text-xs">
                             {t('filters.unsorted')}
                         </ToggleGroupItem>
                     </ToggleGroup>
@@ -349,7 +349,7 @@ export function FavoritesPropertiesTabV2({ properties, isEmpty }: FavoritesPrope
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
                     {filteredProperties.map((favProperty) => (
-                        <Link key={favProperty.id} href={`/property/${favProperty.property.id}`}>
+                        <Link key={favProperty.id} href={`/property/${favProperty.property.slug || favProperty.property.id}`}>
                             <PropertyCardGrid
                                 property={favProperty.property}
                                 actions={<PropertyCompareButton property={favProperty.property} />}

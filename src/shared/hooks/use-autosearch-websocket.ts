@@ -40,8 +40,8 @@ export function useAutosearchWebSocket(
     options: UseAutosearchWebSocketOptions = {}
 ): UseAutosearchWebSocketReturn {
     const {
-        url = typeof window !== 'undefined' 
-            ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/websocket/autosearch` 
+        url = typeof window !== 'undefined'
+            ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/websocket/autosearch`
             : '',
         autoConnect = true,
         reconnectInterval = 3000,
@@ -56,7 +56,7 @@ export function useAutosearchWebSocket(
 
     const [status, setStatus] = useState<AutosearchWebSocketStatus>('disconnected');
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
-    
+
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -71,7 +71,7 @@ export function useAutosearchWebSocket(
     const convertToAutosearchProperty = useCallback(
         (message: AutosearchPropertyMessage): AutosearchProperty => {
             const { payload, filter_ids } = message;
-            
+
             // Базовый Property объект
             const property: Property = {
                 id: message.property_id,
@@ -81,8 +81,9 @@ export function useAutosearchWebSocket(
                 title: payload.title,
                 price: payload.price,
                 pricePerMeter: payload.area ? Math.round(payload.price / payload.area) : 0,
-                rooms: payload.rooms,
-                area: payload.area,
+                rooms: payload.rooms ?? 0,
+                bathrooms: 0,
+                area: payload.area ?? 0,
                 city: payload.city,
                 province: 'Barcelona', // По умолчанию
                 country: payload.country,
@@ -113,7 +114,7 @@ export function useAutosearchWebSocket(
         },
         []
     );
-    
+
     // Остановить heartbeat
     const stopHeartbeat = useCallback(() => {
         if (heartbeatIntervalRef.current) {
@@ -125,18 +126,18 @@ export function useAutosearchWebSocket(
             heartbeatTimeoutRef.current = null;
         }
     }, []);
-    
+
     // Отправить ping
     const sendPing = useCallback(() => {
         if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-        
+
         try {
             wsRef.current.send(JSON.stringify({
                 type: 'ping',
                 channel: `autosearch:user_${userId}`,
                 timestamp: Date.now(),
             }));
-            
+
             heartbeatTimeoutRef.current = setTimeout(() => {
                 console.log('[AutoSearch WS] Heartbeat timeout - no pong received');
                 wsRef.current?.close();
@@ -145,17 +146,17 @@ export function useAutosearchWebSocket(
             console.error('[AutoSearch WS] Failed to send ping:', error);
         }
     }, [heartbeatTimeout, userId]);
-    
+
     // Запустить heartbeat
     const startHeartbeat = useCallback(() => {
         stopHeartbeat();
         sendPing();
-        
+
         heartbeatIntervalRef.current = setInterval(() => {
             sendPing();
         }, heartbeatInterval);
     }, [heartbeatInterval, sendPing, stopHeartbeat]);
-    
+
     // Обработать pong
     const handlePong = useCallback(() => {
         if (heartbeatTimeoutRef.current) {
@@ -163,7 +164,7 @@ export function useAutosearchWebSocket(
             heartbeatTimeoutRef.current = null;
         }
     }, []);
-    
+
     // Вычислить задержку для переподключения (exponential backoff)
     const getReconnectDelay = useCallback((attempt: number): number => {
         return Math.min(reconnectInterval * Math.pow(2, attempt), 60000);
@@ -184,13 +185,13 @@ export function useAutosearchWebSocket(
 
             ws.onopen = () => {
                 console.log('[AutoSearch WS] Connected successfully');
-                
+
                 // Подписаться на канал autosearch:user_{userId}
                 ws.send(JSON.stringify({
                     type: 'subscribe',
                     channel: `autosearch:user_${userId}`,
                 }));
-                
+
                 setStatus('connected');
                 setReconnectAttempts(0);
                 startHeartbeat();
@@ -199,12 +200,12 @@ export function useAutosearchWebSocket(
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    
+
                     switch (data.type) {
                         case 'pong':
                             handlePong();
                             break;
-                            
+
                         case 'property':
                         case 'autosearch:property':
                             // Новый объект от AutoSearch
@@ -216,15 +217,15 @@ export function useAutosearchWebSocket(
                                 filterIds: autosearchProperty.autosearchMetadata.filterIds,
                             });
                             break;
-                            
+
                         case 'subscribed':
                             console.log('[AutoSearch WS] Subscribed to channel', data.channel);
                             break;
-                            
+
                         case 'error':
                             console.error('[AutoSearch WS] Server error:', data);
                             break;
-                            
+
                         default:
                             console.log('[AutoSearch WS] Unknown message type:', data.type);
                     }
@@ -244,7 +245,7 @@ export function useAutosearchWebSocket(
                     reason: event.reason,
                     wasClean: event.wasClean,
                 });
-                
+
                 stopHeartbeat();
                 setStatus('disconnected');
                 wsRef.current = null;
@@ -256,7 +257,7 @@ export function useAutosearchWebSocket(
                         console.log(
                             `[AutoSearch WS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})`
                         );
-                        
+
                         setReconnectAttempts(prev => prev + 1);
                         reconnectTimeoutRef.current = setTimeout(() => {
                             connect();
@@ -287,14 +288,14 @@ export function useAutosearchWebSocket(
     // Disconnect from WebSocket
     const disconnect = useCallback(() => {
         isIntentionalCloseRef.current = true;
-        
+
         if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current);
             reconnectTimeoutRef.current = null;
         }
-        
+
         stopHeartbeat();
-        
+
         if (wsRef.current) {
             // Отписаться от канала перед закрытием
             if (wsRef.current.readyState === WebSocket.OPEN) {
@@ -306,7 +307,7 @@ export function useAutosearchWebSocket(
             wsRef.current.close();
             wsRef.current = null;
         }
-        
+
         setStatus('disconnected');
         setReconnectAttempts(0);
     }, [stopHeartbeat, userId]);
@@ -317,7 +318,7 @@ export function useAutosearchWebSocket(
             const timer = setTimeout(() => {
                 connect();
             }, 500);
-            
+
             return () => clearTimeout(timer);
         }
     }, [autoConnect, userId, connect]);

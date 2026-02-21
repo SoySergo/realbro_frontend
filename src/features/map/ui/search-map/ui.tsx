@@ -32,7 +32,8 @@ type SearchMapProps = {
 /**
  * Формирует URL тайла с фильтрами
  */
-function buildTileUrl(filters: Record<string, unknown>): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildTileUrl(filters: any): string {
     const queryString = filtersToQueryString(filters as Parameters<typeof filtersToQueryString>[0]);
     return queryString ? `${TILES_URL}?${queryString}` : TILES_URL;
 }

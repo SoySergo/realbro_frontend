@@ -75,12 +75,12 @@ export function ComparisonBarProvider() {
         setIsDialogOpen(true);
     };
 
-    const handlePropertyClick = (property: { id: string }) => {
-        router.push(`/${locale}/property/${property.id}`);
+    const handlePropertyClick = (property: { id: string; slug?: string }) => {
+        router.push(`/${locale}/property/${property.slug || property.id}`);
     };
 
     const handleAddMore = () => {
-        router.push(`/${locale}/search/list`);
+        router.push(`/${locale}/search/properties/list`);
     };
 
     return (

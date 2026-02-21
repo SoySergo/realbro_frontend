@@ -1,4 +1,4 @@
-import type { AttributeDTO } from './api-types';
+import type { AttributeDTO, PropertyKindCode, CategoryCode, SubcategoryCode } from './api-types';
 
 // Типы для недвижимости
 export type PropertyType = 'apartment' | 'studio' | 'house' | 'penthouse' | 'duplex';
@@ -18,9 +18,11 @@ export interface NearbyTransport {
 // Информация об авторе объявления
 export interface PropertyAuthor {
     id: string;
+    slug?: string;
     name: string;
     avatar?: string;
     type: 'agent' | 'owner' | 'agency';
+    companyId?: string;
     agencyName?: string;
     agencyLogo?: string;
     isVerified?: boolean;
@@ -142,12 +144,12 @@ export interface Property {
     images: string[];
     createdAt: Date;
     updatedAt: Date;
-    
+
     // Расширенные характеристики площади
     livingArea?: number;        // Жилая площадь
     kitchenArea?: number;       // Площадь кухни
     pricePerMeter?: number;
-    
+
     // Детали квартиры
     elevator?: boolean;
     ceilingHeight?: number;     // Высота потолков (м)
@@ -156,45 +158,45 @@ export interface Property {
     balconyCount?: number;
     loggia?: boolean;
     windowView?: WindowViewType;
-    
+
     // Транспорт
     nearbyTransport?: NearbyTransport;      // Ближайшая станция (legacy)
     nearbyTransportList?: NearbyTransport[]; // Список ближайших станций
-    
+
     // Условия аренды
     rentalConditions?: RentalConditions;
-    
+
     // Предпочтения по арендаторам
     tenantPreferences?: TenantPreferences;
-    
+
     // Соседи (если это комната или покомнатная аренда)
     roommates?: Roommates;
-    
+
     // Детали комнаты (если type === 'room' или подобное)
     roomDetails?: RoomDetails;
-    
+
     // О здании
     building?: BuildingInfo;
-    
+
     // Автор объявления
     author?: PropertyAuthor;
-    
+
     // Статусы
     isNew?: boolean;
     isVerified?: boolean;
-    
+
     // Медиа-контент
     video?: PropertyVideo;
     floorPlan?: string;
     tour3d?: PropertyTour3D;
-    
+
     // Удобства
     amenities?: string[];
-    
+
     // Особые метки
     noCommission?: boolean;
     exclusive?: boolean;
-    
+
     // Публикация
     publishedAt?: Date;
     viewsCount?: number;
@@ -204,9 +206,9 @@ export interface Property {
     // Бекенд-поля (snake_case) — используются при работе с backend DTO
     slug?: string;
     property_type?: 'sale' | 'rent';
-    property_kind?: string;
-    category?: string;
-    sub_category?: string;
+    property_kind?: PropertyKindCode;
+    category?: CategoryCode;
+    sub_category?: SubcategoryCode;
     currency?: string;
     description_original?: string;     // Описание на оригинальном языке
 

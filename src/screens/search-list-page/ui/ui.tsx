@@ -123,12 +123,12 @@ export function SearchListPage({
 
     const handleShowOnMap = () => {
         const params = new URLSearchParams(searchParams.toString());
-        router.push(`/search/map?${params.toString()}`);
+        router.push(`/search/properties/map?${params.toString()}`);
     };
 
     const handlePropertyClick = useCallback(
         (property: PropertyGridCard) => {
-            router.push(`/property/${property.id}`);
+            router.push(`/property/${property.slug || property.id}`);
         },
         [router]
     );

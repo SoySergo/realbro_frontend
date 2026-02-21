@@ -15,7 +15,7 @@ function AgencyStoryCard({ agency, locale }: { agency: AgencyCardData; locale: s
     const t = useTranslations('agency');
     return (
         <Link
-            href={`/agency/${agency.id}`}
+            href={`/agency/${agency.slug}`}
             locale={locale}
             className="flex-shrink-0 w-[120px] cursor-pointer group/story"
         >
@@ -34,7 +34,7 @@ function AgencyStoryCard({ agency, locale }: { agency: AgencyCardData; locale: s
                         <Building2 className="w-10 h-10 text-brand-primary/50" />
                     </div>
                 )}
-                
+
                 {/* Градиент */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 

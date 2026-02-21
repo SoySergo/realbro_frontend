@@ -72,6 +72,7 @@ export interface LocationDetailsDTO {
 // === Автор (краткий — для списка) ===
 export interface AuthorShortDTO {
     id: string;
+    slug?: string;
     contact_id: string;
     name: string;
     avatar?: string;
@@ -153,6 +154,7 @@ export interface PropertyEnrichedListingDTO extends PropertyShortListingDTO {
 
 // === Детальная карточка объекта ===
 export interface PropertyDetailsDTO {
+    id?: string;                     // UUID объекта (может приходить от бекенда)
     property_type: PropertyTypeCode;
     property_kind: PropertyKindCode;
     category: string;               // переведённое название

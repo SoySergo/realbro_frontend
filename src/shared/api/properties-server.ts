@@ -1,7 +1,7 @@
 import type { SearchFilters } from '@/entities/filter';
 import type { Property, PropertyGridCard } from '@/entities/property';
-import type { PropertyShortListingDTO } from '@/entities/property/model/api-types';
-import { dtosToGridCards } from '@/entities/property/model/converters';
+import type { PropertyShortListingDTO, PropertyDetailsDTO } from '@/entities/property/model/api-types';
+import { dtosToGridCards, detailsDtoToProperty } from '@/entities/property/model/converters';
 import type { CursorPaginatedResponse } from './types';
 import { generateMockGridCardsPage, generateMockProperty } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
@@ -211,6 +211,7 @@ export async function getPropertiesCountServer(filters: SearchFilters): Promise<
 
 /**
  * Получить объект недвижимости по ID (для ISR/SSR)
+ * Backend: GET /api/v1/properties/{id} → { data: PropertyDetailsDTO }
  */
 export async function getPropertyByIdServer(id: string): Promise<Property | null> {
     // Return mock immediately if mock mode is enabled
@@ -222,7 +223,7 @@ export async function getPropertyByIdServer(id: string): Promise<Property | null
     }
 
     try {
-        const response = await fetch(`${API_BASE}/properties/${id}`, {
+        const response = await fetch(`${API_V1_BASE}/api/v1/properties/${id}`, {
             next: { revalidate: 21600 }, // ISR: revalidate every 6 hours
         });
 
@@ -231,9 +232,51 @@ export async function getPropertyByIdServer(id: string): Promise<Property | null
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const json = await response.json();
+        // Backend wraps response in { data: ... } → PropertyDetailsDTO
+        const dto: PropertyDetailsDTO = json.data ?? json;
+        return detailsDtoToProperty(dto, id);
     } catch (error) {
         console.error(`[API Server] Failed to get property ${id}:`, error);
+        return null;
+    }
+}
+
+/**
+ * Получить объект недвижимости по slug (для детальных страниц)
+ * Backend: GET /api/v1/properties/by-slug/{slug}?language={lang} → { data: PropertyDetailsDTO }
+ */
+export async function getPropertyBySlugServer(slug: string, language: string = 'en'): Promise<Property | null> {
+    // Return mock immediately if mock mode is enabled
+    if (FEATURES.USE_MOCK_PROPERTIES) {
+        const numericId = parseInt(slug.replace(/\D/g, '')) || 0;
+        const mockProperty = generateMockProperty(numericId, { cardType: 'detail' });
+        mockProperty.slug = slug;
+        return mockProperty;
+    }
+
+    try {
+        const response = await fetch(`${API_V1_BASE}/api/v1/properties/by-slug/${slug}?language=${language}`, {
+            next: { revalidate: 21600 }, // ISR: revalidate every 6 hours
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) return null;
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        // Backend wraps response in { data: ... } → PropertyDetailsDTO
+        const dto: PropertyDetailsDTO = json.data ?? json;
+        // Extract property UUID from response — never use slug as id fallback
+        const id = dto.id || json.data?.id || json.id;
+        if (!id) {
+            console.error(`[API Server] Property by slug "${slug}" returned no UUID id`);
+            return null;
+        }
+        return detailsDtoToProperty(dto, id);
+    } catch (error) {
+        console.error(`[API Server] Failed to get property by slug ${slug}:`, error);
         return null;
     }
 }

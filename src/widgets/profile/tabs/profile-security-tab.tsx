@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { 
-    Shield, 
-    Key, 
-    LogOut, 
+import {
+    Shield,
+    Key,
+    LogOut,
     Loader2,
     Monitor,
     Smartphone,
@@ -233,8 +233,8 @@ export function ProfileSecurityTab({ activeSessions, onUpdate }: ProfileSecurity
                                         key={session.id}
                                         className={cn(
                                             "flex items-center justify-between p-3 rounded-lg",
-                                            session.isCurrent 
-                                                ? "bg-brand-primary-light border border-brand-primary/20" 
+                                            session.isCurrent
+                                                ? "bg-brand-primary-light border border-brand-primary/20"
                                                 : "bg-background-secondary"
                                         )}
                                     >

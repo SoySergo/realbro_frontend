@@ -13,6 +13,8 @@
  */
 
 import type { Property } from '@/entities/property/model/types';
+import type { PropertyDetailsDTO } from '@/entities/property/model/api-types';
+import { detailsDtoToProperty } from '@/entities/property/model/converters';
 import type {
     NearbyPlaces,
     AgentPropertyCard,
@@ -29,8 +31,8 @@ export * from './types';
 
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
-// Real API base URL (change this when backend is ready)
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.example.com';
+// Real API base URL
+const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/api/v1`;
 
 // ============================================================================
 // Mock Data Loaders
@@ -82,7 +84,7 @@ export async function getPropertyDetailById(id: string): Promise<Property | null
         return { ...property, id };
     }
 
-    // Real API call
+    // Real API call: GET /api/v1/properties/{id} → { data: ... }
     try {
         const response = await fetch(`${API_BASE}/properties/${id}`, {
             next: { revalidate: 21600 } // ISR: 6 hours
@@ -93,7 +95,9 @@ export async function getPropertyDetailById(id: string): Promise<Property | null
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const json = await response.json();
+        const dto: PropertyDetailsDTO = json.data ?? json;
+        return detailsDtoToProperty(dto, id);
     } catch (error) {
         console.error(`[API] Failed to get property ${id}:`, error);
         return null;
@@ -112,34 +116,22 @@ export async function getNearbyPlaces(propertyId: string): Promise<NearbyPlaces>
         return loadMockNearbyPlaces();
     }
 
-    // Real API call
-    try {
-        const response = await fetch(`${API_BASE}/properties/${propertyId}/nearby`, {
-            next: { revalidate: 86400 } // ISR: 24 hours (POI data changes less frequently)
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error(`[API] Failed to get nearby places for ${propertyId}:`, error);
-        // Return empty data on error
-        return {
-            transport: [],
-            schools: [],
-            medical: [],
-            groceries: [],
-            shopping: [],
-            restaurants: [],
-            sports: [],
-            parks: [],
-            beauty: [],
-            entertainment: [],
-            attractions: []
-        };
-    }
+    // Real backend: transport data is included in the property detail DTO (location.transport)
+    // There is no separate /nearby endpoint. Return empty structure here.
+    // Transport will be extracted from the property detail on the page level.
+    return {
+        transport: [],
+        schools: [],
+        medical: [],
+        groceries: [],
+        shopping: [],
+        restaurants: [],
+        sports: [],
+        parks: [],
+        beauty: [],
+        entertainment: [],
+        attractions: []
+    };
 }
 
 /**
@@ -175,15 +167,15 @@ export async function getAgentProperties(
             .slice(0, limit);
     }
 
-    // Real API call
+    // Real API call: GET /api/v1/companies/{companyId}/properties
     try {
         const params = new URLSearchParams({
             limit: limit.toString(),
-            ...(excludePropertyId && { exclude: excludePropertyId })
+            page: '1',
         });
 
         const response = await fetch(
-            `${API_BASE}/agents/${agentId}/properties?${params}`,
+            `${API_BASE}/companies/${agentId}/properties?${params}`,
             { next: { revalidate: 3600 } } // ISR: 1 hour
         );
 
@@ -191,9 +183,52 @@ export async function getAgentProperties(
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const json = await response.json();
+        // Backend returns { data: string[] (property IDs), pagination: {...} }
+        // We need to convert to AgentPropertyCard[]
+        const propertyIds: string[] = json.data ?? json;
+        const filteredIds = propertyIds
+            .filter((pid: string) => pid !== excludePropertyId)
+            .slice(0, limit);
+
+        // Fetch each property's details to build cards
+        const cards: AgentPropertyCard[] = [];
+        for (const pid of filteredIds) {
+            try {
+                const propResp = await fetch(`${API_BASE}/properties/${pid}`, {
+                    next: { revalidate: 3600 },
+                });
+                if (propResp.ok) {
+                    const propJson = await propResp.json();
+                    const dto = propJson.data ?? propJson;
+                    cards.push({
+                        id: pid,
+                        title: dto.title || '',
+                        type: 'apartment',
+                        price: dto.price || 0,
+                        rooms: dto.rooms ?? 0,
+                        bathrooms: dto.bathrooms ?? 0,
+                        area: dto.area || 0,
+                        floor: dto.floor ?? undefined,
+                        totalFloors: dto.total_floors ?? undefined,
+                        address: dto.location?.formatted_address || '',
+                        city: '',
+                        coordinates: {
+                            lat: dto.location?.coordinates?.lat ?? 0,
+                            lng: dto.location?.coordinates?.lng ?? 0,
+                        },
+                        images: dto.media?.photos?.map((p: any) => p.url) || [],
+                        isNew: false,
+                        isVerified: dto.author?.is_verified ?? false,
+                    });
+                }
+            } catch {
+                // Skip failed individual property fetches
+            }
+        }
+        return cards;
     } catch (error) {
-        console.error(`[API] Failed to get agent properties for ${agentId}:`, error);
+        console.error(`[API] Failed to get company properties for ${agentId}:`, error);
         return [];
     }
 }
@@ -215,18 +250,24 @@ export async function getSimilarProperties(
         return properties.slice(0, limit);
     }
 
-    // Real API call
+    // Real API call: POST /api/v1/properties/{id}/similar
     try {
         const response = await fetch(
-            `${API_BASE}/properties/${propertyId}/similar?limit=${limit}`,
-            { next: { revalidate: 3600 } } // ISR: 1 hour
+            `${API_BASE}/properties/${propertyId}/similar`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ limit }),
+                next: { revalidate: 3600 },
+            }
         );
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const json = await response.json();
+        return json.data ?? json;
     } catch (error) {
         console.error(`[API] Failed to get similar properties for ${propertyId}:`, error);
         return [];

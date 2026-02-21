@@ -37,7 +37,7 @@ export function PropertyAgentSidebarCard({
                         <div className="relative">
                             {isAgency && agent.agencyLogo ? (
                                 <div className="w-24 h-24 bg-background dark:bg-card rounded-2xl shadow-sm border border-border p-2 flex items-center justify-center overflow-hidden">
-                                     <Image
+                                    <Image
                                         src={agent.agencyLogo}
                                         alt={agent.agencyName || agent.name}
                                         width={84}
@@ -70,7 +70,7 @@ export function PropertyAgentSidebarCard({
                         <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
                             {isAgency ? (t('agency') || 'Агентство недвижимости') : (t('privateAgent') || 'Частное лицо')}
                         </p>
-                        <Link href={`/agency/${agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
+                        <Link href={`/agency/${agent.slug || agent.id}`} className="text-xl font-bold text-foreground hover:text-brand-primary transition-colors">
                             {isAgency ? agent.agencyName : agent.name}
                         </Link>
                     </div>
@@ -78,8 +78,8 @@ export function PropertyAgentSidebarCard({
                     {/* Stats Bar - Simplified */}
                     <div className="bg-muted/30 rounded-lg px-3 flex justify-center items-center">
                         <div className="text-center">
-                             <p className="text-xs text-muted-foreground">{t('objectsInWork') || 'Объектов в работе'}</p>
-                             <p className="font-bold text-foreground text-lg leading-tight">
+                            <p className="text-xs text-muted-foreground">{t('objectsInWork') || 'Объектов в работе'}</p>
+                            <p className="font-bold text-foreground text-lg leading-tight">
                                 {agent.objectsCount || 0}
                             </p>
                         </div>
@@ -87,29 +87,29 @@ export function PropertyAgentSidebarCard({
 
                     {/* Agent Profile (Small row at bottom) */}
                     <div className="pt-3 flex items-center gap-3 text-left border-t border-border/50 mt-4">
-                         <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 relative">
-                             {agent.avatar ? (
+                        <div className="w-10 h-10 rounded-full bg-muted overflow-hidden shrink-0 relative">
+                            {agent.avatar ? (
                                 <Image
                                     src={agent.avatar}
                                     alt={agent.name}
                                     fill
                                     className="object-cover"
                                 />
-                             ) : (
+                            ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-primary/10">
                                     <span className="text-lg font-bold text-primary">{agent.name.charAt(0)}</span>
                                 </div>
-                             )}
-                         </div>
-                         <div>
-                             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('agent') || 'Агент'}</p>
-                             <p className="font-medium text-sm text-foreground leading-tight">{agent.name}</p>
-                             <div className="flex items-center gap-1.5 mt-0.5">
+                            )}
+                        </div>
+                        <div>
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('agent') || 'Агент'}</p>
+                            <p className="font-medium text-sm text-foreground leading-tight">{agent.name}</p>
+                            <div className="flex items-center gap-1.5 mt-0.5">
                                 <span className="text-sm font-bold text-foreground">5.0</span>
                                 <Star className="w-3.5 h-3.5 text-brand-primary fill-current" />
                                 <span className="text-xs text-muted-foreground">{t('reviews') || 'отзыва'}: 2</span>
-                             </div>
-                         </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Card>

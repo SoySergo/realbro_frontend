@@ -308,11 +308,10 @@ export async function getPropertiesByIds(ids: string[]): Promise<PropertyGridCar
     }
 }
 
-/**
- * Получить объект по slug
- */
+/**\n * Получить объект по slug\n * Backend: GET /api/v1/properties/by-slug/{slug} → { data: PropertyDetailsDTO }\n */
 export async function getPropertyBySlug(slug: string): Promise<PropertyShortListingDTO> {
-    return apiClient.get<PropertyShortListingDTO>(`/properties/by-slug/${slug}`);
+    const response = await apiClient.get<ApiDataResponse<PropertyShortListingDTO>>(`/properties/by-slug/${slug}`);
+    return response.data;
 }
 
 /**

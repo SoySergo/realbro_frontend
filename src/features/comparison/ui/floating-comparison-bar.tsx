@@ -121,7 +121,7 @@ function PropertyThumb({
     onRemove: () => void;
 }) {
     // Поддержка обоих форматов изображений: строка или объект с url
-    const data = property as Record<string, unknown>;
+    const data = property as unknown as Record<string, unknown>;
     const images = data.images as Array<string | { url: string }> | undefined;
     const firstImage = images?.[0];
     const imageSrc = typeof firstImage === 'string' ? firstImage : firstImage?.url;

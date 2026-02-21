@@ -16,32 +16,9 @@ import type {
     CategoryCode,
     SubcategoryCode,
 } from './api-types';
-
-// Реэкспорт DTO-типов для удобства
-export type {
-    PropertyShortListingDTO,
-    PropertyEnrichedListingDTO,
-    MediaResponseDTO,
-    MediaItemDTO,
-    AuthorShortDTO,
-    AuthorLongDTO,
-    LocationShortDTO,
-    NearestStationDTO,
-    TransportLineDTO,
-    AttributeDTO,
-    PropertyTypeCode,
-    PropertyKindCode,
-    CategoryCode,
-    SubcategoryCode,
-};
+import type { PropertyFeature, PropertyType, TransportType } from './types';
 
 // === Типы для обратной совместимости (deprecated — будут удалены) ===
-
-// Тип недвижимости (deprecated → используй CategoryCode + SubcategoryCode)
-export type PropertyType = 'apartment' | 'studio' | 'house' | 'penthouse' | 'duplex';
-
-// Тип транспорта (deprecated → используй NearestStationDTO.type)
-export type TransportType = 'metro' | 'train' | 'bus';
 
 // Фото объекта (deprecated → используй MediaItemDTO)
 export interface PropertyCardImage {
@@ -69,6 +46,7 @@ export interface PropertyCardTransportStation {
 // Автор (deprecated → используй AuthorShortDTO)
 export interface PropertyCardAuthor {
     id: string;
+    slug?: string;
     name: string;
     avatar?: string;
     type: 'agent' | 'owner' | 'agency';
@@ -99,8 +77,8 @@ export interface PropertyGridCard {
     address: string;
     // Медиа (новый формат из бекенда)
     media?: MediaResponseDTO;
-    // Медиа (legacy формат)
-    images: PropertyCardImage[];
+    // Медиа (legacy формат) — принимает как объекты PropertyCardImage, так и plain URL строки
+    images: (PropertyCardImage | string)[];
     // Локация (новый формат из бекенда)
     location?: LocationShortDTO;
     // Транспорт (legacy формат)
@@ -163,7 +141,7 @@ export interface PropertyHorizontalCard {
     // Медиа (новый формат)
     media?: MediaResponseDTO;
     // Медиа (legacy)
-    images: PropertyCardImage[];
+    images: (PropertyCardImage | string)[];
     // Атрибуты (новый формат)
     characteristics?: AttributeDTO[];
     // Legacy удобства
@@ -191,17 +169,6 @@ export interface PropertyHorizontalCard {
 }
 
 // === Карточка для чата (AI-предложения) ===
-export type PropertyFeature =
-    | 'parking'
-    | 'elevator'
-    | 'terrace'
-    | 'balcony'
-    | 'airConditioning'
-    | 'heating'
-    | 'furnished'
-    | 'petFriendly'
-    | 'pool'
-    | 'garden';
 
 export interface PropertyChatCard {
     id: string;
@@ -224,7 +191,7 @@ export interface PropertyChatCard {
     description?: string;
     // Медиа
     media?: MediaResponseDTO;
-    images: PropertyCardImage[];
+    images: (PropertyCardImage | string)[];
     // Атрибуты
     characteristics?: AttributeDTO[];
     features?: PropertyFeature[];
@@ -239,4 +206,16 @@ export interface PropertyChatCard {
     updated_at?: string;
     // Legacy
     type?: PropertyType;
+}
+
+// === Утилиты для работы с изображениями (PropertyCardImage | string) ===
+
+/** Получить URL из элемента images (поддерживает оба формата) */
+export function getImageUrl(img: PropertyCardImage | string): string {
+    return typeof img === 'string' ? img : img.url;
+}
+
+/** Получить alt-текст из элемента images */
+export function getImageAlt(img: PropertyCardImage | string, fallback: string = ''): string {
+    return typeof img === 'string' ? fallback : (img.alt || fallback);
 }

@@ -39,7 +39,7 @@ export function FavoritesPropertiesTab({ properties, isEmpty }: FavoritesPropert
             {properties.map((favProperty) => (
                 <Link
                     key={favProperty.id}
-                    href={`/property/${favProperty.property.id}`}
+                    href={`/property/${favProperty.property.slug || favProperty.property.id}`}
                 >
                     <PropertyCardGrid
                         property={favProperty.property}

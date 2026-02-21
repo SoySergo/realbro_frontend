@@ -24,6 +24,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { PropertyNoteDialog } from '@/features/property-note';
 import type { PropertyGridCard } from '../../model/card-types';
+import { getImageUrl, getImageAlt } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
 
@@ -163,10 +164,10 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <Image
                     src={
                         displayImages[currentImageIndex]
-                            ? safeImageSrc(displayImages[currentImageIndex].url)
+                            ? safeImageSrc(getImageUrl(displayImages[currentImageIndex]))
                             : '/placeholder-property.jpg'
                     }
-                    alt={displayImages[currentImageIndex]?.alt || property.title}
+                    alt={displayImages[currentImageIndex] ? getImageAlt(displayImages[currentImageIndex], property.title) : property.title}
                     fill
                     className="object-cover transition-opacity duration-200"
                     sizes="(max-width: 480px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -202,7 +203,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <div className="absolute top-2 right-2 z-10">
                     {property.author && (
                         <Link
-                            href={`/agency/${property.author.id}`}
+                            href={`/agency/${property.author.slug || property.author.id}`}
                             className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
                             onClick={(e) => e.stopPropagation()}
                         >

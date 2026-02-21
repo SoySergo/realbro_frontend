@@ -4,12 +4,13 @@ import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, SearchCheckIcon } from 'lucide-react';
-import type { Property } from '@/entities/property';
+import type { PropertyGridCard } from '@/entities/property/model/card-types';
+import { getImageUrl } from '@/entities/property/model/card-types';
 import { safeImageSrc } from '@/shared/lib/utils';
 
 // ===== AI Story Mini Card =====
 
-function AiStoryCard({ property }: { property: Property }) {
+function AiStoryCard({ property }: { property: PropertyGridCard }) {
     const formatPrice = (price: number): string => {
         if (price >= 1000) {
             return Math.round(price / 1000) + 'k \u20ac';
@@ -23,7 +24,7 @@ function AiStoryCard({ property }: { property: Property }) {
                 <Image
                     src={
                         property.images[0]
-                            ? safeImageSrc(property.images[0])
+                            ? safeImageSrc(getImageUrl(property.images[0]))
                             : '/placeholder-property.jpg'
                     }
                     alt={property.title}
@@ -42,7 +43,7 @@ function AiStoryCard({ property }: { property: Property }) {
                     <p className="text-white/80 text-[10px] truncate">
                         {property.rooms} komn. · {property.area} m²
                     </p>
-                    <p className="text-white/60 text-[10px] truncate">{property.city}</p>
+                    <p className="text-white/60 text-[10px] truncate">{property.address}</p>
                 </div>
 
                 {/* NEW badge */}
@@ -59,7 +60,7 @@ function AiStoryCard({ property }: { property: Property }) {
 // ===== AI Agent Stories Block =====
 
 interface AiAgentStoriesProps {
-    properties: Property[];
+    properties: PropertyGridCard[];
 }
 
 export function AiAgentStories({ properties }: AiAgentStoriesProps) {

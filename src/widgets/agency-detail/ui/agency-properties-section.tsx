@@ -7,7 +7,7 @@ import { Building2, SlidersHorizontal } from 'lucide-react';
 import { PropertyCardGrid } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import { Button } from '@/shared/ui/button';
-import { 
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -16,7 +16,7 @@ import {
 } from '@/shared/ui/select';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
-import { 
+import {
     Sheet,
     SheetContent,
     SheetDescription,
@@ -51,8 +51,8 @@ interface PropertyFiltersState {
  * Поддерживает фильтрацию по цене, комнатам, агенту
  * Использует PropertyCardGrid для отображения
  */
-export function AgencyPropertiesSection({ 
-    properties: initialProperties, 
+export function AgencyPropertiesSection({
+    properties: initialProperties,
     agents = [],
     agencyId,
     locale,
@@ -64,36 +64,36 @@ export function AgencyPropertiesSection({
 
     const [isPending, startTransition] = useTransition();
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-    
+
     // Локальные фильтры (в будущем будут отправляться на бекенд)
     const [filters, setFilters] = useState<PropertyFiltersState>({});
-    
+
     // Фильтрованные объекты (временно на клиенте, в prod - на бекенде)
     const filteredProperties = initialProperties.filter(property => {
         // Фильтр по минимальной цене
         if (filters.minPrice && property.price < filters.minPrice) {
             return false;
         }
-        
+
         // Фильтр по максимальной цене
         if (filters.maxPrice && property.price > filters.maxPrice) {
             return false;
         }
-        
+
         // Фильтр по количеству комнат
         if (filters.rooms && filters.rooms.length > 0) {
             if (!filters.rooms.includes(property.rooms)) {
                 return false;
             }
         }
-        
+
         // Фильтр по агенту
         if (filters.agentId && filters.agentId !== 'all') {
             if (property.author?.id !== filters.agentId) {
                 return false;
             }
         }
-        
+
         return true;
     });
 
@@ -137,7 +137,7 @@ export function AgencyPropertiesSection({
     const handlePropertyClick = useCallback(
         (property: PropertyGridCard) => {
             startTransition(() => {
-                router.push(`/${locale}/property/${property.id}`);
+                router.push(`/${locale}/property/${property.slug || property.id}`);
             });
         },
         [router, locale]
@@ -150,9 +150,9 @@ export function AgencyPropertiesSection({
 
     // Проверка активных фильтров
     const hasActiveFilters = Boolean(
-        filters.minPrice || 
-        filters.maxPrice || 
-        filters.rooms?.length || 
+        filters.minPrice ||
+        filters.maxPrice ||
+        filters.rooms?.length ||
         filters.agentId
     );
 
@@ -177,8 +177,8 @@ export function AgencyPropertiesSection({
                 {/* Мобильная кнопка фильтров */}
                 <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
                     <SheetTrigger asChild>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             className={cn(
                                 'gap-2',
@@ -190,9 +190,9 @@ export function AgencyPropertiesSection({
                             {hasActiveFilters && (
                                 <span className="bg-brand-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                                     {[
-                                        filters.minPrice, 
-                                        filters.maxPrice, 
-                                        filters.rooms?.length, 
+                                        filters.minPrice,
+                                        filters.maxPrice,
+                                        filters.rooms?.length,
                                         filters.agentId
                                     ].filter(Boolean).length}
                                 </span>
@@ -281,15 +281,15 @@ export function AgencyPropertiesSection({
 
                         {/* Кнопки управления */}
                         <div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t border-border flex gap-3">
-                            <Button 
-                                variant="outline" 
+                            <Button
+                                variant="outline"
                                 onClick={handleResetFilters}
                                 disabled={!hasActiveFilters}
                                 className="flex-1"
                             >
                                 {tCommon('reset')}
                             </Button>
-                            <Button 
+                            <Button
                                 onClick={() => setIsFiltersOpen(false)}
                                 className="flex-1"
                             >
@@ -323,8 +323,8 @@ export function AgencyPropertiesSection({
                     <p className="text-text-secondary mb-4">
                         {t('noPropertiesMatchFilters')}
                     </p>
-                    <Button 
-                        variant="outline" 
+                    <Button
+                        variant="outline"
                         onClick={handleResetFilters}
                     >
                         {tCommon('resetFilters')}

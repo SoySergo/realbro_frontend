@@ -53,10 +53,10 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     const simulatePropertyMessage = useCallback(() => {
         const conversationId = getAIConversationId();
         propertyCounterRef.current++;
-        
+
         const property = generateMockProperty(propertyCounterRef.current);
-        property.isNew = true; // Помечаем как новый
-        
+        property.is_new = true; // Помечаем как новый
+
         const filterNames = ['Barcelona Center', 'Gracia Budget', 'Eixample Premium'];
         const filterIds = ['filter_1', 'filter_2', 'filter_3'];
         const filterIdx = propertyCounterRef.current % 3;
@@ -92,11 +92,11 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     // Start simulation
     const startSimulation = useCallback(() => {
         if (simulationIntervalRef.current || hasStartedRef.current) return;
-        
+
         hasStartedRef.current = true;
         console.log('[WebSocket] Starting global simulation');
         setStatus('connected');
-        
+
         // Simulate messages every 5-10 seconds
         simulationIntervalRef.current = setInterval(() => {
             simulatePropertyMessage();
@@ -108,7 +108,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
         const timer = setTimeout(() => {
             startSimulation();
         }, 2000);
-        
+
         return () => {
             clearTimeout(timer);
             if (simulationIntervalRef.current) {

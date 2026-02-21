@@ -28,7 +28,7 @@ export function AgencyCard({ agency, locale, className }: AgencyCardProps) {
     if (agency.isPremium) {
         return (
             <Link
-                href={`/agency/${agency.id}`}
+                href={`/agency/${agency.slug}`}
                 locale={locale}
                 className={cn('group block', className)}
             >
@@ -41,15 +41,15 @@ export function AgencyCard({ agency, locale, className }: AgencyCardProps) {
                 )}>
                     {/* Декоративный градиент сверху */}
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-transparent to-amber-500/10 pointer-events-none" />
-                    
+
                     {/* Анимированный блеск для VIP */}
                     <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 group-hover:animate-[shimmer_1.5s_ease-in-out] pointer-events-none" />
 
                     <div className="relative p-5">
                         {/* VIP бейдж в углу */}
                         <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                            <Badge 
-                                variant="default" 
+                            <Badge
+                                variant="default"
                                 className="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold border-0 shadow-lg shadow-amber-500/30 gap-1"
                             >
                                 <Crown className="w-3 h-3" />
@@ -139,17 +139,17 @@ export function AgencyCard({ agency, locale, className }: AgencyCardProps) {
                         {/* Языки */}
                         <div className="flex flex-wrap gap-1.5">
                             {agency.languages.slice(0, 4).map((lang: string) => (
-                                <Badge 
-                                    key={lang} 
-                                    variant="secondary" 
+                                <Badge
+                                    key={lang}
+                                    variant="secondary"
                                     className="text-xs bg-white/10 text-slate-200 border-white/20 hover:bg-white/20"
                                 >
                                     {tLang(lang)}
                                 </Badge>
                             ))}
                             {agency.languages.length > 4 && (
-                                <Badge 
-                                    variant="secondary" 
+                                <Badge
+                                    variant="secondary"
                                     className="text-xs bg-white/10 text-slate-200 border-white/20"
                                 >
                                     +{agency.languages.length - 4}
@@ -165,7 +165,7 @@ export function AgencyCard({ agency, locale, className }: AgencyCardProps) {
     // Стандартная карточка агентства
     return (
         <Link
-            href={`/agency/${agency.id}`}
+            href={`/agency/${agency.slug}`}
             locale={locale}
             className={cn('group block', className)}
         >

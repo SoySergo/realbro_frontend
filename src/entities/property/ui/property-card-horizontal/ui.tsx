@@ -30,6 +30,7 @@ import {
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import type { PropertyHorizontalCard, PropertyHorizontalCardAuthor } from '../../model/card-types';
+import { getImageUrl, getImageAlt } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
 
@@ -95,7 +96,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
         const remainingSlots = 3 - thumbnails.length;
         if (remainingSlots > 0 && property.images.length > 1) {
             property.images.slice(1, 1 + remainingSlots).forEach((img) => {
-                thumbnails.push({ type: 'photo', src: img.url });
+                thumbnails.push({ type: 'photo', src: getImageUrl(img) });
             });
         }
 
@@ -151,8 +152,8 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                     }}
                 >
                     <Image
-                        src={safeImageSrc(property.images[currentImageIndex]?.url)}
-                        alt={property.images[currentImageIndex]?.alt || property.title}
+                        src={safeImageSrc(property.images[currentImageIndex] ? getImageUrl(property.images[currentImageIndex]) : '')}
+                        alt={property.images[currentImageIndex] ? getImageAlt(property.images[currentImageIndex], property.title) : property.title}
                         width={375}
                         height={280}
                         className="w-full h-[280px] object-cover rounded"
@@ -328,7 +329,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
                             {authorType === 'agency' ? t('agency') : authorType === 'agent' ? t('agent') : t('owner')}
                         </p>
                         <Link
-                            href={`/agency/${property.author.id}`}
+                            href={`/agency/${property.author.slug || property.author.id}`}
                             className="text-sm font-medium text-center mb-1.5 block hover:text-brand-primary transition-colors"
                             onClick={(e) => e.stopPropagation()}
                         >

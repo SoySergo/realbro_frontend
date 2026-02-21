@@ -58,7 +58,8 @@ interface ComparisonPanelProps {
     translations: ComparisonPanelTranslations;
     locale: string;
     onBack?: () => void;
-    onPropertyClick?: (property: Property) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onPropertyClick?: (property: any) => void;
     onAddMore?: () => void;
     className?: string;
 }
@@ -67,7 +68,8 @@ interface ComparisonPanelProps {
 interface CharacteristicRow {
     key: string;
     label: string;
-    getValue: (property: Property) => string | number | boolean | null | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getValue: (property: any) => string | number | boolean | null | undefined;
     format?: 'price' | 'area' | 'floor' | 'boolean' | 'text' | 'months';
     highlight?: 'min' | 'max' | 'boolean';
     suffix?: string;
@@ -347,7 +349,7 @@ export function ComparisonPanel({
                             <div className="flex items-end pb-4">
                                 <span className="text-sm font-medium text-text-secondary">{t.characteristics}</span>
                             </div>
-                            
+
                             {/* Property cards */}
                             {properties.map((property) => (
                                 <PropertyComparisonCard
@@ -359,7 +361,7 @@ export function ComparisonPanel({
                                     locale={locale}
                                 />
                             ))}
-                            
+
                             {/* Empty slots */}
                             {Array.from({ length: emptySlots }).map((_, idx) => (
                                 <EmptySlot
@@ -430,7 +432,8 @@ function PropertyComparisonCard({
     removeLabel,
     locale,
 }: {
-    property: Property;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    property: any;
     onRemove: () => void;
     onClick?: () => void;
     removeLabel: string;
