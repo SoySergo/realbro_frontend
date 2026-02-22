@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
@@ -10,12 +10,18 @@ import { LocationModeWrapper } from '@/features/location-filter/ui/location-mode
 import { IsochroneControls } from '../isochrone-controls';
 import { useIsochroneState } from '../../model/hooks/use-isochrone-state';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useAuth } from '@/features/auth';
+import { useSidebarStore } from '@/widgets/sidebar';
+import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
+import type { IsochroneSettings } from '@/features/location-filter/model';
 
 type MapIsochroneProps = {
     /** Инстанс карты Mapbox */
     map: mapboxgl.Map;
     /** Колбэк для закрытия панели */
     onClose?: () => void;
+    /** Начальные данные (восстановление сохранённого изохрона) */
+    initialData?: IsochroneSettings;
     /** CSS классы для контейнера */
     className?: string;
 };
@@ -24,8 +30,11 @@ type MapIsochroneProps = {
  * Компонент для работы с изохронами на карте
  * Позволяет выбрать точку на карте или через поиск, выбрать профиль и время
  */
-export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
+export function MapIsochrone({ map, onClose, initialData, className }: MapIsochroneProps) {
     const t = useTranslations('isochrone');
+    const { isAuthenticated } = useAuth();
+    const { activeQueryId, queries } = useSidebarStore();
+    const [isSaving, setIsSaving] = useState(false);
 
     // Используем хук для управления состоянием
     const {
@@ -45,6 +54,18 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
         handleClear,
         handleNameChange,
     } = useIsochroneState({ map });
+
+    // Восстановление сохранённого изохрона при повторном открытии
+    const initializedRef = useRef(false);
+    useEffect(() => {
+        if (initialData && !initializedRef.current) {
+            initializedRef.current = true;
+            setSelectedProfile(initialData.profile);
+            setSelectedMinutes(initialData.minutes);
+            handleLocationSelect(initialData.center, t('selectedPoint'));
+            console.log('[MapIsochrone] Restored saved isochrone:', initialData);
+        }
+    }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, t]);
 
     // Обработчик выбора точки на карте
     useEffect(() => {
@@ -73,15 +94,72 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
         };
     }, [isSelectingPoint, map, setSelectedCoordinates, setIsSelectingPoint, handleNameChange, t]);
 
-    // Обработчик применения фильтра (сохранение в URL)
-    const handleApply = () => {
-        // TODO: Добавить логику пуша в URL search params
-        console.log('Apply isochrone filter:', {
-            coordinates: selectedCoordinates,
-            profile: selectedProfile,
-            minutes: selectedMinutes,
-            polygon: isochroneData,
-        });
+    // Обработчик применения фильтра (сохранение в store и на бекенд)
+    const handleApply = async () => {
+        if (!selectedCoordinates || !isochroneData) return;
+
+        setIsSaving(true);
+        try {
+            const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
+
+            // Определяем режим сохранения: фильтр или гостевой
+            const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
+            const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+
+            // Сохраняем изохрон как геометрию на бекенд
+            const geojsonStr = JSON.stringify({
+                type: 'Polygon',
+                coordinates: isochroneData,
+            });
+
+            let geometryId: string | undefined;
+
+            try {
+                if (hasSavedFilter && activeQueryId) {
+                    const result = await createFilterGeometry(activeQueryId, geojsonStr);
+                    geometryId = result.id;
+                    console.log('[GEO] Isochrone saved to filter:', activeQueryId);
+                } else {
+                    const result = await createGuestGeometry(geojsonStr, 'isochrone');
+                    geometryId = result.id;
+                    console.log('[GEO] Isochrone saved as guest geometry:', geometryId);
+                }
+            } catch (geoError) {
+                console.error('[GEO] Failed to save isochrone geometry:', geoError);
+            }
+
+            // Сохраняем в filter store как LocationFilter
+            setLocationFilter({
+                mode: 'isochrone',
+                isochrone: {
+                    center: selectedCoordinates,
+                    profile: selectedProfile as 'walking' | 'cycling' | 'driving',
+                    minutes: selectedMinutes,
+                },
+            });
+
+            // Обновляем SearchFilters
+            const filterUpdates: Record<string, unknown> = {
+                isochroneCenter: selectedCoordinates,
+                isochroneMinutes: selectedMinutes,
+                isochroneProfile: selectedProfile,
+                geometry_source: hasSavedFilter ? 'filter' : 'guest',
+            };
+
+            if (geometryId) {
+                filterUpdates.polygon_ids = [geometryId];
+            }
+
+            setFilters(filterUpdates);
+
+            // Закрываем панель режима локации
+            setLocationMode(null);
+            onClose?.();
+        } catch (error) {
+            console.error('[GEO] Failed to apply isochrone:', error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Обработчик закрытия панели
@@ -97,6 +175,7 @@ export function MapIsochrone({ map, onClose, className }: MapIsochroneProps) {
             onClear={handleClear}
             onApply={handleApply}
             onClose={handleClose}
+            isSaving={isSaving}
             className={className}
         >
             {/* Поиск адреса */}
