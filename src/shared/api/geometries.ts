@@ -62,11 +62,12 @@ export async function getFilterGeometry(filterId: string): Promise<GeometryRespo
  */
 export async function updateFilterGeometry(
     filterId: string,
-    geometry: string
+    geometry: string,
+    type: 'polygon' | 'isochrone' | 'radius' = 'polygon'
 ): Promise<GeometryResponseDTO> {
-    const response = await apiClient.put<{ data: GeometryResponseDTO }>(
+    const response = await apiClient.post<{ data: GeometryResponseDTO }>(
         `/filters/${filterId}/geometry`,
-        { geometry }
+        { type, geometry }
     );
     return response.data;
 }
@@ -85,11 +86,12 @@ export async function deleteFilterGeometry(filterId: string): Promise<void> {
  * Возвращённый id можно использовать в polygon_ids для поиска
  */
 export async function createGuestGeometry(
-    geometry: string // GeoJSON строка
+    geometry: string,
+    type: 'polygon' | 'isochrone' | 'radius' = 'polygon'
 ): Promise<GeometryResponseDTO> {
     const response = await apiClient.post<{ data: GeometryResponseDTO }>(
         '/filters/guest/geometry',
-        { geometry },
+        { type, geometry },
         { skipAuth: true }
     );
     return response.data;

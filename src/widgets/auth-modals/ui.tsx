@@ -18,12 +18,14 @@ function AuthModalsContent() {
     const t = useTranslations('auth');
 
     const modal = searchParams.get('modal');
+    const authReason = searchParams.get('auth_reason');
     const isOpen = modal === 'login' || modal === 'register' || modal === 'forgot-password';
 
     const handleClose = () => {
         // Убираем параметр modal из URL
         const params = new URLSearchParams(searchParams);
         params.delete('modal');
+        params.delete('auth_reason');
 
         // Формируем новый URL без параметра modal
         const queryString = params.toString();
@@ -53,7 +55,7 @@ function AuthModalsContent() {
                         <>
                             <DialogTitle className="text-center">{t('welcomeBack')}</DialogTitle>
                             <DialogDescription className="text-center">
-                                {t('enterCredentials')}
+                                {authReason || t('enterCredentials')}
                             </DialogDescription>
                         </>
                     )}

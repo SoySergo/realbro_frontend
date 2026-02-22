@@ -11,18 +11,24 @@ const intlMiddleware = createMiddleware(routing);
 const guestRoutes = ['/login', '/register', '/forgot-password'];
 
 /**
- * Проверка авторизации через localStorage данные в cookie
+ * Проверка авторизации через наличие refresh_token cookie (бекенд — источник правды)
+ * Или fallback на localStorage данные в cookie
  */
 function checkAuth(request: NextRequest): boolean {
-    const authCookie = request.cookies.get('auth-storage');
+    // Основной источник — httpOnly refresh_token cookie от бекенда
+    const refreshToken = request.cookies.get('refresh_token');
+    if (refreshToken?.value) {
+        return true;
+    }
 
+    // Fallback — localStorage данные в cookie (zustand persist)
+    const authCookie = request.cookies.get('auth-storage');
     if (!authCookie?.value) {
         return false;
     }
 
     try {
         const parsed = JSON.parse(authCookie.value);
-        // Проверяем наличие user объекта (согласно persist config в store.ts)
         return !!(parsed?.state?.user);
     } catch {
         return false;

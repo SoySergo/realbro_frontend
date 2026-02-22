@@ -194,6 +194,7 @@
     "showOnMap": "Mostrar en el mapa",
     "pricePerMeter": "€/m²",
     "roomsShort": "hab.",
+    "bathroomsShort": "baños",
     "floorOf": "{floor}/{total} planta",
     "verified": "Verificado",
     "top": "TOP",
@@ -373,7 +374,8 @@
     "min": "Mín",
     "max": "Máx",
     "bathrooms": "Baños",
-    "bathroomCount": "Número de baños"
+    "bathroomCount": "Número de baños",
+    "findMe": "Encuéntrame"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -404,7 +406,8 @@
     "checkEmail": "Revisa tu correo",
     "resetLinkSent": "Te enviamos un enlace para restablecer la contraseña. Revisa tu bandeja de entrada.",
     "orContinueWith": "O continúa con",
-    "passwordRequirements": "Mínimo 8 caracteres, 1 mayúscula, 1 minúscula, 1 número"
+    "passwordRequirements": "Mínimo 8 caracteres, 1 mayúscula, 1 minúscula, 1 número",
+    "tabRequiresAuth": "Inicia sesión para crear pestañas de búsqueda"
   },
   "profile": {
     "title": "Perfil",
@@ -620,7 +623,18 @@
     "continueSearch": "Continuar buscando",
     "distanceToPoint": "Distancia al punto",
     "loginRequired": "Se requiere autorización para guardar filtros",
-    "loginToSave": "Iniciar sesión"
+    "loginToSave": "Iniciar sesión",
+    "searchTabs": "Pestañas de búsqueda",
+    "noTabs": "Pulsa + para crear una pestaña de búsqueda",
+    "tooltip": {
+      "search": "Búsqueda",
+      "favorites": "Favoritos",
+      "chat": "Mensajes",
+      "profile": "Perfil",
+      "newSearch": "Crear pestaña",
+      "theme": "Tema",
+      "language": "Idioma"
+    }
   },
   "isochrone": {
     "title": "Tiempo de viaje",

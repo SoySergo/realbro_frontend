@@ -1,23 +1,37 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { MapIsochrone } from '@/features/location-isochrone-mode';
 import { MapDraw } from '@/features/location-draw-mode';
 import { MapRadius } from '@/features/location-radius-mode';
 import { LocationSearchMode } from '@/features/location-search-mode';
+import { Search, Pencil, Clock, Circle } from 'lucide-react';
+import { cn } from '@/shared/lib/utils';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/shared/ui/tooltip';
+import type { LocationFilterMode } from '@/features/location-filter/model';
 
 type MapLocationControllerProps = {
     /** Инстанс карты Mapbox */
     map: mapboxgl.Map;
 };
 
+const LOCATION_MODES: { mode: LocationFilterMode; icon: typeof Search }[] = [
+    { mode: 'search', icon: Search },
+    { mode: 'draw', icon: Pencil },
+    { mode: 'isochrone', icon: Clock },
+    { mode: 'radius', icon: Circle },
+];
+
 /**
  * Контроллер для управления режимами фильтра локации на карте (Desktop версия)
- * Отображает соответствующую панель управления в зависимости от activeLocationMode
- *
- * ВАЖНО: На desktop иконки режимов НЕ показываются здесь - выбор режима происходит
- * через LocationFilterButton в панели фильтров (SearchFiltersBar)
+ * Отображает табы для выбора режима + соответствующую панель управления
  *
  * Поддерживаемые режимы:
  * - search: Поиск и выбор локаций (с OSM полигонами)
@@ -27,6 +41,7 @@ type MapLocationControllerProps = {
  */
 export function MapLocationController({ map }: MapLocationControllerProps) {
     const { activeLocationMode, setLocationMode } = useFilterStore();
+    const t = useTranslations('locationFilter.modes');
 
     // Логирование смены режима
     useEffect(() => {
@@ -46,9 +61,37 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
         return null;
     }
 
-    // Рендерим только панель управления для текущего режима (без табов - они в хедере фильтров)
     return (
         <div className="absolute top-4 left-4 z-10 w-96 max-w-[calc(100vw-2rem)]">
+            {/* Табы выбора режима — иконки с тултипами */}
+            <TooltipProvider delayDuration={300}>
+                <div className="flex bg-background border border-border rounded-t-lg overflow-hidden">
+                    {LOCATION_MODES.map(({ mode, icon: Icon }) => (
+                        <Tooltip key={mode}>
+                            <TooltipTrigger asChild>
+                                <button
+                                    onClick={() => setLocationMode(mode)}
+                                    className={cn(
+                                        'flex-1 flex items-center justify-center py-2.5',
+                                        'transition-colors cursor-pointer',
+                                        'border-b-2',
+                                        activeLocationMode === mode
+                                            ? 'border-brand-primary text-brand-primary bg-brand-primary-light dark:bg-brand-primary/10'
+                                            : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-background-secondary'
+                                    )}
+                                >
+                                    <Icon className="w-4 h-4" />
+                                </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="text-xs">
+                                {t(mode)}
+                            </TooltipContent>
+                        </Tooltip>
+                    ))}
+                </div>
+            </TooltipProvider>
+
+            {/* Панель управления текущего режима */}
             {activeLocationMode === 'isochrone' && (
                 <MapIsochrone
                     map={map}

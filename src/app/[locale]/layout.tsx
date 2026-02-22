@@ -88,7 +88,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     {/* Global Toast Notifications */}
                                     <GlobalToastProvider />
                                     {/* Sonner Toaster для пользовательских действий */}
-                                    <Toaster position="top-center" closeButton richColors />
+                                    <Toaster position="top-center" closeButton richColors duration={4000} />
                                 </ToastProvider>
                             </WebSocketProvider>
                         </AuthProvider>

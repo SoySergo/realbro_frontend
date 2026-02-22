@@ -481,6 +481,7 @@
     "minutesAgo": "{count}хв тому",
     "pricePerMeter": "€/м²",
     "roomsShort": "кімн.",
+    "bathroomsShort": "сан.",
     "verified": "Перевірено",
     "viewMore": "Переглянути більше",
     "walkMin": "{min} хв пішки",
@@ -620,7 +621,8 @@
     "min": "Мін",
     "max": "Макс",
     "bathrooms": "Ванні кімнати",
-    "bathroomCount": "Кількість ванних кімнат"
+    "bathroomCount": "Кількість ванних кімнат",
+    "findMe": "Знайди мені"
   },
   "map": {
     "title": "Карта",
@@ -733,7 +735,8 @@
     "signOut": "Вийти",
     "welcomeBack": "З поверненням",
     "email": "Email",
-    "signUp": "Зареєструватися"
+    "signUp": "Зареєструватися",
+    "tabRequiresAuth": "Увійдіть, щоб створити вкладки пошуку"
   },
   "profile": {
     "title": "Профіль",
@@ -950,7 +953,18 @@
     "continueSearch": "Продовжити пошук",
     "distanceToPoint": "Відстань до точки",
     "loginRequired": "Для збереження фільтрів необхідна авторизація",
-    "loginToSave": "Увійти"
+    "loginToSave": "Увійти",
+    "searchTabs": "Пошукові вкладки",
+    "noTabs": "Натисніть +, щоб створити вкладку пошуку",
+    "tooltip": {
+      "search": "Пошук",
+      "favorites": "Обране",
+      "chat": "Повідомлення",
+      "profile": "Профіль",
+      "newSearch": "Створити вкладку",
+      "theme": "Тема",
+      "language": "Мова"
+    }
   },
   "listing": {
     "create": {

@@ -36,33 +36,42 @@ export function AppHeader() {
                 isExpanded ? 'left-72' : 'left-14'
             )}
         >
-            <div className="flex items-center h-full w-full px-3 gap-3">
-                {/* Лого + название — видны только когда сайдбар свёрнут */}
-                <Link
-                    href="/"
+            <div className="flex items-center h-full w-full">
+                {/* Лого-секция: фиксированная ширина 236px (292-56) когда свёрнут,
+                    минимальная когда развёрнут. Предотвращает "прыжки" фильтров
+                    при открытии/закрытии сайдбара (56+236=292 = 288+4) */}
+                <div
                     className={cn(
-                        'flex items-center gap-2 shrink-0 transition-all duration-300',
-                        isExpanded
-                            ? 'w-0 opacity-0 overflow-hidden pointer-events-none'
-                            : 'w-auto opacity-100'
+                        'flex items-center shrink-0 transition-all duration-300 h-full',
+                        isExpanded ? 'w-1' : 'w-[236px] px-3.5 gap-3'
                     )}
                 >
-                    <Image
-                        src="/logo.svg"
-                        alt="RealBro"
-                        width={28}
-                        height={28}
-                        className="shrink-0 w-7 h-7"
-                    />
-                    <span className="font-bold text-lg text-text-primary whitespace-nowrap">
-                        RealBro
-                    </span>
-                </Link>
+                    <Link
+                        href="/"
+                        className={cn(
+                            'flex items-center gap-2 shrink-0 transition-all duration-300',
+                            isExpanded
+                                ? 'w-0 opacity-0 overflow-hidden pointer-events-none'
+                                : 'w-auto opacity-100'
+                        )}
+                    >
+                        <Image
+                            src="/logo.svg"
+                            alt="RealBro"
+                            width={28}
+                            height={28}
+                            className="shrink-0 w-7 h-7"
+                        />
+                        <span className="font-bold text-lg text-text-primary whitespace-nowrap">
+                            RealBro
+                        </span>
+                    </Link>
+                </div>
 
                 {/* Динамический слот для контента страниц */}
                 <div
                     ref={slotRef}
-                    className="flex-1 flex items-center min-w-0 h-full"
+                    className="flex-1 flex items-center min-w-0 h-full pl-1"
                 />
             </div>
         </header>

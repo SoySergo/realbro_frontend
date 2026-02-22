@@ -201,6 +201,7 @@
     "pricePerMeter": "€/m²",
     "report": "Denunciar",
     "roomsShort": "qtos",
+    "bathroomsShort": "ban.",
     "share": "Compartilhar",
     "verified": "Verificado",
     "viewMore": "Ver mais",
@@ -361,7 +362,8 @@
     "viewMap": "Mapa",
     "min": "Mín",
     "max": "Máx",
-    "bathroomCount": "Número de banheiros"
+    "bathroomCount": "Número de banheiros",
+    "findMe": "Encontre para mim"
   },
   "map": {
     "title": "Mapa",
@@ -405,7 +407,8 @@
     "sendResetLink": "Enviar link",
     "signIn": "Entrar",
     "signOut": "Sair",
-    "welcomeBack": "Bem-vindo de volta"
+    "welcomeBack": "Bem-vindo de volta",
+    "tabRequiresAuth": "Faça login para criar abas de pesquisa"
   },
   "profile": {
     "title": "Perfil",
@@ -568,7 +571,7 @@
     "unknownError": "Erro desconhecido"
   },
   "sidebar": {
-    "searchTabs": "Abas de busca",
+    "searchTabs": "Abas de pesquisa",
     "addTab": "Adicionar aba",
     "untitled": "Sem título",
     "rename": "Renomear",
@@ -613,7 +616,17 @@
     "continueSearch": "Continuar buscando",
     "distanceToPoint": "Distância ao ponto",
     "loginRequired": "Login necessário para salvar filtros",
-    "loginToSave": "Fazer login"
+    "loginToSave": "Fazer login",
+    "noTabs": "Pressione + para criar uma aba de pesquisa",
+    "tooltip": {
+      "search": "Pesquisar",
+      "favorites": "Favoritos",
+      "chat": "Mensagens",
+      "profile": "Perfil",
+      "newSearch": "Criar aba",
+      "theme": "Tema",
+      "language": "Idioma"
+    }
   },
   "isochrone": {
     "title": "Isócrona",

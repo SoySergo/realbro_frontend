@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useSidebarStore, DEFAULT_SEARCH_QUERY_ID } from '@/widgets/sidebar/model';
+import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { MessageCircle, User, Heart, Plus, LogIn, Menu, X } from 'lucide-react';
+import { MessageCircle, User, Heart, Search, Plus, Menu, X } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { LanguageSwitcher } from '@/features/language-switcher';
 import { ThemeSwitcher } from '@/features/theme-switcher';
@@ -15,11 +15,12 @@ import { Link, useRouter, usePathname } from '@/shared/config/routing';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 
-// Навигационные элементы (без поиска — он в дефолтной вкладке)
+// Навигационные элементы — всегда одинаковые, независимо от авторизации
 const navigationItems = [
-    { id: 'favorites', icon: Heart, labelKey: 'favorites', href: '/favorites' },
-    { id: 'chat', icon: MessageCircle, labelKey: 'chat', href: '/chat' },
-    { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' },
+    { id: 'search', icon: Search, labelKey: 'search', tooltipKey: 'tooltip.search', href: '/search' },
+    { id: 'favorites', icon: Heart, labelKey: 'favorites', tooltipKey: 'tooltip.favorites', href: '/favorites' },
+    { id: 'chat', icon: MessageCircle, labelKey: 'chat', tooltipKey: 'tooltip.chat', href: '/chat' },
+    { id: 'profile', icon: User, labelKey: 'profile', tooltipKey: 'tooltip.profile', href: '/profile' },
 ] as const;
 
 export function DesktopSidebar() {
@@ -129,9 +130,10 @@ export function DesktopSidebar() {
 
     // Обработчик добавления нового запроса с имитацией загрузки
     const handleAddQuery = async () => {
-        // Проверка авторизации
+        // Проверка авторизации — открываем модальное окно авторизации напрямую
         if (!isAuthenticated) {
-            router.push(`${pathname ?? '/search'}?modal=login`);
+            const authReason = encodeURIComponent(tAuth('tabRequiresAuth'));
+            router.push(`?modal=login&auth_reason=${authReason}`);
             return;
         }
 
@@ -185,174 +187,155 @@ export function DesktopSidebar() {
 
     return (
         <>
-        <aside
-            className={cn(
-                'fixed left-0 top-0 h-screen bg-background border-r border-border',
-                'transition-all duration-300 ease-in-out z-60',
-                isExpanded ? 'w-72' : 'w-14'
-            )}
-        >
-            <div className="flex flex-col h-full">
-                {/* Верхняя секция: бургер/крестик + лого (при развёрнутом) */}
-                <div className={cn(
-                    'shrink-0 h-[52px] flex items-center border-b border-border transition-all duration-300',
-                    isExpanded
-                        ? 'px-3 gap-3 bg-gradient-to-r from-brand-primary/10 to-transparent'
-                        : 'justify-center'
-                )}>
-                    {/* Кнопка бургер / крестик — всегда в одном месте (левый край) */}
-                    <button
-                        onClick={toggleExpanded}
-                        className={cn(
-                            'shrink-0 p-2 rounded-lg cursor-pointer',
-                            'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
-                            'transition-colors duration-150'
-                        )}
-                        aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-                    >
-                        {isExpanded ? (
-                            <X className="w-5 h-5" />
-                        ) : (
-                            <Menu className="w-5 h-5" />
-                        )}
-                    </button>
+            <aside
+                className={cn(
+                    'fixed left-0 top-0 h-screen bg-background border-r border-border',
+                    'transition-all duration-300 ease-in-out z-60',
+                    isExpanded ? 'w-72' : 'w-14'
+                )}
+            >
+                <div className="flex flex-col h-full">
+                    {/* Верхняя секция: бургер/крестик + лого (при развёрнутом) */}
+                    <div className={cn(
+                        'shrink-0 h-[52px] flex items-center border-b border-border transition-all duration-300',
+                        isExpanded
+                            ? 'pl-[15px] pr-3 gap-3 bg-gradient-to-r from-brand-primary/10 to-transparent'
+                            : 'justify-center'
+                    )}>
+                        {/* Кнопка бургер / крестик — всегда в одном месте (левый край) */}
+                        <button
+                            onClick={toggleExpanded}
+                            className={cn(
+                                'shrink-0 p-2 rounded-lg cursor-pointer',
+                                'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
+                                'transition-colors duration-150'
+                            )}
+                            aria-label={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+                        >
+                            {isExpanded ? (
+                                <X className="w-5 h-5" />
+                            ) : (
+                                <Menu className="w-5 h-5" />
+                            )}
+                        </button>
 
-                    {/* Лого + название — видны только при развёрнутом сайдбаре */}
-                    {isExpanded && (
-                        <Link href="/" className="flex items-center gap-2">
-                            <Image
-                                src="/logo.svg"
-                                alt="RealBro"
-                                width={28}
-                                height={28}
-                                className="shrink-0"
-                            />
-                            <span className="font-bold text-xl text-text-primary whitespace-nowrap animate-in fade-in slide-in-from-left-2 duration-300">
-                                RealBro
-                            </span>
-                        </Link>
-                    )}
-                </div>
-
-                {/* Поисковые запросы */}
-                <div className="flex-1 flex flex-col min-h-0 relative">
-                    {/* Заголовок секции поиска и кнопка добавления */}
-                    <div className="px-3 pt-3 pb-1 shrink-0 bg-background relative z-20">
-                        {isExpanded ? (
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-xs font-semibold text-text-secondary">
-                                    {t('search')}
+                        {/* Лого + название — видны только при развёрнутом сайдбаре */}
+                        {isExpanded && (
+                            <Link href="/" className="flex items-center gap-2">
+                                <Image
+                                    src="/logo.svg"
+                                    alt="RealBro"
+                                    width={28}
+                                    height={28}
+                                    className="shrink-0"
+                                />
+                                <span className="font-bold text-xl text-text-primary whitespace-nowrap animate-in fade-in slide-in-from-left-2 duration-300">
+                                    RealBro
                                 </span>
+                            </Link>
+                        )}
+                    </div>
+
+                    {/* Поисковые запросы */}
+                    <div className="flex-1 flex flex-col min-h-0 relative">
+                        {/* Заголовок секции поиска и кнопка добавления */}
+                        <div className="px-3 pt-3 pb-1 shrink-0 bg-background relative z-20">
+                            {isExpanded ? (
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-semibold text-text-secondary">
+                                        {t('searchTabs')}
+                                    </span>
+                                    <button
+                                        onClick={handleAddQuery}
+                                        className={cn(
+                                            'p-1 rounded-md cursor-pointer',
+                                            'text-brand-primary hover:bg-brand-primary/10 transition-colors duration-150'
+                                        )}
+                                        aria-label={t('newSearch')}
+                                        title={t('tooltip.newSearch')}
+                                    >
+                                        <Plus className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            ) : (
                                 <button
                                     onClick={handleAddQuery}
                                     className={cn(
-                                        'p-1 rounded-md cursor-pointer',
+                                        'w-full flex items-center justify-center p-2 rounded-lg cursor-pointer',
                                         'text-brand-primary hover:bg-brand-primary/10 transition-colors duration-150'
                                     )}
                                     aria-label={t('newSearch')}
+                                    title={t('tooltip.newSearch')}
                                 >
-                                    <Plus className="w-3.5 h-3.5" />
+                                    <Plus className="w-[18px] h-[18px] shrink-0" />
                                 </button>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={handleAddQuery}
-                                className={cn(
-                                    'w-full flex items-center justify-center p-2 rounded-lg cursor-pointer',
-                                    'text-brand-primary hover:bg-brand-primary/10 transition-colors duration-150'
-                                )}
-                                aria-label={t('newSearch')}
-                            >
-                                <Plus className="w-[18px] h-[18px] shrink-0" />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Контейнер со скроллом для списка запросов */}
-                    <div className="flex-1 min-h-0 relative">
-                        {/* Верхний градиент */}
-                        <div
-                            className={cn(
-                                'absolute top-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
-                                'bg-linear-to-b from-background to-transparent',
-                                showTopFade ? 'opacity-100' : 'opacity-0'
                             )}
-                        />
-
-                        <div
-                            ref={scrollContainerRef}
-                            onScroll={handleScroll}
-                            className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
-                        >
-                            <div className={cn('px-3 pt-1 pb-2', isExpanded ? 'space-y-1.5' : 'space-y-1 flex flex-col items-center')}>
-                                {/* Список запросов - десктопная версия */}
-                                {queries.map((query) => {
-                                    const isActive = activeQueryId === query.id;
-                                    const isDefaultQuery = query.id === DEFAULT_SEARCH_QUERY_ID;
-
-                                    return (
-                                        <DesktopQueryItem
-                                            key={query.id}
-                                            query={isDefaultQuery && !query.title ? { ...query, title: t('search') } : query}
-                                            isActive={isActive}
-                                            canDelete={!isDefaultQuery}
-                                            isExpanded={isExpanded}
-                                            onSelect={() => {
-                                                setActiveQuery(query.id);
-                                                // Навигация на страницу поиска если мы не на ней
-                                                if (!pathname?.includes('/search')) {
-                                                    router.push('/search/properties/map');
-                                                }
-                                            }}
-                                            onDelete={() => removeQuery(query.id)}
-                                        />
-                                    );
-                                })}
-                            </div>
                         </div>
 
-                        {/* Нижний градиент */}
-                        <div
-                            className={cn(
-                                'absolute bottom-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
-                                'bg-linear-to-t from-background to-transparent',
-                                showBottomFade ? 'opacity-100' : 'opacity-0'
-                            )}
-                        />
+                        {/* Контейнер со скроллом для списка запросов */}
+                        <div className="flex-1 min-h-0 relative">
+                            {/* Верхний градиент */}
+                            <div
+                                className={cn(
+                                    'absolute top-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
+                                    'bg-linear-to-b from-background to-transparent',
+                                    showTopFade ? 'opacity-100' : 'opacity-0'
+                                )}
+                            />
+
+                            <div
+                                ref={scrollContainerRef}
+                                onScroll={handleScroll}
+                                className="h-full overflow-y-auto overflow-x-hidden scrollbar-hide queries-scroll-container"
+                            >
+                                <div className={cn('px-3 pt-1 pb-2', isExpanded ? 'space-y-1.5' : 'space-y-1 flex flex-col items-center')}>
+                                    {/* Список запросов - десктопная версия */}
+                                    {queries.length === 0 && isExpanded && (
+                                        <div className="text-xs text-text-tertiary text-center py-3">
+                                            {t('noTabs')}
+                                        </div>
+                                    )}
+                                    {queries.map((query) => {
+                                        const isActive = activeQueryId === query.id;
+
+                                        return (
+                                            <DesktopQueryItem
+                                                key={query.id}
+                                                query={query}
+                                                isActive={isActive}
+                                                canDelete={true}
+                                                isExpanded={isExpanded}
+                                                onSelect={() => {
+                                                    setActiveQuery(query.id);
+                                                    // Навигация на страницу поиска если мы не на ней
+                                                    if (!pathname?.includes('/search')) {
+                                                        router.push('/search/properties/map');
+                                                    }
+                                                }}
+                                                onDelete={() => removeQuery(query.id)}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Нижний градиент */}
+                            <div
+                                className={cn(
+                                    'absolute bottom-0 left-0 right-0 h-8 pointer-events-none transition-opacity duration-300 z-10',
+                                    'bg-linear-to-t from-background to-transparent',
+                                    showBottomFade ? 'opacity-100' : 'opacity-0'
+                                )}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {/* Градиентный разделитель */}
-                <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
+                    {/* Градиентный разделитель */}
+                    <div className="h-px bg-gradient-to-r from-brand-primary/30 via-brand-primary/10 to-transparent" />
 
-                {/* Нижняя навигация */}
-                <div className="px-3 py-2 space-y-0.5 shrink-0">
-                    {navigationItems.map((item) => {
-                        // Условная навигация для профиля
-                        // Показываем "Войти" если не смонтировано (для SSR) или если не авторизован
-                        if (item.id === 'profile' && (!isMounted || !isAuthenticated)) {
-                            return (
-                                <Link
-                                    key="login"
-                                    href="?modal=login"
-                                    className={cn(
-                                        'w-full flex items-center gap-3 rounded-lg cursor-pointer',
-                                        'text-text-secondary hover:text-text-primary hover:bg-background-secondary',
-                                        'transition-colors duration-150 relative',
-                                        isExpanded ? 'px-3 py-2' : 'justify-center py-2'
-                                    )}
-                                >
-                                    <LogIn className="w-[18px] h-[18px] shrink-0" />
-                                    {isExpanded && (
-                                        <span className="text-sm font-medium">
-                                            {tAuth('signIn')}
-                                        </span>
-                                    )}
-                                </Link>
-                            );
-                        }
-
-                        return (
+                    {/* Нижняя навигация */}
+                    <div className="px-3 py-2 space-y-0.5 shrink-0">
+                        {navigationItems.map((item) => (
                             <Link
                                 key={item.id}
                                 href={item.href}
@@ -362,6 +345,7 @@ export function DesktopSidebar() {
                                     'transition-colors duration-150 relative focus-visible:outline-2 focus-visible:outline-brand-primary focus-visible:outline-offset-2',
                                     isExpanded ? 'px-3 py-2' : 'justify-center py-2'
                                 )}
+                                title={!isExpanded ? t(item.tooltipKey) : undefined}
                             >
                                 <item.icon className="w-[18px] h-[18px] shrink-0" />
                                 {isExpanded && (
@@ -382,56 +366,47 @@ export function DesktopSidebar() {
                                     </span>
                                 )}
                             </Link>
-                        );
-                    })}
+                        ))}
 
-                    {/* Переключатели темы и языка — видны всегда (как в demo-7) */}
-                    <div className="h-px bg-gradient-to-r from-brand-primary/20 via-brand-primary/5 to-transparent my-1.5" />
-                    <div className={cn(
-                        'flex gap-2 justify-center',
-                        isExpanded ? 'flex-row items-center px-2' : 'flex-col items-center'
-                    )}>
-                        <ThemeSwitcher />
-                        <LanguageSwitcher />
-                        {isExpanded && !isMounted ? null : isExpanded && !isAuthenticated && (
-                            <Link
-                                href="?modal=login"
-                                className="ml-auto text-xs text-brand-primary font-medium hover:underline"
-                            >
-                                {tAuth('signIn')}
-                            </Link>
-                        )}
+                        {/* Переключатели темы и языка */}
+                        <div className="h-px bg-gradient-to-r from-brand-primary/20 via-brand-primary/5 to-transparent my-1.5" />
+                        <div className={cn(
+                            'flex gap-2 justify-center',
+                            isExpanded ? 'flex-row items-center px-2' : 'flex-col items-center'
+                        )}>
+                            <ThemeSwitcher />
+                            <LanguageSwitcher />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
 
-        {/* Диалог лимита вкладок */}
-        <Dialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{t('tabLimit')}</DialogTitle>
-                    <DialogDescription>
-                        {t('tabLimitDescription', { max: tabLimit.max })}
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Link
-                        href="/pricing"
-                        className="inline-flex items-center justify-center rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover transition-colors"
-                        onClick={() => setShowLimitDialog(false)}
-                    >
-                        {t('upgradePlan')}
-                    </Link>
-                    <button
-                        onClick={() => setShowLimitDialog(false)}
-                        className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-background-tertiary transition-colors"
-                    >
-                        {t('editTab')}
-                    </button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+            {/* Диалог лимита вкладок */}
+            <Dialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t('tabLimit')}</DialogTitle>
+                        <DialogDescription>
+                            {t('tabLimitDescription', { max: tabLimit.max })}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Link
+                            href="/pricing"
+                            className="inline-flex items-center justify-center rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover transition-colors"
+                            onClick={() => setShowLimitDialog(false)}
+                        >
+                            {t('upgradePlan')}
+                        </Link>
+                        <button
+                            onClick={() => setShowLimitDialog(false)}
+                            className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-background-tertiary transition-colors"
+                        >
+                            {t('editTab')}
+                        </button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

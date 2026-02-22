@@ -5,12 +5,12 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import {
-    Search,
     SlidersHorizontal,
     Trash2,
     CloudUpload,
     CloudCheck,
     CloudCog,
+    RefreshCw,
     FingerprintIcon,
 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
@@ -76,6 +76,8 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
     const [isSavePopoverOpen, setIsSavePopoverOpen] = useState(false);
     const [filterName, setFilterName] = useState('');
     const [savedFiltersSnapshot, setSavedFiltersSnapshot] = useState<string | null>(null);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [justSynced, setJustSynced] = useState(false);
 
     const filtersContainerRef = useRef<HTMLDivElement>(null);
 
@@ -116,6 +118,31 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         ? filtersCount > 0
         : agencyFilters.filtersCount > 0;
 
+    // Авто-синхронизация фильтров для авторизованных пользователей
+    useEffect(() => {
+        if (!isAuthenticated || !isProperties || !activeQuery || activeQuery.isUnsaved || !hasUnsavedChanges) return;
+
+        const timeoutId = setTimeout(async () => {
+            setIsSyncing(true);
+            try {
+                const mergedFilters = { ...filters, ...currentFilters };
+                updateQuery(activeQueryId!, {
+                    filters: mergedFilters,
+                    resultsCount: resultsCount ?? undefined,
+                });
+                setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
+                setJustSynced(true);
+                setTimeout(() => setJustSynced(false), 2000);
+            } catch (error) {
+                console.error('Auto-sync failed:', error);
+            } finally {
+                setIsSyncing(false);
+            }
+        }, 1500);
+
+        return () => clearTimeout(timeoutId);
+    }, [currentFiltersSnapshot, isAuthenticated, isProperties, activeQuery?.id, activeQuery?.isUnsaved]);
+
     // Получение количества результатов
     const fetchResultsCount = useCallback(async () => {
         setIsLoadingCount(true);
@@ -144,29 +171,36 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         return () => clearTimeout(timeoutId);
     }, [fetchResultsCount]);
 
-    const handleReset = () => {
-        if (isProperties) {
-            clearFilters();
-        } else {
-            agencyFilters.resetFilters();
-        }
-    };
+    // Авто-применение фильтров при изменении (с debounce)
+    useEffect(() => {
+        if (!isProperties) return;
 
-    const handleShowResults = () => {
-        setIsFiltersPopupOpen(false);
-
-        if (isProperties) {
+        const timeoutId = setTimeout(() => {
             const mergedFilters = { ...filters, ...currentFilters };
+            setFilters(mergedFilters);
+
             if (activeQueryId && activeQuery) {
                 updateQuery(activeQueryId, {
                     filters: mergedFilters,
                     resultsCount: resultsCount ?? undefined,
                 });
             }
-            setFilters(mergedFilters);
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+    }, [currentFiltersSnapshot]);
+
+    const handleReset = () => {
+        if (isProperties) {
+            clearFilters();
+            // Также сбрасываем location state в Zustand store
+            const { resetFilters: resetStoreFilters } = useFilterStore.getState();
+            resetStoreFilters();
+        } else {
+            agencyFilters.resetFilters();
         }
-        // Для professionals — фильтры применяются автоматически через стор
     };
+
 
     // Проверка авторизации перед сохранением фильтра
     const requireAuth = useCallback((): boolean => {
@@ -221,26 +255,11 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         }
     };
 
-    const formatNumber = (num: number): string => {
-        return num.toLocaleString('ru-RU');
-    };
-
-    const SaveIcon = activeQuery ? (hasUnsavedChanges ? CloudCog : CloudCheck) : CloudUpload;
+    const SaveIcon = isSyncing ? RefreshCw : activeQuery ? (justSynced ? CloudCheck : (hasUnsavedChanges ? CloudCog : CloudCheck)) : CloudUpload;
 
     return (
         <div className="w-full relative z-50">
-            <div className="flex items-center gap-2 px-2 w-full">
-                {/* Кнопка ИИ агент */}
-                <Button
-                    size="sm"
-                    className="shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
-                >
-                    <FingerprintIcon className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t('aiAgent')}</span>
-                </Button>
-
-                <div className="w-px h-6 bg-border shrink-0" />
-
+            <div className="flex items-center gap-2 px-3 w-full justify-center">
                 {/* Переключатель категории */}
                 <SearchCategorySwitcher currentCategory={currentCategory} locale={locale} />
 
@@ -252,12 +271,14 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                 {/* Зона фильтров — зависит от категории */}
                 <div
                     ref={filtersContainerRef}
-                    className="hidden md:flex items-center gap-2 flex-1 min-w-0"
+                    className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto scrollbar-hide"
                 >
                     {isProperties ? (
                         <>
                             <LocationFilterButton />
-                            <CategoryFilter />
+                            <div className="hidden sm:block">
+                                <CategoryFilter />
+                            </div>
                             <div className="hidden lg:block">
                                 <PriceFilter />
                             </div>
@@ -269,7 +290,9 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                             </div>
                         </>
                     ) : (
-                        <ProfessionalFiltersGroup />
+                        <div className="hidden md:contents">
+                            <ProfessionalFiltersGroup />
+                        </div>
                     )}
 
                     {/* Кнопки действий */}
@@ -309,14 +332,16 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                                     variant="ghost"
                                     size="icon"
                                     onClick={handleSave}
-                                    disabled={!hasUnsavedChanges}
+                                    disabled={isSyncing || (!hasUnsavedChanges && !justSynced)}
                                     className={cn(
                                         "text-text-secondary",
-                                        hasUnsavedChanges && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                        isSyncing && "text-brand-primary",
+                                        justSynced && "text-success",
+                                        hasUnsavedChanges && !isSyncing && "hover:text-brand-primary hover:bg-brand-primary/10"
                                     )}
-                                    title={hasUnsavedChanges ? tCommon('save') : t('title')}
+                                    title={isSyncing ? tCommon('saving') : (justSynced ? tCommon('saved') : (hasUnsavedChanges ? tCommon('save') : t('title')))}
                                 >
-                                    <SaveIcon className="w-4 h-4" />
+                                    <SaveIcon className={cn("w-4 h-4", isSyncing && "animate-spin")} />
                                 </Button>
                             ) : (
                                 <Popover open={isSavePopoverOpen} onOpenChange={(open) => {
@@ -376,25 +401,14 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                             )
                         )}
 
-                        {/* Кнопка "Показать" с счётчиком */}
+                        {/* Кнопка "Найди мне" (AI) — в конце */}
                         <Button
-                            variant="default"
+                            variant="outline"
                             size="sm"
-                            onClick={handleShowResults}
-                            disabled={isLoadingCount}
-                            className={cn(
-                                'bg-brand-primary hover:bg-brand-primary/90 text-white',
-                                'min-w-[90px] justify-center'
-                            )}
+                            className="btn-ai-neon ml-3 shrink-0 gap-2"
                         >
-                            <Search className="w-4 h-4 mr-1.5" />
-                            {isLoadingCount ? (
-                                <span className="animate-pulse">...</span>
-                            ) : (
-                                <span>
-                                    {resultsCount !== null ? formatNumber(resultsCount) : tCommon('show')}
-                                </span>
-                            )}
+                            <FingerprintIcon className="w-4 h-4 text-brand-primary" />
+                            <span className="hidden sm:inline font-medium">{t('findMe')}</span>
                         </Button>
                     </div>
                 </div>

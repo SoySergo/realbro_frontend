@@ -41,7 +41,7 @@ function AuthPrompt() {
                 {t('authPrompt.description')}
             </p>
             <Link href="?modal=login">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 bg-brand-primary hover:bg-brand-primary-hover text-white">
                     <LogIn className="w-5 h-5" />
                     {tAuth('signIn')}
                 </Button>
@@ -118,14 +118,14 @@ export function FavoritesContent() {
             </h1>
 
             {/* Табы - видны всем */}
-            <Tabs 
-                value={activeTab} 
+            <Tabs
+                value={activeTab}
                 onValueChange={(value) => setActiveTab(value as FavoritesTab)}
                 className="w-full"
             >
                 <TabsList className="w-full md:w-auto mb-6 grid grid-cols-4 md:flex md:flex-row gap-1 bg-background-secondary p-1 rounded-lg">
-                    <TabsTrigger 
-                        value="properties" 
+                    <TabsTrigger
+                        value="properties"
                         className={cn(
                             "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                             "data-[state=active]:bg-background data-[state=active]:text-text-primary data-[state=active]:shadow-sm",
@@ -135,7 +135,7 @@ export function FavoritesContent() {
                         <Home className="w-4 h-4" />
                         <span className="hidden sm:inline">{t('tabs.properties')}</span>
                     </TabsTrigger>
-                    <TabsTrigger 
+                    <TabsTrigger
                         value="professionals"
                         className={cn(
                             "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
@@ -146,7 +146,7 @@ export function FavoritesContent() {
                         <Users className="w-4 h-4" />
                         <span className="hidden sm:inline">{t('tabs.professionals')}</span>
                     </TabsTrigger>
-                    <TabsTrigger 
+                    <TabsTrigger
                         value="filters"
                         className={cn(
                             "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
@@ -157,7 +157,7 @@ export function FavoritesContent() {
                         <Filter className="w-4 h-4" />
                         <span className="hidden sm:inline">{t('tabs.filters')}</span>
                     </TabsTrigger>
-                    <TabsTrigger 
+                    <TabsTrigger
                         value="notes"
                         className={cn(
                             "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
@@ -173,7 +173,7 @@ export function FavoritesContent() {
                 {/* Контент табов */}
                 <TabsContent value="properties">
                     {isAuthenticated ? (
-                        <FavoritesPropertiesTabV2 
+                        <FavoritesPropertiesTabV2
                             properties={favoriteProperties}
                             isEmpty={favoriteProperties.length === 0}
                         />
@@ -184,7 +184,7 @@ export function FavoritesContent() {
 
                 <TabsContent value="professionals">
                     {isAuthenticated ? (
-                        <FavoritesProfessionalsTabV2 
+                        <FavoritesProfessionalsTabV2
                             professionals={favoriteProfessionals}
                             isEmpty={favoriteProfessionals.length === 0}
                             onRemove={handleRemoveProfessional}
@@ -197,7 +197,7 @@ export function FavoritesContent() {
 
                 <TabsContent value="filters">
                     {isAuthenticated ? (
-                        <FavoritesFiltersTab 
+                        <FavoritesFiltersTab
                             filters={savedFilters}
                             isEmpty={savedFilters.length === 0}
                             onApply={handleApplyFilter}
@@ -211,7 +211,7 @@ export function FavoritesContent() {
 
                 <TabsContent value="notes">
                     {isAuthenticated ? (
-                        <FavoritesNotesTabV2 
+                        <FavoritesNotesTabV2
                             notes={notes}
                             isEmpty={notes.length === 0}
                             onDelete={handleDeleteNote}

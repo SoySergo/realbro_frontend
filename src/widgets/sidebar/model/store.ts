@@ -84,8 +84,8 @@ export const useSidebarStore = create<SidebarStore>()(
         (set, get) => ({
             // Начальное состояние
             isExpanded: false,
-            queries: [createDefaultSearchQuery()],
-            activeQueryId: DEFAULT_SEARCH_QUERY_ID,
+            queries: [],
+            activeQueryId: null,
 
             // Методы раскрытия
             setExpanded: (expanded) => set({ isExpanded: expanded }),
@@ -101,17 +101,10 @@ export const useSidebarStore = create<SidebarStore>()(
                     createdAt: new Date(),
                     lastUpdated: new Date(),
                 };
-                set((state) => {
-                    // Вставляем после дефолтной вкладки поиска (она всегда первая)
-                    const defaultIndex = state.queries.findIndex(q => q.id === DEFAULT_SEARCH_QUERY_ID);
-                    const insertIndex = defaultIndex >= 0 ? defaultIndex + 1 : 0;
-                    const newQueries = [...state.queries];
-                    newQueries.splice(insertIndex, 0, newQuery);
-                    return {
-                        queries: newQueries,
-                        activeQueryId: newQuery.id,
-                    };
-                });
+                set((state) => ({
+                    queries: [newQuery, ...state.queries],
+                    activeQueryId: newQuery.id,
+                }));
             },
 
             removeQuery: (id) => {
@@ -205,15 +198,13 @@ export const useSidebarStore = create<SidebarStore>()(
                 queries: state.queries,
                 activeQueryId: state.activeQueryId,
             }),
-            // Гарантируем наличие дефолтной вкладки поиска после восстановления
+            // Восстановление после rehydrate — убеждаемся что activeQueryId валиден
             onRehydrateStorage: () => (state) => {
                 if (!state) return;
-                const hasDefault = state.queries.some(q => q.id === DEFAULT_SEARCH_QUERY_ID);
-                if (!hasDefault) {
-                    state.queries = [createDefaultSearchQuery(), ...state.queries];
-                }
-                if (!state.activeQueryId && state.queries.length > 0) {
-                    state.activeQueryId = state.queries[0].id;
+                // Удаляем legacy дефолтную вкладку если осталась в storage
+                state.queries = state.queries.filter(q => q.id !== DEFAULT_SEARCH_QUERY_ID);
+                if (state.activeQueryId === DEFAULT_SEARCH_QUERY_ID) {
+                    state.activeQueryId = state.queries.length > 0 ? state.queries[0].id : null;
                 }
             },
         }

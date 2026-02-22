@@ -270,6 +270,7 @@ export const useFilterStore = create<FilterStore>()(
                 set({
                     currentFilters: initialFilters,
                     locationFilter: null,
+                    activeLocationMode: null,
                     selectedBoundaryWikidata: new Set<string>(),
                 });
 
@@ -319,23 +320,23 @@ export const useFilterStore = create<FilterStore>()(
 
                 console.log('Polygon added:', newPolygon.id);
 
-                // Отправка геометрии на бекенд
-                fetch('/api/geometries', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        type: 'polygon',
-                        geometry: newPolygon.points,
-                        name: newPolygon.id,
-                    }),
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log('[GEO] Polygon saved to backend:', data.data?.id);
-                    })
-                    .catch((err) => {
-                        console.error('[GEO] Failed to save polygon:', err);
+                // Отправка геометрии на бекенд через guest endpoint
+                import('@/shared/api/geometries').then(({ createGuestGeometry }) => {
+                    const geojsonStr = JSON.stringify({
+                        type: 'Polygon',
+                        coordinates: [[
+                            ...newPolygon.points.map(p => [p.lng, p.lat]),
+                            [newPolygon.points[0].lng, newPolygon.points[0].lat],
+                        ]],
                     });
+                    createGuestGeometry(geojsonStr, 'polygon')
+                        .then((result) => {
+                            console.log('[GEO] Polygon saved to backend:', result.id);
+                        })
+                        .catch((err: unknown) => {
+                            console.error('[GEO] Failed to save polygon:', err);
+                        });
+                });
 
                 return newPolygon;
             },

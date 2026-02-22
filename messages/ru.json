@@ -194,6 +194,7 @@
     "showOnMap": "Показать на карте",
     "pricePerMeter": "€/м²",
     "roomsShort": "комн.",
+    "bathroomsShort": "сан.",
     "floorOf": "{floor}/{total} эт.",
     "verified": "Проверено",
     "top": "ТОП",
@@ -373,7 +374,8 @@
     "min": "Мин",
     "max": "Макс",
     "bathrooms": "Ванные",
-    "bathroomCount": "Количество ванных"
+    "bathroomCount": "Количество ванных",
+    "findMe": "Найди мне"
   },
   "map": {
     "showMap": "Показать карту",
@@ -404,7 +406,8 @@
     "checkEmail": "Проверьте почту",
     "resetLinkSent": "Мы отправили вам ссылку для сброса пароля. Проверьте входящие сообщения.",
     "orContinueWith": "Или продолжить с",
-    "passwordRequirements": "Минимум 8 символов, 1 заглавная, 1 строчная, 1 цифра"
+    "passwordRequirements": "Минимум 8 символов, 1 заглавная, 1 строчная, 1 цифра",
+    "tabRequiresAuth": "Для создания поисковых вкладок необходимо авторизоваться"
   },
   "profile": {
     "title": "Профиль",
@@ -620,7 +623,18 @@
     "continueSearch": "Продолжить поиск",
     "distanceToPoint": "Расстояние до точки",
     "loginRequired": "Для сохранения фильтров необходима авторизация",
-    "loginToSave": "Войти"
+    "loginToSave": "Войти",
+    "searchTabs": "Поисковые вкладки",
+    "noTabs": "Нажмите +, чтобы создать вкладку поиска",
+    "tooltip": {
+      "search": "Поиск",
+      "favorites": "Избранное",
+      "chat": "Сообщения",
+      "profile": "Профиль",
+      "newSearch": "Создать вкладку",
+      "theme": "Тема",
+      "language": "Язык"
+    }
   },
   "isochrone": {
     "title": "Время в пути",

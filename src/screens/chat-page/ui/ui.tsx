@@ -6,6 +6,36 @@ import { useAuth } from '@/features/auth';
 import { AuthRequired } from '@/shared/ui/auth-required';
 import { Loader2 } from 'lucide-react';
 
+/**
+ * Скелетон списка чатов для неавторизованных пользователей
+ */
+function ChatListSkeleton() {
+    return (
+        <div className="flex flex-col h-full">
+            {/* Шапка */}
+            <div className="p-3 border-b border-border">
+                <div className="h-8 bg-background-secondary rounded animate-pulse" />
+            </div>
+            {/* Табы */}
+            <div className="flex gap-2 p-3 border-b border-border">
+                <div className="h-7 w-16 bg-background-secondary rounded animate-pulse" />
+                <div className="h-7 w-20 bg-background-secondary rounded animate-pulse" />
+                <div className="h-7 w-18 bg-background-secondary rounded animate-pulse" />
+            </div>
+            {/* Список чатов - скелетоны */}
+            {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 border-b border-border/50">
+                    <div className="w-10 h-10 rounded-full bg-background-secondary animate-pulse shrink-0" />
+                    <div className="flex-1 space-y-2">
+                        <div className="h-4 bg-background-secondary rounded animate-pulse w-3/4" />
+                        <div className="h-3 bg-background-secondary rounded animate-pulse w-1/2" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 export function ChatPage() {
     const t = useTranslations('chat');
     const { isAuthenticated, isInitialized } = useAuth();
@@ -19,9 +49,20 @@ export function ChatPage() {
         );
     }
 
-    // Не авторизован - показываем заглушку
+    // Не авторизован - показываем макет чата со скелетонами и призывом к авторизации
     if (!isAuthenticated) {
-        return <AuthRequired context="chat" />;
+        return (
+            <div className="flex h-[calc(100vh-4rem)] md:h-screen">
+                {/* Левая панель - скелетон списка чатов */}
+                <div className="hidden md:flex md:w-80 lg:w-96 border-r border-border bg-background flex-col">
+                    <ChatListSkeleton />
+                </div>
+                {/* Правая панель - призыв к авторизации */}
+                <div className="flex-1 flex items-center justify-center bg-background">
+                    <AuthRequired context="chat" />
+                </div>
+            </div>
+        );
     }
 
     const labels = {

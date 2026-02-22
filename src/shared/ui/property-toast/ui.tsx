@@ -276,7 +276,7 @@ export const PropertyToastContainer = memo(function PropertyToastContainer({
                 ),
                 {
                     id: propertyToast.id,
-                    duration: 30000,
+                    duration: 5000,
                     position: 'top-center',
                     className: cn(
                         'w-full max-w-[380px] md:max-w-[480px] lg:max-w-[520px]',

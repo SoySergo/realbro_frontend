@@ -31,6 +31,18 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
             return false;
         }
 
+        // Дополнительная проверка что стиль полностью готов (предотвращает 'get' undefined)
+        try {
+            const style = map.getStyle();
+            if (!style || !style.layers) {
+                console.warn('[useBoundariesLayer] Style layers not ready');
+                return false;
+            }
+        } catch {
+            console.warn('[useBoundariesLayer] Cannot read style, map not ready');
+            return false;
+        }
+
         // Проверяем, не добавлен ли уже источник
         if (map.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) {
             console.log('[useBoundariesLayer] Boundaries source already exists');
@@ -189,27 +201,37 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
 
             console.log('[useBoundariesLayer] Cleaning up boundaries layer');
 
-            // Удаляем слои в безопасном режиме
-            try {
-                if (map.getLayer(BOUNDARIES_LAYER_IDS.LABELS)) {
-                    map.removeLayer(BOUNDARIES_LAYER_IDS.LABELS);
-                }
-                if (map.getLayer(BOUNDARIES_LAYER_IDS.OUTLINE)) {
-                    map.removeLayer(BOUNDARIES_LAYER_IDS.OUTLINE);
-                }
-                if (map.getLayer(BOUNDARIES_LAYER_IDS.FILL)) {
-                    map.removeLayer(BOUNDARIES_LAYER_IDS.FILL);
-                }
+            // Откладываем удаление слоёв до следующего кадра рендера карты,
+            // чтобы избежать race condition с continuePlacement
+            const doCleanup = () => {
+                try {
+                    if (!map.isStyleLoaded()) {
+                        console.warn('[useBoundariesLayer] Style not loaded during cleanup, scheduling retry');
+                        map.once('idle', doCleanup);
+                        return;
+                    }
 
-                // Удаляем источник
-                if (map.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) {
-                    map.removeSource(BOUNDARIES_LAYER_IDS.SOURCE);
-                }
+                    if (map.getLayer(BOUNDARIES_LAYER_IDS.LABELS)) {
+                        map.removeLayer(BOUNDARIES_LAYER_IDS.LABELS);
+                    }
+                    if (map.getLayer(BOUNDARIES_LAYER_IDS.OUTLINE)) {
+                        map.removeLayer(BOUNDARIES_LAYER_IDS.OUTLINE);
+                    }
+                    if (map.getLayer(BOUNDARIES_LAYER_IDS.FILL)) {
+                        map.removeLayer(BOUNDARIES_LAYER_IDS.FILL);
+                    }
 
-                console.log('[useBoundariesLayer] Boundaries layer removed');
-            } catch (error) {
-                console.warn('[useBoundariesLayer] Error during cleanup:', error);
-            }
+                    if (map.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) {
+                        map.removeSource(BOUNDARIES_LAYER_IDS.SOURCE);
+                    }
+
+                    console.log('[useBoundariesLayer] Boundaries layer removed');
+                } catch (error) {
+                    console.warn('[useBoundariesLayer] Error during cleanup:', error);
+                }
+            };
+
+            requestAnimationFrame(doCleanup);
         };
     }, [map, initializeBoundariesLayer]);
 

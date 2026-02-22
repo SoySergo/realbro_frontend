@@ -239,6 +239,25 @@ body {
   /* Chrome, Safari, Opera */
 }
 
+/* ========================================
+   MAPBOX POPUP OVERRIDES
+   Убираем дефолтный белый фон у popup-ов рисования,
+   чтобы не было двойного бекграунда (popup bg + компонент bg)
+   ======================================== */
+
+.draw-editor-popup .mapboxgl-popup-content,
+.draw-actions-popup .mapboxgl-popup-content {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.draw-editor-popup .mapboxgl-popup-tip,
+.draw-actions-popup .mapboxgl-popup-tip {
+  display: none;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -292,9 +311,11 @@ body {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.4);
   }
+
   100% {
     transform: scale(1);
   }
@@ -306,19 +327,24 @@ body {
 
 /* Chat icon wiggle animation */
 @keyframes chat-wiggle {
+
   0%,
   100% {
     transform: rotate(0deg);
   }
+
   20% {
     transform: rotate(-8deg);
   }
+
   40% {
     transform: rotate(8deg);
   }
+
   60% {
     transform: rotate(-5deg);
   }
+
   80% {
     transform: rotate(5deg);
   }
@@ -330,10 +356,12 @@ body {
 
 /* Chat icon pulse animation */
 @keyframes chat-pulse {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.15);
   }
@@ -349,6 +377,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -365,6 +394,7 @@ body {
     opacity: 0;
     transform: translateY(20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -381,6 +411,7 @@ body {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -396,6 +427,7 @@ body {
   from {
     height: 0;
   }
+
   to {
     height: var(--radix-accordion-content-height);
   }
@@ -405,6 +437,7 @@ body {
   from {
     height: var(--radix-accordion-content-height);
   }
+
   to {
     height: 0;
   }
@@ -423,6 +456,7 @@ body {
   0% {
     transform: translateX(-100%) skewX(-12deg);
   }
+
   100% {
     transform: translateX(200%) skewX(-12deg);
   }
@@ -430,15 +464,33 @@ body {
 
 /* Анимация для иконок действий пользователя */
 @keyframes icon-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes icon-bounce {
-  0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-4px); }
-  60% { transform: translateY(-2px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-4px);
+  }
+
+  60% {
+    transform: translateY(-2px);
+  }
 }
 
 .animate-icon-pop {
@@ -447,4 +499,83 @@ body {
 
 .animate-icon-bounce {
   animation: icon-bounce 0.4s ease-out;
+}
+
+/* ========================================
+   AI BUTTON — Neon rotating border
+   ======================================== */
+
+@keyframes neon-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.btn-ai-neon {
+  position: relative;
+  overflow: hidden;
+  border-color: transparent !important;
+  /* Немного меньшее скругление */
+  border-radius: var(--radius-sm) !important;
+  background-color: transparent !important;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Элементы внутри кнопки должны быть поверх ::after */
+.btn-ai-neon>* {
+  position: relative;
+  z-index: 10;
+}
+
+/* Вращающийся градиент (аппаратное ускорение) */
+.btn-ai-neon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  aspect-ratio: 1;
+  background: conic-gradient(from 0deg,
+      transparent 0%,
+      transparent 40%,
+      #198bff 48%,
+      #00ffff 50%,
+      #198bff 52%,
+      transparent 60%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* При наведении: запускаем анимацию и показываем неон */
+.btn-ai-neon:hover::before {
+  opacity: 1;
+  animation: neon-spin 1.5s linear infinite;
+}
+
+/* Внутренний фон кнопки ("стиль как у других" без жестких инверсий) */
+.btn-ai-neon::after {
+  content: '';
+  position: absolute;
+  /* Отступ = ширина неонового бордера */
+  inset: 1px;
+  border-radius: calc(var(--radius-sm) - 1px);
+  background: var(--background);
+  z-index: 1;
+  transition: background 0.2s ease;
+}
+
+/* Легкий ховер-эффект на фоне кнопки, чтобы сохранить интерактивность */
+.btn-ai-neon:hover::after {
+  background: var(--background-secondary, var(--accent));
+}
+
+.btn-ai-neon:hover {
+  box-shadow: 0 0 15px rgba(25, 139, 255, 0.4);
 }

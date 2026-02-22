@@ -22,6 +22,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import { PropertyNoteDialog } from '@/features/property-note';
 import type { PropertyGridCard } from '../../model/card-types';
 import { getImageUrl, getImageAlt } from '../../model/card-types';
@@ -29,6 +30,7 @@ import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
 
 const MAX_HOVER_IMAGES = 6;
+const MAX_TRANSPORT_LINES = 3;
 const DEFAULT_METRO_LINE_COLOR = '#E50914';
 
 interface PropertyCardGridProps {
@@ -50,13 +52,21 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
 
-    // Дата публикации: приоритет published_at (бекенд), fallback на created_at (legacy)
+    // Дата публикации: приоритет published_at (бекенд), fallback на updated_at, затем created_at (legacy)
+    // Go zero time "0001-01-01T00:00:00Z" считаем пустым значением
     const timeAgo = useMemo(() => {
-        const dateStr = property.published_at || property.created_at;
-        if (!dateStr) return '';
+        const isZeroTime = (d: string) => d.startsWith('0001-01-01');
+        const raw = property.published_at && !isZeroTime(property.published_at)
+            ? property.published_at
+            : property.updated_at && !isZeroTime(property.updated_at)
+                ? property.updated_at
+                : property.created_at;
+        if (!raw || isZeroTime(raw)) return '';
         const now = new Date();
-        const created = new Date(dateStr);
+        const created = new Date(raw);
+        if (isNaN(created.getTime())) return '';
         const diffMs = now.getTime() - created.getTime();
+        if (diffMs < 0) return '';
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
         const diffDays = Math.floor(diffHours / 24);
@@ -65,7 +75,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         if (diffMins < 60) return t('minutesAgo', { count: diffMins });
         if (diffHours < 24) return t('hoursAgo', { count: diffHours });
         return t('daysAgo', { count: diffDays });
-    }, [property.published_at, property.created_at, t]);
+    }, [property.published_at, property.updated_at, property.created_at, t]);
 
     const displayImages = property.images.slice(0, MAX_HOVER_IMAGES);
     const extraImagesCount = property.images.length - MAX_HOVER_IMAGES;
@@ -208,9 +218,15 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Avatar className="w-5 h-5">
-                                <AvatarImage src={safeImageSrc(property.author.avatar)} />
-                                <AvatarFallback className="text-[10px]">
-                                    {property.author.name.charAt(0)}
+                                <AvatarImage src={safeImageSrc(
+                                    property.author.avatar
+                                    || ('company_logo' in property.author ? property.author.company_logo : undefined)
+                                )} />
+                                <AvatarFallback className="text-[10px] bg-brand-primary text-white">
+                                    {('company_name' in property.author && property.author.company_name
+                                        ? property.author.company_name
+                                        : property.author.name
+                                    ).charAt(0).toUpperCase()}
                                 </AvatarFallback>
                             </Avatar>
                             <span className="text-[10px] text-text-secondary">{timeAgo}</span>
@@ -269,10 +285,22 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
 
                 {/* Characteristics */}
                 <div className="flex items-center gap-1.5 text-sm sm:text-xs text-foreground mb-1 flex-wrap">
-                    <span className="font-medium whitespace-nowrap">
-                        {property.rooms} {t('roomsShort')}
-                    </span>
-                    <span className="text-muted-foreground">·</span>
+                    {property.rooms != null && property.rooms > 0 && (
+                        <>
+                            <span className="font-medium whitespace-nowrap">
+                                {property.rooms} {t('roomsShort')}
+                            </span>
+                            <span className="text-muted-foreground">·</span>
+                        </>
+                    )}
+                    {property.bathrooms != null && property.bathrooms > 0 && (
+                        <>
+                            <span className="font-medium whitespace-nowrap">
+                                {property.bathrooms} {t('bathroomsShort')}
+                            </span>
+                            <span className="text-muted-foreground">·</span>
+                        </>
+                    )}
                     <span className="whitespace-nowrap">{property.area} m²</span>
                     {property.floor && property.total_floors && (
                         <>
@@ -304,9 +332,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <div className="flex items-center justify-between gap-2">
                     {property.transport_station ? (
                         <div className="flex items-center gap-2 text-sm sm:text-xs min-w-0">
-                            {/* Линии транспорта */}
+                            {/* Линии транспорта — макс 3 + badge */}
                             <div className="flex items-center gap-1 flex-shrink-0">
-                                {property.transport_station.lines?.map((line, idx) => (
+                                {property.transport_station.lines?.slice(0, MAX_TRANSPORT_LINES).map((line, idx) => (
                                     <div
                                         key={idx}
                                         className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
@@ -317,6 +345,32 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                         {line.name || 'M'}
                                     </div>
                                 ))}
+                                {(property.transport_station.lines?.length ?? 0) > MAX_TRANSPORT_LINES && (
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <div className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded bg-muted text-muted-foreground cursor-default">
+                                                    +{(property.transport_station.lines?.length ?? 0) - MAX_TRANSPORT_LINES}
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top" className="max-w-xs">
+                                                <div className="flex flex-wrap gap-1">
+                                                    {property.transport_station.lines?.map((line, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
+                                                            style={{
+                                                                backgroundColor: line.color || DEFAULT_METRO_LINE_COLOR,
+                                                            }}
+                                                        >
+                                                            {line.name || 'M'}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                )}
                             </div>
                             {/* Название станции */}
                             <span className="text-foreground truncate font-normal">

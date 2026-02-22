@@ -190,6 +190,7 @@
     "showOnMap": "Auf Karte anzeigen",
     "pricePerMeter": "€/m²",
     "roomsShort": "Zi.",
+    "bathroomsShort": "Bad",
     "floorOf": "{floor}/{total} Et.",
     "verified": "Geprüft",
     "top": "TOP",
@@ -369,7 +370,8 @@
     "min": "Min",
     "max": "Max",
     "bathrooms": "Badezimmer",
-    "bathroomCount": "Anzahl Badezimmer"
+    "bathroomCount": "Anzahl Badezimmer",
+    "findMe": "Finde für mich"
   },
   "map": {
     "showMap": "Karte anzeigen",
@@ -400,7 +402,8 @@
     "checkEmail": "Prüfen Sie Ihre E-Mail",
     "resetLinkSent": "Wir haben Ihnen einen Link zum Zurücksetzen des Passworts gesendet. Prüfen Sie Ihren Posteingang.",
     "orContinueWith": "Oder fortfahren mit",
-    "passwordRequirements": "Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe, 1 Ziffer"
+    "passwordRequirements": "Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe, 1 Ziffer",
+    "tabRequiresAuth": "Melden Sie sich an, um Such-Tabs zu erstellen"
   },
   "profile": {
     "title": "Profil",
@@ -616,7 +619,18 @@
     "continueSearch": "Suche fortsetzen",
     "distanceToPoint": "Entfernung zum Punkt",
     "loginRequired": "Anmeldung erforderlich, um Filter zu speichern",
-    "loginToSave": "Anmelden"
+    "loginToSave": "Anmelden",
+    "searchTabs": "Such-Tabs",
+    "noTabs": "Drücken Sie +, um einen Such-Tab zu erstellen",
+    "tooltip": {
+      "search": "Suche",
+      "favorites": "Favoriten",
+      "chat": "Nachrichten",
+      "profile": "Profil",
+      "newSearch": "Tab erstellen",
+      "theme": "Thema",
+      "language": "Sprache"
+    }
   },
   "isochrone": {
     "title": "Fahrzeit",

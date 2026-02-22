@@ -1,89 +1,55 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { MapPin, ChevronDown, Pencil, Clock, Circle, Search } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useRouter } from '@/shared/config/routing';
 import { cn } from '@/shared/lib/utils';
 import type { LocationFilterMode } from '@/features/location-filter/model';
 
 /**
- * Фильтр локации
- * Четыре режима: полигоны, рисование, изохрон (время до точки), радиус
- * При выборе режима открывается панель деталей локации (второй ряд фильтров)
+ * Кнопка-тогл для режима фильтрации локации.
+ * При нажатии: активируется режим "search" (по умолчанию), появляются табы над панелью.
+ * При повторном нажатии: деактивируется.
  *
- * При сохранении показывает название режима + количество элементов
- * Например: "Рисование (+2)" или "Поиск (+3)"
+ * Если есть сохранённый фильтр — показывает иконку и количество.
  */
 // Режимы, требующие карту для работы
-const MAP_REQUIRED_MODES: LocationFilterMode[] = ['draw', 'isochrone', 'radius'];
+const MAP_REQUIRED_MODES: LocationFilterMode[] = ['draw', 'isochrone', 'radius', 'search'];
 
 export function LocationFilterButton() {
     const t = useTranslations('filters');
-    const tLocationFilter = useTranslations('locationFilter.modes');
-    const tSidebar = useTranslations('sidebar');
-    const { locationFilter, activeLocationMode, setLocationMode, searchViewMode } = useFilterStore();
+    const { locationFilter, activeLocationMode, setLocationMode } = useFilterStore();
     const router = useRouter();
     const pathname = usePathname();
-    const [open, setOpen] = useState(false);
 
-    const locationModes = [
-        {
-            mode: 'search' as LocationFilterMode,
-            icon: Search,
-            label: t('locationSearch'),
-            shortLabel: tLocationFilter('search'),
-        },
-        {
-            mode: 'draw' as LocationFilterMode,
-            icon: Pencil,
-            label: t('locationDraw'),
-            shortLabel: tLocationFilter('draw'),
-        },
-        {
-            mode: 'isochrone' as LocationFilterMode,
-            icon: Clock,
-            label: tSidebar('distanceToPoint'),
-            shortLabel: tLocationFilter('isochrone'),
-        },
-        {
-            mode: 'radius' as LocationFilterMode,
-            icon: Circle,
-            label: t('locationRadius'),
-            shortLabel: tLocationFilter('radius'),
-        },
-    ];
+    const handleToggle = () => {
+        if (activeLocationMode) {
+            // Выключаем режим локации
+            setLocationMode(null);
+        } else {
+            // Включаем режим локации — восстанавливаем сохранённый мод или по умолчанию "search"
+            const defaultMode: LocationFilterMode = locationFilter?.mode || 'search';
 
-    const handleModeSelect = (mode: LocationFilterMode) => {
-        console.log('Location filter mode selected:', mode);
+            // Если на странице листинга — редирект на карту
+            const isOnListPage = pathname?.includes('/search/properties/list') || pathname?.includes('/search/agencies/list');
+            if (MAP_REQUIRED_MODES.includes(defaultMode) && isOnListPage) {
+                setLocationMode(defaultMode);
+                router.push(`/search/properties/map?openMode=${defaultMode}`);
+                return;
+            }
 
-        // Если выбран режим, требующий карту, и мы на странице листинга — редирект на карту
-        const isOnListPage = pathname?.includes('/search/properties/list') || pathname?.includes('/search/agencies/list');
-        if (MAP_REQUIRED_MODES.includes(mode) && isOnListPage) {
-            setLocationMode(mode);
-            router.push(`/search/properties/map?openMode=${mode}`);
-            setOpen(false);
-            return;
+            setLocationMode(defaultMode);
         }
-
-        setLocationMode(mode);
-        setOpen(false);
     };
 
     // Проверяем есть ли сохранённый фильтр локации
     const hasSavedFilter = !!locationFilter;
     const isActive = hasSavedFilter || !!activeLocationMode;
 
-    // Определяем текущий режим для отображения
-    const currentMode = locationFilter?.mode || activeLocationMode;
-    const activeMode = currentMode ? locationModes.find(m => m.mode === currentMode) : null;
-    const ActiveIcon = activeMode?.icon || MapPin;
-
-    // Подсчёт выбранных параметров для каждого режима
+    // Подсчёт выбранных параметров
     const getSelectedCount = (): number => {
         if (!locationFilter) return 0;
 
@@ -103,96 +69,29 @@ export function LocationFilterButton() {
 
     const selectedCount = getSelectedCount();
 
-    // Формируем текст кнопки
-    const getButtonLabel = (): string => {
-        if (hasSavedFilter && activeMode) {
-            // Если есть сохранённый фильтр - показываем короткое название режима
-            return activeMode.shortLabel;
-        }
-        if (activeLocationMode && activeMode) {
-            // Если режим активен но не сохранён - показываем полное название
-            return activeMode.label;
-        }
-        // По умолчанию
-        return t('location');
-    };
-
     return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <button
-                    className={cn(
-                        'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
-                        // Светлая тема: белый фон
-                        'bg-background',
-                        // Тёмная тема: без бордера
-                        'border border-border dark:border-transparent',
-                        // Текст
-                        'text-text-primary hover:text-text-primary',
-                        // Активное состояние с сохранённым фильтром
-                        hasSavedFilter && 'bg-brand-primary-light border-brand-primary text-brand-primary',
-                        hasSavedFilter && 'dark:bg-brand-primary dark:text-white'
-                    )}
-                >
-                    <ActiveIcon className="w-4 h-4" />
-                    <span>{getButtonLabel()}</span>
-                    {selectedCount > 0 && (
-                        <span className={cn(
-                            'text-xs font-medium',
-                            hasSavedFilter ? 'text-brand-primary dark:text-white' : 'text-text-tertiary'
-                        )}>
-                            (+{selectedCount})
-                        </span>
-                    )}
-                    <ChevronDown className={cn(
-                        "w-4 h-4 opacity-50 transition-transform",
-                        open && "rotate-180"
-                    )} />
-                </button>
-            </PopoverTrigger>
-
-            <PopoverContent
-                className="w-[280px] p-2 bg-background border-border"
-                align="start"
-            >
-                <div className="space-y-1">
-                    {locationModes.map(({ mode, icon: Icon, label }) => {
-                        const isActiveMode = currentMode === mode;
-                        const isSavedMode = locationFilter?.mode === mode;
-
-                        return (
-                            <button
-                                key={mode}
-                                onClick={() => handleModeSelect(mode)}
-                                className={cn(
-                                    'w-full flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer',
-                                    'text-sm transition-colors duration-150',
-                                    'focus:outline-none',
-                                    // Сохранённый режим
-                                    isSavedMode && 'bg-brand-primary text-white',
-                                    // Активный но не сохранённый
-                                    isActiveMode && !isSavedMode && 'bg-brand-primary-light text-brand-primary dark:bg-brand-primary/20',
-                                    // Неактивный режим
-                                    !isActiveMode && !isSavedMode && [
-                                        'text-text-secondary',
-                                        'hover:bg-brand-primary-light hover:text-brand-primary',
-                                        'dark:hover:bg-brand-primary/20 dark:hover:text-white'
-                                    ]
-                                )}
-                            >
-                                <Icon className="w-4 h-4 shrink-0" />
-                                <span className="flex-1 text-left">{label}</span>
-                                {isSavedMode && selectedCount > 0 && (
-                                    <span className="text-xs font-medium opacity-80">
-                                        (+{selectedCount})
-                                    </span>
-                                )}
-                            </button>
-                        );
-                    })}
-                </div>
-            </PopoverContent>
-        </Popover>
+        <button
+            onClick={handleToggle}
+            className={cn(
+                'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
+                'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
+                // Неактивное состояние
+                !isActive && 'bg-background border border-border dark:border-transparent text-text-primary hover:text-text-primary',
+                // Активное состояние
+                isActive && 'bg-brand-primary text-white border border-brand-primary',
+                isActive && 'hover:bg-brand-primary-hover'
+            )}
+        >
+            <MapPin className="w-4 h-4" />
+            <span>{t('location')}</span>
+            {selectedCount > 0 && (
+                <span className={cn(
+                    'text-xs font-medium',
+                    isActive ? 'text-white/80' : 'text-text-tertiary'
+                )}>
+                    (+{selectedCount})
+                </span>
+            )}
+        </button>
     );
 }

@@ -178,6 +178,7 @@
     "showOnMap": "Show on Map",
     "pricePerMeter": "€/m²",
     "roomsShort": "rooms",
+    "bathroomsShort": "bath.",
     "floorOf": "{floor}/{total} fl.",
     "verified": "Verified",
     "top": "TOP",
@@ -357,7 +358,8 @@
     "min": "Min",
     "max": "Max",
     "bathrooms": "Bathrooms",
-    "bathroomCount": "Number of Bathrooms"
+    "bathroomCount": "Number of Bathrooms",
+    "findMe": "Find me"
   },
   "map": {
     "showMap": "Show Map",
@@ -388,7 +390,8 @@
     "checkEmail": "Check your email",
     "resetLinkSent": "We've sent you a password reset link. Please check your inbox.",
     "orContinueWith": "Or continue with",
-    "passwordRequirements": "At least 8 characters, 1 uppercase, 1 lowercase, 1 number"
+    "passwordRequirements": "At least 8 characters, 1 uppercase, 1 lowercase, 1 number",
+    "tabRequiresAuth": "Sign in to create search tabs"
   },
   "profile": {
     "title": "Profile",
@@ -604,7 +607,18 @@
     "continueSearch": "Continue searching",
     "distanceToPoint": "Distance to point",
     "loginRequired": "Authorization required to save filters",
-    "loginToSave": "Sign in"
+    "loginToSave": "Sign in",
+    "searchTabs": "Search Tabs",
+    "noTabs": "Press + to create a search tab",
+    "tooltip": {
+      "search": "Search",
+      "favorites": "Favorites",
+      "chat": "Messages",
+      "profile": "Profile",
+      "newSearch": "Create tab",
+      "theme": "Theme",
+      "language": "Language"
+    }
   },
   "isochrone": {
     "title": "Travel Time",

@@ -49,8 +49,8 @@ export function AuthRequired({ context, className }: AuthRequiredProps) {
             </p>
 
             {/* Кнопка входа */}
-            <Link href="?modal=login">
-                <Button size="lg" className="gap-2">
+            <Link href={`?modal=login&auth_reason=${encodeURIComponent(t(`${context}.description`))}`}>
+                <Button size="lg" className="gap-2 bg-brand-primary hover:bg-brand-primary-hover text-white">
                     <LogIn className="w-5 h-5" />
                     {tAuth('signIn')}
                 </Button>

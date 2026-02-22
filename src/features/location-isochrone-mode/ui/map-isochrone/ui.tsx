@@ -9,6 +9,7 @@ import { LocationSearch } from '@/features/location-filter/ui/location-search';
 import { LocationModeWrapper } from '@/features/location-filter/ui/location-mode-wrapper';
 import { IsochroneControls } from '../isochrone-controls';
 import { useIsochroneState } from '../../model/hooks/use-isochrone-state';
+import { useFilterStore } from '@/widgets/search-filters-bar';
 
 type MapIsochroneProps = {
     /** Инстанс карты Mapbox */

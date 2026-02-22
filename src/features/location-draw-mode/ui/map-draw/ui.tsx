@@ -19,6 +19,9 @@ import {
 import { cleanupDrawingLayers } from '../../lib/map-layer-helpers';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { saveGeometry } from '@/shared/api';
+import { useAuth } from '@/features/auth';
+import { createFilterGeometry } from '@/shared/api/geometries';
+import { useSidebarStore } from '@/widgets/sidebar';
 
 type MapDrawProps = {
     /** Инстанс карты Mapbox */
@@ -37,6 +40,8 @@ type MapDrawProps = {
 export function MapDraw({ map, onClose, className }: MapDrawProps) {
     const t = useTranslations('draw');
     const { setLocationFilter, setLocationMode } = useFilterStore();
+    const { isAuthenticated } = useAuth();
+    const { activeQueryId, queries } = useSidebarStore();
     const [isSaving, setIsSaving] = useState(false);
 
     // Хук управления состоянием
@@ -137,26 +142,46 @@ export function MapDraw({ map, onClose, className }: MapDrawProps) {
         try {
             // Берём первый полигон для сохранения
             const polygon = polygons[0];
-            const coordinates = [polygon.points.map(p => [p.lng, p.lat])];
+            const coordinates = [
+                [...polygon.points.map(p => [p.lng, p.lat]),
+                [polygon.points[0].lng, polygon.points[0].lat]] // замыкаем полигон
+            ];
 
-            // Отправляем на бекенд
-            const result = await saveGeometry({
-                type: 'polygon',
-                coordinates,
-                metadata: {
-                    name: polygon.name,
-                    pointsCount: polygon.points.length,
-                },
-            });
+            let geometryId: string;
 
-            console.log('Polygon saved to backend:', result);
+            // Проверяем: авторизован + есть сохранённый фильтр → createFilterGeometry
+            const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
+            const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+
+            if (hasSavedFilter && activeQueryId) {
+                // Авторизованный пользователь с сохранённым фильтром
+                const geojsonStr = JSON.stringify({
+                    type: 'Polygon',
+                    coordinates,
+                });
+                const result = await createFilterGeometry(activeQueryId, geojsonStr, 'polygon');
+                geometryId = result.id;
+                console.log('Polygon saved to filter:', activeQueryId, result);
+            } else {
+                // Гостевой endpoint (неавторизованный или несохранённый фильтр)
+                const result = await saveGeometry({
+                    type: 'polygon',
+                    coordinates,
+                    metadata: {
+                        name: polygon.name,
+                        pointsCount: polygon.points.length,
+                    },
+                });
+                geometryId = String(result.id);
+                console.log('Polygon saved as guest geometry:', result);
+            }
 
             // Обновляем store с сохранённым фильтром
             setLocationFilter({
                 mode: 'draw',
                 polygon: {
                     ...polygon,
-                    id: `polygon_${result.id}`,
+                    id: `polygon_${geometryId}`,
                 },
             });
 

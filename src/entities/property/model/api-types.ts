@@ -49,7 +49,7 @@ export interface NearestStationDTO {
     lon: number;
     distance: number;          // метры
     walking_distance?: number;
-    walking_duration?: number; // секунды
+    walking_duration?: number; // минуты
     lines?: TransportLineDTO[];
 }
 
@@ -130,6 +130,7 @@ export interface PropertyShortListingDTO {
     title: string;
     slug: string;
     price: number;
+    price_per_meter?: number;
     price_per_month?: number;
     area: number;
     area_useful?: number;

@@ -65,7 +65,8 @@ export const useAuthStore = create<AuthState>()(
                 return !!user;
             },
 
-            // Инициализация — попытка refresh → сохранить access_token + user
+            // Инициализация — бекенд как источник правды
+            // Всегда пробуем refresh → /me, если есть cookies (httpOnly refresh_token)
             initialize: async () => {
                 set({ isLoading: true });
 
@@ -78,19 +79,17 @@ export const useAuthStore = create<AuthState>()(
 
                 try {
                     // Попытка refresh — refresh_token в httpOnly cookie
-                    const authResponse = await authApi.refresh();
-                    if (authResponse.access_token) {
-                        setAccessToken(authResponse.access_token);
-                    }
-                    set({ user: authResponse.user, isInitialized: true });
+                    // Бекенд возвращает UserInfo напрямую, токены устанавливаются через httpOnly cookies
+                    const user = await authApi.refresh();
+                    set({ user, isInitialized: true });
                 } catch {
-                    // Refresh не удался — пробуем получить user из cookies
+                    // Refresh не удался — пробуем получить user через /me
+                    // (access_token мог быть ещё валидным в cookie)
                     try {
                         const user = await authApi.getMeFromCookies();
                         set({ user, isInitialized: true });
                     } catch {
-                        // Нет валидной сессии - это нормально
-                        setAccessToken(null);
+                        // Нет валидной сессии — гость
                         set({ user: null, isInitialized: true });
                     }
                 } finally {
@@ -98,15 +97,12 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            // Логин — сохраняем access_token из AuthResponse
+            // Логин — бекенд возвращает UserInfo, токены в httpOnly cookies
             login: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
-                    const authResponse = await authApi.login({ email, password });
-                    if (authResponse.access_token) {
-                        setAccessToken(authResponse.access_token);
-                    }
-                    set({ user: authResponse.user });
+                    const user = await authApi.login({ email, password });
+                    set({ user });
                 } catch (error) {
                     const message =
                         error instanceof AuthError
@@ -119,15 +115,12 @@ export const useAuthStore = create<AuthState>()(
                 }
             },
 
-            // Регистрация — сохраняем access_token из AuthResponse
+            // Регистрация — бекенд возвращает UserInfo, токены в httpOnly cookies
             register: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
-                    const authResponse = await authApi.register({ email, password });
-                    if (authResponse.access_token) {
-                        setAccessToken(authResponse.access_token);
-                    }
-                    set({ user: authResponse.user });
+                    const user = await authApi.register({ email, password });
+                    set({ user });
                 } catch (error) {
                     const message =
                         error instanceof AuthError
@@ -168,7 +161,10 @@ export const useAuthStore = create<AuthState>()(
             initiateGoogleOAuth: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const returnUrl = typeof window !== 'undefined' ? window.location.href : undefined;
+                    // Бекенд ожидает относительный путь, не полный URL
+                    const returnUrl = typeof window !== 'undefined'
+                        ? window.location.pathname + window.location.search
+                        : undefined;
                     // Сохраняем pathname в sessionStorage как fallback (бэкенд может не вернуть return_url)
                     if (typeof window !== 'undefined') {
                         saveReturnUrl(window.location.pathname);
@@ -190,12 +186,10 @@ export const useAuthStore = create<AuthState>()(
             initializeFromCookies: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    // После OAuth callback — пробуем refresh для получения access_token
-                    const authResponse = await authApi.refresh();
-                    if (authResponse.access_token) {
-                        setAccessToken(authResponse.access_token);
-                    }
-                    set({ user: authResponse.user, isInitialized: true });
+                    // После OAuth callback — пробуем refresh
+                    // Бекенд возвращает UserInfo напрямую, токены в httpOnly cookies
+                    const user = await authApi.refresh();
+                    set({ user, isInitialized: true });
                 } catch {
                     // Fallback — получаем user из cookies
                     try {

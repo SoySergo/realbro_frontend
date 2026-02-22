@@ -139,6 +139,22 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         initializePropertyLayers(map);
     }, [initializePropertyLayers]);
 
+    // Скрываем/показываем слои объектов при входе/выходе из режима локации
+    useEffect(() => {
+        if (!mapInstance || !layersInitializedRef.current) return;
+
+        const visibility = activeLocationMode ? 'none' : 'visible';
+        const layers = [PROPERTIES_LAYER_CLUSTERS, PROPERTIES_LAYER_CLUSTER_COUNT, PROPERTIES_LAYER_POINTS];
+
+        layers.forEach((layerId) => {
+            if (mapInstance.getLayer(layerId)) {
+                mapInstance.setLayoutProperty(layerId, 'visibility', visibility);
+            }
+        });
+
+        console.log('[SearchMap] Property layers visibility:', visibility);
+    }, [mapInstance, activeLocationMode]);
+
     // Обновляем URL тайлов при изменении фильтров
     useEffect(() => {
         if (!mapInstance || !layersInitializedRef.current) return;

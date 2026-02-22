@@ -75,9 +75,14 @@ async function refreshAccessToken(): Promise<string | null> {
                 return null;
             }
 
+            // Backend returns UserInfo in body, tokens are set via httpOnly cookies
+            // Try to extract access_token from JSON (backward compat), otherwise rely on cookies
             const data = await response.json();
-            accessToken = data.access_token || null;
-            return accessToken;
+            if (data.access_token) {
+                accessToken = data.access_token;
+            }
+            // Return marker that refresh succeeded (cookies are updated)
+            return accessToken || 'cookie-auth';
         } catch {
             accessToken = null;
             return null;
@@ -150,7 +155,12 @@ async function request<T>(
     if (response.status === 401 && !skipAuth) {
         const newToken = await refreshAccessToken();
         if (newToken) {
-            headers['Authorization'] = `Bearer ${newToken}`;
+            // Set Bearer header if we have a real JWT, otherwise rely on httpOnly cookies
+            if (newToken !== 'cookie-auth') {
+                headers['Authorization'] = `Bearer ${newToken}`;
+            } else {
+                delete headers['Authorization'];
+            }
             response = await fetch(url, { ...fetchOptions, headers });
         } else {
             // Refresh не удался — пробрасываем 401

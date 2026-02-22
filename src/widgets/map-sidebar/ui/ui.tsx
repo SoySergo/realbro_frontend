@@ -122,8 +122,8 @@ export function MapSidebar({
     clusterId,
     onClusterReset,
     clusterPropertyIds,
-    isVisible = true,
-    onVisibilityChange,
+    isVisible: _isVisible = true,
+    onVisibilityChange: _onVisibilityChange,
     className,
 }: MapSidebarProps) {
     const tCommon = useTranslations('common');
@@ -201,11 +201,9 @@ export function MapSidebar({
     );
 
     useEffect(() => {
-        if (isVisible) {
-            setPage(1);
-            fetchProperties(1, false);
-        }
-    }, [fetchProperties, isVisible]);
+        setPage(1);
+        fetchProperties(1, false);
+    }, [fetchProperties]);
 
     // Сброс страницы при изменении сортировки или фильтров
     useEffect(() => {
@@ -239,29 +237,6 @@ export function MapSidebar({
         },
         [onPropertyHover]
     );
-
-    // Скрытое состояние
-    if (!isVisible) {
-        return (
-            <div
-                className={cn(
-                    'w-12 bg-background border-l border-border flex flex-col',
-                    className
-                )}
-            >
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onVisibilityChange?.(true)}
-                    className="w-full h-12 rounded-none"
-                    title={tMapSidebar('showPanel')}
-                    aria-label={tMapSidebar('showPanel')}
-                >
-                    <ChevronLeft className="w-4 h-4" />
-                </Button>
-            </div>
-        );
-    }
 
     return (
         <div
@@ -322,17 +297,6 @@ export function MapSidebar({
                         />
                     </Button>
 
-                    {/* Кнопка скрыть */}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onVisibilityChange?.(false)}
-                        className="ml-auto h-9 w-9 p-0"
-                        title={tMapSidebar('hidePanel')}
-                        aria-label={tMapSidebar('hidePanel')}
-                    >
-                        <ChevronRight className="w-4 h-4" />
-                    </Button>
                 </div>
 
                 {/* Кластер и счётчик */}

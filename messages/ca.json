@@ -232,6 +232,7 @@
     "showOnMap": "Mostrar al mapa",
     "pricePerMeter": "€/m²",
     "roomsShort": "hab.",
+    "bathroomsShort": "banys",
     "floorOf": "{floor}/{total} pl.",
     "verified": "Verificat",
     "top": "TOP",
@@ -468,7 +469,8 @@
     "min": "Mín",
     "max": "Màx",
     "bathrooms": "Banys",
-    "bathroomCount": "Nombre de banys"
+    "bathroomCount": "Nombre de banys",
+    "findMe": "Troba per mi"
   },
   "map": {
     "showMap": "Mostrar mapa",
@@ -527,7 +529,8 @@
     "termsAgree": "Accepto els",
     "terms": "termes d'ús",
     "and": "i",
-    "privacy": "política de privadesa"
+    "privacy": "política de privadesa",
+    "tabRequiresAuth": "Inicieu sessió per crear pestanyes de cerca"
   },
   "profile": {
     "title": "Perfil",
@@ -754,7 +757,18 @@
     "continueSearch": "Continuar buscant",
     "distanceToPoint": "Distància al punt",
     "loginRequired": "Cal iniciar sessió per desar filtres",
-    "loginToSave": "Iniciar sessió"
+    "loginToSave": "Iniciar sessió",
+    "searchTabs": "Pestanyes de cerca",
+    "noTabs": "Premeu + per crear una pestanya de cerca",
+    "tooltip": {
+      "search": "Cerca",
+      "favorites": "Preferits",
+      "chat": "Missatges",
+      "profile": "Perfil",
+      "newSearch": "Crear pestanya",
+      "theme": "Tema",
+      "language": "Idioma"
+    }
   },
   "isochrone": {
     "title": "Temps de viatge",

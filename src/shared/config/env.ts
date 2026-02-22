@@ -7,7 +7,7 @@ const envSchema = z.object({
 
     // API endpoints
     NEXT_PUBLIC_API_BASE_URL: z.string().url().default('http://localhost:8080'), // Основной бекенд
-    NEXT_PUBLIC_BOUNDARIES_SERVICE_URL: z.string().url().default('http://localhost:8080'), // Микросервис границ
+    NEXT_PUBLIC_BOUNDARIES_SERVICE_URL: z.string().url().default('http://localhost:8085'), // Микросервис границ
 
     NEXT_PUBLIC_R2_TILES_URL: z.string().url().optional(),
 

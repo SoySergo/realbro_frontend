@@ -53,6 +53,10 @@ export function SearchMapPage() {
     // Состояние мобильного сайдбара (collapsed / expanded)
     const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('collapsed');
 
+    // Состояние выбранного маркера / кластера (для связи карта ↔ сайдбар)
+    const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+    const [clusterPropertyIds, setClusterPropertyIds] = useState<string[] | undefined>(undefined);
+
     // Проверяем, нужно ли автоматически открыть режим локации
     const autoOpenDraw = searchParams.get('openDraw') === 'true';
     const autoOpenMode = searchParams.get('openMode') as 'draw' | 'radius' | 'isochrone' | 'search' | null;
@@ -94,6 +98,24 @@ export function SearchMapPage() {
         }
     }, []);
 
+    // Клик по маркеру на карте → выделить карточку в сайдбаре
+    const handleMarkerClick = useCallback((propertyId: string) => {
+        setSelectedPropertyId(propertyId);
+        setClusterPropertyIds(undefined);
+    }, []);
+
+    // Клик по кластеру на карте → показать объекты кластера в сайдбаре
+    const handleClusterClick = useCallback((propertyIds: string[]) => {
+        setClusterPropertyIds(propertyIds);
+        setSelectedPropertyId(null);
+    }, []);
+
+    // Сброс кластера
+    const handleClusterReset = useCallback(() => {
+        setClusterPropertyIds(undefined);
+        setSelectedPropertyId(null);
+    }, []);
+
     return (
         <div className="flex h-dvh bg-background overflow-hidden">
             {/* Фильтры в общем хедере — только desktop */}
@@ -125,28 +147,41 @@ export function SearchMapPage() {
                     <div className="absolute inset-0 md:relative md:h-screen w-full">
                         {/* Карта (отступ сверху для хедера на desktop) */}
                         <div className="absolute z-10 inset-0 md:pt-[52px]">
-                            <SearchMap />
+                            <SearchMap
+                                onMarkerClick={handleMarkerClick}
+                                onClusterClick={handleClusterClick}
+                            />
                         </div>
                     </div>
                 </div>
 
-                {/* Мобильный сайдбар на карте — только на мобильных */}
-                <div className="md:hidden">
-                    <MobileMapSidebar
-                        onPropertyClick={handlePropertyClick}
-                        snapState={mobileSidebarSnapState}
-                        onSnapStateChange={setMobileSidebarSnapState}
-                    />
-                </div>
+                {/* Мобильный сайдбар на карте — только на мобильных, скрываем в режиме локации */}
+                {!activeLocationMode && (
+                    <div className="md:hidden">
+                        <MobileMapSidebar
+                            onPropertyClick={handlePropertyClick}
+                            selectedPropertyId={selectedPropertyId}
+                            clusterPropertyIds={clusterPropertyIds}
+                            onClusterReset={handleClusterReset}
+                            snapState={mobileSidebarSnapState}
+                            onSnapStateChange={setMobileSidebarSnapState}
+                        />
+                    </div>
+                )}
 
-                {/* Сайдбар со списком объектов - только на desktop */}
-                <div className="hidden md:block">
-                    <MapSidebar
-                        onPropertyClick={handlePropertyClick}
-                        onPropertyHover={handlePropertyHover}
-                        className="fixed right-0 h-screen z-40 mt-[52px]"
-                    />
-                </div>
+                {/* Сайдбар со списком объектов - только на desktop, скрываем полностью в режиме локации */}
+                {!activeLocationMode && (
+                    <div className="hidden md:block">
+                        <MapSidebar
+                            onPropertyClick={handlePropertyClick}
+                            onPropertyHover={handlePropertyHover}
+                            selectedPropertyId={selectedPropertyId}
+                            clusterPropertyIds={clusterPropertyIds}
+                            onClusterReset={handleClusterReset}
+                            className="fixed right-0 h-screen z-40 mt-[52px]"
+                        />
+                    </div>
+                )}
             </main>
         </div>
     );

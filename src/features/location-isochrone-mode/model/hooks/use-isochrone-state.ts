@@ -3,7 +3,7 @@
  * Инкапсулирует логику работы с изохронами на карте
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import type { IsochroneProfile } from '@/shared/api';
 import { getIsochrone, getProfileColor } from '@/shared/api';
@@ -59,6 +59,12 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
 
     // Маркер на карте
     const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
+    const markerRef = useRef<mapboxgl.Marker | null>(null);
+
+    // Синхронизация ref с state для корректного cleanup
+    useEffect(() => {
+        markerRef.current = marker;
+    }, [marker]);
 
     // Очистка изохрона с карты
     const clearIsochroneFromMap = useCallback(() => {
@@ -282,9 +288,10 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
                 console.error('Error cleaning up isochrone:', error);
             }
 
-            if (marker) {
+            // Используем ref вместо state для актуальной ссылки на маркер
+            if (markerRef.current) {
                 try {
-                    marker.remove();
+                    markerRef.current.remove();
                 } catch (error) {
                     console.error('Error removing marker:', error);
                 }

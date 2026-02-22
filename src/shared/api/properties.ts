@@ -329,29 +329,34 @@ export async function getSimilarPropertiesApi(
 
 /**
  * Сохранить геометрию (polygon/isochrone/radius) на бекенд
+ * Использует guest endpoint для неавторизованных или несохранённых фильтров
+ * Для авторизованных с сохранённым фильтром — используйте createFilterGeometry
  */
 export async function saveGeometry(geometry: {
     type: 'polygon' | 'isochrone' | 'radius';
     coordinates: number[][][] | { center: [number, number]; radius: number };
     metadata?: Record<string, unknown>;
-}): Promise<{ id: number }> {
+}): Promise<{ id: string }> {
     try {
-        const response = await fetch(`/api/geometries`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(geometry),
-        });
+        // Формируем GeoJSON строку для бекенда
+        const geojsonGeometry = geometry.type === 'polygon'
+            ? JSON.stringify({
+                type: 'Polygon',
+                coordinates: geometry.coordinates,
+            })
+            : JSON.stringify(geometry.coordinates);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // Используем guest endpoint — работает без авторизации
+        const result = await apiClient.post<{ data: { id: string; filter_id: string; geometry: string; created_at: string } }>(
+            '/filters/guest/geometry',
+            { type: geometry.type, geometry: geojsonGeometry },
+            { skipAuth: true }
+        );
 
-        return await response.json();
+        return { id: result.data.id };
     } catch (error) {
         console.error('[API] Failed to save geometry:', error);
         // Return mock ID for development
-        return { id: Date.now() };
+        return { id: String(Date.now()) };
     }
 }

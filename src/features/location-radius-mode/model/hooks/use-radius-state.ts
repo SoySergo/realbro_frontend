@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
 
@@ -54,6 +54,12 @@ export function useRadiusState({ map, defaultPointName }: UseRadiusStateProps): 
 
     // Маркер на карте
     const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
+    const markerRef = useRef<mapboxgl.Marker | null>(null);
+
+    // Синхронизация ref с state для корректного cleanup
+    useEffect(() => {
+        markerRef.current = marker;
+    }, [marker]);
 
     // Очистка радиуса с карты
     const clearRadiusFromMap = useCallback(() => {
@@ -252,9 +258,10 @@ export function useRadiusState({ map, defaultPointName }: UseRadiusStateProps): 
                 console.error('Error cleaning up radius:', error);
             }
 
-            if (marker) {
+            // Используем ref вместо state для актуальной ссылки на маркер
+            if (markerRef.current) {
                 try {
-                    marker.remove();
+                    markerRef.current.remove();
                 } catch (error) {
                     console.error('Error removing marker:', error);
                 }

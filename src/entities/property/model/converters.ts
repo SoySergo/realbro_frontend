@@ -32,7 +32,7 @@ export function dtoToGridCard(dto: PropertyShortListingDTO): PropertyGridCard {
         category: dto.category,
         sub_category: dto.sub_category,
         price: dto.price,
-        price_per_meter: undefined,
+        price_per_meter: dto.price_per_meter,
         price_per_month: dto.price_per_month,
         rooms: dto.rooms ?? 0,
         bathrooms: dto.bathrooms ?? undefined,
@@ -54,7 +54,7 @@ export function dtoToGridCard(dto: PropertyShortListingDTO): PropertyGridCard {
                 color: line.color ?? '#E50914',
             })),
             walk_minutes: dto.location.transport.walking_duration
-                ? Math.round(dto.location.transport.walking_duration / 60)
+                ? Math.round(dto.location.transport.walking_duration)
                 : 0,
         } : undefined,
         // Автор

@@ -1,5 +1,4 @@
 import type {
-    AuthResponse,
     LoginRequest,
     RegisterRequest,
     ChangePasswordRequest,
@@ -35,12 +34,12 @@ export class AuthError extends Error {
 class AuthApiService {
     /**
      * Регистрация нового пользователя
-     * Возвращает AuthResponse с access_token + user
+     * Возвращает UserInfo, токены устанавливаются через httpOnly cookies
      */
-    async register(data: RegisterRequest): Promise<AuthResponse> {
+    async register(data: RegisterRequest): Promise<UserInfo> {
         console.log('[Auth API] Registering user:', data.email);
         try {
-            return await apiClient.post<AuthResponse>('/auth/register', data, { skipAuth: true });
+            return await apiClient.post<UserInfo>('/auth/register', data, { skipAuth: true });
         } catch (error) {
             if (error instanceof ApiError) {
                 throw new AuthError(error.message, error.statusCode, error.errorCode);
@@ -51,12 +50,12 @@ class AuthApiService {
 
     /**
      * Вход в систему
-     * Возвращает AuthResponse с access_token + user
+     * Возвращает UserInfo, токены устанавливаются через httpOnly cookies
      */
-    async login(data: LoginRequest): Promise<AuthResponse> {
+    async login(data: LoginRequest): Promise<UserInfo> {
         console.log('[Auth API] Logging in user:', data.email);
         try {
-            return await apiClient.post<AuthResponse>('/auth/login', data, { skipAuth: true });
+            return await apiClient.post<UserInfo>('/auth/login', data, { skipAuth: true });
         } catch (error) {
             if (error instanceof ApiError) {
                 throw new AuthError(error.message, error.statusCode, error.errorCode);
@@ -67,12 +66,12 @@ class AuthApiService {
 
     /**
      * Обновление токена (refresh_token из httpOnly cookie)
-     * Возвращает AuthResponse с новым access_token + user
+     * Возвращает UserInfo, новые токены устанавливаются через httpOnly cookies
      */
-    async refresh(): Promise<AuthResponse> {
+    async refresh(): Promise<UserInfo> {
         console.log('[Auth API] Refreshing tokens');
         try {
-            return await apiClient.post<AuthResponse>('/auth/refresh', undefined, { skipAuth: true });
+            return await apiClient.post<UserInfo>('/auth/refresh', undefined, { skipAuth: true });
         } catch (error) {
             if (error instanceof ApiError) {
                 throw new AuthError(error.message, error.statusCode, error.errorCode);
