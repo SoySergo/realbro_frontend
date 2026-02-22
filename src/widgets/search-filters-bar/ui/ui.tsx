@@ -118,7 +118,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         ? filtersCount > 0
         : agencyFilters.filtersCount > 0;
 
-    // Авто-синхронизация фильтров для авторизованных пользователей
+    // Авто-синхронизация фильтров для авторизованных пользователей (debounce 3 сек)
     useEffect(() => {
         if (!isAuthenticated || !isProperties || !activeQuery || activeQuery.isUnsaved || !hasUnsavedChanges) return;
 
@@ -138,7 +138,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
             } finally {
                 setIsSyncing(false);
             }
-        }, 1500);
+        }, 3000);
 
         return () => clearTimeout(timeoutId);
     }, [currentFiltersSnapshot, isAuthenticated, isProperties, activeQuery?.id, activeQuery?.isUnsaved]);
@@ -230,7 +230,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         }
     };
 
-    const handleSaveNewFilter = () => {
+    const handleSaveNewFilter = async () => {
         if (filterName.trim()) {
             const mergedFilters = { ...filters, ...currentFilters };
 
@@ -243,12 +243,25 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                 });
                 setSavedFiltersSnapshot(JSON.stringify(mergedFilters));
             } else {
-                addQuery({
-                    title: filterName.trim(),
-                    filters: mergedFilters,
-                    resultsCount: resultsCount ?? undefined,
-                    isUnsaved: false,
-                });
+                // Используем saveNewTabWithGeometry для переноса гостевой геометрии
+                const { saveNewTabWithGeometry } = useSidebarStore.getState();
+                const hasGuestGeometry = mergedFilters.polygon_ids?.length || mergedFilters.geometryIds?.length;
+
+                if (hasGuestGeometry) {
+                    const tabId = await saveNewTabWithGeometry(filterName.trim(), mergedFilters);
+                    if (tabId) {
+                        // Обновляем geometry_source на 'filter' после переноса
+                        const { setFilters: updateStoreFilters } = useFilterStore.getState();
+                        updateStoreFilters({ geometry_source: 'filter' });
+                    }
+                } else {
+                    addQuery({
+                        title: filterName.trim(),
+                        filters: mergedFilters,
+                        resultsCount: resultsCount ?? undefined,
+                        isUnsaved: false,
+                    });
+                }
             }
             setFilterName('');
             setIsSavePopoverOpen(false);

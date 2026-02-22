@@ -21,7 +21,7 @@ const MAP_REQUIRED_MODES: LocationFilterMode[] = ['draw', 'isochrone', 'radius',
 
 export function LocationFilterButton() {
     const t = useTranslations('filters');
-    const { locationFilter, activeLocationMode, setLocationMode } = useFilterStore();
+    const { locationFilter, activeLocationMode, setLocationMode, currentFilters } = useFilterStore();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -49,15 +49,23 @@ export function LocationFilterButton() {
     const hasSavedFilter = !!locationFilter;
     const isActive = hasSavedFilter || !!activeLocationMode;
 
-    // Подсчёт выбранных параметров
+    // Подсчёт выбранных параметров (учитываем множественные полигоны)
     const getSelectedCount = (): number => {
-        if (!locationFilter) return 0;
+        if (!locationFilter) {
+            // Проверяем наличие геометрий в фильтрах даже без locationFilter
+            const polygonCount = currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length || 0;
+            if (polygonCount > 0) return polygonCount;
+            return 0;
+        }
 
         switch (locationFilter.mode) {
             case 'search':
                 return locationFilter.selectedLocations?.length || 0;
-            case 'draw':
-                return locationFilter.polygon ? 1 : 0;
+            case 'draw': {
+                // Учитываем множественные полигоны из фильтров
+                const idsCount = currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length || 0;
+                return idsCount > 0 ? idsCount : (locationFilter.polygon ? 1 : 0);
+            }
             case 'isochrone':
                 return locationFilter.isochrone ? 1 : 0;
             case 'radius':

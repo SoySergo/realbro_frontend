@@ -103,6 +103,9 @@ export interface SearchFilters {
     geojson?: string;                // inline GeoJSON
     polygon_ids?: string[];          // UUID[] сохранённых геометрий
 
+    // Источник геометрии: 'guest' | 'filter' — указывает бекенду, откуда брать полигоны
+    geometry_source?: 'guest' | 'filter';
+
     // Включение / исключение
     include_ids?: string[];          // UUID[]
     exclude_ids?: string[];          // UUID[]

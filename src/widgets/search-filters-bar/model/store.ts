@@ -306,7 +306,7 @@ export const useFilterStore = create<FilterStore>()(
                 }
             },
 
-            // Добавление полигона
+            // Добавление полигона (сохранение на бекенд происходит в handleApply каждого режима)
             addPolygon: (polygon) => {
                 const newPolygon: DrawPolygon = {
                     ...polygon,
@@ -318,25 +318,7 @@ export const useFilterStore = create<FilterStore>()(
                     savedPolygons: [...state.savedPolygons, newPolygon],
                 }));
 
-                console.log('Polygon added:', newPolygon.id);
-
-                // Отправка геометрии на бекенд через guest endpoint
-                import('@/shared/api/geometries').then(({ createGuestGeometry }) => {
-                    const geojsonStr = JSON.stringify({
-                        type: 'Polygon',
-                        coordinates: [[
-                            ...newPolygon.points.map(p => [p.lng, p.lat]),
-                            [newPolygon.points[0].lng, newPolygon.points[0].lat],
-                        ]],
-                    });
-                    createGuestGeometry(geojsonStr, 'polygon')
-                        .then((result) => {
-                            console.log('[GEO] Polygon saved to backend:', result.id);
-                        })
-                        .catch((err: unknown) => {
-                            console.error('[GEO] Failed to save polygon:', err);
-                        });
-                });
+                console.log('[GEO] Polygon added to local store:', newPolygon.id);
 
                 return newPolygon;
             },

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
@@ -9,6 +10,8 @@ import { LocationModeWrapper } from '@/features/location-filter/ui/location-mode
 import { RadiusControls } from '../radius-controls';
 import { useRadiusState } from '../../model/hooks/use-radius-state';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useAuth } from '@/features/auth';
+import { useSidebarStore } from '@/widgets/sidebar';
 import { saveRadius } from '@/shared/api/geometries';
 
 type MapRadiusProps = {
@@ -27,6 +30,9 @@ type MapRadiusProps = {
  */
 export function MapRadius({ map, onClose, className }: MapRadiusProps) {
     const t = useTranslations('radius');
+    const { isAuthenticated } = useAuth();
+    const { activeQueryId, queries } = useSidebarStore();
+    const [isSaving, setIsSaving] = useState(false);
 
     // Используем хук для управления состоянием радиуса
     const {
@@ -49,32 +55,44 @@ export function MapRadius({ map, onClose, className }: MapRadiusProps) {
     const handleApply = async () => {
         if (!selectedCoordinates) return;
 
-        const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
+        setIsSaving(true);
+        try {
+            const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
 
-        // Сохраняем в filter store как LocationFilter
-        setLocationFilter({
-            mode: 'radius',
-            radius: {
-                center: selectedCoordinates,
+            // Определяем режим сохранения: фильтр или гостевой
+            const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
+            const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+
+            // Сохраняем в filter store как LocationFilter
+            setLocationFilter({
+                mode: 'radius',
+                radius: {
+                    center: selectedCoordinates,
+                    radiusKm: selectedRadius,
+                },
+            });
+
+            // Обновляем SearchFilters с данными радиуса
+            setFilters({
+                radiusCenter: selectedCoordinates,
                 radiusKm: selectedRadius,
-            },
-        });
+                geometry_source: hasSavedFilter ? 'filter' : 'guest',
+            });
 
-        // Обновляем SearchFilters с данными радиуса
-        setFilters({
-            radiusCenter: selectedCoordinates,
-            radiusKm: selectedRadius,
-        });
+            // Закрываем панель режима локации
+            setLocationMode(null);
 
-        // Закрываем панель режима локации
-        setLocationMode(null);
+            // Сохраняем на бекенд (фоном)
+            saveRadius(selectedCoordinates, selectedRadius, selectedName).catch((error) => {
+                console.error('[GEO] Failed to save radius to backend:', error);
+            });
 
-        // Сохраняем на бекенд (фоном)
-        saveRadius(selectedCoordinates, selectedRadius, selectedName).catch((error) => {
-            console.error('[Radius] Failed to save to backend:', error);
-        });
-
-        onClose?.();
+            onClose?.();
+        } catch (error) {
+            console.error('[GEO] Failed to apply radius:', error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Обработчик закрытия панели
@@ -90,6 +108,7 @@ export function MapRadius({ map, onClose, className }: MapRadiusProps) {
             onClear={handleClear}
             onApply={handleApply}
             onClose={handleClose}
+            isSaving={isSaving}
             className={className}
         >
             {/* Поиск адреса */}

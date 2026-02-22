@@ -133,63 +133,78 @@ export function MapDraw({ map, onClose, className }: MapDrawProps) {
             delete: t('delete'),
         },
     });
-    // TODO: Сохраняем все полигоны и в поиск добавляем ids
     // Обработчик применения фильтра (сохранение на бекенд и в store)
     const handleApply = async () => {
         if (polygons.length === 0) return;
 
         setIsSaving(true);
         try {
-            // Берём первый полигон для сохранения
-            const polygon = polygons[0];
-            const coordinates = [
-                [...polygon.points.map(p => [p.lng, p.lat]),
-                [polygon.points[0].lng, polygon.points[0].lat]] // замыкаем полигон
-            ];
+            const savedGeometryIds: string[] = [];
 
-            let geometryId: string;
-
-            // Проверяем: авторизован + есть сохранённый фильтр → createFilterGeometry
+            // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
 
-            if (hasSavedFilter && activeQueryId) {
-                // Авторизованный пользователь с сохранённым фильтром
-                const geojsonStr = JSON.stringify({
-                    type: 'Polygon',
-                    coordinates,
-                });
-                const result = await createFilterGeometry(activeQueryId, geojsonStr, 'polygon');
-                geometryId = result.id;
-                console.log('Polygon saved to filter:', activeQueryId, result);
-            } else {
-                // Гостевой endpoint (неавторизованный или несохранённый фильтр)
-                const result = await saveGeometry({
-                    type: 'polygon',
-                    coordinates,
-                    metadata: {
-                        name: polygon.name,
-                        pointsCount: polygon.points.length,
-                    },
-                });
-                geometryId = String(result.id);
-                console.log('Polygon saved as guest geometry:', result);
+            // Сохраняем все полигоны
+            for (const polygon of polygons) {
+                const coordinates = [
+                    [...polygon.points.map(p => [p.lng, p.lat]),
+                    [polygon.points[0].lng, polygon.points[0].lat]] // замыкаем полигон
+                ];
+
+                let geometryId: string;
+
+                if (hasSavedFilter && activeQueryId) {
+                    // Сохраняем привязанным к фильтру
+                    const geojsonStr = JSON.stringify({
+                        type: 'Polygon',
+                        coordinates,
+                    });
+                    const result = await createFilterGeometry(activeQueryId, geojsonStr);
+                    geometryId = result.id;
+                    console.log('[GEO] Polygon saved to filter:', activeQueryId);
+                } else {
+                    // Гостевой endpoint
+                    const result = await saveGeometry({
+                        type: 'polygon',
+                        coordinates,
+                        metadata: {
+                            name: polygon.name,
+                            pointsCount: polygon.points.length,
+                        },
+                    });
+                    geometryId = String(result.id);
+                    console.log('[GEO] Polygon saved as guest geometry:', geometryId);
+                }
+
+                savedGeometryIds.push(geometryId);
             }
 
-            // Обновляем store с сохранённым фильтром
+            // Обновляем store — сохраняем первый полигон как основной
             setLocationFilter({
                 mode: 'draw',
                 polygon: {
-                    ...polygon,
-                    id: `polygon_${geometryId}`,
+                    ...polygons[0],
+                    id: `polygon_${savedGeometryIds[0]}`,
                 },
+            });
+
+            // Сохраняем все geometry IDs в фильтры
+            const { setFilters } = useFilterStore.getState();
+            setFilters({
+                geometryIds: savedGeometryIds.map(id => {
+                    const parsed = parseInt(id);
+                    return Number.isNaN(parsed) ? 0 : parsed;
+                }).filter(id => id > 0),
+                polygon_ids: savedGeometryIds,
+                geometry_source: hasSavedFilter ? 'filter' : 'guest',
             });
 
             // Закрываем панель режима
             setLocationMode(null);
             onClose?.();
         } catch (error) {
-            console.error('Failed to save polygon:', error);
+            console.error('[GEO] Failed to save polygon:', error);
         } finally {
             setIsSaving(false);
         }
