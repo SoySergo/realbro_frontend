@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
@@ -20,6 +20,8 @@ type LocationSearchModeProps = {
     map: mapboxgl.Map;
     /** Колбэк для закрытия панели */
     onClose?: () => void;
+    /** Начальные локации (восстановление сохранённых) */
+    initialLocations?: LocationItem[];
     /** CSS классы для контейнера */
     className?: string;
 };
@@ -30,7 +32,7 @@ type LocationSearchModeProps = {
  * Позволяет выбрать множество локаций для фильтра
  * Интегрирован с BoundariesLayer - клики на полигоны карты добавляют локации
  */
-export function LocationSearchMode({ map, onClose, className }: LocationSearchModeProps) {
+export function LocationSearchMode({ map, onClose, initialLocations, className }: LocationSearchModeProps) {
     const t = useTranslations('locationSearch');
 
     // Состояние поиска
@@ -41,6 +43,16 @@ export function LocationSearchMode({ map, onClose, className }: LocationSearchMo
 
     // Локальное состояние выбранных локаций
     const { selectedLocations, addLocation, removeLocation, toggleLocation, clearLocations } = useSearchModeState();
+
+    // Восстановление сохранённых локаций при повторном открытии
+    const initializedRef = useRef(false);
+    useEffect(() => {
+        if (initialLocations && initialLocations.length > 0 && !initializedRef.current) {
+            initializedRef.current = true;
+            initialLocations.forEach(loc => addLocation(loc));
+            console.log('[LocationSearchMode] Restored saved locations:', initialLocations.length);
+        }
+    }, [initialLocations, addLocation]);
 
     // Язык пользователя
     const userLang = document.documentElement.lang || 'en';

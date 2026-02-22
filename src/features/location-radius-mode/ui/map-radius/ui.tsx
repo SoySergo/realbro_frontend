@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import mapboxgl from 'mapbox-gl';
 import { MapPin } from 'lucide-react';
@@ -13,12 +13,15 @@ import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { saveRadius } from '@/shared/api/geometries';
+import type { RadiusSettings } from '@/features/location-filter/model';
 
 type MapRadiusProps = {
     /** Инстанс карты Mapbox */
     map: mapboxgl.Map;
     /** Колбэк для закрытия панели */
     onClose?: () => void;
+    /** Начальные данные (восстановление сохранённого радиуса) */
+    initialData?: RadiusSettings;
     /** CSS классы для контейнера */
     className?: string;
 };
@@ -28,7 +31,7 @@ type MapRadiusProps = {
  * Позволяет пользователю выбрать точку на карте (кликом или через поиск) и радиус
  * Использует двухслойную систему: локальное состояние + глобальное (store/URL)
  */
-export function MapRadius({ map, onClose, className }: MapRadiusProps) {
+export function MapRadius({ map, onClose, initialData, className }: MapRadiusProps) {
     const t = useTranslations('radius');
     const { isAuthenticated } = useAuth();
     const { activeQueryId, queries } = useSidebarStore();
@@ -50,6 +53,17 @@ export function MapRadius({ map, onClose, className }: MapRadiusProps) {
         map,
         defaultPointName: t('selectedPoint'),
     });
+
+    // Восстановление сохранённого радиуса при повторном открытии
+    const initializedRef = useRef(false);
+    useEffect(() => {
+        if (initialData && !initializedRef.current) {
+            initializedRef.current = true;
+            handleLocationSelect(initialData.center, t('selectedPoint'));
+            setSelectedRadius(initialData.radiusKm);
+            console.log('[MapRadius] Restored saved radius:', initialData);
+        }
+    }, [initialData, handleLocationSelect, setSelectedRadius, t]);
 
     // Обработчик применения фильтра
     const handleApply = async () => {

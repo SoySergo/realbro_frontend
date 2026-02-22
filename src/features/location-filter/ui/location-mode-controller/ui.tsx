@@ -40,7 +40,7 @@ const LOCATION_MODES: { mode: LocationFilterMode; icon: typeof Search }[] = [
  * - radius: Радиус от точки
  */
 export function MapLocationController({ map }: MapLocationControllerProps) {
-    const { activeLocationMode, setLocationMode } = useFilterStore();
+    const { activeLocationMode, setLocationMode, locationFilter } = useFilterStore();
     const t = useTranslations('locationFilter.modes');
 
     // Логирование смены режима
@@ -96,6 +96,7 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 <MapIsochrone
                     map={map}
                     onClose={handleClosePanel}
+                    initialData={locationFilter?.mode === 'isochrone' ? locationFilter.isochrone : undefined}
                 />
             )}
 
@@ -103,6 +104,7 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 <MapDraw
                     map={map}
                     onClose={handleClosePanel}
+                    initialData={locationFilter?.mode === 'draw' ? locationFilter.polygon : undefined}
                 />
             )}
 
@@ -110,6 +112,7 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 <MapRadius
                     map={map}
                     onClose={handleClosePanel}
+                    initialData={locationFilter?.mode === 'radius' ? locationFilter.radius : undefined}
                 />
             )}
 
@@ -117,6 +120,7 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 <LocationSearchMode
                     map={map}
                     onClose={handleClosePanel}
+                    initialLocations={locationFilter?.mode === 'search' ? locationFilter.selectedLocations : undefined}
                 />
             )}
         </div>
