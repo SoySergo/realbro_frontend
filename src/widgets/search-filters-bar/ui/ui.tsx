@@ -245,7 +245,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
             } else {
                 // Используем saveNewTabWithGeometry для переноса гостевой геометрии
                 const { saveNewTabWithGeometry } = useSidebarStore.getState();
-                const hasGuestGeometry = mergedFilters.polygon_ids?.length || mergedFilters.geometryIds?.length;
+                const hasGuestGeometry = (mergedFilters.polygon_ids?.length ?? 0) > 0 || (mergedFilters.geometryIds?.length ?? 0) > 0;
 
                 if (hasGuestGeometry) {
                     const tabId = await saveNewTabWithGeometry(filterName.trim(), mergedFilters);

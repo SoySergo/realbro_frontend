@@ -184,7 +184,8 @@ export const useSidebarStore = create<SidebarStore>()(
                 try {
                     const { createSearchQuery } = await import('@/shared/api/search-queries');
 
-                    // Помечаем geometry_source как guest для бекенда при переносе
+                    // geometry_source = 'guest' потому что при создании новой вкладки
+                    // геометрия ещё в гостевом endpoint, бекенд перенесёт по polygon_ids
                     const filtersWithSource = {
                         ...filters,
                         geometry_source: 'guest',
