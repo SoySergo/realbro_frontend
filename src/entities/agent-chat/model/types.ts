@@ -122,6 +122,39 @@ export interface AgentPropertyCardLabels {
   new: string;
 }
 
+export interface AgentMediaGalleryLabels {
+  morePhotos: string;
+  allPhotos: string;
+  photo: string;
+  of: string;
+  close: string;
+}
+
+export interface AgentActionLabels {
+  like: string;
+  dislike: string;
+  report: string;
+  reply: string;
+}
+
+export interface AgentNoteFormLabels {
+  title: string;
+  placeholder: string;
+  save: string;
+  cancel: string;
+  saved: string;
+}
+
+export interface AgentContactFormLabels {
+  title: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  call: string;
+  write: string;
+  send: string;
+}
+
 export interface AgentChatLabels {
   title: string;
   subtitle: string;
@@ -132,11 +165,11 @@ export interface AgentChatLabels {
   threadTitle: string;
   filters: Record<string, string>;
   settings: Record<string, string>;
-  actions: Record<string, string>;
+  actions: AgentActionLabels;
   quickActions: Record<string, string>;
-  noteForm: Record<string, string>;
-  contactForm: Record<string, string>;
-  mediaGallery: Record<string, string>;
+  noteForm: AgentNoteFormLabels;
+  contactForm: AgentContactFormLabels;
+  mediaGallery: AgentMediaGalleryLabels;
   messages: Record<string, string>;
   empty: Record<string, string>;
   findMe: string;
