@@ -87,12 +87,12 @@ export function ChatWindow({
                 labels={labels}
             />
 
-            {isAIAgent ? (
+            {isAIAgent && labels.agentV2 ? (
                 <AgentFeedV2
                     conversationId={activeConversationId}
                     labels={{
                         ...labels,
-                        agentV2: labels.agentV2 || {} as AgentV2Labels,
+                        agentV2: labels.agentV2,
                     }}
                 />
             ) : (
