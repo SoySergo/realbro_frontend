@@ -6,8 +6,9 @@ import { useChatStore } from '@/features/chat-messages';
 import { MessageList } from '@/features/chat-messages/ui/message-list';
 import { SendMessageForm } from '@/features/chat-messages/ui/send-message-form';
 import { ChatHeader } from '../chat-header/ui';
-import { AIAgentPropertyFeed } from '../ai-agent-property-feed/ui';
+import { AgentFeedV2 } from '@/features/agent-chat-v2/ui/agent-feed-v2';
 import type { PropertyCardLabels } from '@/entities/chat';
+import type { AgentV2Labels } from '@/features/agent-chat-v2/model/types';
 
 interface ChatWindowProps {
     onSettingsClick?: () => void;
@@ -28,6 +29,7 @@ interface ChatWindowProps {
         allFilters: string;
         selectFilter: string;
         propertyCard?: PropertyCardLabels;
+        agentV2?: AgentV2Labels;
     };
     className?: string;
 }
@@ -86,9 +88,12 @@ export function ChatWindow({
             />
 
             {isAIAgent ? (
-                <AIAgentPropertyFeed
+                <AgentFeedV2
                     conversationId={activeConversationId}
-                    labels={labels}
+                    labels={{
+                        ...labels,
+                        agentV2: labels.agentV2 || {} as AgentV2Labels,
+                    }}
                 />
             ) : (
                 <MessageList

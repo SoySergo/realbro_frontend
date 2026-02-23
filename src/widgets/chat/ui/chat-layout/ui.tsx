@@ -7,6 +7,7 @@ import { ChatSidebar } from '../chat-sidebar/ui';
 import { ChatWindow } from '../chat-window/ui';
 import { ChatSettingsPanel } from '../chat-settings-panel/ui';
 import type { PropertyCardLabels } from '@/entities/chat';
+import type { AgentV2Labels } from '@/features/agent-chat-v2/model/types';
 
 interface ChatLayoutProps {
     labels: {
@@ -27,6 +28,7 @@ interface ChatLayoutProps {
         allFilters: string;
         selectFilter: string;
         propertyCard?: PropertyCardLabels;
+        agentV2?: AgentV2Labels;
         settingsPanel: {
             settingsTitle: string;
             searchParams: string;

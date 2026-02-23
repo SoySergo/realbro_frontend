@@ -230,6 +230,26 @@ export function generateMockConversations(): Conversation[] {
     const now = new Date();
     return [
         {
+            id: 'conv_ai_agent',
+            type: 'ai-agent',
+            title: 'AI Property Agent',
+            participants: ['current_user', 'ai_agent'],
+            lastMessage: {
+                id: 'msg_ai_last',
+                conversationId: 'conv_ai_agent',
+                senderId: 'ai_agent',
+                type: 'property',
+                content: 'Found 5 new properties',
+                properties: [],
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 30 * 60000).toISOString(),
+            },
+            unreadCount: 3,
+            isPinned: true,
+            createdAt: '2026-01-01T00:00:00Z',
+            updatedAt: new Date(now.getTime() - 30 * 60000).toISOString(),
+        },
+        {
             id: 'conv_support',
             type: 'support',
             title: 'Support',
@@ -313,6 +333,52 @@ export function generateMockConversations(): Conversation[] {
 
 export function generateMockMessages(conversationId: string): ChatMessage[] {
     const now = new Date();
+
+    if (conversationId === 'conv_ai_agent') {
+        // Генерируем сообщения с объектами для AI агента
+        const filterNames = ['Eixample 2BR', 'Gothic Quarter', 'Gràcia Studio'];
+        const filterIds = ['filter_1', 'filter_2', 'filter_3'];
+        const messages: ChatMessage[] = [
+            {
+                id: 'msg_ai_status_1',
+                conversationId,
+                senderId: 'ai_agent',
+                type: 'ai-status',
+                content: 'AI Agent started monitoring your search filters',
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 6 * 24 * 3600000).toISOString(),
+            },
+        ];
+
+        // Генерируем несколько групп объектов за разные дни
+        for (let day = 5; day >= 0; day--) {
+            const batchCount = Math.floor(Math.random() * 3) + 1;
+            for (let batch = 0; batch < batchCount; batch++) {
+                const filterIndex = (day + batch) % filterNames.length;
+                const propCount = Math.floor(Math.random() * 3) + 1;
+                const properties: PropertyChatCard[] = [];
+                for (let p = 0; p < propCount; p++) {
+                    properties.push(generateMockProperty(day * 10 + batch * 3 + p));
+                }
+                messages.push({
+                    id: `msg_ai_prop_${day}_${batch}`,
+                    conversationId,
+                    senderId: 'ai_agent',
+                    type: 'property',
+                    content: `Found ${propCount} properties`,
+                    properties,
+                    status: 'delivered',
+                    createdAt: new Date(now.getTime() - day * 24 * 3600000 - batch * 3 * 3600000).toISOString(),
+                    metadata: {
+                        filterName: filterNames[filterIndex],
+                        filterId: filterIds[filterIndex],
+                        batchId: `batch_${day}_${batch}`,
+                    },
+                });
+            }
+        }
+        return messages;
+    }
 
     if (conversationId === 'conv_support') {
         return [

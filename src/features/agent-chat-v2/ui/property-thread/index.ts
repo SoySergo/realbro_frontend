@@ -1,0 +1,1 @@
+export { PropertyThread } from './ui';
