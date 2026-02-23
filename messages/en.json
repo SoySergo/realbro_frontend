@@ -1605,5 +1605,106 @@
       "activated": "Task activated",
       "deactivated": "Task deactivated"
     }
+  },
+  "agentChat": {
+    "title": "AI Agent",
+    "subtitle": "Property search assistant",
+    "backToMain": "Back",
+    "propertyThreads": "Properties",
+    "noThreads": "No property discussions",
+    "mainChat": "Main chat",
+    "threadTitle": "Property discussion",
+    "filters": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "thisWeek": "Week",
+      "thisMonth": "Month",
+      "allTime": "All time",
+      "allFilters": "All filters",
+      "selectFilter": "Select filter"
+    },
+    "settings": {
+      "title": "Agent settings",
+      "searchParams": "Search parameters",
+      "notifications": "Notifications",
+      "activeHours": "Active hours",
+      "from": "From",
+      "to": "To",
+      "frequency": "Frequency",
+      "immediately": "Immediately",
+      "every15min": "Every 15 min",
+      "every30min": "Every 30 min",
+      "every1hour": "Every hour",
+      "every2hours": "Every 2 hours",
+      "onlineMode": "When online",
+      "offlineMode": "When offline",
+      "onlineDesc": "Suggests options immediately",
+      "offlineDesc": "Scheduled notifications"
+    },
+    "actions": {
+      "like": "Like",
+      "dislike": "Not suitable",
+      "report": "Report",
+      "reply": "Reply"
+    },
+    "quickActions": {
+      "description": "Description",
+      "makeNote": "Note",
+      "addFavorite": "Favorite",
+      "suitable": "Suitable",
+      "notSuitable": "Not suitable",
+      "whatsNearby": "What's nearby",
+      "contact": "Contact"
+    },
+    "noteForm": {
+      "title": "Create note",
+      "placeholder": "Enter note...",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saved": "Note saved"
+    },
+    "contactForm": {
+      "title": "Contact",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "call": "Call",
+      "write": "Write",
+      "send": "Send"
+    },
+    "mediaGallery": {
+      "morePhotos": "+{count}",
+      "allPhotos": "All photos",
+      "photo": "Photo",
+      "of": "of",
+      "close": "Close"
+    },
+    "messages": {
+      "placeholder": "Ask a question...",
+      "send": "Send",
+      "agentTyping": "Agent typing...",
+      "descriptionSent": "Here's the property description:",
+      "addedToFavorites": "Added to favorites ❤️",
+      "removedFromFavorites": "Removed from favorites",
+      "markedSuitable": "Marked as suitable ✅",
+      "markedNotSuitable": "Marked as not suitable ❌",
+      "nearbyTitle": "Nearby infrastructure",
+      "noteTitle": "Your note"
+    },
+    "empty": {
+      "title": "Agent hasn't found properties yet",
+      "subtitle": "Set up filters and the agent will start searching"
+    },
+    "findMe": "Find me",
+    "objects": "objects",
+    "newObjects": "New objects",
+    "propertyCard": {
+      "perMonth": "/mo",
+      "rooms": "rooms",
+      "area": "m²",
+      "floor": "fl.",
+      "verified": "Verified",
+      "new": "New"
+    }
   }
 }

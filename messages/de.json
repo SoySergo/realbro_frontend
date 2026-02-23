@@ -1536,5 +1536,106 @@
     "pro": "Pro",
     "paymentSuccess": "Zahlung erfolgreich",
     "noSubscription": "Aktives Abonnement erforderlich"
+  },
+  "agentChat": {
+    "title": "KI-Agent",
+    "subtitle": "Immobilien-Suchassistent",
+    "backToMain": "Zurück",
+    "propertyThreads": "Immobilien",
+    "noThreads": "Keine Immobilien-Diskussionen",
+    "mainChat": "Haupt-Chat",
+    "threadTitle": "Immobilien-Diskussion",
+    "filters": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "thisWeek": "Woche",
+      "thisMonth": "Monat",
+      "allTime": "Gesamter Zeitraum",
+      "allFilters": "Alle Filter",
+      "selectFilter": "Filter auswählen"
+    },
+    "settings": {
+      "title": "Agenten-Einstellungen",
+      "searchParams": "Suchparameter",
+      "notifications": "Benachrichtigungen",
+      "activeHours": "Aktive Stunden",
+      "from": "Von",
+      "to": "Bis",
+      "frequency": "Häufigkeit",
+      "immediately": "Sofort",
+      "every15min": "Alle 15 Min.",
+      "every30min": "Alle 30 Min.",
+      "every1hour": "Jede Stunde",
+      "every2hours": "Alle 2 Stunden",
+      "onlineMode": "Wenn online",
+      "offlineMode": "Wenn offline",
+      "onlineDesc": "Schlägt sofort Optionen vor",
+      "offlineDesc": "Geplante Benachrichtigungen"
+    },
+    "actions": {
+      "like": "Gefällt mir",
+      "dislike": "Nicht passend",
+      "report": "Melden",
+      "reply": "Antworten"
+    },
+    "quickActions": {
+      "description": "Beschreibung",
+      "makeNote": "Notiz",
+      "addFavorite": "Favorit",
+      "suitable": "Passend",
+      "notSuitable": "Nicht passend",
+      "whatsNearby": "Was ist in der Nähe",
+      "contact": "Kontaktieren"
+    },
+    "noteForm": {
+      "title": "Notiz erstellen",
+      "placeholder": "Notiz eingeben...",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "saved": "Notiz gespeichert"
+    },
+    "contactForm": {
+      "title": "Kontaktieren",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp",
+      "email": "E-Mail",
+      "call": "Anrufen",
+      "write": "Schreiben",
+      "send": "Senden"
+    },
+    "mediaGallery": {
+      "morePhotos": "+{count}",
+      "allPhotos": "Alle Fotos",
+      "photo": "Foto",
+      "of": "von",
+      "close": "Schließen"
+    },
+    "messages": {
+      "placeholder": "Stellen Sie eine Frage...",
+      "send": "Senden",
+      "agentTyping": "Agent tippt...",
+      "descriptionSent": "Hier ist die Beschreibung der Immobilie:",
+      "addedToFavorites": "Zu Favoriten hinzugefügt ❤️",
+      "removedFromFavorites": "Aus Favoriten entfernt",
+      "markedSuitable": "Als passend markiert ✅",
+      "markedNotSuitable": "Als nicht passend markiert ❌",
+      "nearbyTitle": "Infrastruktur in der Nähe",
+      "noteTitle": "Ihre Notiz"
+    },
+    "empty": {
+      "title": "Der Agent hat noch keine Immobilien gefunden",
+      "subtitle": "Richten Sie die Filter ein und der Agent beginnt mit der Suche"
+    },
+    "findMe": "Finde mir",
+    "objects": "Immobilien",
+    "newObjects": "Neue Immobilien",
+    "propertyCard": {
+      "perMonth": "/Monat",
+      "rooms": "Zi.",
+      "area": "m²",
+      "floor": "Et.",
+      "verified": "Verifiziert",
+      "new": "Neu"
+    }
   }
 }
