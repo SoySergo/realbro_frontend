@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { X, MessageSquare, Heart, ThumbsUp, ThumbsDown, MapPin, StickyNote } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useAgentChatV2Store } from '../../model/store';
@@ -26,8 +26,16 @@ export function ThreadSidebar({
     onSelectThread,
     className,
 }: ThreadSidebarProps) {
-    const threads = useAgentChatV2Store((s) => s.getThreadsList());
+    const threadsMap = useAgentChatV2Store((s) => s.threads);
     const activeThreadId = useAgentChatV2Store((s) => s.activeThreadId);
+
+    // Мемоизируем список тредов, чтобы избежать infinite loop
+    const threads = useMemo(
+        () => Object.values(threadsMap).sort(
+            (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        ),
+        [threadsMap]
+    );
 
     if (!isOpen) return null;
 

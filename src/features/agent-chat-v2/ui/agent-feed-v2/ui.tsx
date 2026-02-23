@@ -83,7 +83,7 @@ export function AgentFeedV2({ conversationId, labels, className }: AgentFeedV2Pr
     const [unseenIds, setUnseenIds] = useState<Set<string>>(new Set());
     const prevMessageCountRef = useRef(0);
 
-    const { messages, isLoadingMessages } = useChatStore();
+    const { messages } = useChatStore();
     const { dayFilter, selectedFilterIds, showAllFilters } = useChatFilterStore();
 
     const activeThreadId = useAgentChatV2Store((s) => s.activeThreadId);
@@ -101,7 +101,6 @@ export function AgentFeedV2({ conversationId, labels, className }: AgentFeedV2Pr
     const yesterdayLabel = labels.propertyCard?.yesterday || labels.filters?.yesterday || 'Yesterday';
     const objectsLabel = labels.propertyCard?.objects || 'properties';
     const liveFeedLabel = labels.propertyCard?.live || labels.aiAgent?.liveFeed || 'LIVE';
-    const notViewedLabel = labels.propertyCard?.notViewedGroup || 'Not viewed';
 
     const conversationMessages = useMemo(
         () => messages[conversationId] || [],
