@@ -2106,5 +2106,106 @@
     "pro": "Професійний",
     "paymentSuccess": "Оплата виконана",
     "noSubscription": "Потрібна активна підписка"
+  },
+  "agentChat": {
+    "title": "ШІ Агент",
+    "subtitle": "Пошук об'єктів нерухомості",
+    "backToMain": "Назад",
+    "propertyThreads": "Об'єкти",
+    "noThreads": "Немає обговорень об'єктів",
+    "mainChat": "Основний чат",
+    "threadTitle": "Обговорення об'єкта",
+    "filters": {
+      "today": "Сьогодні",
+      "yesterday": "Вчора",
+      "thisWeek": "Тиждень",
+      "thisMonth": "Місяць",
+      "allTime": "Весь час",
+      "allFilters": "Усі фільтри",
+      "selectFilter": "Обрати фільтр"
+    },
+    "settings": {
+      "title": "Налаштування агента",
+      "searchParams": "Параметри пошуку",
+      "notifications": "Сповіщення",
+      "activeHours": "Активні години",
+      "from": "З",
+      "to": "До",
+      "frequency": "Частота",
+      "immediately": "Одразу",
+      "every15min": "Кожні 15 хв",
+      "every30min": "Кожні 30 хв",
+      "every1hour": "Щогодини",
+      "every2hours": "Кожні 2 години",
+      "onlineMode": "Коли онлайн",
+      "offlineMode": "Коли офлайн",
+      "onlineDesc": "Пропонує варіанти одразу",
+      "offlineDesc": "Сповіщення за розкладом"
+    },
+    "actions": {
+      "like": "Подобається",
+      "dislike": "Не підходить",
+      "report": "Поскаржитись",
+      "reply": "Відповісти"
+    },
+    "quickActions": {
+      "description": "Опис",
+      "makeNote": "Нотатка",
+      "addFavorite": "В обране",
+      "suitable": "Підходить",
+      "notSuitable": "Не підходить",
+      "whatsNearby": "Що поруч",
+      "contact": "Зв'язатись"
+    },
+    "noteForm": {
+      "title": "Створити нотатку",
+      "placeholder": "Введіть нотатку...",
+      "save": "Зберегти",
+      "cancel": "Скасувати",
+      "saved": "Нотатку збережено"
+    },
+    "contactForm": {
+      "title": "Зв'язатись",
+      "phone": "Телефон",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "call": "Зателефонувати",
+      "write": "Написати",
+      "send": "Надіслати"
+    },
+    "mediaGallery": {
+      "morePhotos": "+{count}",
+      "allPhotos": "Усі фото",
+      "photo": "Фото",
+      "of": "з",
+      "close": "Закрити"
+    },
+    "messages": {
+      "placeholder": "Напишіть запитання...",
+      "send": "Надіслати",
+      "agentTyping": "Агент друкує...",
+      "descriptionSent": "Ось опис об'єкта:",
+      "addedToFavorites": "Додано до обраного ❤️",
+      "removedFromFavorites": "Видалено з обраного",
+      "markedSuitable": "Позначено як підходящий ✅",
+      "markedNotSuitable": "Позначено як непідходящий ❌",
+      "nearbyTitle": "Інфраструктура поруч",
+      "noteTitle": "Ваша нотатка"
+    },
+    "empty": {
+      "title": "Агент поки не знайшов об'єкти",
+      "subtitle": "Налаштуйте фільтри й агент почне пошук"
+    },
+    "findMe": "Знайди мені",
+    "objects": "об'єктів",
+    "newObjects": "Нові об'єкти",
+    "propertyCard": {
+      "perMonth": "/міс",
+      "rooms": "кімн.",
+      "area": "м²",
+      "floor": "пов.",
+      "verified": "Перевірено",
+      "new": "Нове"
+    }
   }
 }

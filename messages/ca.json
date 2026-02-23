@@ -1834,5 +1834,106 @@
     "pro": "Pro",
     "paymentSuccess": "Pagament completat",
     "noSubscription": "Es requereix subscripció activa"
+  },
+  "agentChat": {
+    "title": "Agent IA",
+    "subtitle": "Assistent de cerca d'immobles",
+    "backToMain": "Enrere",
+    "propertyThreads": "Immobles",
+    "noThreads": "No hi ha discussions sobre immobles",
+    "mainChat": "Xat principal",
+    "threadTitle": "Discussió de l'immoble",
+    "filters": {
+      "today": "Avui",
+      "yesterday": "Ahir",
+      "thisWeek": "Setmana",
+      "thisMonth": "Mes",
+      "allTime": "Tot el temps",
+      "allFilters": "Tots els filtres",
+      "selectFilter": "Seleccionar filtre"
+    },
+    "settings": {
+      "title": "Configuració de l'agent",
+      "searchParams": "Paràmetres de cerca",
+      "notifications": "Notificacions",
+      "activeHours": "Hores actives",
+      "from": "Des de",
+      "to": "Fins a",
+      "frequency": "Freqüència",
+      "immediately": "Immediatament",
+      "every15min": "Cada 15 min",
+      "every30min": "Cada 30 min",
+      "every1hour": "Cada hora",
+      "every2hours": "Cada 2 hores",
+      "onlineMode": "Quan en línia",
+      "offlineMode": "Quan fora de línia",
+      "onlineDesc": "Suggereix opcions immediatament",
+      "offlineDesc": "Notificacions programades"
+    },
+    "actions": {
+      "like": "M'agrada",
+      "dislike": "No adequat",
+      "report": "Denunciar",
+      "reply": "Respondre"
+    },
+    "quickActions": {
+      "description": "Descripció",
+      "makeNote": "Nota",
+      "addFavorite": "Favorit",
+      "suitable": "Adequat",
+      "notSuitable": "No adequat",
+      "whatsNearby": "Què hi ha a prop",
+      "contact": "Contactar"
+    },
+    "noteForm": {
+      "title": "Crear nota",
+      "placeholder": "Escriviu una nota...",
+      "save": "Desar",
+      "cancel": "Cancel·lar",
+      "saved": "Nota desada"
+    },
+    "contactForm": {
+      "title": "Contactar",
+      "phone": "Telèfon",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "call": "Trucar",
+      "write": "Escriure",
+      "send": "Enviar"
+    },
+    "mediaGallery": {
+      "morePhotos": "+{count}",
+      "allPhotos": "Totes les fotos",
+      "photo": "Foto",
+      "of": "de",
+      "close": "Tancar"
+    },
+    "messages": {
+      "placeholder": "Escriviu una pregunta...",
+      "send": "Enviar",
+      "agentTyping": "L'agent està escrivint...",
+      "descriptionSent": "Aquí teniu la descripció de l'immoble:",
+      "addedToFavorites": "Afegit a favorits ❤️",
+      "removedFromFavorites": "Eliminat de favorits",
+      "markedSuitable": "Marcat com a adequat ✅",
+      "markedNotSuitable": "Marcat com a no adequat ❌",
+      "nearbyTitle": "Infraestructura propera",
+      "noteTitle": "La teva nota"
+    },
+    "empty": {
+      "title": "L'agent encara no ha trobat immobles",
+      "subtitle": "Configureu els filtres i l'agent començarà a cercar"
+    },
+    "findMe": "Troba'm",
+    "objects": "immobles",
+    "newObjects": "Nous immobles",
+    "propertyCard": {
+      "perMonth": "/mes",
+      "rooms": "hab.",
+      "area": "m²",
+      "floor": "pl.",
+      "verified": "Verificat",
+      "new": "Nou"
+    }
   }
 }

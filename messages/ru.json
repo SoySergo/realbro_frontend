@@ -1618,5 +1618,106 @@
       "activated": "Задание активировано",
       "deactivated": "Задание деактивировано"
     }
+  },
+  "agentChat": {
+    "title": "ИИ Агент",
+    "subtitle": "Поиск объектов недвижимости",
+    "backToMain": "Назад",
+    "propertyThreads": "Объекты",
+    "noThreads": "Нет обсуждений по объектам",
+    "mainChat": "Основной чат",
+    "threadTitle": "Обсуждение объекта",
+    "filters": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "thisWeek": "Неделя",
+      "thisMonth": "Месяц",
+      "allTime": "Всё время",
+      "allFilters": "Все фильтры",
+      "selectFilter": "Выбрать фильтр"
+    },
+    "settings": {
+      "title": "Настройки агента",
+      "searchParams": "Параметры поиска",
+      "notifications": "Уведомления",
+      "activeHours": "Активные часы",
+      "from": "С",
+      "to": "До",
+      "frequency": "Частота",
+      "immediately": "Сразу",
+      "every15min": "Каждые 15 мин",
+      "every30min": "Каждые 30 мин",
+      "every1hour": "Каждый час",
+      "every2hours": "Каждые 2 часа",
+      "onlineMode": "Когда онлайн",
+      "offlineMode": "Когда офлайн",
+      "onlineDesc": "Предлагает варианты сразу",
+      "offlineDesc": "Уведомления по расписанию"
+    },
+    "actions": {
+      "like": "Нравится",
+      "dislike": "Не подходит",
+      "report": "Пожаловаться",
+      "reply": "Ответить"
+    },
+    "quickActions": {
+      "description": "Описание",
+      "makeNote": "Заметка",
+      "addFavorite": "В избранное",
+      "suitable": "Подходит",
+      "notSuitable": "Не подходит",
+      "whatsNearby": "Что рядом",
+      "contact": "Связаться"
+    },
+    "noteForm": {
+      "title": "Создать заметку",
+      "placeholder": "Введите заметку...",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "saved": "Заметка сохранена"
+    },
+    "contactForm": {
+      "title": "Связаться",
+      "phone": "Телефон",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "call": "Позвонить",
+      "write": "Написать",
+      "send": "Отправить"
+    },
+    "mediaGallery": {
+      "morePhotos": "+{count}",
+      "allPhotos": "Все фото",
+      "photo": "Фото",
+      "of": "из",
+      "close": "Закрыть"
+    },
+    "messages": {
+      "placeholder": "Напишите вопрос...",
+      "send": "Отправить",
+      "agentTyping": "Агент печатает...",
+      "descriptionSent": "Вот описание объекта:",
+      "addedToFavorites": "Добавлено в избранное ❤️",
+      "removedFromFavorites": "Удалено из избранного",
+      "markedSuitable": "Отмечено как подходящий ✅",
+      "markedNotSuitable": "Отмечено как неподходящий ❌",
+      "nearbyTitle": "Инфраструктура рядом",
+      "noteTitle": "Ваша заметка"
+    },
+    "empty": {
+      "title": "Агент пока не нашёл объекты",
+      "subtitle": "Настройте фильтры и агент начнёт поиск"
+    },
+    "findMe": "Найди мне",
+    "objects": "объектов",
+    "newObjects": "Новые объекты",
+    "propertyCard": {
+      "perMonth": "/мес",
+      "rooms": "комн.",
+      "area": "м²",
+      "floor": "эт.",
+      "verified": "Проверено",
+      "new": "Новое"
+    }
   }
 }
