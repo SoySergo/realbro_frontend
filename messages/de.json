@@ -850,6 +850,79 @@
       "yesterday": "Gestern",
       "live": "IN ECHTZEIT",
       "objects": "Objekte"
+    },
+    "agentV2": {
+      "title": "KI-Immobilienagent",
+      "findMe": "Finde für mich",
+      "propertyThread": "Immobiliendiskussion",
+      "backToFeed": "Zurück zum Feed",
+      "threads": "Immobilien-Threads",
+      "noThreads": "Noch keine Immobiliendiskussionen",
+      "mediaGallery": "Fotogalerie",
+      "showAll": "Alle anzeigen",
+      "photos": "Fotos",
+      "closeGallery": "Galerie schließen",
+      "quickActions": {
+        "describe": "Beschreibung",
+        "note": "Notiz hinzufügen",
+        "favorite": "Zu Favoriten hinzufügen",
+        "suitable": "Geeignet",
+        "notSuitable": "Nicht geeignet",
+        "nearby": "Was ist in der Nähe",
+        "contact": "Kontaktieren"
+      },
+      "actions": {
+        "like": "Gefällt mir",
+        "dislike": "Gefällt mir nicht",
+        "report": "Melden",
+        "reply": "Antworten"
+      },
+      "noteForm": {
+        "title": "Notiz hinzufügen",
+        "placeholder": "Schreiben Sie Ihre Notiz zu dieser Immobilie...",
+        "save": "Notiz speichern",
+        "cancel": "Abbrechen",
+        "saved": "Notiz gespeichert"
+      },
+      "contactForm": {
+        "title": "Kontakt zur Immobilie",
+        "phone": "Telefon",
+        "whatsapp": "WhatsApp",
+        "email": "E-Mail",
+        "send": "Senden",
+        "cancel": "Abbrechen",
+        "sent": "Nachricht gesendet"
+      },
+      "agentStatus": {
+        "online": "Agent ist online",
+        "offline": "Agent ist offline",
+        "searching": "Immobilien werden gesucht...",
+        "found": "{count} Immobilien gefunden"
+      },
+      "notifications": {
+        "title": "Benachrichtigungseinstellungen",
+        "whenOnline": "Online — sofortige Vorschläge",
+        "whenOffline": "Offline — geplant",
+        "selectTime": "Benachrichtigungszeit auswählen",
+        "destination": "Wohin senden"
+      },
+      "filters": {
+        "current": "Aktueller Filter",
+        "saved": "Gespeicherte Filter",
+        "change": "Filter ändern",
+        "parameters": "Suchparameter"
+      },
+      "property": {
+        "addedToFavorites": "Zu Favoriten hinzugefügt",
+        "removedFromFavorites": "Aus Favoriten entfernt",
+        "markedSuitable": "Als geeignet markiert",
+        "markedNotSuitable": "Als nicht geeignet markiert",
+        "descriptionSent": "Beschreibung gesendet",
+        "nearbyPlaces": "Orte in der Nähe",
+        "transport": "Verkehrsmittel",
+        "shops": "Geschäfte & Dienstleistungen",
+        "parks": "Parks & Erholung"
+      }
     }
   },
   "propertyDetail": {

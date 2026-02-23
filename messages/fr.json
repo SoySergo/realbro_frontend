@@ -828,6 +828,79 @@
       "yesterday": "Hier",
       "live": "EN DIRECT",
       "objects": "propriétés"
+    },
+    "agentV2": {
+      "title": "Agent immobilier IA",
+      "findMe": "Trouve pour moi",
+      "propertyThread": "Discussion de propriété",
+      "backToFeed": "Retour au fil",
+      "threads": "Fils de propriétés",
+      "noThreads": "Pas encore de discussions de propriétés",
+      "mediaGallery": "Galerie photo",
+      "showAll": "Tout afficher",
+      "photos": "photos",
+      "closeGallery": "Fermer la galerie",
+      "quickActions": {
+        "describe": "Description",
+        "note": "Ajouter une note",
+        "favorite": "Ajouter aux favoris",
+        "suitable": "Convenable",
+        "notSuitable": "Non convenable",
+        "nearby": "Qu'y a-t-il à proximité",
+        "contact": "Contacter"
+      },
+      "actions": {
+        "like": "J'aime",
+        "dislike": "Je n'aime pas",
+        "report": "Signaler",
+        "reply": "Répondre"
+      },
+      "noteForm": {
+        "title": "Ajouter une note",
+        "placeholder": "Écrivez votre note sur cette propriété...",
+        "save": "Enregistrer la note",
+        "cancel": "Annuler",
+        "saved": "Note enregistrée"
+      },
+      "contactForm": {
+        "title": "Contacter au sujet de la propriété",
+        "phone": "Téléphone",
+        "whatsapp": "WhatsApp",
+        "email": "E-mail",
+        "send": "Envoyer",
+        "cancel": "Annuler",
+        "sent": "Message envoyé"
+      },
+      "agentStatus": {
+        "online": "Agent en ligne",
+        "offline": "Agent hors ligne",
+        "searching": "Recherche de propriétés...",
+        "found": "{count} propriétés trouvées"
+      },
+      "notifications": {
+        "title": "Paramètres de notification",
+        "whenOnline": "En ligne — suggestions instantanées",
+        "whenOffline": "Hors ligne — programmées",
+        "selectTime": "Sélectionner l'heure de notification",
+        "destination": "Où envoyer"
+      },
+      "filters": {
+        "current": "Filtre actuel",
+        "saved": "Filtres enregistrés",
+        "change": "Changer de filtre",
+        "parameters": "Paramètres de recherche"
+      },
+      "property": {
+        "addedToFavorites": "Ajouté aux favoris",
+        "removedFromFavorites": "Retiré des favoris",
+        "markedSuitable": "Marqué comme convenable",
+        "markedNotSuitable": "Marqué comme non convenable",
+        "descriptionSent": "Description envoyée",
+        "nearbyPlaces": "Lieux à proximité",
+        "transport": "Transports",
+        "shops": "Commerces & services",
+        "parks": "Parcs & loisirs"
+      }
     }
   },
   "footer": {

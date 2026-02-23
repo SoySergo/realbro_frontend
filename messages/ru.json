@@ -854,6 +854,79 @@
       "yesterday": "Вчера",
       "live": "В РЕАЛЬНОМ ВРЕМЕНИ",
       "objects": "объектов"
+    },
+    "agentV2": {
+      "title": "AI Агент по недвижимости",
+      "findMe": "Найди для меня",
+      "propertyThread": "Обсуждение объекта",
+      "backToFeed": "Назад к ленте",
+      "threads": "Обсуждения объектов",
+      "noThreads": "Обсуждений пока нет",
+      "mediaGallery": "Фотогалерея",
+      "showAll": "Показать все",
+      "photos": "фото",
+      "closeGallery": "Закрыть галерею",
+      "quickActions": {
+        "describe": "Описание",
+        "note": "Добавить заметку",
+        "favorite": "В избранное",
+        "suitable": "Подходит",
+        "notSuitable": "Не подходит",
+        "nearby": "Что рядом",
+        "contact": "Связаться"
+      },
+      "actions": {
+        "like": "Нравится",
+        "dislike": "Не нравится",
+        "report": "Пожаловаться",
+        "reply": "Ответить"
+      },
+      "noteForm": {
+        "title": "Добавить заметку",
+        "placeholder": "Напишите заметку об этом объекте...",
+        "save": "Сохранить заметку",
+        "cancel": "Отмена",
+        "saved": "Заметка сохранена"
+      },
+      "contactForm": {
+        "title": "Связаться по объекту",
+        "phone": "Телефон",
+        "whatsapp": "WhatsApp",
+        "email": "Эл. почта",
+        "send": "Отправить",
+        "cancel": "Отмена",
+        "sent": "Сообщение отправлено"
+      },
+      "agentStatus": {
+        "online": "Агент онлайн",
+        "offline": "Агент офлайн",
+        "searching": "Поиск объектов...",
+        "found": "Найдено {count} объектов"
+      },
+      "notifications": {
+        "title": "Настройки уведомлений",
+        "whenOnline": "Онлайн — мгновенные предложения",
+        "whenOffline": "Офлайн — по расписанию",
+        "selectTime": "Выберите время уведомлений",
+        "destination": "Куда отправлять"
+      },
+      "filters": {
+        "current": "Текущий фильтр",
+        "saved": "Сохранённые фильтры",
+        "change": "Изменить фильтр",
+        "parameters": "Параметры поиска"
+      },
+      "property": {
+        "addedToFavorites": "Добавлено в избранное",
+        "removedFromFavorites": "Удалено из избранного",
+        "markedSuitable": "Отмечено как подходящее",
+        "markedNotSuitable": "Отмечено как неподходящее",
+        "descriptionSent": "Описание отправлено",
+        "nearbyPlaces": "Рядом",
+        "transport": "Транспорт",
+        "shops": "Магазины и сервисы",
+        "parks": "Парки и отдых"
+      }
     }
   },
   "propertyDetail": {

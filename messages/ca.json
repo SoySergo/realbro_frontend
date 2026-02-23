@@ -1053,7 +1053,80 @@
     "report": "Denunciar",
     "clearHistory": "Netejar historial",
     "noMessages": "No hi ha missatges",
-    "startConversation": "Començar conversa"
+    "startConversation": "Començar conversa",
+    "agentV2": {
+      "title": "Agent immobiliari IA",
+      "findMe": "Cerca per a mi",
+      "propertyThread": "Discussió de propietat",
+      "backToFeed": "Tornar al feed",
+      "threads": "Fils de propietats",
+      "noThreads": "Encara no hi ha discussions de propietats",
+      "mediaGallery": "Galeria de fotos",
+      "showAll": "Mostrar tot",
+      "photos": "fotos",
+      "closeGallery": "Tancar galeria",
+      "quickActions": {
+        "describe": "Descripció",
+        "note": "Afegir nota",
+        "favorite": "Afegir a preferits",
+        "suitable": "Adequat",
+        "notSuitable": "No adequat",
+        "nearby": "Què hi ha a prop",
+        "contact": "Contactar"
+      },
+      "actions": {
+        "like": "M'agrada",
+        "dislike": "No m'agrada",
+        "report": "Reportar",
+        "reply": "Respondre"
+      },
+      "noteForm": {
+        "title": "Afegir nota",
+        "placeholder": "Escriu la teva nota sobre aquesta propietat...",
+        "save": "Desar nota",
+        "cancel": "Cancel·lar",
+        "saved": "Nota desada"
+      },
+      "contactForm": {
+        "title": "Contactar sobre propietat",
+        "phone": "Telèfon",
+        "whatsapp": "WhatsApp",
+        "email": "Correu electrònic",
+        "send": "Enviar",
+        "cancel": "Cancel·lar",
+        "sent": "Missatge enviat"
+      },
+      "agentStatus": {
+        "online": "Agent en línia",
+        "offline": "Agent desconnectat",
+        "searching": "Cercant propietats...",
+        "found": "Trobades {count} propietats"
+      },
+      "notifications": {
+        "title": "Configuració de notificacions",
+        "whenOnline": "En línia — suggeriments instantanis",
+        "whenOffline": "Desconnectat — programades",
+        "selectTime": "Seleccionar hora de notificació",
+        "destination": "On enviar"
+      },
+      "filters": {
+        "current": "Filtre actual",
+        "saved": "Filtres desats",
+        "change": "Canviar filtre",
+        "parameters": "Paràmetres de cerca"
+      },
+      "property": {
+        "addedToFavorites": "Afegit a preferits",
+        "removedFromFavorites": "Eliminat de preferits",
+        "markedSuitable": "Marcat com a adequat",
+        "markedNotSuitable": "Marcat com a no adequat",
+        "descriptionSent": "Descripció enviada",
+        "nearbyPlaces": "Llocs a prop",
+        "transport": "Transport",
+        "shops": "Botigues i serveis",
+        "parks": "Parcs i lleure"
+      }
+    }
   },
   "propertyDetail": {
     "photos": "Fotos",

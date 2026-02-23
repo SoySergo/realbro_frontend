@@ -834,6 +834,79 @@
       "yesterday": "Yesterday",
       "live": "LIVE",
       "objects": "properties"
+    },
+    "agentV2": {
+      "title": "AI Property Agent",
+      "findMe": "Find for me",
+      "propertyThread": "Property Discussion",
+      "backToFeed": "Back to feed",
+      "threads": "Property Threads",
+      "noThreads": "No property discussions yet",
+      "mediaGallery": "Photo gallery",
+      "showAll": "Show all",
+      "photos": "photos",
+      "closeGallery": "Close gallery",
+      "quickActions": {
+        "describe": "Description",
+        "note": "Add note",
+        "favorite": "Add to favorites",
+        "suitable": "Suitable",
+        "notSuitable": "Not suitable",
+        "nearby": "What's nearby",
+        "contact": "Contact"
+      },
+      "actions": {
+        "like": "Like",
+        "dislike": "Dislike",
+        "report": "Report",
+        "reply": "Reply"
+      },
+      "noteForm": {
+        "title": "Add Note",
+        "placeholder": "Write your note about this property...",
+        "save": "Save note",
+        "cancel": "Cancel",
+        "saved": "Note saved"
+      },
+      "contactForm": {
+        "title": "Contact about property",
+        "phone": "Phone",
+        "whatsapp": "WhatsApp",
+        "email": "Email",
+        "send": "Send",
+        "cancel": "Cancel",
+        "sent": "Message sent"
+      },
+      "agentStatus": {
+        "online": "Agent is online",
+        "offline": "Agent is offline",
+        "searching": "Searching properties...",
+        "found": "Found {count} properties"
+      },
+      "notifications": {
+        "title": "Notification Settings",
+        "whenOnline": "When online — instant suggestions",
+        "whenOffline": "When offline — scheduled",
+        "selectTime": "Select notification time",
+        "destination": "Where to send"
+      },
+      "filters": {
+        "current": "Current filter",
+        "saved": "Saved filters",
+        "change": "Change filter",
+        "parameters": "Search parameters"
+      },
+      "property": {
+        "addedToFavorites": "Added to favorites",
+        "removedFromFavorites": "Removed from favorites",
+        "markedSuitable": "Marked as suitable",
+        "markedNotSuitable": "Marked as not suitable",
+        "descriptionSent": "Description sent",
+        "nearbyPlaces": "Nearby places",
+        "transport": "Transport",
+        "shops": "Shops & services",
+        "parks": "Parks & recreation"
+      }
     }
   },
   "propertyDetail": {

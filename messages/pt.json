@@ -827,6 +827,79 @@
       "saved": "Guardado",
       "viewDetails": "Ver detalhes",
       "share": "Partilhar"
+    },
+    "agentV2": {
+      "title": "Agente imobiliário IA",
+      "findMe": "Encontre para mim",
+      "propertyThread": "Discussão de imóvel",
+      "backToFeed": "Voltar ao feed",
+      "threads": "Tópicos de imóveis",
+      "noThreads": "Ainda não há discussões de imóveis",
+      "mediaGallery": "Galeria de fotos",
+      "showAll": "Mostrar tudo",
+      "photos": "fotos",
+      "closeGallery": "Fechar galeria",
+      "quickActions": {
+        "describe": "Descrição",
+        "note": "Adicionar nota",
+        "favorite": "Adicionar aos favoritos",
+        "suitable": "Adequado",
+        "notSuitable": "Não adequado",
+        "nearby": "O que há por perto",
+        "contact": "Contactar"
+      },
+      "actions": {
+        "like": "Gosto",
+        "dislike": "Não gosto",
+        "report": "Reportar",
+        "reply": "Responder"
+      },
+      "noteForm": {
+        "title": "Adicionar nota",
+        "placeholder": "Escreva a sua nota sobre este imóvel...",
+        "save": "Guardar nota",
+        "cancel": "Cancelar",
+        "saved": "Nota guardada"
+      },
+      "contactForm": {
+        "title": "Contactar sobre imóvel",
+        "phone": "Telefone",
+        "whatsapp": "WhatsApp",
+        "email": "E-mail",
+        "send": "Enviar",
+        "cancel": "Cancelar",
+        "sent": "Mensagem enviada"
+      },
+      "agentStatus": {
+        "online": "Agente online",
+        "offline": "Agente offline",
+        "searching": "A procurar imóveis...",
+        "found": "Encontrados {count} imóveis"
+      },
+      "notifications": {
+        "title": "Definições de notificação",
+        "whenOnline": "Online — sugestões instantâneas",
+        "whenOffline": "Offline — agendadas",
+        "selectTime": "Selecionar hora de notificação",
+        "destination": "Para onde enviar"
+      },
+      "filters": {
+        "current": "Filtro atual",
+        "saved": "Filtros guardados",
+        "change": "Alterar filtro",
+        "parameters": "Parâmetros de pesquisa"
+      },
+      "property": {
+        "addedToFavorites": "Adicionado aos favoritos",
+        "removedFromFavorites": "Removido dos favoritos",
+        "markedSuitable": "Marcado como adequado",
+        "markedNotSuitable": "Marcado como não adequado",
+        "descriptionSent": "Descrição enviada",
+        "nearbyPlaces": "Locais próximos",
+        "transport": "Transportes",
+        "shops": "Lojas e serviços",
+        "parks": "Parques e lazer"
+      }
     }
   },
   "propertyDetail": {

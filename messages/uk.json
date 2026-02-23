@@ -1527,6 +1527,79 @@
       "saved": "Збережено",
       "viewDetails": "Детальніше",
       "share": "Поділитися"
+    },
+    "agentV2": {
+      "title": "AI Агент з нерухомості",
+      "findMe": "Знайди для мене",
+      "propertyThread": "Обговорення об'єкта",
+      "backToFeed": "Назад до стрічки",
+      "threads": "Обговорення об'єктів",
+      "noThreads": "Обговорень поки немає",
+      "mediaGallery": "Фотогалерея",
+      "showAll": "Показати все",
+      "photos": "фото",
+      "closeGallery": "Закрити галерею",
+      "quickActions": {
+        "describe": "Опис",
+        "note": "Додати нотатку",
+        "favorite": "Додати до обраного",
+        "suitable": "Підходить",
+        "notSuitable": "Не підходить",
+        "nearby": "Що поруч",
+        "contact": "Зв'язатися"
+      },
+      "actions": {
+        "like": "Подобається",
+        "dislike": "Не подобається",
+        "report": "Поскаржитися",
+        "reply": "Відповісти"
+      },
+      "noteForm": {
+        "title": "Додати нотатку",
+        "placeholder": "Напишіть нотатку про цей об'єкт...",
+        "save": "Зберегти нотатку",
+        "cancel": "Скасувати",
+        "saved": "Нотатку збережено"
+      },
+      "contactForm": {
+        "title": "Зв'язатися щодо об'єкта",
+        "phone": "Телефон",
+        "whatsapp": "WhatsApp",
+        "email": "Ел. пошта",
+        "send": "Надіслати",
+        "cancel": "Скасувати",
+        "sent": "Повідомлення надіслано"
+      },
+      "agentStatus": {
+        "online": "Агент онлайн",
+        "offline": "Агент офлайн",
+        "searching": "Пошук об'єктів...",
+        "found": "Знайдено {count} об'єктів"
+      },
+      "notifications": {
+        "title": "Налаштування сповіщень",
+        "whenOnline": "Онлайн — миттєві пропозиції",
+        "whenOffline": "Офлайн — за розкладом",
+        "selectTime": "Оберіть час сповіщень",
+        "destination": "Куди надсилати"
+      },
+      "filters": {
+        "current": "Поточний фільтр",
+        "saved": "Збережені фільтри",
+        "change": "Змінити фільтр",
+        "parameters": "Параметри пошуку"
+      },
+      "property": {
+        "addedToFavorites": "Додано до обраного",
+        "removedFromFavorites": "Видалено з обраного",
+        "markedSuitable": "Позначено як підходить",
+        "markedNotSuitable": "Позначено як не підходить",
+        "descriptionSent": "Опис надіслано",
+        "nearbyPlaces": "Місця поруч",
+        "transport": "Транспорт",
+        "shops": "Магазини та сервіси",
+        "parks": "Парки та відпочинок"
+      }
     }
   },
   "comparison": {
