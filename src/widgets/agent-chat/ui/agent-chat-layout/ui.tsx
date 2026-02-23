@@ -28,8 +28,8 @@ export function AgentChatLayout({ labels, className }: AgentChatLayoutProps) {
       {/* Сайдбар с тредами — скрыт на мобильном когда открыт тред */}
       <div className={cn(
         'w-full md:w-[280px] lg:w-[300px] shrink-0',
-        currentView === 'thread' ? 'hidden md:flex' : 'hidden md:flex',
-        showMobileSidebar ? 'flex md:flex' : 'hidden md:flex'
+        'hidden md:flex',
+        showMobileSidebar && 'flex md:flex'
       )}>
         <AgentChatSidebar
           labels={{

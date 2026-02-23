@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useRef, useEffect, useCallback, useMemo } from 'react';
+import { memo, useRef, useEffect, useCallback } from 'react';
 import { Bot } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useAgentChatStore } from '@/features/agent-chat';
@@ -32,9 +32,6 @@ export const AgentChatMainFeed = memo(function AgentChatMainFeed({
     return threads.find((t) => t.property.id === propertyId);
   }, [threads]);
 
-  // Фильтрованные сообщения — мемоизация
-  const filteredMessages = useMemo(() => mainMessages, [mainMessages]);
-
   if (isLoading) {
     return (
       <div className={cn('flex-1 flex items-center justify-center', className)}>
@@ -46,7 +43,7 @@ export const AgentChatMainFeed = memo(function AgentChatMainFeed({
     );
   }
 
-  if (filteredMessages.length === 0) {
+  if (mainMessages.length === 0) {
     return (
       <div className={cn('flex-1 flex flex-col items-center justify-center gap-3 px-4', className)}>
         <div className="w-16 h-16 rounded-2xl bg-background-secondary flex items-center justify-center">
@@ -65,7 +62,7 @@ export const AgentChatMainFeed = memo(function AgentChatMainFeed({
       ref={scrollRef}
       className={cn('flex-1 overflow-y-auto px-3 md:px-4 py-3 space-y-3 scrollbar-hide', className)}
     >
-      {filteredMessages.map((msg) => {
+      {mainMessages.map((msg) => {
         // Объект недвижимости
         if (msg.type === 'property' && msg.property) {
           const thread = findThread(msg.property.id);

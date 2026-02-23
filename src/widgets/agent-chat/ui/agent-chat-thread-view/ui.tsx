@@ -69,10 +69,6 @@ export const AgentChatThreadView = memo(function AgentChatThreadView({
 
     switch (action) {
       case 'description':
-        // Агент отправляет описание
-        sendMessage('', thread.id).then(() => {
-          // Мок: добавляем описание как ответ агента
-        });
         // Имитируем запрос описания
         useAgentChatStore.setState((state) => ({
           threads: state.threads.map((t) =>
