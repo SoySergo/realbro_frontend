@@ -3,6 +3,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+// Внутренний URL бекенда для серверного проксирования (localhost, без tunnel)
+const BACKEND_URL = (process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '');
+
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
@@ -15,8 +18,12 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/backend/:path*',
-        destination: 'http://localhost:8080/api/:path*',
+        source: '/api/v1/:path*',
+        destination: `${BACKEND_URL}/api/v1/:path*`,
+      },
+      {
+        source: '/api/websocket/:path*',
+        destination: `${BACKEND_URL}/api/websocket/:path*`,
       },
     ];
   },

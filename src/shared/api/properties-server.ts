@@ -6,8 +6,8 @@ import type { CursorPaginatedResponse } from './types';
 import { generateMockGridCardsPage, generateMockProperty } from './mocks/properties-mock';
 import { FEATURES } from '@/shared/config/features';
 
-const API_BASE = process.env.BACKEND_URL || 'http://localhost:3001/api';
-const API_V1_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+const API_BASE = process.env.BACKEND_URL || 'http://localhost:8080';
+const API_V1_BASE = (process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '');
 
 export interface PropertiesListResponse {
     data: PropertyGridCard[];

@@ -10,10 +10,10 @@
 
 import type { ErrorResponse } from '../types';
 
+// На клиенте — относительный URL (через Next.js rewrite-прокси), на сервере — прямой через BACKEND_URL
 const API_BASE_URL = typeof window !== 'undefined'
-    ? (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080')
-    : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080');
-
+    ? ''
+    : (process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '');
 const API_PREFIX = '/api/v1';
 
 /**

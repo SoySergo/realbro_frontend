@@ -32,7 +32,7 @@ export * from './types';
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 // Real API base URL
-const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'}/api/v1`;
+const API_BASE = `${(process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
 
 // ============================================================================
 // Mock Data Loaders

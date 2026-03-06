@@ -1,8 +1,10 @@
-import env from '@/shared/config/env';
 import type { UserResponse, UpdateUserRequest } from '@/entities/user';
 import { updateUserRequestSchema } from '@/entities/user';
 
-const API_BASE = `${env.NEXT_PUBLIC_API_BASE_URL}/api/v1`;
+// На клиенте — относительный URL (прокси через Next.js rewrites), на сервере — прямой
+const API_BASE = typeof window !== 'undefined'
+    ? '/api/v1'
+    : `${(process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
 
 /**
  * Кастомная ошибка API пользователей
