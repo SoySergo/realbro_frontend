@@ -57,7 +57,7 @@ export function ListingControls({
                 {/* Left: count + sort */}
                 <div className="flex items-center gap-4">
                     <span className="text-sm text-text-secondary">
-                        {totalCount
+                        {totalCount != null && !isNaN(totalCount) && totalCount > 0
                             ? tListing('subtitle', {
                                   count: totalCount.toLocaleString('ru-RU'),
                               })

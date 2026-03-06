@@ -175,7 +175,7 @@ export function SearchListPage({
                 )}
 
                 {/* Mobile counter */}
-                {pagination?.total && (
+                {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
                     <div className="md:hidden px-3 pt-2 pb-1">
                         <span className="text-sm text-text-secondary">
                             {tListing('subtitle', {
