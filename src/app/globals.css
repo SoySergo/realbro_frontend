@@ -199,6 +199,12 @@
   --color-foreground: var(--foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
+
+  /* Кастомные брейкпоинты для фильтров */
+  --breakpoint-filters-1: 900px;
+  --breakpoint-filters-2: 1100px;
+  --breakpoint-filters-3: 1200px;
+  --breakpoint-filters-4: 1300px;
 }
 
 /* Базовые стили body */

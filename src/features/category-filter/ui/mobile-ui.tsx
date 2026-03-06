@@ -9,12 +9,9 @@ import { getCategories, type Category } from '@/shared/api/dictionaries';
 
 // Фолбэк категории
 const FALLBACK_CATEGORIES = [
-    { id: 1, name: '', code: 'apartment' },
-    { id: 2, name: '', code: 'house' },
-    { id: 3, name: '', code: 'villa' },
-    { id: 4, name: '', code: 'studio' },
-    { id: 5, name: '', code: 'penthouse' },
-    { id: 6, name: '', code: 'townhouse' },
+    { id: 1, slug: 'room', code: 'room' },
+    { id: 2, slug: 'apartment', code: 'apartment' },
+    { id: 3, slug: 'house', code: 'house' },
 ];
 
 interface CategoryFilterMobileProps {
@@ -41,7 +38,7 @@ export function CategoryFilterMobile({ value, onChange }: CategoryFilterMobilePr
 
     // Используем API категории если есть, иначе фолбэк
     const categories = apiCategories.length > 0
-        ? apiCategories.map(c => ({ id: c.id, label: c.name || tTypes(c.code as Parameters<typeof tTypes>[0]) }))
+        ? apiCategories.map(c => ({ id: c.id, label: c.translated_name || tTypes(c.slug as Parameters<typeof tTypes>[0]) }))
         : FALLBACK_CATEGORIES.map(c => ({ id: c.id, label: tTypes(c.code as Parameters<typeof tTypes>[0]) }));
 
     // Используем переданное значение или берём из store

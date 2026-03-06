@@ -227,7 +227,7 @@ export const AreaFilter = memo(() => {
                 <button
                     className={cn(
                         'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
+                        'px-3 py-2 text-sm max-w-[200px] transition-all duration-200',
                         // Светлая тема: белый фон
                         'bg-background',
                         // Тёмная тема: без бордера
@@ -238,9 +238,9 @@ export const AreaFilter = memo(() => {
                         isActive && 'text-text-primary'
                     )}
                 >
-                    {buttonLabel}
+                    <span className="truncate">{buttonLabel}</span>
                     <ChevronDown className={cn(
-                        "w-4 h-4 opacity-50 transition-transform",
+                        "w-4 h-4 opacity-50 shrink-0 transition-transform",
                         isOpen && "rotate-180"
                     )} />
                 </button>

@@ -228,7 +228,8 @@
         "studio": "Monolocale",
         "penthouse": "Attico",
         "townhouse": "Casa a schiera",
-        "duplex": "Duplex"
+        "duplex": "Duplex",
+        "room": "Stanza"
     },
     "transport": {
         "metro": "Metro",
@@ -268,6 +269,7 @@
         "forRent": "Affitto",
         "location": "Posizione",
         "category": "Categoria",
+        "subcategory": "Sottocategoria",
         "markerType": "Tipo di marcatori",
         "rooms": "Stanze",
         "price": "Prezzo",

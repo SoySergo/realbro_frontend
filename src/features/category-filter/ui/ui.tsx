@@ -14,12 +14,9 @@ import { getCategories, type Category } from '@/shared/api/dictionaries';
 
 // Фолбэк категории (если API недоступен)
 const FALLBACK_CATEGORIES = [
-    { id: 1, name: '', code: 'apartment' },
-    { id: 2, name: '', code: 'house' },
-    { id: 3, name: '', code: 'villa' },
-    { id: 4, name: '', code: 'studio' },
-    { id: 5, name: '', code: 'penthouse' },
-    { id: 6, name: '', code: 'townhouse' },
+    { id: 1, slug: 'room', code: 'room' },
+    { id: 2, slug: 'apartment', code: 'apartment' },
+    { id: 3, slug: 'house', code: 'house' },
 ];
 
 /**
@@ -42,7 +39,7 @@ export function CategoryFilter() {
 
     // Используем API категории если есть, иначе фолбэк
     const categories = apiCategories.length > 0
-        ? apiCategories.map(c => ({ id: c.id, label: c.name || tTypes(c.code as Parameters<typeof tTypes>[0]) }))
+        ? apiCategories.map(c => ({ id: c.id, label: c.translated_name || tTypes(c.slug as Parameters<typeof tTypes>[0]) }))
         : FALLBACK_CATEGORIES.map(c => ({ id: c.id, label: tTypes(c.code as Parameters<typeof tTypes>[0]) }));
 
     const selectedIds = filters.categoryIds || [];
@@ -60,16 +57,24 @@ export function CategoryFilter() {
     };
 
     const selectedCount = selectedIds.length;
-    const buttonLabel = selectedCount > 0
-        ? `${t('category')} (${selectedCount})`
-        : t('category');
+    // Формируем лейбл кнопки с именами выбранных категорий
+    let buttonLabel: string;
+    if (selectedCount > 0) {
+        const selectedNames = categories
+            .filter(c => selectedIds.includes(c.id))
+            .map(c => c.label);
+        const joined = selectedNames.join(', ');
+        buttonLabel = joined.length > 24 ? joined.slice(0, 22) + '…' : joined;
+    } else {
+        buttonLabel = t('category');
+    }
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        'w-fit whitespace-nowrap cursor-pointer',
+                        'max-w-[160px] cursor-pointer',
                         // Светлая тема: белый фон
                         'bg-background',
                         // Тёмная тема: без бордера
@@ -86,8 +91,8 @@ export function CategoryFilter() {
                         selectedCount > 0 && 'text-text-primary'
                     )}
                 >
-                    {buttonLabel}
-                    <ChevronDownIcon className="size-4 opacity-50" />
+                    <span className="truncate">{buttonLabel}</span>
+                    <ChevronDownIcon className="size-4 opacity-50 shrink-0" />
                 </button>
             </PopoverTrigger>
             <PopoverContent

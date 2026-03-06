@@ -228,7 +228,8 @@
         "studio": "Студия",
         "penthouse": "Пентхаус",
         "townhouse": "Таунхаус",
-        "duplex": "Дуплекс"
+        "duplex": "Дуплекс",
+        "room": "Комната"
     },
     "transport": {
         "metro": "Метро",
@@ -268,6 +269,7 @@
         "forRent": "Аренда",
         "location": "Локация",
         "category": "Категория",
+        "subcategory": "Подкатегория",
         "markerType": "Тип маркеров",
         "rooms": "Комнаты",
         "price": "Цена",

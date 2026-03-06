@@ -224,7 +224,8 @@
         "studio": "Studio",
         "penthouse": "Penthouse",
         "townhouse": "Reihenhaus",
-        "duplex": "Duplex"
+        "duplex": "Duplex",
+        "room": "Zimmer"
     },
     "transport": {
         "metro": "U-Bahn",
@@ -264,6 +265,7 @@
         "forRent": "Miete",
         "location": "Standort",
         "category": "Kategorie",
+        "subcategory": "Unterkategorie",
         "markerType": "Markertyp",
         "rooms": "Zimmer",
         "price": "Preis",

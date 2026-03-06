@@ -11,6 +11,7 @@ import { useAgencyFilters } from '@/features/agency-filters';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { MarkerTypeFilterMobile } from '@/features/marker-type-filter';
 import { CategoryFilterMobile } from '@/features/category-filter';
+import { SubcategoryFilterMobile } from '@/features/subcategory-filter';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
 import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
@@ -59,6 +60,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
     // Локальное состояние для фильтров недвижимости
     const [localMarkerType, setLocalMarkerType] = useState(filters.markerType || 'all');
     const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
+    const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.sub_categories || []);
     const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
     const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
     const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
@@ -81,6 +83,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         if (open) {
             setLocalMarkerType(filters.markerType || 'all');
             setLocalCategoryIds(filters.categoryIds || []);
+            setLocalSubCategoryIds(filters.sub_categories || []);
             setLocalRooms(filters.rooms || []);
             setLocalMinPrice(filters.minPrice || 0);
             setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
@@ -105,6 +108,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                     ...currentFilters,
                     markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
                     categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
+                    sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                     rooms: localRooms.length > 0 ? localRooms : undefined,
                     minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                     maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
@@ -181,6 +185,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
             setFilters({
                 markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
                 categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
+                sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                 rooms: localRooms.length > 0 ? localRooms : undefined,
                 minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                 maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
@@ -203,6 +208,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         if (isProperties) {
             setLocalMarkerType('all');
             setLocalCategoryIds([]);
+            setLocalSubCategoryIds([]);
             setLocalRooms([]);
             setLocalMinPrice(0);
             setLocalMaxPrice(MAX_PRICE);
@@ -325,6 +331,19 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                 />
                                             </div>
                                         </FilterSection>
+
+                                        {/* Подкатегория */}
+                                        {localCategoryIds.length > 0 && (
+                                            <FilterSection id="subcategory" title={t('subcategory')}>
+                                                <div className="py-3">
+                                                    <SubcategoryFilterMobile
+                                                        value={localSubCategoryIds}
+                                                        onChange={setLocalSubCategoryIds}
+                                                        categoryIds={localCategoryIds}
+                                                    />
+                                                </div>
+                                            </FilterSection>
+                                        )}
 
                                         {/* Цена */}
                                         <FilterSection id="price" title={t('categories.price')}>

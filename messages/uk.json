@@ -571,6 +571,7 @@
             "rooms": "Кімнати"
         },
         "category": "Категорія",
+        "subcategory": "Підкатегорія",
         "clear": "Очистити",
         "clearAll": "Очистити все",
         "loading": "Завантаження...",
@@ -1924,7 +1925,13 @@
     },
     "propertyTypes": {
         "townhouse": "Таунхаус",
-        "villa": "Вілла"
+        "villa": "Вілла",
+        "room": "Кімната",
+        "apartment": "Квартира",
+        "house": "Будинок",
+        "studio": "Студія",
+        "penthouse": "Пентхаус",
+        "duplex": "Дуплекс"
     },
     "radius": {
         "clickOnMap": "Клікніть на карту",

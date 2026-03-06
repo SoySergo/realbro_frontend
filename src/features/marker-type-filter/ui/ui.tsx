@@ -39,7 +39,7 @@ export function MarkerTypeFilter() {
             <SelectTrigger
                 size="default"
                 className={cn(
-                    'w-fit whitespace-nowrap cursor-pointer',
+                    'max-w-[150px] cursor-pointer',
                     // Светлая тема: белый фон
                     'bg-background',
                     // Тёмная тема: без бордера
@@ -53,7 +53,7 @@ export function MarkerTypeFilter() {
                 )}
             >
                 <SelectValue placeholder={t('markerAll')}>
-                    {selectedLabel}
+                    <span className="truncate">{selectedLabel}</span>
                 </SelectValue>
             </SelectTrigger>
             <SelectContent

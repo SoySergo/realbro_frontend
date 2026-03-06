@@ -212,7 +212,8 @@
         "studio": "Studio",
         "penthouse": "Penthouse",
         "townhouse": "Maison de ville",
-        "duplex": "Duplex"
+        "duplex": "Duplex",
+        "room": "Chambre"
     },
     "transport": {
         "metro": "Métro",
@@ -252,6 +253,7 @@
         "forRent": "À louer",
         "location": "Localisation",
         "category": "Catégorie",
+        "subcategory": "Sous-catégorie",
         "markerType": "Type de marqueurs",
         "rooms": "Pièces",
         "price": "Prix",

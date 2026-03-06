@@ -6,15 +6,15 @@ import { apiClient } from './lib/api-client';
 
 export interface Category {
     id: number;
-    name: string;
-    code: string;
+    slug: string;
+    translated_name: string;
 }
 
 export interface Subcategory {
     id: number;
-    name: string;
-    code: string;
     category_id: number;
+    slug: string;
+    translated_name: string;
 }
 
 // === API-функции ===

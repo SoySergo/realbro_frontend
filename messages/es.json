@@ -228,7 +228,8 @@
         "studio": "Estudio",
         "penthouse": "Ático",
         "townhouse": "Adosado",
-        "duplex": "Dúplex"
+        "duplex": "Dúplex",
+        "room": "Habitación"
     },
     "transport": {
         "metro": "Metro",
@@ -268,6 +269,7 @@
         "forRent": "Alquiler",
         "location": "Ubicación",
         "category": "Categoría",
+        "subcategory": "Subcategoría",
         "markerType": "Tipo de marcadores",
         "rooms": "Habitaciones",
         "price": "Precio",

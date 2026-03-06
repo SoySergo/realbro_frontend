@@ -72,6 +72,9 @@ export function parseFiltersFromSearchParams(searchParams: URLSearchParams | Rea
     // Категории (categories=1,2,3)
     filters.categoryIds = parseNumberArray(searchParams.get('categories'));
 
+    // Подкатегории (sub_categories=4,5,6)
+    filters.sub_categories = parseNumberArray(searchParams.get('sub_categories'));
+
     // Административные уровни
     filters.adminLevel2 = parseNumberArray(searchParams.get('admin2'));
     filters.adminLevel4 = parseNumberArray(searchParams.get('admin4'));
@@ -123,6 +126,10 @@ export function serializeFiltersToSearchParams(filters: SearchFilters): URLSearc
     // Категории
     const categoriesStr = serializeNumberArray(filters.categoryIds);
     if (categoriesStr) params.set('categories', categoriesStr);
+
+    // Подкатегории
+    const subCategoriesStr = serializeNumberArray(filters.sub_categories);
+    if (subCategoriesStr) params.set('sub_categories', subCategoriesStr);
 
     // Административные уровни
     const admin2Str = serializeNumberArray(filters.adminLevel2);

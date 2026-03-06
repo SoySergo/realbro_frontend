@@ -347,6 +347,7 @@
         "forRent": "Lloguer",
         "location": "Ubicació",
         "category": "Categoria",
+        "subcategory": "Subcategoria",
         "markerType": "Tipus de marcadors",
         "rooms": "Habitacions",
         "price": "Preu",

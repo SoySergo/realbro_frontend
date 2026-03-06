@@ -30,9 +30,11 @@ import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-c
 import { useAgencyFilters } from '@/features/agency-filters';
 
 // Фильтры недвижимости
-import { MarkerTypeFilter } from '@/features/marker-type-filter';
+// TODO: MarkerTypeFilter — найти эстетичное место в UI
+// import { MarkerTypeFilter } from '@/features/marker-type-filter';
 import { LocationFilterButton } from '@/features/location-filter';
 import { CategoryFilter } from '@/features/category-filter';
+import { SubcategoryFilter } from '@/features/subcategory-filter';
 import { PriceFilter } from '@/features/price-filter';
 import { RoomsFilter } from '@/features/rooms-filter';
 import { AreaFilter } from '@/features/area-filter';
@@ -273,157 +275,161 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
     return (
         <div className="w-full relative z-50">
             <div className="flex items-center gap-2 px-3 w-full justify-end">
-                {/* Переключатель категории */}
+                {/* Переключатель категории — всегда первый элемент слева */}
                 <SearchCategorySwitcher currentCategory={currentCategory} locale={locale} />
 
-                <div className="w-px h-6 bg-border shrink-0" />
-
-                {/* Фильтр маркеров — общий для обеих категорий */}
-                <MarkerTypeFilter />
-
-                {/* Зона фильтров — зависит от категории */}
+                {/* Зона фильтров — прилипает слева после переключателя, растёт вправо */}
                 <div
                     ref={filtersContainerRef}
-                    className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto scrollbar-hide"
+                    className="flex items-center gap-2 min-w-0 shrink-0"
                 >
                     {isProperties ? (
                         <>
-                            <LocationFilterButton />
-                            <div className="hidden sm:block">
+                            {/* Локация — появляется с 900px */}
+                            <div className="hidden filters-1:block shrink-0">
+                                <LocationFilterButton />
+                            </div>
+                            {/* Категория — появляется с 1100px */}
+                            <div className="hidden filters-2:block shrink-0">
                                 <CategoryFilter />
                             </div>
-                            <div className="hidden lg:block">
+                            {/* Подкатегория — появляется вместе с категорией */}
+                            <SubcategoryFilter className="hidden filters-2:block shrink-0" />
+                            {/* Цена — появляется с 1200px */}
+                            <div className="hidden filters-3:block shrink-0">
                                 <PriceFilter />
                             </div>
-                            <div className="hidden lg:block">
+                            {/* Комнаты — появляются с 1300px */}
+                            <div className="hidden filters-4:block shrink-0">
                                 <RoomsFilter />
                             </div>
-                            <div className="hidden 2xl:block">
+                            {/* Площадь — показана с 2xl (1536px) */}
+                            <div className="hidden 2xl:block shrink-0">
                                 <AreaFilter />
                             </div>
                         </>
                     ) : (
-                        <div className="hidden md:contents">
+                        <div className="hidden filters-1:contents">
                             <ProfessionalFiltersGroup />
                         </div>
                     )}
+                </div>
 
-                    {/* Кнопки действий */}
-                    <div className="flex items-center gap-1 shrink-0 ml-1">
-                        {/* Все фильтры */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsFiltersPopupOpen(true)}
-                            className="text-text-secondary hover:text-brand-primary hover:bg-brand-primary/10"
-                            title={t('allFilters')}
-                            aria-label={t('allFilters')}
-                        >
-                            <SlidersHorizontal className="w-4 h-4" />
-                        </Button>
+                {/* Кнопки действий — фиксированы справа */}
+                <div className="flex items-center gap-1 shrink-0 ml-1">
+                    {/* Все фильтры */}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsFiltersPopupOpen(true)}
+                        className="text-text-secondary hover:text-brand-primary hover:bg-brand-primary/10"
+                        title={t('allFilters')}
+                        aria-label={t('allFilters')}
+                    >
+                        <SlidersHorizontal className="w-4 h-4" />
+                    </Button>
 
-                        {/* Очистить */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={handleReset}
-                            disabled={!hasActiveFilters}
-                            className={cn(
-                                "text-text-secondary",
-                                hasActiveFilters && "hover:text-error hover:bg-error/10"
-                            )}
-                            title={t('clearAll')}
-                            aria-label={t('clearAll')}
-                        >
-                            <Trash2 className="w-4 h-4" />
-                        </Button>
-
-                        {/* Сохранить/Обновить — только для properties */}
-                        {isProperties && (
-                            activeQuery ? (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={handleSave}
-                                    disabled={isSyncing || (!hasUnsavedChanges && !justSynced)}
-                                    className={cn(
-                                        "text-text-secondary",
-                                        isSyncing && "text-brand-primary",
-                                        justSynced && "text-success",
-                                        hasUnsavedChanges && !isSyncing && "hover:text-brand-primary hover:bg-brand-primary/10"
-                                    )}
-                                    title={isSyncing ? tCommon('saving') : (justSynced ? tCommon('saved') : (hasUnsavedChanges ? tCommon('save') : t('title')))}
-                                >
-                                    <SaveIcon className={cn("w-4 h-4", isSyncing && "animate-spin")} />
-                                </Button>
-                            ) : (
-                                <Popover open={isSavePopoverOpen} onOpenChange={(open) => {
-                                    if (open && !requireAuth()) return;
-                                    setIsSavePopoverOpen(open);
-                                }}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            disabled={!hasActiveFilters}
-                                            className={cn(
-                                                "text-text-secondary",
-                                                hasActiveFilters && "hover:text-brand-primary hover:bg-brand-primary/10"
-                                            )}
-                                            title={tCommon('save')}
-                                        >
-                                            <CloudUpload className="w-4 h-4" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent align="end" className="w-72 p-4">
-                                        <div className="space-y-3">
-                                            <h4 className="font-medium text-sm">{t('saveConfirmTitle')}</h4>
-                                            <Input
-                                                placeholder={t('title')}
-                                                value={filterName}
-                                                onChange={(e) => setFilterName(e.target.value)}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
-                                                        handleSaveNewFilter();
-                                                    }
-                                                }}
-                                                autoFocus
-                                            />
-                                            <div className="flex gap-2 justify-end">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setIsSavePopoverOpen(false);
-                                                        setFilterName('');
-                                                    }}
-                                                >
-                                                    {t('cancel')}
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    onClick={handleSaveNewFilter}
-                                                    disabled={!filterName.trim()}
-                                                >
-                                                    {tCommon('save')}
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
-                            )
+                    {/* Очистить */}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleReset}
+                        disabled={!hasActiveFilters}
+                        className={cn(
+                            "text-text-secondary",
+                            hasActiveFilters && "hover:text-error hover:bg-error/10"
                         )}
+                        title={t('clearAll')}
+                        aria-label={t('clearAll')}
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </Button>
 
-                        {/* Кнопка "Найди мне" (AI) — в конце */}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="btn-ai-neon ml-3 shrink-0 gap-2"
-                        >
-                            <FingerprintIcon className="w-4 h-4 text-brand-primary" />
-                            <span className="hidden sm:inline font-medium">{t('findMe')}</span>
-                        </Button>
-                    </div>
+                    {/* Сохранить/Обновить — только для properties */}
+                    {isProperties && (
+                        activeQuery ? (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={handleSave}
+                                disabled={isSyncing || (!hasUnsavedChanges && !justSynced)}
+                                className={cn(
+                                    "text-text-secondary",
+                                    isSyncing && "text-brand-primary",
+                                    justSynced && "text-success",
+                                    hasUnsavedChanges && !isSyncing && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                )}
+                                title={isSyncing ? tCommon('saving') : (justSynced ? tCommon('saved') : (hasUnsavedChanges ? tCommon('save') : t('title')))}
+                            >
+                                <SaveIcon className={cn("w-4 h-4", isSyncing && "animate-spin")} />
+                            </Button>
+                        ) : (
+                            <Popover open={isSavePopoverOpen} onOpenChange={(open) => {
+                                if (open && !requireAuth()) return;
+                                setIsSavePopoverOpen(open);
+                            }}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        disabled={!hasActiveFilters}
+                                        className={cn(
+                                            "text-text-secondary",
+                                            hasActiveFilters && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                        )}
+                                        title={tCommon('save')}
+                                    >
+                                        <CloudUpload className="w-4 h-4" />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent align="end" className="w-72 p-4">
+                                    <div className="space-y-3">
+                                        <h4 className="font-medium text-sm">{t('saveConfirmTitle')}</h4>
+                                        <Input
+                                            placeholder={t('title')}
+                                            value={filterName}
+                                            onChange={(e) => setFilterName(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleSaveNewFilter();
+                                                }
+                                            }}
+                                            autoFocus
+                                        />
+                                        <div className="flex gap-2 justify-end">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => {
+                                                    setIsSavePopoverOpen(false);
+                                                    setFilterName('');
+                                                }}
+                                            >
+                                                {t('cancel')}
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                onClick={handleSaveNewFilter}
+                                                disabled={!filterName.trim()}
+                                            >
+                                                {tCommon('save')}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        )
+                    )}
+
+                    {/* Кнопка "Найди мне" (AI) — в конце */}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="btn-ai-neon ml-3 shrink-0 gap-2"
+                    >
+                        <FingerprintIcon className="w-4 h-4 text-brand-primary" />
+                        <span className="hidden sm:inline font-medium">{t('findMe')}</span>
+                    </Button>
                 </div>
             </div>
 

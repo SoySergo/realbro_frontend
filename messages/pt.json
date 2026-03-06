@@ -312,6 +312,7 @@
             "rooms": "Quartos"
         },
         "category": "Categoria",
+        "subcategory": "Subcategoria",
         "clear": "Limpar",
         "clearAll": "Limpar tudo",
         "loading": "Carregando...",
