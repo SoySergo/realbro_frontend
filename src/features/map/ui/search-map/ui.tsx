@@ -8,8 +8,9 @@ import { MobileLocationMode } from '@/widgets/mobile-location-mode';
 import { useFilterStore, useCurrentFilters } from '@/widgets/search-filters-bar';
 import { filtersToQueryString } from '@/entities/filter';
 
-// URL MVT тайлов — относительный путь, проксируется через Next.js rewrites
-const TILES_URL = `/api/v1/properties/tiles/{z}/{x}/{y}.pbf`;
+// URL MVT тайлов — прямые запросы к бекенду (CORS на стороне бекенда)
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+const TILES_URL = `${API_BASE_URL}/api/v1/properties/tiles/{z}/{x}/{y}.pbf`;
 
 // Имя source и layer для тайлов
 const PROPERTIES_SOURCE = 'properties';

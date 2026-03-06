@@ -41,7 +41,7 @@ export function useAutosearchWebSocket(
 ): UseAutosearchWebSocketReturn {
     const {
         url = typeof window !== 'undefined'
-            ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/websocket/autosearch`
+            ? `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080').replace(/^http/, 'ws')}/api/websocket/autosearch`
             : '',
         autoConnect = true,
         reconnectInterval = 3000,

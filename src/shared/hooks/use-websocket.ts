@@ -36,7 +36,9 @@ interface UseWebSocketReturn {
  */
 export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketReturn {
     const {
-        url = typeof window !== 'undefined' ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/websocket/chat` : '',
+        url = typeof window !== 'undefined'
+            ? `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080').replace(/^http/, 'ws')}/api/websocket/chat`
+            : '',
         autoConnect = false, // Changed to false - connect when user opens chat
         reconnectInterval = 3000,
         maxReconnectAttempts = 5,

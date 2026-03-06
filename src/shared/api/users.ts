@@ -1,10 +1,8 @@
 import type { UserResponse, UpdateUserRequest } from '@/entities/user';
 import { updateUserRequestSchema } from '@/entities/user';
 
-// На клиенте — относительный URL (прокси через Next.js rewrites), на сервере — прямой
-const API_BASE = typeof window !== 'undefined'
-    ? '/api/v1'
-    : `${(process.env.BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
+// Прямые запросы к бекенду (CORS на стороне бекенда)
+const API_BASE = `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
 
 /**
  * Кастомная ошибка API пользователей
