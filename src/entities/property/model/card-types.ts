@@ -32,6 +32,7 @@ export interface PropertyCardImage {
 // Линия транспорта (deprecated → используй TransportLineDTO)
 export interface TransportLine {
     name: string;
+    ref?: string;
     color: string;
 }
 
@@ -67,9 +68,10 @@ export interface PropertyGridCard {
     currency?: string;
     // Основные характеристики
     price: number;
-    price_per_meter?: number;
+    price_per_m2?: number;
     price_per_month?: number;
     rooms: number;
+    bedrooms?: number;
     bathrooms?: number;
     area: number;
     floor?: number;
@@ -128,7 +130,7 @@ export interface PropertyHorizontalCard {
     currency?: string;
     // Основные характеристики
     price: number;
-    price_per_meter?: number;
+    price_per_m2?: number;
     price_per_month?: number;
     rooms: number;
     bathrooms?: number;
@@ -181,7 +183,7 @@ export interface PropertyChatCard {
     sub_category?: SubcategoryCode;
     // Основные
     price: number;
-    price_per_meter?: number;
+    price_per_m2?: number;
     rooms: number;
     bathrooms: number;
     area: number;

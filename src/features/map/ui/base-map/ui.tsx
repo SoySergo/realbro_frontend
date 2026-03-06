@@ -97,7 +97,11 @@ export function BaseMap({
         });
 
         map.current.on('error', (e) => {
-            console.error('[BaseMap] Map error:', e);
+            // Логируем только ошибки с информативным сообщением
+            const errorMessage = e.error?.message;
+            if (errorMessage) {
+                console.error('[BaseMap] Map error:', errorMessage, e);
+            }
         });
 
         // Cleanup при размонтировании

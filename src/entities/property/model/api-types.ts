@@ -130,11 +130,12 @@ export interface PropertyShortListingDTO {
     title: string;
     slug: string;
     price: number;
-    price_per_meter?: number;
+    price_per_m2?: number;
     price_per_month?: number;
     area: number;
     area_useful?: number;
     rooms: number | null;
+    bedrooms?: number | null;
     bathrooms: number | null;
     floor: number | null;
     total_floors: number | null;

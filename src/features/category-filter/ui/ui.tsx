@@ -1,6 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { cn } from '@/shared/lib/utils';
@@ -9,26 +10,40 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/shared/ui/popover';
+import { getCategories, type Category } from '@/shared/api/dictionaries';
+
+// Фолбэк категории (если API недоступен)
+const FALLBACK_CATEGORIES = [
+    { id: 1, name: '', code: 'apartment' },
+    { id: 2, name: '', code: 'house' },
+    { id: 3, name: '', code: 'villa' },
+    { id: 4, name: '', code: 'studio' },
+    { id: 5, name: '', code: 'penthouse' },
+    { id: 6, name: '', code: 'townhouse' },
+];
 
 /**
  * Фильтр категорий недвижимости
  * Мультиселект для выбора нескольких категорий
+ * Данные загружаются из API /dictionaries/categories
  */
 export function CategoryFilter() {
     const t = useTranslations('filters');
     const tTypes = useTranslations('propertyTypes');
+    const locale = useLocale();
     const { filters, setFilters } = useSearchFilters();
 
-    // TODO: Эти категории должны приходить с бекенда
-    // Пока захардкодим для примера
-    const categories = [
-        { id: 1, label: tTypes('apartment') },
-        { id: 2, label: tTypes('house') },
-        { id: 3, label: tTypes('villa') },
-        { id: 4, label: tTypes('studio') },
-        { id: 5, label: tTypes('penthouse') },
-        { id: 6, label: tTypes('townhouse') },
-    ];
+    const [apiCategories, setApiCategories] = useState<Category[]>([]);
+
+    // Загружаем категории из API
+    useEffect(() => {
+        getCategories(locale).then(setApiCategories);
+    }, [locale]);
+
+    // Используем API категории если есть, иначе фолбэк
+    const categories = apiCategories.length > 0
+        ? apiCategories.map(c => ({ id: c.id, label: c.name || tTypes(c.code as Parameters<typeof tTypes>[0]) }))
+        : FALLBACK_CATEGORIES.map(c => ({ id: c.id, label: tTypes(c.code as Parameters<typeof tTypes>[0]) }));
 
     const selectedIds = filters.categoryIds || [];
 

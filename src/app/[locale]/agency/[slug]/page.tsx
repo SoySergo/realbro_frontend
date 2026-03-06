@@ -26,7 +26,7 @@ function propertyToGridCard(p: Property): PropertyGridCard {
         sub_category: p.sub_category,
         currency: p.currency,
         price: p.price,
-        price_per_meter: p.pricePerMeter,
+        price_per_m2: p.pricePerMeter,
         rooms: p.rooms,
         bathrooms: p.bathrooms,
         area: p.area,

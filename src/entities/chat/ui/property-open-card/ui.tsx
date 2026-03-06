@@ -221,9 +221,9 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                     <div className="text-2xl font-bold text-text-primary">
                         {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{perMonth}</span>
                     </div>
-                    {property.price_per_meter && (
+                    {property.price_per_m2 && (
                         <div className="text-sm text-text-tertiary">
-                            {property.price_per_meter} €/m²
+                            {property.price_per_m2} €/m²
                         </div>
                     )}
                 </div>

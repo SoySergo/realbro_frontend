@@ -193,7 +193,7 @@ export function generateMockProperty(index: number): PropertyChatCard {
         title: `${neighborhood} - ${type === 'studio' ? 'Estudio' : bedrooms + 'BR'} ${type}`,
         type,
         price,
-        price_per_meter: Math.round(price / area),
+        price_per_m2: Math.round(price / area),
         rooms: bedrooms,
         bathrooms: Math.floor(Math.random() * 2) + 1,
         area,

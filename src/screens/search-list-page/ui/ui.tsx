@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useTransition, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Loader2 } from 'lucide-react';
@@ -18,7 +18,7 @@ import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { MapPreview } from '@/widgets/map-preview';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
-import { Pagination } from '@/shared/ui/pagination';
+import { getPropertiesList } from '@/shared/api';
 import type { PropertiesListResponse } from '@/shared/api/properties-server';
 import type { SearchFilters } from '@/entities/filter';
 import type { PropertyGridCard } from '@/entities/property';
@@ -44,18 +44,20 @@ export function SearchListPage({
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [isPending, startTransition] = useTransition();
 
     const tListing = useTranslations('listing');
 
     // State
-    const [properties] = useState<PropertyGridCard[]>(initialData.data);
-    const [pagination] = useState(initialData.pagination);
+    const [properties, setProperties] = useState<PropertyGridCard[]>(initialData.data);
+    const [pagination, setPagination] = useState(initialData.pagination);
     const [page, setPage] = useState(initialPage);
     const [sortBy, setSortBy] = useState<PropertySortBy>(initialSortBy);
     const [sortOrder, setSortOrder] = useState<PropertySortOrder>(initialSortOrder);
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
     const [isMapVisible, setIsMapVisible] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const sentinelRef = useRef<HTMLDivElement>(null);
+    const loadingRef = useRef(false);
 
     // Ref for MapPreview to track visibility
     const mapPreviewRef = useRef<HTMLDivElement>(null);
@@ -87,17 +89,15 @@ export function SearchListPage({
         return () => observer.disconnect();
     }, []);
 
-    // Update URL when pagination/sort changes
+    // Update URL when sort changes (no page in URL for infinite scroll)
     const updateUrl = useCallback(
-        (newPage: number, newSortBy: PropertySortBy, newSortOrder: PropertySortOrder) => {
+        (newSortBy: PropertySortBy, newSortOrder: PropertySortOrder) => {
             const params = new URLSearchParams(searchParams.toString());
-            params.set('page', String(newPage));
+            params.delete('page');
             params.set('sortBy', newSortBy);
             params.set('sortOrder', newSortOrder);
 
-            startTransition(() => {
-                router.push(`${pathname}?${params.toString()}`, { scroll: false });
-            });
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
         },
         [router, pathname, searchParams]
     );
@@ -106,20 +106,63 @@ export function SearchListPage({
         const newSortBy = value as PropertySortBy;
         setSortBy(newSortBy);
         setPage(1);
-        updateUrl(1, newSortBy, sortOrder);
+        setProperties(initialData.data);
+        setPagination(initialData.pagination);
+        updateUrl(newSortBy, sortOrder);
     };
 
     const toggleSortOrder = () => {
         const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
         setSortOrder(newOrder);
-        updateUrl(page, sortBy, newOrder);
+        setPage(1);
+        setProperties(initialData.data);
+        setPagination(initialData.pagination);
+        updateUrl(sortBy, newOrder);
     };
 
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-        updateUrl(newPage, sortBy, sortOrder);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    // Подгрузка следующей страницы при скролле
+    const totalPages = pagination?.totalPages ?? 1;
+    const hasMore = page < totalPages;
+
+    const loadMore = useCallback(async () => {
+        if (loadingRef.current || !hasMore) return;
+        loadingRef.current = true;
+        setIsLoadingMore(true);
+        try {
+            const nextPage = page + 1;
+            const response = await getPropertiesList({
+                filters: initialFilters,
+                page: nextPage,
+                limit: 24,
+                sortBy,
+                sortOrder,
+            });
+            setProperties(prev => [...prev, ...response.data]);
+            setPagination(response.pagination);
+            setPage(nextPage);
+        } catch (error) {
+            console.error('Failed to load more properties:', error);
+        } finally {
+            setIsLoadingMore(false);
+            loadingRef.current = false;
+        }
+    }, [page, hasMore, initialFilters, sortBy, sortOrder]);
+
+    // IntersectionObserver для sentinel элемента в конце списка
+    useEffect(() => {
+        if (!sentinelRef.current || !hasMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !loadingRef.current && hasMore) {
+                    loadMore();
+                }
+            },
+            { threshold: 0.1 }
+        );
+        observer.observe(sentinelRef.current);
+        return () => observer.disconnect();
+    }, [hasMore, loadMore]);
 
     const handleShowOnMap = () => {
         const params = new URLSearchParams(searchParams.toString());
@@ -132,8 +175,6 @@ export function SearchListPage({
         },
         [router]
     );
-
-    const totalPages = pagination?.totalPages ?? 1;
 
     return (
         <div className="flex min-h-screen bg-background">
@@ -167,15 +208,8 @@ export function SearchListPage({
                     onShowOnMap={handleShowOnMap}
                 />
 
-                {/* Loading overlay */}
-                {isPending && (
-                    <div className="fixed inset-0 bg-background/50 z-50 flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-                    </div>
-                )}
-
                 {/* Mobile counter */}
-                {pagination?.total && (
+                {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
                     <div className="md:hidden px-3 pt-2 pb-1">
                         <span className="text-sm text-text-secondary">
                             {tListing('subtitle', {
@@ -225,15 +259,15 @@ export function SearchListPage({
                             <p className="text-sm mt-2">{tListing('emptySubtitle')}</p>
                         </div>
                     )}
-                </div>
 
-                {/* Pagination */}
-                <Pagination
-                    page={page}
-                    totalPages={totalPages}
-                    disabled={isPending}
-                    onPageChange={handlePageChange}
-                />
+                    {/* Sentinel элемент для infinite scroll */}
+                    {hasMore && <div ref={sentinelRef} className="h-10" />}
+                    {isLoadingMore && (
+                        <div className="flex justify-center py-6">
+                            <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
+                        </div>
+                    )}
+                </div>
             </main>
 
             {/* Floating Map Button - visible when MapPreview is scrolled out of view and filters are closed */}

@@ -91,11 +91,11 @@ export function SearchMapPage() {
         router.push(`/property/${property.slug || property.id}`);
     }, [router]);
 
-    // Обработчик наведения - подсветить на карте
+    // Обработчик наведения — подсветить на карте
+    const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
+
     const handlePropertyHover = useCallback((property: PropertyGridCard | null) => {
-        if (property) {
-            console.log('Property hover:', property.id);
-        }
+        setHoveredPropertyId(property?.id || null);
     }, []);
 
     // Клик по маркеру на карте → выделить карточку в сайдбаре
@@ -150,6 +150,7 @@ export function SearchMapPage() {
                             <SearchMap
                                 onMarkerClick={handleMarkerClick}
                                 onClusterClick={handleClusterClick}
+                                highlightedPropertyId={hoveredPropertyId}
                             />
                         </div>
                     </div>

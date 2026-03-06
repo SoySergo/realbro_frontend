@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import {
     Select,
     SelectContent,
@@ -246,79 +247,90 @@ export function MapSidebar({
                 className
             )}
         >
-            {/* Sticky Header */}
+            {/* Sticky Header — компактный */}
             <div className="p-3 pt-4 border-b border-border shrink-0 sticky top-0 z-10 bg-background">
-                <div className="flex items-center gap-2 mb-2">
-                    {/* Кнопка переключения на режим списка */}
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleSwitchToList}
-                        className="h-9 gap-1.5"
-                        title={tMapSidebar('showAsList')}
-                    >
-                        <ListIcon className="w-4 h-4" />
-                        <span className="text-xs">{tMapSidebar('showAsList')}</span>
-                    </Button>
-
-                    {/* Разделитель */}
-                    <div className="w-px h-6 bg-border" />
-
-                    {/* Сортировка */}
-                    <Select value={sortBy} onValueChange={handleSortChange}>
-                        <SelectTrigger className="w-[110px] h-9 text-xs">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {sortOptions.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={toggleSortOrder}
-                        className="h-9 w-9 p-0"
-                        aria-label={
-                            sortOrder === 'asc'
-                                ? tMapSidebar('sortDescending')
-                                : tMapSidebar('sortAscending')
-                        }
-                    >
-                        <ArrowUpDown
-                            className={cn(
-                                'w-4 h-4 transition-transform',
-                                sortOrder === 'asc' && 'rotate-180'
-                            )}
-                        />
-                    </Button>
-
-                </div>
-
-                {/* Кластер и счётчик */}
-                <div className="flex items-center justify-between">
-                    {(clusterId || (clusterPropertyIds && clusterPropertyIds.length > 0)) && onClusterReset ? (
+                {(clusterId || (clusterPropertyIds && clusterPropertyIds.length > 0)) && onClusterReset ? (
+                    // Режим кластера: название + кнопка закрыть
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                            {tMapSidebar('clusterObjects')}
+                        </span>
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             onClick={onClusterReset}
-                            className="h-7 text-xs gap-1"
+                            className="h-8 w-8 p-0"
+                            aria-label={tMapSidebar('resetCluster')}
                         >
-                            <X className="w-3 h-3" />
-                            {tMapSidebar('resetCluster')}
+                            <X className="w-4 h-4" />
                         </Button>
-                    ) : (
+                    </div>
+                ) : (
+                    // Обычный режим: счётчик слева, кнопки справа
+                    <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">
                             {pagination
                                 ? tMapSidebar('objectsCount', { count: pagination.total })
                                 : ''}
                         </span>
-                    )}
-                </div>
+                        <div className="flex items-center gap-1">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={handleSwitchToList}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <ListIcon className="w-4 h-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>{tMapSidebar('showAsList')}</TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+
+                            {/* Сортировка — компактный dropdown + порядок */}
+                            <Select value={sortBy} onValueChange={handleSortChange}>
+                                <SelectTrigger className="w-[100px] h-8 text-xs">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {sortOptions.map((option) => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={toggleSortOrder}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <ArrowUpDown
+                                                className={cn(
+                                                    'w-4 h-4 transition-transform',
+                                                    sortOrder === 'asc' && 'rotate-180'
+                                                )}
+                                            />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {sortOrder === 'asc'
+                                            ? tMapSidebar('sortDescending')
+                                            : tMapSidebar('sortAscending')}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Загрузка */}

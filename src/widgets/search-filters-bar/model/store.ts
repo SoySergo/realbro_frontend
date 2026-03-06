@@ -9,6 +9,7 @@ import type { LocationFilter } from '@/features/location-filter/model/types';
 import type { LocationItem } from '@/entities/location/model/types';
 import { adminLevelToLocationField } from '@/entities/boundary';
 import { useSidebarStore } from '@/widgets/sidebar';
+import { clearAllLocationStorage } from '@/features/location-search-mode/model/hooks/use-search-mode-state';
 
 // Режим отображения поиска: карта (с сайдбаром) или список (без карты)
 export type SearchViewMode = 'map' | 'list';
@@ -197,16 +198,18 @@ function convertFiltersToLocationFilter(
         };
     }
 
-    // Проверяем полигоны
+    // Проверяем полигоны — восстанавливаем первый найденный среди всех geometryIds
     if (filters.geometryIds && filters.geometryIds.length > 0) {
-        const polygonId = `polygon_${filters.geometryIds[0]}`;
-        const polygon = savedPolygons.find((p) => p.id === polygonId);
+        for (const geoId of filters.geometryIds) {
+            const polygonId = `polygon_${geoId}`;
+            const polygon = savedPolygons.find((p) => p.id === polygonId);
 
-        if (polygon) {
-            return {
-                mode: 'draw',
-                polygon,
-            };
+            if (polygon) {
+                return {
+                    mode: 'draw',
+                    polygon,
+                };
+            }
         }
     }
 
@@ -275,6 +278,7 @@ export const useFilterStore = create<FilterStore>()(
                 });
 
                 // Очищаем localStorage для всех режимов локации
+                clearAllLocationStorage();
                 try {
                     localStorage.removeItem('local-location-states');
                     console.log('[LOCAL] Cleared localStorage on reset');

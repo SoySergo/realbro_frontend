@@ -32,9 +32,10 @@ export function dtoToGridCard(dto: PropertyShortListingDTO): PropertyGridCard {
         category: dto.category,
         sub_category: dto.sub_category,
         price: dto.price,
-        price_per_meter: dto.price_per_meter,
+        price_per_m2: dto.price_per_m2,
         price_per_month: dto.price_per_month,
         rooms: dto.rooms ?? 0,
+        bedrooms: dto.bedrooms ?? undefined,
         bathrooms: dto.bathrooms ?? undefined,
         area: dto.area,
         floor: dto.floor ?? undefined,
@@ -51,6 +52,7 @@ export function dtoToGridCard(dto: PropertyShortListingDTO): PropertyGridCard {
             station_name: dto.location.transport.name,
             lines: (dto.location.transport.lines ?? []).map(line => ({
                 name: line.name,
+                ref: line.ref,
                 color: line.color ?? '#E50914',
             })),
             walk_minutes: dto.location.transport.walking_duration

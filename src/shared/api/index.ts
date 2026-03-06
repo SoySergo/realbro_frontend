@@ -7,6 +7,7 @@ export * from './properties';
 export * from './search-queries';
 export * from './geometries';
 export * from './contacts';
+export * from './dictionaries';
 
 // API Client
 export { apiClient, ApiError, setAccessToken, getAccessToken } from './lib/api-client';
