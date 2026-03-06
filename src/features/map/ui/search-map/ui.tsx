@@ -27,6 +27,10 @@ type SearchMapProps = {
     onClusterClick?: (propertyIds: string[]) => void;
     /** Колбэк при клике на индивидуальный маркер */
     onMarkerClick?: (propertyId: string) => void;
+    /** Колбэк при изменении видимой области карты — передаёт bbox */
+    onBoundsChange?: (bbox: [number, number, number, number]) => void;
+    /** ID свойства для подсветки на карте */
+    highlightedPropertyId?: string | null;
 };
 
 /**
@@ -46,7 +50,7 @@ function buildTileUrl(filters: any): string {
  * - Если активен режим фильтра локации (search/draw/isochrone/radius) - показывает панель управления
  * - Если режим НЕ активен - показывает маркеры недвижимости на карте (MVT тайлы)
  */
-export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarkerClick }: SearchMapProps) {
+export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarkerClick, onBoundsChange, highlightedPropertyId }: SearchMapProps) {
     const [mapInstance, setMapInstance] = useState<mapboxgl.Map | null>(null);
     const { activeLocationMode } = useFilterStore();
     const currentFilters = useCurrentFilters();
@@ -111,18 +115,25 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             },
         });
 
-        // Слой индивидуальных точек (z > 15)
+        // Слой индивидуальных точек — отображаем цену
         map.addLayer({
             id: PROPERTIES_LAYER_POINTS,
-            type: 'circle',
+            type: 'symbol',
             source: PROPERTIES_SOURCE,
             'source-layer': PROPERTIES_SOURCE,
             filter: ['!', ['has', 'point_count']],
+            layout: {
+                'text-field': ['concat', ['get', 'price_formatted'], '€'],
+                'text-size': 11,
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-anchor': 'center',
+                'text-allow-overlap': false,
+                'text-ignore-placement': false,
+            },
             paint: {
-                'circle-color': '#007cbf',
-                'circle-radius': 8,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#ffffff',
+                'text-color': '#1a1a2e',
+                'text-halo-color': '#ffffff',
+                'text-halo-width': 1.5,
             },
         });
 
@@ -246,6 +257,91 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             mapInstance.off('mouseleave', PROPERTIES_LAYER_POINTS, handleMouseLeave);
         };
     }, [mapInstance, onClusterClick, onMarkerClick]);
+
+    // Обработчик moveend — передаём bbox наверх для обновления сайдбара
+    useEffect(() => {
+        if (!mapInstance || !onBoundsChange) return;
+
+        const handleMoveEnd = () => {
+            const bounds = mapInstance.getBounds();
+            if (bounds) {
+                onBoundsChange([
+                    bounds.getWest(),
+                    bounds.getSouth(),
+                    bounds.getEast(),
+                    bounds.getNorth()
+                ]);
+            }
+        };
+
+        mapInstance.on('moveend', handleMoveEnd);
+        return () => {
+            mapInstance.off('moveend', handleMoveEnd);
+        };
+    }, [mapInstance, onBoundsChange]);
+
+    // Подсветка свойства на карте при ховере на карточку в сайдбаре
+    useEffect(() => {
+        if (!mapInstance || !layersInitializedRef.current) return;
+
+        const HIGHLIGHT_SOURCE = 'highlight-property';
+        const HIGHLIGHT_LAYER = 'highlight-property-layer';
+
+        if (!highlightedPropertyId) {
+            // Убираем подсветку
+            if (mapInstance.getLayer(HIGHLIGHT_LAYER)) {
+                mapInstance.setLayoutProperty(HIGHLIGHT_LAYER, 'visibility', 'none');
+            }
+            return;
+        }
+
+        // Ищем объект среди отрендеренных features
+        const features = mapInstance.queryRenderedFeatures(undefined, {
+            layers: [PROPERTIES_LAYER_POINTS],
+        });
+        const feature = features.find(f => f.properties?.id === highlightedPropertyId);
+
+        if (feature && feature.geometry.type === 'Point') {
+            const coords = feature.geometry.coordinates as [number, number];
+
+            // Обновляем или создаём source/layer для подсветки
+            const source = mapInstance.getSource(HIGHLIGHT_SOURCE) as mapboxgl.GeoJSONSource | undefined;
+            const geojson: GeoJSON.FeatureCollection = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: coords },
+                    properties: {},
+                }],
+            };
+
+            if (source) {
+                source.setData(geojson);
+            } else {
+                mapInstance.addSource(HIGHLIGHT_SOURCE, {
+                    type: 'geojson',
+                    data: geojson,
+                });
+            }
+
+            if (!mapInstance.getLayer(HIGHLIGHT_LAYER)) {
+                mapInstance.addLayer({
+                    id: HIGHLIGHT_LAYER,
+                    type: 'circle',
+                    source: HIGHLIGHT_SOURCE,
+                    paint: {
+                        'circle-radius': 14,
+                        'circle-color': '#FF6B35',
+                        'circle-stroke-width': 3,
+                        'circle-stroke-color': '#ffffff',
+                        'circle-opacity': 0.9,
+                    },
+                });
+            } else {
+                mapInstance.setLayoutProperty(HIGHLIGHT_LAYER, 'visibility', 'visible');
+            }
+        }
+    }, [mapInstance, highlightedPropertyId]);
 
     return (
         <>

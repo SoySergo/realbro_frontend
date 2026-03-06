@@ -272,7 +272,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
 
     return (
         <div className="w-full relative z-50">
-            <div className="flex items-center gap-2 px-3 w-full justify-center">
+            <div className="flex items-center gap-2 px-3 w-full justify-end">
                 {/* Переключатель категории */}
                 <SearchCategorySwitcher currentCategory={currentCategory} locale={locale} />
 
