@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { LocationItem } from '@/entities/location';
+import type { LocationFilterMode } from '@/features/location-filter/model/types';
 
 // === Персистенция в localStorage ===
 const STORAGE_KEY_PREFIX = 'location-mode-data-';
@@ -37,9 +38,9 @@ export function clearAllLocationStorage(): void {
 /**
  * React state для режима поиска локаций с персистенцией в localStorage
  * Управляет списком выбранных локаций до применения фильтра
- * @param mode — название режима (search, draw, etc.)
+ * @param mode — режим локации (search, draw, isochrone, radius)
  */
-export function useSearchModeState(mode: string = 'search') {
+export function useSearchModeState(mode: LocationFilterMode = 'search') {
     const [selectedLocations, setSelectedLocations] = useState<LocationItem[]>(
         () => loadFromStorage(mode)
     );
