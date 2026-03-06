@@ -83,9 +83,9 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                     <span className="text-lg font-bold text-brand-primary">
                         {property.price.toLocaleString()} €
                     </span>
-                    {property.price_per_meter && (
+                    {property.price_per_m2 && (
                         <span className="text-[10px] text-text-tertiary">
-                            {property.price_per_meter} €/m²
+                            {property.price_per_m2} €/m²
                         </span>
                     )}
                 </div>

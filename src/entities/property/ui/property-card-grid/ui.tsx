@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -54,27 +54,40 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
 
     // Дата публикации: приоритет published_at (бекенд), fallback на updated_at, затем created_at (legacy)
     // Go zero time "0001-01-01T00:00:00Z" считаем пустым значением
-    const timeAgo = useMemo(() => {
+    // Вычисляем только на клиенте через useEffect для избежания hydration mismatch
+    const [timeAgo, setTimeAgo] = useState('');
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Намеренно: вычисляем timeAgo на клиенте для избежания hydration mismatch
+    useEffect(() => {
         const isZeroTime = (d: string) => d.startsWith('0001-01-01');
         const raw = property.published_at && !isZeroTime(property.published_at)
             ? property.published_at
             : property.updated_at && !isZeroTime(property.updated_at)
                 ? property.updated_at
                 : property.created_at;
-        if (!raw || isZeroTime(raw)) return '';
+        if (!raw || isZeroTime(raw)) {
+            setTimeAgo('');
+            return;
+        }
         const now = new Date();
         const created = new Date(raw);
-        if (isNaN(created.getTime())) return '';
+        if (isNaN(created.getTime())) {
+            setTimeAgo('');
+            return;
+        }
         const diffMs = now.getTime() - created.getTime();
-        if (diffMs < 0) return '';
+        if (diffMs < 0) {
+            setTimeAgo('');
+            return;
+        }
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMins / 60);
         const diffDays = Math.floor(diffHours / 24);
 
-        if (diffMins < 1) return t('justNow');
-        if (diffMins < 60) return t('minutesAgo', { count: diffMins });
-        if (diffHours < 24) return t('hoursAgo', { count: diffHours });
-        return t('daysAgo', { count: diffDays });
+        if (diffMins < 1) setTimeAgo(t('justNow'));
+        else if (diffMins < 60) setTimeAgo(t('minutesAgo', { count: diffMins }));
+        else if (diffHours < 24) setTimeAgo(t('hoursAgo', { count: diffHours }));
+        else setTimeAgo(t('daysAgo', { count: diffDays }));
     }, [property.published_at, property.updated_at, property.created_at, t]);
 
     const displayImages = property.images.slice(0, MAX_HOVER_IMAGES);
@@ -211,27 +224,40 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
 
                 {/* Author avatar and time */}
                 <div className="absolute top-2 right-2 z-10">
-                    {property.author && (
-                        <Link
-                            href={`/agency/${property.author.slug || property.author.id}`}
-                            className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Avatar className="w-5 h-5">
-                                <AvatarImage src={safeImageSrc(
-                                    property.author.avatar
-                                    || ('company_logo' in property.author ? property.author.company_logo : undefined)
-                                )} />
-                                <AvatarFallback className="text-[10px] bg-brand-primary text-white">
-                                    {('company_name' in property.author && property.author.company_name
-                                        ? property.author.company_name
-                                        : property.author.name
-                                    ).charAt(0).toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <span className="text-[10px] text-text-secondary">{timeAgo}</span>
-                        </Link>
-                    )}
+                    {property.author && (() => {
+                        const authorSlug = property.author!.slug || property.author!.id;
+                        const avatarContent = (
+                            <>
+                                <Avatar className="w-5 h-5">
+                                    <AvatarImage src={safeImageSrc(
+                                        property.author!.avatar
+                                        || ('company_logo' in property.author! ? property.author!.company_logo : undefined)
+                                    )} />
+                                    <AvatarFallback className="text-[10px] bg-brand-primary text-white">
+                                        {('company_name' in property.author! && property.author!.company_name
+                                            ? property.author!.company_name
+                                            : property.author!.name
+                                        ).charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <span className="text-[10px] text-text-secondary">{timeAgo}</span>
+                            </>
+                        );
+
+                        return authorSlug ? (
+                            <Link
+                                href={`/agency/${authorSlug}`}
+                                className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md hover:shadow-lg transition-shadow"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {avatarContent}
+                            </Link>
+                        ) : (
+                            <div className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-full pl-0.5 pr-2 py-0.5 shadow-md">
+                                {avatarContent}
+                            </div>
+                        );
+                    })()}
                 </div>
             </div>
 
@@ -243,7 +269,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
                             <span className="font-bold text-foreground">{formatPrice(property.price)}</span>
                             <span className="text-xs sm:text-[11px] text-muted-foreground font-normal">
-                                {property.price_per_meter?.toLocaleString('ru-RU')} {t('pricePerMeter')}
+                                {property.price_per_m2?.toLocaleString('ru-RU')} {t('pricePerMeter')}
                             </span>
                         </div>
                     </div>
@@ -289,6 +315,14 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         <>
                             <span className="font-medium whitespace-nowrap">
                                 {property.rooms} {t('roomsShort')}
+                            </span>
+                            <span className="text-muted-foreground">·</span>
+                        </>
+                    )}
+                    {property.bedrooms != null && property.bedrooms > 0 && (
+                        <>
+                            <span className="font-medium whitespace-nowrap">
+                                {property.bedrooms} {t('bedroomsShort')}
                             </span>
                             <span className="text-muted-foreground">·</span>
                         </>
@@ -342,7 +376,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                             backgroundColor: line.color || DEFAULT_METRO_LINE_COLOR,
                                         }}
                                     >
-                                        {line.name || 'M'}
+                                        {line.ref || line.name || 'M'}
                                     </div>
                                 ))}
                                 {(property.transport_station.lines?.length ?? 0) > MAX_TRANSPORT_LINES && (
@@ -353,7 +387,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                                     +{(property.transport_station.lines?.length ?? 0) - MAX_TRANSPORT_LINES}
                                                 </div>
                                             </TooltipTrigger>
-                                            <TooltipContent side="top" className="max-w-xs">
+                                            <TooltipContent side="top" className="bg-popover text-popover-foreground max-w-xs">
                                                 <div className="flex flex-wrap gap-1">
                                                     {property.transport_station.lines?.map((line, idx) => (
                                                         <div
@@ -363,7 +397,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                                                 backgroundColor: line.color || DEFAULT_METRO_LINE_COLOR,
                                                             }}
                                                         >
-                                                            {line.name || 'M'}
+                                                            {line.ref || line.name || 'M'}
                                                         </div>
                                                     ))}
                                                 </div>

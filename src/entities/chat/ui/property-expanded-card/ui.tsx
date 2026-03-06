@@ -191,9 +191,9 @@ export function PropertyExpandedCard({
                     <span className="text-2xl font-bold text-brand-primary">
                         {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">/мес</span>
                     </span>
-                    {property.price_per_meter && (
+                    {property.price_per_m2 && (
                         <span className="text-xs text-text-tertiary">
-                            {property.price_per_meter} €/m²
+                            {property.price_per_m2} €/m²
                         </span>
                     )}
                 </div>
