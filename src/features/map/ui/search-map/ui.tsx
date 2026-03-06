@@ -296,9 +296,11 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         }
 
         // Ищем объект среди отрендеренных features
-        const features = mapInstance.queryRenderedFeatures(undefined, {
-            layers: [PROPERTIES_LAYER_POINTS],
-        });
+        const canvas = mapInstance.getCanvas();
+        const features = mapInstance.queryRenderedFeatures(
+            [[0, 0], [canvas.width, canvas.height]],
+            { layers: [PROPERTIES_LAYER_POINTS] }
+        );
         const feature = features.find(f => f.properties?.id === highlightedPropertyId);
 
         if (feature && feature.geometry.type === 'Point') {

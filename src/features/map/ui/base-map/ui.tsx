@@ -98,8 +98,9 @@ export function BaseMap({
 
         map.current.on('error', (e) => {
             // Логируем только ошибки с информативным сообщением
-            if (e.error?.message || e.message) {
-                console.error('[BaseMap] Map error:', e.error?.message || e.message, e);
+            const errorMessage = e.error?.message;
+            if (errorMessage) {
+                console.error('[BaseMap] Map error:', errorMessage, e);
             }
         });
 

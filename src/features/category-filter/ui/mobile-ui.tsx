@@ -1,9 +1,21 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 import { CheckIcon } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { cn } from '@/shared/lib/utils';
+import { getCategories, type Category } from '@/shared/api/dictionaries';
+
+// Фолбэк категории
+const FALLBACK_CATEGORIES = [
+    { id: 1, name: '', code: 'apartment' },
+    { id: 2, name: '', code: 'house' },
+    { id: 3, name: '', code: 'villa' },
+    { id: 4, name: '', code: 'studio' },
+    { id: 5, name: '', code: 'penthouse' },
+    { id: 6, name: '', code: 'townhouse' },
+];
 
 interface CategoryFilterMobileProps {
     value?: number[];
@@ -13,22 +25,24 @@ interface CategoryFilterMobileProps {
 /**
  * Мобильная версия фильтра категорий недвижимости
  * Отображается как развёрнутый список с чекбоксами (мультиселект)
- * Может работать как контролируемый компонент (с пропсами) или использовать глобальный store
+ * Данные загружаются из API /dictionaries/categories
  */
 export function CategoryFilterMobile({ value, onChange }: CategoryFilterMobileProps = {}) {
     const tTypes = useTranslations('propertyTypes');
+    const locale = useLocale();
     const { filters, setFilters } = useSearchFilters();
 
-    // TODO: Эти категории должны приходить с бекенда
-    // Пока захардкодим для примера
-    const categories = [
-        { id: 1, label: tTypes('apartment') },
-        { id: 2, label: tTypes('house') },
-        { id: 3, label: tTypes('villa') },
-        { id: 4, label: tTypes('studio') },
-        { id: 5, label: tTypes('penthouse') },
-        { id: 6, label: tTypes('townhouse') },
-    ];
+    const [apiCategories, setApiCategories] = useState<Category[]>([]);
+
+    // Загружаем категории из API
+    useEffect(() => {
+        getCategories(locale).then(setApiCategories);
+    }, [locale]);
+
+    // Используем API категории если есть, иначе фолбэк
+    const categories = apiCategories.length > 0
+        ? apiCategories.map(c => ({ id: c.id, label: c.name || tTypes(c.code as Parameters<typeof tTypes>[0]) }))
+        : FALLBACK_CATEGORIES.map(c => ({ id: c.id, label: tTypes(c.code as Parameters<typeof tTypes>[0]) }));
 
     // Используем переданное значение или берём из store
     const selectedIds = value ?? filters.categoryIds ?? [];
