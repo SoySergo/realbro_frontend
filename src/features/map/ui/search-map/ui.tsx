@@ -177,6 +177,9 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         setMapInstance(map);
         console.log('[SearchMap] Map instance ready');
 
+        // Сброс флага — для реинициализации при смене темы
+        layersInitializedRef.current = false;
+
         // Инициализируем слои MVT тайлов
         initializePropertyLayers(map);
     }, [initializePropertyLayers]);

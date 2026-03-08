@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mapboxConfig } from '@/shared/lib/mapbox';
+import { useTheme } from 'next-themes';
 
-// Стиль карты - светлый для обеих тем
-const MAP_STYLE = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
+// Стили карты
+const MAP_STYLE_LIGHT = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
+const MAP_STYLE_DARK = 'mapbox://styles/serhii11/cmi1yrucv00oa01qu6ciub5td';
 
 type BaseMapProps = {
     /** Начальный центр карты [lng, lat] */
@@ -72,6 +74,9 @@ export function BaseMap({
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const [isMapReady, setIsMapReady] = useState(false);
+    const { resolvedTheme } = useTheme();
+
+    const getMapStyle = () => resolvedTheme === 'dark' ? MAP_STYLE_DARK : MAP_STYLE_LIGHT;
 
     // Инициализация карты
     useEffect(() => {
@@ -82,7 +87,7 @@ export function BaseMap({
         // Создаём инстанс карты
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: MAP_STYLE,
+            style: getMapStyle(),
             center: initialCenter,
             zoom: initialZoom,
         });
@@ -125,6 +130,31 @@ export function BaseMap({
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Сохраняем onMapLoad в ref для доступа при смене темы
+    const onMapLoadRef = useRef(onMapLoad);
+    onMapLoadRef.current = onMapLoad;
+
+    // Реакция на смену темы — меняем стиль карты
+    useEffect(() => {
+        if (!map.current || !isMapReady) return;
+
+        const newStyle = getMapStyle();
+
+        if (resolvedTheme) {
+            const mapRef = map.current;
+
+            // После setStyle все кастомные sources/layers удаляются
+            // Ждём style.load и перевызываем onMapLoad для реинициализации слоёв
+            mapRef.once('style.load', () => {
+                console.log('[BaseMap] Style changed to', resolvedTheme);
+                onMapLoadRef.current?.(mapRef);
+            });
+
+            mapRef.setStyle(newStyle);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resolvedTheme]);
 
     return (
         <div className="relative h-full w-full">
