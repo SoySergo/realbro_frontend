@@ -24,7 +24,7 @@ import {
     SelectValue,
 } from '@/shared/ui/select';
 import { useCurrentFilters, useViewModeActions } from '@/widgets/search-filters-bar';
-import { getPropertiesList, getPropertiesByIds, type PropertiesListResponse } from '@/shared/api';
+import { getPropertiesList, getPropertiesByIds, getPropertiesCount, type PropertiesListResponse } from '@/shared/api';
 import type { PropertyGridCard } from '@/entities/property';
 import { PropertyCardGrid } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
@@ -136,6 +136,7 @@ export function MapSidebar({
 
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [pagination, setPagination] = useState<PropertiesListResponse['pagination'] | null>(null);
+    const [totalCount, setTotalCount] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState<PropertySortBy>('createdAt');
@@ -164,7 +165,22 @@ export function MapSidebar({
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
 
-                    const data = await getPropertiesByIds(clusterPropertyIds);
+                    let data = await getPropertiesByIds(clusterPropertyIds);
+
+                    data = data.sort((a, b) => {
+                        let comparison = 0;
+                        if (sortBy === 'price') {
+                            comparison = a.price - b.price;
+                        } else if (sortBy === 'area') {
+                            comparison = (a.area || 0) - (b.area || 0);
+                        } else {
+                            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                            comparison = dateA - dateB;
+                        }
+                        return sortOrder === 'asc' ? comparison : -comparison;
+                    });
+
                     setProperties(data);
                     setPagination({
                         page: 1,
@@ -212,6 +228,23 @@ export function MapSidebar({
         setProperties([]);
     }, [sortBy, sortOrder, currentFilters, clusterId]);
 
+    // Загрузка реального каунта
+    useEffect(() => {
+        if (clusterPropertyIds && clusterPropertyIds.length > 0) {
+            setTotalCount(clusterPropertyIds.length);
+            return;
+        }
+
+        const controller = new AbortController();
+        getPropertiesCount(currentFilters, controller.signal)
+            .then(count => setTotalCount(count))
+            .catch(err => {
+                if (err.name !== 'AbortError') console.error('Failed to get count:', err);
+            });
+
+        return () => controller.abort();
+    }, [currentFilters, clusterPropertyIds]);
+
     const handleSortChange = (value: string) => {
         setSortBy(value as PropertySortBy);
     };
@@ -247,90 +280,86 @@ export function MapSidebar({
                 className
             )}
         >
-            {/* Sticky Header — компактный */}
-            <div className="p-3 pt-4 border-b border-border shrink-0 sticky top-0 z-10 bg-background">
-                {(clusterId || (clusterPropertyIds && clusterPropertyIds.length > 0)) && onClusterReset ? (
-                    // Режим кластера: название + кнопка закрыть
-                    <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                            {tMapSidebar('clusterObjects')}
+            {/* Sticky Header */}
+            <div className="p-3 pt-4 border-b border-border shrink-0 sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        {(clusterId || (clusterPropertyIds && clusterPropertyIds.length > 0)) && onClusterReset && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={onClusterReset}
+                                className="h-8 w-8 p-0 rounded-full hover:bg-background-secondary"
+                                aria-label={tMapSidebar('resetCluster')}
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </Button>
+                        )}
+                        <span className="text-sm font-medium text-text-primary">
+                            {(clusterPropertyIds && clusterPropertyIds.length > 0)
+                                ? tMapSidebar('objectsCount', { count: clusterPropertyIds.length })
+                                : totalCount !== null
+                                    ? tMapSidebar('objectsCount', { count: totalCount })
+                                    : ''}
                         </span>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={onClusterReset}
-                            className="h-8 w-8 p-0"
-                            aria-label={tMapSidebar('resetCluster')}
-                        >
-                            <X className="w-4 h-4" />
-                        </Button>
                     </div>
-                ) : (
-                    // Обычный режим: счётчик слева, кнопки справа
-                    <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                            {pagination
-                                ? tMapSidebar('objectsCount', { count: pagination.total })
-                                : ''}
-                        </span>
-                        <div className="flex items-center gap-1">
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={handleSwitchToList}
-                                            className="h-8 w-8 p-0"
-                                        >
-                                            <ListIcon className="w-4 h-4" />
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>{tMapSidebar('showAsList')}</TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
 
-                            {/* Сортировка — компактный dropdown + порядок */}
-                            <Select value={sortBy} onValueChange={handleSortChange}>
-                                <SelectTrigger className="w-[100px] h-8 text-xs">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {sortOptions.map((option) => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                    <div className="flex items-center gap-1.5">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={handleSwitchToList}
+                                        className="h-8 w-8 p-0 text-muted-foreground hover:text-text-primary"
+                                    >
+                                        <ListIcon className="w-4 h-4" />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{tMapSidebar('showAsList')}</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
 
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={toggleSortOrder}
-                                            className="h-8 w-8 p-0"
-                                        >
-                                            <ArrowUpDown
-                                                className={cn(
-                                                    'w-4 h-4 transition-transform',
-                                                    sortOrder === 'asc' && 'rotate-180'
-                                                )}
-                                            />
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {sortOrder === 'asc'
-                                            ? tMapSidebar('sortDescending')
-                                            : tMapSidebar('sortAscending')}
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        </div>
+                        <Select value={sortBy} onValueChange={handleSortChange}>
+                            <SelectTrigger className="w-[110px] h-8 text-xs bg-background-secondary border-none focus:ring-0 focus:ring-offset-0">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {sortOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={toggleSortOrder}
+                                        className="h-8 w-8 p-0 text-muted-foreground hover:text-text-primary"
+                                    >
+                                        <ArrowUpDown
+                                            className={cn(
+                                                'w-4 h-4 transition-transform text-muted-foreground',
+                                                sortOrder === 'asc' && 'rotate-180'
+                                            )}
+                                        />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {sortOrder === 'asc'
+                                        ? tMapSidebar('sortDescending')
+                                        : tMapSidebar('sortAscending')}
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
-                )}
+                </div>
             </div>
 
             {/* Загрузка */}
@@ -440,6 +469,7 @@ export function MobileMapSidebar({
     // Данные
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [pagination, setPagination] = useState<PropertiesListResponse['pagination'] | null>(null);
+    const [totalCount, setTotalCount] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState<PropertySortBy>('createdAt');
@@ -476,7 +506,22 @@ export function MobileMapSidebar({
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
 
-                    const data = await getPropertiesByIds(clusterPropertyIds);
+                    let data = await getPropertiesByIds(clusterPropertyIds);
+
+                    data = data.sort((a, b) => {
+                        let comparison = 0;
+                        if (sortBy === 'price') {
+                            comparison = a.price - b.price;
+                        } else if (sortBy === 'area') {
+                            comparison = (a.area || 0) - (b.area || 0);
+                        } else {
+                            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                            comparison = dateA - dateB;
+                        }
+                        return sortOrder === 'asc' ? comparison : -comparison;
+                    });
+
                     setProperties(data);
                     setPagination({
                         page: 1,
@@ -524,6 +569,23 @@ export function MobileMapSidebar({
         setPage(1);
         setProperties([]);
     }, [sortBy, sortOrder, currentFilters, clusterId]);
+
+    // Загрузка реального каунта
+    useEffect(() => {
+        if (clusterPropertyIds && clusterPropertyIds.length > 0) {
+            setTotalCount(clusterPropertyIds.length);
+            return;
+        }
+
+        const controller = new AbortController();
+        getPropertiesCount(currentFilters, controller.signal)
+            .then(count => setTotalCount(count))
+            .catch(err => {
+                if (err.name !== 'AbortError') console.error('Failed to get count:', err);
+            });
+
+        return () => controller.abort();
+    }, [currentFilters, clusterPropertyIds]);
 
     // Вычисляем высоту виртуализированного списка
     useEffect(() => {
@@ -608,8 +670,8 @@ export function MobileMapSidebar({
                     <span className="text-sm font-medium">
                         {clusterPropertyIds && clusterPropertyIds.length > 0
                             ? tMapSidebar('objectsCount', { count: clusterPropertyIds.length })
-                            : pagination
-                                ? tMapSidebar('objectsCount', { count: pagination.total })
+                            : totalCount !== null
+                                ? tMapSidebar('objectsCount', { count: totalCount })
                                 : ''}
                     </span>
                     {/* Кнопка сброса кластера */}
@@ -623,7 +685,7 @@ export function MobileMapSidebar({
                             }}
                             className="h-auto p-0 text-xs text-primary justify-start font-normal"
                         >
-                            <X className="w-3 h-3 mr-1" />
+                            <ChevronLeft className="w-3 h-3 mr-1" />
                             {tMapSidebar('resetCluster')}
                         </Button>
                     )}
