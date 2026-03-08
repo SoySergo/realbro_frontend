@@ -104,8 +104,18 @@ export function BaseMap({
             }
         });
 
+        const handleResize = () => {
+            if (map.current) {
+                map.current.resize();
+            }
+        };
+
+        const resizeObserver = new ResizeObserver(handleResize);
+        resizeObserver.observe(mapContainer.current);
+
         // Cleanup при размонтировании
         return () => {
+            resizeObserver.disconnect();
             if (map.current) {
                 console.log('[BaseMap] Removing map instance');
                 map.current.remove();
