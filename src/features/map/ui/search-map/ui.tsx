@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import { BaseMap } from '../base-map';
@@ -19,6 +19,10 @@ const PROPERTIES_SOURCE = 'properties';
 const PROPERTIES_LAYER_CLUSTERS = 'properties-clusters';
 const PROPERTIES_LAYER_CLUSTER_COUNT = 'properties-cluster-count';
 const PROPERTIES_LAYER_POINTS = 'properties-points';
+
+// Highlight source/layer — вынесены как константы (были строками внутри effect)
+const HIGHLIGHT_SOURCE = 'highlight-property';
+const HIGHLIGHT_LAYER = 'highlight-property-layer';
 
 type SearchMapProps = {
     /** Начальный центр карты [lng, lat] */
@@ -62,6 +66,19 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
     const popupRef = useRef<mapboxgl.Popup | null>(null);
     const [popupData, setPopupData] = useState<{ id: string, node: HTMLDivElement, onClose?: () => void } | null>(null);
+
+    // ─── Стабильные ссылки на колбэки через refs ───
+    // Позволяет НЕ пересоздавать map event listeners при каждом смене пропсов
+    const onClusterClickRef = useRef(onClusterClick);
+    onClusterClickRef.current = onClusterClick;
+    const onMarkerClickRef = useRef(onMarkerClick);
+    onMarkerClickRef.current = onMarkerClick;
+    const onBoundsChangeRef = useRef(onBoundsChange);
+    onBoundsChangeRef.current = onBoundsChange;
+
+    // ─── Мемоизация tileUrl ───
+    // Пересчитывается только при реальном изменении фильтров
+    const tileUrl = useMemo(() => buildTileUrl(currentFilters), [currentFilters]);
 
     /**
      * Инициализация MVT source и layers на карте
@@ -118,12 +135,12 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             }
         }
 
-        const tileUrl = buildTileUrl(currentFiltersRef.current);
+        const initialTileUrl = buildTileUrl(currentFiltersRef.current);
 
         // Добавляем vector tile source
         map.addSource(PROPERTIES_SOURCE, {
             type: 'vector',
-            tiles: [tileUrl],
+            tiles: [initialTileUrl],
             minzoom: 0,
             maxzoom: 22,
         });
@@ -221,19 +238,19 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         console.log('[SearchMap] Property layers visibility:', visibility);
     }, [mapInstance, activeLocationMode]);
 
-    // Обновляем URL тайлов при изменении фильтров
+    // Обновляем URL тайлов при изменении фильтров (используем мемоизированный tileUrl)
     useEffect(() => {
         if (!mapInstance || !layersInitializedRef.current) return;
 
         const source = mapInstance.getSource(PROPERTIES_SOURCE);
         if (source && 'setTiles' in source) {
-            const tileUrl = buildTileUrl(currentFilters);
             (source as mapboxgl.VectorTileSource).setTiles([tileUrl]);
             console.log('[SearchMap] Tile source updated with new filters');
         }
-    }, [mapInstance, currentFilters]);
+    }, [mapInstance, tileUrl]);
 
-    // Обработчики кликов по кластерам и маркерам
+    // ─── Обработчики кликов по кластерам и маркерам ───
+    // Используем refs для колбэков → effect не пересоздаёт listeners при смене пропсов
     useEffect(() => {
         if (!mapInstance || !layersInitializedRef.current) return;
 
@@ -255,7 +272,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                         ? JSON.parse(properties.property_ids)
                         : properties.property_ids;
                     if (Array.isArray(propertyIds)) {
-                        onClusterClick?.(propertyIds as string[]);
+                        onClusterClickRef.current?.(propertyIds as string[]);
                     }
                 } catch {
                     console.error('[SearchMap] Failed to parse property_ids from cluster feature');
@@ -284,7 +301,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             const propertyId = feature.properties?.id;
 
             if (propertyId) {
-                onMarkerClick?.(String(propertyId));
+                onMarkerClickRef.current?.(String(propertyId));
 
                 // Создаём и показываем popup
                 if (popupRef.current) {
@@ -360,16 +377,18 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             mapInstance.off('mouseenter', PROPERTIES_LAYER_POINTS, handleMouseEnter);
             mapInstance.off('mouseleave', PROPERTIES_LAYER_POINTS, handleMouseLeave);
         };
-    }, [mapInstance, onClusterClick, onMarkerClick]);
+    }, [mapInstance]); // ← только mapInstance, больше не зависит от колбэков
 
     // Обработчик moveend — передаём bbox наверх для обновления сайдбара
     useEffect(() => {
-        if (!mapInstance || !onBoundsChange) return;
+        if (!mapInstance) return;
 
         const handleMoveEnd = () => {
+            const cb = onBoundsChangeRef.current;
+            if (!cb) return;
             const bounds = mapInstance.getBounds();
             if (bounds) {
-                onBoundsChange([
+                cb([
                     bounds.getWest(),
                     bounds.getSouth(),
                     bounds.getEast(),
@@ -382,14 +401,11 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         return () => {
             mapInstance.off('moveend', handleMoveEnd);
         };
-    }, [mapInstance, onBoundsChange]);
+    }, [mapInstance]); // ← только mapInstance
 
     // Подсветка свойства на карте при ховере на карточку в сайдбаре
     useEffect(() => {
         if (!mapInstance || !layersInitializedRef.current) return;
-
-        const HIGHLIGHT_SOURCE = 'highlight-property';
-        const HIGHLIGHT_LAYER = 'highlight-property-layer';
 
         if (!highlightedPropertyId) {
             // Убираем подсветку
