@@ -32,6 +32,7 @@ export interface PropertiesListParams {
     limit?: number;
     sortBy?: 'price' | 'area' | 'createdAt' | 'published_at';
     sortOrder?: 'asc' | 'desc';
+    language?: string;
 }
 
 // Параметры для cursor-based запроса к реальному API
@@ -196,7 +197,7 @@ export async function getPropertiesListCursor(
  * Получить список объектов с пагинацией (legacy — для моков)
  */
 export async function getPropertiesList(params: PropertiesListParams): Promise<PropertiesListResponse> {
-    const { filters, page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc' } = params;
+    const { filters, page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc', language } = params;
 
     // Реальный API с cursor-пагинацией
     if (FEATURES.USE_REAL_PROPERTIES) {
@@ -206,6 +207,7 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
             limit,
             sort_by: sort_by as PropertiesCursorParams['sort_by'],
             sort_order: sortOrder,
+            language,
         });
         // Конвертируем cursor-ответ в legacy формат для обратной совместимости
         return {
@@ -273,11 +275,11 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
 /**
  * Получить объекты по массиву IDs (клик по кластеру/маркеру)
  */
-export async function getPropertiesByIds(ids: string[], lang?: string): Promise<PropertyGridCard[]> {
+export async function getPropertiesByIds(ids: string[], language?: string): Promise<PropertyGridCard[]> {
     // Реальный API
     if (FEATURES.USE_REAL_PROPERTIES) {
         const params: Record<string, any> = { include_ids: ids.join(',') };
-        if (lang) params.lang = lang;
+        if (language) params.language = language;
         
         const response = await apiClient.get<CursorPaginatedResponse<PropertyShortListingDTO>>(
             '/properties/short-listing',

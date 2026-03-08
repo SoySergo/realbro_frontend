@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { List, type ListImperativeAPI } from 'react-window';
 import {
     Loader2,
@@ -129,6 +129,7 @@ export function MapSidebar({
 }: MapSidebarProps) {
     const tCommon = useTranslations('common');
     const tMapSidebar = useTranslations('mapSidebar');
+    const locale = useLocale();
     const router = useRouter();
 
     const currentFilters = useCurrentFilters();
@@ -165,7 +166,7 @@ export function MapSidebar({
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
 
-                    let data = await getPropertiesByIds(clusterPropertyIds);
+                    let data = await getPropertiesByIds(clusterPropertyIds, locale);
 
                     data = data.sort((a, b) => {
                         let comparison = 0;
@@ -196,6 +197,7 @@ export function MapSidebar({
                         limit: 20,
                         sortBy,
                         sortOrder,
+                        language: locale,
                     });
 
                     if (append) {
@@ -214,7 +216,7 @@ export function MapSidebar({
                 loadingRef.current = false;
             }
         },
-        [currentFilters, sortBy, sortOrder, clusterPropertyIds]
+        [currentFilters, sortBy, sortOrder, clusterPropertyIds, locale]
     );
 
     useEffect(() => {
@@ -464,6 +466,7 @@ export function MobileMapSidebar({
     className,
 }: MobileMapSidebarProps) {
     const tMapSidebar = useTranslations('mapSidebar');
+    const locale = useLocale();
     const currentFilters = useCurrentFilters();
 
     // Данные
@@ -506,7 +509,7 @@ export function MobileMapSidebar({
                 // Если есть clusterPropertyIds — загружаем по IDs
                 if (clusterPropertyIds && clusterPropertyIds.length > 0) {
 
-                    let data = await getPropertiesByIds(clusterPropertyIds);
+                    let data = await getPropertiesByIds(clusterPropertyIds, locale);
 
                     data = data.sort((a, b) => {
                         let comparison = 0;
@@ -537,6 +540,7 @@ export function MobileMapSidebar({
                         limit: 20,
                         sortBy,
                         sortOrder,
+                        language: locale,
                     });
 
                     if (append) {
@@ -555,7 +559,7 @@ export function MobileMapSidebar({
                 loadingRef.current = false;
             }
         },
-        [currentFilters, sortBy, sortOrder, clusterPropertyIds]
+        [currentFilters, sortBy, sortOrder, clusterPropertyIds, locale]
     );
 
     // Начальная загрузка данных

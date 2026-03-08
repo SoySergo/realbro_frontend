@@ -266,6 +266,20 @@ body {
   display: none;
 }
 
+/* Плавное появление карточки на карте */
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.property-grid-popup {
+  animation: popup-appear 0.3s ease-out;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

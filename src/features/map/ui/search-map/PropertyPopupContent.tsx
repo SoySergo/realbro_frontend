@@ -43,7 +43,7 @@ export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupConte
 
     if (loading) {
         return (
-            <div className="w-[260px] h-[280px] bg-background rounded-xl overflow-hidden shadow-xl border flex flex-col relative animate-fade-in">
+            <div className="w-[260px] h-[280px] bg-background rounded-xl overflow-hidden shadow-xl border flex flex-col relative">
                 {/* Skeleton image area */}
                 <div className="relative h-[160px] w-full bg-background-secondary shrink-0">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer_1.5s_infinite]" style={{ backgroundSize: '200% 100%' }} />
@@ -98,7 +98,7 @@ export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupConte
     ].filter(Boolean).join(' · ');
 
     return (
-        <div className="w-[260px] h-[280px] bg-background rounded-xl overflow-hidden shadow-xl border flex flex-col relative animate-fade-in cursor-pointer" onClick={(e: React.MouseEvent) => {
+        <div className="w-[260px] h-[280px] bg-background rounded-xl overflow-hidden shadow-xl border flex flex-col relative cursor-pointer" onClick={(e: React.MouseEvent) => {
             // Prevent map click when clicking card
             e.stopPropagation();
         }}>
