@@ -273,12 +273,15 @@ export async function getPropertiesList(params: PropertiesListParams): Promise<P
 /**
  * Получить объекты по массиву IDs (клик по кластеру/маркеру)
  */
-export async function getPropertiesByIds(ids: string[]): Promise<PropertyGridCard[]> {
+export async function getPropertiesByIds(ids: string[], lang?: string): Promise<PropertyGridCard[]> {
     // Реальный API
     if (FEATURES.USE_REAL_PROPERTIES) {
+        const params: Record<string, any> = { include_ids: ids.join(',') };
+        if (lang) params.lang = lang;
+        
         const response = await apiClient.get<CursorPaginatedResponse<PropertyShortListingDTO>>(
             '/properties/short-listing',
-            { params: { include_ids: ids.join(',') } }
+            { params }
         );
         return dtosToGridCards(response.data);
     }

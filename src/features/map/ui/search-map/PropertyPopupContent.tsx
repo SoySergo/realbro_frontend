@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { type PropertyGridCard } from '@/entities/property';
 import { getPropertiesByIds } from '@/shared/api';
 import { Loader2, X, Image as ImageIcon } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getImageUrl } from '@/entities/property';
@@ -16,13 +16,14 @@ interface PropertyPopupContentProps {
 
 export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupContentProps) {
     const t = useTranslations('property');
+    const locale = useLocale();
     const [property, setProperty] = useState<PropertyGridCard | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let mounted = true;
         setLoading(true);
-        getPropertiesByIds([propertyId])
+        getPropertiesByIds([propertyId], locale)
             .then(res => {
                 if (mounted && res && res.length > 0) {
                     setProperty(res[0]);
@@ -42,13 +43,28 @@ export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupConte
 
     if (loading) {
         return (
-            <div className="w-[260px] h-[280px] flex items-center justify-center bg-background rounded-xl shadow-lg border relative">
-                <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
-                {onClose && (
-                    <button className="absolute top-2 right-2 flex items-center justify-center h-8 w-8 rounded-full bg-black/20 text-white hover:bg-black/40 transition-colors" onClick={onClose} aria-label="Close">
-                        <X className="h-4 w-4" />
-                    </button>
-                )}
+            <div className="w-[260px] h-[280px] bg-background rounded-xl overflow-hidden shadow-xl border flex flex-col relative animate-fade-in">
+                {/* Skeleton image area */}
+                <div className="relative h-[160px] w-full bg-background-secondary shrink-0">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer_1.5s_infinite]" style={{ backgroundSize: '200% 100%' }} />
+                    {onClose && (
+                        <button className="absolute top-2 right-2 flex items-center justify-center z-20 h-7 w-7 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm transition-colors" onClick={onClose} aria-label="Close">
+                            <X className="h-4 w-4" />
+                        </button>
+                    )}
+                </div>
+                {/* Skeleton content */}
+                <div className="p-3 flex flex-col flex-1 justify-between">
+                    <div>
+                        <div className="h-5 w-24 rounded bg-background-secondary mb-2 animate-pulse" />
+                        <div className="h-3 w-36 rounded bg-background-secondary mb-1.5 animate-pulse" />
+                        <div className="h-4 w-44 rounded bg-background-secondary animate-pulse" />
+                    </div>
+                    <div className="flex items-center pt-2 border-t mt-auto">
+                        <div className="w-5 h-5 rounded-full bg-background-secondary mr-1.5 animate-pulse" />
+                        <div className="h-3 w-20 rounded bg-background-secondary animate-pulse" />
+                    </div>
+                </div>
             </div>
         );
     }

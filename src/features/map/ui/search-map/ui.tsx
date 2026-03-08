@@ -273,12 +273,13 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 const isDesktop = window.innerWidth >= 768;
 
                 const popup = new mapboxgl.Popup({
-                    closeButton: false, // Исходный крестик выключен, используем свой в компоненте
+                    closeButton: false,
                     closeOnClick: true,
                     maxWidth: 'none',
                     offset: 15,
+                    anchor: 'bottom', // Всегда над маркером — без рывка при навигации
                     className: 'property-grid-popup',
-                    autoPan: false // Отключаем стандартный, делаем свой с учетом сайдбара
+                    autoPan: false
                 } as any)
                     .setLngLat(e.lngLat)
                     .setDOMContent(popupNode)
@@ -290,12 +291,12 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 mapInstance.easeTo({
                     center: e.lngLat,
                     padding: {
-                        top: 100,
+                        top: 250,
                         bottom: isDesktop ? 100 : 350,
-                        left: isDesktop ? 100 : 20,
-                        right: isDesktop ? 100 : 20
+                        left: isDesktop ? 150 : 20,
+                        right: isDesktop ? 150 : 20
                     },
-                    duration: 500
+                    duration: 1000
                 });
 
                 const closePopup = () => {
