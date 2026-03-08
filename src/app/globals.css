@@ -252,7 +252,8 @@ body {
    ======================================== */
 
 .draw-editor-popup .mapboxgl-popup-content,
-.draw-actions-popup .mapboxgl-popup-content {
+.draw-actions-popup .mapboxgl-popup-content,
+.property-grid-popup .mapboxgl-popup-content {
   background: transparent;
   box-shadow: none;
   padding: 0;
@@ -260,7 +261,8 @@ body {
 }
 
 .draw-editor-popup .mapboxgl-popup-tip,
-.draw-actions-popup .mapboxgl-popup-tip {
+.draw-actions-popup .mapboxgl-popup-tip,
+.property-grid-popup .mapboxgl-popup-tip {
   display: none;
 }
 
@@ -333,7 +335,6 @@ body {
 
 /* Chat icon wiggle animation */
 @keyframes chat-wiggle {
-
   0%,
   100% {
     transform: rotate(0deg);
@@ -362,7 +363,6 @@ body {
 
 /* Chat icon pulse animation */
 @keyframes chat-pulse {
-
   0%,
   100% {
     transform: scale(1);
@@ -484,7 +484,6 @@ body {
 }
 
 @keyframes icon-bounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -532,26 +531,28 @@ body {
 }
 
 /* Элементы внутри кнопки должны быть поверх ::after */
-.btn-ai-neon>* {
+.btn-ai-neon > * {
   position: relative;
   z-index: 10;
 }
 
 /* Вращающийся градиент (аппаратное ускорение) */
 .btn-ai-neon::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 300%;
   aspect-ratio: 1;
-  background: conic-gradient(from 0deg,
-      transparent 0%,
-      transparent 40%,
-      #198bff 48%,
-      #00ffff 50%,
-      #198bff 52%,
-      transparent 60%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 40%,
+    #198bff 48%,
+    #00ffff 50%,
+    #198bff 52%,
+    transparent 60%
+  );
   transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
@@ -567,7 +568,7 @@ body {
 
 /* Внутренний фон кнопки ("стиль как у других" без жестких инверсий) */
 .btn-ai-neon::after {
-  content: '';
+  content: "";
   position: absolute;
   /* Отступ = ширина неонового бордера */
   inset: 1px;

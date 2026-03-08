@@ -172,14 +172,14 @@ export function SearchMapPage() {
 
                 {/* Сайдбар со списком объектов - только на desktop, скрываем полностью в режиме локации */}
                 {!activeLocationMode && (
-                    <div className="hidden md:block">
+                    <div className="hidden md:block shrink-0 h-screen pt-[52px] z-40">
                         <MapSidebar
                             onPropertyClick={handlePropertyClick}
                             onPropertyHover={handlePropertyHover}
                             selectedPropertyId={selectedPropertyId}
                             clusterPropertyIds={clusterPropertyIds}
                             onClusterReset={handleClusterReset}
-                            className="fixed right-0 h-screen z-40 mt-[52px]"
+                            className="h-full"
                         />
                     </div>
                 )}

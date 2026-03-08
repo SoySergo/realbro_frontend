@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import { BaseMap } from '../base-map';
 import { MapLocationController } from '@/features/location-filter';
 import { MobileLocationMode } from '@/widgets/mobile-location-mode';
 import { useFilterStore, useCurrentFilters } from '@/widgets/search-filters-bar';
 import { filtersToQueryString } from '@/entities/filter';
+import { PropertyPopupContent } from './PropertyPopupContent';
 
 // URL MVT тайлов — прямые запросы к бекенду (CORS на стороне бекенда)
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
@@ -58,11 +60,34 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     const currentFiltersRef = useRef(currentFilters);
     currentFiltersRef.current = currentFilters;
 
+    const popupRef = useRef<mapboxgl.Popup | null>(null);
+    const [popupData, setPopupData] = useState<{ id: string, node: HTMLDivElement, onClose?: () => void } | null>(null);
+
     /**
      * Инициализация MVT source и layers на карте
      */
     const initializePropertyLayers = useCallback((map: mapboxgl.Map) => {
         if (layersInitializedRef.current) return;
+
+        // Создаём кастомную иконку (SMS bubble)
+        if (!map.hasImage('price-bubble')) {
+            const svg = `
+<svg width="60" height="40" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 12 4 L 48 4 A 12 12 0 0 1 60 16 L 60 20 A 12 12 0 0 1 48 32 L 36 32 L 30 38 L 24 32 L 12 32 A 12 12 0 0 1 0 20 L 0 16 A 12 12 0 0 1 12 4 z" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+</svg>`;
+            const img = new Image(60, 40);
+            img.onload = () => {
+                if (!map.hasImage('price-bubble')) {
+                    map.addImage('price-bubble', img, {
+                        stretchX: [[16, 24], [36, 44]],
+                        stretchY: [[16, 20]],
+                        content: [12, 4, 48, 32],
+                        pixelRatio: 1
+                    });
+                }
+            };
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        }
 
         const tileUrl = buildTileUrl(currentFiltersRef.current);
 
@@ -85,18 +110,18 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 'circle-color': [
                     'step',
                     ['get', 'point_count'],
-                    '#51bbd6',   // < 10
-                    10, '#f1f075', // 10-50
-                    50, '#f28cb1', // > 50
+                    '#198bff',   // < 10
+                    10, '#0d7ae8', // 10-50
+                    50, '#115293', // > 50
                 ],
                 'circle-radius': [
                     'step',
                     ['get', 'point_count'],
                     20,           // < 10
-                    10, 30,       // 10-50
-                    50, 40,       // > 50
+                    10, 26,       // 10-50
+                    50, 32,       // > 50
                 ],
-                'circle-stroke-width': 2,
+                'circle-stroke-width': 3,
                 'circle-stroke-color': '#ffffff',
             },
         });
@@ -111,8 +136,11 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             layout: {
                 'text-field': ['get', 'point_count_abbreviated'],
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12,
+                'text-size': 14,
             },
+            paint: {
+                'text-color': '#ffffff',
+            }
         });
 
         // Слой индивидуальных точек — отображаем цену
@@ -124,16 +152,19 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             filter: ['!', ['has', 'point_count']],
             layout: {
                 'text-field': ['concat', ['get', 'price_formatted'], '€'],
-                'text-size': 11,
+                'text-size': 13,
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-anchor': 'center',
+                'text-anchor': 'bottom', // Центр текста над маркером
+                'text-offset': [0, -0.5],
+                'icon-image': 'price-bubble',
+                'icon-text-fit': 'both',
+                'icon-text-fit-padding': [8, 12, 10, 12],
                 'text-allow-overlap': false,
                 'text-ignore-placement': false,
+                'icon-anchor': 'bottom',
             },
             paint: {
-                'text-color': '#1a1a2e',
-                'text-halo-color': '#ffffff',
-                'text-halo-width': 1.5,
+                'text-color': '#ffffff',
             },
         });
 
@@ -230,6 +261,54 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
             if (propertyId) {
                 onMarkerClick?.(String(propertyId));
+
+                // Создаём и показываем popup
+                if (popupRef.current) {
+                    popupRef.current.remove();
+                }
+
+                const popupNode = document.createElement('div');
+                popupNode.className = 'custom-property-popup';
+
+                const isDesktop = window.innerWidth >= 768;
+
+                const popup = new mapboxgl.Popup({
+                    closeButton: false, // Исходный крестик выключен, используем свой в компоненте
+                    closeOnClick: true,
+                    maxWidth: 'none',
+                    offset: 15,
+                    className: 'property-grid-popup',
+                    autoPan: false // Отключаем стандартный, делаем свой с учетом сайдбара
+                } as any)
+                    .setLngLat(e.lngLat)
+                    .setDOMContent(popupNode)
+                    .addTo(mapInstance);
+
+                popupRef.current = popup;
+
+                // Ручное центрирование с учетом фиксированных сайдбаров
+                mapInstance.easeTo({
+                    center: e.lngLat,
+                    padding: {
+                        top: 100,
+                        bottom: isDesktop ? 100 : 350,
+                        left: isDesktop ? 100 : 20,
+                        right: isDesktop ? 100 : 20
+                    },
+                    duration: 500
+                });
+
+                const closePopup = () => {
+                    if (popupRef.current) {
+                        popupRef.current.remove();
+                    }
+                };
+
+                setPopupData({ id: String(propertyId), node: popupNode, onClose: closePopup });
+
+                popup.on('remove', () => {
+                    setPopupData(null);
+                });
             }
         };
 
@@ -363,6 +442,9 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                         <MapLocationController map={mapInstance} />
                     </div>
                 )}
+                
+                {/* Рендеринг React-попапа через Portal */}
+                {popupData && createPortal(<PropertyPopupContent propertyId={popupData.id} onClose={popupData.onClose} />, popupData.node)}
             </BaseMap>
         </>
     );
