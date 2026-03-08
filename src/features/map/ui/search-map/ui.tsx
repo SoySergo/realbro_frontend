@@ -69,11 +69,16 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     const initializePropertyLayers = useCallback((map: mapboxgl.Map) => {
         if (layersInitializedRef.current) return;
 
-        // Создаём кастомную иконку (SMS bubble)
+        // Определяем текущую тему
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const bubbleFill = isDark ? '#ffffff' : '#111827';
+        const bubbleTextColor = isDark ? '#000000' : '#ffffff';
+
+        // Создаём кастомную иконку (SMS bubble) — без бордера, адаптивная к теме
         if (!map.hasImage('price-bubble')) {
             const svg = `
 <svg width="60" height="40" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 12 4 L 48 4 A 12 12 0 0 1 60 16 L 60 20 A 12 12 0 0 1 48 32 L 36 32 L 30 38 L 24 32 L 12 32 A 12 12 0 0 1 0 20 L 0 16 A 12 12 0 0 1 12 4 z" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+    <path d="M 12 4 L 48 4 A 12 12 0 0 1 60 16 L 60 20 A 12 12 0 0 1 48 32 L 36 32 L 30 38 L 24 32 L 12 32 A 12 12 0 0 1 0 20 L 0 16 A 12 12 0 0 1 12 4 z" fill="${bubbleFill}"/>
 </svg>`;
             const img = new Image(60, 40);
             img.onload = () => {
@@ -89,6 +94,30 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
         }
 
+        // Создаём SVG иконки для кластеров (3 размера, без бордера)
+        const clusterConfigs = [
+            { name: 'cluster-small', size: 40, color: '#198bff' },
+            { name: 'cluster-medium', size: 52, color: '#0d7ae8' },
+            { name: 'cluster-large', size: 64, color: '#115293' },
+        ];
+
+        for (const { name, size, color } of clusterConfigs) {
+            if (!map.hasImage(name)) {
+                const r = size / 2;
+                const clusterSvg = `
+<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${r}" cy="${r}" r="${r}" fill="${color}"/>
+</svg>`;
+                const clusterImg = new Image(size, size);
+                clusterImg.onload = () => {
+                    if (!map.hasImage(name)) {
+                        map.addImage(name, clusterImg, { pixelRatio: 1 });
+                    }
+                };
+                clusterImg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(clusterSvg);
+            }
+        }
+
         const tileUrl = buildTileUrl(currentFiltersRef.current);
 
         // Добавляем vector tile source
@@ -99,30 +128,22 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             maxzoom: 22,
         });
 
-        // Слой кластеров (z ≤ 15)
+        // Слой кластеров (z ≤ 15) — SVG иконки
         map.addLayer({
             id: PROPERTIES_LAYER_CLUSTERS,
-            type: 'circle',
+            type: 'symbol',
             source: PROPERTIES_SOURCE,
             'source-layer': PROPERTIES_SOURCE,
             filter: ['has', 'point_count'],
-            paint: {
-                'circle-color': [
+            layout: {
+                'icon-image': [
                     'step',
                     ['get', 'point_count'],
-                    '#198bff',   // < 10
-                    10, '#0d7ae8', // 10-50
-                    50, '#115293', // > 50
+                    'cluster-small',    // < 10
+                    10, 'cluster-medium', // 10-50
+                    50, 'cluster-large',  // > 50
                 ],
-                'circle-radius': [
-                    'step',
-                    ['get', 'point_count'],
-                    20,           // < 10
-                    10, 26,       // 10-50
-                    50, 32,       // > 50
-                ],
-                'circle-stroke-width': 3,
-                'circle-stroke-color': '#ffffff',
+                'icon-allow-overlap': true,
             },
         });
 
@@ -164,12 +185,12 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 'icon-anchor': 'bottom',
             },
             paint: {
-                'text-color': '#ffffff',
+                'text-color': bubbleTextColor,
             },
         });
 
         layersInitializedRef.current = true;
-        console.log('[SearchMap] MVT tile layers initialized');
+        console.log('[SearchMap] MVT tile layers initialized, theme:', isDark ? 'dark' : 'light');
     }, []);
 
     // Колбэк при загрузке карты

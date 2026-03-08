@@ -39,10 +39,20 @@
   --status-reserved: var(--warning);
   --status-rented: var(--text-tertiary);
 
-  /* Карта */
-  --map-marker: var(--brand-primary);
-  --map-marker-hover: var(--brand-primary-hover);
-  --map-cluster: var(--background-secondary);
+  /* Карта — маркеры цен */
+  --map-price-bg: #252525;
+  --map-price-border: oklch(0.922 0 0);
+  --map-price-text: #f8f9fa;
+  --map-price-hover-bg: #0d7ae8;
+  --map-price-hover-border: #0d7ae8;
+
+  /* Карта — кластеры */
+  --map-cluster-bg: #198bff;
+  --map-cluster-border: #198bff;
+  --map-cluster-text: #f8f9fa;
+  --map-cluster-hover-bg: #f8f9fa;
+  --map-cluster-hover-border: #0d7ae8;
+  --map-cluster-hover-text: #1a1a1a;
 
   /* Шрифты */
   --font-sans: var(--font-inter);
@@ -105,6 +115,21 @@
   --success: #2ecc71;
   --warning: #f39c12;
   --error: #e74c3c;
+
+  /* Карта — маркеры цен */
+  --map-price-bg: #f1f3f5;
+  --map-price-border: #0f0f0f;
+  --map-price-text: #1a1a1a;
+  --map-price-hover-bg: #3da1ff;
+  --map-price-hover-border: #3da1ff;
+
+  /* Карта — кластеры */
+  --map-cluster-bg: #198bff;
+  --map-cluster-border: #198bff;
+  --map-cluster-text: #ffffff;
+  --map-cluster-hover-bg: #3da1ff;
+  --map-cluster-hover-border: #3da1ff;
+  --map-cluster-hover-text: #ffffff;
 
   /* Tailwind semantic colors for dark theme */
   --foreground: oklch(0.985 0 0);
@@ -313,6 +338,7 @@ body {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
 
 @layer base {
   * {
