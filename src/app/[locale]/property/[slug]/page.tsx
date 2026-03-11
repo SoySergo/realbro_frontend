@@ -102,7 +102,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
 
     // Fetch additional data in parallel (after we have property for agent ID)
     const [nearbyPlaces, agentProperties, similarProperties] = await Promise.all([
-        getNearbyPlaces(property.id),
+        getNearbyPlaces(property.coordinates),
         companyId
             ? getAgentProperties(companyId, property.id)
             : Promise.resolve([]),
