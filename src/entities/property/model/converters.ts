@@ -128,6 +128,8 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
             phone: '',
             companyId: dto.author.company_id,
             objectsCount: dto.author.object_count,
+            rating: dto.author.rating,
+            reviewCount: dto.author.review_count,
             isVerified: dto.author.is_verified,
             agencyName: dto.author.company_name,
             agencyLogo: dto.author.company_logo,

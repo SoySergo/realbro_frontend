@@ -229,7 +229,7 @@ export const PriceFilter = memo(() => {
 
     const buttonLabel = useMemo(() => {
         if (!isActive) return t('price');
-        return `${t('price')}: €${formatPrice(filters.minPrice || 0)} - €${formatPrice(filters.maxPrice || MAX_PRICE)}`;
+        return `€${formatPrice(filters.minPrice || 0)} - €${formatPrice(filters.maxPrice || MAX_PRICE)}`;
     }, [isActive, filters.minPrice, filters.maxPrice, t]);
 
     return (

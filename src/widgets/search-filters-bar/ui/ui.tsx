@@ -10,7 +10,7 @@ import {
     CloudUpload,
     CloudCheck,
     CloudCog,
-    RefreshCw,
+    CloudAlert,
     FingerprintIcon,
 } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
@@ -80,6 +80,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
     const [savedFiltersSnapshot, setSavedFiltersSnapshot] = useState<string | null>(null);
     const [isSyncing, setIsSyncing] = useState(false);
     const [justSynced, setJustSynced] = useState(false);
+    const [syncError, setSyncError] = useState(false);
 
     const filtersContainerRef = useRef<HTMLDivElement>(null);
 
@@ -126,6 +127,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
 
         const timeoutId = setTimeout(async () => {
             setIsSyncing(true);
+            setSyncError(false);
             try {
                 const mergedFilters = { ...filters, ...currentFilters };
                 updateQuery(activeQueryId!, {
@@ -137,6 +139,8 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                 setTimeout(() => setJustSynced(false), 2000);
             } catch (error) {
                 console.error('Auto-sync failed:', error);
+                setSyncError(true);
+                setTimeout(() => setSyncError(false), 3000);
             } finally {
                 setIsSyncing(false);
             }
@@ -270,7 +274,20 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
         }
     };
 
-    const SaveIcon = isSyncing ? RefreshCw : activeQuery ? (justSynced ? CloudCheck : (hasUnsavedChanges ? CloudCog : CloudCheck)) : CloudUpload;
+    // Пайплайн иконок облачной синхронизации:
+    // CloudCog — фильтр изменился, ожидание
+    // animate-spin — запрос на апдейт идёт (isSyncing)
+    // CloudAlert — ошибка синхронизации
+    // CloudCheck (зелёный) — успешная синхронизация
+    // CloudCheck (серый) — нет изменений
+    // CloudUpload — новый фильтр (не сохранён)
+    const SaveIcon = syncError
+        ? CloudAlert
+        : isSyncing
+            ? CloudCog
+            : activeQuery
+                ? (justSynced ? CloudCheck : (hasUnsavedChanges ? CloudCog : CloudCheck))
+                : CloudUpload;
 
     return (
         <div className="w-full relative z-50">
@@ -281,7 +298,7 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                 {/* Зона фильтров — прилипает слева после переключателя, растёт вправо */}
                 <div
                     ref={filtersContainerRef}
-                    className="flex items-center gap-2 min-w-0 shrink-0"
+                    className="flex items-center gap-1.5 min-w-0 shrink overflow-hidden"
                 >
                     {isProperties ? (
                         <>
@@ -352,14 +369,15 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                                 variant="ghost"
                                 size="icon"
                                 onClick={handleSave}
-                                disabled={isSyncing || (!hasUnsavedChanges && !justSynced)}
+                                disabled={isSyncing || (!hasUnsavedChanges && !justSynced && !syncError)}
                                 className={cn(
                                     "text-text-secondary",
                                     isSyncing && "text-brand-primary",
+                                    syncError && "text-destructive",
                                     justSynced && "text-success",
-                                    hasUnsavedChanges && !isSyncing && "hover:text-brand-primary hover:bg-brand-primary/10"
+                                    hasUnsavedChanges && !isSyncing && !syncError && "hover:text-brand-primary hover:bg-brand-primary/10"
                                 )}
-                                title={isSyncing ? tCommon('saving') : (justSynced ? tCommon('saved') : (hasUnsavedChanges ? tCommon('save') : t('title')))}
+                                title={syncError ? tCommon('error') : isSyncing ? tCommon('saving') : (justSynced ? tCommon('saved') : (hasUnsavedChanges ? tCommon('save') : t('title')))}
                             >
                                 <SaveIcon className={cn("w-4 h-4", isSyncing && "animate-spin")} />
                             </Button>

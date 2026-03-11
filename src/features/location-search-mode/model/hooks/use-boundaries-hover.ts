@@ -76,7 +76,15 @@ export function useBoundariesHover({ map, isEnabled }: UseBoundariesHoverProps):
         const handleMouseLeave = () => {
             if (!map || isCleanedUp) return;
 
-            map.getCanvas().style.cursor = '';
+            try {
+                map.getCanvas().style.cursor = '';
+            } catch {
+                // Карта уже уничтожена
+                return;
+            }
+
+            // Проверяем существование source перед setFeatureState
+            if (!map.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) return;
 
             // Убираем hover состояние
             if (hoveredFeatureIdRef.current !== null) {
@@ -151,7 +159,11 @@ export function useBoundariesHover({ map, isEnabled }: UseBoundariesHoverProps):
 
             // Очищаем курсор
             if (map) {
-                map.getCanvas().style.cursor = '';
+                try {
+                    map.getCanvas().style.cursor = '';
+                } catch {
+                    // Карта уже уничтожена
+                }
             }
 
             // Очищаем hover состояние

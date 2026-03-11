@@ -464,6 +464,7 @@ export function PropertyDetailWidget({
                                     translations={{
                                         agency: t.agent.agency,
                                         realtor: t.agent.realtor,
+                                        owner: t.agent.owner,
                                         reviews: t.agent.reviews,
                                         showPhone: t.agent.showPhone,
                                         sendMessage: t.agent.sendMessage,
@@ -481,6 +482,8 @@ export function PropertyDetailWidget({
                             price={property.price}
                             rentalConditions={property.rentalConditions}
                             noCommission={property.noCommission}
+                            depositMonths={property.deposit_months}
+                            depositAmount={property.deposit}
                             translations={{
                                 perMonth: t.conditions.perMonth,
                                 priceHistory: t.conditions.priceHistory,
