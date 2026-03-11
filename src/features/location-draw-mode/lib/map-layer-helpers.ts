@@ -4,8 +4,12 @@ import mapboxgl from 'mapbox-gl';
  * Удаление слоя карты если он существует
  */
 export const removeLayerIfExists = (map: mapboxgl.Map, layerId: string): void => {
-    if (map.getLayer(layerId)) {
-        map.removeLayer(layerId);
+    try {
+        if (map.getStyle() && map.getLayer(layerId)) {
+            map.removeLayer(layerId);
+        }
+    } catch {
+        // Карта уже уничтожена — игнорируем
     }
 };
 
@@ -13,8 +17,12 @@ export const removeLayerIfExists = (map: mapboxgl.Map, layerId: string): void =>
  * Удаление источника карты если он существует
  */
 export const removeSourceIfExists = (map: mapboxgl.Map, sourceId: string): void => {
-    if (map.getSource(sourceId)) {
-        map.removeSource(sourceId);
+    try {
+        if (map.getStyle() && map.getSource(sourceId)) {
+            map.removeSource(sourceId);
+        }
+    } catch {
+        // Карта уже уничтожена — игнорируем
     }
 };
 

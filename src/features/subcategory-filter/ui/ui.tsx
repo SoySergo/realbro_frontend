@@ -57,10 +57,13 @@ export function SubcategoryFilter({ className }: SubcategoryFilterProps) {
             .finally(() => setLoading(false));
     }, [categoryIdsKey, locale]);
 
-    const items = useMemo(() => subcategories.map(s => ({
-        id: s.id,
-        label: s.translated_name || s.slug,
-    })), [subcategories]);
+    // Исключаем субкатегорию "Комната" из списка
+    const items = useMemo(() => subcategories
+        .filter(s => s.slug !== 'room')
+        .map(s => ({
+            id: s.id,
+            label: s.translated_name || s.slug,
+        })), [subcategories]);
 
     const selectedIds = filters.sub_categories || [];
 

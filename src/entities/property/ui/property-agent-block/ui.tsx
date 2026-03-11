@@ -10,6 +10,7 @@ import { Button } from '@/shared/ui/button';
 export interface PropertyAgentBlockTranslations {
     agency: string;
     realtor: string;
+    owner: string;
     reviews: string;
     showPhone: string;
     sendMessage: string;
@@ -32,8 +33,12 @@ export function PropertyAgentBlock({
 }: PropertyAgentBlockProps) {
     const t = translations;
 
-    // Determine the role text
-    const roleText = agent.type === 'agency' ? t.agency : t.realtor;
+    // Определяем текст роли по author_type
+    const roleText = agent.type === 'agency'
+        ? t.agency
+        : agent.type === 'owner'
+            ? t.owner
+            : t.realtor;
 
     const agencyText = agent.agencyName ? ` · ${agent.agencyName}` : '';
     const headerText = `${roleText}${agencyText}`;
@@ -100,16 +105,17 @@ export function PropertyAgentBlock({
                     </Link>
                 </div>
 
-                {/* Rating & Verification */}
-                <div className="flex items-center justify-center gap-4 text-sm">
-                    {/* Rating placeholder (mock if not in data) */}
-                    <div className="flex items-center gap-1.5 font-medium">
-                        <Star className="w-4 h-4 text-warning fill-warning" />
-                        <span>5,0</span>
-                        <span className="text-muted-foreground mx-1">·</span>
-                        <span className="text-muted-foreground">2 {t.reviews}</span>
+                {/* Рейтинг и отзывы — только если есть данные */}
+                {(agent.rating != null && agent.rating > 0 || agent.reviewCount != null && agent.reviewCount > 0) && (
+                    <div className="flex items-center justify-center gap-4 text-sm">
+                        <div className="flex items-center gap-1.5 font-medium">
+                            <Star className="w-4 h-4 text-warning fill-warning" />
+                            <span>{agent.rating?.toFixed(1).replace('.', ',') ?? '—'}</span>
+                            <span className="text-muted-foreground mx-1">·</span>
+                            <span className="text-muted-foreground">{agent.reviewCount ?? 0} {t.reviews}</span>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex gap-3 justify-center max-w-md mx-auto pt-2">

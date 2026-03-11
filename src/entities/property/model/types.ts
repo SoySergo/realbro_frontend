@@ -30,6 +30,8 @@ export interface PropertyAuthor {
     phone?: string;
     yearsOnPlatform?: number;
     objectsCount?: number;
+    rating?: number;
+    reviewCount?: number;
     showOnline?: boolean;
 }
 

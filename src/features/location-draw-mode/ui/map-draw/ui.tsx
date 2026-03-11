@@ -157,7 +157,9 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
-            const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+            // Проверяем что ID фильтра — валидный UUID (бекенд ожидает UUID формат)
+            const isValidUUID = activeQueryId ? /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(activeQueryId) : false;
+            const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved && isValidUUID;
 
             // Сохраняем все полигоны
             for (const polygon of polygons) {
@@ -239,6 +241,13 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         return () => {
             console.log('Cleanup draw component');
 
+            // Проверяем что карта ещё активна перед cleanup
+            try {
+                if (!map.getCanvas()) return;
+            } catch {
+                return;
+            }
+
             // Удаляем источники и слои
             cleanupDrawingLayers(map);
 
@@ -251,8 +260,12 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
             }
 
             // Восстанавливаем курсор и dragPan
-            map.dragPan.enable();
-            map.getCanvas().style.cursor = '';
+            try {
+                map.dragPan.enable();
+                map.getCanvas().style.cursor = '';
+            } catch {
+                // Карта уже уничтожена
+            }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

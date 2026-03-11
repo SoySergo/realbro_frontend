@@ -27,6 +27,7 @@ export interface PropertySidebarConditionsTranslations {
     showPhone: string;
     writeMessage: string;
     writeOnline: string;
+    months?: string;
 }
 
 interface PropertySidebarConditionsProps {
@@ -37,6 +38,9 @@ interface PropertySidebarConditionsProps {
     author?: PropertyAuthor;
     translations: PropertySidebarConditionsTranslations;
     locale?: string;
+    priceHistory?: unknown[];
+    depositMonths?: number;
+    depositAmount?: number;
     onCall?: () => void;
     onMessage?: () => void;
     onLike?: () => void;
@@ -54,6 +58,9 @@ export function PropertySidebarConditions({
     author,
     translations,
     locale = 'ru-RU',
+    priceHistory,
+    depositMonths,
+    depositAmount,
     onCall,
     onMessage,
     onLike,
@@ -69,8 +76,24 @@ export function PropertySidebarConditions({
         return new Intl.NumberFormat(locale).format(Math.round(amount));
     };
 
-    const deposit = rentalConditions?.deposit ?? 0;
+    // Залог: учитываем как deposit из rentalConditions, так и отдельные поля бекенда
+    const depositValue = depositAmount ?? rentalConditions?.deposit ?? 0;
     const utilitiesIncluded = rentalConditions?.utilitiesIncluded ?? false;
+    const monthsLabel = t.months || 'mo.';
+
+    // Формируем строку залога: "2 мес. (1 200 €)" или "1 200 €" или "—"
+    const depositDisplay = (() => {
+        if (depositMonths && depositMonths > 0 && depositValue > 0) {
+            return `${depositMonths} ${monthsLabel} (${formatPrice(depositValue)} ${currency})`;
+        }
+        if (depositMonths && depositMonths > 0) {
+            return `${depositMonths} ${monthsLabel}`;
+        }
+        if (depositValue > 0) {
+            return `${formatPrice(depositValue)} ${currency}`;
+        }
+        return '—';
+    })();
     
     return (
         <Card className={cn('p-6 shadow-sm border-border bg-card', className)}>
@@ -82,9 +105,12 @@ export function PropertySidebarConditions({
                             <span className="text-3xl font-bold">
                                 {formatPrice(price)} {currency}/{t.perMonth}
                             </span>
-                            <button className="p-1.5 rounded-md hover:bg-muted text-muted-foreground transition-colors" title={t.priceHistory}>
-                                <BarChart3 className="w-5 h-5" />
-                            </button>
+                            {/* Кнопка истории цены — показываем только если есть данные */}
+                            {priceHistory && priceHistory.length > 0 && (
+                                <button className="p-1.5 rounded-md hover:bg-muted text-muted-foreground transition-colors" title={t.priceHistory}>
+                                    <BarChart3 className="w-5 h-5" />
+                                </button>
+                            )}
                         </div>
                         <button className="text-sm text-primary hover:underline mt-1">
                             {t.trackPrice}
@@ -139,7 +165,7 @@ export function PropertySidebarConditions({
                         <span className="text-muted-foreground whitespace-nowrap">{t.deposit}</span>
                         <div className="flex-1 border-b border-border border-dashed mb-1 mx-1 opacity-50"></div>
                         <span className="text-right font-medium text-nowrap">
-                            {deposit > 0 ? `${formatPrice(deposit)} ${currency}` : '—'}
+                            {depositDisplay}
                         </span>
                     </div>
 

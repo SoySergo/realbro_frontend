@@ -17,6 +17,7 @@ import type { PropertyDetailsDTO } from '@/entities/property/model/api-types';
 import { detailsDtoToProperty } from '@/entities/property/model/converters';
 import type {
     NearbyPlaces,
+    NearbyPlace,
     AgentPropertyCard,
     SimilarPropertyCard,
     TransportStation
@@ -31,8 +32,11 @@ export * from './types';
 
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
-// URL реального API
+// URL реального API (основной бекенд)
 const API_BASE = `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
+
+// URL сервиса локаций (boundaries / nearby / transport / POI)
+const LOCATION_SERVICE_URL = `${(process.env.NEXT_PUBLIC_BOUNDARIES_SERVICE_URL || 'http://localhost:8085').replace(/\/$/, '')}/api/v1`;
 
 // ============================================================================
 // Mock Data Loaders
@@ -105,20 +109,87 @@ export async function getPropertyDetailById(id: string): Promise<Property | null
 }
 
 /**
- * Get nearby places for a property
+ * Get nearby places for a property from location service
  *
- * @param propertyId - Property ID
+ * Calls the location service /nearby/:category endpoint for each category
+ * and /transport/nearest for transport stations.
+ *
+ * @param coordinates - Property coordinates { lat, lng }
+ * @param radius - Search radius in meters (default: 1000)
  * @returns NearbyPlaces object with all categories
  */
-export async function getNearbyPlaces(propertyId: string): Promise<NearbyPlaces> {
+export async function getNearbyPlaces(
+    coordinates: { lat: number; lng: number },
+    radius: number = 1000
+): Promise<NearbyPlaces> {
     if (USE_MOCKS) {
         await new Promise(resolve => setTimeout(resolve, 50));
         return loadMockNearbyPlaces();
     }
 
-    // Real backend: transport data is included in the property detail DTO (location.transport)
-    // There is no separate /nearby endpoint. Return empty structure here.
-    // Transport will be extracted from the property detail on the page level.
+    // Категории для запроса к сервису локаций
+    const categories = [
+        'transport', 'schools', 'medical', 'groceries', 'shopping',
+        'restaurants', 'sports', 'parks', 'beauty', 'entertainment', 'attractions'
+    ] as const;
+
+    // Запросы ко всем категориям параллельно
+    const results = await Promise.allSettled(
+        categories.map(category => fetchNearbyCategory(category, coordinates, radius))
+    );
+
+    const nearbyPlaces = createEmptyNearbyPlaces();
+
+    results.forEach((result, index) => {
+        const category = categories[index];
+        if (result.status === 'fulfilled' && result.value) {
+            if (category === 'transport') {
+                nearbyPlaces.transport = result.value as TransportStation[];
+            } else {
+                nearbyPlaces[category] = result.value as NearbyPlace[];
+            }
+        }
+    });
+
+    return nearbyPlaces;
+}
+
+/**
+ * Fetch a single nearby category from location service
+ * GET /api/v1/nearby/:category?lat=X&lng=Y&radius=Z
+ */
+async function fetchNearbyCategory(
+    category: string,
+    coordinates: { lat: number; lng: number },
+    radius: number
+): Promise<TransportStation[] | NearbyPlace[]> {
+    try {
+        const params = new URLSearchParams({
+            lat: String(coordinates.lat),
+            lng: String(coordinates.lng),
+            radius: String(radius),
+        });
+
+        const response = await fetch(
+            `${LOCATION_SERVICE_URL}/nearby/${category}?${params}`,
+            { next: { revalidate: 21600 } } // ISR: 6 hours
+        );
+
+        if (!response.ok) {
+            console.log(`[LocationService] /nearby/${category} returned ${response.status}`);
+            return [];
+        }
+
+        const json = await response.json();
+        return json.data ?? json;
+    } catch (error) {
+        console.error(`[LocationService] Failed to fetch /nearby/${category}:`, error);
+        return [];
+    }
+}
+
+/** Пустая структура nearbyPlaces для фоллбэка */
+function createEmptyNearbyPlaces(): NearbyPlaces {
     return {
         transport: [],
         schools: [],
@@ -138,11 +209,11 @@ export async function getNearbyPlaces(propertyId: string): Promise<NearbyPlaces>
  * Get transport stations near a property
  * Convenience function that extracts transport from nearby places
  *
- * @param propertyId - Property ID
+ * @param coordinates - Property coordinates { lat, lng }
  * @returns Array of transport stations
  */
-export async function getTransportStations(propertyId: string): Promise<TransportStation[]> {
-    const nearbyPlaces = await getNearbyPlaces(propertyId);
+export async function getTransportStations(coordinates: { lat: number; lng: number }): Promise<TransportStation[]> {
+    const nearbyPlaces = await getNearbyPlaces(coordinates);
     return nearbyPlaces.transport;
 }
 
@@ -298,19 +369,7 @@ export async function getPropertyPageData(propertyId: string): Promise<PropertyP
     if (!property) {
         return {
             property: null,
-            nearbyPlaces: {
-                transport: [],
-                schools: [],
-                medical: [],
-                groceries: [],
-                shopping: [],
-                restaurants: [],
-                sports: [],
-                parks: [],
-                beauty: [],
-                entertainment: [],
-                attractions: []
-            },
+            nearbyPlaces: createEmptyNearbyPlaces(),
             agentProperties: [],
             similarProperties: []
         };
@@ -318,7 +377,7 @@ export async function getPropertyPageData(propertyId: string): Promise<PropertyP
 
     // Fetch remaining data in parallel
     const [nearbyPlaces, agentProperties, similarProperties] = await Promise.all([
-        getNearbyPlaces(propertyId),
+        getNearbyPlaces(property.coordinates),
         property.author?.id
             ? getAgentProperties(property.author.id, propertyId)
             : Promise.resolve([]),

@@ -230,6 +230,7 @@ export async function getPropertyPageTranslations(locale: string) {
             agent: t('agent'),
             agency: t('agency'),
             realtor: t('realtor'),
+            owner: t('owner'),
             privateAgent: t('privateAgent'),
             superAgent: t('superAgent'),
             verified: t('verified'),

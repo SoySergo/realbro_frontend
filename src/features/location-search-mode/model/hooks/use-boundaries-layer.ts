@@ -174,7 +174,7 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
 
         let isCleanedUp = false;
 
-        // Если карта ещё не загружена, ждем события load
+        // Если карта ещё не загружена, ждем события style.load (гарантирует полную загрузку стиля)
         if (!map.isStyleLoaded()) {
             const handleLoad = () => {
                 if (!isCleanedUp) {
@@ -182,11 +182,11 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
                 }
             };
 
-            map.once('styledata', handleLoad);
+            map.once('style.load', handleLoad);
 
             return () => {
                 isCleanedUp = true;
-                map.off('styledata', handleLoad);
+                map.off('style.load', handleLoad);
             };
         }
 
@@ -232,6 +232,20 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
             };
 
             requestAnimationFrame(doCleanup);
+        };
+    }, [map, initializeBoundariesLayer]);
+
+    // Переинициализация после смены стиля (setStyle() удаляет все кастомные source/layer)
+    useEffect(() => {
+        if (!map) return;
+
+        const handleStyleLoad = () => {
+            initializeBoundariesLayer();
+        };
+
+        map.on('style.load', handleStyleLoad);
+        return () => {
+            map.off('style.load', handleStyleLoad);
         };
     }, [map, initializeBoundariesLayer]);
 
