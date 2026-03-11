@@ -9,6 +9,8 @@ import { useTheme } from 'next-themes';
 // Стили карты
 const MAP_STYLE_LIGHT = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
 const MAP_STYLE_DARK = 'mapbox://styles/serhii11/cmi1yrucv00oa01qu6ciub5td';
+// const MAP_STYLE_DARK = 'mapbox://styles/serhii11/cmmlub367000a01r4av0u00ld';
+
 
 type BaseMapProps = {
     /** Начальный центр карты [lng, lat] */
