@@ -109,11 +109,14 @@ export function PropertyAgentSidebarCard({
                         <div>
                             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('agent') || 'Агент'}</p>
                             <p className="font-medium text-sm text-foreground leading-tight">{agent.name}</p>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                                <span className="text-sm font-bold text-foreground">{agent.rating?.toFixed(1) ?? '—'}</span>
-                                <Star className="w-3.5 h-3.5 text-brand-primary fill-current" />
-                                <span className="text-xs text-muted-foreground">{t('reviews') || 'отзыва'}: {agent.reviewCount ?? 0}</span>
-                            </div>
+                            {/* Рейтинг и отзывы — только если есть данные */}
+                            {(agent.rating != null && agent.rating > 0 || agent.reviewCount != null && agent.reviewCount > 0) && (
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                    <span className="text-sm font-bold text-foreground">{agent.rating?.toFixed(1) ?? '—'}</span>
+                                    <Star className="w-3.5 h-3.5 text-brand-primary fill-current" />
+                                    <span className="text-xs text-muted-foreground">{t('reviews') || 'отзыва'}: {agent.reviewCount ?? 0}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

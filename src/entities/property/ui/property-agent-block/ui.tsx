@@ -105,16 +105,17 @@ export function PropertyAgentBlock({
                     </Link>
                 </div>
 
-                {/* Rating & Verification */}
-                <div className="flex items-center justify-center gap-4 text-sm">
-                    {/* Рейтинг и отзывы из данных */}
-                    <div className="flex items-center gap-1.5 font-medium">
-                        <Star className="w-4 h-4 text-warning fill-warning" />
-                        <span>{agent.rating?.toFixed(1).replace('.', ',') ?? '—'}</span>
-                        <span className="text-muted-foreground mx-1">·</span>
-                        <span className="text-muted-foreground">{agent.reviewCount ?? 0} {t.reviews}</span>
+                {/* Рейтинг и отзывы — только если есть данные */}
+                {(agent.rating != null && agent.rating > 0 || agent.reviewCount != null && agent.reviewCount > 0) && (
+                    <div className="flex items-center justify-center gap-4 text-sm">
+                        <div className="flex items-center gap-1.5 font-medium">
+                            <Star className="w-4 h-4 text-warning fill-warning" />
+                            <span>{agent.rating?.toFixed(1).replace('.', ',') ?? '—'}</span>
+                            <span className="text-muted-foreground mx-1">·</span>
+                            <span className="text-muted-foreground">{agent.reviewCount ?? 0} {t.reviews}</span>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex gap-3 justify-center max-w-md mx-auto pt-2">
