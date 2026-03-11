@@ -500,6 +500,7 @@ export function PropertyDetailWidget({
                                 rentalTerm: t.conditions.rentalTerm,
                                 minRentalPeriod: t.conditions.minRentalPeriod,
                                 longTerm: t.conditions.longTerm,
+                                months: t.conditions.months,
                                 showPhone: t.agent.showPhone,
                                 writeMessage: t.agent.writeMessage,
                                 writeOnline: t.agent.writeOnline,

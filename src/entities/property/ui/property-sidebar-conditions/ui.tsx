@@ -27,6 +27,7 @@ export interface PropertySidebarConditionsTranslations {
     showPhone: string;
     writeMessage: string;
     writeOnline: string;
+    months?: string;
 }
 
 interface PropertySidebarConditionsProps {
@@ -78,14 +79,15 @@ export function PropertySidebarConditions({
     // Залог: учитываем как deposit из rentalConditions, так и отдельные поля бекенда
     const depositValue = depositAmount ?? rentalConditions?.deposit ?? 0;
     const utilitiesIncluded = rentalConditions?.utilitiesIncluded ?? false;
+    const monthsLabel = t.months || 'mo.';
 
     // Формируем строку залога: "2 мес. (1 200 €)" или "1 200 €" или "—"
     const depositDisplay = (() => {
         if (depositMonths && depositMonths > 0 && depositValue > 0) {
-            return `${depositMonths} ${t.perMonth.charAt(0) === 'м' ? 'мес' : 'mo'}. (${formatPrice(depositValue)} ${currency})`;
+            return `${depositMonths} ${monthsLabel} (${formatPrice(depositValue)} ${currency})`;
         }
         if (depositMonths && depositMonths > 0) {
-            return `${depositMonths} ${t.perMonth.charAt(0) === 'м' ? 'мес' : 'mo'}.`;
+            return `${depositMonths} ${monthsLabel}`;
         }
         if (depositValue > 0) {
             return `${formatPrice(depositValue)} ${currency}`;

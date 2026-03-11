@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
-import { CheckCircle2, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Link } from '@/shared/config/routing';
 import type { PropertyAuthor } from '../../model/types';
 import { Card } from '@/shared/ui/card';
