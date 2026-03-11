@@ -22,10 +22,10 @@ export function PropertyAgentSidebarCard({
 
     // Определяем текст роли по author_type
     const roleLabel = agent.type === 'agency'
-        ? (t('agency') || 'Агентство недвижимости')
+        ? t('agency')
         : agent.type === 'owner'
-            ? (t('owner') || 'Собственник')
-            : (t('privateAgent') || 'Частное лицо');
+            ? t('owner')
+            : t('privateAgent');
 
     // "Объектов в работе" — минимум 1 (текущий объект)
     const objectsCount = Math.max(agent.objectsCount || 0, 1);
@@ -83,7 +83,7 @@ export function PropertyAgentSidebarCard({
                     {/* Stats Bar */}
                     <div className="bg-muted/30 rounded-lg px-3 flex justify-center items-center">
                         <div className="text-center">
-                            <p className="text-xs text-muted-foreground">{t('objectsInWork') || 'Объектов в работе'}</p>
+                            <p className="text-xs text-muted-foreground">{t('objectsInWork')}</p>
                             <p className="font-bold text-foreground text-lg leading-tight">
                                 {objectsCount}
                             </p>
@@ -107,14 +107,14 @@ export function PropertyAgentSidebarCard({
                             )}
                         </div>
                         <div>
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('agent') || 'Агент'}</p>
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('agent')}</p>
                             <p className="font-medium text-sm text-foreground leading-tight">{agent.name}</p>
                             {/* Рейтинг и отзывы — только если есть данные */}
                             {(agent.rating != null && agent.rating > 0 || agent.reviewCount != null && agent.reviewCount > 0) && (
                                 <div className="flex items-center gap-1.5 mt-0.5">
                                     <span className="text-sm font-bold text-foreground">{agent.rating?.toFixed(1) ?? '—'}</span>
                                     <Star className="w-3.5 h-3.5 text-brand-primary fill-current" />
-                                    <span className="text-xs text-muted-foreground">{t('reviews') || 'отзыва'}: {agent.reviewCount ?? 0}</span>
+                                    <span className="text-xs text-muted-foreground">{t('reviews')}: {agent.reviewCount ?? 0}</span>
                                 </div>
                             )}
                         </div>
