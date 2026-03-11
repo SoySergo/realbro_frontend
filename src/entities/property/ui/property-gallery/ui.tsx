@@ -10,6 +10,7 @@ import type { PropertyVideo, PropertyTour3D } from '@/entities/property/model/ty
 
 interface PropertyGalleryProps {
     images: string[];
+    thumbnails?: string[];     // 480px WebP thumbnails (parallel to images)
     title?: string;
     floorPlan?: string;
     video?: PropertyVideo;
@@ -17,7 +18,7 @@ interface PropertyGalleryProps {
     className?: string;
 }
 
-export function PropertyGallery({ images, title, floorPlan, video, tour3d, className }: PropertyGalleryProps) {
+export function PropertyGallery({ images, thumbnails, title, floorPlan, video, tour3d, className }: PropertyGalleryProps) {
     const t = useTranslations('propertyDetail');
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeView, setActiveView] = useState<'photos' | 'video' | 'tour3d' | 'plan'>('photos');
@@ -376,7 +377,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                                 )}
                             >
                                 <Image
-                                    src={img}
+                                    src={thumbnails?.[idx] ?? img}
                                     alt={`Thumbnail ${idx + 1}`}
                                     fill
                                     className="object-cover"
@@ -464,7 +465,7 @@ export function PropertyGallery({ images, title, floorPlan, video, tour3d, class
                                 )}
                             >
                                 <Image
-                                    src={img}
+                                    src={thumbnails?.[idx] ?? img}
                                     alt={`Thumbnail ${idx + 1}`}
                                     fill
                                     className="object-cover"

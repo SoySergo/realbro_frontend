@@ -95,6 +95,7 @@ export interface AuthorLongDTO extends AuthorShortDTO {
 export interface MediaItemDTO {
     id: string;
     url: string;
+    thumbnail_url?: string;    // 480px WebP thumbnail
     type: string;             // "image" | "video" | "floor"
     width?: number;
     height?: number;

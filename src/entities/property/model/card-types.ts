@@ -24,6 +24,7 @@ import type { PropertyFeature, PropertyType, TransportType } from './types';
 export interface PropertyCardImage {
     id: string;
     url: string;
+    thumbnailUrl?: string;     // 480px WebP thumbnail
     width: number;
     height: number;
     alt: string;
@@ -215,6 +216,12 @@ export interface PropertyChatCard {
 /** Получить URL из элемента images (поддерживает оба формата) */
 export function getImageUrl(img: PropertyCardImage | string): string {
     return typeof img === 'string' ? img : img.url;
+}
+
+/** Получить thumbnail URL (fallback на основной URL) */
+export function getImageThumbnailUrl(img: PropertyCardImage | string): string {
+    if (typeof img === 'string') return img;
+    return img.thumbnailUrl ?? img.url;
 }
 
 /** Получить alt-текст из элемента images */

@@ -5,7 +5,7 @@ import { MapPin, Bed, Maximize, Train, Bus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import type { PropertyChatCard } from '@/entities/property';
-import { getImageUrl, getImageAlt } from '@/entities/property/model/card-types';
+import { getImageAlt, getImageThumbnailUrl } from '@/entities/property/model/card-types';
 
 interface PropertyBatchCardProps {
     property: PropertyChatCard;
@@ -44,7 +44,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
             <div className="relative h-[160px] overflow-hidden">
                 {mainImage ? (
                     <img
-                        src={getImageUrl(mainImage)}
+                        src={getImageThumbnailUrl(mainImage)}
                         alt={getImageAlt(mainImage, property.title)}
                         className="w-full h-full object-cover"
                     />

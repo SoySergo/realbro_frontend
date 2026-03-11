@@ -144,6 +144,7 @@ export interface Property {
     descriptionOriginal?: string;
     features: PropertyFeature[];
     images: string[];
+    thumbnails?: string[];     // 480px WebP thumbnails (parallel to images)
     createdAt: Date;
     updatedAt: Date;
 

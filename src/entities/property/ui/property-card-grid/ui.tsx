@@ -25,7 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import { PropertyNoteDialog } from '@/features/property-note';
 import type { PropertyGridCard } from '../../model/card-types';
-import { getImageUrl, getImageAlt } from '../../model/card-types';
+import { getImageAlt, getImageThumbnailUrl } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
 
@@ -187,7 +187,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 <Image
                     src={
                         displayImages[currentImageIndex]
-                            ? safeImageSrc(getImageUrl(displayImages[currentImageIndex]))
+                            ? safeImageSrc(getImageThumbnailUrl(displayImages[currentImageIndex]))
                             : '/placeholder-property.jpg'
                     }
                     alt={displayImages[currentImageIndex] ? getImageAlt(displayImages[currentImageIndex], property.title) : property.title}

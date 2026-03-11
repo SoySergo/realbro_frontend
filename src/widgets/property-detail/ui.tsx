@@ -296,6 +296,7 @@ export function PropertyDetailWidget({
             <div className="lg:hidden mb-0">
                 <PropertyGallery
                     images={property.images}
+                    thumbnails={property.thumbnails}
                     title={property.title}
                     floorPlan={property.floorPlan}
                     video={property.video}

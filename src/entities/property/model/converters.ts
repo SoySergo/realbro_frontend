@@ -18,6 +18,7 @@ export function dtoToGridCard(dto: PropertyShortListingDTO): PropertyGridCard {
     const images: PropertyCardImage[] = dto.media.photos.map(photo => ({
         id: photo.id,
         url: photo.url,
+        thumbnailUrl: photo.thumbnail_url ?? photo.url,
         width: photo.width ?? 800,
         height: photo.height ?? 600,
         alt: photo.description ?? dto.title,
@@ -86,6 +87,9 @@ export function dtosToGridCards(dtos: PropertyShortListingDTO[]): PropertyGridCa
 export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Property {
     // Извлекаем URL фото из media.photos
     const images: string[] = dto.media.photos.map(photo => photo.url);
+    const thumbnails: string[] = dto.media.photos.map(
+        photo => photo.thumbnail_url ?? photo.url
+    );
 
     return {
         id,
@@ -114,6 +118,7 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
         description_original: dto.description_original,
         features: [],
         images,
+        thumbnails,
         createdAt: new Date(dto.published_at),
         updatedAt: new Date(dto.updated_at),
         publishedAt: new Date(dto.published_at),

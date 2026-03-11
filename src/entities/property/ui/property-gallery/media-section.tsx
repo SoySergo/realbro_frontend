@@ -67,7 +67,8 @@ export function PropertyMediaSection({ property, className, actions }: PropertyM
             <div className="relative mt-4">
                 {activeTab === 'photos' && (
                     <PropertyGallery 
-                        images={property.images} 
+                        images={property.images}
+                        thumbnails={property.thumbnails}
                         title={property.title}
                     />
                 )}

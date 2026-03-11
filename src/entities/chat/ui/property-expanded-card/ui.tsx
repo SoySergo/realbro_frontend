@@ -9,7 +9,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import type { PropertyChatCard, PropertyFeature } from '@/entities/property';
-import { getImageUrl, getImageAlt } from '@/entities/property/model/card-types';
+import { getImageAlt, getImageThumbnailUrl } from '@/entities/property/model/card-types';
 
 interface PropertyExpandedCardProps {
     property: PropertyChatCard;
@@ -105,7 +105,7 @@ export function PropertyExpandedCard({
                             className="relative shrink-0 snap-start rounded-xl overflow-hidden w-[80%] md:w-[75%] aspect-4/3"
                         >
                             <img
-                                src={getImageUrl(image)}
+                                src={getImageThumbnailUrl(image)}
                                 alt={getImageAlt(image, `${property.title} ${index + 1}`)}
                                 className="w-full h-full object-cover"
                             />
