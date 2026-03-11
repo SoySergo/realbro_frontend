@@ -116,9 +116,27 @@ export async function getNearbyPlaces(propertyId: string): Promise<NearbyPlaces>
         return loadMockNearbyPlaces();
     }
 
-    // Real backend: transport data is included in the property detail DTO (location.transport)
-    // There is no separate /nearby endpoint. Return empty structure here.
-    // Transport will be extracted from the property detail on the page level.
+    // Запрос к бекенду: GET /api/v1/properties/{id}/nearby-places
+    try {
+        const response = await fetch(`${API_BASE}/properties/${propertyId}/nearby-places`, {
+            next: { revalidate: 21600 } // ISR: 6 hours
+        });
+
+        if (!response.ok) {
+            console.log(`[API] Nearby places endpoint returned ${response.status}, using empty data`);
+            return createEmptyNearbyPlaces();
+        }
+
+        const json = await response.json();
+        return json.data ?? json;
+    } catch (error) {
+        console.error(`[API] Failed to fetch nearby places for ${propertyId}:`, error);
+        return createEmptyNearbyPlaces();
+    }
+}
+
+/** Пустая структура nearbyPlaces для фоллбэка */
+function createEmptyNearbyPlaces(): NearbyPlaces {
     return {
         transport: [],
         schools: [],
@@ -298,19 +316,7 @@ export async function getPropertyPageData(propertyId: string): Promise<PropertyP
     if (!property) {
         return {
             property: null,
-            nearbyPlaces: {
-                transport: [],
-                schools: [],
-                medical: [],
-                groceries: [],
-                shopping: [],
-                restaurants: [],
-                sports: [],
-                parks: [],
-                beauty: [],
-                entertainment: [],
-                attractions: []
-            },
+            nearbyPlaces: createEmptyNearbyPlaces(),
             agentProperties: [],
             similarProperties: []
         };
