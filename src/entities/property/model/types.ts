@@ -222,6 +222,7 @@ export interface Property {
     amenities_dto?: AttributeDTO[];    // amenities_dto чтобы не конфликтовать с amenities: string[]
     tenant_preferences_dto?: AttributeDTO[];
     tenants_dto?: AttributeDTO[];
+    house_rules?: AttributeDTO[];
 
     // SEO
     seo_title?: string;

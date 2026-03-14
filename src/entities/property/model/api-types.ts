@@ -151,6 +151,7 @@ export interface PropertyEnrichedListingDTO extends PropertyShortListingDTO {
     amenities: AttributeDTO[];
     tenant_preferences: AttributeDTO[];
     tenants: AttributeDTO[];
+    house_rules: AttributeDTO[];
     estate_info: AttributeDTO[];
     short_description: string;
 }
@@ -192,6 +193,7 @@ export interface PropertyDetailsDTO {
     amenities: AttributeDTO[];
     tenant_preferences: AttributeDTO[];
     tenants: AttributeDTO[];
+    house_rules: AttributeDTO[];
     media: MediaResponseDTO;
     published_at: string;
     updated_at: string;

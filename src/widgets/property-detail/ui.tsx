@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import type { Property } from '@/entities/property/model/types';
+import { DynamicIcon } from '@/shared/ui/dynamic-icon';
 import type { PropertyPageTranslations } from '@/shared/lib/get-property-translations';
 import type { NearbyPlaces, AgentPropertyCard, SimilarPropertyCard } from '@/shared/api';
 import { usePropertyActions } from '@/entities/user-actions';
@@ -446,6 +447,26 @@ export function PropertyDetailWidget({
                                 translations={tenantInfoTranslations}
                             />
                         </section>
+
+                        {/* House Rules */}
+                        {property.house_rules && property.house_rules.length > 0 && (
+                            <section className="border-t border-border/50 pt-6">
+                                <div className="bg-secondary rounded-2xl p-6 space-y-3">
+                                    <h3 className="font-semibold text-foreground text-lg">{t.characteristics.houseRules || 'House Rules'}</h3>
+                                    <div className="space-y-2">
+                                        {property.house_rules.map((attr, index) => (
+                                            <div
+                                                key={`${attr.value}-${index}`}
+                                                className="flex items-center gap-3 text-sm py-2 border-b border-border/40 last:border-0"
+                                            >
+                                                <DynamicIcon name={attr.icon_type} size={16} className="shrink-0 text-muted-foreground" />
+                                                <span className="text-foreground">{attr.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+                        )}
 
                         {/* Location */}
                         <section id="map" className="border-t border-border/50 pt-6 scroll-mt-24">

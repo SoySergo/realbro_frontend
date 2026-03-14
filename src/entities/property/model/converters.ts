@@ -160,6 +160,7 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
         tenants_dto: dto.tenants,
         estate_info: dto.estate_info,
         energy_efficiency: dto.energy_efficiency,
+        house_rules: dto.house_rules,
 
         // SEO
         seo_title: dto.seo_title,

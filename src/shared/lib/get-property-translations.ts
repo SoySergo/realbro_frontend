@@ -73,6 +73,7 @@ export async function getPropertyPageTranslations(locale: string) {
             title: t('characteristics'),
             aboutFlat: t('aboutFlat'),
             aboutBuilding: t('aboutBuilding'),
+            houseRules: t('livingRules'),
             propertyType: tCharacteristics('propertyType'),
             totalArea: tCharacteristics('totalArea'),
             livingArea: tCharacteristics('livingArea'),
