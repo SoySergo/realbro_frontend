@@ -1,5 +1,4 @@
 import type { SearchFilters } from '../model/types';
-import type { DrawPolygon } from '@/entities/map-draw/model/types';
 import type { LocationItem } from '@/entities/location';
 import { adminLevelToLocationField } from '@/entities/boundary';
 
@@ -14,7 +13,6 @@ import { adminLevelToLocationField } from '@/entities/boundary';
 export function convertLocationFilterToFilters(locationFilter: {
     mode: 'search' | 'draw' | 'isochrone' | 'radius';
     selectedLocations?: LocationItem[];
-    polygon?: DrawPolygon;
     isochrone?: {
         center: [number, number];
         profile: 'walking' | 'cycling' | 'driving';
@@ -61,8 +59,8 @@ export function convertLocationFilterToFilters(locationFilter: {
         result.locationsMeta = locationsMeta;
     }
 
-    if (locationFilter.mode === 'draw' && locationFilter.polygon) {
-        result.geometryIds = [parseInt(locationFilter.polygon.id.replace('polygon_', ''))];
+    if (locationFilter.mode === 'draw') {
+        // Draw mode geometries are stored by polygon_ids in filters, set during save
     }
 
     if (locationFilter.mode === 'radius' && locationFilter.radius) {
@@ -77,12 +75,10 @@ export function convertLocationFilterToFilters(locationFilter: {
  * Преобразует SearchFilters обратно в LocationFilter
  */
 export function convertFiltersToLocationFilter(
-    filters: SearchFilters,
-    savedPolygons: DrawPolygon[]
+    filters: SearchFilters
 ): {
     mode: 'search' | 'draw' | 'isochrone' | 'radius';
     selectedLocations?: LocationItem[];
-    polygon?: DrawPolygon;
     radius?: { center: [number, number]; radiusKm: number };
 } | null {
     // Проверяем наличие adminLevel полей
@@ -123,25 +119,23 @@ export function convertFiltersToLocationFilter(
         };
     }
 
-    // Проверяем полигоны
-    if (filters.geometryIds && filters.geometryIds.length > 0) {
-        const polygonId = `polygon_${filters.geometryIds[0]}`;
-        const polygon = savedPolygons.find((p) => p.id === polygonId);
+    // Проверяем полигоны (теперь загружаются с бекенда по polygon_ids)
+    if (filters.polygon_ids && filters.polygon_ids.length > 0) {
+        return {
+            mode: 'draw',
+        };
+    }
 
-        if (polygon) {
-            return {
-                mode: 'draw',
-                polygon,
-            };
-        }
+    if (filters.geometryIds && filters.geometryIds.length > 0) {
+        return {
+            mode: 'draw',
+        };
     }
 
     // Проверяем радиус
     if (filters.radiusCenter && filters.radiusKm) {
         return {
             mode: 'radius',
-            selectedLocations: undefined,
-            polygon: undefined,
             radius: {
                 center: filters.radiusCenter,
                 radiusKm: filters.radiusKm,

@@ -45,9 +45,10 @@ export function LocationFilterButton() {
         }
     };
 
-    // Проверяем есть ли сохранённый фильтр локации
-    const hasSavedFilter = !!locationFilter;
-    const isActive = hasSavedFilter || !!activeLocationMode;
+    // Кнопка активна когда режим открыт ИЛИ есть сохранённые геометрии/локации в фильтрах
+    const hasGeometryIds = !!(currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length);
+    const hasSearchLocations = !!(locationFilter?.mode === 'search' && locationFilter.selectedLocations?.length);
+    const isActive = !!activeLocationMode || hasGeometryIds || hasSearchLocations;
 
     // Подсчёт выбранных параметров (учитываем множественные полигоны)
     const getSelectedCount = (): number => {

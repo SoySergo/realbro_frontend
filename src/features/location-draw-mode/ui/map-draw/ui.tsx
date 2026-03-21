@@ -19,9 +19,8 @@ import {
 } from '../../model/hooks';
 import { cleanupDrawingLayers } from '../../lib/map-layer-helpers';
 import { useFilterStore } from '@/widgets/search-filters-bar';
-import { saveGeometry } from '@/shared/api';
 import { useAuth } from '@/features/auth';
-import { createFilterGeometry } from '@/shared/api/geometries';
+import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
 import { useSidebarStore } from '@/widgets/sidebar';
 
 type MapDrawProps = {
@@ -79,6 +78,15 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
             console.log('[MapDraw] Restored saved polygon:', initialData.id);
         }
     }, [initialData, setPolygons]);
+
+    // Очистка с удалением геометрий с бекенда
+    const handleClearWithDelete = () => {
+        handleClear();
+        // Удаляем геометрии с бекенда
+        const { deleteLocationGeometries } = useFilterStore.getState();
+        deleteLocationGeometries(isAuthenticated);
+        setLocationFilter(null);
+    };
 
     // Хук drag-and-drop точек
     const { draggedPointIndex } = usePointDragDrop({
@@ -157,61 +165,54 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
-            // Проверяем что ID фильтра — валидный UUID (бекенд ожидает UUID формат)
             const isValidUUID = activeQueryId ? /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(activeQueryId) : false;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved && isValidUUID;
 
-            // Сохраняем все полигоны
+            // Сохраняем все полигоны на бекенд
             for (const polygon of polygons) {
                 const coordinates = [
                     [...polygon.points.map(p => [p.lng, p.lat]),
                     [polygon.points[0].lng, polygon.points[0].lat]] // замыкаем полигон
                 ];
 
+                const geojsonStr = JSON.stringify({
+                    type: 'Polygon',
+                    coordinates,
+                });
+
+                const params = {
+                    type: 'polygon' as const,
+                    geometry: geojsonStr,
+                    name: polygon.name || '',
+                };
+
                 let geometryId: string;
 
                 if (hasSavedFilter && activeQueryId) {
-                    // Сохраняем привязанным к фильтру
-                    const geojsonStr = JSON.stringify({
-                        type: 'Polygon',
-                        coordinates,
-                    });
-                    const result = await createFilterGeometry(activeQueryId, geojsonStr);
+                    const result = await createFilterGeometry(activeQueryId, params);
                     geometryId = result.id;
                     console.log('[GEO] Polygon saved to filter:', activeQueryId);
                 } else {
-                    // Гостевой endpoint
-                    const result = await saveGeometry({
-                        type: 'polygon',
-                        coordinates,
-                        metadata: {
-                            name: polygon.name,
-                            pointsCount: polygon.points.length,
-                        },
-                    });
-                    geometryId = String(result.id);
+                    const result = await createGuestGeometry(params);
+                    geometryId = result.id;
                     console.log('[GEO] Polygon saved as guest geometry:', geometryId);
                 }
 
                 savedGeometryIds.push(geometryId);
+
+                // Сохраняем мету (id + name, без координат)
+                const { addGeometryMeta } = useFilterStore.getState();
+                addGeometryMeta({ id: geometryId, name: polygon.name || '', type: 'polygon' });
             }
 
-            // Обновляем store — сохраняем первый полигон как основной
+            // Обновляем store
             setLocationFilter({
                 mode: 'draw',
-                polygon: {
-                    ...polygons[0],
-                    id: `polygon_${savedGeometryIds[0]}`,
-                },
             });
 
-            // Сохраняем все geometry IDs в фильтры
+            // Сохраняем geometry IDs в фильтры → попадут в URL params
             const { setFilters } = useFilterStore.getState();
             setFilters({
-                geometryIds: savedGeometryIds.map(id => {
-                    const parsed = parseInt(id);
-                    return Number.isNaN(parsed) ? 0 : parsed;
-                }).filter(id => id > 0),
                 polygon_ids: savedGeometryIds,
                 geometry_source: hasSavedFilter ? 'filter' : 'guest',
             });
@@ -274,7 +275,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={currentPoints.length > 0 || polygons.length > 0}
-            onClear={handleClear}
+            onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
             isSaving={isSaving}

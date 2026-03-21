@@ -16,6 +16,7 @@ import { X, Loader2, Search, Phone, Trash2, Building2, Users, MapPin, CloudUploa
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useAgencyFilters } from '@/features/agency-filters';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useAuth } from '@/features/auth';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
 import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
@@ -76,7 +77,8 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
     const locale = useLocale();
     const { filters, setFilters } = useSearchFilters();
     const agencyFiltersStore = useAgencyFilters();
-    const { activeLocationMode, setLocationMode, currentFilters, locationFilter, setLocationFilter } = useFilterStore();
+    const { activeLocationMode, setLocationMode, currentFilters, locationFilter, setLocationFilter, deleteLocationGeometries } = useFilterStore();
+    const { isAuthenticated } = useAuth();
 
     const [localCategory, setLocalCategory] = useState<SearchCategory>(currentCategory);
 
@@ -709,7 +711,29 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); setLocationFilter(null); }}
+                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
+                                                    >
+                                                        <X className="w-3.5 h-3.5 text-text-tertiary" />
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {locationFilter.mode === 'draw' && !locationFilter.polygon && (
+                                                <div
+                                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
+                                                    onClick={() => {
+                                                        pendingFilterReopenRef.current = true;
+                                                        setLocationMode('draw');
+                                                        onOpenChange(false);
+                                                    }}
+                                                >
+                                                    <Pencil className="w-3.5 h-3.5 text-brand-primary shrink-0" />
+                                                    <span className="text-sm text-text-primary truncate flex-1">
+                                                        {t('drawnArea')}
+                                                    </span>
+                                                    <button
+                                                        className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
+                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>
@@ -731,7 +755,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); setLocationFilter(null); }}
+                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>
@@ -753,7 +777,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); setLocationFilter(null); }}
+                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>

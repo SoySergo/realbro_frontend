@@ -1,44 +1,46 @@
 'use client';
 
 import { apiClient } from './lib/api-client';
-import { FEATURES } from '@/shared/config/features';
 
 // === Типы ===
 
-// DTO бекенда (snake_case)
+export type GeometryType = 'polygon' | 'isochrone' | 'radius';
+
+// DTO бекенда (snake_case) — соответствует GeometryResponse на бекенде
 export interface GeometryResponseDTO {
     id: string; // UUID
     filter_id: string;
-    geometry: string; // GeoJSON строка
+    geometry: string; // GeoJSON строка (nullable для radius)
+    name: string;
+    geometry_type: GeometryType;
+    radius: number; // км (для radius type)
+    center_lat: number;
+    center_lng: number;
     created_at: string;
 }
 
-// Legacy DTO для моков (обратная совместимость)
-export interface GeometryDTO {
-    id: number;
-    type: 'polygon' | 'isochrone' | 'radius';
-    geometry: unknown; // GeoJSON geometry или {center, radiusKm}
-    name: string;
-    metadata: Record<string, unknown>;
-    createdAt: string;
+// Параметры создания геометрии
+export interface CreateGeometryParams {
+    type: GeometryType;
+    geometry?: string; // GeoJSON строка (обязательна для polygon/isochrone)
+    name?: string;
+    radius?: number; // км (обязательно для radius type)
+    center_lat?: number; // обязательно для radius type
+    center_lng?: number; // обязательно для radius type
 }
-
-const MOCK_API_BASE = '/api/geometries';
 
 // === Реальный API (привязанные к фильтру) ===
 
 /**
- * Создать геометрию для фильтра
- * Авторизованные: filter_id = ID фильтра текущего таба
- * Неавторизованные: используйте createGuestGeometry()
+ * Создать геометрию для фильтра (авторизованные пользователи)
  */
 export async function createFilterGeometry(
     filterId: string,
-    geometry: string // GeoJSON строка
+    params: CreateGeometryParams
 ): Promise<GeometryResponseDTO> {
     const response = await apiClient.post<{ data: GeometryResponseDTO }>(
         `/filters/${filterId}/geometry`,
-        { geometry }
+        params
     );
     return response.data;
 }
@@ -58,21 +60,6 @@ export async function getFilterGeometry(filterId: string): Promise<GeometryRespo
 }
 
 /**
- * Обновить геометрию фильтра
- */
-export async function updateFilterGeometry(
-    filterId: string,
-    geometry: string,
-    type: 'polygon' | 'isochrone' | 'radius' = 'polygon'
-): Promise<GeometryResponseDTO> {
-    const response = await apiClient.post<{ data: GeometryResponseDTO }>(
-        `/filters/${filterId}/geometry`,
-        { type, geometry }
-    );
-    return response.data;
-}
-
-/**
  * Удалить геометрию фильтра
  */
 export async function deleteFilterGeometry(filterId: string): Promise<void> {
@@ -86,12 +73,11 @@ export async function deleteFilterGeometry(filterId: string): Promise<void> {
  * Возвращённый id можно использовать в polygon_ids для поиска
  */
 export async function createGuestGeometry(
-    geometry: string,
-    type: 'polygon' | 'isochrone' | 'radius' = 'polygon'
+    params: CreateGeometryParams
 ): Promise<GeometryResponseDTO> {
     const response = await apiClient.post<{ data: GeometryResponseDTO }>(
         '/filters/guest/geometry',
-        { type, geometry },
+        params,
         { skipAuth: true }
     );
     return response.data;
@@ -117,104 +103,4 @@ export async function getGuestGeometry(id: string): Promise<GeometryResponseDTO 
  */
 export async function deleteGuestGeometry(id: string): Promise<void> {
     await apiClient.delete(`/filters/guest/geometry/${id}`, { skipAuth: true });
-}
-
-// === Legacy API (для моков / обратная совместимость) ===
-
-/**
- * Получить все сохранённые геометрии пользователя
- */
-export async function getGeometries(): Promise<GeometryDTO[]> {
-    if (FEATURES.USE_REAL_FILTERS) {
-        // Реальный API не поддерживает получение всех геометрий списком
-        // Геометрии привязаны к конкретным фильтрам
-        console.warn('[API] getGeometries() not supported with real API, use getFilterGeometry() per filter');
-        return [];
-    }
-
-    try {
-        const response = await fetch(MOCK_API_BASE);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const json = await response.json();
-        return json.data;
-    } catch (error) {
-        console.error('[API] Failed to get geometries:', error);
-        return [];
-    }
-}
-
-/**
- * Сохранить геометрию (polygon/isochrone/radius)
- */
-export async function createGeometry(data: {
-    type: 'polygon' | 'isochrone' | 'radius';
-    geometry: unknown;
-    name?: string;
-    metadata?: Record<string, unknown>;
-}): Promise<GeometryDTO> {
-    if (FEATURES.USE_REAL_FILTERS) {
-        // Для реального API используем guest-геометрию как fallback
-        const geojsonStr = typeof data.geometry === 'string'
-            ? data.geometry
-            : JSON.stringify(data.geometry);
-
-        const result = await createGuestGeometry(geojsonStr);
-        const parsedId = parseInt(result.id);
-        return {
-            id: Number.isNaN(parsedId) ? Date.now() : parsedId,
-            type: data.type,
-            geometry: data.geometry,
-            name: data.name || '',
-            metadata: data.metadata || {},
-            createdAt: result.created_at,
-        };
-    }
-
-    const response = await fetch(MOCK_API_BASE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-    });
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const json = await response.json();
-    return json.data;
-}
-
-/**
- * Удалить геометрию
- */
-export async function deleteGeometry(id: number): Promise<void> {
-    if (FEATURES.USE_REAL_FILTERS) {
-        await deleteGuestGeometry(String(id));
-        return;
-    }
-
-    const response = await fetch(`${MOCK_API_BASE}?id=${id}`, {
-        method: 'DELETE',
-    });
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-}
-
-/**
- * Сохранить радиус (convenience function)
- * @param center - [lng, lat]
- * @param radiusKm - радиус в км (0.1 - 100)
- */
-export async function saveRadius(
-    center: [number, number],
-    radiusKm: number,
-    name?: string
-): Promise<GeometryDTO> {
-    if (radiusKm < 0.1 || radiusKm > 100) {
-        throw new Error('radiusKm must be between 0.1 and 100');
-    }
-
-    return createGeometry({
-        type: 'radius',
-        geometry: { center, radiusKm },
-        name: name || `Радиус ${radiusKm} км`,
-        metadata: { radiusKm },
-    });
 }

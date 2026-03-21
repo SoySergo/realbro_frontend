@@ -24,8 +24,8 @@ export {
     useFilterActions,
     useLocationFilter,
     useSelectedBoundaryWikidata,
-    useSavedPolygons,
-    usePolygonActions,
+    useLocationGeometryMeta,
+    useGeometryActions,
     useViewModeActions,
     useListingViewMode,
 } from './model/store';

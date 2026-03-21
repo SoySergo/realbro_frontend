@@ -67,6 +67,14 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
         }
     }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, t]);
 
+    // Очистка с удалением геометрий на бекенде
+    const handleClearWithDelete = async () => {
+        handleClear();
+        const { deleteLocationGeometries, setLocationFilter } = useFilterStore.getState();
+        await deleteLocationGeometries(isAuthenticated);
+        setLocationFilter(null);
+    };
+
     // Обработчик выбора точки на карте
     useEffect(() => {
         if (!isSelectingPoint) return;
@@ -100,7 +108,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
 
         setIsSaving(true);
         try {
-            const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
+            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta } = useFilterStore.getState();
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
@@ -112,20 +120,33 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                 coordinates: isochroneData,
             });
 
+            const params = {
+                type: 'isochrone' as const,
+                geometry: geojsonStr,
+                name: selectedName || '',
+                center_lat: selectedCoordinates[1],
+                center_lng: selectedCoordinates[0],
+            };
+
             let geometryId: string | undefined;
 
             try {
                 if (hasSavedFilter && activeQueryId) {
-                    const result = await createFilterGeometry(activeQueryId, geojsonStr);
+                    const result = await createFilterGeometry(activeQueryId, params);
                     geometryId = result.id;
                     console.log('[GEO] Isochrone saved to filter:', activeQueryId);
                 } else {
-                    const result = await createGuestGeometry(geojsonStr, 'isochrone');
+                    const result = await createGuestGeometry(params);
                     geometryId = result.id;
                     console.log('[GEO] Isochrone saved as guest geometry:', geometryId);
                 }
             } catch (geoError) {
                 console.error('[GEO] Failed to save isochrone geometry:', geoError);
+            }
+
+            // Сохраняем мету (id + name)
+            if (geometryId) {
+                addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'isochrone' });
             }
 
             // Сохраняем в filter store как LocationFilter
@@ -173,7 +194,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={!!selectedCoordinates || !!isochroneData}
-            onClear={handleClear}
+            onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
             isSaving={isSaving}
@@ -186,7 +207,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                     selectedCoordinates={selectedCoordinates}
                     selectedName={selectedName}
                     fullAddress={fullAddress}
-                    onClear={handleClear}
+                    onClear={handleClearWithDelete}
                     onNameChange={handleNameChange}
                     placeholder={t('searchPlaceholder')}
                 />

@@ -4,12 +4,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import type { SearchFilters } from '@/entities/filter/model/types';
-import type { DrawPolygon } from '@/entities/map-draw/model/types';
 import type { LocationFilter } from '@/features/location-filter/model/types';
 import type { LocationItem } from '@/entities/location/model/types';
 import { adminLevelToLocationField } from '@/entities/boundary';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { clearAllLocationStorage } from '@/features/location-search-mode/model/hooks/use-search-mode-state';
+import type { GeometryType } from '@/shared/api/geometries';
+import { deleteGuestGeometry, deleteFilterGeometry } from '@/shared/api/geometries';
 
 // Режим отображения поиска: карта (с сайдбаром) или список (без карты)
 export type SearchViewMode = 'map' | 'list';
@@ -27,8 +28,8 @@ type FilterStore = {
     // Фильтры текущей активной вкладки
     currentFilters: SearchFilters;
 
-    // Сохраненные полигоны (для всех вкладок)
-    savedPolygons: DrawPolygon[];
+    // Мета-информация о сохранённых геометриях (id + name, без координат)
+    locationGeometryMeta: Array<{ id: string; name: string; type: GeometryType }>;
 
     // Фильтр локации (отдельно, т.к. сложный)
     locationFilter: LocationFilter | null;
@@ -37,7 +38,6 @@ type FilterStore = {
     activeLocationMode: LocationFilter['mode'] | null;
 
     // Выбранные wikidata ID локаций на карте (для подсветки полигонов)
-    // Используем wikidata для синхронизации с OSM полигонами
     selectedBoundaryWikidata: Set<string>;
 
     // ID активной вкладки для синхронизации с sidebarStore
@@ -51,11 +51,10 @@ type FilterStore = {
     resetFilters: () => void;
     clearFilter: (key: keyof SearchFilters) => void;
 
-    // Действия с полигонами
-    addPolygon: (polygon: Omit<DrawPolygon, 'id' | 'createdAt'>) => DrawPolygon;
-    removePolygon: (id: string) => void;
-    updatePolygon: (id: string, updates: Partial<DrawPolygon>) => void;
-    clearPolygons: () => void;
+    // Действия с геометриями
+    addGeometryMeta: (meta: { id: string; name: string; type: GeometryType }) => void;
+    removeGeometryMeta: (id: string) => void;
+    clearGeometryMeta: () => void;
 
     // Действия с локацией
     setLocationFilter: (location: LocationFilter | null) => void;
@@ -64,6 +63,9 @@ type FilterStore = {
     removeSelectedBoundary: (wikidata: string) => void;
     toggleSelectedBoundary: (wikidata: string) => void;
     clearSelectedBoundaries: () => void;
+
+    // Удаление геометрий с бекенда
+    deleteLocationGeometries: (isAuthenticated: boolean) => Promise<void>;
 
     // Синхронизация с вкладками (из sidebarStore)
     setActiveQueryId: (queryId: string | null) => void;
@@ -78,9 +80,6 @@ type FilterStore = {
     setListingViewMode: (mode: ListingViewMode) => void;
     toggleListingViewMode: () => void;
 };
-
-// Генерация ID для полигона
-const generatePolygonId = () => `polygon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 // Начальное состояние фильтров
 const initialFilters: SearchFilters = {
@@ -158,8 +157,7 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
 
 // Преобразует SearchFilters обратно в LocationFilter
 function convertFiltersToLocationFilter(
-    filters: SearchFilters,
-    savedPolygons: DrawPolygon[]
+    filters: SearchFilters
 ): LocationFilter | null {
     // Проверяем наличие adminLevel полей
     const hasAdminLevels =
@@ -185,7 +183,7 @@ function convertFiltersToLocationFilter(
 
             return {
                 id: meta.id,
-                name: '', // Название будет загружено позже
+                name: '',
                 type,
                 adminLevel: meta.adminLevel,
                 wikidata: meta.wikidata,
@@ -198,19 +196,11 @@ function convertFiltersToLocationFilter(
         };
     }
 
-    // Проверяем полигоны — восстанавливаем первый найденный среди всех geometryIds
-    if (filters.geometryIds && filters.geometryIds.length > 0) {
-        for (const geoId of filters.geometryIds) {
-            const polygonId = `polygon_${geoId}`;
-            const polygon = savedPolygons.find((p) => p.id === polygonId);
-
-            if (polygon) {
-                return {
-                    mode: 'draw',
-                    polygon,
-                };
-            }
-        }
+    // Проверяем полигоны (geometry IDs в URL → будут загружены с бекенда при открытии мода)
+    if (filters.polygon_ids && filters.polygon_ids.length > 0) {
+        return {
+            mode: 'draw',
+        };
     }
 
     // Проверяем радиус
@@ -245,7 +235,7 @@ export const useFilterStore = create<FilterStore>()(
             searchViewMode: 'map' as SearchViewMode,
             listingViewMode: 'grid' as ListingViewMode,
             currentFilters: initialFilters,
-            savedPolygons: [],
+            locationGeometryMeta: [],
             locationFilter: null,
             activeLocationMode: null,
             selectedBoundaryWikidata: new Set<string>(),
@@ -310,58 +300,36 @@ export const useFilterStore = create<FilterStore>()(
                 }
             },
 
-            // Добавление полигона (сохранение на бекенд происходит в handleApply каждого режима)
-            addPolygon: (polygon) => {
-                const newPolygon: DrawPolygon = {
-                    ...polygon,
-                    id: generatePolygonId(),
-                    createdAt: new Date(),
-                };
-
+            // Добавление мета-информации о геометрии (id + name, без координат)
+            addGeometryMeta: (meta) => {
                 set((state) => ({
-                    savedPolygons: [...state.savedPolygons, newPolygon],
+                    locationGeometryMeta: [...state.locationGeometryMeta, meta],
                 }));
-
-                console.log('[GEO] Polygon added to local store:', newPolygon.id);
-
-                return newPolygon;
+                console.log('[GEO] Geometry meta added:', meta.id, meta.type);
             },
 
-            // Удаление полигона
-            removePolygon: (id) => {
+            // Удаление мета-информации о геометрии
+            removeGeometryMeta: (id) => {
                 set((state) => ({
-                    savedPolygons: state.savedPolygons.filter((p) => p.id !== id),
-                    // Удаляем из фильтров, если там есть
+                    locationGeometryMeta: state.locationGeometryMeta.filter((m) => m.id !== id),
                     currentFilters: {
                         ...state.currentFilters,
-                        geometryIds: state.currentFilters.geometryIds?.filter(
-                            (gid) => gid !== parseInt(id.replace('polygon_', ''))
-                        ),
+                        polygon_ids: state.currentFilters.polygon_ids?.filter((pid) => pid !== id),
                     },
                 }));
-
-                console.log('Polygon removed:', id);
+                console.log('[GEO] Geometry meta removed:', id);
             },
 
-            // Обновление полигона
-            updatePolygon: (id, updates) => {
+            // Очистка всех мета-данных геометрий
+            clearGeometryMeta: () => {
                 set((state) => ({
-                    savedPolygons: state.savedPolygons.map((p) =>
-                        p.id === id ? { ...p, ...updates } : p
-                    ),
-                }));
-            },
-
-            // Очистка всех полигонов
-            clearPolygons: () => {
-                set({
-                    savedPolygons: [],
+                    locationGeometryMeta: [],
                     currentFilters: {
-                        ...get().currentFilters,
+                        ...state.currentFilters,
+                        polygon_ids: [],
                         geometryIds: [],
-                        rawGeometryIds: [],
                     },
-                });
+                }));
             },
 
             // Установка фильтра локации
@@ -458,6 +426,37 @@ export const useFilterStore = create<FilterStore>()(
                 console.log('Location mode set:', mode);
             },
 
+            // Удаление геометрий с бекенда с учётом авторизации
+            deleteLocationGeometries: async (isAuthenticated) => {
+                const { locationGeometryMeta, currentFilters } = get();
+                const polygonIds = currentFilters.polygon_ids || [];
+                const geometrySource = currentFilters.geometry_source;
+
+                // Очищаем локальное состояние сразу
+                set({
+                    locationGeometryMeta: [],
+                });
+
+                if (isAuthenticated) {
+                    // Авторизован → удаляем с бекенда
+                    const deletePromises = polygonIds.map((id) => {
+                        if (geometrySource === 'filter') {
+                            return deleteFilterGeometry(id).catch((e) => {
+                                console.error('[GEO] Failed to delete filter geometry:', id, e);
+                            });
+                        }
+                        return deleteGuestGeometry(id).catch((e) => {
+                            console.error('[GEO] Failed to delete guest geometry:', id, e);
+                        });
+                    });
+                    await Promise.allSettled(deletePromises);
+                    console.log('[GEO] Deleted geometries from backend:', polygonIds);
+                } else {
+                    // Гость → НЕ удаляем с бекенда (URL мог быть расшарен)
+                    console.log('[GEO] Guest: cleared local meta only, backend geometries kept');
+                }
+            },
+
             // Синхронизация с вкладками (из sidebarStore)
             syncWithQuery: (queryId) => {
                 try {
@@ -491,8 +490,7 @@ export const useFilterStore = create<FilterStore>()(
                     set({ currentFilters: filters });
 
                     // Преобразуем фильтры обратно в locationFilter
-                    const savedPolygons = get().savedPolygons;
-                    const locationFilter = convertFiltersToLocationFilter(filters, savedPolygons);
+                    const locationFilter = convertFiltersToLocationFilter(filters);
 
                     if (locationFilter) {
                         set({ locationFilter });
@@ -598,7 +596,7 @@ export const useFilterStore = create<FilterStore>()(
             name: 'filter-storage',
             // Сохраняем только полигоны глобально
             partialize: (state) => ({
-                savedPolygons: state.savedPolygons,
+                locationGeometryMeta: state.locationGeometryMeta,
             }),
         }
     )
@@ -678,22 +676,22 @@ export function useSelectedBoundaryWikidata() {
 }
 
 /**
- * Селектор для сохранённых полигонов
+ * Селектор для мета-данных геометрий (id + name)
  */
-export function useSavedPolygons() {
-    return useFilterStore(useShallow((state) => state.savedPolygons));
+export function useLocationGeometryMeta() {
+    return useFilterStore(useShallow((state) => state.locationGeometryMeta));
 }
 
 /**
- * Селектор для действий с полигонами
+ * Селектор для действий с геометриями
  */
-export function usePolygonActions() {
+export function useGeometryActions() {
     return useFilterStore(
         useShallow((state) => ({
-            addPolygon: state.addPolygon,
-            removePolygon: state.removePolygon,
-            updatePolygon: state.updatePolygon,
-            clearPolygons: state.clearPolygons,
+            addGeometryMeta: state.addGeometryMeta,
+            removeGeometryMeta: state.removeGeometryMeta,
+            clearGeometryMeta: state.clearGeometryMeta,
+            deleteLocationGeometries: state.deleteLocationGeometries,
         }))
     );
 }

@@ -12,7 +12,7 @@ import { useRadiusState } from '../../model/hooks/use-radius-state';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
 import { useSidebarStore } from '@/widgets/sidebar';
-import { saveRadius } from '@/shared/api/geometries';
+import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
 import type { RadiusSettings } from '@/features/location-filter/model';
 
 type MapRadiusProps = {
@@ -65,19 +65,57 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
         }
     }, [initialData, handleLocationSelect, setSelectedRadius, t]);
 
+    // Очистка с удалением геометрий на бекенде
+    const handleClearWithDelete = async () => {
+        handleClear();
+        const { deleteLocationGeometries, setLocationFilter } = useFilterStore.getState();
+        await deleteLocationGeometries(isAuthenticated);
+        setLocationFilter(null);
+    };
+
     // Обработчик применения фильтра
     const handleApply = async () => {
         if (!selectedCoordinates) return;
 
         setIsSaving(true);
         try {
-            const { setLocationFilter, setFilters, setLocationMode } = useFilterStore.getState();
+            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta } = useFilterStore.getState();
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
 
-            // Сохраняем в filter store как LocationFilter
+            // Сохраняем на бекенд: type=radius, center+radius (без GeoJSON полигона)
+            const params = {
+                type: 'radius' as const,
+                name: selectedName || '',
+                radius: selectedRadius,
+                center_lat: selectedCoordinates[1],
+                center_lng: selectedCoordinates[0],
+            };
+
+            let geometryId: string | undefined;
+
+            try {
+                if (hasSavedFilter && activeQueryId) {
+                    const result = await createFilterGeometry(activeQueryId, params);
+                    geometryId = result.id;
+                    console.log('[GEO] Radius saved to filter:', activeQueryId);
+                } else {
+                    const result = await createGuestGeometry(params);
+                    geometryId = result.id;
+                    console.log('[GEO] Radius saved as guest geometry:', geometryId);
+                }
+            } catch (geoError) {
+                console.error('[GEO] Failed to save radius to backend:', geoError);
+            }
+
+            // Сохраняем мету (id + name)
+            if (geometryId) {
+                addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'radius' });
+            }
+
+            // Сохраняем в store
             setLocationFilter({
                 mode: 'radius',
                 radius: {
@@ -87,21 +125,21 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                 },
             });
 
-            // Обновляем SearchFilters с данными радиуса
-            setFilters({
+            // Обновляем SearchFilters
+            const filterUpdates: Record<string, unknown> = {
                 radiusCenter: selectedCoordinates,
                 radiusKm: selectedRadius,
                 geometry_source: hasSavedFilter ? 'filter' : 'guest',
-            });
+            };
+
+            if (geometryId) {
+                filterUpdates.polygon_ids = [geometryId];
+            }
+
+            setFilters(filterUpdates);
 
             // Закрываем панель режима локации
             setLocationMode(null);
-
-            // Сохраняем на бекенд (фоном)
-            saveRadius(selectedCoordinates, selectedRadius, selectedName).catch((error) => {
-                console.error('[GEO] Failed to save radius to backend:', error);
-            });
-
             onClose?.();
         } catch (error) {
             console.error('[GEO] Failed to apply radius:', error);
@@ -120,7 +158,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={!!selectedCoordinates}
-            onClear={handleClear}
+            onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
             isSaving={isSaving}
@@ -133,7 +171,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                     selectedCoordinates={selectedCoordinates}
                     selectedName={selectedName}
                     fullAddress={fullAddress}
-                    onClear={handleClear}
+                    onClear={handleClearWithDelete}
                     onNameChange={handleNameChange}
                     placeholder={t('searchPlaceholder')}
                 />

@@ -331,37 +331,3 @@ export async function getSimilarPropertiesApi(
         { limit }
     );
 }
-
-/**
- * Сохранить геометрию (polygon/isochrone/radius) на бекенд
- * Использует guest endpoint для неавторизованных или несохранённых фильтров
- * Для авторизованных с сохранённым фильтром — используйте createFilterGeometry
- */
-export async function saveGeometry(geometry: {
-    type: 'polygon' | 'isochrone' | 'radius';
-    coordinates: number[][][] | { center: [number, number]; radius: number };
-    metadata?: Record<string, unknown>;
-}): Promise<{ id: string }> {
-    try {
-        // Формируем GeoJSON строку для бекенда
-        const geojsonGeometry = geometry.type === 'polygon'
-            ? JSON.stringify({
-                type: 'Polygon',
-                coordinates: geometry.coordinates,
-            })
-            : JSON.stringify(geometry.coordinates);
-
-        // Используем guest endpoint — работает без авторизации
-        const result = await apiClient.post<{ data: { id: string; filter_id: string; geometry: string; created_at: string } }>(
-            '/filters/guest/geometry',
-            { type: geometry.type, geometry: geojsonGeometry },
-            { skipAuth: true }
-        );
-
-        return { id: result.data.id };
-    } catch (error) {
-        console.error('[API] Failed to save geometry:', error);
-        // Return mock ID for development
-        return { id: String(Date.now()) };
-    }
-}
