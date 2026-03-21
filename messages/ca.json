@@ -474,7 +474,7 @@
         "bathroomCount": "Nombre de banys",
         "findMe": "Troba per mi",
         "show": "Mostrar",
-        "resultsFound": "{count} resultats trobats"
+        "resultsFound": "Trobat <b>{count}</b>"
     },
     "map": {
         "showMap": "Mostrar mapa",

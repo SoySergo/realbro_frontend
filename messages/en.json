@@ -364,7 +364,7 @@
         "bathroomCount": "Number of Bathrooms",
         "findMe": "Find me",
         "show": "Show",
-        "resultsFound": "{count} results found"
+        "resultsFound": "Found <b>{count}</b>"
     },
     "map": {
         "showMap": "Show Map",

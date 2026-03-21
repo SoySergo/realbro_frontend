@@ -380,7 +380,7 @@
         "bathroomCount": "Numero di bagni",
         "findMe": "Trova per me",
         "show": "Mostra",
-        "resultsFound": "{count} risultati trovati"
+        "resultsFound": "Trovato <b>{count}</b>"
     },
     "map": {
         "showMap": "Mostra mappa",

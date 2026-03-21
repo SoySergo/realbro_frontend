@@ -367,7 +367,7 @@
         "bathroomCount": "Número de banheiros",
         "findMe": "Encontre para mim",
         "show": "Mostrar",
-        "resultsFound": "{count} resultados encontrados"
+        "resultsFound": "Encontrado <b>{count}</b>"
     },
     "map": {
         "title": "Mapa",

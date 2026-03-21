@@ -364,7 +364,7 @@
         "bathroomCount": "Nombre de salles de bain",
         "findMe": "Trouve-moi",
         "show": "Afficher",
-        "resultsFound": "{count} résultats trouvés"
+        "resultsFound": "Trouvé <b>{count}</b>"
     },
     "map": {
         "showMap": "Afficher la carte",

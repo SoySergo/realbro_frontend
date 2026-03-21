@@ -74,12 +74,11 @@ export default async function LocaleLayout({ children, params }: Props) {
                             <WebSocketProvider>
                                 <ToastProvider>
                                     <AuthErrorHandler />
-                                    {/* Sidebar (Desktop + Mobile) */}
-                                    <Sidebar />
-                                    {/* AppHeader — общий хедер для десктопа (md+) */}
-                                    <div className="hidden md:block">
+                                    {/* TODO: Старый сайдбар и хедер закомментированы для новой версии [slug] */}
+                                    {/* <Sidebar /> */}
+                                    {/* <div className="hidden md:block">
                                         <AppHeader />
-                                    </div>
+                                    </div> */}
                                     {children}
                                     {/* Auth Modals */}
                                     <AuthModals />

@@ -626,7 +626,7 @@
         "bathroomCount": "Кількість ванних кімнат",
         "findMe": "Знайди мені",
         "show": "Показати",
-        "resultsFound": "Знайдено {count} об'єктів"
+        "resultsFound": "Знайдено <b>{count}</b>"
     },
     "map": {
         "title": "Карта",

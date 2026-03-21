@@ -48,7 +48,8 @@ export function SearchCategorySwitcher({
         <Select value={currentCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger
                 className={cn(
-                    'h-9 w-auto gap-2 text-sm border-border px-3 shrink-0',
+                    'h-9 w-full gap-2 text-sm px-3',
+                    'border-0 shadow-none bg-background-secondary',
                     className
                 )}
             >
@@ -60,13 +61,13 @@ export function SearchCategorySwitcher({
                 </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="properties">
+                <SelectItem value="properties" className="py-2.5">
                     <span className="flex items-center gap-2">
                         <Building2 className="w-4 h-4" />
                         {t('properties')}
                     </span>
                 </SelectItem>
-                <SelectItem value="professionals">
+                <SelectItem value="professionals" className="py-2.5">
                     <span className="flex items-center gap-2">
                         <Users className="w-4 h-4" />
                         {t('professionals')}

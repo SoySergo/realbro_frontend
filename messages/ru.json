@@ -380,7 +380,7 @@
         "bathroomCount": "Количество ванных",
         "findMe": "Найди мне",
         "show": "Показать",
-        "resultsFound": "Найдено {count} объектов"
+        "resultsFound": "Найдено <b>{count}</b>"
     },
     "map": {
         "showMap": "Показать карту",

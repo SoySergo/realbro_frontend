@@ -230,6 +230,10 @@
   --breakpoint-filters-2: 1100px;
   --breakpoint-filters-3: 1200px;
   --breakpoint-filters-4: 1300px;
+
+  /* Брейкпоинты для страницы поиска [slug] */
+  --breakpoint-slug-desktop: 900px;
+  --breakpoint-slug-wide: 1300px;
 }
 
 /* Базовые стили body */
