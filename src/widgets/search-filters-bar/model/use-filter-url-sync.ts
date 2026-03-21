@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { useFilterStore } from './store';
 import type { SearchFilters } from '@/entities/filter/model/types';
 
@@ -39,7 +39,6 @@ const DEFAULT_VALUES: Record<string, unknown> = {
  * - При изменении фильтров обновляет URL через router.replace (без скролла).
  */
 export function useFilterUrlSync() {
-    const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const { currentFilters, setFilters } = useFilterStore();
@@ -100,6 +99,6 @@ export function useFilterUrlSync() {
         const queryString = params.toString();
         const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
 
-        router.replace(newUrl, { scroll: false });
-    }, [currentFilters, pathname, router]);
+        window.history.replaceState(null, '', newUrl);
+    }, [currentFilters, pathname]);
 }

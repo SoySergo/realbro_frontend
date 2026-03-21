@@ -64,6 +64,8 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     const currentFiltersRef = useRef(currentFilters);
     currentFiltersRef.current = currentFilters;
 
+    const [isTilesLoading, setIsTilesLoading] = useState(false);
+
     const popupRef = useRef<mapboxgl.Popup | null>(null);
     const [popupData, setPopupData] = useState<{ id: string, node: HTMLDivElement, onClose?: () => void } | null>(null);
 
@@ -244,10 +246,25 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
         const source = mapInstance.getSource(PROPERTIES_SOURCE);
         if (source && 'setTiles' in source) {
+            setIsTilesLoading(true);
             (source as mapboxgl.VectorTileSource).setTiles([tileUrl]);
             console.log('[SearchMap] Tile source updated with new filters');
         }
     }, [mapInstance, tileUrl]);
+
+    // Отслеживаем загрузку тайлов через события карты
+    useEffect(() => {
+        if (!mapInstance) return;
+
+        const handleSourceData = (e: mapboxgl.MapSourceDataEvent) => {
+            if (e.sourceId === PROPERTIES_SOURCE && e.isSourceLoaded) {
+                setIsTilesLoading(false);
+            }
+        };
+
+        mapInstance.on('sourcedata', handleSourceData);
+        return () => { mapInstance.off('sourcedata', handleSourceData); };
+    }, [mapInstance]);
 
     // ─── Обработчики кликов по кластерам и маркерам ───
     // Используем refs для колбэков → effect не пересоздаёт listeners при смене пропсов
@@ -467,6 +484,13 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
     return (
         <>
+            {/* Полоска загрузки тайлов при обновлении фильтров */}
+            {isTilesLoading && (
+                <div className="absolute top-0 left-0 right-0 z-50 h-1 overflow-hidden">
+                    <div className="h-full w-1/3 bg-brand-primary rounded-full animate-[slideRight_1s_ease-in-out_infinite]" />
+                </div>
+            )}
+
             {/* Мобильный режим локации - заменяет верхний сайдбар */}
             {mapInstance && activeLocationMode && (
                 <MobileLocationMode map={mapInstance} />

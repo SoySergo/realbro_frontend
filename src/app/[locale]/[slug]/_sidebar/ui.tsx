@@ -8,9 +8,9 @@ import {
     SlidersHorizontal,
     ArrowUpDown,
     MapPin,
-    Loader2,
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { useAuth } from '@/features/auth';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { useCurrentFilters, useFilterStore } from '@/widgets/search-filters-bar';
@@ -323,8 +323,12 @@ export function SearchPageSidebar() {
                 ))}
 
                 {isLoading && (
-                    <div className="flex items-center justify-center py-6">
-                        <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
+                    <div className="space-y-0">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <div key={i} className="px-3 py-2.5">
+                                <PropertyCardSkeleton />
+                            </div>
+                        ))}
                     </div>
                 )}
 
@@ -343,5 +347,29 @@ export function SearchPageSidebar() {
                 onCategoryChange={setCurrentCategory}
             />
         </aside>
+    );
+}
+
+function PropertyCardSkeleton() {
+    return (
+        <div className="rounded-lg overflow-hidden border border-border bg-background">
+            <Skeleton className="w-full h-[180px] rounded-none" />
+            <div className="p-3 space-y-2.5">
+                <div className="flex items-center justify-between">
+                    <Skeleton className="h-5 w-28" />
+                    <Skeleton className="h-4 w-16" />
+                </div>
+                <Skeleton className="h-4 w-full" />
+                <div className="flex items-center gap-2">
+                    <Skeleton className="h-4 w-14" />
+                    <Skeleton className="h-4 w-14" />
+                    <Skeleton className="h-4 w-14" />
+                </div>
+                <div className="flex items-center justify-between pt-1">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-6 w-6 rounded-full" />
+                </div>
+            </div>
+        </div>
     );
 }

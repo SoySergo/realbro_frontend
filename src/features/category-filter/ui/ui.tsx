@@ -3,13 +3,14 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDownIcon } from 'lucide-react';
-import { useSearchFilters } from '@/features/search-filters/model';
+import { useFilterStore, useCurrentFilters } from '@/widgets/search-filters-bar';
 import { cn } from '@/shared/lib/utils';
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuTrigger,
+    DropdownMenuSeparator,
 } from '@/shared/ui/dropdown-menu';
 import { getCategories, type Category } from '@/shared/api/dictionaries';
 
@@ -23,57 +24,63 @@ const FALLBACK_CATEGORIES = [
 /**
  * Фильтр категорий недвижимости
  * Мультиселект для выбора нескольких категорий
- * Данные загружаются из API /dictionaries/categories
  *
- * Выбор хранится локально, пушится в URL только при закрытии дропдауна.
+ * Выбор хранится локально. По кнопке «Применить» — пушится в стор.
+ * При клике вне дропдауна — изменения отменяются.
  */
 export function CategoryFilter() {
     const t = useTranslations('filters');
+    const tCommon = useTranslations('common');
     const tTypes = useTranslations('propertyTypes');
     const locale = useLocale();
-    const { filters, setFilters } = useSearchFilters();
+    const currentFilters = useCurrentFilters();
+    const storeSetFilters = useFilterStore((s) => s.setFilters);
 
     const [apiCategories, setApiCategories] = useState<Category[]>([]);
-    // Локальный стейт выбранных категорий (не трогает URL до закрытия)
-    const [localIds, setLocalIds] = useState<number[]>(filters.categoryIds || []);
+    const [localIds, setLocalIds] = useState<number[]>(currentFilters.categoryIds || []);
     const [open, setOpen] = useState(false);
-    const prevFilterIds = useRef(filters.categoryIds);
+    const prevFilterIds = useRef(currentFilters.categoryIds);
 
     // Загружаем категории из API
     useEffect(() => {
         getCategories(locale).then(setApiCategories);
     }, [locale]);
 
-    // Синхронизируем локальный стейт, если фильтры изменились извне (сброс, URL навигация)
+    // Синхронизируем локальный стейт, если фильтры изменились извне (сброс, другой компонент)
     useEffect(() => {
-        const incoming = filters.categoryIds || [];
-        if (prevFilterIds.current !== filters.categoryIds) {
-            prevFilterIds.current = filters.categoryIds;
+        const incoming = currentFilters.categoryIds || [];
+        if (prevFilterIds.current !== currentFilters.categoryIds) {
+            prevFilterIds.current = currentFilters.categoryIds;
             setLocalIds(incoming);
         }
-    }, [filters.categoryIds]);
+    }, [currentFilters.categoryIds]);
 
-    // При открытии — синхронизируем локальный стейт с текущими фильтрами
-    // При закрытии — пушим локальный выбор в URL
+    // При открытии — синхронизируем. При закрытии (клик вне) — отменяем изменения.
     const handleOpenChange = useCallback((nextOpen: boolean) => {
         if (nextOpen) {
-            setLocalIds(filters.categoryIds || []);
+            setLocalIds(currentFilters.categoryIds || []);
         } else {
-            // Пушим только если реально изменилось
-            const current = filters.categoryIds || [];
-            const changed =
-                localIds.length !== current.length ||
-                localIds.some((id) => !current.includes(id));
-
-            if (changed) {
-                setFilters({
-                    categoryIds: localIds.length > 0 ? localIds : undefined,
-                    categories: localIds.length > 0 ? localIds : undefined,
-                });
-            }
+            // Клик вне дропдауна — откатываем к текущим фильтрам
+            setLocalIds(currentFilters.categoryIds || []);
         }
         setOpen(nextOpen);
-    }, [filters.categoryIds, localIds, setFilters]);
+    }, [currentFilters.categoryIds]);
+
+    // Кнопка «Применить» — пушим и закрываем
+    const handleApply = useCallback(() => {
+        const current = currentFilters.categoryIds || [];
+        const changed =
+            localIds.length !== current.length ||
+            localIds.some((id) => !current.includes(id));
+
+        if (changed) {
+            storeSetFilters({
+                categoryIds: localIds.length > 0 ? localIds : undefined,
+                categories: localIds.length > 0 ? localIds : undefined,
+            });
+        }
+        setOpen(false);
+    }, [currentFilters.categoryIds, localIds, storeSetFilters]);
 
     // Используем API категории если есть, иначе фолбэк
     const categories = apiCategories.length > 0
@@ -136,6 +143,13 @@ export function CategoryFilter() {
                         {category.label}
                     </DropdownMenuCheckboxItem>
                 ))}
+                <DropdownMenuSeparator />
+                <button
+                    onClick={handleApply}
+                    className="w-full h-8 rounded-md text-sm font-medium bg-brand-primary text-white hover:bg-brand-primary-hover transition-colors cursor-pointer"
+                >
+                    {tCommon('apply')}
+                </button>
             </DropdownMenuContent>
         </DropdownMenu>
     );
