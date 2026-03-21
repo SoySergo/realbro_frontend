@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDownIcon } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
@@ -24,6 +24,8 @@ const FALLBACK_CATEGORIES = [
  * Фильтр категорий недвижимости
  * Мультиселект для выбора нескольких категорий
  * Данные загружаются из API /dictionaries/categories
+ *
+ * Выбор хранится локально, пушится в URL только при закрытии дропдауна.
  */
 export function CategoryFilter() {
     const t = useTranslations('filters');
@@ -32,36 +34,63 @@ export function CategoryFilter() {
     const { filters, setFilters } = useSearchFilters();
 
     const [apiCategories, setApiCategories] = useState<Category[]>([]);
+    // Локальный стейт выбранных категорий (не трогает URL до закрытия)
+    const [localIds, setLocalIds] = useState<number[]>(filters.categoryIds || []);
+    const [open, setOpen] = useState(false);
+    const prevFilterIds = useRef(filters.categoryIds);
 
     // Загружаем категории из API
     useEffect(() => {
         getCategories(locale).then(setApiCategories);
     }, [locale]);
 
+    // Синхронизируем локальный стейт, если фильтры изменились извне (сброс, URL навигация)
+    useEffect(() => {
+        const incoming = filters.categoryIds || [];
+        if (prevFilterIds.current !== filters.categoryIds) {
+            prevFilterIds.current = filters.categoryIds;
+            setLocalIds(incoming);
+        }
+    }, [filters.categoryIds]);
+
+    // При открытии — синхронизируем локальный стейт с текущими фильтрами
+    // При закрытии — пушим локальный выбор в URL
+    const handleOpenChange = useCallback((nextOpen: boolean) => {
+        if (nextOpen) {
+            setLocalIds(filters.categoryIds || []);
+        } else {
+            // Пушим только если реально изменилось
+            const current = filters.categoryIds || [];
+            const changed =
+                localIds.length !== current.length ||
+                localIds.some((id) => !current.includes(id));
+
+            if (changed) {
+                setFilters({
+                    categoryIds: localIds.length > 0 ? localIds : undefined,
+                    categories: localIds.length > 0 ? localIds : undefined,
+                });
+            }
+        }
+        setOpen(nextOpen);
+    }, [filters.categoryIds, localIds, setFilters]);
+
     // Используем API категории если есть, иначе фолбэк
     const categories = apiCategories.length > 0
         ? apiCategories.map(c => ({ id: c.id, label: c.translated_name || tTypes(c.slug as Parameters<typeof tTypes>[0]) }))
         : FALLBACK_CATEGORIES.map(c => ({ id: c.id, label: tTypes(c.code as Parameters<typeof tTypes>[0]) }));
 
-    const selectedIds = filters.categoryIds || [];
-
     const handleToggle = useCallback((id: number) => {
-        const newIds = selectedIds.includes(id)
-            ? selectedIds.filter((i: number) => i !== id)
-            : [...selectedIds, id];
+        setLocalIds((prev) =>
+            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+    }, []);
 
-        setFilters({
-            categoryIds: newIds.length > 0 ? newIds : undefined,
-            categories: newIds.length > 0 ? newIds : undefined,
-        });
-    }, [selectedIds, setFilters]);
-
-    const selectedCount = selectedIds.length;
-    // Формируем лейбл кнопки с именами выбранных категорий
+    const selectedCount = localIds.length;
     let buttonLabel: string;
     if (selectedCount > 0) {
         const selectedNames = categories
-            .filter(c => selectedIds.includes(c.id))
+            .filter(c => localIds.includes(c.id))
             .map(c => c.label);
         const joined = selectedNames.join(', ');
         buttonLabel = joined.length > 24 ? joined.slice(0, 22) + '…' : joined;
@@ -70,7 +99,7 @@ export function CategoryFilter() {
     }
 
     return (
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={handleOpenChange}>
             <DropdownMenuTrigger asChild>
                 <button
                     className={cn(
@@ -94,12 +123,12 @@ export function CategoryFilter() {
                 {categories.map((category) => (
                     <DropdownMenuCheckboxItem
                         key={category.id}
-                        checked={selectedIds.includes(category.id)}
+                        checked={localIds.includes(category.id)}
                         onCheckedChange={() => handleToggle(category.id)}
                         onSelect={(e) => e.preventDefault()}
                         className={cn(
                             'cursor-pointer rounded-md py-2.5 text-sm',
-                            selectedIds.includes(category.id)
+                            localIds.includes(category.id)
                                 ? 'text-brand-primary font-medium'
                                 : 'text-text-secondary'
                         )}
