@@ -58,6 +58,7 @@ export function SearchPageSidebar() {
     const locale = useLocale();
     const router = useRouter();
     const { isAuthenticated } = useAuth();
+    // const isAuthenticated = true; // Временно разрешаем всем видеть маркеры для теста
     const { filters, setFilters } = useSearchFilters();
     const currentFilters = useCurrentFilters();
     const { activeLocationMode, setLocationMode, locationFilter } = useFilterStore();
@@ -338,6 +339,8 @@ export function SearchPageSidebar() {
             <FiltersDesktopPanel
                 open={isFiltersOpen}
                 onOpenChange={setIsFiltersOpen}
+                currentCategory={currentCategory}
+                onCategoryChange={setCurrentCategory}
             />
         </aside>
     );

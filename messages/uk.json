@@ -584,7 +584,7 @@
         "markerLiked": "Сподобалось",
         "markerNoView": "Не переглянуто",
         "markerNotViewed": "Не оброблено",
-        "markerType": "Тип маркерів",
+        "markerTypeLabel": "Тип маркерів",
         "maxArea": "Макс. площа",
         "maxPrice": "Макс. ціна",
         "minArea": "Мін. площа",
@@ -601,6 +601,7 @@
         "propertyClass": "Тип нерухомості",
         "propertyClassResidential": "Житлова",
         "propertyClassCommercial": "Комерційна",
+        "propertyClassLand": "Земельні ділянки",
         "propertyCategories": "Категорія",
         "propertyCategoryApartment": "Квартира",
         "propertyCategoryRoom": "Кімната",
@@ -626,7 +627,18 @@
         "bathroomCount": "Кількість ванних кімнат",
         "findMe": "Знайди мені",
         "show": "Показати",
-        "resultsFound": "Знайдено <b>{count}</b>"
+        "resultsFound": "Знайдено <b>{count}</b>",
+        "savedFilter": "Збережений фільтр",
+        "markerType": {
+            "all": "Всі об'єкти",
+            "like": "Сподобались",
+            "dislike": "Не сподобались",
+            "view": "Переглянуто",
+            "noView": "Не переглянуто",
+            "saved": "Збережені",
+            "toReview": "На розгляд",
+            "toThink": "Подумати"
+        }
     },
     "map": {
         "title": "Карта",

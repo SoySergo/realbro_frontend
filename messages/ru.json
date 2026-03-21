@@ -270,7 +270,7 @@
         "location": "Локация",
         "category": "Категория",
         "subcategory": "Подкатегория",
-        "markerType": "Тип маркеров",
+        "markerTypeLabel": "Тип маркеров",
         "rooms": "Комнаты",
         "price": "Цена",
         "area": "Площадь",
@@ -360,6 +360,7 @@
         "propertyClass": "Тип недвижимости",
         "propertyClassResidential": "Жилая",
         "propertyClassCommercial": "Коммерческая",
+        "propertyClassLand": "Земельные участки",
         "propertyCategories": "Категория",
         "propertyCategoryApartment": "Квартира",
         "propertyCategoryRoom": "Комната",
@@ -380,7 +381,18 @@
         "bathroomCount": "Количество ванных",
         "findMe": "Найди мне",
         "show": "Показать",
-        "resultsFound": "Найдено <b>{count}</b>"
+        "resultsFound": "Найдено <b>{count}</b>",
+        "savedFilter": "Сохранённый фильтр",
+        "markerType": {
+            "all": "Все объекты",
+            "like": "Понравились",
+            "dislike": "Не понравились",
+            "view": "Просмотрено",
+            "noView": "Не просмотрено",
+            "saved": "Сохранённые",
+            "toReview": "На рассмотрение",
+            "toThink": "Подумать"
+        }
     },
     "map": {
         "showMap": "Показать карту",

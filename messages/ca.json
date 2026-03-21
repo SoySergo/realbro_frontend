@@ -348,7 +348,7 @@
         "location": "Ubicació",
         "category": "Categoria",
         "subcategory": "Subcategoria",
-        "markerType": "Tipus de marcadors",
+        "markerTypeLabel": "Tipus de marcadors",
         "rooms": "Habitacions",
         "price": "Preu",
         "area": "Superfície",
@@ -454,6 +454,7 @@
         "propertyClass": "Tipus de propietat",
         "propertyClassResidential": "Residencial",
         "propertyClassCommercial": "Comercial",
+        "propertyClassLand": "Terrenys",
         "propertyCategories": "Categoria",
         "propertyCategoryApartment": "Apartament",
         "propertyCategoryRoom": "Habitació",
@@ -474,7 +475,18 @@
         "bathroomCount": "Nombre de banys",
         "findMe": "Troba per mi",
         "show": "Mostrar",
-        "resultsFound": "Trobat <b>{count}</b>"
+        "resultsFound": "Trobat <b>{count}</b>",
+        "savedFilter": "Filtre desat",
+        "markerType": {
+            "all": "Tots els immobles",
+            "like": "M'agraden",
+            "dislike": "No m'agraden",
+            "view": "Vistos",
+            "noView": "No vistos",
+            "saved": "Desats",
+            "toReview": "Per revisar",
+            "toThink": "Per pensar"
+        }
     },
     "map": {
         "showMap": "Mostrar mapa",

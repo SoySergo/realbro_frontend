@@ -357,7 +357,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
 
                                     {/* Дополнительные - отдельная группа */}
                                     <div className="mt-2 pt-3 border-t border-border">
-                                        <FilterSection id="marker-type" title={t('markerType')}>
+                                        <FilterSection id="marker-type" title={t('markerTypeLabel')}>
                                             <div className="py-4">
                                                 <MarkerTypeFilterMobile
                                                     value={localMarkerType}
@@ -443,7 +443,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                                         }}
                                                     />
                                                     <span className="text-base text-text-primary">
-                                                        {tAgency(`propertyTypes.${type}`)}
+                                                        {tAgency(`propertyTypesLabels.${type}`)}
                                                     </span>
                                                 </label>
                                             ))}
@@ -451,7 +451,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                     </FilterSection>
 
                                     <div className="mt-2 pt-3 border-t border-border">
-                                        <FilterSection id="marker-type" title={t('markerType')}>
+                                        <FilterSection id="marker-type" title={t('markerTypeLabel')}>
                                             <div className="py-4">
                                                 <MarkerTypeFilterMobile
                                                     value={localMarkerType}

@@ -266,7 +266,7 @@
         "location": "Standort",
         "category": "Kategorie",
         "subcategory": "Unterkategorie",
-        "markerType": "Markertyp",
+        "markerTypeLabel": "Markertyp",
         "rooms": "Zimmer",
         "price": "Preis",
         "area": "Fläche",
@@ -356,6 +356,7 @@
         "propertyClass": "Immobilientyp",
         "propertyClassResidential": "Wohnimmobilie",
         "propertyClassCommercial": "Gewerbeimmobilie",
+        "propertyClassLand": "Grundstücke",
         "propertyCategories": "Kategorie",
         "propertyCategoryApartment": "Wohnung",
         "propertyCategoryRoom": "Zimmer",
@@ -376,7 +377,18 @@
         "bathroomCount": "Anzahl Badezimmer",
         "findMe": "Finde für mich",
         "show": "Anzeigen",
-        "resultsFound": "Gefunden <b>{count}</b>"
+        "resultsFound": "Gefunden <b>{count}</b>",
+        "savedFilter": "Gespeicherter Filter",
+        "markerType": {
+            "all": "Alle Objekte",
+            "like": "Gefällt mir",
+            "dislike": "Gefällt mir nicht",
+            "view": "Angesehen",
+            "noView": "Nicht angesehen",
+            "saved": "Gespeichert",
+            "toReview": "Zur Überprüfung",
+            "toThink": "Zum Nachdenken"
+        }
     },
     "map": {
         "showMap": "Karte anzeigen",

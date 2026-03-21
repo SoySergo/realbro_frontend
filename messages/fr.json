@@ -254,7 +254,7 @@
         "location": "Localisation",
         "category": "Catégorie",
         "subcategory": "Sous-catégorie",
-        "markerType": "Type de marqueurs",
+        "markerTypeLabel": "Type de marqueurs",
         "rooms": "Pièces",
         "price": "Prix",
         "area": "Surface",
@@ -344,6 +344,7 @@
         "propertyClass": "Type de bien",
         "propertyClassResidential": "Résidentiel",
         "propertyClassCommercial": "Commercial",
+        "propertyClassLand": "Terrains",
         "propertyCategories": "Catégorie",
         "propertyCategoryApartment": "Appartement",
         "propertyCategoryRoom": "Chambre",
@@ -364,7 +365,18 @@
         "bathroomCount": "Nombre de salles de bain",
         "findMe": "Trouve-moi",
         "show": "Afficher",
-        "resultsFound": "Trouvé <b>{count}</b>"
+        "resultsFound": "Trouvé <b>{count}</b>",
+        "savedFilter": "Filtre sauvegardé",
+        "markerType": {
+            "all": "Tous les biens",
+            "like": "Aimés",
+            "dislike": "Non aimés",
+            "view": "Consultés",
+            "noView": "Non consultés",
+            "saved": "Sauvegardés",
+            "toReview": "À examiner",
+            "toThink": "À réfléchir"
+        }
     },
     "map": {
         "showMap": "Afficher la carte",

@@ -2,6 +2,17 @@
 
 import { apiClient } from './lib/api-client';
 
+// === Маппинг фронтенд-локали → бекенд язык ===
+const LOCALE_TO_BACKEND_LANG: Record<string, string> = {
+    en: 'en-GB',
+    pt: 'pt-PT',
+    ca: 'es', // Catalan → fallback to Spanish
+};
+
+function toBackendLang(locale: string): string {
+    return LOCALE_TO_BACKEND_LANG[locale] || locale;
+}
+
 // === Типы справочников ===
 
 export interface Category {
@@ -27,7 +38,7 @@ export async function getCategories(lang: string): Promise<Category[]> {
     try {
         const response = await apiClient.get<{ data: Category[] }>(
             '/dictionaries/categories',
-            { params: { lang }, skipAuth: true }
+            { params: { lang: toBackendLang(lang) }, skipAuth: true }
         );
         return response.data;
     } catch (error) {
@@ -45,7 +56,7 @@ export async function getSubcategories(categoryId: number, lang?: string): Promi
     try {
         const response = await apiClient.get<{ data: Subcategory[] }>(
             `/dictionaries/categories/${categoryId}/subcategories`,
-            { params: { lang }, skipAuth: true }
+            { params: { lang: lang ? toBackendLang(lang) : undefined }, skipAuth: true }
         );
         return response.data;
     } catch (error) {

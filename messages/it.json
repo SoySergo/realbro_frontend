@@ -270,7 +270,7 @@
         "location": "Posizione",
         "category": "Categoria",
         "subcategory": "Sottocategoria",
-        "markerType": "Tipo di marcatori",
+        "markerTypeLabel": "Tipo di marcatori",
         "rooms": "Stanze",
         "price": "Prezzo",
         "area": "Superficie",
@@ -360,6 +360,7 @@
         "propertyClass": "Tipo di proprietà",
         "propertyClassResidential": "Residenziale",
         "propertyClassCommercial": "Commerciale",
+        "propertyClassLand": "Terreni",
         "propertyCategories": "Categoria",
         "propertyCategoryApartment": "Appartamento",
         "propertyCategoryRoom": "Stanza",
@@ -380,7 +381,18 @@
         "bathroomCount": "Numero di bagni",
         "findMe": "Trova per me",
         "show": "Mostra",
-        "resultsFound": "Trovato <b>{count}</b>"
+        "resultsFound": "Trovato <b>{count}</b>",
+        "savedFilter": "Filtro salvato",
+        "markerType": {
+            "all": "Tutti gli immobili",
+            "like": "Piaciuti",
+            "dislike": "Non piaciuti",
+            "view": "Visti",
+            "noView": "Non visti",
+            "saved": "Salvati",
+            "toReview": "Da esaminare",
+            "toThink": "Da pensare"
+        }
     },
     "map": {
         "showMap": "Mostra mappa",

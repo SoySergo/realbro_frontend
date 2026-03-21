@@ -254,7 +254,7 @@
         "location": "Location",
         "category": "Category",
         "subcategory": "Subcategory",
-        "markerType": "Marker Type",
+        "markerTypeLabel": "Marker Type",
         "rooms": "Rooms",
         "price": "Price",
         "area": "Area",
@@ -344,6 +344,7 @@
         "propertyClass": "Property Type",
         "propertyClassResidential": "Residential",
         "propertyClassCommercial": "Commercial",
+        "propertyClassLand": "Land plots",
         "propertyCategories": "Category",
         "propertyCategoryApartment": "Apartment",
         "propertyCategoryRoom": "Room",
@@ -364,7 +365,18 @@
         "bathroomCount": "Number of Bathrooms",
         "findMe": "Find me",
         "show": "Show",
-        "resultsFound": "Found <b>{count}</b>"
+        "resultsFound": "Found <b>{count}</b>",
+        "savedFilter": "Saved filter",
+        "markerType": {
+            "all": "All properties",
+            "like": "Liked",
+            "dislike": "Disliked",
+            "view": "Viewed",
+            "noView": "Not viewed",
+            "saved": "Saved",
+            "toReview": "To review",
+            "toThink": "To think about"
+        }
     },
     "map": {
         "showMap": "Show Map",

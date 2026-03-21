@@ -325,7 +325,7 @@
         "markerLiked": "Curtidos",
         "markerNoView": "Não vistos",
         "markerNotViewed": "Não processados",
-        "markerType": "Tipo de marcador",
+        "markerTypeLabel": "Tipo de marcador",
         "maxArea": "Área máx",
         "maxPrice": "Preço máx",
         "minArea": "Área min",
@@ -343,6 +343,7 @@
         "propertyClass": "Tipo de imóvel",
         "propertyClassResidential": "Residencial",
         "propertyClassCommercial": "Comercial",
+        "propertyClassLand": "Terrenos",
         "propertyCategories": "Categoria",
         "propertyCategoryApartment": "Apartamento",
         "propertyCategoryRoom": "Quarto",
@@ -367,7 +368,18 @@
         "bathroomCount": "Número de banheiros",
         "findMe": "Encontre para mim",
         "show": "Mostrar",
-        "resultsFound": "Encontrado <b>{count}</b>"
+        "resultsFound": "Encontrado <b>{count}</b>",
+        "savedFilter": "Filtro salvo",
+        "markerType": {
+            "all": "Todos os imóveis",
+            "like": "Gostei",
+            "dislike": "Não gostei",
+            "view": "Vistos",
+            "noView": "Não vistos",
+            "saved": "Salvos",
+            "toReview": "Para revisar",
+            "toThink": "Para pensar"
+        }
     },
     "map": {
         "title": "Mapa",
