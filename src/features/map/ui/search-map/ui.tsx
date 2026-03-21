@@ -262,8 +262,16 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
             }
         };
 
+        const handleIdle = () => {
+            setIsTilesLoading(false);
+        };
+
         mapInstance.on('sourcedata', handleSourceData);
-        return () => { mapInstance.off('sourcedata', handleSourceData); };
+        mapInstance.on('idle', handleIdle);
+        return () => {
+            mapInstance.off('sourcedata', handleSourceData);
+            mapInstance.off('idle', handleIdle);
+        };
     }, [mapInstance]);
 
     // ─── Обработчики кликов по кластерам и маркерам ───
@@ -484,13 +492,6 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
 
     return (
         <>
-            {/* Полоска загрузки тайлов при обновлении фильтров */}
-            {isTilesLoading && (
-                <div className="absolute top-0 left-0 right-0 z-50 h-1 overflow-hidden">
-                    <div className="h-full w-1/3 bg-brand-primary rounded-full animate-[slideRight_1s_ease-in-out_infinite]" />
-                </div>
-            )}
-
             {/* Мобильный режим локации - заменяет верхний сайдбар */}
             {mapInstance && activeLocationMode && (
                 <MobileLocationMode map={mapInstance} />
@@ -501,6 +502,13 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 initialZoom={initialZoom}
                 onMapLoad={handleMapLoad}
             >
+                {/* Полоска загрузки тайлов при обновлении фильтров */}
+                {isTilesLoading && (
+                    <div className="absolute top-0 left-0 right-0 z-50 h-1 overflow-hidden">
+                        <div className="h-full w-1/3 bg-brand-primary rounded-full animate-[slideRight_1s_ease-in-out_infinite]" />
+                    </div>
+                )}
+
                 {/* Контроллер режимов фильтра локации (только desktop) */}
                 {mapInstance && activeLocationMode && (
                     <div className="hidden md:block">
