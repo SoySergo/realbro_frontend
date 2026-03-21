@@ -369,6 +369,34 @@ export const useFilterStore = create<FilterStore>()(
                 try {
                     set({ locationFilter: location });
 
+                    // Если null — очищаем все location-related поля из currentFilters
+                    if (!location) {
+                        set((state) => {
+                            const cleaned = { ...state.currentFilters };
+                            // Search mode fields
+                            delete (cleaned as Record<string, unknown>).adminLevel2;
+                            delete (cleaned as Record<string, unknown>).adminLevel4;
+                            delete (cleaned as Record<string, unknown>).adminLevel6;
+                            delete (cleaned as Record<string, unknown>).adminLevel7;
+                            delete (cleaned as Record<string, unknown>).adminLevel8;
+                            delete (cleaned as Record<string, unknown>).adminLevel9;
+                            delete (cleaned as Record<string, unknown>).adminLevel10;
+                            // Isochrone fields
+                            delete (cleaned as Record<string, unknown>).isochroneCenter;
+                            delete (cleaned as Record<string, unknown>).isochroneMinutes;
+                            delete (cleaned as Record<string, unknown>).isochroneProfile;
+                            // Radius fields
+                            delete (cleaned as Record<string, unknown>).radiusCenter;
+                            delete (cleaned as Record<string, unknown>).radiusKm;
+                            // Geometry fields
+                            delete (cleaned as Record<string, unknown>).polygon_ids;
+                            delete (cleaned as Record<string, unknown>).geometry_source;
+                            delete (cleaned as Record<string, unknown>).geometryIds;
+                            return { currentFilters: cleaned };
+                        });
+                        return;
+                    }
+
                     // Преобразуем selectedLocations в фильтры по admin_level
                     if (location?.selectedLocations && location.selectedLocations.length > 0) {
                         const filterUpdates: Partial<SearchFilters> = {};

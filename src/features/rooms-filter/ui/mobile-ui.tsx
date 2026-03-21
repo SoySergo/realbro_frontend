@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/utils';
 interface RoomsFilterMobileProps {
     value?: number[];
     onChange?: (value: number[]) => void;
+    className?: string;
 }
 
 /**
@@ -15,7 +16,7 @@ interface RoomsFilterMobileProps {
  * Отображается как сетка кнопок (3 колонки, мультиселект)
  * Может работать как контролируемый компонент (с пропсами) или использовать глобальный store
  */
-export function RoomsFilterMobile({ value, onChange }: RoomsFilterMobileProps = {}) {
+export function RoomsFilterMobile({ value, onChange, className }: RoomsFilterMobileProps = {}) {
     const t = useTranslations('filters');
     const { filters, setFilters } = useSearchFilters();
 
@@ -53,7 +54,7 @@ export function RoomsFilterMobile({ value, onChange }: RoomsFilterMobileProps = 
     );
 
     return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className={cn('flex flex-wrap gap-2', className)}>
             {roomOptions.map((option) => {
                 const isSelected = selectedRooms.includes(option.value);
 
@@ -62,11 +63,11 @@ export function RoomsFilterMobile({ value, onChange }: RoomsFilterMobileProps = 
                         key={option.value}
                         onClick={() => handleToggle(option.value)}
                         className={cn(
-                            'px-3 py-3 rounded-lg text-sm font-medium transition-all',
-                            'border border-border',
+                            'h-8 px-3 rounded-md text-sm font-medium transition-colors',
+                            'border',
                             isSelected
                                 ? 'bg-brand-primary text-white border-brand-primary'
-                                : 'bg-background text-text-secondary hover:bg-background-secondary'
+                                : 'border-border text-text-secondary hover:bg-background-secondary hover:text-text-primary'
                         )}
                     >
                         {option.label}

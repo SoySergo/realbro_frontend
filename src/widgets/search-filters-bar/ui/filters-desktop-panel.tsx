@@ -727,7 +727,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                 >
                                                     <Circle className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                                                     <span className="text-sm text-text-primary truncate flex-1">
-                                                        {t('radiusReady', { radius: locationFilter.radius.radiusKm })}
+                                                        {locationFilter.radius.name ? `${locationFilter.radius.name} · ` : ''}{t('radiusReady', { radius: locationFilter.radius.radiusKm })}
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
@@ -749,7 +749,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                 >
                                                     <Clock className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                                                     <span className="text-sm text-text-primary truncate flex-1">
-                                                        {t('isochroneReady', { profile: t(locationFilter.isochrone.profile), minutes: locationFilter.isochrone.minutes })}
+                                                        {locationFilter.isochrone.name ? `${locationFilter.isochrone.name} · ` : ''}{t('isochroneReady', { profile: t(locationFilter.isochrone.profile), minutes: locationFilter.isochrone.minutes })}
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
@@ -785,14 +785,17 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                     </section>
                                 </div>
 
-                                {/* Количество комнат */}
-                                <section>
-                                    <h3 className="text-sm font-medium text-text-primary mb-3">{t('roomCount')}</h3>
-                                    <RoomsFilterMobile
-                                        value={localRooms}
-                                        onChange={setLocalRooms}
-                                    />
-                                </section>
+                                {/* Количество комнат — скрываем если выбрана только категория "комната" */}
+                                {!(localCategoryIds.length === 1 && localCategoryIds[0] === categories.find(c => c.slug === 'room')?.id) && (
+                                    <section>
+                                        <h3 className="text-sm font-medium text-text-primary mb-3">{t('roomCount')}</h3>
+                                        <RoomsFilterMobile
+                                            value={localRooms}
+                                            onChange={setLocalRooms}
+                                            className="gap-1"
+                                        />
+                                    </section>
+                                )}
                             </>
                         ) : (
                             <>

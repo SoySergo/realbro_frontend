@@ -59,7 +59,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
     useEffect(() => {
         if (initialData && !initializedRef.current) {
             initializedRef.current = true;
-            handleLocationSelect(initialData.center, t('selectedPoint'));
+            handleLocationSelect(initialData.center, initialData.name || t('selectedPoint'));
             setSelectedRadius(initialData.radiusKm);
             console.log('[MapRadius] Restored saved radius:', initialData);
         }
@@ -83,6 +83,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                 radius: {
                     center: selectedCoordinates,
                     radiusKm: selectedRadius,
+                    name: selectedName || undefined,
                 },
             });
 

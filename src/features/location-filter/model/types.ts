@@ -13,12 +13,14 @@ export interface IsochroneSettings {
     center: [number, number]; // [lng, lat]
     profile: 'walking' | 'cycling' | 'driving';
     minutes: number; // 5, 10, 15, 30, 45, 60
+    name?: string; // Название точки (от пользователя)
 }
 
 // Настройки радиуса
 export interface RadiusSettings {
     center: [number, number]; // [lng, lat]
     radiusKm: number;
+    name?: string; // Название точки
 }
 
 // Локация для фильтра

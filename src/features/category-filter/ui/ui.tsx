@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDownIcon } from 'lucide-react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { cn } from '@/shared/lib/utils';
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/shared/ui/popover';
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 import { getCategories, type Category } from '@/shared/api/dictionaries';
 
 // Фолбэк категории (если API недоступен)
@@ -44,7 +45,7 @@ export function CategoryFilter() {
 
     const selectedIds = filters.categoryIds || [];
 
-    const handleToggle = (id: number) => {
+    const handleToggle = useCallback((id: number) => {
         const newIds = selectedIds.includes(id)
             ? selectedIds.filter((i: number) => i !== id)
             : [...selectedIds, id];
@@ -53,8 +54,7 @@ export function CategoryFilter() {
             categoryIds: newIds.length > 0 ? newIds : undefined,
             categories: newIds.length > 0 ? newIds : undefined,
         });
-        console.log('Categories updated:', newIds);
-    };
+    }, [selectedIds, setFilters]);
 
     const selectedCount = selectedIds.length;
     // Формируем лейбл кнопки с именами выбранных категорий
@@ -70,8 +70,8 @@ export function CategoryFilter() {
     }
 
     return (
-        <Popover>
-            <PopoverTrigger asChild>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
                 <button
                     className={cn(
                         'w-full cursor-pointer',
@@ -86,39 +86,28 @@ export function CategoryFilter() {
                     <span className="truncate min-w-0">{buttonLabel}</span>
                     <ChevronDownIcon className="size-4 opacity-50 shrink-0" />
                 </button>
-            </PopoverTrigger>
-            <PopoverContent
-                className={cn(
-                    'w-[220px] z-50 p-1.5',
-                    'bg-background',
-                    'border border-border dark:border-border',
-                    'shadow-lg'
-                )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+                className="w-[220px] p-1.5"
                 align="start"
             >
-                <div className="max-h-80 overflow-y-auto space-y-0.5">
-                    {categories.map((category) => {
-                        const isSelected = selectedIds.includes(category.id);
-
-                        return (
-                            <div
-                                key={category.id}
-                                onClick={() => handleToggle(category.id)}
-                                className={cn(
-                                    'relative flex w-full cursor-pointer items-center',
-                                    'rounded-md py-2.5 px-3 text-sm outline-hidden select-none',
-                                    'transition-colors duration-150',
-                                    isSelected
-                                        ? 'bg-brand-primary/10 text-brand-primary font-medium'
-                                        : 'text-text-secondary hover:bg-background-secondary hover:text-text-primary'
-                                )}
-                            >
-                                <span className="flex-1">{category.label}</span>
-                            </div>
-                        );
-                    })}
-                </div>
-            </PopoverContent>
-        </Popover>
+                {categories.map((category) => (
+                    <DropdownMenuCheckboxItem
+                        key={category.id}
+                        checked={selectedIds.includes(category.id)}
+                        onCheckedChange={() => handleToggle(category.id)}
+                        onSelect={(e) => e.preventDefault()}
+                        className={cn(
+                            'cursor-pointer rounded-md py-2.5 text-sm',
+                            selectedIds.includes(category.id)
+                                ? 'text-brand-primary font-medium'
+                                : 'text-text-secondary'
+                        )}
+                    >
+                        {category.label}
+                    </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

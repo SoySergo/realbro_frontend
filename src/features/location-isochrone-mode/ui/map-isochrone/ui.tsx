@@ -62,7 +62,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
             initializedRef.current = true;
             setSelectedProfile(initialData.profile);
             setSelectedMinutes(initialData.minutes);
-            handleLocationSelect(initialData.center, t('selectedPoint'));
+            handleLocationSelect(initialData.center, initialData.name || t('selectedPoint'));
             console.log('[MapIsochrone] Restored saved isochrone:', initialData);
         }
     }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, t]);
@@ -135,6 +135,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                     center: selectedCoordinates,
                     profile: selectedProfile as 'walking' | 'cycling' | 'driving',
                     minutes: selectedMinutes,
+                    name: selectedName || undefined,
                 },
             });
 
