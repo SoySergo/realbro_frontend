@@ -80,8 +80,11 @@ export function filtersToBackendParams(filters: SearchFilters): URLSearchParams 
 
 /**
  * Convenience: returns query string for tile URLs.
+ * Excludes bbox — tiles are already spatially filtered by z/x/y.
  */
 export function filtersToQueryString(filters: SearchFilters): string {
-    return filtersToBackendParams(filters).toString();
+    const params = filtersToBackendParams(filters);
+    params.delete('bbox');
+    return params.toString();
 }
 

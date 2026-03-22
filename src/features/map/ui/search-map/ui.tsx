@@ -405,7 +405,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         };
     }, [mapInstance]); // ← только mapInstance, больше не зависит от колбэков
 
-    // Обработчик moveend — пишем bbox в URL (debounce 250ms)
+    // Обработчик moveend — пишем bbox в URL (debounce 50ms)
     const setFiltersRef = useRef(setFilters);
     setFiltersRef.current = setFilters;
     useEffect(() => {
@@ -427,7 +427,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                     setFiltersRef.current({ bbox });
                     onBoundsChangeRef.current?.(bbox);
                 }
-            }, 250);
+            }, 50);
         };
 
         mapInstance.on('moveend', handleMoveEnd);
