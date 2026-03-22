@@ -348,6 +348,7 @@
             "price": "Цена",
             "area": "Площадь",
             "rooms": "Комнаты",
+            "bathrooms": "Ванные",
             "location": "Локация",
             "features": "Удобства",
             "propertyType": "Тип недвижимости"
@@ -378,10 +379,12 @@
         "min": "Мин",
         "max": "Макс",
         "bathrooms": "Ванные",
+        "bathroomsMin": "Ванных мин.",
         "bathroomCount": "Количество ванных",
         "findMe": "Найди мне",
         "show": "Показать",
         "resultsFound": "Найдено <b>{count}</b>",
+        "resultsFoundLabel": "Найдено",
         "savedFilter": "Сохранённый фильтр",
         "markerType": {
             "all": "Все объекты",

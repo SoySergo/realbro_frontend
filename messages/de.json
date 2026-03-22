@@ -378,6 +378,7 @@
         "findMe": "Finde für mich",
         "show": "Anzeigen",
         "resultsFound": "Gefunden <b>{count}</b>",
+        "resultsFoundLabel": "Gefunden",
         "savedFilter": "Gespeicherter Filter",
         "markerType": {
             "all": "Alle Objekte",

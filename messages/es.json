@@ -382,6 +382,7 @@
         "findMe": "Encuéntrame",
         "show": "Mostrar",
         "resultsFound": "Encontrado <b>{count}</b>",
+        "resultsFoundLabel": "Encontrado",
         "savedFilter": "Filtro guardado",
         "markerType": {
             "all": "Todos los inmuebles",

@@ -476,6 +476,7 @@
         "findMe": "Troba per mi",
         "show": "Mostrar",
         "resultsFound": "Trobat <b>{count}</b>",
+        "resultsFoundLabel": "Trobat",
         "savedFilter": "Filtre desat",
         "markerType": {
             "all": "Tots els immobles",

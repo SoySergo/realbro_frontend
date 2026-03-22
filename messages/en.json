@@ -366,6 +366,7 @@
         "findMe": "Find me",
         "show": "Show",
         "resultsFound": "Found <b>{count}</b>",
+        "resultsFoundLabel": "Found",
         "savedFilter": "Saved filter",
         "markerType": {
             "all": "All properties",

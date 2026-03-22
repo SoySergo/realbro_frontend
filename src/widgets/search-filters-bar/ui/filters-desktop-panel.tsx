@@ -18,6 +18,7 @@ import { useActiveLocationMode, useSetLocationMode } from '@/features/search-fil
 import { useAgencyFilters } from '@/features/agency-filters';
 import { useAuth } from '@/features/auth';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
+import { BathroomsFilterMobile } from '@/features/bathrooms-filter';
 import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
 import type { LocationFilterMode } from '@/features/location-filter/model';
@@ -97,6 +98,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
     const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
     const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.subCategories || []);
     const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
+    const [localBathrooms, setLocalBathrooms] = useState<number[]>(filters.bathrooms || []);
     const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
     const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
     const [localMinArea, setLocalMinArea] = useState(filters.minArea || 0);
@@ -139,6 +141,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
             setLocalCategoryIds(filters.categoryIds || []);
             setLocalSubCategoryIds(filters.subCategories || []);
             setLocalRooms(filters.rooms || []);
+            setLocalBathrooms(filters.bathrooms || []);
             setLocalMinPrice(filters.minPrice || 0);
             setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
             setLocalMinArea(filters.minArea || 0);
@@ -197,6 +200,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                     categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
                     subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                     rooms: localRooms.length > 0 ? localRooms : undefined,
+                    bathrooms: localBathrooms.length > 0 ? localBathrooms : undefined,
                     minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                     maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
                     minArea: localMinArea !== 0 ? localMinArea : undefined,
@@ -221,7 +225,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         } finally {
             setIsLoadingCount(false);
         }
-    }, [isProperties, localMarkerType, localCategoryIds, localSubCategoryIds, localRooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, filters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
+    }, [isProperties, localMarkerType, localCategoryIds, localSubCategoryIds, localRooms, localBathrooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, filters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
 
     // Обновляем счётчик при изменении фильтров (с debounce)
     useEffect(() => {
@@ -239,6 +243,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         ? (localMarkerType !== 'all' ||
             localCategoryIds.length > 0 ||
             localRooms.length > 0 ||
+            localBathrooms.length > 0 ||
             localMinPrice !== 0 ||
             localMaxPrice !== MAX_PRICE ||
             localMinArea !== 0 ||
@@ -256,6 +261,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
             localCategoryIds.length > 0,
             localSubCategoryIds.length > 0,
             localRooms.length > 0,
+            localBathrooms.length > 0,
             localMinPrice !== 0 || localMaxPrice !== MAX_PRICE,
             localMinArea !== 0 || localMaxArea !== MAX_AREA,
             localLocationMode !== null,
@@ -275,6 +281,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                 categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
                 subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                 rooms: localRooms.length > 0 ? localRooms : undefined,
+                bathrooms: localBathrooms.length > 0 ? localBathrooms : undefined,
                 minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                 maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
                 minArea: localMinArea !== 0 ? localMinArea : undefined,
@@ -298,6 +305,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
             setLocalCategoryIds([]);
             setLocalSubCategoryIds([]);
             setLocalRooms([]);
+            setLocalBathrooms([]);
             setLocalMinPrice(0);
             setLocalMaxPrice(MAX_PRICE);
             setLocalMinArea(0);
@@ -770,6 +778,16 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                         />
                                     </section>
                                 )}
+
+                                {/* Количество ванных */}
+                                <section>
+                                    <h3 className="text-sm font-medium text-text-primary mb-3">{t('bathroomCount')}</h3>
+                                    <BathroomsFilterMobile
+                                        value={localBathrooms}
+                                        onChange={setLocalBathrooms}
+                                        className="gap-1"
+                                    />
+                                </section>
                             </>
                         ) : (
                             <>

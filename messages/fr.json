@@ -366,6 +366,7 @@
         "findMe": "Trouve-moi",
         "show": "Afficher",
         "resultsFound": "Trouvé <b>{count}</b>",
+        "resultsFoundLabel": "Trouvé",
         "savedFilter": "Filtre sauvegardé",
         "markerType": {
             "all": "Tous les biens",

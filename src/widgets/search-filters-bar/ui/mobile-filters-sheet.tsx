@@ -15,6 +15,7 @@ import { MarkerTypeFilterMobile } from '@/features/marker-type-filter';
 import { CategoryFilterMobile } from '@/features/category-filter';
 import { SubcategoryFilterMobile } from '@/features/subcategory-filter';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
+import { BathroomsFilterMobile } from '@/features/bathrooms-filter';
 import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
 import { LocationFilterMobile } from '@/features/location-filter';
@@ -62,6 +63,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
     const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
     const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.subCategories || []);
     const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
+    const [localBathrooms, setLocalBathrooms] = useState<number[]>(filters.bathrooms || []);
     const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
     const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
     const [localMinArea, setLocalMinArea] = useState(filters.minArea || 0);
@@ -89,6 +91,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                     categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
                     sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                     rooms: localRooms.length > 0 ? localRooms : undefined,
+                    bathrooms: localBathrooms.length > 0 ? localBathrooms : undefined,
                     minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                     maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
                     minArea: localMinArea !== 0 ? localMinArea : undefined,
@@ -113,7 +116,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
         } finally {
             setIsLoadingCount(false);
         }
-    }, [isProperties, localMarkerType, localCategoryIds, localRooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, currentFilters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
+    }, [isProperties, localMarkerType, localCategoryIds, localRooms, localBathrooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, currentFilters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
 
     // Обновляем счётчик при изменении фильтров (с debounce)
     useEffect(() => {
@@ -133,6 +136,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
             setLocalCategoryIds(filters.categoryIds || []);
             setLocalSubCategoryIds(filters.subCategories || []);
             setLocalRooms(filters.rooms || []);
+            setLocalBathrooms(filters.bathrooms || []);
             setLocalMinPrice(filters.minPrice || 0);
             setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
             setLocalMinArea(filters.minArea || 0);
@@ -165,6 +169,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
         ? (localMarkerType !== 'all' ||
             localCategoryIds.length > 0 ||
             localRooms.length > 0 ||
+            localBathrooms.length > 0 ||
             localMinPrice !== 0 ||
             localMaxPrice !== MAX_PRICE ||
             localMinArea !== 0 ||
@@ -183,6 +188,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                 categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
                 subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                 rooms: localRooms.length > 0 ? localRooms : undefined,
+                bathrooms: localBathrooms.length > 0 ? localBathrooms : undefined,
                 minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                 maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
                 minArea: localMinArea !== 0 ? localMinArea : undefined,
@@ -206,6 +212,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
             setLocalCategoryIds([]);
             setLocalSubCategoryIds([]);
             setLocalRooms([]);
+            setLocalBathrooms([]);
             setLocalMinPrice(0);
             setLocalMaxPrice(MAX_PRICE);
             setLocalMinArea(0);
@@ -340,6 +347,15 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
                                             <RoomsFilterMobile
                                                 value={localRooms}
                                                 onChange={setLocalRooms}
+                                            />
+                                        </div>
+                                    </FilterSection>
+
+                                    <FilterSection id="bathrooms" title={t('categories.bathrooms')}>
+                                        <div className="py-4">
+                                            <BathroomsFilterMobile
+                                                value={localBathrooms}
+                                                onChange={setLocalBathrooms}
                                             />
                                         </div>
                                     </FilterSection>

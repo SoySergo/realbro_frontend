@@ -179,7 +179,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         >
             {/* Image with hover slider + touch swipe */}
             <div
-                className="relative aspect-[4/3] touch-manipulation "
+                className="relative h-[260px] touch-manipulation overflow-hidden"
                 onMouseMove={handleMouseMove}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}

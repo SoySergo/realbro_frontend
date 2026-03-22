@@ -8,9 +8,11 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 
+const ALL_VALUES = [1, 2, 3, 4];
+
 /**
  * Компактный горизонтальный фильтр ванных комнат с Popover
- * Стиль Toggle Group - все кнопки объединены в одну группу
+ * Выбор минимального количества: клик по 2 → выбираются 2, 3, 4 (2 и более)
  */
 export const BathroomsFilter = memo(() => {
     const t = useTranslations('filters');
@@ -19,37 +21,40 @@ export const BathroomsFilter = memo(() => {
     const [isOpen, setIsOpen] = useState(false);
 
     const bathroomOptions = useMemo(() => [
-        { value: '1', label: '1' },
-        { value: '2', label: '2' },
-        { value: '3', label: '3' },
-        { value: '4', label: '4+' },
+        { value: 1, label: '1+' },
+        { value: 2, label: '2+' },
+        { value: 3, label: '3+' },
+        { value: 4, label: '4+' },
     ], []);
 
-    const selectedBathrooms = useMemo(() => filters.bathrooms || [], [filters.bathrooms]);
+    // Минимальное выбранное значение (null если ничего не выбрано)
+    const minSelected = useMemo(() => {
+        const baths = filters.bathrooms;
+        if (!baths || baths.length === 0) return null;
+        return Math.min(...baths);
+    }, [filters.bathrooms]);
 
-    // Конвертируем массив чисел в массив строк для ToggleGroup
-    const selectedValues = useMemo(
-        () => selectedBathrooms.map(String),
-        [selectedBathrooms]
-    );
+    const isActive = minSelected !== null;
 
-    const handleValueChange = useCallback((values: string[]) => {
-        const newBathrooms = values.map(Number);
-        setFilters({ bathrooms: newBathrooms.length > 0 ? newBathrooms : undefined });
-        console.log('Bathrooms updated:', newBathrooms);
-    }, [setFilters]);
+    const handleSelect = useCallback((value: number) => {
+        if (minSelected === value) {
+            // Повторный клик — сброс
+            setFilters({ bathrooms: undefined });
+        } else {
+            // Выбираем все значения >= value
+            const newBathrooms = ALL_VALUES.filter(v => v >= value);
+            setFilters({ bathrooms: newBathrooms });
+        }
+    }, [minSelected, setFilters]);
 
     const handleReset = useCallback(() => {
         setFilters({ bathrooms: undefined });
     }, [setFilters]);
 
-    const selectedCount = selectedBathrooms.length;
-    const isActive = selectedCount > 0;
-
     const buttonLabel = useMemo(() => {
-        if (!isActive) return t('bathrooms');
-        return `${t('bathrooms')} (${selectedCount})`;
-    }, [isActive, selectedCount, t]);
+        if (!isActive) return t('bathroomsMin');
+        return `${t('bathroomsMin')} ${minSelected}+`;
+    }, [isActive, minSelected, t]);
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -57,20 +62,16 @@ export const BathroomsFilter = memo(() => {
                 <button
                     className={cn(
                         'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
-                        // Светлая тема: белый фон
+                        'px-3 py-2 text-sm max-w-[160px] transition-all duration-200',
                         'bg-background',
-                        // Тёмная тема: без бордера
                         'border border-border dark:border-transparent',
-                        // Текст
                         'text-text-primary hover:text-text-primary',
-                        // Активное состояние
                         isActive && 'text-text-primary'
                     )}
                 >
-                    {buttonLabel}
+                    <span className="truncate">{buttonLabel}</span>
                     <ChevronDown className={cn(
-                        "w-4 h-4 opacity-50 transition-transform",
+                        "w-4 h-4 opacity-50 shrink-0 transition-transform",
                         isOpen && "rotate-180"
                     )} />
                 </button>
@@ -81,32 +82,24 @@ export const BathroomsFilter = memo(() => {
                 align="start"
             >
                 <div className="flex flex-col gap-3">
-                    {/* Toggle Group - горизонтальный ряд кнопок */}
                     <div className="inline-flex rounded-md" role="group">
                         {bathroomOptions.map((option, index) => {
-                            const isSelected = selectedValues.includes(option.value);
+                            const isSelected = minSelected !== null && option.value >= minSelected;
                             const isFirst = index === 0;
                             const isLast = index === bathroomOptions.length - 1;
 
                             return (
                                 <button
                                     key={option.value}
-                                    onClick={() => {
-                                        const newValues = isSelected
-                                            ? selectedValues.filter((v: string) => v !== option.value)
-                                            : [...selectedValues, option.value];
-                                        handleValueChange(newValues);
-                                    }}
+                                    onClick={() => handleSelect(option.value)}
                                     className={cn(
                                         "relative inline-flex items-center justify-center px-3 h-9 text-sm font-medium transition-all cursor-pointer",
                                         "text-text-primary border border-border bg-background dark:bg-input/30",
                                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2",
                                         "disabled:pointer-events-none disabled:opacity-50",
-                                        // Углы только у первого и последнего
                                         isFirst && "rounded-l-md",
                                         isLast && "rounded-r-md",
                                         !isFirst && "-ml-px",
-                                        // Состояния
                                         isSelected
                                             ? "bg-brand-primary text-white border-brand-primary z-10 dark:bg-brand-primary dark:text-white"
                                             : "hover:bg-background-secondary hover:text-text-primary dark:hover:bg-input/50"
@@ -118,7 +111,6 @@ export const BathroomsFilter = memo(() => {
                         })}
                     </div>
 
-                    {/* Кнопка сброса */}
                     {isActive && (
                         <Button
                             variant="outline"
@@ -126,14 +118,10 @@ export const BathroomsFilter = memo(() => {
                             onClick={handleReset}
                             className={cn(
                                 "w-auto cursor-pointer",
-                                // Светлая тема
                                 "bg-background text-text-secondary border-border",
-                                // Тёмная тема
                                 "dark:bg-background-secondary dark:text-text-primary dark:border-border",
-                                // Ховер: лёгкое осветление фона
                                 "hover:bg-background-secondary hover:text-text-primary",
                                 "dark:hover:bg-background-tertiary dark:hover:text-text-primary",
-                                // Переход
                                 "transition-colors duration-150"
                             )}
                         >

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo, type CSSProperties, type ReactElement } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { List, useDynamicRowHeight, useListRef } from 'react-window';
 import {
     Fingerprint,
     SlidersHorizontal,
@@ -10,7 +11,6 @@ import {
     MapPin,
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import { Skeleton } from '@/shared/ui/skeleton';
 import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
@@ -19,7 +19,8 @@ import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-c
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
 import { PropertyCardGrid } from '@/entities/property';
 import type { PropertyGridCard } from '@/entities/property';
-import { getPropertiesList, getPropertiesCount, type PropertiesListResponse } from '@/shared/api';
+import { getPropertiesListCursor, getPropertiesCount } from '@/shared/api';
+import { dtosToGridCards } from '@/entities/property/model/converters';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
 import {
     Select,
@@ -41,6 +42,43 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
     { value: 'to_think', labelKey: 'toThink' },
 ];
 
+const SIDEBAR_PAGE_LIMIT = 10;
+
+/** Props, передаваемые в rowComponent через rowProps */
+interface PropertyRowData {
+    properties: PropertyGridCard[];
+    onPropertyClick: (p: PropertyGridCard) => void;
+}
+
+/** Виртуализированная строка списка (react-window v2) */
+function PropertyRow({
+    index,
+    style,
+    properties,
+    onPropertyClick,
+}: {
+    ariaAttributes: Record<string, unknown>;
+    index: number;
+    style: CSSProperties;
+} & PropertyRowData): ReactElement | null {
+    const property = properties[index];
+    if (!property) {
+        return <div style={style} />;
+    }
+    return (
+        <div style={style}>
+            <div className="px-3 py-2.5">
+                <PropertyCardGrid
+                    property={property}
+                    onClick={() => onPropertyClick(property)}
+                    actions={<PropertyCompareButton property={property} />}
+                    menuItems={<PropertyCompareMenuItem property={property} />}
+                />
+            </div>
+        </div>
+    );
+}
+
 /**
  * SearchPageSidebar — правый сайдбар для страницы поиска (450px).
  *
@@ -51,7 +89,6 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
 export function SearchPageSidebar() {
     const t = useTranslations('filters');
     const tSidebar = useTranslations('mapSidebar');
-    const tCommon = useTranslations('common');
     const locale = useLocale();
     const router = useRouter();
     const { isAuthenticated } = useAuth();
@@ -62,14 +99,18 @@ export function SearchPageSidebar() {
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-    // Properties state
+    // Properties state — cursor-based pagination
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [totalCount, setTotalCount] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [page, setPage] = useState(1);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [nextCursor, setNextCursor] = useState<string | undefined>();
     const [hasMore, setHasMore] = useState(true);
     const loadingRef = useRef(false);
-    const scrollRef = useRef<HTMLDivElement>(null);
+
+    // react-window: dynamic row heights + list ref
+    const dynamicRowHeight = useDynamicRowHeight({ defaultRowHeight: 460 });
+    const listRef = useListRef(null);
 
     const sortBy = filters.sort ?? 'createdAt';
     const sortOrder = filters.order ?? 'desc';
@@ -80,34 +121,47 @@ export function SearchPageSidebar() {
         { value: 'area', label: tSidebar('sortArea') },
     ];
 
-    // Загрузка свойств
+    // Refs для стабильного доступа в колбэках (без stale closures)
+    const nextCursorRef = useRef(nextCursor);
+    nextCursorRef.current = nextCursor;
+    const hasMoreRef = useRef(hasMore);
+    hasMoreRef.current = hasMore;
+    const propertiesLenRef = useRef(0);
+    propertiesLenRef.current = properties.length;
+
     const fetchProperties = useCallback(
-        async (pageNum: number, append = false) => {
+        async (cursor?: string) => {
             if (loadingRef.current) return;
             loadingRef.current = true;
             setIsLoading(true);
+            if (!cursor) setIsRefreshing(true);
 
             try {
-                const response = await getPropertiesList({
+                const sort_by = sortBy === 'createdAt' ? 'published_at' : sortBy;
+                const response = await getPropertiesListCursor({
                     filters,
-                    page: pageNum,
-                    limit: 20,
-                    sortBy,
-                    sortOrder,
+                    limit: SIDEBAR_PAGE_LIMIT,
+                    cursor,
+                    sort_by: sort_by as 'published_at' | 'price' | 'area',
+                    sort_order: sortOrder,
                     language: locale,
                 });
 
-                if (append) {
-                    setProperties((prev) => [...prev, ...response.data]);
+                const cards = dtosToGridCards(response.data);
+
+                if (cursor) {
+                    setProperties((prev) => [...prev, ...cards]);
                 } else {
-                    setProperties(response.data);
+                    setProperties(cards);
                 }
 
-                setHasMore(pageNum < response.pagination.totalPages);
+                setNextCursor(response.pagination.next_cursor);
+                setHasMore(response.pagination.has_more);
             } catch (error) {
                 console.error('Failed to fetch properties:', error);
             } finally {
                 setIsLoading(false);
+                setIsRefreshing(false);
                 loadingRef.current = false;
             }
         },
@@ -116,9 +170,8 @@ export function SearchPageSidebar() {
 
     // Сброс и перезагрузка при изменении фильтров/сортировки
     useEffect(() => {
-        setPage(1);
-        setProperties([]);
-        fetchProperties(1, false);
+        setNextCursor(undefined);
+        fetchProperties();
     }, [fetchProperties]);
 
     // Загрузка каунта
@@ -133,24 +186,33 @@ export function SearchPageSidebar() {
         return () => controller.abort();
     }, [filters]);
 
-    // Infinite scroll
-    const handleScroll = useCallback(() => {
-        const el = scrollRef.current;
-        if (!el || isLoading || !hasMore) return;
+    // Infinite scroll через onRowsRendered react-window
+    const fetchRef = useRef(fetchProperties);
+    fetchRef.current = fetchProperties;
 
-        const { scrollTop, scrollHeight, clientHeight } = el;
-        if (scrollHeight - scrollTop - clientHeight < 300) {
-            const nextPage = page + 1;
-            setPage(nextPage);
-            fetchProperties(nextPage, true);
-        }
-    }, [isLoading, hasMore, page, fetchProperties]);
+    const handleRowsRendered = useCallback(
+        (_visible: { startIndex: number; stopIndex: number }, all: { startIndex: number; stopIndex: number }) => {
+            const len = propertiesLenRef.current;
+            if (!hasMoreRef.current || loadingRef.current || len === 0) return;
+            // Подгружаем, когда видимый+overscan дошёл до 3-х последних элементов
+            if (all.stopIndex >= len - 3) {
+                fetchRef.current(nextCursorRef.current);
+            }
+        },
+        [] // стабильный колбэк — все данные через refs
+    );
 
     const handlePropertyClick = useCallback(
         (property: PropertyGridCard) => {
             router.push(`/property/${property.slug || property.id}`);
         },
         [router]
+    );
+
+    // Мемоизированные rowProps для react-window
+    const rowProps = useMemo<PropertyRowData>(
+        () => ({ properties, onPropertyClick: handlePropertyClick }),
+        [properties, handlePropertyClick]
     );
 
     const handleSortChange = (value: string) => {
@@ -161,9 +223,8 @@ export function SearchPageSidebar() {
         setFilters({ order: sortOrder === 'asc' ? 'desc' : 'asc' });
     };
 
-    // Должно быть 2 колонки карточек на десктопе
     return (
-        <aside className="hidden slug-desktop:flex flex-col w-[450px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
+        <aside className="hidden slug-desktop:flex flex-col w-[390px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
             {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 pt-3 pb-1">
@@ -251,17 +312,16 @@ export function SearchPageSidebar() {
 
             {/* === Сортировка + каунт === */}
             <div className="flex items-center justify-between px-3 py-1.5 border-t border-border">
-                <span className="text-sm text-text-secondary">
-                    {t.rich('resultsFound', {
-                        count: totalCount !== null
-                            ? totalCount.toLocaleString()
-                            : '…',
-                        b: (chunks) => (
-                            <span className="font-semibold text-text-primary font-mono">
-                                {chunks}
-                            </span>
-                        ),
-                    })}
+                <span className="text-sm text-text-secondary inline-flex items-center gap-1">
+                    {t('resultsFoundLabel')}
+                    <span className="inline-flex items-center overflow-hidden">
+                        <span
+                            key={totalCount}
+                            className="font-semibold text-text-primary font-mono animate-in fade-in slide-in-from-bottom-2 duration-300"
+                        >
+                            {totalCount !== null ? totalCount.toLocaleString() : '…'}
+                        </span>
+                    </span>
                 </span>
 
                 <div className="flex items-center gap-1">
@@ -292,39 +352,36 @@ export function SearchPageSidebar() {
                 </div>
             </div>
 
-            {/* === Карточки объектов === */}
-            <div
-                ref={scrollRef}
-                onScroll={handleScroll}
-                className="flex-1 overflow-y-auto"
-            >
-                {properties.map((property) => (
-                    <div key={property.id} className="px-3 py-2.5">
-                        <PropertyCardGrid
-                            property={property}
-                            onClick={() => handlePropertyClick(property)}
-                            actions={<PropertyCompareButton property={property} />}
-                            menuItems={<PropertyCompareMenuItem property={property} />}
-                        />
-                    </div>
-                ))}
-
-                {isLoading && (
-                    <div className="space-y-0">
-                        {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="px-3 py-2.5">
-                                <PropertyCardSkeleton />
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {!isLoading && properties.length === 0 && (
-                    <div className="flex items-center justify-center py-12 text-sm text-text-secondary">
-                        {tSidebar('noResults') || 'Нет результатов'}
-                    </div>
+            {/* === Прогресс-бар загрузки === */}
+            <div className="relative h-0.5 w-full bg-border/50 shrink-0 overflow-hidden">
+                {isRefreshing && (
+                    <div className="absolute inset-0 bg-brand-primary animate-progress-bar" />
                 )}
             </div>
+
+            {/* === Карточки объектов (виртуализированный список) === */}
+            {!isLoading && properties.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center text-sm text-text-secondary">
+                    {tSidebar('noResults')}
+                </div>
+            ) : (
+                <div className="flex-1 min-h-0 relative">
+                    {/* Затемнение поверх старых карточек при обновлении */}
+                    {isRefreshing && (
+                        <div className="absolute inset-0 bg-background/10 z-10 pointer-events-none transition-opacity duration-200" />
+                    )}
+                    <List<PropertyRowData>
+                        listRef={listRef}
+                        rowComponent={PropertyRow}
+                        rowProps={rowProps}
+                        rowCount={properties.length}
+                        rowHeight={dynamicRowHeight}
+                        onRowsRendered={handleRowsRendered}
+                        overscanCount={2}
+                        style={{ height: '100%', width: '100%' }}
+                    />
+                </div>
+            )}
 
             {/* Панель "Все фильтры" */}
             <FiltersDesktopPanel
@@ -334,29 +391,5 @@ export function SearchPageSidebar() {
                 onCategoryChange={setCurrentCategory}
             />
         </aside>
-    );
-}
-
-function PropertyCardSkeleton() {
-    return (
-        <div className="rounded-lg overflow-hidden border border-border bg-background">
-            <Skeleton className="w-full h-[180px] rounded-none" />
-            <div className="p-3 space-y-2.5">
-                <div className="flex items-center justify-between">
-                    <Skeleton className="h-5 w-28" />
-                    <Skeleton className="h-4 w-16" />
-                </div>
-                <Skeleton className="h-4 w-full" />
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-4 w-14" />
-                    <Skeleton className="h-4 w-14" />
-                    <Skeleton className="h-4 w-14" />
-                </div>
-                <div className="flex items-center justify-between pt-1">
-                    <Skeleton className="h-4 w-20" />
-                    <Skeleton className="h-6 w-6 rounded-full" />
-                </div>
-            </div>
-        </div>
     );
 }

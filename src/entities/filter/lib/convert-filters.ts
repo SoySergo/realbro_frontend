@@ -80,11 +80,13 @@ export function filtersToBackendParams(filters: SearchFilters): URLSearchParams 
 
 /**
  * Convenience: returns query string for tile URLs.
- * Excludes bbox — tiles are already spatially filtered by z/x/y.
+ * Excludes bbox (tiles spatially filtered by z/x/y) and sort params (sort is sidebar-only).
  */
 export function filtersToQueryString(filters: SearchFilters): string {
     const params = filtersToBackendParams(filters);
     params.delete('bbox');
+    params.delete('sort_by');
+    params.delete('sort_order');
     return params.toString();
 }
 

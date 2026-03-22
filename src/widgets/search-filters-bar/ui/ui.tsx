@@ -37,6 +37,7 @@ import { CategoryFilter } from '@/features/category-filter';
 import { SubcategoryFilter } from '@/features/subcategory-filter';
 import { PriceFilter } from '@/features/price-filter';
 import { RoomsFilter } from '@/features/rooms-filter';
+import { BathroomsFilter } from '@/features/bathrooms-filter';
 import { AreaFilter } from '@/features/area-filter';
 
 // Фильтры профессионалов
@@ -319,6 +320,10 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                             {/* Комнаты — появляются с 1300px */}
                             <div className="hidden filters-4:block shrink-0">
                                 <RoomsFilter />
+                            </div>
+                            {/* Ванные — появляются с 1300px */}
+                            <div className="hidden filters-4:block shrink-0">
+                                <BathroomsFilter />
                             </div>
                             {/* Площадь — показана с 2xl (1536px) */}
                             <div className="hidden 2xl:block shrink-0">

@@ -568,7 +568,8 @@
             "area": "Площа",
             "location": "Розташування",
             "price": "Ціна",
-            "rooms": "Кімнати"
+            "rooms": "Кімнати",
+            "bathrooms": "Ванні кімнати"
         },
         "category": "Категорія",
         "subcategory": "Підкатегорія",
@@ -624,10 +625,12 @@
         "min": "Мін",
         "max": "Макс",
         "bathrooms": "Ванні кімнати",
+        "bathroomsMin": "Ванних мін.",
         "bathroomCount": "Кількість ванних кімнат",
         "findMe": "Знайди мені",
         "show": "Показати",
         "resultsFound": "Знайдено <b>{count}</b>",
+        "resultsFoundLabel": "Знайдено",
         "savedFilter": "Збережений фільтр",
         "markerType": {
             "all": "Всі об'єкти",

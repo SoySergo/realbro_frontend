@@ -4,65 +4,73 @@ import { useCallback, useMemo } from 'react';
 import { useSearchFilters } from '@/features/search-filters/model';
 import { cn } from '@/shared/lib/utils';
 
+const ALL_VALUES = [1, 2, 3, 4];
+
 interface BathroomsFilterMobileProps {
     value?: number[];
     onChange?: (value: number[]) => void;
+    className?: string;
 }
 
 /**
  * Мобильная версия фильтра ванных комнат
- * Отображается как сетка кнопок (мультиселект)
- * Может работать как контролируемый компонент (с пропсами) или использовать глобальный store
+ * Выбор минимального количества: клик по 2 → выбираются 2, 3, 4 (2 и более)
  */
-export function BathroomsFilterMobile({ value, onChange }: BathroomsFilterMobileProps = {}) {
+export function BathroomsFilterMobile({ value, onChange, className }: BathroomsFilterMobileProps = {}) {
     const { filters, setFilters } = useSearchFilters();
 
     const bathroomOptions = useMemo(
         () => [
-            { value: 1, label: '1' },
-            { value: 2, label: '2' },
-            { value: 3, label: '3' },
+            { value: 1, label: '1+' },
+            { value: 2, label: '2+' },
+            { value: 3, label: '3+' },
             { value: 4, label: '4+' },
         ],
         []
     );
 
-    // Используем переданное значение или берём из store
     const selectedBathrooms = useMemo(() => value ?? filters.bathrooms ?? [], [value, filters.bathrooms]);
 
-    const handleToggle = useCallback(
+    const minSelected = useMemo(() => {
+        if (selectedBathrooms.length === 0) return null;
+        return Math.min(...selectedBathrooms);
+    }, [selectedBathrooms]);
+
+    const handleSelect = useCallback(
         (bathroomValue: number) => {
-            const newBathrooms = selectedBathrooms.includes(bathroomValue)
-                ? selectedBathrooms.filter((b: number) => b !== bathroomValue)
-                : [...selectedBathrooms, bathroomValue];
+            let newBathrooms: number[];
+            if (minSelected === bathroomValue) {
+                // Повторный клик — сброс
+                newBathrooms = [];
+            } else {
+                // Все значения >= выбранного
+                newBathrooms = ALL_VALUES.filter(v => v >= bathroomValue);
+            }
 
             if (onChange) {
-                // Контролируемый режим - вызываем коллбэк
                 onChange(newBathrooms);
             } else {
-                // Неконтролируемый режим - обновляем store
                 setFilters({ bathrooms: newBathrooms.length > 0 ? newBathrooms : undefined });
-                console.log('Bathrooms updated:', newBathrooms);
             }
         },
-        [selectedBathrooms, onChange, setFilters]
+        [minSelected, onChange, setFilters]
     );
 
     return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className={cn('flex flex-wrap gap-2', className)}>
             {bathroomOptions.map((option) => {
-                const isSelected = selectedBathrooms.includes(option.value);
+                const isSelected = minSelected !== null && option.value >= minSelected;
 
                 return (
                     <button
                         key={option.value}
-                        onClick={() => handleToggle(option.value)}
+                        onClick={() => handleSelect(option.value)}
                         className={cn(
-                            'px-3 py-3 rounded-lg text-sm font-medium transition-all',
-                            'border border-border',
+                            'h-8 px-3 rounded-md text-sm font-medium transition-colors',
+                            'border',
                             isSelected
                                 ? 'bg-brand-primary text-white border-brand-primary'
-                                : 'bg-background text-text-secondary hover:bg-background-secondary'
+                                : 'border-border text-text-secondary hover:bg-background-secondary hover:text-text-primary'
                         )}
                     >
                         {option.label}
