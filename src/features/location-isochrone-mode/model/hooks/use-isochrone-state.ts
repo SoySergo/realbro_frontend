@@ -39,6 +39,8 @@ export interface UseIsochroneStateReturn {
     handleLocationSelect: (coordinates: [number, number], name: string, address?: string) => void;
     handleClear: () => void;
     handleNameChange: (newName: string) => void;
+    /** Восстанавливает изохрон из сохранённого полигона (без вызова Mapbox API) */
+    restoreFromPolygon: (polygon: number[][][]) => void;
 }
 
 /**
@@ -60,6 +62,9 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
     // Маркер на карте
     const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
     const markerRef = useRef<mapboxgl.Marker | null>(null);
+
+    // Флаг: данные восстановлены из сохранённого полигона (не нужно вызывать Mapbox)
+    const restoredFromSavedRef = useRef(false);
 
     // Синхронизация ref с state для корректного cleanup
     useEffect(() => {
@@ -195,6 +200,12 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
     useEffect(() => {
         if (!selectedCoordinates) return;
 
+        // Если полигон был восстановлен из сохранённых данных — не вызываем Mapbox API
+        if (restoredFromSavedRef.current) {
+            restoredFromSavedRef.current = false;
+            return;
+        }
+
         const buildIsochrone = async () => {
             setIsLoading(true);
             try {
@@ -271,6 +282,15 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
         console.log('Name changed:', newName);
     }, []);
 
+    // Восстановление изохрона из сохранённого полигона (без Mapbox API)
+    const restoreFromPolygon = useCallback((polygon: number[][][]) => {
+        restoredFromSavedRef.current = true;
+        setIsochroneData(polygon);
+        const color = getProfileColor(selectedProfile);
+        drawIsochroneOnMap(polygon, color);
+        console.log('[Isochrone] Restored from saved polygon data');
+    }, [selectedProfile, drawIsochroneOnMap]);
+
     // Cleanup при размонтировании
     useEffect(() => {
         return () => {
@@ -326,5 +346,6 @@ export function useIsochroneState({ map }: UseIsochroneStateParams): UseIsochron
         handleLocationSelect,
         handleClear,
         handleNameChange,
+        restoreFromPolygon,
     };
 }

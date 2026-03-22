@@ -36,6 +36,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
     const { isAuthenticated } = useAuth();
     const { activeQueryId, queries } = useSidebarStore();
     const [isSaving, setIsSaving] = useState(false);
+    const [isDirty, setIsDirty] = useState(!initialData);
 
     // Используем хук для управления состоянием радиуса
     const {
@@ -68,6 +69,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
     // Очистка с удалением геометрий на бекенде
     const handleClearWithDelete = async () => {
         handleClear();
+        setIsDirty(false);
         const { deleteLocationGeometries, setLocationFilter } = useFilterStore.getState();
         await deleteLocationGeometries(isAuthenticated);
         setLocationFilter(null);
@@ -79,11 +81,17 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
 
         setIsSaving(true);
         try {
-            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta } = useFilterStore.getState();
+            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta, locationGeometryMeta, deleteLocationGeometries, clearGeometryMeta } = useFilterStore.getState();
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+
+            // Удаляем старые геометрии перед созданием новых (чтобы не дублировать)
+            if (locationGeometryMeta.length > 0) {
+                await deleteLocationGeometries(isAuthenticated);
+                clearGeometryMeta();
+            }
 
             // Сохраняем на бекенд: type=radius, center+radius (без GeoJSON полигона)
             const params = {
@@ -158,6 +166,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={!!selectedCoordinates}
+            isDirty={isDirty}
             onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
@@ -167,7 +176,10 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
             {/* Поиск адреса */}
             <div className="space-y-2">
                 <LocationSearch
-                    onLocationSelect={handleLocationSelect}
+                    onLocationSelect={(coords, name, address) => {
+                        handleLocationSelect(coords, name, address);
+                        setIsDirty(true);
+                    }}
                     selectedCoordinates={selectedCoordinates}
                     selectedName={selectedName}
                     fullAddress={fullAddress}
@@ -182,7 +194,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                 <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => setIsSelectingPoint(true)}
+                    onClick={() => { setIsSelectingPoint(true); setIsDirty(true); }}
                     disabled={isSelectingPoint}
                 >
                     <MapPin className="h-4 w-4 mr-2" />
@@ -193,7 +205,7 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
             {/* Управление радиусом */}
             {selectedCoordinates && (
                 <div className="border-t border-border pt-4">
-                    <RadiusControls selectedRadius={selectedRadius} onRadiusChange={setSelectedRadius} />
+                    <RadiusControls selectedRadius={selectedRadius} onRadiusChange={(r) => { setSelectedRadius(r); setIsDirty(true); }} />
                 </div>
             )}
 

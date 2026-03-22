@@ -7,6 +7,8 @@ import { X, Trash2, Check, Loader2 } from 'lucide-react';
 type LocationModeActionsProps = {
     /** Есть ли локальные данные для очистки */
     hasLocalData: boolean;
+    /** Были ли изменения данных с момента последнего сохранения (для кнопки "Сохранить") */
+    isDirty?: boolean;
     /** Колбэк для очистки локальных данных */
     onClear: () => void;
     /** Колбэк для применения фильтров (сохранения в URL/store) */
@@ -27,6 +29,7 @@ type LocationModeActionsProps = {
  */
 export function LocationModeActions({
     hasLocalData,
+    isDirty,
     onClear,
     onApply,
     onClose,
@@ -35,6 +38,9 @@ export function LocationModeActions({
     className,
 }: LocationModeActionsProps) {
     const t = useTranslations('locationFilter.actions');
+
+    // Кнопка сохранения: если isDirty передан — используем его, иначе fallback на hasLocalData
+    const canSave = isDirty !== undefined ? isDirty : hasLocalData;
 
     return (
         <div className={className}>
@@ -55,7 +61,7 @@ export function LocationModeActions({
                 <Button
                     size="sm"
                     onClick={onApply}
-                    disabled={!hasLocalData || isSaving}
+                    disabled={!canSave || isSaving}
                     className="flex-1 bg-brand-primary hover:bg-brand-primary-hover"
                 >
                     {isSaving ? (

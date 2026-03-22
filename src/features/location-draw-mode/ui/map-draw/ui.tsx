@@ -45,6 +45,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
     const { isAuthenticated } = useAuth();
     const { activeQueryId, queries } = useSidebarStore();
     const [isSaving, setIsSaving] = useState(false);
+    const [isDirty, setIsDirty] = useState(!initialData);
 
     // Хук управления состоянием
     const {
@@ -74,14 +75,22 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
     useEffect(() => {
         if (initialData && !initializedRef.current) {
             initializedRef.current = true;
-            setPolygons([initialData]);
-            console.log('[MapDraw] Restored saved polygon:', initialData.id);
+            // createdAt может быть строкой после восстановления из localStorage
+            const restored = {
+                ...initialData,
+                createdAt: initialData.createdAt instanceof Date
+                    ? initialData.createdAt
+                    : new Date(initialData.createdAt),
+            };
+            setPolygons([restored]);
+            console.log('[MapDraw] Restored saved polygon:', restored.id);
         }
     }, [initialData, setPolygons]);
 
     // Очистка с удалением геометрий с бекенда
     const handleClearWithDelete = () => {
         handleClear();
+        setIsDirty(false);
         // Удаляем геометрии с бекенда
         const { deleteLocationGeometries } = useFilterStore.getState();
         deleteLocationGeometries(isAuthenticated);
@@ -162,11 +171,18 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         setIsSaving(true);
         try {
             const savedGeometryIds: string[] = [];
+            const { locationGeometryMeta, deleteLocationGeometries, clearGeometryMeta } = useFilterStore.getState();
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
             const isValidUUID = activeQueryId ? /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(activeQueryId) : false;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved && isValidUUID;
+
+            // Удаляем старые геометрии перед созданием новых (чтобы не дублировать)
+            if (locationGeometryMeta.length > 0) {
+                await deleteLocationGeometries(isAuthenticated);
+                clearGeometryMeta();
+            }
 
             // Сохраняем все полигоны на бекенд
             for (const polygon of polygons) {
@@ -208,6 +224,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
             // Обновляем store
             setLocationFilter({
                 mode: 'draw',
+                polygon: polygons[0],
             });
 
             // Сохраняем geometry IDs в фильтры → попадут в URL params
@@ -275,6 +292,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={currentPoints.length > 0 || polygons.length > 0}
+            isDirty={isDirty}
             onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
@@ -295,8 +313,8 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                 {!isDrawing && polygons.length > 0 && (
                     <DrawnPolygonsList
                         polygons={polygons}
-                        onEdit={handleEditPolygon}
-                        onDelete={handleDeletePolygon}
+                        onEdit={(id) => { handleEditPolygon(id); setIsDirty(true); }}
+                        onDelete={(id) => { handleDeletePolygon(id); setIsDirty(true); }}
                         onSelect={setSelectedPolygonId}
                         selectedId={selectedPolygonId}
                     />
@@ -307,7 +325,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                     <DrawControls
                         hasPolygons={polygons.length > 0}
                         isDrawing={isDrawing}
-                        onStartDrawing={handleStartDrawing}
+                        onStartDrawing={() => { handleStartDrawing(); setIsDirty(true); }}
                         polygonsCount={polygons.length}
                     />
                 )}

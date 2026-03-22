@@ -14,6 +14,7 @@ export interface IsochroneSettings {
     profile: 'walking' | 'cycling' | 'driving';
     minutes: number; // 5, 10, 15, 30, 45, 60
     name?: string; // Название точки (от пользователя)
+    polygon?: number[][][]; // Сохранённые координаты полигона (чтобы не перезапрашивать Mapbox)
 }
 
 // Настройки радиуса

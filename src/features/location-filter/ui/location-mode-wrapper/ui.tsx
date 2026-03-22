@@ -14,6 +14,8 @@ type LocationModeWrapperProps = {
     fixedContent?: React.ReactNode;
     /** Есть ли локальные данные для очистки */
     hasLocalData: boolean;
+    /** Были ли изменения данных с момента последнего сохранения (для кнопки "Сохранить") */
+    isDirty?: boolean;
     /** Колбэк для очистки локальных данных */
     onClear: () => void;
     /** Колбэк для применения фильтров (сохранения в URL/store) */
@@ -41,6 +43,7 @@ export function LocationModeWrapper({
     children,
     fixedContent,
     hasLocalData,
+    isDirty,
     onClear,
     onApply,
     onClose,
@@ -79,6 +82,7 @@ export function LocationModeWrapper({
             <div className="px-4 py-3 border-t border-border shrink-0">
                 <LocationModeActions
                     hasLocalData={hasLocalData}
+                    isDirty={isDirty}
                     onClear={onClear}
                     onApply={onApply}
                     showClose={false}

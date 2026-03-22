@@ -87,6 +87,13 @@ export function parseFiltersFromSearchParams(searchParams: URLSearchParams | Rea
     // Полигоны (geometry=123,456)
     filters.geometryIds = parseNumberArray(searchParams.get('geometry'));
 
+    // Геометрии-UUID (polygon_ids=uuid1,uuid2)
+    const polygonIdsParam = searchParams.get('polygon_ids');
+    if (polygonIdsParam) {
+        const ids = polygonIdsParam.split(',').filter(Boolean);
+        if (ids.length > 0) filters.polygon_ids = ids;
+    }
+
     // Тип маркеров (marker=like)
     const markerType = searchParams.get('marker');
     if (markerType && ['view', 'no_view', 'like', 'dislike', 'all'].includes(markerType)) {
@@ -157,6 +164,11 @@ export function serializeFiltersToSearchParams(filters: SearchFilters): URLSearc
     const geometryStr = serializeNumberArray(filters.geometryIds);
     if (geometryStr) params.set('geometry', geometryStr);
 
+    // Геометрии-UUID
+    if (filters.polygon_ids && filters.polygon_ids.length > 0) {
+        params.set('polygon_ids', filters.polygon_ids.join(','));
+    }
+
     // Тип маркеров
     if (filters.markerType && filters.markerType !== 'all') {
         params.set('marker', filters.markerType);
@@ -190,6 +202,7 @@ export function hasActiveFilters(filters: SearchFilters): boolean {
         (filters.adminLevel9 && filters.adminLevel9.length > 0) ||
         (filters.adminLevel10 && filters.adminLevel10.length > 0) ||
         (filters.geometryIds && filters.geometryIds.length > 0) ||
+        (filters.polygon_ids && filters.polygon_ids.length > 0) ||
         (filters.markerType && filters.markerType !== 'all')
     );
 }

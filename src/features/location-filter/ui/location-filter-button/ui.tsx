@@ -45,10 +45,12 @@ export function LocationFilterButton() {
         }
     };
 
-    // Кнопка активна когда режим открыт ИЛИ есть сохранённые геометрии/локации в фильтрах
+    // Состояние кнопки: панель открыта vs фильтр применён
     const hasGeometryIds = !!(currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length);
     const hasSearchLocations = !!(locationFilter?.mode === 'search' && locationFilter.selectedLocations?.length);
-    const isActive = !!activeLocationMode || hasGeometryIds || hasSearchLocations;
+    const isPanelOpen = !!activeLocationMode;
+    const hasAppliedFilter = hasGeometryIds || hasSearchLocations;
+    const isActive = isPanelOpen;
 
     // Подсчёт выбранных параметров (учитываем множественные полигоны)
     const getSelectedCount = (): number => {
@@ -84,9 +86,11 @@ export function LocationFilterButton() {
             className={cn(
                 'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
                 'px-3 py-2 text-sm whitespace-nowrap transition-all duration-200',
-                // Неактивное состояние
-                !isActive && 'bg-background border border-border dark:border-transparent text-text-primary hover:text-text-primary',
-                // Активное состояние
+                // Неактивное состояние (нет ни панели, ни фильтра)
+                !isActive && !hasAppliedFilter && 'bg-background border border-border dark:border-transparent text-text-primary hover:text-text-primary',
+                // Фильтр применён, но панель закрыта
+                !isActive && hasAppliedFilter && 'bg-brand-primary/10 border border-brand-primary text-brand-primary hover:bg-brand-primary/20',
+                // Панель открыта
                 isActive && 'bg-brand-primary text-white border border-brand-primary',
                 isActive && 'hover:bg-brand-primary-hover'
             )}
@@ -96,7 +100,7 @@ export function LocationFilterButton() {
             {selectedCount > 0 && (
                 <span className={cn(
                     'text-xs font-medium',
-                    isActive ? 'text-white/80' : 'text-text-tertiary'
+                    isActive ? 'text-white/80' : hasAppliedFilter ? 'text-brand-primary' : 'text-text-tertiary'
                 )}>
                     (+{selectedCount})
                 </span>

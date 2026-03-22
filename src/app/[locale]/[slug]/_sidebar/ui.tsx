@@ -164,6 +164,7 @@ export function SearchPageSidebar() {
         setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     };
 
+    // Должно быть 2 колонки карточек на десктопе
     return (
         <aside className="hidden slug-desktop:flex flex-col w-[450px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}

@@ -179,7 +179,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         >
             {/* Image with hover slider + touch swipe */}
             <div
-                className="relative aspect-[4/3] touch-manipulation"
+                className="relative aspect-[4/3] touch-manipulation "
                 onMouseMove={handleMouseMove}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
@@ -192,7 +192,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                     }
                     alt={displayImages[currentImageIndex] ? getImageAlt(displayImages[currentImageIndex], property.title) : property.title}
                     fill
-                    className="object-cover transition-opacity duration-200"
+                    className="object-cover transition-opacity duration-200 "
                     sizes="(max-width: 480px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
 

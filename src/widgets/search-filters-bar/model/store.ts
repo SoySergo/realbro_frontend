@@ -136,9 +136,7 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
         result.locationsMeta = locationsMeta;
     }
 
-    if (locationFilter.mode === 'draw' && locationFilter.polygon) {
-        result.geometryIds = [parseInt(locationFilter.polygon.id.replace('polygon_', ''))];
-    }
+    // draw, isochrone, radius — polygon_ids уже установлены в currentFilters через handleApply
 
     if (locationFilter.mode === 'radius' && locationFilter.radius) {
         result.radiusCenter = locationFilter.radius.center;
@@ -594,9 +592,10 @@ export const useFilterStore = create<FilterStore>()(
         }),
         {
             name: 'filter-storage',
-            // Сохраняем только полигоны глобально
+            // Сохраняем мету геометрий и полные данные locationFilter (координаты, настройки)
             partialize: (state) => ({
                 locationGeometryMeta: state.locationGeometryMeta,
+                locationFilter: state.locationFilter,
             }),
         }
     )

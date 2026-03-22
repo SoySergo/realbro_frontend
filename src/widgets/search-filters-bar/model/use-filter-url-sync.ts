@@ -5,39 +5,19 @@ import { useSearchParams, usePathname } from 'next/navigation';
 import { useFilterStore } from './store';
 import type { SearchFilters } from '@/entities/filter/model/types';
 import { getGuestGeometry } from '@/shared/api/geometries';
-
-// Маппинг ключей фильтров на URL-параметры
-const FILTER_URL_MAP: Record<string, string> = {
-    minPrice: 'minPrice',
-    maxPrice: 'maxPrice',
-    rooms: 'rooms',
-    propertyCategory: 'category',
-    minArea: 'area_min',
-    maxArea: 'area_max',
-    markerType: 'markerType',
-    sortOrder: 'sortOrder',
-};
-
-// Числовые поля
-const NUMERIC_KEYS = new Set(['minPrice', 'maxPrice', 'minArea', 'maxArea']);
-
-// Массивы чисел
-const NUMERIC_ARRAY_KEYS = new Set(['rooms']);
-
-// Массивы строк
-const STRING_ARRAY_KEYS = new Set(['propertyCategory']);
-
-// Значения по умолчанию, которые не нужно сериализовать в URL
-const DEFAULT_VALUES: Record<string, unknown> = {
-    markerType: 'all',
-    sortOrder: 'desc',
-};
+import {
+    parseFiltersFromSearchParams,
+    serializeFiltersToSearchParams,
+} from '@/features/search-filters/lib/search-params';
 
 /**
  * Хук синхронизации фильтров с URL-параметрами.
  *
+ * Использует единый формат URL: price=min-max, categories=1,2, polygon_ids=uuid,...
+ * (тот же формат, что и search-filters/lib/search-params.ts)
+ *
  * - При загрузке страницы парсит URL и применяет фильтры в стор.
- * - При изменении фильтров обновляет URL через router.replace (без скролла).
+ * - При изменении фильтров обновляет URL через history.replaceState.
  * - Загружает геометрии с бекенда при наличии polygon_ids в URL.
  */
 export function useFilterUrlSync() {
@@ -51,41 +31,23 @@ export function useFilterUrlSync() {
         if (!isInitialLoad.current) return;
         isInitialLoad.current = false;
 
-        const filtersFromUrl: Record<string, unknown> = {};
-        let hasUrlFilters = false;
+        // Парсим все фильтры из URL единым парсером (включая polygon_ids)
+        const filtersFromUrl = parseFiltersFromSearchParams(searchParams);
 
-        for (const [filterKey, urlKey] of Object.entries(FILTER_URL_MAP)) {
-            const value = searchParams.get(urlKey);
-            if (value === null || value === '') continue;
-
-            hasUrlFilters = true;
-
-            if (NUMERIC_KEYS.has(filterKey)) {
-                filtersFromUrl[filterKey] = Number(value);
-            } else if (NUMERIC_ARRAY_KEYS.has(filterKey)) {
-                filtersFromUrl[filterKey] = value.split(',').map(Number);
-            } else if (STRING_ARRAY_KEYS.has(filterKey)) {
-                filtersFromUrl[filterKey] = value.split(',');
-            } else {
-                filtersFromUrl[filterKey] = value;
-            }
+        // Загружаем геометрии с бекенда при наличии polygon_ids
+        if (filtersFromUrl.polygon_ids && filtersFromUrl.polygon_ids.length > 0) {
+            loadGeometriesFromBackend(filtersFromUrl.polygon_ids);
         }
 
-        // Парсим polygon_ids из URL
-        const polygonIdsParam = searchParams.get('polygon_ids');
-        if (polygonIdsParam) {
-            const polygonIds = polygonIdsParam.split(',').filter(Boolean);
-            if (polygonIds.length > 0) {
-                filtersFromUrl.polygon_ids = polygonIds;
-                hasUrlFilters = true;
-
-                // Загружаем геометрии с бекенда для восстановления на карте
-                loadGeometriesFromBackend(polygonIds);
+        const hasUrlFilters = Object.keys(filtersFromUrl).some(
+            (key) => {
+                const val = filtersFromUrl[key as keyof SearchFilters];
+                return val !== undefined && (!Array.isArray(val) || val.length > 0);
             }
-        }
+        );
 
         if (hasUrlFilters) {
-            setFilters(filtersFromUrl as Partial<SearchFilters>);
+            setFilters(filtersFromUrl);
             console.log('[URL] Applied filters from URL:', filtersFromUrl);
         }
     }, [searchParams, setFilters]);
@@ -94,27 +56,8 @@ export function useFilterUrlSync() {
     useEffect(() => {
         if (isInitialLoad.current) return;
 
-        const params = new URLSearchParams();
-
-        for (const [filterKey, urlKey] of Object.entries(FILTER_URL_MAP)) {
-            const value = currentFilters[filterKey as keyof SearchFilters];
-
-            if (value === undefined || value === null || value === '') continue;
-
-            // Пропускаем значения по умолчанию
-            if (filterKey in DEFAULT_VALUES && value === DEFAULT_VALUES[filterKey]) continue;
-
-            if (Array.isArray(value) && value.length > 0) {
-                params.set(urlKey, value.join(','));
-            } else if (typeof value === 'number' || typeof value === 'string') {
-                params.set(urlKey, String(value));
-            }
-        }
-
-        // Сериализуем polygon_ids в URL
-        if (currentFilters.polygon_ids && currentFilters.polygon_ids.length > 0) {
-            params.set('polygon_ids', currentFilters.polygon_ids.join(','));
-        }
+        // Сериализуем все фильтры единым сериализатором
+        const params = serializeFiltersToSearchParams(currentFilters);
 
         const queryString = params.toString();
         const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
@@ -124,11 +67,26 @@ export function useFilterUrlSync() {
 }
 
 /**
- * Загружает геометрии с бекенда по ID и восстанавливает locationFilter в store
+ * Загружает геометрии: сначала из localStorage (rehydrated store), затем с бекенда как fallback
  */
 async function loadGeometriesFromBackend(polygonIds: string[]) {
-    const { setLocationFilter, addGeometryMeta } = useFilterStore.getState();
+    const { setLocationFilter, addGeometryMeta, locationFilter, locationGeometryMeta } = useFilterStore.getState();
 
+    // Проверяем, есть ли уже полные данные в store (восстановлены из localStorage через zustand persist)
+    if (locationFilter && locationGeometryMeta.length > 0) {
+        const hasMatchingMeta = polygonIds.some(id => locationGeometryMeta.some(m => m.id === id));
+        const hasCoordinateData =
+            (locationFilter.mode === 'isochrone' && locationFilter.isochrone?.polygon) ||
+            (locationFilter.mode === 'radius' && locationFilter.radius?.center) ||
+            (locationFilter.mode === 'draw' && locationFilter.polygon?.points?.length);
+
+        if (hasMatchingMeta && hasCoordinateData) {
+            console.log('[URL] Restored geometries from localStorage (skipped backend fetch)');
+            return;
+        }
+    }
+
+    // Fallback: загружаем с бекенда
     try {
         const results = await Promise.all(
             polygonIds.map((id) => getGuestGeometry(id))
@@ -161,23 +119,58 @@ async function loadGeometriesFromBackend(polygonIds: string[]) {
                 },
             });
         } else if (geometryType === 'isochrone') {
+            // Парсим сохранённый полигон из GeoJSON
+            let savedPolygon: number[][][] | undefined;
+            if (firstResult.geometry) {
+                try {
+                    const geojson = JSON.parse(firstResult.geometry);
+                    if (geojson.coordinates) {
+                        savedPolygon = geojson.coordinates;
+                    }
+                } catch {
+                    console.error('[URL] Failed to parse isochrone geometry');
+                }
+            }
+
             setLocationFilter({
                 mode: 'isochrone',
                 isochrone: {
                     center: [firstResult.center_lng, firstResult.center_lat],
-                    profile: 'walking', // По дефолту, точный профиль хранится в metadata
+                    profile: 'walking',
                     minutes: 15,
                     name: firstResult.name || undefined,
+                    polygon: savedPolygon,
                 },
             });
         } else {
-            // polygon — геометрия будет отображена через polygon_ids в фильтрах
+            // polygon — восстанавливаем координаты из GeoJSON
+            let restoredPolygon: import('@/entities/map-draw/model/types').DrawPolygon | undefined;
+            if (firstResult.geometry) {
+                try {
+                    const geojson = JSON.parse(firstResult.geometry);
+                    if (geojson.coordinates && geojson.coordinates[0]) {
+                        const coords = geojson.coordinates[0] as [number, number][];
+                        // Убираем замыкающую точку (дубль первой)
+                        const points = coords.slice(0, -1).map(([lng, lat]) => ({ lng, lat }));
+                        restoredPolygon = {
+                            id: `polygon_${firstResult.id}`,
+                            name: firstResult.name || '',
+                            points,
+                            createdAt: new Date(firstResult.created_at),
+                        };
+                    }
+                } catch {
+                    console.error('[URL] Failed to parse polygon geometry');
+                }
+            }
+
             setLocationFilter({
                 mode: 'draw',
+                polygon: restoredPolygon,
             });
         }
 
-        console.log('[URL] Restored geometries from backend:', validResults.length);
+        console.log('[URL] Restored geometries from backend (fallback):', validResults.length);
     } catch (error) {
         console.error('[URL] Failed to load geometries from backend:', error);
     }

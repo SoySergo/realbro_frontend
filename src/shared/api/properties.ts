@@ -113,7 +113,12 @@ function serializeFiltersForBackend(
     if (filters.adminLevel10?.length) params['neighborhood_ids'] = filters.adminLevel10.join(',');
 
     // Геометрия
-    if (filters.geometryIds?.length) params['polygon_ids'] = filters.geometryIds.join(',');
+    if (filters.polygon_ids?.length) {
+        params['polygon_ids'] = filters.polygon_ids.join(',');
+        if (filters.geometry_source) params['geometry_source'] = filters.geometry_source;
+    } else if (filters.geometryIds?.length) {
+        params['polygon_ids'] = filters.geometryIds.join(',');
+    }
 
     // Пагинация и сортировка
     if (options?.limit) params['limit'] = options.limit;

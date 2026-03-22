@@ -36,6 +36,9 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
     const { activeQueryId, queries } = useSidebarStore();
     const [isSaving, setIsSaving] = useState(false);
 
+    // Отслеживание изменений: dirty = данные изменились с момента последнего сохранения/восстановления
+    const [isDirty, setIsDirty] = useState(!initialData);
+
     // Используем хук для управления состоянием
     const {
         selectedProfile,
@@ -53,6 +56,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
         handleLocationSelect,
         handleClear,
         handleNameChange,
+        restoreFromPolygon,
     } = useIsochroneState({ map });
 
     // Восстановление сохранённого изохрона при повторном открытии
@@ -62,14 +66,21 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
             initializedRef.current = true;
             setSelectedProfile(initialData.profile);
             setSelectedMinutes(initialData.minutes);
+
+            // Если есть сохранённый полигон — восстанавливаем без вызова Mapbox API
+            if (initialData.polygon) {
+                restoreFromPolygon(initialData.polygon);
+            }
+
             handleLocationSelect(initialData.center, initialData.name || t('selectedPoint'));
-            console.log('[MapIsochrone] Restored saved isochrone:', initialData);
+            console.log('[MapIsochrone] Restored saved isochrone from saved polygon data');
         }
-    }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, t]);
+    }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, restoreFromPolygon, t]);
 
     // Очистка с удалением геометрий на бекенде
     const handleClearWithDelete = async () => {
         handleClear();
+        setIsDirty(false);
         const { deleteLocationGeometries, setLocationFilter } = useFilterStore.getState();
         await deleteLocationGeometries(isAuthenticated);
         setLocationFilter(null);
@@ -84,6 +95,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
             setSelectedCoordinates(coordinates);
             handleNameChange(t('selectedPoint'));
             setIsSelectingPoint(false);
+            setIsDirty(true);
 
             // Маркер создастся автоматически через хук
             console.log('Point selected on map:', coordinates);
@@ -108,11 +120,17 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
 
         setIsSaving(true);
         try {
-            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta } = useFilterStore.getState();
+            const { setLocationFilter, setFilters, setLocationMode, addGeometryMeta, locationGeometryMeta, deleteLocationGeometries, clearGeometryMeta } = useFilterStore.getState();
 
             // Определяем режим сохранения: фильтр или гостевой
             const activeQuery = activeQueryId ? queries.find(q => q.id === activeQueryId) : null;
             const hasSavedFilter = isAuthenticated && activeQuery && !activeQuery.isUnsaved;
+
+            // Удаляем старые геометрии перед созданием новых (чтобы не дублировать)
+            if (locationGeometryMeta.length > 0) {
+                await deleteLocationGeometries(isAuthenticated);
+                clearGeometryMeta();
+            }
 
             // Сохраняем изохрон как геометрию на бекенд
             const geojsonStr = JSON.stringify({
@@ -157,6 +175,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                     profile: selectedProfile as 'walking' | 'cycling' | 'driving',
                     minutes: selectedMinutes,
                     name: selectedName || undefined,
+                    polygon: isochroneData,
                 },
             });
 
@@ -194,6 +213,7 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
         <LocationModeWrapper
             title={t('title')}
             hasLocalData={!!selectedCoordinates || !!isochroneData}
+            isDirty={isDirty}
             onClear={handleClearWithDelete}
             onApply={handleApply}
             onClose={handleClose}
@@ -203,7 +223,10 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
             {/* Поиск адреса */}
             <div className="space-y-2">
                 <LocationSearch
-                    onLocationSelect={handleLocationSelect}
+                    onLocationSelect={(coords, name, address) => {
+                        handleLocationSelect(coords, name, address);
+                        setIsDirty(true);
+                    }}
                     selectedCoordinates={selectedCoordinates}
                     selectedName={selectedName}
                     fullAddress={fullAddress}
@@ -232,9 +255,9 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                     <div className="border-t border-border pt-4">
                         <IsochroneControls
                             selectedProfile={selectedProfile}
-                            onProfileChange={setSelectedProfile}
+                            onProfileChange={(p) => { setSelectedProfile(p); setIsDirty(true); }}
                             selectedMinutes={selectedMinutes}
-                            onMinutesChange={setSelectedMinutes}
+                            onMinutesChange={(m) => { setSelectedMinutes(m); setIsDirty(true); }}
                         />
                     </div>
 
