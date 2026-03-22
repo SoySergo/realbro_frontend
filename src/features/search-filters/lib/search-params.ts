@@ -1,7 +1,15 @@
 /**
  * Утилиты для сериализации и десериализации фильтров поиска в URL параметры
- * 
+ *
  * Формат URL: /search?price=500-2000&rooms=2,3&area=50-100&admin2=123&categories=1,2,3
+ *
+ * Геометрии разбиваются по типу:
+ *   polygon=uuid1,uuid2   – нарисованные полигоны
+ *   isochrone=uuid        – изохрон (время в пути)
+ *   radius=uuid           – радиус от точки
+ *   geo_src=guest|filter  – источник геометрии (для загрузки нужного API)
+ *
+ * Обратная совместимость: старый параметр polygon_ids также разбирается.
  */
 
 import type { ReadonlyURLSearchParams } from 'next/navigation';
@@ -87,11 +95,30 @@ export function parseFiltersFromSearchParams(searchParams: URLSearchParams | Rea
     // Полигоны (geometry=123,456)
     filters.geometryIds = parseNumberArray(searchParams.get('geometry'));
 
-    // Геометрии-UUID (polygon_ids=uuid1,uuid2)
-    const polygonIdsParam = searchParams.get('polygon_ids');
-    if (polygonIdsParam) {
-        const ids = polygonIdsParam.split(',').filter(Boolean);
-        if (ids.length > 0) filters.polygon_ids = ids;
+    // Геометрии по типу: polygon=uuid1,uuid2 / isochrone=uuid / radius=uuid
+    // (новый формат — каждый тип в своём параметре)
+    const polygonParam = searchParams.get('polygon');
+    const isochroneParam = searchParams.get('isochrone');
+    const radiusParam = searchParams.get('radius');
+
+    // Обратная совместимость: старый параметр polygon_ids (без разбивки по типу)
+    const legacyPolygonIdsParam = searchParams.get('polygon_ids');
+
+    // Объединяем все UUID геометрий в единый массив polygon_ids
+    const allGeometryIds = [
+        ...(polygonParam ? polygonParam.split(',').filter(Boolean) : []),
+        ...(isochroneParam ? isochroneParam.split(',').filter(Boolean) : []),
+        ...(radiusParam ? radiusParam.split(',').filter(Boolean) : []),
+        ...(legacyPolygonIdsParam ? legacyPolygonIdsParam.split(',').filter(Boolean) : []),
+    ];
+    if (allGeometryIds.length > 0) {
+        filters.polygon_ids = allGeometryIds;
+    }
+
+    // Источник геометрии: guest (незарегистрированный) или filter (авторизованный)
+    const geoSrc = searchParams.get('geo_src');
+    if (geoSrc === 'guest' || geoSrc === 'filter') {
+        filters.geometry_source = geoSrc;
     }
 
     // Тип маркеров (marker=like)
@@ -160,13 +187,19 @@ export function serializeFiltersToSearchParams(filters: SearchFilters): URLSearc
     const admin10Str = serializeNumberArray(filters.adminLevel10);
     if (admin10Str) params.set('admin10', admin10Str);
 
-    // Полигоны
+    // Полигоны (числовые ID, deprecated)
     const geometryStr = serializeNumberArray(filters.geometryIds);
     if (geometryStr) params.set('geometry', geometryStr);
 
-    // Геометрии-UUID
+    // Геометрии-UUID: сериализуем в общий polygon_ids если нет разбивки по типу
+    // (при наличии locationGeometryMeta тип-специфичные параметры добавляются снаружи — в useFilterUrlSync)
     if (filters.polygon_ids && filters.polygon_ids.length > 0) {
         params.set('polygon_ids', filters.polygon_ids.join(','));
+    }
+
+    // Источник геометрии (guest / filter)
+    if (filters.geometry_source) {
+        params.set('geo_src', filters.geometry_source);
     }
 
     // Тип маркеров
