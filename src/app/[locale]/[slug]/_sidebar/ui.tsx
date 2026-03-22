@@ -3,6 +3,15 @@
 import { useEffect, useState, useCallback, useRef, useMemo, type CSSProperties, type ReactElement } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
+
+// Polyfill ResizeObserver for SSR (react-window v2 calls `new ResizeObserver` at hook init)
+if (typeof globalThis.ResizeObserver === 'undefined') {
+    globalThis.ResizeObserver = class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    } as unknown as typeof globalThis.ResizeObserver;
+}
 import { List, useDynamicRowHeight, useListRef } from 'react-window';
 import {
     Fingerprint,
@@ -11,12 +20,14 @@ import {
     MapPin,
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
+import { useEnsureGeometries } from '@/shared/lib/use-ensure-geometries';
 import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { CategoryFilter } from '@/features/category-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
+import { useFilterStore } from '@/widgets/search-filters-bar';
 import { PropertyCardGrid } from '@/entities/property';
 import type { PropertyGridCard } from '@/entities/property';
 import { getPropertiesListCursor, getPropertiesCount } from '@/shared/api';
@@ -93,6 +104,7 @@ export function SearchPageSidebar() {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { filters, setFilters } = useFilters();
+    const { isReady: geometriesReady } = useEnsureGeometries(filters, setFilters);
     const activeLocationMode = useActiveLocationMode();
     const setLocationMode = useSetLocationMode();
 
@@ -168,14 +180,16 @@ export function SearchPageSidebar() {
         [filters, sortBy, sortOrder, locale]
     );
 
-    // Сброс и перезагрузка при изменении фильтров/сортировки
+    // Сброс и перезагрузка при изменении фильтров/сортировки (ждём проверку геометрий)
     useEffect(() => {
+        if (!geometriesReady) return;
         setNextCursor(undefined);
         fetchProperties();
-    }, [fetchProperties]);
+    }, [fetchProperties, geometriesReady]);
 
-    // Загрузка каунта
+    // Загрузка каунта (ждём проверку геометрий)
     useEffect(() => {
+        if (!geometriesReady) return;
         const controller = new AbortController();
         getPropertiesCount(filters, controller.signal)
             .then((count) => setTotalCount(count))
@@ -184,7 +198,7 @@ export function SearchPageSidebar() {
             });
 
         return () => controller.abort();
-    }, [filters]);
+    }, [filters, geometriesReady]);
 
     // Infinite scroll через onRowsRendered react-window
     const fetchRef = useRef(fetchProperties);
@@ -224,7 +238,7 @@ export function SearchPageSidebar() {
     };
 
     return (
-        <aside className="hidden slug-desktop:flex flex-col w-[390px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
+        <aside className="hidden slug-desktop:flex flex-col w-[450px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
             {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 pt-3 pb-1">
@@ -283,7 +297,15 @@ export function SearchPageSidebar() {
                             if (activeLocationMode) {
                                 setLocationMode(null);
                             } else {
-                                setLocationMode('search');
+                                // Восстанавливаем последний активный режим локации
+                                const { locationFilter } = useFilterStore.getState();
+                                const modeFromStore = locationFilter?.mode;
+                                // Fallback: определяем режим из URL-фильтров
+                                const modeFromUrl = filters.polygonIds?.length ? 'draw'
+                                    : filters.isochroneIds?.length ? 'isochrone'
+                                    : filters.radiusIds?.length ? 'radius'
+                                    : undefined;
+                                setLocationMode(modeFromStore ?? modeFromUrl ?? 'search');
                             }
                         }}
                         className={cn(
@@ -353,11 +375,11 @@ export function SearchPageSidebar() {
             </div>
 
             {/* === Прогресс-бар загрузки === */}
-            <div className="relative h-0.5 w-full bg-border/50 shrink-0 overflow-hidden">
+            {/* <div className="relative h-0.5 w-full bg-border/50 shrink-0 overflow-hidden">
                 {isRefreshing && (
                     <div className="absolute inset-0 bg-brand-primary animate-progress-bar" />
                 )}
-            </div>
+            </div> */}
 
             {/* === Карточки объектов (виртуализированный список) === */}
             {!isLoading && properties.length === 0 ? (

@@ -17,19 +17,22 @@ import {
     useEditorPopup,
     useActionsPopup,
 } from '../../model/hooks';
-import { cleanupDrawingLayers } from '../../lib/map-layer-helpers';
+import { cleanupAllDrawingLayers } from '../../lib/map-layer-helpers';
 import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
-import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { createFilterGeometry, createGuestGeometry, getGuestGeometry, getFilterGeometry } from '@/shared/api/geometries';
 import { useSidebarStore } from '@/widgets/sidebar';
+import type { DrawPoint } from '@/entities/map-draw/model/types';
+import { saveGeometryToStorage, getGeometryFromStorage, removeGeometryFromStorage, syncGeometriesToBackend } from '@/shared/lib/geometry-storage';
 
 type MapDrawProps = {
     /** Инстанс карты Mapbox */
     map: mapboxgl.Map;
     /** Колбэк для закрытия панели */
     onClose?: () => void;
-    /** Начальные данные (восстановление сохранённого полигона) */
-    initialData?: DrawPolygon;
+    /** Начальные данные (восстановление сохранённых полигонов) */
+    initialData?: DrawPolygon[];
     /** CSS классы для контейнера */
     className?: string;
 };
@@ -39,13 +42,30 @@ type MapDrawProps = {
  * Позволяет создавать, редактировать и удалять полигоны
  * Использует двухслойную систему: локальное состояние + глобальное (store/URL)
  */
+/** Конвертация GeoJSON строки из бекенда → DrawPolygon */
+function geojsonToDrawPolygon(id: string, geojsonStr: string, name?: string): DrawPolygon | null {
+    try {
+        const geojson = JSON.parse(geojsonStr);
+        if (geojson.type !== 'Polygon' || !geojson.coordinates?.[0]) return null;
+        const ring: number[][] = geojson.coordinates[0];
+        // Последняя точка = первая (замыкание), убираем её
+        const points: DrawPoint[] = ring.slice(0, -1).map(([lng, lat]) => ({ lng, lat }));
+        if (points.length < 3) return null;
+        return { id, name, points, createdAt: new Date() };
+    } catch {
+        return null;
+    }
+}
+
 export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) {
     const t = useTranslations('draw');
     const { setLocationFilter, setLocationMode } = useFilterStore();
     const { isAuthenticated } = useAuth();
+    const { filters: urlFilters, setFilters: setUrlFilters } = useFilters();
     const { activeQueryId, queries } = useSidebarStore();
     const [isSaving, setIsSaving] = useState(false);
     const [isDirty, setIsDirty] = useState(!initialData);
+    const [isRestoring, setIsRestoring] = useState(false);
 
     // Хук управления состоянием
     const {
@@ -70,31 +90,118 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         handleClear,
     } = useDrawingState(map);
 
-    // Восстановление сохранённого полигона при повторном открытии
+    // Восстановление полигона: из initialData (store) ИЛИ из бекенда (по IDs из URL)
     const initializedRef = useRef(false);
     useEffect(() => {
-        if (initialData && !initializedRef.current) {
-            initializedRef.current = true;
-            // createdAt может быть строкой после восстановления из localStorage
-            const restored = {
-                ...initialData,
-                createdAt: initialData.createdAt instanceof Date
-                    ? initialData.createdAt
-                    : new Date(initialData.createdAt),
-            };
-            setPolygons([restored]);
-            console.log('[MapDraw] Restored saved polygon:', restored.id);
-        }
-    }, [initialData, setPolygons]);
+        if (initializedRef.current) return;
 
-    // Очистка с удалением геометрий с бекенда
+        // 1) Если есть initialData из store — используем его
+        if (initialData && initialData.length > 0) {
+            initializedRef.current = true;
+            const restored = initialData.map(p => ({
+                ...p,
+                createdAt: p.createdAt instanceof Date ? p.createdAt : new Date(p.createdAt),
+            }));
+            setPolygons(restored);
+            setIsDirty(false);
+            console.log('[MapDraw] Restored', restored.length, 'polygons from store');
+
+            // Async: убедиться что геометрии есть в БД (могли быть удалены при чистке)
+            const polygonIds = urlFilters.polygonIds;
+            if (polygonIds?.length) {
+                syncGeometriesToBackend(polygonIds);
+            }
+            return;
+        }
+
+        // 2) Если нет initialData, но в URL есть polygonIds — загружаем с бекенда
+        const polygonIds = urlFilters.polygonIds;
+        if (polygonIds && polygonIds.length > 0) {
+            initializedRef.current = true;
+            setIsRestoring(true);
+            const geoSrc = urlFilters.geoSrc;
+
+            Promise.all(
+                polygonIds.map(async (id) => {
+                    // 1) Пробуем получить из БД
+                    try {
+                        const geo = geoSrc === 'filter'
+                            ? await getFilterGeometry(id)
+                            : await getGuestGeometry(id);
+                        if (geo) {
+                            const parsed = geojsonToDrawPolygon(geo.id, geo.geometry, geo.name);
+                            if (parsed) return parsed;
+                            console.warn('[MapDraw] DB geometry parse failed for', id, '- trying localStorage');
+                        }
+                    } catch (err) {
+                        console.warn('[MapDraw] DB fetch failed for', id, err, '- trying localStorage');
+                    }
+
+                    // 2) Fallback: localStorage
+                    const local = getGeometryFromStorage(id);
+                    if (local?.geometry) {
+                        const parsed = geojsonToDrawPolygon(local.id, local.geometry, local.name);
+                        if (parsed) {
+                            console.log('[MapDraw] Restored from localStorage:', id);
+                            syncGeometriesToBackend([id]);
+                            return parsed;
+                        }
+                    }
+
+                    // 3) Нет нигде — вернём null (ID будет убран из URL)
+                    console.warn('[MapDraw] Polygon not found anywhere, will remove ID:', id);
+                    return null;
+                })
+            ).then((results) => {
+                const restored = results.filter((p): p is DrawPolygon => p !== null);
+                const lostIds = polygonIds.filter((_, i) => results[i] === null);
+
+                if (restored.length > 0) {
+                    setPolygons(restored);
+                    setIsDirty(false);
+                    setLocationFilter({ mode: 'draw', polygons: restored });
+                    console.log('[MapDraw] Restored', restored.length, 'polygons');
+                }
+
+                // Убираем потерянные ID из URL
+                if (lostIds.length > 0) {
+                    const remainingIds = polygonIds.filter(id => !lostIds.includes(id));
+                    setUrlFilters({
+                        polygonIds: remainingIds.length > 0 ? remainingIds : undefined,
+                        geoSrc: remainingIds.length > 0 ? geoSrc : undefined,
+                    });
+                }
+            }).catch((err) => {
+                console.error('[MapDraw] Failed to fetch polygons:', err);
+            }).finally(() => {
+                setIsRestoring(false);
+            });
+            return;
+        }
+
+        initializedRef.current = true;
+    }, [initialData, urlFilters.polygonIds, urlFilters.geoSrc, setPolygons, setLocationFilter]);
+
+    // Очистка с удалением геометрий с бекенда + из URL + из localStorage
     const handleClearWithDelete = () => {
+        // Удаляем из localStorage
+        const { locationGeometryMeta, deleteLocationGeometries } = useFilterStore.getState();
+        for (const meta of locationGeometryMeta) {
+            removeGeometryFromStorage(meta.id);
+        }
+        // Также удаляем по текущим URL IDs (может не совпадать с meta)
+        const currentPolygonIds = urlFilters.polygonIds;
+        if (currentPolygonIds) {
+            for (const id of currentPolygonIds) {
+                removeGeometryFromStorage(id);
+            }
+        }
+
         handleClear();
         setIsDirty(false);
-        // Удаляем геометрии с бекенда
-        const { deleteLocationGeometries } = useFilterStore.getState();
         deleteLocationGeometries(isAuthenticated);
         setLocationFilter(null);
+        setUrlFilters({ polygonIds: undefined, geoSrc: undefined });
     };
 
     // Хук drag-and-drop точек
@@ -137,7 +244,10 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         isDrawing,
         currentPoints,
         editorPopupRef,
-        onComplete: handleCompletePolygon,
+        onComplete: () => {
+            const changed = handleCompletePolygon();
+            if (changed) setIsDirty(true);
+        },
         onCancel: handleCancelDrawing,
         onUndo: handleUndoLastPoint,
         translations: {
@@ -156,8 +266,8 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         polygons,
         actionsPopupRef,
         isDrawing,
-        onEdit: handleEditPolygon,
-        onDelete: handleDeletePolygon,
+        onEdit: (id: string) => { handleEditPolygon(id); },
+        onDelete: (id: string) => { handleDeletePolygon(id); setIsDirty(true); },
         onSelectPolygon: setSelectedPolygonId,
         translations: {
             edit: t('edit'),
@@ -197,6 +307,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                 });
 
                 const params = {
+                    id: polygon.id,
                     type: 'polygon' as const,
                     geometry: geojsonStr,
                     name: polygon.name || '',
@@ -216,6 +327,14 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
 
                 savedGeometryIds.push(geometryId);
 
+                // Дублируем в localStorage (fallback при чистке БД)
+                saveGeometryToStorage({
+                    id: geometryId,
+                    type: 'polygon',
+                    geometry: geojsonStr,
+                    name: polygon.name || '',
+                });
+
                 // Сохраняем мету (id + name, без координат)
                 const { addGeometryMeta } = useFilterStore.getState();
                 addGeometryMeta({ id: geometryId, name: polygon.name || '', type: 'polygon' });
@@ -224,12 +343,11 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
             // Обновляем store
             setLocationFilter({
                 mode: 'draw',
-                polygon: polygons[0],
+                polygons: polygons,
             });
 
-            // Сохраняем geometry IDs в фильтры → попадут в URL params
-            const { setFilters } = useFilterStore.getState();
-            setFilters({
+            // Сохраняем geometry IDs в URL через nuqs (source of truth)
+            setUrlFilters({
                 polygonIds: savedGeometryIds,
                 geoSrc: hasSavedFilter ? 'filter' : 'guest',
             });
@@ -266,8 +384,8 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                 return;
             }
 
-            // Удаляем источники и слои
-            cleanupDrawingLayers(map);
+            // Удаляем все слои рисования (включая завершённые полигоны)
+            cleanupAllDrawingLayers(map);
 
             // Удаляем popup-ы
             if (editorPopup) {
@@ -301,7 +419,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         >
             <div className="space-y-4">
                 {/* Пустое состояние */}
-                {!isDrawing && polygons.length === 0 && (
+                {!isDrawing && !isRestoring && polygons.length === 0 && (
                     <div className="text-center py-8 text-text-secondary">
                         <MapPin className="h-12 w-12 mx-auto mb-3 opacity-50" />
                         <p className="text-sm">{t('emptyState')}</p>
@@ -313,7 +431,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                 {!isDrawing && polygons.length > 0 && (
                     <DrawnPolygonsList
                         polygons={polygons}
-                        onEdit={(id) => { handleEditPolygon(id); setIsDirty(true); }}
+                        onEdit={(id) => { handleEditPolygon(id); }}
                         onDelete={(id) => { handleDeletePolygon(id); setIsDirty(true); }}
                         onSelect={setSelectedPolygonId}
                         selectedId={selectedPolygonId}
@@ -325,7 +443,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                     <DrawControls
                         hasPolygons={polygons.length > 0}
                         isDrawing={isDrawing}
-                        onStartDrawing={() => { handleStartDrawing(); setIsDirty(true); }}
+                        onStartDrawing={() => { handleStartDrawing(); }}
                         polygonsCount={polygons.length}
                     />
                 )}

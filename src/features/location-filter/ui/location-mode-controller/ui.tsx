@@ -104,7 +104,7 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
                 <MapDraw
                     map={map}
                     onClose={handleClosePanel}
-                    initialData={locationFilter?.mode === 'draw' ? locationFilter.polygon : undefined}
+                    initialData={locationFilter?.mode === 'draw' ? locationFilter.polygons : undefined}
                 />
             )}
 

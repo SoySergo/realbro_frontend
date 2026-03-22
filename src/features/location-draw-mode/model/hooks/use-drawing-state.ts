@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import type { DrawPolygon, DrawPoint } from '@/entities/map-draw/model/types';
-import { generatePolygonId } from '../../lib/polygon-helpers';
+import { generatePolygonId, arePointsEqual } from '../../lib/polygon-helpers';
 
 type UseDrawingStateReturn = {
     // Состояние UI
@@ -26,7 +26,7 @@ type UseDrawingStateReturn = {
 
     // Обработчики
     handleStartDrawing: () => void;
-    handleCompletePolygon: () => void;
+    handleCompletePolygon: () => boolean;
     handleCancelDrawing: () => void;
     handleUndoLastPoint: () => void;
     handleEditPolygon: (polygonId: string) => void;
@@ -99,9 +99,13 @@ export function useDrawingState(map: mapboxgl.Map): UseDrawingStateReturn {
         }
     }, [map, polygons.length]);
 
-    // Завершить текущий полигон
-    const handleCompletePolygon = useCallback(() => {
-        if (currentPoints.length < 3) return;
+    // Завершить текущий полигон. Возвращает true если полигон реально изменился.
+    const handleCompletePolygon = useCallback((): boolean => {
+        if (currentPoints.length < 3) return false;
+
+        // Проверяем, действительно ли точки изменились при редактировании
+        const editing = editingPolygonRef.current;
+        const changed = !editing || !arePointsEqual(editing.points, currentPoints);
 
         const newPolygon: DrawPolygon = {
             id: generatePolygonId(),
@@ -125,6 +129,8 @@ export function useDrawingState(map: mapboxgl.Map): UseDrawingStateReturn {
             editorPopupRef.current.remove();
             editorPopupRef.current = null;
         }
+
+        return changed;
     }, [currentPoints, map]);
 
     // Отменить текущее рисование

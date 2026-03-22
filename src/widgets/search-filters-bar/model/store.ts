@@ -8,6 +8,7 @@ import type { LocationItem } from '@/entities/location/model/types';
 import { adminLevelToLocationField } from '@/entities/boundary';
 import type { GeometryType } from '@/shared/api/geometries';
 import { deleteGuestGeometry, deleteFilterGeometry } from '@/shared/api/geometries';
+import { removeGeometryFromStorage } from '@/shared/lib/geometry-storage';
 
 // Режим отображения поиска: карта (с сайдбаром) или список (без карты)
 export type SearchViewMode = 'map' | 'list';
@@ -414,6 +415,14 @@ export const useFilterStore = create<FilterStore>()(
                 const { locationGeometryMeta, currentFilters } = get();
                 const polygonIds = currentFilters.polygonIds || [];
                 const geometrySource = currentFilters.geoSrc;
+
+                // Удаляем из localStorage
+                for (const meta of locationGeometryMeta) {
+                    removeGeometryFromStorage(meta.id);
+                }
+                for (const id of polygonIds) {
+                    removeGeometryFromStorage(id);
+                }
 
                 // Очищаем локальное состояние сразу
                 set({

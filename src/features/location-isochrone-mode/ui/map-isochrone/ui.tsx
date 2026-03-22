@@ -13,6 +13,8 @@ import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
+import { saveGeometryToStorage, syncGeometriesToBackend } from '@/shared/lib/geometry-storage';
+import { generatePolygonId } from '@/features/location-draw-mode/lib/polygon-helpers';
 import type { IsochroneSettings } from '@/features/location-filter/model';
 
 type MapIsochroneProps = {
@@ -74,6 +76,13 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
 
             handleLocationSelect(initialData.center, initialData.name || t('selectedPoint'));
             console.log('[MapIsochrone] Restored saved isochrone from saved polygon data');
+
+            // Async: убедиться что геометрия есть в БД
+            const { locationGeometryMeta } = useFilterStore.getState();
+            const geoIds = locationGeometryMeta.filter(m => m.type === 'isochrone').map(m => m.id);
+            if (geoIds.length > 0) {
+                syncGeometriesToBackend(geoIds);
+            }
         }
     }, [initialData, setSelectedProfile, setSelectedMinutes, handleLocationSelect, restoreFromPolygon, t]);
 
@@ -138,7 +147,9 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                 coordinates: isochroneData,
             });
 
+            const geometryId = generatePolygonId();
             const params = {
+                id: geometryId,
                 type: 'isochrone' as const,
                 geometry: geojsonStr,
                 name: selectedName || '',
@@ -146,16 +157,12 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                 center_lng: selectedCoordinates[0],
             };
 
-            let geometryId: string | undefined;
-
             try {
                 if (hasSavedFilter && activeQueryId) {
-                    const result = await createFilterGeometry(activeQueryId, params);
-                    geometryId = result.id;
+                    await createFilterGeometry(activeQueryId, params);
                     console.log('[GEO] Isochrone saved to filter:', activeQueryId);
                 } else {
-                    const result = await createGuestGeometry(params);
-                    geometryId = result.id;
+                    await createGuestGeometry(params);
                     console.log('[GEO] Isochrone saved as guest geometry:', geometryId);
                 }
             } catch (geoError) {
@@ -163,9 +170,16 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
             }
 
             // Сохраняем мету (id + name)
-            if (geometryId) {
-                addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'isochrone' });
-            }
+            addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'isochrone' });
+            // Дублируем в localStorage (fallback при чистке БД)
+            saveGeometryToStorage({
+                id: geometryId,
+                type: 'isochrone',
+                geometry: geojsonStr,
+                name: selectedName || '',
+                center_lat: selectedCoordinates[1],
+                center_lng: selectedCoordinates[0],
+            });
 
             // Сохраняем в filter store как LocationFilter
             setLocationFilter({
@@ -185,11 +199,8 @@ export function MapIsochrone({ map, onClose, initialData, className }: MapIsochr
                 isochroneMinutes: selectedMinutes,
                 isochroneProfile: selectedProfile,
                 geometry_source: hasSavedFilter ? 'filter' : 'guest',
+                polygon_ids: [geometryId],
             };
-
-            if (geometryId) {
-                filterUpdates.polygon_ids = [geometryId];
-            }
 
             setFilters(filterUpdates);
 

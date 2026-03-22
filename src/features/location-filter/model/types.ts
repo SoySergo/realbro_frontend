@@ -28,7 +28,7 @@ export interface RadiusSettings {
 export interface LocationFilter {
     mode: LocationFilterMode;
     selectedLocations?: LocationItem[]; // для режима search
-    polygon?: DrawPolygon;
+    polygons?: DrawPolygon[];
     isochrone?: IsochroneSettings;
     radius?: RadiusSettings;
 }

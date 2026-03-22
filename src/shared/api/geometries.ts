@@ -20,7 +20,9 @@ export interface GeometryResponseDTO {
 }
 
 // Параметры создания геометрии
+// Параметры создания геометрии
 export interface CreateGeometryParams {
+    id?: string; // UUID (опционально, фронтенд генерирует UUIDv7)
     type: GeometryType;
     geometry?: string; // GeoJSON строка (обязательна для polygon/isochrone)
     name?: string;

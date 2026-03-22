@@ -14,7 +14,7 @@ type UseEditorPopupProps = {
     /** Ref для хранения popup */
     editorPopupRef: React.RefObject<mapboxgl.Popup | null>;
     /** Колбэк завершения полигона */
-    onComplete: () => void;
+    onComplete: () => boolean | void;
     /** Колбэк отмены рисования */
     onCancel: () => void;
     /** Колбэк отмены последней точки */

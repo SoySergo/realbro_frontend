@@ -67,7 +67,7 @@ export function LocationFilterButton() {
             case 'draw': {
                 // Учитываем множественные полигоны из фильтров
                 const idsCount = currentFilters.polygonIds?.length || 0;
-                return idsCount > 0 ? idsCount : (locationFilter.polygon ? 1 : 0);
+                return idsCount > 0 ? idsCount : (locationFilter.polygons?.length || 0);
             }
             case 'isochrone':
                 return locationFilter.isochrone ? 1 : 0;

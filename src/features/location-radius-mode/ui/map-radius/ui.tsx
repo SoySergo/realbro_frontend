@@ -13,6 +13,8 @@ import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { createFilterGeometry, createGuestGeometry } from '@/shared/api/geometries';
+import { saveGeometryToStorage, syncGeometriesToBackend } from '@/shared/lib/geometry-storage';
+import { generatePolygonId } from '@/features/location-draw-mode/lib/polygon-helpers';
 import type { RadiusSettings } from '@/features/location-filter/model';
 
 type MapRadiusProps = {
@@ -63,6 +65,13 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
             handleLocationSelect(initialData.center, initialData.name || t('selectedPoint'));
             setSelectedRadius(initialData.radiusKm);
             console.log('[MapRadius] Restored saved radius:', initialData);
+
+            // Async: убедиться что геометрия есть в БД
+            const { locationGeometryMeta } = useFilterStore.getState();
+            const geoIds = locationGeometryMeta.filter(m => m.type === 'radius').map(m => m.id);
+            if (geoIds.length > 0) {
+                syncGeometriesToBackend(geoIds);
+            }
         }
     }, [initialData, handleLocationSelect, setSelectedRadius, t]);
 
@@ -94,7 +103,9 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
             }
 
             // Сохраняем на бекенд: type=radius, center+radius (без GeoJSON полигона)
+            const geometryId = generatePolygonId();
             const params = {
+                id: geometryId,
                 type: 'radius' as const,
                 name: selectedName || '',
                 radius: selectedRadius,
@@ -102,16 +113,12 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                 center_lng: selectedCoordinates[0],
             };
 
-            let geometryId: string | undefined;
-
             try {
                 if (hasSavedFilter && activeQueryId) {
-                    const result = await createFilterGeometry(activeQueryId, params);
-                    geometryId = result.id;
+                    await createFilterGeometry(activeQueryId, params);
                     console.log('[GEO] Radius saved to filter:', activeQueryId);
                 } else {
-                    const result = await createGuestGeometry(params);
-                    geometryId = result.id;
+                    await createGuestGeometry(params);
                     console.log('[GEO] Radius saved as guest geometry:', geometryId);
                 }
             } catch (geoError) {
@@ -119,9 +126,16 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
             }
 
             // Сохраняем мету (id + name)
-            if (geometryId) {
-                addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'radius' });
-            }
+            addGeometryMeta({ id: geometryId, name: selectedName || '', type: 'radius' });
+            // Дублируем в localStorage (fallback при чистке БД)
+            saveGeometryToStorage({
+                id: geometryId,
+                type: 'radius',
+                name: selectedName || '',
+                radius: selectedRadius,
+                center_lat: selectedCoordinates[1],
+                center_lng: selectedCoordinates[0],
+            });
 
             // Сохраняем в store
             setLocationFilter({
@@ -138,11 +152,8 @@ export function MapRadius({ map, onClose, initialData, className }: MapRadiusPro
                 radiusCenter: selectedCoordinates,
                 radiusKm: selectedRadius,
                 geometry_source: hasSavedFilter ? 'filter' : 'guest',
+                polygon_ids: [geometryId],
             };
-
-            if (geometryId) {
-                filterUpdates.polygon_ids = [geometryId];
-            }
 
             setFilters(filterUpdates);
 
