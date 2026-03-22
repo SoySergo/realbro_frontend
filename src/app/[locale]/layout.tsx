@@ -5,6 +5,7 @@ import { ToastProvider } from "@/shared/ui/toast";
 import { setRequestLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/shared/config/routing';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '../globals.css';
 import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { AppHeader } from '@/widgets/app-header';
@@ -71,6 +72,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <ThemeProvider>
                     <NextIntlClientProvider messages={messages}>
                         <AuthProvider>
+                            <NuqsAdapter>
                             <WebSocketProvider>
                                 <ToastProvider>
                                     <AuthErrorHandler />
@@ -90,6 +92,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     <Toaster position="top-center" closeButton richColors duration={4000} />
                                 </ToastProvider>
                             </WebSocketProvider>
+                            </NuqsAdapter>
                         </AuthProvider>
                     </NextIntlClientProvider>
                 </ThemeProvider>

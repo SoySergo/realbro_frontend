@@ -1,139 +1,81 @@
 /**
- * Базовые типы для фильтров поиска недвижимости
+ * Search filter types — URL is the single source of truth.
+ * Each field maps directly to a URL search parameter.
+ * No backend snake_case fields, no localStorage, no duplicates.
  */
 
-// Структура фильтров согласно бекенду
+export type MarkerType =
+    | 'view'
+    | 'no_view'
+    | 'like'
+    | 'dislike'
+    | 'saved'
+    | 'hidden'
+    | 'to_review'
+    | 'to_think'
+    | 'all';
+
+export type SortField = 'price' | 'area' | 'createdAt';
+export type SortOrder = 'asc' | 'desc';
+export type GeometrySource = 'guest' | 'filter';
+
+/**
+ * SearchFilters — URL-representable filter state.
+ * undefined = parameter not set in URL.
+ */
 export interface SearchFilters {
-    // Географические фильтры (старая структура - deprecated)
-    countryIds?: number[];
-    regionIds?: number[];
-    provinceIds?: number[];
-    cityIds?: number[];
-    districtIds?: number[];
-    neighborhoodIds?: number[];
-
-    // Географические фильтры по OSM admin_level
-    adminLevel2?: number[]; // Страны
-    adminLevel4?: number[]; // Регионы
-    adminLevel6?: number[]; // Провинции
-    adminLevel7?: number[]; // Крупные города
-    adminLevel8?: number[]; // Города
-    adminLevel9?: number[]; // Районы
-    adminLevel10?: number[]; // Кварталы/микрорайоны
-
-    // Тип сделки
-    dealType?: DealType;
-
-    // Класс недвижимости (жилая / коммерческая)
-    propertyClass?: PropertyClass;
-
-    // Категории недвижимости (квартиры, комнаты, дома, офисы и т.д.)
-    categoryIds?: number[];
-    propertyCategory?: PropertyCategory[];
-
-    // Цена
+    // Price range: ?price=500-2000
     minPrice?: number;
     maxPrice?: number;
 
-    // Комнаты
-    rooms?: number[];
-
-    // Площадь
+    // Area range: ?area=50-100
     minArea?: number;
     maxArea?: number;
 
-    // Язык (автоматически из локали)
-    lang?: string;
+    // Room counts: ?rooms=2,3,4
+    rooms?: number[];
 
-    // Тип маркеров на карте
-    markerType?: MarkerType;
-
-    // Полигоны (для рисования областей)
-    geometryIds?: number[];
-    rawGeometryIds?: number[];
-
-    // Радиус (центр + радиус в км)
-    radiusCenter?: [number, number]; // [lng, lat]
-    radiusKm?: number;
-
-    // Изохрон (время до точки)
-    isochroneCenter?: [number, number]; // [lng, lat]
-    isochroneMinutes?: number;
-    isochroneProfile?: 'walking' | 'cycling' | 'driving';
-
-    // Сортировка
-    sort?: string;
-    sortOrder?: 'asc' | 'desc';
-
-    // Мета-информация о локациях (для восстановления границ)
-    locationsMeta?: Array<{
-        id: number;
-        name?: string;
-        wikidata?: string;
-        adminLevel?: number;
-    }>;
-
-    // === Бекенд-совместимые поля (snake_case) ===
-
-    // Тип сделки (бекенд: 'sale' | 'rent' | 'sale,rent')
-    property_types?: string;
-    // Вид недвижимости (1=residential, 2=commercial, 3=industrial, 4=land, 5=other)
-    property_kind_ids?: number[];
-    // Категория (1=room, 2=apartment, 3=house)
-    categories?: number[];
-    // Подкатегория (4=piso, 5=studio, 6=loft, ...)
-    sub_categories?: number[];
-
-    // Локации (snake_case — маппинг admin_level)
-    country_ids?: number[];
-    region_ids?: number[];
-    province_ids?: number[];
-    city_ids?: number[];             // admin_level 7 и 8 → city_ids
-    district_ids?: number[];
-    neighborhood_ids?: number[];
-
-    // Ванные
+    // Bathrooms: ?bathrooms=1,2
     bathrooms?: number[];
 
-    // Геолокация
-    bbox?: string;                   // 'minLat,minLng,maxLat,maxLng'
-    radius?: number;                 // метры
-    radius_lat?: number;
-    radius_lng?: number;
-    geojson?: string;                // inline GeoJSON
-    polygon_ids?: string[];          // UUID[] сохранённых геометрий
+    // Category IDs: ?categories=1,2
+    categoryIds?: number[];
 
-    // Источник геометрии: 'guest' | 'filter' — указывает бекенду, откуда брать полигоны
-    geometry_source?: 'guest' | 'filter';
+    // Subcategory IDs: ?sub_categories=4,5,6
+    subCategories?: number[];
 
-    // Включение / исключение
-    include_ids?: string[];          // UUID[]
-    exclude_ids?: string[];          // UUID[]
+    // Admin levels (OSM): ?admin2=123&admin4=456...
+    adminLevel2?: number[];
+    adminLevel4?: number[];
+    adminLevel6?: number[];
+    adminLevel7?: number[];
+    adminLevel8?: number[];
+    adminLevel9?: number[];
+    adminLevel10?: number[];
 
-    // Сортировка (snake_case)
-    sort_by?: string;                // 'published_at' | 'price' | 'area' | 'created_at'
-    sort_order_backend?: 'asc' | 'desc';
+    // Geometry UUIDs: ?polygon=uuid1,uuid2&isochrone=uuid3&radius=uuid4
+    polygonIds?: string[];
+    isochroneIds?: string[];
+    radiusIds?: string[];
 
-    // Пагинация
-    limit?: number;
-    cursor?: string;
+    // Geometry source: ?geo_src=guest|filter
+    geoSrc?: GeometrySource;
 
-    // Язык
-    language?: string;
+    // Marker type: ?marker=like
+    markerType?: MarkerType;
 
-    // Маркеры (для saved filters)
-    exclude_marker_types?: string[]; // 'dislike', 'hidden'
+    // Sort: ?sort=price&order=desc
+    sort?: SortField;
+    order?: SortOrder;
+
+    // Bounding box (visible map area): ?bbox=west,south,east,north
+    bbox?: [number, number, number, number];
 }
 
-// Тип сделки
+// Legacy re-exports for gradual migration
 export type DealType = 'rent' | 'sale';
-
-// Класс недвижимости
 export type PropertyClass = 'residential' | 'commercial';
-
-// Категория недвижимости
 export type PropertyCategory =
-    // Жилая
     | 'apartment'
     | 'room'
     | 'house'
@@ -141,7 +83,6 @@ export type PropertyCategory =
     | 'penthouse'
     | 'townhouse'
     | 'studio'
-    // Коммерческая
     | 'office'
     | 'retail'
     | 'warehouse'
@@ -149,8 +90,7 @@ export type PropertyCategory =
     | 'hotel'
     | 'land';
 
-// Типы маркеров
-export type MarkerType = 'view' | 'no_view' | 'like' | 'dislike' | 'saved' | 'hidden' | 'to_review' | 'to_think' | 'all';
+
 
 // Deprecated - старые типы для обратной совместимости
 export interface PropertyFilters {

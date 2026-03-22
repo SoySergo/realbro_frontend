@@ -230,8 +230,8 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
             // Сохраняем geometry IDs в фильтры → попадут в URL params
             const { setFilters } = useFilterStore.getState();
             setFilters({
-                polygon_ids: savedGeometryIds,
-                geometry_source: hasSavedFilter ? 'filter' : 'guest',
+                polygonIds: savedGeometryIds,
+                geoSrc: hasSavedFilter ? 'filter' : 'guest',
             });
 
             // Закрываем панель режима

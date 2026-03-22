@@ -46,7 +46,7 @@ export function LocationFilterButton() {
     };
 
     // Состояние кнопки: панель открыта vs фильтр применён
-    const hasGeometryIds = !!(currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length);
+    const hasGeometryIds = !!(currentFilters.polygonIds?.length);
     const hasSearchLocations = !!(locationFilter?.mode === 'search' && locationFilter.selectedLocations?.length);
     const isPanelOpen = !!activeLocationMode;
     const hasAppliedFilter = hasGeometryIds || hasSearchLocations;
@@ -56,7 +56,7 @@ export function LocationFilterButton() {
     const getSelectedCount = (): number => {
         if (!locationFilter) {
             // Проверяем наличие геометрий в фильтрах даже без locationFilter
-            const polygonCount = currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length || 0;
+            const polygonCount = currentFilters.polygonIds?.length || 0;
             if (polygonCount > 0) return polygonCount;
             return 0;
         }
@@ -66,7 +66,7 @@ export function LocationFilterButton() {
                 return locationFilter.selectedLocations?.length || 0;
             case 'draw': {
                 // Учитываем множественные полигоны из фильтров
-                const idsCount = currentFilters.polygon_ids?.length || currentFilters.geometryIds?.length || 0;
+                const idsCount = currentFilters.polygonIds?.length || 0;
                 return idsCount > 0 ? idsCount : (locationFilter.polygon ? 1 : 0);
             }
             case 'isochrone':

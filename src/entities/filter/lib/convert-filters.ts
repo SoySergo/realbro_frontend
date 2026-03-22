@@ -1,272 +1,87 @@
 import type { SearchFilters } from '../model/types';
-import type { LocationItem } from '@/entities/location';
 import { adminLevelToLocationField } from '@/entities/boundary';
 
 /**
- * Утилиты для конвертации фильтров между разными форматами
- * Перенесено из src/store/filterStore.ts
+ * Converts SearchFilters (URL state) → URLSearchParams for backend API calls and MVT tile URLs.
+ * Maps frontend field names → backend snake_case field names.
  */
-
-/**
- * Преобразует LocationFilter в структуру SearchFilters
- */
-export function convertLocationFilterToFilters(locationFilter: {
-    mode: 'search' | 'draw' | 'isochrone' | 'radius';
-    selectedLocations?: LocationItem[];
-    isochrone?: {
-        center: [number, number];
-        profile: 'walking' | 'cycling' | 'driving';
-        minutes: number;
-    };
-    radius?: {
-        center: [number, number];
-        radiusKm: number;
-    };
-}): Partial<SearchFilters> {
-    const result: Partial<SearchFilters> = {};
-
-    if (locationFilter.mode === 'search' && locationFilter.selectedLocations) {
-        // Группируем по adminLevel
-        const groupedByLevel: Record<number, number[]> = {};
-        const locationsMeta: Array<{ id: number; wikidata?: string; adminLevel?: number }> = [];
-
-        locationFilter.selectedLocations.forEach((loc) => {
-            if (loc.adminLevel && loc.id) {
-                if (!groupedByLevel[loc.adminLevel]) {
-                    groupedByLevel[loc.adminLevel] = [];
-                }
-                groupedByLevel[loc.adminLevel].push(loc.id);
-
-                // Сохраняем мета-информацию для восстановления границ
-                locationsMeta.push({
-                    id: loc.id,
-                    wikidata: loc.wikidata,
-                    adminLevel: loc.adminLevel,
-                });
-            }
-        });
-
-        // Применяем к нужным полям
-        if (groupedByLevel[2]) result.adminLevel2 = groupedByLevel[2];
-        if (groupedByLevel[4]) result.adminLevel4 = groupedByLevel[4];
-        if (groupedByLevel[6]) result.adminLevel6 = groupedByLevel[6];
-        if (groupedByLevel[7]) result.adminLevel7 = groupedByLevel[7];
-        if (groupedByLevel[8]) result.adminLevel8 = groupedByLevel[8];
-        if (groupedByLevel[9]) result.adminLevel9 = groupedByLevel[9];
-        if (groupedByLevel[10]) result.adminLevel10 = groupedByLevel[10];
-
-        // Сохраняем мета-информацию
-        result.locationsMeta = locationsMeta;
-    }
-
-    if (locationFilter.mode === 'draw') {
-        // Draw mode geometries are stored by polygon_ids in filters, set during save
-    }
-
-    if (locationFilter.mode === 'radius' && locationFilter.radius) {
-        result.radiusCenter = locationFilter.radius.center;
-        result.radiusKm = locationFilter.radius.radiusKm;
-    }
-
-    return result;
-}
-
-/**
- * Преобразует SearchFilters обратно в LocationFilter
- */
-export function convertFiltersToLocationFilter(
-    filters: SearchFilters
-): {
-    mode: 'search' | 'draw' | 'isochrone' | 'radius';
-    selectedLocations?: LocationItem[];
-    radius?: { center: [number, number]; radiusKm: number };
-} | null {
-    // Проверяем наличие adminLevel полей
-    const hasAdminLevels =
-        filters.adminLevel2 ||
-        filters.adminLevel4 ||
-        filters.adminLevel6 ||
-        filters.adminLevel7 ||
-        filters.adminLevel8 ||
-        filters.adminLevel9 ||
-        filters.adminLevel10;
-
-    if (hasAdminLevels && filters.locationsMeta) {
-        // Восстанавливаем локации из мета-информации
-        const selectedLocations: LocationItem[] = filters.locationsMeta.map((meta) => {
-            // Определяем тип локации по adminLevel
-            let type: 'city' | 'province' | 'district' | 'country' | 'neighborhood' | 'region' | 'comarca' =
-                'city';
-            if (meta.adminLevel === 2) type = 'country';
-            else if (meta.adminLevel === 4) type = 'region';
-            else if (meta.adminLevel === 6) type = 'province';
-            else if (meta.adminLevel === 7 || meta.adminLevel === 8) type = 'city';
-            else if (meta.adminLevel === 9) type = 'district';
-            else if (meta.adminLevel === 10) type = 'neighborhood';
-
-            return {
-                id: meta.id,
-                name: '', // Название будет загружено позже
-                type,
-                adminLevel: meta.adminLevel,
-                wikidata: meta.wikidata,
-            };
-        });
-
-        return {
-            mode: 'search',
-            selectedLocations,
-        };
-    }
-
-    // Проверяем полигоны (теперь загружаются с бекенда по polygon_ids)
-    if (filters.polygon_ids && filters.polygon_ids.length > 0) {
-        return {
-            mode: 'draw',
-        };
-    }
-
-    if (filters.geometryIds && filters.geometryIds.length > 0) {
-        return {
-            mode: 'draw',
-        };
-    }
-
-    // Проверяем радиус
-    if (filters.radiusCenter && filters.radiusKm) {
-        return {
-            mode: 'radius',
-            radius: {
-                center: filters.radiusCenter,
-                radiusKm: filters.radiusKm,
-            },
-        };
-    }
-
-    return null;
-}
-
-/**
- * Конвертирует adminLevel-поля в snake_case поля бекенда
- * Использует единый маппинг adminLevelToLocationField из @/entities/boundary
- */
-export function locationToBackendFilters(filters: SearchFilters): Record<string, number[]> {
-    const result: Record<string, number[]> = {};
-    
-    const levelMap: Record<string, number> = {
-        adminLevel2: 2,
-        adminLevel4: 4,
-        adminLevel6: 6,
-        adminLevel7: 7,
-        adminLevel8: 8,
-        adminLevel9: 9,
-        adminLevel10: 10,
-    };
-
-    for (const [key, level] of Object.entries(levelMap)) {
-        const values = filters[key as keyof SearchFilters] as number[] | undefined;
-        if (values && values.length > 0) {
-            const backendField = adminLevelToLocationField(level);
-            if (result[backendField]) {
-                // city_ids получает значения от level 7 и 8
-                result[backendField] = [...result[backendField], ...values];
-            } else {
-                result[backendField] = values;
-            }
-        }
-    }
-
-    return result;
-}
-
-/**
- * Формирует query string из SearchFilters для бекенд-запросов
- * Числовые массивы → CSV: [1, 2, 3] → "1,2,3"
- * UUID массивы → CSV: ["uuid1", "uuid2"] → "uuid1,uuid2"
- */
-export function filtersToQueryString(filters: SearchFilters): string {
+export function filtersToBackendParams(filters: SearchFilters): URLSearchParams {
     const params = new URLSearchParams();
 
-    // Тип сделки
-    if (filters.property_types) {
-        params.set('property_types', filters.property_types);
-    } else if (filters.dealType) {
-        params.set('property_types', filters.dealType);
-    }
+    // Categories
+    if (filters.categoryIds?.length) params.set('categories', filters.categoryIds.join(','));
+    if (filters.subCategories?.length) params.set('sub_categories', filters.subCategories.join(','));
 
-    // Вид недвижимости
-    if (filters.property_kind_ids?.length) {
-        params.set('property_kind_ids', filters.property_kind_ids.join(','));
-    }
+    // Admin levels → backend location fields (using shared mapping)
+    const adminLevels: [string, number[], number][] = [
+        ['adminLevel2', filters.adminLevel2 ?? [], 2],
+        ['adminLevel4', filters.adminLevel4 ?? [], 4],
+        ['adminLevel6', filters.adminLevel6 ?? [], 6],
+        ['adminLevel7', filters.adminLevel7 ?? [], 7],
+        ['adminLevel8', filters.adminLevel8 ?? [], 8],
+        ['adminLevel9', filters.adminLevel9 ?? [], 9],
+        ['adminLevel10', filters.adminLevel10 ?? [], 10],
+    ];
 
-    // Категория / подкатегория
-    if (filters.categories?.length) {
-        params.set('categories', filters.categories.join(','));
-    } else if (filters.categoryIds?.length) {
-        params.set('categories', filters.categoryIds.join(','));
-    }
-    if (filters.sub_categories?.length) {
-        params.set('sub_categories', filters.sub_categories.join(','));
-    }
-
-    // Локации (snake_case → бекенд)
-    const locationFields = locationToBackendFilters(filters);
-    for (const [field, ids] of Object.entries(locationFields)) {
-        if (ids.length > 0) {
-            params.set(field, ids.join(','));
+    const locationBuckets: Record<string, number[]> = {};
+    for (const [, values, level] of adminLevels) {
+        if (values.length > 0) {
+            const backendField = adminLevelToLocationField(level);
+            if (locationBuckets[backendField]) {
+                locationBuckets[backendField].push(...values);
+            } else {
+                locationBuckets[backendField] = [...values];
+            }
         }
     }
-    
-    // Также добавляем прямые snake_case поля, если они заданы и ещё не установлены
-    if (filters.country_ids?.length && !params.has('country_ids')) params.set('country_ids', filters.country_ids.join(','));
-    if (filters.region_ids?.length && !params.has('region_ids')) params.set('region_ids', filters.region_ids.join(','));
-    if (filters.province_ids?.length && !params.has('province_ids')) params.set('province_ids', filters.province_ids.join(','));
-    if (filters.city_ids?.length && !params.has('city_ids')) params.set('city_ids', filters.city_ids.join(','));
-    if (filters.district_ids?.length && !params.has('district_ids')) params.set('district_ids', filters.district_ids.join(','));
-    if (filters.neighborhood_ids?.length && !params.has('neighborhood_ids')) params.set('neighborhood_ids', filters.neighborhood_ids.join(','));
+    for (const [field, ids] of Object.entries(locationBuckets)) {
+        params.set(field, ids.join(','));
+    }
 
-    // Цена
+    // Price
     if (filters.minPrice !== undefined) params.set('min_price', String(filters.minPrice));
     if (filters.maxPrice !== undefined) params.set('max_price', String(filters.maxPrice));
 
-    // Площадь
+    // Area
     if (filters.minArea !== undefined) params.set('min_area', String(filters.minArea));
     if (filters.maxArea !== undefined) params.set('max_area', String(filters.maxArea));
 
-    // Комнаты / ванные
+    // Rooms
     if (filters.rooms?.length) params.set('rooms', filters.rooms.join(','));
-    if (filters.bathrooms?.length) params.set('bathrooms', filters.bathrooms.join(','));
 
-    // Геолокация
-    if (filters.bbox) params.set('bbox', filters.bbox);
-    if (filters.radius !== undefined) params.set('radius', String(filters.radius));
-    if (filters.radius_lat !== undefined) params.set('radius_lat', String(filters.radius_lat));
-    if (filters.radius_lng !== undefined) params.set('radius_lng', String(filters.radius_lng));
-    if (filters.geojson) params.set('geojson', filters.geojson);
-    if (filters.polygon_ids?.length) params.set('polygon_ids', filters.polygon_ids.join(','));
-
-    // Включение / исключение
-    if (filters.include_ids?.length) params.set('include_ids', filters.include_ids.join(','));
-    if (filters.exclude_ids?.length) params.set('exclude_ids', filters.exclude_ids.join(','));
-
-    // Маркеры
-    if (filters.exclude_marker_types?.length) {
-        params.set('exclude_marker_types', filters.exclude_marker_types.join(','));
+    // Geometries — all UUID types merge into polygon_ids for backend
+    const allGeometryIds = [
+        ...(filters.polygonIds ?? []),
+        ...(filters.isochroneIds ?? []),
+        ...(filters.radiusIds ?? []),
+    ];
+    if (allGeometryIds.length > 0) {
+        params.set('polygon_ids', allGeometryIds.join(','));
+        if (filters.geoSrc) params.set('geometry_source', filters.geoSrc);
     }
 
-    // Сортировка
-    if (filters.sort_by) params.set('sort_by', filters.sort_by);
-    if (filters.sort_order_backend) params.set('sort_order', filters.sort_order_backend);
-    if (filters.sort && !filters.sort_by) params.set('sort_by', filters.sort);
-    if (filters.sortOrder && !filters.sort_order_backend) params.set('sort_order', filters.sortOrder);
+    // Bounding box
+    if (filters.bbox) params.set('bbox', filters.bbox.join(','));
 
-    // Пагинация
-    if (filters.limit !== undefined) params.set('limit', String(filters.limit));
-    if (filters.cursor) params.set('cursor', filters.cursor);
+    // Marker type → exclude_marker_types (backend inverts the logic)
+    if (filters.markerType && filters.markerType !== 'all') {
+        params.set('marker_type', filters.markerType);
+    }
 
-    // Язык
-    if (filters.language) params.set('language', filters.language);
-    else if (filters.lang) params.set('language', filters.lang);
+    // Sort
+    if (filters.sort) {
+        const sortBy = filters.sort === 'createdAt' ? 'published_at' : filters.sort;
+        params.set('sort_by', sortBy);
+    }
+    if (filters.order) params.set('sort_order', filters.order);
 
-    return params.toString();
+    return params;
 }
+
+/**
+ * Convenience: returns query string for tile URLs.
+ */
+export function filtersToQueryString(filters: SearchFilters): string {
+    return filtersToBackendParams(filters).toString();
+}
+

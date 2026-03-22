@@ -60,7 +60,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
     // Локальное состояние для фильтров недвижимости
     const [localMarkerType, setLocalMarkerType] = useState(filters.markerType || 'all');
     const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
-    const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.sub_categories || []);
+    const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.subCategories || []);
     const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
     const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
     const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
@@ -131,7 +131,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
         if (open) {
             setLocalMarkerType(filters.markerType || 'all');
             setLocalCategoryIds(filters.categoryIds || []);
-            setLocalSubCategoryIds(filters.sub_categories || []);
+            setLocalSubCategoryIds(filters.subCategories || []);
             setLocalRooms(filters.rooms || []);
             setLocalMinPrice(filters.minPrice || 0);
             setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
@@ -181,7 +181,7 @@ export function MobileFiltersSheet({ open, onOpenChange, currentCategory = 'prop
             setFilters({
                 markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
                 categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
-                sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
+                subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                 rooms: localRooms.length > 0 ? localRooms : undefined,
                 minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                 maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,

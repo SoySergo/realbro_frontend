@@ -26,7 +26,7 @@ export function SubcategoryFilterMobile({ value, onChange, categoryIds }: Subcat
     const [loading, setLoading] = useState(false);
 
     // Стабильный ключ для выбранных категорий
-    const resolvedCategoryIds = categoryIds || filters.categories || filters.categoryIds || [];
+    const resolvedCategoryIds = categoryIds || filters.categoryIds || [];
     const categoryIdsKey = resolvedCategoryIds.slice().sort().join(',');
 
     const prevKeyRef = useRef(categoryIdsKey);
@@ -56,10 +56,10 @@ export function SubcategoryFilterMobile({ value, onChange, categoryIds }: Subcat
         label: s.translated_name || s.slug,
     }));
 
-    const selectedIds = value ?? filters.sub_categories ?? [];
+    const selectedIds = value ?? filters.subCategories ?? [];
 
     const handleToggle = useCallback((id: number) => {
-        const current = value ?? filters.sub_categories ?? [];
+        const current = value ?? filters.subCategories ?? [];
         const newIds = current.includes(id)
             ? current.filter((i: number) => i !== id)
             : [...current, id];
@@ -68,10 +68,10 @@ export function SubcategoryFilterMobile({ value, onChange, categoryIds }: Subcat
             onChange(newIds);
         } else {
             setFilters({
-                sub_categories: newIds.length > 0 ? newIds : undefined,
+                subCategories: newIds.length > 0 ? newIds : undefined,
             });
         }
-    }, [value, filters.sub_categories, onChange, setFilters]);
+    }, [value, filters.subCategories, onChange, setFilters]);
 
     if (resolvedCategoryIds.length === 0 || (items.length === 0 && !loading)) {
         return null;

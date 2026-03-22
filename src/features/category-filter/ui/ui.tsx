@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDownIcon } from 'lucide-react';
-import { useFilterStore, useCurrentFilters } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
 import { cn } from '@/shared/lib/utils';
 import {
     DropdownMenu,
@@ -33,8 +33,7 @@ export function CategoryFilter() {
     const tCommon = useTranslations('common');
     const tTypes = useTranslations('propertyTypes');
     const locale = useLocale();
-    const currentFilters = useCurrentFilters();
-    const storeSetFilters = useFilterStore((s) => s.setFilters);
+    const { filters: currentFilters, setFilters: storeSetFilters } = useFilters();
 
     const [apiCategories, setApiCategories] = useState<Category[]>([]);
     const [localIds, setLocalIds] = useState<number[]>(currentFilters.categoryIds || []);
@@ -76,7 +75,6 @@ export function CategoryFilter() {
         if (changed) {
             storeSetFilters({
                 categoryIds: localIds.length > 0 ? localIds : undefined,
-                categories: localIds.length > 0 ? localIds : undefined,
             });
         }
         setOpen(false);

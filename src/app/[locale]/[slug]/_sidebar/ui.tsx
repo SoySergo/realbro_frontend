@@ -12,8 +12,8 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useAuth } from '@/features/auth';
-import { useSearchFilters } from '@/features/search-filters/model';
-import { useCurrentFilters, useFilterStore } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { CategoryFilter } from '@/features/category-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
@@ -28,7 +28,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
-import type { MarkerType } from '@/entities/filter';
+import type { MarkerType, SortField, SortOrder } from '@/entities/filter';
 
 const markerOptions: { value: MarkerType; labelKey: string }[] = [
     { value: 'all', labelKey: 'all' },
@@ -40,9 +40,6 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
     { value: 'to_review', labelKey: 'toReview' },
     { value: 'to_think', labelKey: 'toThink' },
 ];
-
-type SortBy = 'price' | 'area' | 'createdAt';
-type SortOrder = 'asc' | 'desc';
 
 /**
  * SearchPageSidebar — правый сайдбар для страницы поиска (450px).
@@ -58,10 +55,9 @@ export function SearchPageSidebar() {
     const locale = useLocale();
     const router = useRouter();
     const { isAuthenticated } = useAuth();
-    // const isAuthenticated = true; // Временно разрешаем всем видеть маркеры для теста
-    const { filters, setFilters } = useSearchFilters();
-    const currentFilters = useCurrentFilters();
-    const { activeLocationMode, setLocationMode, locationFilter } = useFilterStore();
+    const { filters, setFilters } = useFilters();
+    const activeLocationMode = useActiveLocationMode();
+    const setLocationMode = useSetLocationMode();
 
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -72,12 +68,13 @@ export function SearchPageSidebar() {
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const [sortBy, setSortBy] = useState<SortBy>('createdAt');
-    const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
     const loadingRef = useRef(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const sortOptions: { value: SortBy; label: string }[] = [
+    const sortBy = filters.sort ?? 'createdAt';
+    const sortOrder = filters.order ?? 'desc';
+
+    const sortOptions: { value: SortField; label: string }[] = [
         { value: 'createdAt', label: tSidebar('sortDate') },
         { value: 'price', label: tSidebar('sortPrice') },
         { value: 'area', label: tSidebar('sortArea') },
@@ -92,7 +89,7 @@ export function SearchPageSidebar() {
 
             try {
                 const response = await getPropertiesList({
-                    filters: currentFilters,
+                    filters,
                     page: pageNum,
                     limit: 20,
                     sortBy,
@@ -114,7 +111,7 @@ export function SearchPageSidebar() {
                 loadingRef.current = false;
             }
         },
-        [currentFilters, sortBy, sortOrder, locale]
+        [filters, sortBy, sortOrder, locale]
     );
 
     // Сброс и перезагрузка при изменении фильтров/сортировки
@@ -127,14 +124,14 @@ export function SearchPageSidebar() {
     // Загрузка каунта
     useEffect(() => {
         const controller = new AbortController();
-        getPropertiesCount(currentFilters, controller.signal)
+        getPropertiesCount(filters, controller.signal)
             .then((count) => setTotalCount(count))
             .catch((err) => {
                 if (err.name !== 'AbortError') console.error('Failed to get count:', err);
             });
 
         return () => controller.abort();
-    }, [currentFilters]);
+    }, [filters]);
 
     // Infinite scroll
     const handleScroll = useCallback(() => {
@@ -157,11 +154,11 @@ export function SearchPageSidebar() {
     );
 
     const handleSortChange = (value: string) => {
-        setSortBy(value as SortBy);
+        setFilters({ sort: value as SortField });
     };
 
     const toggleSortOrder = () => {
-        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+        setFilters({ order: sortOrder === 'asc' ? 'desc' : 'asc' });
     };
 
     // Должно быть 2 колонки карточек на десктопе
@@ -170,17 +167,6 @@ export function SearchPageSidebar() {
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
             {isAuthenticated && (
                 <div className="flex items-center gap-2 px-3 pt-3 pb-1">
-                    <Select>
-                        <SelectTrigger className="h-9 flex-1 text-sm border-border">
-                            <SelectValue placeholder={t('savedFilter') || 'Сохранённый фильтр'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="__placeholder" disabled>
-                                {t('savedFilter') || 'Нет сохранённых'}
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-
                     <Select
                         value={filters.markerType || 'all'}
                         onValueChange={(value) =>
@@ -236,12 +222,12 @@ export function SearchPageSidebar() {
                             if (activeLocationMode) {
                                 setLocationMode(null);
                             } else {
-                                setLocationMode(locationFilter?.mode || 'search');
+                                setLocationMode('search');
                             }
                         }}
                         className={cn(
                             'w-9 h-9 rounded-md flex items-center justify-center shrink-0 transition-all duration-200',
-                            activeLocationMode || locationFilter
+                            activeLocationMode
                                 ? 'bg-brand-primary text-white border border-brand-primary hover:bg-brand-primary-hover'
                                 : 'border border-border bg-background text-text-secondary hover:text-brand-primary hover:bg-background-secondary'
                         )}

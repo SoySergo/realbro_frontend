@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { CloudSyncIcon, CloudCheckIcon } from '@/shared/icons/cloude-sync';
 import { useSearchFilters } from '@/features/search-filters/model';
+import type { SortField } from '@/entities/filter/model/types';
 import { useAgencyFilters as useAgencyFiltersHook } from '@/features/agency-filters';
 import { useSearchViewMode, useActiveLocationMode } from '../model/store';
 import { QueriesSelect } from '@/widgets/sidebar/ui/queries-select';
@@ -251,7 +252,7 @@ function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', o
     const tLang = useTranslations('languages');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const { filters, setFilters, clearFilter } = useSearchFilters();
+    const { filters, setFilters } = useSearchFilters();
     const agencyFilters = useAgencyFiltersHook();
 
     const isProperties = currentCategory === 'properties';
@@ -271,14 +272,14 @@ function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', o
     ];
 
     const selectedSort = filters.sort || 'createdAt';
-    const sortOrder = filters.sortOrder || 'desc';
+    const sortOrder = filters.order || 'desc';
 
     const handleSortChange = (value: string) => {
-        setFilters({ sort: value });
+        setFilters({ sort: value as SortField });
     };
 
     const toggleSortOrder = () => {
-        setFilters({ sortOrder: sortOrder === 'asc' ? 'desc' : 'asc' });
+        setFilters({ order: sortOrder === 'asc' ? 'desc' : 'asc' });
     };
 
     // Активные фильтры — зависят от категории
@@ -328,7 +329,7 @@ function MobileFiltersFloatingBar({ isMapMode, currentCategory = 'properties', o
             } else if (key === 'area') {
                 setFilters({ minArea: undefined, maxArea: undefined });
             } else {
-                clearFilter(key as keyof typeof filters);
+                setFilters({ [key]: undefined });
             }
         } else {
             agencyFilters.clearFilter(key as keyof typeof af);

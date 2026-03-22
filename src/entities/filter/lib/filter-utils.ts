@@ -1,80 +1,50 @@
 import type { SearchFilters } from '../model/types';
-import type { DrawPolygon } from '@/entities/map-draw/model/types';
 
 /**
- * Утилиты для работы с фильтрами
- * Перенесены из src/store/filterStore.ts
- */
-
-// Начальное состояние фильтров
-export const initialFilters: SearchFilters = {
-    markerType: 'all',
-    sortOrder: 'desc',
-};
-
-/**
- * Генерация ID для полигона
- */
-export const generatePolygonId = (): string => {
-    return `polygon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-};
-
-/**
- * Проверяет, есть ли активные фильтры (кроме дефолтных)
+ * Checks if there are any active filters beyond defaults
  */
 export const hasActiveFilters = (filters: SearchFilters): boolean => {
-    const activeKeys = Object.keys(filters).filter(key => {
-        const value = filters[key as keyof SearchFilters];
-        // Игнорируем дефолтные значения
-        if (key === 'markerType' && value === 'all') return false;
-        if (key === 'sortOrder') return false;
-        return value !== undefined && value !== null;
-    });
-    return activeKeys.length > 0;
+    return !!(
+        filters.minPrice !== undefined ||
+        filters.maxPrice !== undefined ||
+        (filters.rooms && filters.rooms.length > 0) ||
+        filters.minArea !== undefined ||
+        filters.maxArea !== undefined ||
+        (filters.categoryIds && filters.categoryIds.length > 0) ||
+        (filters.subCategories && filters.subCategories.length > 0) ||
+        (filters.adminLevel2 && filters.adminLevel2.length > 0) ||
+        (filters.adminLevel4 && filters.adminLevel4.length > 0) ||
+        (filters.adminLevel6 && filters.adminLevel6.length > 0) ||
+        (filters.adminLevel7 && filters.adminLevel7.length > 0) ||
+        (filters.adminLevel8 && filters.adminLevel8.length > 0) ||
+        (filters.adminLevel9 && filters.adminLevel9.length > 0) ||
+        (filters.adminLevel10 && filters.adminLevel10.length > 0) ||
+        (filters.polygonIds && filters.polygonIds.length > 0) ||
+        (filters.isochroneIds && filters.isochroneIds.length > 0) ||
+        (filters.radiusIds && filters.radiusIds.length > 0) ||
+        (filters.markerType && filters.markerType !== 'all')
+    );
 };
 
 /**
- * Подсчитывает количество активных фильтров
+ * Counts number of active filter groups (for badge display)
  */
 export const countActiveFilters = (filters: SearchFilters): number => {
     let count = 0;
-
-    // Категории
     if (filters.categoryIds && filters.categoryIds.length > 0) count++;
-
-    // Цена
+    if (filters.subCategories && filters.subCategories.length > 0) count++;
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) count++;
-
-    // Площадь
     if (filters.minArea !== undefined || filters.maxArea !== undefined) count++;
-
-    // Комнаты
     if (filters.rooms && filters.rooms.length > 0) count++;
-
-    // Локации (adminLevel)
-    if (filters.adminLevel2 || filters.adminLevel4 || filters.adminLevel6 ||
-        filters.adminLevel7 || filters.adminLevel8 || filters.adminLevel9 ||
-        filters.adminLevel10) count++;
-
-    // Полигоны
-    if (filters.geometryIds && filters.geometryIds.length > 0) count++;
-
+    if (filters.markerType && filters.markerType !== 'all') count++;
+    const hasAdmin =
+        (filters.adminLevel2?.length) || (filters.adminLevel4?.length) ||
+        (filters.adminLevel6?.length) || (filters.adminLevel7?.length) ||
+        (filters.adminLevel8?.length) || (filters.adminLevel9?.length) ||
+        (filters.adminLevel10?.length);
+    if (hasAdmin) count++;
+    if (filters.polygonIds?.length || filters.isochroneIds?.length || filters.radiusIds?.length) count++;
     return count;
-};
-
-/**
- * Создает новый полигон с уникальным ID
- */
-export const createPolygon = (coordinates: [number, number][][]): DrawPolygon => {
-    // Преобразуем GeoJSON coordinates в DrawPoint[]
-    // Берем первый ring (внешний контур) полигона
-    const points = coordinates[0].map(([lng, lat]) => ({ lng, lat }));
-
-    return {
-        id: generatePolygonId(),
-        points,
-        createdAt: new Date(),
-    };
 };
 
 /**

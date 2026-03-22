@@ -51,14 +51,13 @@ function serializeFilters(filters: SearchFilters, params: URLSearchParams): void
     if (filters.adminLevel10?.length) params.set('adminLevel10', filters.adminLevel10.join(','));
 
     // Geometry for draw/isochrone/radius
-    if (filters.geometryIds?.length) params.set('geometryIds', filters.geometryIds.join(','));
+    if (filters.polygonIds?.length) params.set('geometryIds', filters.polygonIds.join(','));
 }
 
 /**
  * Сериализация фильтров для реального API (snake_case)
  */
 function serializeFiltersForBackend(filters: SearchFilters, params: URLSearchParams): void {
-    if (filters.dealType) params.set('property_types', filters.dealType);
     if (filters.categoryIds?.length) params.set('categories', filters.categoryIds.join(','));
     if (filters.minPrice) params.set('min_price', String(filters.minPrice));
     if (filters.maxPrice) params.set('max_price', String(filters.maxPrice));
@@ -75,7 +74,7 @@ function serializeFiltersForBackend(filters: SearchFilters, params: URLSearchPar
     if (filters.adminLevel9?.length) params.set('district_ids', filters.adminLevel9.join(','));
     if (filters.adminLevel10?.length) params.set('neighborhood_ids', filters.adminLevel10.join(','));
 
-    if (filters.geometryIds?.length) params.set('polygon_ids', filters.geometryIds.join(','));
+    if (filters.polygonIds?.length) params.set('polygon_ids', filters.polygonIds.join(','));
 }
 
 /**
@@ -335,17 +334,17 @@ export function parseFiltersFromSearchParams(
     }
 
     // Parse geometry
-    if (searchParams.geometryIds) {
-        const geoStr = Array.isArray(searchParams.geometryIds) ? searchParams.geometryIds[0] : searchParams.geometryIds;
-        filters.geometryIds = geoStr.split(',').map(Number);
+    if (searchParams.polygonIds) {
+        const geoStr = Array.isArray(searchParams.polygonIds) ? searchParams.polygonIds[0] : searchParams.polygonIds;
+        filters.polygonIds = geoStr.split(',').filter(Boolean);
     }
 
     // Sort
     if (searchParams.sort) {
         filters.sort = searchParams.sort as SearchFilters['sort'];
     }
-    if (searchParams.sortOrder) {
-        filters.sortOrder = searchParams.sortOrder as SearchFilters['sortOrder'];
+    if (searchParams.order) {
+        filters.order = searchParams.order as SearchFilters['order'];
     }
 
     return filters;

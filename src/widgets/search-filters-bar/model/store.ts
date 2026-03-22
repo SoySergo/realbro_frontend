@@ -1,14 +1,11 @@
 'use client';
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import type { SearchFilters } from '@/entities/filter/model/types';
 import type { LocationFilter } from '@/features/location-filter/model/types';
 import type { LocationItem } from '@/entities/location/model/types';
 import { adminLevelToLocationField } from '@/entities/boundary';
-import { useSidebarStore } from '@/widgets/sidebar';
-import { clearAllLocationStorage } from '@/features/location-search-mode/model/hooks/use-search-mode-state';
 import type { GeometryType } from '@/shared/api/geometries';
 import { deleteGuestGeometry, deleteFilterGeometry } from '@/shared/api/geometries';
 
@@ -84,7 +81,7 @@ type FilterStore = {
 // Начальное состояние фильтров
 const initialFilters: SearchFilters = {
     markerType: 'all',
-    sortOrder: 'desc',
+    order: 'desc',
 };
 
 // Преобразует LocationFilter в структуру SearchFilters
@@ -133,21 +130,21 @@ function convertLocationFilterToFilters(locationFilter: LocationFilter): Partial
         }
 
         // Сохраняем мета-информацию
-        result.locationsMeta = locationsMeta;
+        (result as Record<string, unknown>).locationsMeta = locationsMeta;
     }
 
     // draw, isochrone, radius — polygon_ids уже установлены в currentFilters через handleApply
 
     if (locationFilter.mode === 'radius' && locationFilter.radius) {
-        result.radiusCenter = locationFilter.radius.center;
-        result.radiusKm = locationFilter.radius.radiusKm;
+        (result as Record<string, unknown>).radiusCenter = locationFilter.radius.center;
+        (result as Record<string, unknown>).radiusKm = locationFilter.radius.radiusKm;
     }
 
     // Изохрон (время до точки)
     if (locationFilter.mode === 'isochrone' && locationFilter.isochrone) {
-        result.isochroneCenter = locationFilter.isochrone.center;
-        result.isochroneMinutes = locationFilter.isochrone.minutes;
-        result.isochroneProfile = locationFilter.isochrone.profile;
+        (result as Record<string, unknown>).isochroneCenter = locationFilter.isochrone.center;
+        (result as Record<string, unknown>).isochroneMinutes = locationFilter.isochrone.minutes;
+        (result as Record<string, unknown>).isochroneProfile = locationFilter.isochrone.profile;
     }
 
     return result;
@@ -167,9 +164,9 @@ function convertFiltersToLocationFilter(
         filters.adminLevel9 ||
         filters.adminLevel10;
 
-    if (hasAdminLevels && filters.locationsMeta) {
+    if (hasAdminLevels && (filters as Record<string, unknown>).locationsMeta) {
         // Восстанавливаем локации из мета-информации
-        const selectedLocations: LocationItem[] = filters.locationsMeta.map((meta) => {
+        const selectedLocations: LocationItem[] = ((filters as Record<string, unknown>).locationsMeta as Array<{ id: number; wikidata?: string; adminLevel?: number }>).map((meta) => {
             // Определяем тип локации по adminLevel
             let type: 'city' | 'province' | 'district' | 'country' | 'neighborhood' = 'city';
             if (meta.adminLevel === 2) type = 'country';
@@ -195,31 +192,31 @@ function convertFiltersToLocationFilter(
     }
 
     // Проверяем полигоны (geometry IDs в URL → будут загружены с бекенда при открытии мода)
-    if (filters.polygon_ids && filters.polygon_ids.length > 0) {
+    if (filters.polygonIds && filters.polygonIds.length > 0) {
         return {
             mode: 'draw',
         };
     }
 
     // Проверяем радиус
-    if (filters.radiusCenter && filters.radiusKm) {
+    if ((filters as Record<string, unknown>).radiusCenter && (filters as Record<string, unknown>).radiusKm) {
         return {
             mode: 'radius',
             radius: {
-                center: filters.radiusCenter,
-                radiusKm: filters.radiusKm,
+                center: (filters as Record<string, unknown>).radiusCenter as [number, number],
+                radiusKm: (filters as Record<string, unknown>).radiusKm as number,
             },
         };
     }
 
     // Проверяем изохрон
-    if (filters.isochroneCenter && filters.isochroneMinutes) {
+    if ((filters as Record<string, unknown>).isochroneCenter && (filters as Record<string, unknown>).isochroneMinutes) {
         return {
             mode: 'isochrone',
             isochrone: {
-                center: filters.isochroneCenter,
-                minutes: filters.isochroneMinutes,
-                profile: filters.isochroneProfile || 'walking',
+                center: (filters as Record<string, unknown>).isochroneCenter as [number, number],
+                minutes: (filters as Record<string, unknown>).isochroneMinutes as number,
+                profile: ((filters as Record<string, unknown>).isochroneProfile as 'walking' | 'cycling' | 'driving') || 'walking',
             },
         };
     }
@@ -228,7 +225,6 @@ function convertFiltersToLocationFilter(
 }
 
 export const useFilterStore = create<FilterStore>()(
-    persist(
         (set, get) => ({
             searchViewMode: 'map' as SearchViewMode,
             listingViewMode: 'grid' as ListingViewMode,
@@ -264,15 +260,6 @@ export const useFilterStore = create<FilterStore>()(
                     activeLocationMode: null,
                     selectedBoundaryWikidata: new Set<string>(),
                 });
-
-                // Очищаем localStorage для всех режимов локации
-                clearAllLocationStorage();
-                try {
-                    localStorage.removeItem('local-location-states');
-                    console.log('[LOCAL] Cleared localStorage on reset');
-                } catch (error) {
-                    console.error('[LOCAL] Failed to clear localStorage on reset:', error);
-                }
 
                 console.log('All filters reset, including location and boundaries');
 
@@ -312,7 +299,7 @@ export const useFilterStore = create<FilterStore>()(
                     locationGeometryMeta: state.locationGeometryMeta.filter((m) => m.id !== id),
                     currentFilters: {
                         ...state.currentFilters,
-                        polygon_ids: state.currentFilters.polygon_ids?.filter((pid) => pid !== id),
+                        polygonIds: state.currentFilters.polygonIds?.filter((pid: string) => pid !== id),
                     },
                 }));
                 console.log('[GEO] Geometry meta removed:', id);
@@ -324,8 +311,7 @@ export const useFilterStore = create<FilterStore>()(
                     locationGeometryMeta: [],
                     currentFilters: {
                         ...state.currentFilters,
-                        polygon_ids: [],
-                        geometryIds: [],
+                        polygonIds: [],
                     },
                 }));
             },
@@ -355,9 +341,8 @@ export const useFilterStore = create<FilterStore>()(
                             delete (cleaned as Record<string, unknown>).radiusCenter;
                             delete (cleaned as Record<string, unknown>).radiusKm;
                             // Geometry fields
-                            delete (cleaned as Record<string, unknown>).polygon_ids;
-                            delete (cleaned as Record<string, unknown>).geometry_source;
-                            delete (cleaned as Record<string, unknown>).geometryIds;
+                            delete (cleaned as Record<string, unknown>).polygonIds;
+                            delete (cleaned as Record<string, unknown>).geoSrc;
                             return { currentFilters: cleaned };
                         });
                         return;
@@ -427,8 +412,8 @@ export const useFilterStore = create<FilterStore>()(
             // Удаление геометрий с бекенда с учётом авторизации
             deleteLocationGeometries: async (isAuthenticated) => {
                 const { locationGeometryMeta, currentFilters } = get();
-                const polygonIds = currentFilters.polygon_ids || [];
-                const geometrySource = currentFilters.geometry_source;
+                const polygonIds = currentFilters.polygonIds || [];
+                const geometrySource = currentFilters.geoSrc;
 
                 // Очищаем локальное состояние сразу
                 set({
@@ -437,7 +422,7 @@ export const useFilterStore = create<FilterStore>()(
 
                 if (isAuthenticated) {
                     // Авторизован → удаляем с бекенда
-                    const deletePromises = polygonIds.map((id) => {
+                    const deletePromises = polygonIds.map((id: string) => {
                         if (geometrySource === 'filter') {
                             return deleteFilterGeometry(id).catch((e) => {
                                 console.error('[GEO] Failed to delete filter geometry:', id, e);
@@ -455,29 +440,9 @@ export const useFilterStore = create<FilterStore>()(
                 }
             },
 
-            // Синхронизация с вкладками (из sidebarStore)
-            syncWithQuery: (queryId) => {
-                try {
-                    const { currentFilters, locationFilter } = get();
-                    const sidebarStore = useSidebarStore.getState();
-
-                    // Преобразуем locationFilter в структуру фильтров
-                    const locationFiltersData = locationFilter
-                        ? convertLocationFilterToFilters(locationFilter)
-                        : {};
-
-                    // Сохраняем текущие фильтры в активную вкладку
-                    sidebarStore.updateQuery(queryId, {
-                        filters: {
-                            ...currentFilters,
-                            ...locationFiltersData,
-                        },
-                    });
-
-                    console.log('[SYNC] Synced filters with query:', queryId);
-                } catch (error) {
-                    console.error('[SYNC] Failed to sync filters with query:', error);
-                }
+            // Синхронизация с вкладками — no-op (tabs removed, URL is source of truth)
+            syncWithQuery: (_queryId) => {
+                // No-op: filters live in URL now
             },
 
             // Загрузка фильтров из вкладки
@@ -590,15 +555,6 @@ export const useFilterStore = create<FilterStore>()(
                 }));
             },
         }),
-        {
-            name: 'filter-storage',
-            // Сохраняем мету геометрий и полные данные locationFilter (координаты, настройки)
-            partialize: (state) => ({
-                locationGeometryMeta: state.locationGeometryMeta,
-                locationFilter: state.locationFilter,
-            }),
-        }
-    )
 );
 
 // ==========================================

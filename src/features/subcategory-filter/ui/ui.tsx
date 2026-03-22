@@ -30,7 +30,7 @@ export function SubcategoryFilter({ className }: SubcategoryFilterProps) {
     const [loading, setLoading] = useState(false);
 
     // Стабильный ключ для выбранных категорий (не пересоздаётся на каждый рендер)
-    const categoryIds = filters.categories || filters.categoryIds || [];
+    const categoryIds = filters.categoryIds || [];
     const categoryIdsKey = categoryIds.slice().sort().join(',');
 
     // Загружаем подкатегории только когда меняются категории или локаль
@@ -65,18 +65,18 @@ export function SubcategoryFilter({ className }: SubcategoryFilterProps) {
             label: s.translated_name || s.slug,
         })), [subcategories]);
 
-    const selectedIds = filters.sub_categories || [];
+    const selectedIds = filters.subCategories || [];
 
     const handleToggle = useCallback((id: number) => {
-        const current = filters.sub_categories || [];
+        const current = filters.subCategories || [];
         const newIds = current.includes(id)
             ? current.filter((i: number) => i !== id)
             : [...current, id];
 
         setFilters({
-            sub_categories: newIds.length > 0 ? newIds : undefined,
+            subCategories: newIds.length > 0 ? newIds : undefined,
         });
-    }, [filters.sub_categories, setFilters]);
+    }, [filters.subCategories, setFilters]);
 
     // Не показываем, если нет категорий или нет подкатегорий
     if (categoryIds.length === 0 || (items.length === 0 && !loading)) {

@@ -6,7 +6,8 @@ import mapboxgl from 'mapbox-gl';
 import { BaseMap } from '../base-map';
 import { MapLocationController } from '@/features/location-filter';
 import { MobileLocationMode } from '@/widgets/mobile-location-mode';
-import { useFilterStore, useCurrentFilters } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { useActiveLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { filtersToQueryString } from '@/entities/filter';
 import { PropertyPopupContent } from './PropertyPopupContent';
 
@@ -58,8 +59,8 @@ function buildTileUrl(filters: any): string {
  */
 export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarkerClick, onBoundsChange, highlightedPropertyId }: SearchMapProps) {
     const [mapInstance, setMapInstance] = useState<mapboxgl.Map | null>(null);
-    const { activeLocationMode } = useFilterStore();
-    const currentFilters = useCurrentFilters();
+    const activeLocationMode = useActiveLocationMode();
+    const { filters: currentFilters, setFilters } = useFilters();
     const layersInitializedRef = useRef(false);
     const currentFiltersRef = useRef(currentFilters);
     currentFiltersRef.current = currentFilters;
@@ -404,29 +405,37 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         };
     }, [mapInstance]); // ← только mapInstance, больше не зависит от колбэков
 
-    // Обработчик moveend — передаём bbox наверх для обновления сайдбара
+    // Обработчик moveend — пишем bbox в URL (debounce 250ms)
+    const setFiltersRef = useRef(setFilters);
+    setFiltersRef.current = setFilters;
     useEffect(() => {
         if (!mapInstance) return;
 
+        let debounceTimer: ReturnType<typeof setTimeout>;
+
         const handleMoveEnd = () => {
-            const cb = onBoundsChangeRef.current;
-            if (!cb) return;
-            const bounds = mapInstance.getBounds();
-            if (bounds) {
-                cb([
-                    bounds.getWest(),
-                    bounds.getSouth(),
-                    bounds.getEast(),
-                    bounds.getNorth()
-                ]);
-            }
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const bounds = mapInstance.getBounds();
+                if (bounds) {
+                    const bbox: [number, number, number, number] = [
+                        bounds.getWest(),
+                        bounds.getSouth(),
+                        bounds.getEast(),
+                        bounds.getNorth()
+                    ];
+                    setFiltersRef.current({ bbox });
+                    onBoundsChangeRef.current?.(bbox);
+                }
+            }, 250);
         };
 
         mapInstance.on('moveend', handleMoveEnd);
         return () => {
+            clearTimeout(debounceTimer);
             mapInstance.off('moveend', handleMoveEnd);
         };
-    }, [mapInstance]); // ← только mapInstance
+    }, [mapInstance]);
 
     // Подсветка свойства на карте при ховере на карточку в сайдбаре
     useEffect(() => {

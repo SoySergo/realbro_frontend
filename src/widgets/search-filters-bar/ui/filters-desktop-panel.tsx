@@ -12,15 +12,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
-import { X, Loader2, Search, Phone, Trash2, Building2, Users, MapPin, CloudUpload, ListTree, Map, Pencil, Circle, Clock } from 'lucide-react';
-import { useSearchFilters } from '@/features/search-filters/model';
+import { X, Loader2, Search, Phone, Trash2, Building2, Users, MapPin, ListTree, Map, Pencil, Circle, Clock } from 'lucide-react';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { useAgencyFilters } from '@/features/agency-filters';
-import { useFilterStore } from '@/widgets/search-filters-bar';
 import { useAuth } from '@/features/auth';
 import { RoomsFilterMobile } from '@/features/rooms-filter';
 import { PriceFilterMobile } from '@/features/price-filter';
 import { AreaFilterMobile } from '@/features/area-filter';
-import type { LocationFilterMode, LocationFilter } from '@/features/location-filter/model';
+import type { LocationFilterMode } from '@/features/location-filter/model';
 import { Popover, PopoverTrigger, PopoverContent } from '@/shared/ui/popover';
 import { getPropertiesCount, getAgenciesCount, getCategories, getSubcategories, searchLocations } from '@/shared/api';
 import type { MapboxLocation } from '@/entities/location';
@@ -75,9 +75,10 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
     const tAgency = useTranslations('agency');
     const tLang = useTranslations('languages');
     const locale = useLocale();
-    const { filters, setFilters } = useSearchFilters();
+    const { filters, setFilters, clearFilters } = useFilters();
     const agencyFiltersStore = useAgencyFilters();
-    const { activeLocationMode, setLocationMode, currentFilters, locationFilter, setLocationFilter, deleteLocationGeometries } = useFilterStore();
+    const activeLocationMode = useActiveLocationMode();
+    const setLocationMode = useSetLocationMode();
     const { isAuthenticated } = useAuth();
 
     const [localCategory, setLocalCategory] = useState<SearchCategory>(currentCategory);
@@ -94,7 +95,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
     const [localPropertyClass, setLocalPropertyClass] = useState<PropertyClass>('residential');
     const [localDealType, setLocalDealType] = useState<DealType>('rent');
     const [localCategoryIds, setLocalCategoryIds] = useState<number[]>(filters.categoryIds || []);
-    const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.sub_categories || []);
+    const [localSubCategoryIds, setLocalSubCategoryIds] = useState<number[]>(filters.subCategories || []);
     const [localRooms, setLocalRooms] = useState<number[]>(filters.rooms || []);
     const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice || 0);
     const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice || MAX_PRICE);
@@ -136,7 +137,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         if (open) {
             setLocalMarkerType((filters.markerType as MarkerType) || 'all');
             setLocalCategoryIds(filters.categoryIds || []);
-            setLocalSubCategoryIds(filters.sub_categories || []);
+            setLocalSubCategoryIds(filters.subCategories || []);
             setLocalRooms(filters.rooms || []);
             setLocalMinPrice(filters.minPrice || 0);
             setLocalMaxPrice(filters.maxPrice || MAX_PRICE);
@@ -191,10 +192,10 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         try {
             if (isProperties) {
                 const mergedFilters = {
-                    ...currentFilters,
+                    ...filters,
                     markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
                     categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
-                    sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
+                    subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                     rooms: localRooms.length > 0 ? localRooms : undefined,
                     minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                     maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
@@ -220,7 +221,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
         } finally {
             setIsLoadingCount(false);
         }
-    }, [isProperties, localMarkerType, localCategoryIds, localSubCategoryIds, localRooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, currentFilters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
+    }, [isProperties, localMarkerType, localCategoryIds, localSubCategoryIds, localRooms, localMinPrice, localMaxPrice, localMinArea, localMaxArea, filters, localQuery, localPhone, localLanguages, localPropertyTypes, agencyFiltersStore.filters, locale]);
 
     // Обновляем счётчик при изменении фильтров (с debounce)
     useEffect(() => {
@@ -272,7 +273,7 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
             setFilters({
                 markerType: localMarkerType !== 'all' ? localMarkerType : undefined,
                 categoryIds: localCategoryIds.length > 0 ? localCategoryIds : undefined,
-                sub_categories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
+                subCategories: localSubCategoryIds.length > 0 ? localSubCategoryIds : undefined,
                 rooms: localRooms.length > 0 ? localRooms : undefined,
                 minPrice: localMinPrice !== 0 ? localMinPrice : undefined,
                 maxPrice: localMaxPrice !== MAX_PRICE ? localMaxPrice : undefined,
@@ -430,21 +431,10 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
 
                         {isProperties ? (
                             <>
-                                {/* Пользовательские: сохранённый фильтр + маркеры */}
+                                {/* Маркеры (auth only) */}
                                 <section>
-                                    <h3 className="text-sm font-medium text-text-primary mb-3">{t('savedFilter')}</h3>
+                                    <h3 className="text-sm font-medium text-text-primary mb-3">{t('markerType.all')}</h3>
                                     <div className="flex gap-3">
-                                        <Select>
-                                            <SelectTrigger className="h-10 flex-1 text-sm">
-                                                <SelectValue placeholder={t('savedFilter')} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="__placeholder" disabled>
-                                                    {t('savedFilter')}
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-
                                         <Select
                                             value={localMarkerType}
                                             onValueChange={(value) => setLocalMarkerType(value as MarkerType)}
@@ -659,67 +649,12 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                         </Button>
                                     </div>
 
-                                    {/* Сохранённые элементы локации */}
-                                    {locationFilter && (
+                                    {/* Активные геометрии (polygon/isochrone/radius) */}
+                                    {(filters.polygonIds?.length || filters.isochroneIds?.length || filters.radiusIds?.length) ? (
                                         <div className="mt-3 space-y-1.5">
-                                            {locationFilter.mode === 'search' && locationFilter.selectedLocations?.map((loc) => (
+                                            {filters.polygonIds?.map((id) => (
                                                 <div
-                                                    key={loc.wikidata || loc.name}
-                                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
-                                                    onClick={() => {
-                                                        pendingFilterReopenRef.current = true;
-                                                        setLocationMode('search');
-                                                        onOpenChange(false);
-                                                    }}
-                                                >
-                                                    <MapPin className="w-3.5 h-3.5 text-brand-primary shrink-0" />
-                                                    <div className="flex flex-col min-w-0 flex-1">
-                                                        <span className="text-sm text-text-primary truncate">{loc.name}</span>
-                                                        <span className="text-xs text-text-tertiary">
-                                                            {t(`locationType${loc.type === 'city' ? 'City' : loc.type === 'country' ? 'Country' : loc.type === 'region' ? 'Region' : loc.type === 'province' ? 'Province' : loc.type === 'district' ? 'District' : loc.type === 'neighborhood' ? 'Neighborhood' : 'Place'}`)}
-                                                        </span>
-                                                    </div>
-                                                    <button
-                                                        className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const updated = locationFilter.selectedLocations?.filter(l => l.wikidata !== loc.wikidata) || [];
-                                                            if (updated.length === 0) {
-                                                                setLocationFilter(null);
-                                                            } else {
-                                                                setLocationFilter({ ...locationFilter, selectedLocations: updated });
-                                                            }
-                                                        }}
-                                                    >
-                                                        <X className="w-3.5 h-3.5 text-text-tertiary" />
-                                                    </button>
-                                                </div>
-                                            ))}
-
-                                            {locationFilter.mode === 'draw' && locationFilter.polygon && (
-                                                <div
-                                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
-                                                    onClick={() => {
-                                                        pendingFilterReopenRef.current = true;
-                                                        setLocationMode('draw');
-                                                        onOpenChange(false);
-                                                    }}
-                                                >
-                                                    <Pencil className="w-3.5 h-3.5 text-brand-primary shrink-0" />
-                                                    <span className="text-sm text-text-primary truncate flex-1">
-                                                        {t('drawnArea')}{locationFilter.polygon.name ? `: ${locationFilter.polygon.name}` : ''}
-                                                    </span>
-                                                    <button
-                                                        className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
-                                                    >
-                                                        <X className="w-3.5 h-3.5 text-text-tertiary" />
-                                                    </button>
-                                                </div>
-                                            )}
-
-                                            {locationFilter.mode === 'draw' && !locationFilter.polygon && (
-                                                <div
+                                                    key={id}
                                                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
                                                     onClick={() => {
                                                         pendingFilterReopenRef.current = true;
@@ -733,15 +668,20 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setFilters({
+                                                                polygonIds: filters.polygonIds?.filter(pid => pid !== id),
+                                                            });
+                                                        }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>
                                                 </div>
-                                            )}
-
-                                            {locationFilter.mode === 'radius' && locationFilter.radius && (
+                                            ))}
+                                            {filters.radiusIds?.map((id) => (
                                                 <div
+                                                    key={id}
                                                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
                                                     onClick={() => {
                                                         pendingFilterReopenRef.current = true;
@@ -751,19 +691,24 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                 >
                                                     <Circle className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                                                     <span className="text-sm text-text-primary truncate flex-1">
-                                                        {locationFilter.radius.name ? `${locationFilter.radius.name} · ` : ''}{t('radiusReady', { radius: locationFilter.radius.radiusKm })}
+                                                        {t('radiusFilter')}
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setFilters({
+                                                                radiusIds: filters.radiusIds?.filter(rid => rid !== id),
+                                                            });
+                                                        }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>
                                                 </div>
-                                            )}
-
-                                            {locationFilter.mode === 'isochrone' && locationFilter.isochrone && (
+                                            ))}
+                                            {filters.isochroneIds?.map((id) => (
                                                 <div
+                                                    key={id}
                                                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background-secondary group cursor-pointer hover:bg-background-tertiary transition-colors"
                                                     onClick={() => {
                                                         pendingFilterReopenRef.current = true;
@@ -773,18 +718,23 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                                 >
                                                     <Clock className="w-3.5 h-3.5 text-brand-primary shrink-0" />
                                                     <span className="text-sm text-text-primary truncate flex-1">
-                                                        {locationFilter.isochrone.name ? `${locationFilter.isochrone.name} · ` : ''}{t('isochroneReady', { profile: t(locationFilter.isochrone.profile), minutes: locationFilter.isochrone.minutes })}
+                                                        {t('isochroneFilter')}
                                                     </span>
                                                     <button
                                                         className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
-                                                        onClick={(e) => { e.stopPropagation(); deleteLocationGeometries(isAuthenticated); setLocationFilter(null); }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setFilters({
+                                                                isochroneIds: filters.isochroneIds?.filter(iid => iid !== id),
+                                                            });
+                                                        }}
                                                     >
                                                         <X className="w-3.5 h-3.5 text-text-tertiary" />
                                                     </button>
                                                 </div>
-                                            )}
+                                            ))}
                                         </div>
-                                    )}
+                                    ) : null}
                                 </section>
 
                                 {/* Цена и Площадь — в два столбца */}
@@ -943,16 +893,6 @@ export function FiltersDesktopPanel({ open, onOpenChange, currentCategory = 'pro
                                         {resultsCount != null ? formatNumber(resultsCount) : '...'}
                                     </span>
                                 </span>
-                            </Button>
-
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="text-sm gap-2 text-brand-primary hover:text-brand-primary-hover hover:bg-brand-primary/10"
-                            >
-                                <CloudUpload className="w-4 h-4" />
-                                {t('save')}
                             </Button>
                         </div>
                     </div>

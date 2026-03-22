@@ -251,14 +251,14 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
             } else {
                 // Используем saveNewTabWithGeometry для переноса гостевой геометрии
                 const { saveNewTabWithGeometry } = useSidebarStore.getState();
-                const hasGuestGeometry = (mergedFilters.polygon_ids?.length ?? 0) > 0 || (mergedFilters.geometryIds?.length ?? 0) > 0;
+                const hasGuestGeometry = (mergedFilters.polygonIds?.length ?? 0) > 0;
 
                 if (hasGuestGeometry) {
                     const tabId = await saveNewTabWithGeometry(filterName.trim(), mergedFilters);
                     if (tabId) {
                         // Обновляем geometry_source на 'filter' после переноса
                         const { setFilters: updateStoreFilters } = useFilterStore.getState();
-                        updateStoreFilters({ geometry_source: 'filter' });
+                        updateStoreFilters({ geoSrc: 'filter' });
                     }
                 } else {
                     addQuery({
