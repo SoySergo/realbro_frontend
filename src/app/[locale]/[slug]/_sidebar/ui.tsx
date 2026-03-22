@@ -103,13 +103,27 @@ export function SearchPageSidebar() {
     const locale = useLocale();
     const router = useRouter();
     const { isAuthenticated } = useAuth();
-    const { filters, setFilters } = useFilters();
+    const { filters, setFilters, filtersCount } = useFilters();
     const { isReady: geometriesReady } = useEnsureGeometries(filters, setFilters);
     const activeLocationMode = useActiveLocationMode();
     const setLocationMode = useSetLocationMode();
 
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+    // Кол-во выбранных элементов локации (полигоны + изохроны + радиусы + admin-границы)
+    const locationCount = useMemo(() => {
+        return (filters.polygonIds?.length ?? 0)
+            + (filters.isochroneIds?.length ?? 0)
+            + (filters.radiusIds?.length ?? 0)
+            + (filters.adminLevel2?.length ?? 0)
+            + (filters.adminLevel4?.length ?? 0)
+            + (filters.adminLevel6?.length ?? 0)
+            + (filters.adminLevel7?.length ?? 0)
+            + (filters.adminLevel8?.length ?? 0)
+            + (filters.adminLevel9?.length ?? 0)
+            + (filters.adminLevel10?.length ?? 0);
+    }, [filters]);
 
     // Properties state — cursor-based pagination
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
@@ -309,25 +323,35 @@ export function SearchPageSidebar() {
                             }
                         }}
                         className={cn(
-                            'w-9 h-9 rounded-md flex items-center justify-center shrink-0 transition-all duration-200',
+                            'relative w-9 h-9 rounded-md flex items-center justify-center shrink-0 transition-all duration-200',
                             activeLocationMode
                                 ? 'bg-brand-primary text-white border border-brand-primary hover:bg-brand-primary-hover'
                                 : 'border border-border bg-background text-text-secondary hover:text-brand-primary hover:bg-background-secondary'
                         )}
                     >
                         <MapPin className="w-4 h-4" />
+                        {locationCount > 0 && !activeLocationMode && (
+                            <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-white bg-brand-primary rounded-full">
+                                {locationCount}
+                            </span>
+                        )}
                     </button>
 
                     <button
                         onClick={() => setIsFiltersOpen(true)}
                         className={cn(
-                            'w-9 h-9 rounded-md flex items-center justify-center shrink-0',
+                            'relative w-9 h-9 rounded-md flex items-center justify-center shrink-0',
                             'border border-border bg-background',
                             'text-text-secondary hover:text-brand-primary hover:bg-background-secondary',
                             'transition-colors'
                         )}
                     >
                         <SlidersHorizontal className="w-4 h-4" />
+                        {filtersCount > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-white bg-brand-primary rounded-full">
+                                {filtersCount}
+                            </span>
+                        )}
                     </button>
                 </div>
             </div>
