@@ -189,7 +189,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         for (const meta of locationGeometryMeta) {
             removeGeometryFromStorage(meta.id);
         }
-        // Также удаляем по текущим URL IDs (может не совпадать с meta)
+        // Также удаляем по текущим URL IDs
         const currentPolygonIds = urlFilters.polygonIds;
         if (currentPolygonIds) {
             for (const id of currentPolygonIds) {
@@ -259,6 +259,36 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         },
     });
 
+    // Полное удаление одного полигона: state + localStorage + URL + meta + backend
+    const handleFullDelete = (id: string) => {
+        handleDeletePolygon(id);
+        setIsDirty(true);
+
+        // Удаляем из localStorage
+        removeGeometryFromStorage(id);
+
+        // Удаляем из URL
+        const currentIds = urlFilters.polygonIds;
+        if (currentIds) {
+            const remaining = currentIds.filter(pid => pid !== id);
+            setUrlFilters({
+                polygonIds: remaining.length > 0 ? remaining : undefined,
+                geoSrc: remaining.length > 0 ? urlFilters.geoSrc : undefined,
+            });
+        }
+
+        // Удаляем мету из store
+        const { removeGeometryMeta } = useFilterStore.getState();
+        removeGeometryMeta(id);
+
+        // Удаляем с бекенда (async, не блокируем)
+        if (urlFilters.geoSrc === 'filter') {
+            import('@/shared/api/geometries').then(({ deleteFilterGeometry }) =>
+                deleteFilterGeometry(id).catch(() => {})
+            );
+        }
+    };
+
     // Хук popup действий (показывается при клике на полигон)
     useActionsPopup({
         map,
@@ -267,7 +297,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
         actionsPopupRef,
         isDrawing,
         onEdit: (id: string) => { handleEditPolygon(id); },
-        onDelete: (id: string) => { handleDeletePolygon(id); setIsDirty(true); },
+        onDelete: handleFullDelete,
         onSelectPolygon: setSelectedPolygonId,
         translations: {
             edit: t('edit'),
@@ -432,7 +462,7 @@ export function MapDraw({ map, onClose, initialData, className }: MapDrawProps) 
                     <DrawnPolygonsList
                         polygons={polygons}
                         onEdit={(id) => { handleEditPolygon(id); }}
-                        onDelete={(id) => { handleDeletePolygon(id); setIsDirty(true); }}
+                        onDelete={handleFullDelete}
                         onSelect={setSelectedPolygonId}
                         selectedId={selectedPolygonId}
                     />

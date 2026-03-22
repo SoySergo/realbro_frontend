@@ -9,6 +9,9 @@ import { useDrawingState } from '../../model/hooks/use-drawing-state';
 import { useDrawingLayer } from '../../model/hooks/use-drawing-layer';
 import { useCompletedPolygonsLayer } from '../../model/hooks/use-completed-polygons-layer';
 import { useMapClickHandler } from '../../model/hooks/use-map-click-handler';
+import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { removeGeometryFromStorage } from '@/shared/lib/geometry-storage';
 import type mapboxgl from 'mapbox-gl';
 
 type MobileDrawPanelProps = {
@@ -52,6 +55,33 @@ export const MobileDrawPanel = memo(function MobileDrawPanel({ map }: MobileDraw
         isDrawingRef,
         selectedPolygonIdRef,
     } = useDrawingState(map);
+
+    const { filters: urlFilters, setFilters: setUrlFilters } = useFilters();
+
+    // Полное удаление одного полигона: state + localStorage + URL + meta + backend
+    const handleFullDelete = (id: string) => {
+        handleDeletePolygon(id);
+
+        removeGeometryFromStorage(id);
+
+        const currentIds = urlFilters.polygonIds;
+        if (currentIds) {
+            const remaining = currentIds.filter(pid => pid !== id);
+            setUrlFilters({
+                polygonIds: remaining.length > 0 ? remaining : undefined,
+                geoSrc: remaining.length > 0 ? urlFilters.geoSrc : undefined,
+            });
+        }
+
+        const { removeGeometryMeta } = useFilterStore.getState();
+        removeGeometryMeta(id);
+
+        if (urlFilters.geoSrc === 'filter') {
+            import('@/shared/api/geometries').then(({ deleteFilterGeometry }) =>
+                deleteFilterGeometry(id).catch(() => {})
+            );
+        }
+    };
 
     // Слой для текущего рисования
     useDrawingLayer({
@@ -168,7 +198,7 @@ export const MobileDrawPanel = memo(function MobileDrawPanel({ map }: MobileDraw
                             selectedId={selectedPolygonId}
                             onSelect={setSelectedPolygonId}
                             onEdit={handleEditPolygon}
-                            onDelete={handleDeletePolygon}
+                            onDelete={handleFullDelete}
                         />
                     )}
 
