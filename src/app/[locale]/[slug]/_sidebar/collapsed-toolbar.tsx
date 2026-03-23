@@ -11,6 +11,7 @@ import { cn } from '@/shared/lib/utils';
 import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
+import type { LocationFilterMode } from '@/features/search-filters/model/use-location-mode';
 import { CategoryFilter } from '@/features/category-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
@@ -140,10 +141,11 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
                                 } else {
                                     const { locationFilter } = useFilterStore.getState();
                                     const modeFromStore = locationFilter?.mode;
-                                    const modeFromUrl = filters.polygonIds?.length ? 'draw'
-                                        : filters.isochroneIds?.length ? 'isochrone'
-                                        : filters.radiusIds?.length ? 'radius'
-                                        : undefined;
+                                    // Определяем режим из URL-фильтров
+                                    let modeFromUrl: LocationFilterMode | undefined;
+                                    if (filters.polygonIds?.length) modeFromUrl = 'draw';
+                                    else if (filters.isochroneIds?.length) modeFromUrl = 'isochrone';
+                                    else if (filters.radiusIds?.length) modeFromUrl = 'radius';
                                     setLocationMode(modeFromStore ?? modeFromUrl ?? 'search');
                                 }
                             }}
