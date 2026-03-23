@@ -1,6 +1,7 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import env from '@/shared/config/env';
+import { useFilterStore } from '@/widgets/search-filters-bar';
 import {
     LAYER_COLORS,
     BOUNDARIES_LAYER_IDS,
@@ -191,48 +192,7 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
         }
 
         // Иначе инициализируем сразу
-        const initialized = initializeBoundariesLayer();
-
-        // Cleanup при размонтировании
-        return () => {
-            isCleanedUp = true;
-
-            if (!map || !initialized) return;
-
-            console.log('[useBoundariesLayer] Cleaning up boundaries layer');
-
-            // Откладываем удаление слоёв до следующего кадра рендера карты,
-            // чтобы избежать race condition с continuePlacement
-            const doCleanup = () => {
-                try {
-                    if (!map.isStyleLoaded()) {
-                        console.warn('[useBoundariesLayer] Style not loaded during cleanup, scheduling retry');
-                        map.once('idle', doCleanup);
-                        return;
-                    }
-
-                    if (map.getLayer(BOUNDARIES_LAYER_IDS.LABELS)) {
-                        map.removeLayer(BOUNDARIES_LAYER_IDS.LABELS);
-                    }
-                    if (map.getLayer(BOUNDARIES_LAYER_IDS.OUTLINE)) {
-                        map.removeLayer(BOUNDARIES_LAYER_IDS.OUTLINE);
-                    }
-                    if (map.getLayer(BOUNDARIES_LAYER_IDS.FILL)) {
-                        map.removeLayer(BOUNDARIES_LAYER_IDS.FILL);
-                    }
-
-                    if (map.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) {
-                        map.removeSource(BOUNDARIES_LAYER_IDS.SOURCE);
-                    }
-
-                    console.log('[useBoundariesLayer] Boundaries layer removed');
-                } catch (error) {
-                    console.warn('[useBoundariesLayer] Error during cleanup:', error);
-                }
-            };
-
-            requestAnimationFrame(doCleanup);
-        };
+        initializeBoundariesLayer();
     }, [map, initializeBoundariesLayer]);
 
     // Переинициализация после смены стиля (setStyle() удаляет все кастомные source/layer)
@@ -248,6 +208,40 @@ export function useBoundariesLayer({ map, theme }: UseBoundariesLayerProps): voi
             map.off('style.load', handleStyleLoad);
         };
     }, [map, initializeBoundariesLayer]);
+
+    // Удаление слоёв при выходе из режима search (или смене на другой режим)
+    const mapRef = useRef(map);
+    mapRef.current = map;
+
+    useEffect(() => {
+        let prevMode = useFilterStore.getState().activeLocationMode;
+
+        const unsubscribe = useFilterStore.subscribe((state) => {
+            const mode = state.activeLocationMode;
+            if (mode === prevMode) return;
+
+            // Чистим только когда уходим из search (был search → стал другой/null)
+            if (prevMode === 'search' && mode !== 'search') {
+                const m = mapRef.current;
+                if (m) {
+                    console.log('[useBoundariesLayer] Mode changed from search, cleaning up');
+                    try {
+                        if (m.getLayer(BOUNDARIES_LAYER_IDS.LABELS)) m.removeLayer(BOUNDARIES_LAYER_IDS.LABELS);
+                        if (m.getLayer(BOUNDARIES_LAYER_IDS.OUTLINE)) m.removeLayer(BOUNDARIES_LAYER_IDS.OUTLINE);
+                        if (m.getLayer(BOUNDARIES_LAYER_IDS.FILL)) m.removeLayer(BOUNDARIES_LAYER_IDS.FILL);
+                        if (m.getSource(BOUNDARIES_LAYER_IDS.SOURCE)) m.removeSource(BOUNDARIES_LAYER_IDS.SOURCE);
+                        console.log('[useBoundariesLayer] Boundaries layer removed');
+                    } catch (error) {
+                        console.warn('[useBoundariesLayer] Error during cleanup:', error);
+                    }
+                }
+            }
+
+            prevMode = mode;
+        });
+
+        return unsubscribe;
+    }, []);
 
     // Обновление стилей при смене темы
     useEffect(() => {
