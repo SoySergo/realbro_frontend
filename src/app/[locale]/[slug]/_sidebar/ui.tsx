@@ -302,9 +302,9 @@ export function SearchPageSidebar() {
     return (
         <aside className="hidden slug-desktop:flex flex-col w-[450px] slug-xl:w-[520px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
-            {/* < 1366px: отдельный ряд; >= 1366px: встроен в общий ряд ниже */}
-            {isAuthenticated && !isWide && (
-                <div className="flex items-center gap-2 px-3 pt-3 pb-1">
+            {/* < 1366px: отдельный ряд; >= 1366px: скрыт (встроен в общий ряд ниже) */}
+            {isAuthenticated && (
+                <div className="flex slug-xl:hidden items-center gap-2 px-3 pt-3 pb-1">
                     <Select
                         value={filters.markerType || 'all'}
                         onValueChange={(value) =>
@@ -340,27 +340,29 @@ export function SearchPageSidebar() {
                     <Fingerprint className="w-5 h-5" />
                 </button>
 
-                {/* Маркеры — встроены в общий ряд на >= 1366px */}
-                {isAuthenticated && isWide && (
-                    <Select
-                        value={filters.markerType || 'all'}
-                        onValueChange={(value) =>
-                            setFilters({ markerType: value as MarkerType })
-                        }
-                    >
-                        <SelectTrigger className="h-9 w-[130px] text-sm border-border shrink-0">
-                            <SelectValue>
-                                {t(`markerType.${filters.markerType || 'all'}`) || 'Все объекты'}
-                            </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                            {markerOptions.map((opt) => (
-                                <SelectItem key={opt.value} value={opt.value}>
-                                    {t(`markerType.${opt.labelKey}`) || opt.labelKey}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                {/* Маркеры — встроены в общий ряд на >= 1366px, скрыты на < 1366px */}
+                {isAuthenticated && (
+                    <div className="hidden slug-xl:block shrink-0">
+                        <Select
+                            value={filters.markerType || 'all'}
+                            onValueChange={(value) =>
+                                setFilters({ markerType: value as MarkerType })
+                            }
+                        >
+                            <SelectTrigger className="h-9 w-[130px] text-sm border-border">
+                                <SelectValue>
+                                    {t(`markerType.${filters.markerType || 'all'}`) || 'Все объекты'}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {markerOptions.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value}>
+                                        {t(`markerType.${opt.labelKey}`) || opt.labelKey}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                 )}
 
                 {/* Центральная часть: раздел + категория — растягиваются */}

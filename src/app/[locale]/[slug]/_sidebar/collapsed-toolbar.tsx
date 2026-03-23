@@ -74,7 +74,8 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
         <>
             <div
                 className={cn(
-                    'bg-background rounded-[9px] overflow-hidden transition-all duration-300 ease-in-out',
+                    'bg-background rounded-[9px] overflow-hidden',
+                    'transition-[max-height,opacity] duration-300 ease-in-out',
                     visible
                         ? 'max-h-[60px] opacity-100'
                         : 'max-h-0 opacity-0 pointer-events-none'
