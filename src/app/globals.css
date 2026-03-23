@@ -234,8 +234,7 @@
   /* Брейкпоинты для страницы поиска [slug] */
   --breakpoint-slug-desktop: 900px;
   --breakpoint-slug-wide: 1300px;
-  --breakpoint-slug-xl: 1366px;
-}
+  --breakpoint-slug-xl: 1500px;}
 
 /* Базовые стили body */
 body {

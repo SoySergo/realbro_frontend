@@ -143,8 +143,8 @@ export function SearchPageSidebar() {
     const activeLocationMode = useActiveLocationMode();
     const setLocationMode = useSetLocationMode();
 
-    // >= 1366px: 2 колонки карточек, все кнопки в 1 ряд
-    const isWide = useMediaQuery('(min-width: 1366px)');
+    // >= 1500px: 2 колонки карточек, все кнопки в 1 ряд
+    const isWide = useMediaQuery('(min-width: 1500px)');
     const columns: 1 | 2 = isWide ? 2 : 1;
 
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');

@@ -45,7 +45,7 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
             <div
                 className={cn(
                     'transition-[width,opacity] duration-300 ease-in-out shrink-0 overflow-hidden will-change-[width,opacity]',
-                    isCollapsed ? 'w-0 opacity-0' : 'w-[450px] slug-xl:w-[520px] ml-[5px] opacity-100'
+                    isCollapsed ? 'w-0 opacity-0' : 'w-[450px] slug-xll:w-[520px] ml-[5px] opacity-100'
                 )}
             >
                 <SearchPageSidebar />
