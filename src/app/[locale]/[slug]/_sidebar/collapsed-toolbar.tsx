@@ -76,7 +76,7 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
         <>
             <div
                 className={cn(
-                    'bg-background rounded-[9px] overflow-hidden shrink-0',
+                    'bg-background rounded-[9px] overflow-hidden shrink-0 self-start',
                     'h-[52px] flex items-center',
                     'transition-[width,opacity] duration-300 ease-in-out',
                     visible
