@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useEnsureGeometries } from '@/shared/lib/use-ensure-geometries';
+import { useMediaQuery } from '@/shared/lib/use-media-query';
 import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode, useSetLocationMode } from '@/features/search-filters/model/use-location-mode';
@@ -59,19 +60,50 @@ const SIDEBAR_PAGE_LIMIT = 10;
 interface PropertyRowData {
     properties: PropertyGridCard[];
     onPropertyClick: (p: PropertyGridCard) => void;
+    columns: 1 | 2;
 }
 
-/** Виртуализированная строка списка (react-window v2) */
+/**
+ * Виртуализированная строка списка (react-window v2).
+ * В режиме columns=2 отображает 2 карточки в ряд (для >= 1366px).
+ */
 function PropertyRow({
     index,
     style,
     properties,
     onPropertyClick,
+    columns,
 }: {
     ariaAttributes: Record<string, unknown>;
     index: number;
     style: CSSProperties;
 } & PropertyRowData): ReactElement | null {
+    if (columns === 2) {
+        const leftProperty = properties[index * 2];
+        const rightProperty = properties[index * 2 + 1];
+        if (!leftProperty) return <div style={style} />;
+        return (
+            <div style={style}>
+                <div className="grid grid-cols-2 gap-2 px-3 py-2.5">
+                    <PropertyCardGrid
+                        property={leftProperty}
+                        onClick={() => onPropertyClick(leftProperty)}
+                        actions={<PropertyCompareButton property={leftProperty} />}
+                        menuItems={<PropertyCompareMenuItem property={leftProperty} />}
+                    />
+                    {rightProperty && (
+                        <PropertyCardGrid
+                            property={rightProperty}
+                            onClick={() => onPropertyClick(rightProperty)}
+                            actions={<PropertyCompareButton property={rightProperty} />}
+                            menuItems={<PropertyCompareMenuItem property={rightProperty} />}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+
     const property = properties[index];
     if (!property) {
         return <div style={style} />;
@@ -91,7 +123,10 @@ function PropertyRow({
 }
 
 /**
- * SearchPageSidebar — правый сайдбар для страницы поиска (450px).
+ * SearchPageSidebar — правый сайдбар для страницы поиска.
+ *
+ * — < 1366px: 450px, 1 колонка карточек, 2 ряда кнопок
+ * — >= 1366px: 520px, 2 колонки карточек, все кнопки в 1 ряд
  *
  * Верхний уровень: сохранённые фильтры + маркеры (auth only).
  * Ниже: секция/категория + фильтры.
@@ -107,6 +142,10 @@ export function SearchPageSidebar() {
     const { isReady: geometriesReady } = useEnsureGeometries(filters, setFilters);
     const activeLocationMode = useActiveLocationMode();
     const setLocationMode = useSetLocationMode();
+
+    // >= 1366px: 2 колонки карточек, все кнопки в 1 ряд
+    const isWide = useMediaQuery('(min-width: 1366px)');
+    const columns: 1 | 2 = isWide ? 2 : 1;
 
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -218,12 +257,18 @@ export function SearchPageSidebar() {
     const fetchRef = useRef(fetchProperties);
     fetchRef.current = fetchProperties;
 
+    const columnsRef = useRef(columns);
+    columnsRef.current = columns;
+
     const handleRowsRendered = useCallback(
         (_visible: { startIndex: number; stopIndex: number }, all: { startIndex: number; stopIndex: number }) => {
             const len = propertiesLenRef.current;
-            if (!hasMoreRef.current || loadingRef.current || len === 0) return;
-            // Подгружаем, когда видимый+overscan дошёл до 3-х последних элементов
-            if (all.stopIndex >= len - 3) {
+            const cols = columnsRef.current;
+            // Кол-во «рядов» виртуального списка
+            const rowCount = cols === 2 ? Math.ceil(len / 2) : len;
+            if (!hasMoreRef.current || loadingRef.current || rowCount === 0) return;
+            // Подгружаем, когда видимый+overscan дошёл до 3-х последних рядов
+            if (all.stopIndex >= rowCount - 3) {
                 fetchRef.current(nextCursorRef.current);
             }
         },
@@ -239,9 +284,12 @@ export function SearchPageSidebar() {
 
     // Мемоизированные rowProps для react-window
     const rowProps = useMemo<PropertyRowData>(
-        () => ({ properties, onPropertyClick: handlePropertyClick }),
-        [properties, handlePropertyClick]
+        () => ({ properties, onPropertyClick: handlePropertyClick, columns }),
+        [properties, handlePropertyClick, columns]
     );
+
+    // Кол-во рядов виртуального списка (при 2-х колонках — вдвое меньше)
+    const virtualRowCount = columns === 2 ? Math.ceil(properties.length / 2) : properties.length;
 
     const handleSortChange = (value: string) => {
         setFilters({ sort: value as SortField });
@@ -252,10 +300,11 @@ export function SearchPageSidebar() {
     };
 
     return (
-        <aside className="hidden slug-desktop:flex flex-col w-[450px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
+        <aside className="hidden slug-desktop:flex flex-col w-[450px] slug-xl:w-[520px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
+            {/* < 1366px: отдельный ряд; >= 1366px: скрыт (встроен в общий ряд ниже) */}
             {isAuthenticated && (
-                <div className="flex items-center gap-2 px-3 pt-3 pb-1">
+                <div className="flex slug-xl:hidden items-center gap-2 px-3 pt-3 pb-1">
                     <Select
                         value={filters.markerType || 'all'}
                         onValueChange={(value) =>
@@ -278,7 +327,7 @@ export function SearchPageSidebar() {
                 </div>
             )}
 
-            {/* === Фильтры: 1 ряд — отпечаток, раздел, категория, локация, подробности === */}
+            {/* === Фильтры: 1 ряд — отпечаток, [маркеры >= 1366], раздел, категория, локация, подробности === */}
             <div className="flex items-center gap-1.5 px-3 py-2">
                 {/* Отпечаток — AI Agent */}
                 <button
@@ -290,6 +339,31 @@ export function SearchPageSidebar() {
                 >
                     <Fingerprint className="w-5 h-5" />
                 </button>
+
+                {/* Маркеры — встроены в общий ряд на >= 1366px, скрыты на < 1366px */}
+                {isAuthenticated && (
+                    <div className="hidden slug-xl:block shrink-0">
+                        <Select
+                            value={filters.markerType || 'all'}
+                            onValueChange={(value) =>
+                                setFilters({ markerType: value as MarkerType })
+                            }
+                        >
+                            <SelectTrigger className="h-9 w-[130px] text-sm border-border">
+                                <SelectValue>
+                                    {t(`markerType.${filters.markerType || 'all'}`) || 'Все объекты'}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {markerOptions.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value}>
+                                        {t(`markerType.${opt.labelKey}`) || opt.labelKey}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                )}
 
                 {/* Центральная часть: раздел + категория — растягиваются */}
                 <div className="flex items-center gap-1.5 min-w-0 flex-1">
@@ -420,7 +494,7 @@ export function SearchPageSidebar() {
                         listRef={listRef}
                         rowComponent={PropertyRow}
                         rowProps={rowProps}
-                        rowCount={properties.length}
+                        rowCount={virtualRowCount}
                         rowHeight={dynamicRowHeight}
                         onRowsRendered={handleRowsRendered}
                         overscanCount={2}
