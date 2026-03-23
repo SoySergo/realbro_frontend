@@ -11,7 +11,9 @@ import { BoundariesVisualLayer } from '../boundaries-visual-layer';
 import { useSearchModeState } from '../../model/hooks/use-search-mode-state';
 import { searchLocations, mapPlaceTypeToLocationType, getAdminLevelForPlaceType } from '@/shared/api';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
 import { cn } from '@/shared/lib/utils';
+import type { SearchFilters } from '@/entities/filter/model/types';
 import type { MapboxLocation } from '@/entities/location';
 import type { LocationItem } from '@/entities/location';
 
@@ -43,6 +45,9 @@ export function LocationSearchMode({ map, onClose, initialLocations, className }
 
     // Локальное состояние выбранных локаций
     const { selectedLocations, addLocation, removeLocation, toggleLocation, clearLocations } = useSearchModeState();
+
+    // URL фильтры
+    const { setFilters: setUrlFilters } = useFilters();
 
     // Восстановление сохранённых локаций при повторном открытии
     const initializedRef = useRef(false);
@@ -138,7 +143,7 @@ export function LocationSearchMode({ map, onClose, initialLocations, className }
         setShowDropdown(false);
     }, [clearLocations]);
 
-    // Обработчик применения фильтра (сохранение в store)
+    // Обработчик применения фильтра (сохранение в store + URL)
     const handleApply = useCallback(() => {
         if (selectedLocations.length === 0) return;
 
@@ -150,10 +155,38 @@ export function LocationSearchMode({ map, onClose, initialLocations, className }
             selectedLocations,
         });
 
+        // Группируем локации по adminLevel для URL
+        const groupedByLevel: Record<number, number[]> = {};
+        selectedLocations.forEach((loc) => {
+            if (loc.adminLevel && loc.id) {
+                if (!groupedByLevel[loc.adminLevel]) {
+                    groupedByLevel[loc.adminLevel] = [];
+                }
+                groupedByLevel[loc.adminLevel].push(loc.id);
+            }
+        });
+
+        // Пушим admin level IDs в URL + очищаем геометрические фильтры
+        const urlUpdates: Partial<SearchFilters> = {
+            adminLevel2: groupedByLevel[2],
+            adminLevel4: groupedByLevel[4],
+            adminLevel6: groupedByLevel[6],
+            adminLevel7: groupedByLevel[7],
+            adminLevel8: groupedByLevel[8],
+            adminLevel9: groupedByLevel[9],
+            adminLevel10: groupedByLevel[10],
+            // Очищаем геометрические фильтры других режимов
+            polygonIds: undefined,
+            isochroneIds: undefined,
+            radiusIds: undefined,
+            geoSrc: undefined,
+        };
+        setUrlFilters(urlUpdates);
+
         // Закрываем панель режима локации
         setLocationMode(null);
         onClose?.();
-    }, [selectedLocations, onClose]);
+    }, [selectedLocations, onClose, setUrlFilters]);
 
     // Обработчик закрытия панели
     const handleClose = useCallback(() => {
