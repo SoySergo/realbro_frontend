@@ -408,6 +408,8 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     // Обработчик moveend — пишем bbox в URL (debounce 50ms)
     const setFiltersRef = useRef(setFilters);
     setFiltersRef.current = setFilters;
+    const activeLocationModeRef = useRef(activeLocationMode);
+    activeLocationModeRef.current = activeLocationMode;
     useEffect(() => {
         if (!mapInstance) return;
 
@@ -416,6 +418,9 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
         const handleMoveEnd = () => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
+                // Не обновляем bbox при активном режиме локации
+                if (activeLocationModeRef.current) return;
+
                 const bounds = mapInstance.getBounds();
                 if (bounds) {
                     const bbox: [number, number, number, number] = [
