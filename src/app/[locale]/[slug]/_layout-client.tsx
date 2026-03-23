@@ -24,8 +24,8 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
     const isCollapsed = !!activeLocationMode;
 
     return (
-        <div className="hidden slug-desktop:flex h-screen p-[5px] gap-[5px] bg-background-tertiary">
-            {/* Левая секция — хедер + контент */}
+        <div className="relative hidden slug-desktop:flex h-screen p-[5px] gap-[5px] bg-background-tertiary">
+            {/* Левая секция — хедер + контент (растягивается на всю ширину при свёрнутом сайдбаре) */}
             <div className="flex-1 flex flex-col gap-[5px] min-w-0">
                 <SearchPageHeader />
                 <main className="flex-1 min-h-0">
@@ -33,13 +33,13 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                 </main>
             </div>
 
-            {/* Панель кнопок при свёрнутом сайдбаре — справа, выровнена по хедеру */}
+            {/* Панель кнопок при свёрнутом сайдбаре — абсолютно позиционирована справа вверху */}
             <CollapsedSidebarToolbar visible={isCollapsed} />
 
             {/* Правый сайдбар — анимируемая ширина */}
             <div
                 className={cn(
-                    'transition-[width,opacity] duration-300 ease-in-out shrink-0 overflow-hidden',
+                    'transition-[width,opacity] duration-300 ease-in-out shrink-0 overflow-hidden will-change-[width,opacity]',
                     isCollapsed ? 'w-0 opacity-0' : 'w-[450px] slug-xl:w-[520px] opacity-100'
                 )}
             >
