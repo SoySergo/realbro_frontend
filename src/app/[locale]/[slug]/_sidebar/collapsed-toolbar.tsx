@@ -76,16 +76,15 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
         <>
             <div
                 className={cn(
-                    'absolute top-[5px] right-[5px] z-10',
                     'bg-background rounded-[9px] overflow-hidden',
-                    'h-[52px] flex items-center',
-                    'transition-[width,opacity] duration-300 ease-in-out will-change-[width,opacity]',
+                    'h-[52px] flex items-center shrink-0',
+                    'transition-[width,opacity,margin] duration-300 ease-in-out will-change-[width,opacity]',
                     visible
-                        ? 'w-auto opacity-100'
-                        : 'w-0 opacity-0 pointer-events-none'
+                        ? 'w-[450px] slug-xl:w-[520px] ml-[5px] opacity-100'
+                        : 'w-0 ml-0 opacity-0 pointer-events-none'
                 )}
             >
-                <div className="flex items-center gap-1.5 px-3 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 px-3 whitespace-nowrap w-full">
                     {/* Отпечаток — AI Agent (всегда первый, синий) */}
                     <button
                         className={cn(

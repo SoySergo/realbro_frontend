@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode } from 'react';
+import { type ReactNode, useState, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { useActiveLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { SearchPageHeader } from './_header/ui';
@@ -21,26 +21,31 @@ interface SlugLayoutClientProps {
  */
 export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
     const activeLocationMode = useActiveLocationMode();
-    const isCollapsed = !!activeLocationMode;
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const isCollapsed = mounted && !!activeLocationMode;
 
     return (
-        <div className="relative hidden slug-desktop:flex h-screen p-[5px] gap-[5px] bg-background-tertiary">
-            {/* Левая секция — хедер + контент (растягивается на всю ширину при свёрнутом сайдбаре) */}
+        <div className="relative hidden slug-desktop:flex h-screen p-[5px] bg-background-tertiary">
+            {/* Левая секция — хедер + контент */}
             <div className="flex-1 flex flex-col gap-[5px] min-w-0">
-                <SearchPageHeader />
+                {/* Строка хедера + collapsed toolbar */}
+                <div className="flex shrink-0">
+                    <div className="flex-1 min-w-0">
+                        <SearchPageHeader />
+                    </div>
+                    <CollapsedSidebarToolbar visible={isCollapsed} />
+                </div>
                 <main className="flex-1 min-h-0">
                     {children}
                 </main>
             </div>
 
-            {/* Панель кнопок при свёрнутом сайдбаре — абсолютно позиционирована справа вверху */}
-            <CollapsedSidebarToolbar visible={isCollapsed} />
-
-            {/* Правый сайдбар — анимируемая ширина */}
+            {/* Правый сайдбар — анимируемая ширина, на всю высоту */}
             <div
                 className={cn(
                     'transition-[width,opacity] duration-300 ease-in-out shrink-0 overflow-hidden will-change-[width,opacity]',
-                    isCollapsed ? 'w-0 opacity-0' : 'w-[450px] slug-xl:w-[520px] opacity-100'
+                    isCollapsed ? 'w-0 opacity-0' : 'w-[450px] slug-xl:w-[520px] ml-[5px] opacity-100'
                 )}
             >
                 <SearchPageSidebar />
