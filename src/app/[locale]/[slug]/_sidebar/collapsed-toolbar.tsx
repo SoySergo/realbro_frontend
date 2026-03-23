@@ -43,7 +43,8 @@ interface CollapsedSidebarToolbarProps {
 /**
  * Панель кнопок при свёрнутом сайдбаре.
  *
- * Появляется над картой со скруглёнными краями (как хедер).
+ * Появляется справа от хедера (там, где был хедер сайдбара)
+ * со скруглёнными краями (как хедер).
  * — < 1366px: нижняя панель (только фильтр-кнопки)
  * — >= 1366px: один ряд (отпечаток, сохранённые фильтры, раздел, категория, локация, фильтры)
  */
@@ -75,14 +76,15 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
         <>
             <div
                 className={cn(
-                    'bg-background rounded-[9px] overflow-hidden',
-                    'transition-[max-height,opacity] duration-300 ease-in-out',
+                    'bg-background rounded-[9px] overflow-hidden shrink-0',
+                    'h-[52px] flex items-center',
+                    'transition-[width,opacity] duration-300 ease-in-out',
                     visible
-                        ? 'max-h-[60px] opacity-100'
-                        : 'max-h-0 opacity-0 pointer-events-none'
+                        ? 'w-auto opacity-100'
+                        : 'w-0 opacity-0 pointer-events-none'
                 )}
             >
-                <div className="flex items-center gap-1.5 px-3 py-2">
+                <div className="flex items-center gap-1.5 px-3 whitespace-nowrap">
                     {/* Отпечаток — AI Agent (всегда первый, синий) */}
                     <button
                         className={cn(
