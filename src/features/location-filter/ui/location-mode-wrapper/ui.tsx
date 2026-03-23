@@ -51,7 +51,7 @@ export function LocationModeWrapper({
     className,
 }: LocationModeWrapperProps) {
     return (
-        <div className={cn('flex flex-col bg-background border border-border border-t-0 rounded-b-lg shadow-lg max-h-[calc(100vh-200px)]', className)}>
+        <div className={cn('flex flex-col bg-background border border-border rounded-lg shadow-lg max-h-[calc(100vh-200px)]', className)}>
             {/* Шапка: Заголовок + Крестик */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
                 <h3 className="text-base font-semibold text-text-primary">{title}</h3>

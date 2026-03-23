@@ -62,17 +62,17 @@ export function MapLocationController({ map }: MapLocationControllerProps) {
     }
 
     return (
-        <div className="absolute top-4 left-4 z-10 w-96 max-w-[calc(100vw-2rem)]">
+        <div className="absolute top-4 left-4 z-10 w-96 max-w-[calc(100vw-2rem)] flex flex-col gap-2">
             {/* Табы выбора режима — иконки с тултипами */}
             <TooltipProvider delayDuration={300}>
-                <div className="flex bg-background border border-border rounded-t-lg overflow-hidden">
+                <div className="flex bg-background border border-border rounded-lg overflow-hidden shadow-md">
                     {LOCATION_MODES.map(({ mode, icon: Icon }) => (
                         <Tooltip key={mode}>
                             <TooltipTrigger asChild>
                                 <button
                                     onClick={() => setLocationMode(mode)}
                                     className={cn(
-                                        'flex-1 flex items-center justify-center py-2.5',
+                                        'flex-1 flex items-center justify-center py-3.5',
                                         'transition-colors cursor-pointer',
                                         'border-b-2',
                                         activeLocationMode === mode
