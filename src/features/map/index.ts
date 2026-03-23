@@ -12,3 +12,4 @@
  */
 
 export { BaseMap, SearchMap } from './ui';
+export { useHoveredPropertyStore } from './model/use-hovered-property';

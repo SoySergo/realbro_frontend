@@ -8,6 +8,7 @@ import { MapLocationController } from '@/features/location-filter';
 import { MobileLocationMode } from '@/widgets/mobile-location-mode';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode } from '@/features/search-filters/model/use-location-mode';
+import { useHoveredPropertyStore } from '../../model/use-hovered-property';
 import { filtersToQueryString } from '@/entities/filter';
 import { PropertyPopupContent } from './PropertyPopupContent';
 
@@ -20,10 +21,6 @@ const PROPERTIES_SOURCE = 'properties';
 const PROPERTIES_LAYER_CLUSTERS = 'properties-clusters';
 const PROPERTIES_LAYER_CLUSTER_COUNT = 'properties-cluster-count';
 const PROPERTIES_LAYER_POINTS = 'properties-points';
-
-// Highlight source/layer — вынесены как константы (были строками внутри effect)
-const HIGHLIGHT_SOURCE = 'highlight-property';
-const HIGHLIGHT_LAYER = 'highlight-property-layer';
 
 type SearchMapProps = {
     /** Начальный центр карты [lng, lat] */
@@ -443,66 +440,75 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
     }, [mapInstance]);
 
     // Подсветка свойства на карте при ховере на карточку в сайдбаре
+    // HTML-маркер с иконкой дома + скрытие оригинального price-bubble
+    const highlightMarkerRef = useRef<mapboxgl.Marker | null>(null);
+    const hoveredProperty = useHoveredPropertyStore((s) => s.hovered);
+
     useEffect(() => {
         if (!mapInstance || !layersInitializedRef.current) return;
 
-        if (!highlightedPropertyId) {
-            // Убираем подсветку
-            if (mapInstance.getLayer(HIGHLIGHT_LAYER)) {
-                mapInstance.setLayoutProperty(HIGHLIGHT_LAYER, 'visibility', 'none');
-            }
-            return;
+        // Удаляем предыдущий маркер
+        if (highlightMarkerRef.current) {
+            highlightMarkerRef.current.remove();
+            highlightMarkerRef.current = null;
         }
 
-        // Ищем объект среди отрендеренных features
-        const canvas = mapInstance.getCanvas();
-        const features = mapInstance.queryRenderedFeatures(
-            [[0, 0], [canvas.width, canvas.height]],
-            { layers: [PROPERTIES_LAYER_POINTS] }
-        );
-        const feature = features.find(f => f.properties?.id === highlightedPropertyId);
+        const hoveredId = hoveredProperty?.id;
+        const coords = hoveredProperty?.coordinates;
 
-        if (feature && feature.geometry.type === 'Point') {
-            const coords = feature.geometry.coordinates as [number, number];
-
-            // Обновляем или создаём source/layer для подсветки
-            const source = mapInstance.getSource(HIGHLIGHT_SOURCE) as mapboxgl.GeoJSONSource | undefined;
-            const geojson: GeoJSON.FeatureCollection = {
-                type: 'FeatureCollection',
-                features: [{
-                    type: 'Feature',
-                    geometry: { type: 'Point', coordinates: coords },
-                    properties: {},
-                }],
-            };
-
-            if (source) {
-                source.setData(geojson);
+        // Обновляем фильтр слоя точек: скрываем hovered объект среди price-bubbles
+        if (mapInstance.getLayer(PROPERTIES_LAYER_POINTS)) {
+            if (hoveredId) {
+                mapInstance.setFilter(PROPERTIES_LAYER_POINTS, [
+                    'all',
+                    ['!', ['has', 'point_count']],
+                    ['!=', ['get', 'id'], hoveredId],
+                ]);
             } else {
-                mapInstance.addSource(HIGHLIGHT_SOURCE, {
-                    type: 'geojson',
-                    data: geojson,
-                });
-            }
-
-            if (!mapInstance.getLayer(HIGHLIGHT_LAYER)) {
-                mapInstance.addLayer({
-                    id: HIGHLIGHT_LAYER,
-                    type: 'circle',
-                    source: HIGHLIGHT_SOURCE,
-                    paint: {
-                        'circle-radius': 14,
-                        'circle-color': '#FF6B35',
-                        'circle-stroke-width': 3,
-                        'circle-stroke-color': '#ffffff',
-                        'circle-opacity': 0.9,
-                    },
-                });
-            } else {
-                mapInstance.setLayoutProperty(HIGHLIGHT_LAYER, 'visibility', 'visible');
+                // Восстанавливаем исходный фильтр
+                mapInstance.setFilter(PROPERTIES_LAYER_POINTS, [
+                    '!', ['has', 'point_count'],
+                ]);
             }
         }
-    }, [mapInstance, highlightedPropertyId]);
+
+        if (!coords) return;
+
+        // Создаём DOM-элемент маркера — белая подложка + иконка дома
+        const el = document.createElement('div');
+        el.className = 'property-highlight-marker';
+        el.innerHTML = `
+            <div style="
+                width: 40px; height: 40px;
+                background: var(--brand-primary, #198bff);
+                border: 3px solid white;
+                border-radius: 50% 50% 50% 0;
+                transform: rotate(-45deg);
+                display: flex; align-items: center; justify-content: center;
+                box-shadow: 0 3px 12px rgba(25,139,255,0.5);
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                     fill="white" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                     style="transform: rotate(45deg);">
+                    <path d="M12 3 2 12h3v8a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-8h3Z"/>
+                </svg>
+            </div>`;
+        el.style.cssText = `
+            animation: highlight-marker-in 200ms ease-out;
+            pointer-events: none;
+        `;
+
+        const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+            .setLngLat(coords)
+            .addTo(mapInstance);
+
+        highlightMarkerRef.current = marker;
+
+        return () => {
+            marker.remove();
+            highlightMarkerRef.current = null;
+        };
+    }, [mapInstance, hoveredProperty]);
 
     return (
         <>

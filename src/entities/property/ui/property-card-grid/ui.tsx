@@ -28,6 +28,7 @@ import type { PropertyGridCard } from '../../model/card-types';
 import { getImageAlt, getImageThumbnailUrl } from '../../model/card-types';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
+import { useHoveredPropertyStore } from '@/features/map/model/use-hovered-property';
 
 const MAX_HOVER_IMAGES = 6;
 const MAX_TRANSPORT_LINES = 1;
@@ -51,6 +52,8 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
     const [dislikeAnimating, setDislikeAnimating] = useState(false);
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const touchStartX = useRef(0);
+
+    const setHovered = useHoveredPropertyStore((s) => s.setHovered);
 
     // Дата публикации: приоритет published_at (бекенд), fallback на updated_at, затем created_at (legacy)
     // Go zero time "0001-01-01T00:00:00Z" считаем пустым значением
@@ -169,10 +172,17 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 'min-w-0'
             )}
             onClick={onClick}
-            onMouseEnter={() => setIsHovering(true)}
+            onMouseEnter={() => {
+                setIsHovering(true);
+                const coords = property.location?.coordinates;
+                if (coords) {
+                    setHovered({ id: property.id, coordinates: [coords.lng, coords.lat] });
+                }
+            }}
             onMouseLeave={() => {
                 setIsHovering(false);
                 setCurrentImageIndex(0);
+                setHovered(null);
             }}
         >
             {/* Image with hover slider + touch swipe */}
@@ -287,7 +297,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         >
                             <ThumbsUp
                                 className={cn(
-                                    'w-[18px] h-[18px] transition-transform duration-200',
+                                    'w-[18px] h-[18px] transition-transform duration-100',
                                     likeAnimating && 'scale-125',
                                     currentReaction === 'like' && 'fill-brand-primary/30'
                                 )}
@@ -305,7 +315,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                         >
                             <ThumbsDown
                                 className={cn(
-                                    'w-[18px] h-[18px] transition-transform duration-200',
+                                    'w-[18px] h-[18px] transition-transform duration-100',
                                     dislikeAnimating && 'scale-125',
                                     currentReaction === 'dislike' && 'fill-destructive/30'
                                 )}
