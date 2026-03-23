@@ -89,7 +89,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     {/* Global Toast Notifications */}
                                     <GlobalToastProvider />
                                     {/* Sonner Toaster для пользовательских действий */}
-                                    <Toaster position="top-center" closeButton richColors duration={4000} />
+                                    <Toaster position="top-center" closeButton duration={3000} />
                                 </ToastProvider>
                             </WebSocketProvider>
                             </NuqsAdapter>

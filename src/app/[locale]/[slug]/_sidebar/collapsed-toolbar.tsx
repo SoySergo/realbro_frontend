@@ -80,7 +80,7 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
                     'h-[52px] flex items-center shrink-0',
                     'transition-[width,opacity,margin] duration-300 ease-in-out will-change-[width,opacity]',
                     visible
-                        ? 'w-[450px] slug-xl:w-[520px] ml-[5px] opacity-100'
+                        ? 'w-[400px] slug-xl:w-[520px] ml-[5px] opacity-100'
                         : 'w-0 ml-0 opacity-0 pointer-events-none'
                 )}
             >

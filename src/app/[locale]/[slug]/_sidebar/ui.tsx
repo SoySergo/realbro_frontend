@@ -300,7 +300,7 @@ export function SearchPageSidebar() {
     };
 
     return (
-        <aside className="hidden slug-desktop:flex flex-col w-[450px] slug-xl:w-[520px] shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
+        <aside className="hidden slug-desktop:flex flex-col w-full shrink-0 h-full bg-background rounded-[9px] overflow-hidden">
             {/* === Верхний блок: сохранённые фильтры + маркеры (auth only) === */}
             {/* < 1366px: отдельный ряд; >= 1366px: скрыт (встроен в общий ряд ниже) */}
             {isAuthenticated && (

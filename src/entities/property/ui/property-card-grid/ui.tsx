@@ -30,7 +30,7 @@ import { cn, safeImageSrc } from '@/shared/lib/utils';
 import { useUserActionsStore } from '@/entities/user-actions';
 
 const MAX_HOVER_IMAGES = 6;
-const MAX_TRANSPORT_LINES = 3;
+const MAX_TRANSPORT_LINES = 1;
 const DEFAULT_METRO_LINE_COLOR = '#E50914';
 
 interface PropertyCardGridProps {
@@ -136,12 +136,11 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         e.preventDefault();
         e.stopPropagation();
         setLikeAnimating(true);
-        setTimeout(() => setLikeAnimating(false), 500);
-        // Переключение: если уже like → сброс, иначе → like
+        setTimeout(() => setLikeAnimating(false), 400);
         const newReaction = currentReaction === 'like' ? null : 'like';
         setStoreReaction(property.id, newReaction);
         if (newReaction === 'like') {
-            toast.success(tActions('liked'), { duration: 2000 });
+            toast(tActions('liked'), { duration: 2000 });
         }
     };
 
@@ -149,8 +148,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         e.preventDefault();
         e.stopPropagation();
         setDislikeAnimating(true);
-        setTimeout(() => setDislikeAnimating(false), 500);
-        // Переключение: если уже dislike → сброс, иначе → dislike
+        setTimeout(() => setDislikeAnimating(false), 400);
         const newReaction = currentReaction === 'dislike' ? null : 'dislike';
         setStoreReaction(property.id, newReaction);
         if (newReaction === 'dislike') {
@@ -179,7 +177,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         >
             {/* Image with hover slider + touch swipe */}
             <div
-                className="relative h-[260px] touch-manipulation overflow-hidden"
+                className="relative aspect-[4/3] touch-manipulation overflow-hidden"
                 onMouseMove={handleMouseMove}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
@@ -262,55 +260,62 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
             </div>
 
             {/* Card content */}
-            <div className="p-3">
+            <div className="px-3 pt-2.5 pb-3">
                 {/* Price and buttons */}
                 <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline gap-2 text-lg sm:text-base truncate">
+                        <div className="flex items-baseline gap-2 text-base truncate">
                             <span className="font-bold text-foreground">{formatPrice(property.price)}</span>
-                            <span className="text-xs sm:text-[11px] text-muted-foreground font-normal">
+                            <span className="text-[11px] text-muted-foreground font-normal">
                                 {property.price_per_m2?.toLocaleString('ru-RU')} {t('pricePerMeter')}
                             </span>
                         </div>
                     </div>
 
-                    {/* Like/dislike buttons - увеличены на мобильных */}
-                    <div className="flex items-center gap-1 sm:gap-0.5 flex-shrink-0">
-                        {/* Слот для дополнительных действий (например, сравнение) */}
+                    {/* Like/dislike buttons */}
+                    <div className="flex items-center gap-0.5 flex-shrink-0">
                         {actions}
                         <button
                             className={cn(
-                                'w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full transition-colors',
+                                'w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200',
                                 currentReaction === 'like'
-                                    ? 'bg-green-500/20 text-green-600'
-                                    : 'hover:bg-green-500/20 hover:text-green-600 text-muted-foreground'
+                                    ? 'bg-brand-primary/15 text-brand-primary'
+                                    : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                             )}
                             onClick={handleLike}
                             title={t('like')}
                         >
                             <ThumbsUp
-                                className={cn('w-5 h-5 sm:w-4 sm:h-4', likeAnimating && 'animate-bounce')}
+                                className={cn(
+                                    'w-[18px] h-[18px] transition-transform duration-200',
+                                    likeAnimating && 'scale-125',
+                                    currentReaction === 'like' && 'fill-brand-primary/30'
+                                )}
                             />
                         </button>
                         <button
                             className={cn(
-                                'w-10 h-10 sm:w-7 sm:h-7 flex items-center justify-center rounded-full transition-colors',
+                                'w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200',
                                 currentReaction === 'dislike'
-                                    ? 'bg-red-500/20 text-red-500'
-                                    : 'hover:bg-red-500/20 hover:text-red-500 text-muted-foreground'
+                                    ? 'bg-destructive/15 text-destructive'
+                                    : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                             )}
                             onClick={handleDislike}
                             title={t('dislike')}
                         >
                             <ThumbsDown
-                                className={cn('w-5 h-5 sm:w-4 sm:h-4', dislikeAnimating && 'animate-bounce')}
+                                className={cn(
+                                    'w-[18px] h-[18px] transition-transform duration-200',
+                                    dislikeAnimating && 'scale-125',
+                                    currentReaction === 'dislike' && 'fill-destructive/30'
+                                )}
                             />
                         </button>
                     </div>
                 </div>
 
                 {/* Characteristics */}
-                <div className="flex items-center gap-1.5 text-sm sm:text-xs text-foreground mb-1 flex-wrap">
+                <div className="flex items-center gap-1.5 text-xs text-foreground mb-1 flex-wrap">
                     {property.rooms != null && property.rooms > 0 && (
                         <>
                             <span className="font-medium whitespace-nowrap">
@@ -350,13 +355,13 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 </div>
 
                 {/* Title - новое поле вместо типа */}
-                <div className="text-sm sm:text-xs font-medium text-foreground mb-1 line-clamp-2">
+                <div className="text-xs font-medium text-foreground mb-1 line-clamp-2">
                     {property.title}
                 </div>
 
                 {/* Address */}
-                <div className="flex items-center gap-1 text-sm sm:text-xs text-muted-foreground mb-1">
-                    <MapPin className="w-3.5 h-3.5 sm:w-3 sm:h-3 flex-shrink-0" />
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
+                    <MapPin className="w-3 h-3 flex-shrink-0" />
                     <span className="truncate">
                         {property.address}
                     </span>
@@ -365,13 +370,13 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 {/* Transport and menu */}
                 <div className="flex items-center justify-between gap-2">
                     {property.transport_station ? (
-                        <div className="flex items-center gap-2 text-sm sm:text-xs min-w-0">
+                        <div className="flex items-center gap-1.5 text-xs min-w-0">
                             {/* Линии транспорта — макс 3 + badge */}
                             <div className="flex items-center gap-1 flex-shrink-0">
                                 {property.transport_station.lines?.slice(0, MAX_TRANSPORT_LINES).map((line, idx) => (
                                     <div
                                         key={idx}
-                                        className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded shadow-sm text-white"
+                                        className="flex items-center justify-center min-w-[22px] h-5 px-1.5 text-[10px] font-bold leading-none rounded shadow-sm text-white"
                                         style={{
                                             backgroundColor: line.color || DEFAULT_METRO_LINE_COLOR,
                                         }}
@@ -383,7 +388,7 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                                     <TooltipProvider>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <div className="flex items-center justify-center min-w-5 h-4 px-1 text-[9px] font-bold leading-none rounded bg-muted text-muted-foreground cursor-default">
+                                                <div className="flex items-center justify-center min-w-[22px] h-5 px-1.5 text-[10px] font-bold leading-none rounded bg-muted text-muted-foreground cursor-default">
                                                     +{(property.transport_station.lines?.length ?? 0) - MAX_TRANSPORT_LINES}
                                                 </div>
                                             </TooltipTrigger>
