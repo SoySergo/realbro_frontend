@@ -59,7 +59,7 @@ export function ChatSettingsPanel({
                 )}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 h-18 border-b border-border/70 shrink-0">
+                <div className="flex items-center justify-between px-5 h-[4.5rem] border-b border-border/70 shrink-0">
                     <h3 className="text-base font-semibold text-text-primary">
                         {labels.settingsTitle}
                     </h3>

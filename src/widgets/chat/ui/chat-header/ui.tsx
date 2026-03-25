@@ -46,7 +46,7 @@ export function ChatHeader({
     return (
         <div
             className={cn(
-                'sticky top-0 z-10 flex items-center gap-3 px-4 md:px-5 h-18',
+                'sticky top-0 z-10 flex items-center gap-3 px-4 md:px-5 h-[4.5rem]',
                 'border-b border-border/70 bg-background/88 backdrop-blur-xl shrink-0',
                 className
             )}

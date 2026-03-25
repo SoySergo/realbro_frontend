@@ -83,7 +83,7 @@ export function SendMessageForm({
                         : 'bg-background-tertiary text-text-tertiary cursor-not-allowed'
                 )}
             >
-                <Send className="w-4.5 h-4.5" />
+                <Send className="w-5 h-5" />
             </button>
         </form>
     );

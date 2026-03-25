@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/shared/config/routing';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore, useChatUIStore } from '@/features/chat-messages';
 import { ChatSidebar } from '../chat-sidebar/ui';
@@ -56,17 +57,20 @@ interface ChatLayoutProps {
 
 export function ChatLayout({ labels, className }: ChatLayoutProps) {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const { conversations, activeConversationId, setActiveConversation } = useChatStore();
     const { setChatOpen } = useChatUIStore();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [showMobileChat, setShowMobileChat] = useState(false);
     const requestedConversationId = searchParams.get('conversationId');
+    const showConversationOnMobile =
+        showMobileChat || requestedConversationId === AI_AGENT_CONVERSATION_ID;
 
     // Синхронизируем состояние чата с глобальным стором для скрытия нижнего меню
     useEffect(() => {
-        setChatOpen(showMobileChat);
+        setChatOpen(showConversationOnMobile);
         return () => setChatOpen(false);
-    }, [showMobileChat, setChatOpen]);
+    }, [showConversationOnMobile, setChatOpen]);
 
     useEffect(() => {
         if (!requestedConversationId) return;
@@ -81,12 +85,12 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
             setActiveConversation(targetConversation.id);
         }
 
-        if (targetConversation.id === AI_AGENT_CONVERSATION_ID) {
-            setShowMobileChat(true);
-        }
     }, [requestedConversationId, conversations, activeConversationId, setActiveConversation]);
 
     const handleBackToSidebar = () => {
+        if (requestedConversationId) {
+            router.replace('/chat');
+        }
         setShowMobileChat(false);
     };
 
@@ -103,7 +107,7 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
             <div
                 className={cn(
                     'w-full md:w-[360px] lg:w-[400px] shrink-0',
-                    showMobileChat ? 'hidden md:flex' : 'flex'
+                    showConversationOnMobile ? 'hidden md:flex' : 'flex'
                 )}
             >
                 <ChatSidebar
@@ -111,6 +115,7 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
                         title: labels.title,
                         searchPlaceholder: labels.searchPlaceholder,
                         tabs: labels.tabs,
+                        aiAgentSearching: labels.aiAgent.searching,
                     }}
                     onSelectConversation={() => setShowMobileChat(true)}
                     className="w-full"
@@ -121,13 +126,13 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
             <div
                 className={cn(
                     'flex-1 min-w-0 bg-background',
-                    showMobileChat ? 'flex' : 'hidden md:flex'
+                    showConversationOnMobile ? 'flex' : 'hidden md:flex'
                 )}
             >
                 <ChatWindow
                     onSettingsClick={() => setIsSettingsOpen(true)}
                     onBackClick={handleBackToSidebar}
-                    showBack={showMobileChat}
+                    showBack={showConversationOnMobile}
                     labels={labels}
                     className="w-full"
                 />

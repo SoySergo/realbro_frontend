@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { Edit2, Plus, Layers } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
+import { useRouter } from '@/shared/config/routing';
 import { useSidebarStore } from '@/widgets/sidebar/model/store';
 import { useChatSettingsStore } from '../../model/store';
 
@@ -19,8 +20,10 @@ interface SearchParamsLinkProps {
 }
 
 export function SearchParamsLink({ labels, filters, className }: SearchParamsLinkProps) {
+    const router = useRouter();
     const { settings, updateSettings } = useChatSettingsStore();
     const savedQueries = useSidebarStore((state) => state.queries);
+    const setActiveQuery = useSidebarStore((state) => state.setActiveQuery);
 
     const allFilters = useMemo(() => {
         if (filters?.length) {
@@ -54,6 +57,11 @@ export function SearchParamsLink({ labels, filters, className }: SearchParamsLin
         });
     };
 
+    const handleEdit = (filterId: string) => {
+        setActiveQuery(filterId);
+        router.push('/search');
+    };
+
     return (
         <div className={cn('space-y-4', className)}>
             <div className="flex items-center gap-2">
@@ -83,7 +91,10 @@ export function SearchParamsLink({ labels, filters, className }: SearchParamsLin
                                     &times;
                                 </button>
                                 <button
+                                    type="button"
+                                    aria-label={labels.editFilter}
                                     className="text-xs text-brand-primary hover:text-brand-primary-hover flex items-center gap-1 cursor-pointer ml-2"
+                                    onClick={() => handleEdit(filter.id)}
                                 >
                                     <Edit2 className="w-3 h-3" />
                                     {labels.editFilter}

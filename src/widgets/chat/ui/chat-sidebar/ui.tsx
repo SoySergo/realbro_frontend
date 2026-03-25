@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Sparkles } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { ConversationItem } from '@/entities/chat';
@@ -20,6 +20,7 @@ interface ChatSidebarProps {
         title: string;
         searchPlaceholder: string;
         tabs: Record<string, string>;
+        aiAgentSearching: string;
     };
     onSelectConversation?: () => void;
     className?: string;
@@ -41,36 +42,30 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
         fetchConversations();
     }, [fetchConversations]);
 
-    const sortedConversations = useMemo(
-        () =>
-            [...conversations].sort((a, b) => {
-                if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
-                return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-            }),
-        [conversations]
-    );
+    const sortedConversations = [...conversations].sort((a, b) => {
+        if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    });
 
     const aiConversation = sortedConversations.find(
         (conversation) => conversation.type === 'ai-agent'
     );
 
-    const visibleConversations = useMemo(() => {
-        return sortedConversations.filter((conversation) => {
-            if (conversation.type === 'ai-agent') {
-                return false;
-            }
+    const visibleConversations = sortedConversations.filter((conversation) => {
+        if (conversation.type === 'ai-agent') {
+            return false;
+        }
 
-            if (activeTab !== 'all' && conversation.type !== activeTab) {
-                return false;
-            }
+        if (activeTab !== 'all' && conversation.type !== activeTab) {
+            return false;
+        }
 
-            if (searchQuery.trim()) {
-                return conversation.title.toLowerCase().includes(searchQuery.toLowerCase());
-            }
+        if (searchQuery.trim()) {
+            return conversation.title.toLowerCase().includes(searchQuery.toLowerCase());
+        }
 
-            return true;
-        });
-    }, [activeTab, searchQuery, sortedConversations]);
+        return true;
+    });
 
     const shouldShowAiCard =
         !!aiConversation &&
@@ -202,7 +197,7 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
                                         </div>
 
                                         <p className="mt-3 line-clamp-2 text-sm text-white/90">
-                                            {aiConversation.lastMessage?.content || labels.tabs.aiAgent}
+                                            {labels.aiAgentSearching}
                                         </p>
                                     </div>
                                 </div>
