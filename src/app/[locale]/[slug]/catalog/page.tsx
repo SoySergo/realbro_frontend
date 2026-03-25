@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Map as MapIcon, Loader2 } from 'lucide-react';
+import { Link } from '@/shared/config/routing';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { PropertyCardGrid } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
@@ -26,7 +27,6 @@ import { CatalogFiltersToolbar } from './_catalog-filters';
  */
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
-    const router = useRouter();
     const params = useParams();
     const slug = params.slug as string;
     const locale = params.locale as string;
@@ -124,17 +124,6 @@ export default function CatalogPage() {
         return () => observer.disconnect();
     }, [hasMore, loadMore]);
 
-    const handlePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            router.push(`/${locale}/property/${property.slug || property.id}`);
-        },
-        [router, locale]
-    );
-
-    const handleShowOnMap = () => {
-        router.push(`/${locale}/${slug}/map`);
-    };
-
     return (
         <>
             <div className="flex flex-col h-full bg-background rounded-[9px] overflow-auto">
@@ -168,13 +157,17 @@ export default function CatalogPage() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 slug-desktop:grid-cols-3 gap-2 sm:gap-3 slug-desktop:gap-4">
                                 {properties.map((property) => (
-                                    <PropertyCardGrid
+                                    <Link
                                         key={property.id}
-                                        property={property}
-                                        onClick={() => handlePropertyClick(property)}
-                                        actions={<PropertyCompareButton property={property} />}
-                                        menuItems={<PropertyCompareMenuItem property={property} />}
-                                    />
+                                        href={`/property/${property.slug || property.id}`}
+                                        className="block"
+                                    >
+                                        <PropertyCardGrid
+                                            property={property}
+                                            actions={<PropertyCompareButton property={property} />}
+                                            menuItems={<PropertyCompareMenuItem property={property} />}
+                                        />
+                                    </Link>
                                 ))}
                             </div>
                         </>
@@ -201,8 +194,8 @@ export default function CatalogPage() {
             {/* Плавающая кнопка «Смотреть на карте» — появляется когда фильтры вне viewport */}
             {!filtersVisible && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-                    <button
-                        onClick={handleShowOnMap}
+                    <Link
+                        href={`/${slug}/map`}
                         className={cn(
                             'flex items-center gap-2 px-5 py-3',
                             'bg-brand-primary text-white rounded-full shadow-lg',
@@ -212,7 +205,7 @@ export default function CatalogPage() {
                     >
                         <MapIcon className="w-5 h-5" />
                         {tListing('showOnMap')}
-                    </button>
+                    </Link>
                 </div>
             )}
 

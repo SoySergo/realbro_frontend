@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
     Search,
     MessageCircle,
@@ -65,7 +65,6 @@ export function CatalogScrollHeader() {
     const tListing = useTranslations('listing');
     const locale = useLocale();
     const pathname = usePathname();
-    const router = useRouter();
     const params = useParams();
     const slug = params.slug as string;
 
@@ -89,10 +88,6 @@ export function CatalogScrollHeader() {
             + (filters.adminLevel9?.length ?? 0)
             + (filters.adminLevel10?.length ?? 0);
     }, [filters]);
-
-    const handleShowOnMap = () => {
-        router.push(`/${locale}/${slug}/map`);
-    };
 
     return (
         <>
@@ -169,8 +164,8 @@ export function CatalogScrollHeader() {
                         </div>
 
                         {/* Кнопка «Смотреть на карте» */}
-                        <button
-                            onClick={handleShowOnMap}
+                        <Link
+                            href={`/${slug}/map`}
                             className={cn(
                                 'flex items-center gap-1.5 h-9 px-3 rounded-md shrink-0',
                                 'bg-brand-primary text-white text-sm font-medium',
@@ -181,7 +176,7 @@ export function CatalogScrollHeader() {
                             <span className="hidden slug-wide:inline whitespace-nowrap">
                                 {tListing('showOnMap')}
                             </span>
-                        </button>
+                        </Link>
 
                         {/* Локация + фильтры */}
                         <div className="flex items-center gap-1.5 shrink-0">
