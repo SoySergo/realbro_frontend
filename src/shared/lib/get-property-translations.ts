@@ -27,9 +27,12 @@ export async function getPropertyPageTranslations(locale: string) {
         header: {
             back: t('back'),
             navPhotos: t('navPhotos'),
+            navMedia: t('navMedia'),
             navDescription: t('navDescription'),
             navCharacteristics: t('navCharacteristics'),
             navMap: t('navMap'),
+            previous: t('previous'),
+            next: t('next'),
             updated: t('updated'),
             views: t('views'),
             viewsToday: t('viewsToday'),

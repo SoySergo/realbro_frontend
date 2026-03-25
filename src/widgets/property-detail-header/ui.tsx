@@ -12,12 +12,15 @@ const SCROLL_THRESHOLD = 50; // px to trigger header state change
 const INTERSECTION_OFFSET = 300; // px offset for section detection
 const HEADER_HEIGHT = 60; // px height of sticky header
 
-interface HeaderTranslations {
+export interface HeaderTranslations {
     back: string;
     navPhotos: string;
+    navMedia: string;
     navDescription: string;
     navCharacteristics: string;
     navMap: string;
+    previous: string;
+    next: string;
 }
 
 interface MainInfoTranslations {
@@ -47,8 +50,8 @@ interface PropertyDetailHeaderProps {
     translations: HeaderTranslations;
     mainInfoTranslations: MainInfoTranslations;
     locale?: string;
-    /** Режим рендера: по умолчанию — полный fixed header, 'headerSlot' — встроен в AppHeader */
-    variant?: 'default' | 'headerSlot';
+    /** Режим рендера: по умолчанию — полный fixed header, 'headerSlot' — встроен в AppHeader, 'subHeader' — второй уровень навигации */
+    variant?: 'default' | 'headerSlot' | 'subHeader';
 }
 
 // Get Intl locale from app locale
@@ -87,7 +90,7 @@ export function PropertyDetailHeader({
             setIsScrolled(scrollY > SCROLL_THRESHOLD);
 
             // Simple intersection detection
-            const sections = ['photos', 'description', 'characteristics', 'map'];
+            const sections = ['photos', 'characteristics', 'description', 'map'];
             for (const section of sections) {
                 const el = document.getElementById(section);
                 if (el) {
@@ -116,10 +119,11 @@ export function PropertyDetailHeader({
         }
     };
 
+    // Порядок навигации по скриншоту: Медиа, Характеристики, Описание, Карта
     const navItems = [
-        { id: 'photos', label: t.navPhotos },
-        { id: 'description', label: t.navDescription },
+        { id: 'photos', label: t.navMedia },
         { id: 'characteristics', label: t.navCharacteristics },
+        { id: 'description', label: t.navDescription },
         { id: 'map', label: t.navMap },
     ];
 
@@ -127,6 +131,61 @@ export function PropertyDetailHeader({
     const intlLocale = getIntlLocale(locale);
     const formattedPrice = price ? new Intl.NumberFormat(intlLocale).format(price) : '';
     const pricePerMeter = price && area ? Math.round(price / area) : null;
+
+    // Режим subHeader — второй уровень навигации под основным хедером
+    if (variant === 'subHeader') {
+        return (
+            <div className={cn(
+                "flex items-center justify-between w-full h-[44px] px-4 bg-background border-b border-border",
+                className
+            )}>
+                {/* Кнопка назад */}
+                <div className="flex items-center shrink-0">
+                    <button
+                        onClick={() => router.back()}
+                        className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-colors"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        {t.back}
+                    </button>
+                </div>
+
+                {/* Навигация по секциям */}
+                <nav className="flex items-center gap-1">
+                    {navItems.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => scrollToSection(item.id)}
+                            className={cn(
+                                "px-3 py-1.5 text-sm font-medium transition-colors",
+                                activeSection === item.id
+                                    ? "text-brand-primary"
+                                    : "text-muted-foreground hover:text-foreground"
+                            )}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </nav>
+
+                {/* Навигация по листингу (Предыдущий / Следующий) */}
+                <div className="flex items-center gap-3 shrink-0">
+                    {hasListingContext && (
+                        <>
+                            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                <ChevronLeft className="w-4 h-4" />
+                                {t.previous}
+                            </button>
+                            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                {t.next}
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     // Режим headerSlot — встроенный контент без собственного fixed-обёртки
     if (variant === 'headerSlot') {
@@ -171,6 +230,7 @@ export function PropertyDetailHeader({
                                 variant="ghost"
                                 size="icon"
                                 className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                title={t.previous}
                             >
                                 <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
                             </Button>
@@ -178,6 +238,7 @@ export function PropertyDetailHeader({
                                 variant="ghost"
                                 size="icon"
                                 className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                title={t.next}
                             >
                                 <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
                             </Button>
@@ -275,6 +336,7 @@ export function PropertyDetailHeader({
                                  variant="ghost"
                                  size="icon"
                                  className="h-10 w-10 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                 title={t.previous}
                              >
                                  <ChevronLeft className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
@@ -282,6 +344,7 @@ export function PropertyDetailHeader({
                                  variant="ghost"
                                  size="icon"
                                  className="h-10 w-10 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                 title={t.next}
                              >
                                  <ChevronRight className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
@@ -299,5 +362,3 @@ export function PropertyDetailHeader({
         </header>
     );
 }
-
-

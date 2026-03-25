@@ -101,8 +101,9 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
         category: dto.category as any,
         sub_category: dto.sub_category as any,
         price: dto.price,
-        pricePerMeter: dto.area > 0 ? Math.round(dto.price / dto.area) : undefined,
+        pricePerMeter: dto.price_per_m2 ?? (dto.area > 0 ? Math.round(dto.price / dto.area) : undefined),
         rooms: dto.rooms ?? 0,
+        bedrooms: dto.bedrooms ?? undefined,
         bathrooms: dto.bathrooms ?? 0,
         area: dto.area,
         floor: dto.floor ?? undefined,
@@ -126,18 +127,18 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
 
         // Автор
         author: {
-            id: dto.author.id,
+            id: dto.author.id ?? dto.author.contact_id,
             name: dto.author.name,
             avatar: dto.author.avatar,
             type: dto.author.author_type as 'owner' | 'agent' | 'agency',
             phone: '',
-            companyId: dto.author.company_id,
+            companyId: dto.author.company?.id,
             objectsCount: dto.author.object_count,
             rating: dto.author.rating,
             reviewCount: dto.author.review_count,
             isVerified: dto.author.is_verified,
-            agencyName: dto.author.company_name,
-            agencyLogo: dto.author.company_logo,
+            agencyName: dto.author.company?.name,
+            agencyLogo: dto.author.company?.logo_url,
         },
 
         // Финансовые условия
