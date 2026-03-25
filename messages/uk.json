@@ -1,2139 +1,2139 @@
 {
-  "footer": {
-    "aboutService": "Про сервіс",
-    "tariffs": "Тарифи",
-    "profile": "Особистий кабінет",
-    "sections": {
-      "company": "Компанія",
-      "support": "Підтримка",
-      "legal": "Юридичне"
-    },
-    "companyLinks": {
-      "aboutUs": "Про нас",
-      "news": "Новини",
-      "careers": "Кар'єра",
-      "contacts": "Контакти"
-    },
-    "supportLinks": {
-      "helpCenter": "Центр допомоги",
-      "faq": "Питання та відповіді",
-      "termsOfService": "Умови використання",
-      "privacyPolicy": "Політика конфіденційності"
-    },
-    "legalLinks": {
-      "cookies": "Файли cookie",
-      "licenses": "Ліцензії",
-      "disclaimer": "Відмова від відповідальності"
-    },
-    "newsletter": {
-      "title": "Підпишіться на розсилку",
-      "description": "Отримуйте останні новини та пропозиції",
-      "emailPlaceholder": "Ваша електронна пошта",
-      "subscribeButton": "Підписатися"
-    },
-    "copyright": "© 2024 RealBro. Усі права захищені.",
-    "socialMedia": {
-      "title": "Ми в соціальних мережах"
-    },
-    "mapSearch": "Пошук нерухомості на карті",
-    "listSearch": "Пошук нерухомості списком",
-    "agenciesSearch": "Пошук агентств нерухомості",
-    "support": "Підтримка",
-    "terms": "Умови використання",
-    "privacy": "Політика конфіденційності",
-    "cookies": "Політика використання cookie",
-    "allRightsReserved": "Всі права захищені",
-    "agreement": "Використовуючи сервіс, ви погоджуєтесь з умовами використання",
-    "search": "Пошук"
-  },
-  "common": {
-    "search": "Пошук",
-    "filter": "Фільтр",
-    "filters": "Filters",
-    "sort": "Сортування",
-    "map": "Карта",
-    "list": "Список",
-    "save": "Зберегти",
-    "saved": "Збережено",
-    "cancel": "Скасувати",
-    "apply": "Застосувати",
-    "reset": "Скинути",
-    "close": "Закрити",
-    "open": "Відкрити",
-    "showMore": "Показати більше",
-    "showLess": "Показати менше",
-    "loading": "Завантаження...",
-    "error": "Помилка",
-    "success": "Успішно",
-    "tryAgain": "Спробувати знову",
-    "back": "Назад",
-    "next": "Далі",
-    "previous": "Попередній",
-    "submit": "Надіслати",
-    "edit": "Редагувати",
-    "delete": "Видалити",
-    "confirm": "Підтвердити",
-    "viewDetails": "Переглянути деталі",
-    "contact": "Зв'язатися",
-    "share": "Поділитися",
-    "print": "Друкувати",
-    "download": "Завантажити",
-    "upload": "Завантажити",
-    "selectAll": "Вибрати все",
-    "deselectAll": "Скасувати вибір",
-    "yes": "Так",
-    "no": "Ні",
-    "or": "або",
-    "and": "та",
-    "from": "Від",
-    "to": "До",
-    "perMonth": "на місяць",
-    "perYear": "на рік",
-    "total": "Усього",
-    "results": "результатів",
-    "noResults": "Нічого не знайдено",
-    "currency": "€",
-    "language": "Мова",
-    "notFound": "Не знайдено",
-    "comingSoon": "Скоро",
-    "select": "Вибрати",
-    "selected": "Вибрано",
-    "all": "All",
-    "none": "Немає",
-    "other": "Інше",
-    "clear": "Очистити",
-    "view": "Переглянути",
-    "hide": "Сховати",
-    "show": "Показати",
-    "more": "Більше",
-    "less": "Менше",
-    "free": "Безкоштовно",
-    "euro": "€",
-    "months": "міс.",
-    "selectDate": "Вибрати дату",
-    "resetFilters": "Reset filters"
-  },
-  "landing": {
-    "hero": {
-      "title": "Знайдіть своє ідеальне житло в Барселоні",
-      "subtitle": "Тисячі пропозицій квартир та будинків на довгострокову оренду",
-      "searchPlaceholder": "Введіть район, вулицю або ключові слова...",
-      "searchButton": "Почати пошук",
-      "stats": {
-        "properties": "Більше 10 000+ оголошень",
-        "cities": "50+ районів",
-        "users": "100 000+ користувачів"
-      },
-      "cta": "Почати пошук",
-      "ctaAgent": "Створити завдання для агента",
-      "ctaTabs": "Створити вкладку пошуку"
-    },
-    "features": {
-      "title": "Чому обирають нас",
-      "subtitle": "Ми робимо пошук житла простим та зручним",
-      "mapSearch": {
-        "title": "Пошук на карті",
-        "description": "Знаходьте житло на інтерактивній карті з детальною інформацією про райони"
-      },
-      "verified": {
-        "title": "Перевірені пропозиції",
-        "description": "Всі оголошення проходять модерацію для вашої безпеки"
-      },
-      "support": {
-        "title": "Підтримка 24/7",
-        "description": "Наша команда завжди готова допомогти з будь-яких питань"
-      },
-      "fast": {
-        "title": "Швидкий пошук",
-        "description": "Потужні фільтри для швидкого знаходження ідеального варіанту"
-      },
-      "realtime": {
-        "title": "Пошук у реальному часі",
-        "description": "Дивіться, як агент знаходить нові об'єкти прямо зараз. Картки з'являються миттєво."
-      },
-      "background": {
-        "title": "Агент працює у фоні",
-        "description": "Створіть фільтри — агент надсилатиме об'єкти в чат. Отримуйте push-сповіщення про нові знахідки."
-      },
-      "multipleTabs": {
-        "title": "Кілька вкладок пошуку",
-        "description": "Шукайте компроміси: близько до роботи до 1000€ або 40 хвилин громадським транспортом за 800€."
-      },
-      "location": {
-        "title": "Гнучке налаштування локації",
-        "description": "Ізохрона, полігони, радіус, малювання — оберіть зручний спосіб."
-      },
-      "status": {
-        "title": "Фільтрація за статусом",
-        "description": "Дивіться лише нові, обрані або всі об'єкти."
-      }
-    },
-    "howItWorks": {
-      "title": "Як це працює",
-      "subtitle": "Простий процес пошуку вашого житла",
-      "step1": {
-        "title": "Оберіть район",
-        "description": "Використовуйте карту або фільтри для пошуку в потрібному районі"
-      },
-      "step2": {
-        "title": "Налаштуйте фільтри",
-        "description": "Вкажіть бюджет, кількість кімнат та інші параметри"
-      },
-      "step3": {
-        "title": "Перегляньте оголошення",
-        "description": "Вивчіть детальну інформацію, фото та відгуки"
-      },
-      "step4": {
-        "title": "Зв'яжіться з власником",
-        "description": "Відправте запит або зателефонуйте безпосередньо"
-      }
-    },
-    "popularAreas": {
-      "title": "Популярні райони",
-      "subtitle": "Найбільш затребувані локації Барселони",
-      "viewAll": "Дивитися всі райони"
-    },
-    "testimonials": {
-      "title": "Відгуки наших клієнтів",
-      "subtitle": "Що говорять про нас користувачі"
-    },
-    "cta": {
-      "title": "Готові знайти своє житло?",
-      "subtitle": "Приєднуйтесь до тисяч задоволених користувачів",
-      "button": "Розпочати пошук",
-      "orRegister": "або зареєструватися безкоштовно",
-      "startFree": "Почати безкоштовно",
-      "viewPricing": "Переглянути тарифи"
-    },
-    "demo": {
-      "realtimeTitle": "Об'єкти з'являються в реальному часі",
-      "backgroundTitle": "Агент шукає, поки ви відпочиваєте",
-      "tabsTitle": "Перемикайтесь між пошуками",
-      "locationTitle": "Налаштуйте локацію як вам зручно",
-      "statusTitle": "Фільтруйте за статусом перегляду",
-      "agentSearching": "Агент шукає...",
-      "perMonth": "/міс",
-      "rooms": "кімнат",
-      "newProperty": "Новий об'єкт в",
-      "suitableApartment": "Підходяща квартира в",
-      "agentFound": "Агент знайшов {count} варіантів",
-      "minutesAgo": "{count} хв тому",
-      "aiAgent": "AI Агент",
-      "foundNewProperties": "Знайдено {count} нових об'єктів за вашими критеріями:",
-      "nearWork": "Поблизу роботи",
-      "byTransport": "{min} хв транспортом",
-      "district": "Район {name}",
-      "upTo": "до",
-      "minRooms": "{count}+ кімнат",
-      "showVariants": "Показати {count}+ варіантів",
-      "work": "Робота",
-      "travelTime": "{min} хвилин",
-      "walking": "Пішки",
-      "cycling": "На велосипеді",
-      "driving": "На машині",
-      "searchMode": "Пошук",
-      "isochroneMode": "Ізохрона",
-      "radiusMode": "Радіус",
-      "drawMode": "Малювання",
-      "selectedLocations": "Обрані локації",
-      "walkingMinutes": "{min} хв пішки",
-      "radiusKm": "Радіус {km} км",
-      "drawnArea": "Намальована область",
-      "all": "Всі",
-      "notViewed": "Не переглянуто",
-      "liked": "Сподобалось",
-      "rejected": "Відхилено",
-      "new": "Нове",
-      "likedStatus": "Сподобалось",
-      "rejectedStatus": "Відхилено"
-    }
-  },
-  "pricing": {
-    "title": "Тарифні плани",
-    "subtitle": "Виберіть план, який підходить саме вам",
-    "monthly": "Щомісячна оплата",
-    "yearly": "Річна оплата",
-    "yearlyDiscount": "Заощадьте до 20%",
-    "free": {
-      "name": "Безкоштовний",
-      "price": "0",
-      "period": "назавжди",
-      "description": "Для приватних користувачів",
-      "features": {
-        "searches": "Необмежений пошук",
-        "saved": "До 5 збережених оголошень",
-        "contacts": "1 контакт на день",
-        "support": "Базова підтримка"
-      },
-      "button": "Почати безкоштовно"
-    },
-    "basic": {
-      "name": "Базовий",
-      "price": "9.99",
-      "period": "на місяць",
-      "description": "Для активних користувачів",
-      "features": {
-        "searches": "Необмежений пошук",
-        "saved": "Необмежені збереження",
-        "contacts": "10 контактів на день",
-        "priority": "Пріоритетна підтримка",
-        "alerts": "Email-сповіщення",
-        "noAds": "Без реклами"
-      },
-      "button": "Вибрати план",
-      "popular": "Популярний"
-    },
-    "premium": {
-      "name": "Преміум",
-      "price": "29.99",
-      "period": "на місяць",
-      "description": "Для професіоналів",
-      "features": {
-        "searches": "Необмежений пошук",
-        "saved": "Необмежені збереження",
-        "contacts": "Необмежені контакти",
-        "priority": "Пріоритетна підтримка 24/7",
-        "alerts": "Миттєві сповіщення",
-        "noAds": "Без реклами",
-        "analytics": "Аналітика ринку",
-        "earlyAccess": "Ранній доступ до нових оголошень"
-      },
-      "button": "Вибрати план"
-    },
-    "faq": {
-      "title": "Часті питання",
-      "questions": {
-        "q1": {
-          "question": "Чи можу я змінити план пізніше?",
-          "answer": "Так, ви можете змінити свій план в будь-який момент. Різниця в оплаті буде перерахована пропорційно."
+    "footer": {
+        "aboutService": "Про сервіс",
+        "tariffs": "Тарифи",
+        "profile": "Особистий кабінет",
+        "sections": {
+            "company": "Компанія",
+            "support": "Підтримка",
+            "legal": "Юридичне"
         },
-        "q2": {
-          "question": "Як скасувати підписку?",
-          "answer": "Ви можете скасувати підписку в особистому кабінеті в будь-який момент. Доступ буде збережено до кінця оплаченого періоду."
+        "companyLinks": {
+            "aboutUs": "Про нас",
+            "news": "Новини",
+            "careers": "Кар'єра",
+            "contacts": "Контакти"
         },
-        "q3": {
-          "question": "Які способи оплати прийняті?",
-          "answer": "Ми приймаємо всі основні кредитні картки, PayPal та банківські перекази."
+        "supportLinks": {
+            "helpCenter": "Центр допомоги",
+            "faq": "Питання та відповіді",
+            "termsOfService": "Умови використання",
+            "privacyPolicy": "Політика конфіденційності"
         },
-        "q4": {
-          "question": "Чи є знижки для річної підписки?",
-          "answer": "Так, при оплаті річної підписки ви отримуєте знижку до 20%."
-        }
-      }
+        "legalLinks": {
+            "cookies": "Файли cookie",
+            "licenses": "Ліцензії",
+            "disclaimer": "Відмова від відповідальності"
+        },
+        "newsletter": {
+            "title": "Підпишіться на розсилку",
+            "description": "Отримуйте останні новини та пропозиції",
+            "emailPlaceholder": "Ваша електронна пошта",
+            "subscribeButton": "Підписатися"
+        },
+        "copyright": "© 2024 RealBro. Усі права захищені.",
+        "socialMedia": {
+            "title": "Ми в соціальних мережах"
+        },
+        "mapSearch": "Пошук нерухомості на карті",
+        "listSearch": "Пошук нерухомості списком",
+        "agenciesSearch": "Пошук агентств нерухомості",
+        "support": "Підтримка",
+        "terms": "Умови використання",
+        "privacy": "Політика конфіденційності",
+        "cookies": "Політика використання cookie",
+        "allRightsReserved": "Всі права захищені",
+        "agreement": "Використовуючи сервіс, ви погоджуєтесь з умовами використання",
+        "search": "Пошук"
     },
-    "plans": {
-      "free": {
-        "name": "Безкоштовний",
-        "description": "Для знайомства з платформою"
-      },
-      "trial": {
-        "name": "Пробний",
-        "description": "Спробуйте всі функції"
-      },
-      "standard": {
-        "name": "Стандартний",
-        "description": "Для активного пошуку"
-      },
-      "maximum": {
-        "name": "Максимальний",
-        "description": "Максимум можливостей"
-      }
-    },
-    "features": {
-      "database": "Доступ до найбільшої бази об'єктів",
-      "filtering": "Зручна фільтрація",
-      "tabsUnlimited": "До {count} вкладок пошуку",
-      "ownersLimited": "Обмежений доступ до власників",
-      "aiSearchNo": "Без пошуку AI-агентом",
-      "duration": "Тривалість: {days} днів",
-      "ownersMultiplier": "Доступ до власників ×{count}",
-      "aiSearch": "Персональний пошук AI",
-      "aiFilters": "До {count} фільтрів для агента"
-    },
-    "selectPlan": "Обрати план",
-    "popular": "Популярний"
-  },
-  "navigation": {
-    "home": "Головна",
-    "search": "Пошук",
-    "saved": "Збережені",
-    "profile": "Профіль",
-    "login": "Вхід",
-    "register": "Реєстрація",
-    "logout": "Вихід",
-    "menu": "Меню",
-    "closeMenu": "Закрити меню",
-    "myListings": "Мої оголошення",
-    "addListing": "Додати оголошення",
-    "messages": "Повідомлення",
-    "settings": "Налаштування",
-    "help": "Допомога",
-    "about": "Про нас",
-    "contact": "Контакти",
-    "blog": "Блог",
-    "pricing": "Тарифи",
-    "theme": {
-      "light": "Світла тема",
-      "dark": "Темна тема",
-      "system": "Системна"
-    }
-  },
-  "property": {
-    "title": "Назва",
-    "description": "Опис",
-    "price": "Ціна",
-    "pricePerMonth": "Ціна за місяць",
-    "deposit": "Застава",
-    "utilities": "Комунальні послуги",
-    "utilitiesIncluded": "Комунальні послуги включені",
-    "utilitiesNotIncluded": "Комунальні послуги не включені",
-    "type": "Тип нерухомості",
-    "types": {
-      "apartment": "Квартира",
-      "house": "Будинок",
-      "studio": "Студія",
-      "room": "Кімната",
-      "penthouse": "Пентхаус",
-      "duplex": "Дуплекс",
-      "loft": "Лофт"
-    },
-    "bedrooms": "Спальні",
-    "bathrooms": "Ванні кімнати",
-    "area": "Площа",
-    "areaValue": "{area} м²",
-    "floor": "Поверх",
-    "totalFloors": "Всього поверхів",
-    "floorInfo": "{floor} з {total}",
-    "furnished": "Мебльована",
-    "unfurnished": "Без меблів",
-    "partiallyFurnished": "Частково мебльована",
-    "availableFrom": "Доступна з",
-    "availableNow": "Доступна зараз",
-    "minRentalPeriod": "Мінімальний термін оренди",
-    "months": "{count} міс.",
-    "features": "Зручності",
-    "featuresList": {
-      "wifi": "Wi-Fi",
-      "parking": "Паркування",
-      "elevator": "Ліфт",
-      "balcony": "Балкон",
-      "terrace": "Тераса",
-      "garden": "Сад",
-      "pool": "Басейн",
-      "gym": "Тренажерний зал",
-      "security": "Охорона",
-      "airConditioning": "Кондиціонер",
-      "heating": "Опалення",
-      "washer": "Пральна машина",
-      "dryer": "Сушарка",
-      "dishwasher": "Посудомийна машина",
-      "pets": "Дозволено тварини",
-      "smoking": "Дозволено паління",
-      "accessible": "Доступність для інвалідів"
-    },
-    "location": "Розташування",
-    "address": "Адреса",
-    "neighborhood": "Район",
-    "city": "Місто",
-    "zipCode": "Поштовий індекс",
-    "nearbyPlaces": "Поряд знаходиться",
-    "transportLinks": "Транспортне сполучення",
-    "metro": "Метро",
-    "bus": "Автобус",
-    "train": "Поїзд",
-    "walkingDistance": "Пішки {minutes} хв",
-    "photos": "Фотографії",
-    "video": "Відео",
-    "virtualTour": "Віртуальний тур",
-    "floorPlan": "План поверху",
-    "contact": {
-      "title": "Зв'язатися з власником",
-      "name": "Ваше ім'я",
-      "email": "Ваш email",
-      "phone": "Ваш телефон",
-      "message": "Повідомлення",
-      "messagePlaceholder": "Я зацікавлений у цій нерухомості...",
-      "send": "Відправити запит",
-      "callNow": "Зателефонувати зараз",
-      "whatsapp": "Написати в WhatsApp"
-    },
-    "owner": "Власник",
-    "share": "Поділитися",
-    "report": "Поскаржитись",
-    "similarProperties": "Схожі пропозиції",
-    "viewAllProperties": "Дивитися всі пропозиції",
-    "updated": "Оновлено",
-    "views": "Переглядів",
-    "saved": "Збережено",
-    "saveProperty": "Зберегти",
-    "unsaveProperty": "Видалити зі збережених",
-    "noPropertiesFound": "Жодної нерухомості не знайдено",
-    "tryAdjustingFilters": "Спробуйте змінити фільтри пошуку",
-    "addNote": "Додати нотатку",
-    "agency": "Агентство",
-    "agent": "Агент",
-    "daysAgo": "{count}д тому",
-    "dislike": "Не подобається",
-    "floorOf": "{floor}/{total} пов.",
-    "hoursAgo": "{count}год тому",
-    "justNow": "щойно",
-    "like": "Вподобати",
-    "minutesAgo": "{count}хв тому",
-    "pricePerMeter": "€/м²",
-    "roomsShort": "кімн.",
-    "bathroomsShort": "сан.",
-    "verified": "Перевірено",
-    "viewMore": "Переглянути більше",
-    "walkMin": "{min} хв пішки",
-    "top": "ТОП",
-    "new": "Нове",
-    "found": "found",
-    "minPrice": "Minimum price",
-    "maxPrice": "Maximum price",
-    "selectRooms": "Select number of rooms",
-    "room": "room",
-    "bedroomsShort": "спал."
-  },
-  "filters": {
-    "title": "Фільтри",
-    "applyFilters": "Застосувати фільтри",
-    "clearFilters": "Очистити все",
-    "showResults": "Показати результати ({count})",
-    "price": "Ціна",
-    "propertyType": {
-      "title": "Тип нерухомості",
-      "all": "Всі типи"
-    },
-    "rooms": {
-      "title": "Кількість кімнат",
-      "bedrooms": "Спальні",
-      "bathrooms": "Ванні кімнати",
-      "any": "Будь-яка",
-      "studio": "Студія",
-      "orMore": "{count}+"
-    },
-    "area": "Площа",
-    "floor": {
-      "title": "Поверх",
-      "any": "Будь-який",
-      "ground": "Перший",
-      "last": "Останній",
-      "notGround": "Не перший",
-      "notLast": "Не останній"
-    },
-    "furnished": {
-      "title": "Мебльована",
-      "any": "Будь-яка",
-      "yes": "Так",
-      "no": "Ні",
-      "partial": "Частково"
-    },
-    "features": {
-      "title": "Зручності",
-      "selectFeatures": "Виберіть зручності"
-    },
-    "availability": {
-      "title": "Доступність",
-      "availableNow": "Доступна зараз",
-      "from": "Від дати"
-    },
-    "moreFilters": "Більше фільтрів",
-    "lessFilters": "Менше фільтрів",
-    "advanced": "Розширені",
-    "deposit": {
-      "title": "Застава",
-      "required": "Потрібна застава",
-      "notRequired": "Без застави"
-    },
-    "utilities": {
-      "title": "Комунальні послуги",
-      "included": "Включені",
-      "notIncluded": "Не включені"
-    },
-    "pets": {
-      "title": "Тварини",
-      "allowed": "Дозволено",
-      "notAllowed": "Не дозволено"
-    },
-    "minRentalPeriod": {
-      "title": "Мінімальний термін оренди",
-      "months": "місяців"
-    },
-    "activeFilters": "{count} активних фільтрів",
-    "aiAgent": "AI Агент",
-    "allFilters": "Всі фільтри",
-    "areaRange": "Діапазон площі",
-    "cancel": "Скасувати",
-    "categories": {
-      "area": "Площа",
-      "location": "Розташування",
-      "price": "Ціна",
-      "rooms": "Кімнати",
-      "bathrooms": "Ванні кімнати"
-    },
-    "category": "Категорія",
-    "subcategory": "Підкатегорія",
-    "clear": "Очистити",
-    "clearAll": "Очистити все",
-    "loading": "Завантаження...",
-    "locationDraw": "Малювати область",
-    "locationRadius": "Радіус",
-    "locationSearch": "Пошук локації",
-    "locationTimeFrom": "Час у дорозі",
-    "markerAll": "Всі",
-    "markerDisliked": "Не сподобалось",
-    "markerLiked": "Сподобалось",
-    "markerNoView": "Не переглянуто",
-    "markerNotViewed": "Не оброблено",
-    "markerTypeLabel": "Тип маркерів",
-    "maxArea": "Макс. площа",
-    "maxPrice": "Макс. ціна",
-    "minArea": "Мін. площа",
-    "minPrice": "Мін. ціна",
-    "newSearch": "Новий пошук",
-    "presets": "Пресет",
-    "priceRange": "Діапазон цін",
-    "quickSelect": "Швидкий вибір",
-    "saveConfirmTitle": "Зберегти фільтр?",
-    "saveFilter": "Зберегти фільтр",
-    "dealType": "Тип угоди",
-    "dealTypeRent": "Оренда",
-    "dealTypeSale": "Продаж",
-    "propertyClass": "Тип нерухомості",
-    "propertyClassResidential": "Житлова",
-    "propertyClassCommercial": "Комерційна",
-    "propertyClassLand": "Земельні ділянки",
-    "propertyCategories": "Категорія",
-    "propertyCategoryApartment": "Квартира",
-    "propertyCategoryRoom": "Кімната",
-    "propertyCategoryHouse": "Будинок",
-    "propertyCategoryVilla": "Вілла",
-    "propertyCategoryPenthouse": "Пентхаус",
-    "propertyCategoryTownhouse": "Таунхаус",
-    "propertyCategoryStudio": "Студія",
-    "propertyCategoryOffice": "Офіс",
-    "propertyCategoryRetail": "Торгове приміщення",
-    "propertyCategoryWarehouse": "Склад",
-    "propertyCategoryRestaurant": "Ресторан",
-    "propertyCategoryHotel": "Готель",
-    "propertyCategoryLand": "Земельна ділянка",
-    "selectPoint": "Оберіть точку",
-    "sortDate": "За датою",
-    "studio": "Студія",
-    "viewList": "Список",
-    "viewMap": "Карта",
-    "min": "Мін",
-    "max": "Макс",
-    "bathrooms": "Ванні кімнати",
-    "bathroomsMin": "Ванних мін.",
-    "bathroomCount": "Кількість ванних кімнат",
-    "findMe": "Знайди мені",
-    "show": "Показати",
-    "resultsFound": "Знайдено <b>{count}</b>",
-    "resultsFoundLabel": "Знайдено",
-    "savedFilter": "Збережений фільтр",
-    "markerType": {
-      "all": "Всі об'єкти",
-      "like": "Сподобались",
-      "dislike": "Не сподобались",
-      "view": "Переглянуто",
-      "noView": "Не переглянуто",
-      "saved": "Збережені",
-      "toReview": "На розгляд",
-      "toThink": "Подумати"
-    }
-  },
-  "map": {
-    "title": "Карта",
-    "searchThisArea": "Шукати в цій зоні",
-    "searchAsIMoveMap": "Шукати при переміщенні карти",
-    "zoom": {
-      "in": "Наблизити",
-      "out": "Віддалити"
-    },
-    "fullscreen": "На весь екран",
-    "exitFullscreen": "Вийти з повноекранного режиму",
-    "currentLocation": "Моє місцезнаходження",
-    "clusteredProperties": "{count} оголошень",
-    "loading": "Завантаження карти...",
-    "error": "Помилка завантаження карти",
-    "noPropertiesInArea": "В цій зоні немає оголошень",
-    "expandArea": "Розширте зону пошуку",
-    "layers": {
-      "title": "Шари",
-      "satellite": "Супутник",
-      "streets": "Вулиці",
-      "transit": "Транспорт"
-    },
-    "legend": {
-      "title": "Легенда",
-      "priceRange": "Діапазон цін",
-      "low": "Низька",
-      "medium": "Середня",
-      "high": "Висока"
-    },
-    "showMap": "Показати карту"
-  },
-  "auth": {
-    "login": {
-      "title": "Вхід",
-      "subtitle": "Увійдіть до свого облікового запису",
-      "email": "Email",
-      "emailPlaceholder": "Введіть ваш email",
-      "password": "Пароль",
-      "passwordPlaceholder": "Введіть ваш пароль",
-      "rememberMe": "Запам'ятати мене",
-      "forgotPassword": "Забули пароль?",
-      "loginButton": "Увійти",
-      "noAccount": "Немає облікового запису?",
-      "registerLink": "Зареєструватися",
-      "orContinueWith": "Або продовжити через",
-      "google": "Google",
-      "facebook": "Facebook"
-    },
-    "register": {
-      "title": "Реєстрація",
-      "subtitle": "Створіть обліковий запис",
-      "firstName": "Ім'я",
-      "firstNamePlaceholder": "Введіть ваше ім'я",
-      "lastName": "Прізвище",
-      "lastNamePlaceholder": "Введіть ваше прізвище",
-      "email": "Email",
-      "emailPlaceholder": "Введіть ваш email",
-      "password": "Пароль",
-      "passwordPlaceholder": "Створіть пароль",
-      "confirmPassword": "Підтвердіть пароль",
-      "confirmPasswordPlaceholder": "Підтвердіть пароль",
-      "acceptTerms": "Я приймаю",
-      "termsLink": "умови використання",
-      "and": "та",
-      "privacyLink": "політику конфіденційності",
-      "registerButton": "Зареєструватися",
-      "haveAccount": "Вже є обліковий запис?",
-      "loginLink": "Увійти",
-      "orContinueWith": "Або продовжити через"
-    },
-    "forgotPassword": {
-      "title": "Відновлення пароля",
-      "subtitle": "Введіть ваш email для відновлення пароля",
-      "email": "Email",
-      "emailPlaceholder": "Введіть ваш email",
-      "sendButton": "Відправити інструкції",
-      "backToLogin": "Повернутися до входу",
-      "successMessage": "Інструкції відправлені на ваш email"
-    },
-    "resetPassword": "Скинути пароль",
-    "errors": {
-      "invalidCredentials": "Невірний email або пароль",
-      "emailRequired": "Email обов'язковий",
-      "emailInvalid": "Невірний формат email",
-      "passwordRequired": "Пароль обов'язковий",
-      "passwordTooShort": "Пароль повинен містити мінімум 8 символів",
-      "passwordsNotMatch": "Паролі не співпадають",
-      "firstNameRequired": "Ім'я обов'язкове",
-      "lastNameRequired": "Прізвище обов'язкове",
-      "termsRequired": "Ви повинні прийняти умови використання",
-      "emailExists": "Email вже використовується",
-      "userNotFound": "Користувача не знайдено",
-      "tokenExpired": "Термін дії токена закінчився",
-      "networkError": "Помилка з'єднання. Спробуйте ще раз"
-    },
-    "backToLogin": "Повернутися до входу",
-    "checkEmail": "Перевірте вашу пошту",
-    "confirmPassword": "Підтвердити пароль",
-    "createAccount": "Створити акаунт",
-    "enterCredentials": "Введіть ваші дані",
-    "enterDetails": "Введіть деталі",
-    "loading": "Завантаження...",
-    "orContinueWith": "Або увійти через",
-    "passwordRequirements": "Мінімум 8 символів",
-    "resetLinkSent": "Посилання для скидання надіслано",
-    "resetPasswordDescription": "Введіть ваш email для скидання пароля",
-    "sendResetLink": "Надіслати посилання",
-    "signIn": "Увійти",
-    "signOut": "Вийти",
-    "welcomeBack": "З поверненням",
-    "email": "Email",
-    "signUp": "Зареєструватися",
-    "tabRequiresAuth": "Увійдіть, щоб створити вкладки пошуку"
-  },
-  "profile": {
-    "title": "Профіль",
-    "editProfile": "Редагувати профіль",
-    "personalInfo": "Особиста інформація",
-    "photo": {
-      "title": "Фото профілю",
-      "upload": "Завантажити фото",
-      "remove": "Видалити фото",
-      "maxSize": "Максимальний розмір: 5 МБ"
-    },
-    "address": {
-      "title": "Адреса",
-      "street": "Вулиця",
-      "city": "Місто",
-      "zipCode": "Поштовий індекс",
-      "country": "Країна"
-    },
-    "preferences": {
-      "title": "Налаштування",
-      "language": "Мова",
-      "currency": "Валюта",
-      "notifications": "Сповіщення",
-      "emailNotifications": "Email-сповіщення",
-      "pushNotifications": "Push-сповіщення",
-      "smsNotifications": "SMS-сповіщення"
-    },
-    "security": "Безпека",
-    "subscription": {
-      "title": "Підписка",
-      "currentPlan": "Поточний план",
-      "planDetails": "Деталі плану",
-      "upgradePlan": "Покращити план",
-      "cancelSubscription": "Скасувати підписку",
-      "renewalDate": "Дата оновлення",
-      "billingHistory": "Історія платежів",
-      "active": "Активна",
-      "aiFilters": "AI фільтри",
-      "cancelAtPeriodEnd": "Скасувати в кінці періоду",
-      "cancelConfirmDescription": "Ви можете користуватися до кінця періоду.",
-      "cancelConfirmTitle": "Скасувати?",
-      "canceled": "Скасовано",
-      "canceledOn": "Скасовано",
-      "changePlan": "Змінити план",
-      "comparePlans": "Порівняти плани",
-      "currentPlanBadge": "Поточний",
-      "expired": "Термін дії минув",
-      "features": "Функції",
-      "noPlan": "Немає плану",
-      "ownerAccess": "Доступ до власників",
-      "pastDue": "Прострочено",
-      "renewsOn": "Оновлюється",
-      "searchTabs": "Вкладки пошуку",
-      "selectPlan": "Обрати план"
-    },
-    "myListings": {
-      "title": "Мої оголошення",
-      "active": "Активні",
-      "inactive": "Неактивні",
-      "draft": "Чернетки",
-      "addNew": "Додати нове",
-      "noListings": "У вас поки немає оголошень"
-    },
-    "savedProperties": "Збережені об'єкти",
-    "messages": {
-      "title": "Повідомлення",
-      "inbox": "Вхідні",
-      "sent": "Відправлені",
-      "archived": "Архів",
-      "noMessages": "У вас немає повідомлень"
-    },
-    "deleteAccount": "Видалити акаунт",
-    "saveChanges": "Зберегти зміни",
-    "changesSaved": "Зміни збережено",
-    "uploadPhoto": "Завантажити фото",
-    "removePhoto": "Видалити фото",
-    "accountStats": "Статистика акаунту",
-    "activeSessions": "Активні сесії",
-    "confirmDelete": "Підтвердити видалення",
-    "confirmDeleteDescription": "Цю дію неможливо скасувати.",
-    "confirmDeleteTitle": "Видалити акаунт?",
-    "confirmNewPassword": "Підтвердіть новий пароль",
-    "currentPassword": "Поточний пароль",
-    "dangerZone": "Небезпечна зона",
-    "deleteAccountWarning": "Всі ваші дані будуть видалені.",
-    "displayName": "Ім'я",
-    "displayNamePlaceholder": "Ваше ім'я",
-    "errorSaving": "Помилка збереження",
-    "errors": {
-      "passwordMismatch": "Паролі не співпадають"
-    },
-    "language": "Мова",
-    "logoutAll": "Вийти з усіх пристроїв",
-    "memberSince": "Учасник з",
-    "notificationSettings": {
-      "email": {
-        "accountUpdates": "Оновлення акаунту",
-        "newProperties": "Нові об'єкти",
-        "priceChanges": "Зміни цін",
-        "promotions": "Акції",
-        "savedSearches": "Збережені пошуки",
-        "title": "Email"
-      },
-      "push": {
-        "messages": "Повідомлення",
-        "newProperties": "Нові об'єкти",
-        "priceChanges": "Зміни цін",
-        "savedSearches": "Збережені пошуки",
-        "title": "Push"
-      },
-      "telegram": {
-        "connect": "Підключити",
-        "connected": "Підключено",
-        "disconnect": "Відключити",
-        "enabled": "Увімкнено",
-        "newProperties": "Нові об'єкти",
-        "priceChanges": "Зміни цін",
-        "title": "Telegram"
-      }
-    },
-    "notifications": "Сповіщення",
-    "passwordChanged": "Пароль успішно змінено",
-    "passwordRequirements": "Мінімум 8 символів",
-    "payments": {
-      "failed": "Помилка",
-      "noPayments": "Немає платежів",
-      "pending": "В очікуванні",
-      "refunded": "Повернуто",
-      "succeeded": "Успішно",
-      "title": "Платежі"
-    },
-    "pushNotifications": "Push-сповіщення",
-    "saved": "Збережено",
-    "sessions": {
-      "current": "Поточна сесія",
-      "lastActive": "Остання активність",
-      "terminateOther": "Завершити інші",
-      "title": "Сесії"
-    },
-    "tabs": {
-      "appearance": "Вигляд",
-      "general": "Загальні",
-      "notifications": "Сповіщення",
-      "security": "Безпека",
-      "subscription": "Підписка"
-    },
-    "theme": "Тема",
-    "themeDark": "Темна",
-    "themeLight": "Світла",
-    "themeSystem": "Системна",
-    "viewedProperties": "Переглянуті об'єкти"
-  },
-  "errors": {
-    "404": {
-      "title": "Сторінка не знайдена",
-      "description": "Схоже, що ця сторінка не існує або була переміщена.",
-      "button": "Повернутися на головну"
-    },
-    "500": {
-      "title": "Помилка сервера",
-      "description": "Щось пішло не так на нашому сервері. Ми вже працюємо над виправленням.",
-      "button": "Спробувати ще раз"
-    },
-    "generic": {
-      "title": "Щось пішло не так",
-      "description": "Сталася помилка. Будь ласка, спробуйте ще раз.",
-      "button": "Спробувати ще раз"
-    },
-    "network": {
-      "title": "Немає з'єднання",
-      "description": "Перевірте підключення до інтернету та спробуйте знову.",
-      "button": "Повторити"
-    },
-    "unauthorized": {
-      "title": "Доступ заборонено",
-      "description": "Для доступу до цієї сторінки необхідно увійти.",
-      "button": "Увійти"
-    },
-    "forbidden": {
-      "title": "Доступ заборонено",
-      "description": "У вас немає прав для доступу до цієї сторінки.",
-      "button": "Повернутися назад"
-    }
-  },
-  "sidebar": {
-    "title": "Фільтри",
-    "close": "Закрити",
-    "apply": "Застосувати",
-    "reset": "Скинути все",
-    "aiAgent": "AI Агент",
-    "area": "Площа",
-    "category": "Категорія",
-    "newSearch": "Новий пошук",
-    "price": "Ціна",
-    "rooms": "Кімнати",
-    "saveFilter": "Зберегти фільтр",
-    "search": "Пошук",
-    "selectSearch": "Оберіть пошук",
-    "sortDate": "За датою",
-    "viewList": "Список",
-    "viewMap": "Карта",
-    "favorites": "Вибране",
-    "chat": "Чат",
-    "profile": "Профіль",
-    "tabLimit": "Ліміт вкладок досягнуто",
-    "tabLimitDescription": "Ви досягли максимуму в {max} вкладок. Розширте тариф або відредагуйте існуючі.",
-    "upgradePlan": "Розширити тариф",
-    "editTab": "Редагувати вкладку",
-    "clearFilters": "Очистити фільтри",
-    "assignAiAgent": "Дати завдання ІІ-агенту",
-    "agentSearching": "Агент шукає...",
-    "agentNotifications": "Сповіщення з {startHour} до {endHour}",
-    "goToChat": "Перейти в чат з агентом",
-    "continueSearch": "Продовжити пошук",
-    "distanceToPoint": "Відстань до точки",
-    "loginRequired": "Для збереження фільтрів необхідна авторизація",
-    "loginToSave": "Увійти",
-    "searchTabs": "Пошукові вкладки",
-    "noTabs": "Натисніть +, щоб створити вкладку пошуку",
-    "tooltip": {
-      "search": "Пошук",
-      "favorites": "Обране",
-      "chat": "Повідомлення",
-      "profile": "Профіль",
-      "newSearch": "Створити вкладку",
-      "theme": "Тема",
-      "language": "Мова"
-    }
-  },
-  "listing": {
-    "create": {
-      "title": "Додати оголошення",
-      "subtitle": "Заповніть інформацію про вашу нерухомість",
-      "steps": {
-        "basic": "Основна інформація",
-        "details": "Деталі",
-        "features": "Зручності",
-        "photos": "Фотографії",
-        "location": "Розташування",
-        "preview": "Попередній перегляд"
-      },
-      "basicInfo": {
-        "title": "Основна інформація",
-        "propertyTitle": "Назва оголошення",
-        "propertyTitlePlaceholder": "Наприклад: Затишна квартира в центрі Барселони",
-        "propertyType": "Тип нерухомості",
-        "description": "Опис",
-        "descriptionPlaceholder": "Опишіть вашу нерухомість...",
-        "price": "Ціна за місяць",
-        "pricePlaceholder": "0",
-        "deposit": "Застава",
-        "depositPlaceholder": "0",
-        "utilities": "Комунальні послуги",
-        "utilitiesIncluded": "Включені в ціну",
-        "utilitiesNotIncluded": "Не включені"
-      },
-      "details": {
-        "title": "Деталі нерухомості",
-        "bedrooms": "Кількість спалень",
-        "bathrooms": "Кількість ванних кімнат",
-        "area": "Площа (м²)",
-        "areaPlaceholder": "0",
-        "floor": "Поверх",
-        "floorPlaceholder": "0",
-        "totalFloors": "Всього поверхів",
-        "totalFloorsPlaceholder": "0",
-        "furnished": "Мебльована",
-        "availableFrom": "Доступна з",
-        "minRentalPeriod": "Мінімальний термін оренди (місяців)"
-      },
-      "features": {
-        "title": "Зручності та особливості",
-        "selectFeatures": "Виберіть доступні зручності"
-      },
-      "photos": {
-        "title": "Фотографії",
-        "description": "Додайте фотографії вашої нерухомості (мінімум 3, максимум 20)",
-        "upload": "Завантажити фотографії",
-        "maxSize": "Максимальний розмір файлу: 10 МБ",
-        "dragDrop": "Перетягніть фотографії сюди або натисніть для вибору",
-        "reorder": "Перетягніть для зміни порядку"
-      },
-      "location": {
-        "title": "Розташування",
-        "address": "Адреса",
-        "addressPlaceholder": "Вулиця, номер будинку",
-        "neighborhood": "Район",
-        "neighborhoodPlaceholder": "Наприклад: Eixample",
-        "city": "Місто",
-        "cityPlaceholder": "Барселона",
-        "zipCode": "Поштовий індекс",
-        "zipCodePlaceholder": "08001",
-        "showMap": "Показати на карті",
-        "dragMarker": "Перетягніть маркер для точного розташування"
-      },
-      "preview": {
-        "title": "Попередній перегляд",
-        "description": "Перевірте, як виглядатиме ваше оголошення",
-        "edit": "Редагувати"
-      },
-      "buttons": {
+    "common": {
+        "search": "Пошук",
+        "filter": "Фільтр",
+        "filters": "Filters",
+        "sort": "Сортування",
+        "map": "Карта",
+        "list": "Список",
+        "save": "Зберегти",
+        "saved": "Збережено",
+        "cancel": "Скасувати",
+        "apply": "Застосувати",
+        "reset": "Скинути",
+        "close": "Закрити",
+        "open": "Відкрити",
+        "showMore": "Показати більше",
+        "showLess": "Показати менше",
+        "loading": "Завантаження...",
+        "error": "Помилка",
+        "success": "Успішно",
+        "tryAgain": "Спробувати знову",
         "back": "Назад",
         "next": "Далі",
-        "save": "Зберегти як чернетку",
-        "publish": "Опублікувати",
-        "cancel": "Скасувати"
-      },
-      "validation": {
-        "titleRequired": "Назва обов'язкова",
-        "typeRequired": "Виберіть тип нерухомості",
-        "descriptionRequired": "Опис обов'язковий",
-        "priceRequired": "Вкажіть ціну",
-        "priceInvalid": "Невірна ціна",
-        "bedroomsRequired": "Вкажіть кількість спалень",
-        "bathroomsRequired": "Вкажіть кількість ванних кімнат",
-        "areaRequired": "Вкажіть площу",
-        "areaInvalid": "Невірна площа",
-        "photosRequired": "Додайте мінімум 3 фотографії",
-        "addressRequired": "Адреса обов'язкова",
-        "neighborhoodRequired": "Вкажіть район",
-        "cityRequired": "Місто обов'язкове",
-        "zipCodeRequired": "Поштовий індекс обов'язковий"
-      },
-      "success": {
-        "title": "Оголошення створено!",
-        "description": "Ваше оголошення буде опубліковано після модерації",
-        "viewListing": "Переглянути оголошення",
-        "addAnother": "Додати ще одне"
-      }
+        "previous": "Попередній",
+        "submit": "Надіслати",
+        "edit": "Редагувати",
+        "delete": "Видалити",
+        "confirm": "Підтвердити",
+        "viewDetails": "Переглянути деталі",
+        "contact": "Зв'язатися",
+        "share": "Поділитися",
+        "print": "Друкувати",
+        "download": "Завантажити",
+        "upload": "Завантажити",
+        "selectAll": "Вибрати все",
+        "deselectAll": "Скасувати вибір",
+        "yes": "Так",
+        "no": "Ні",
+        "or": "або",
+        "and": "та",
+        "from": "Від",
+        "to": "До",
+        "perMonth": "на місяць",
+        "perYear": "на рік",
+        "total": "Усього",
+        "results": "результатів",
+        "noResults": "Нічого не знайдено",
+        "currency": "€",
+        "language": "Мова",
+        "notFound": "Не знайдено",
+        "comingSoon": "Скоро",
+        "select": "Вибрати",
+        "selected": "Вибрано",
+        "all": "All",
+        "none": "Немає",
+        "other": "Інше",
+        "clear": "Очистити",
+        "view": "Переглянути",
+        "hide": "Сховати",
+        "show": "Показати",
+        "more": "Більше",
+        "less": "Менше",
+        "free": "Безкоштовно",
+        "euro": "€",
+        "months": "міс.",
+        "selectDate": "Вибрати дату",
+        "resetFilters": "Reset filters"
     },
-    "edit": {
-      "title": "Редагувати оголошення",
-      "save": "Зберегти зміни",
-      "success": "Зміни збережено"
+    "landing": {
+        "hero": {
+            "title": "Знайдіть своє ідеальне житло в Барселоні",
+            "subtitle": "Тисячі пропозицій квартир та будинків на довгострокову оренду",
+            "searchPlaceholder": "Введіть район, вулицю або ключові слова...",
+            "searchButton": "Почати пошук",
+            "stats": {
+                "properties": "Більше 10 000+ оголошень",
+                "cities": "50+ районів",
+                "users": "100 000+ користувачів"
+            },
+            "cta": "Почати пошук",
+            "ctaAgent": "Створити завдання для агента",
+            "ctaTabs": "Створити вкладку пошуку"
+        },
+        "features": {
+            "title": "Чому обирають нас",
+            "subtitle": "Ми робимо пошук житла простим та зручним",
+            "mapSearch": {
+                "title": "Пошук на карті",
+                "description": "Знаходьте житло на інтерактивній карті з детальною інформацією про райони"
+            },
+            "verified": {
+                "title": "Перевірені пропозиції",
+                "description": "Всі оголошення проходять модерацію для вашої безпеки"
+            },
+            "support": {
+                "title": "Підтримка 24/7",
+                "description": "Наша команда завжди готова допомогти з будь-яких питань"
+            },
+            "fast": {
+                "title": "Швидкий пошук",
+                "description": "Потужні фільтри для швидкого знаходження ідеального варіанту"
+            },
+            "realtime": {
+                "title": "Пошук у реальному часі",
+                "description": "Дивіться, як агент знаходить нові об'єкти прямо зараз. Картки з'являються миттєво."
+            },
+            "background": {
+                "title": "Агент працює у фоні",
+                "description": "Створіть фільтри — агент надсилатиме об'єкти в чат. Отримуйте push-сповіщення про нові знахідки."
+            },
+            "multipleTabs": {
+                "title": "Кілька вкладок пошуку",
+                "description": "Шукайте компроміси: близько до роботи до 1000€ або 40 хвилин громадським транспортом за 800€."
+            },
+            "location": {
+                "title": "Гнучке налаштування локації",
+                "description": "Ізохрона, полігони, радіус, малювання — оберіть зручний спосіб."
+            },
+            "status": {
+                "title": "Фільтрація за статусом",
+                "description": "Дивіться лише нові, обрані або всі об'єкти."
+            }
+        },
+        "howItWorks": {
+            "title": "Як це працює",
+            "subtitle": "Простий процес пошуку вашого житла",
+            "step1": {
+                "title": "Оберіть район",
+                "description": "Використовуйте карту або фільтри для пошуку в потрібному районі"
+            },
+            "step2": {
+                "title": "Налаштуйте фільтри",
+                "description": "Вкажіть бюджет, кількість кімнат та інші параметри"
+            },
+            "step3": {
+                "title": "Перегляньте оголошення",
+                "description": "Вивчіть детальну інформацію, фото та відгуки"
+            },
+            "step4": {
+                "title": "Зв'яжіться з власником",
+                "description": "Відправте запит або зателефонуйте безпосередньо"
+            }
+        },
+        "popularAreas": {
+            "title": "Популярні райони",
+            "subtitle": "Найбільш затребувані локації Барселони",
+            "viewAll": "Дивитися всі райони"
+        },
+        "testimonials": {
+            "title": "Відгуки наших клієнтів",
+            "subtitle": "Що говорять про нас користувачі"
+        },
+        "cta": {
+            "title": "Готові знайти своє житло?",
+            "subtitle": "Приєднуйтесь до тисяч задоволених користувачів",
+            "button": "Розпочати пошук",
+            "orRegister": "або зареєструватися безкоштовно",
+            "startFree": "Почати безкоштовно",
+            "viewPricing": "Переглянути тарифи"
+        },
+        "demo": {
+            "realtimeTitle": "Об'єкти з'являються в реальному часі",
+            "backgroundTitle": "Агент шукає, поки ви відпочиваєте",
+            "tabsTitle": "Перемикайтесь між пошуками",
+            "locationTitle": "Налаштуйте локацію як вам зручно",
+            "statusTitle": "Фільтруйте за статусом перегляду",
+            "agentSearching": "Агент шукає...",
+            "perMonth": "/міс",
+            "rooms": "кімнат",
+            "newProperty": "Новий об'єкт в",
+            "suitableApartment": "Підходяща квартира в",
+            "agentFound": "Агент знайшов {count} варіантів",
+            "minutesAgo": "{count} хв тому",
+            "aiAgent": "AI Агент",
+            "foundNewProperties": "Знайдено {count} нових об'єктів за вашими критеріями:",
+            "nearWork": "Поблизу роботи",
+            "byTransport": "{min} хв транспортом",
+            "district": "Район {name}",
+            "upTo": "до",
+            "minRooms": "{count}+ кімнат",
+            "showVariants": "Показати {count}+ варіантів",
+            "work": "Робота",
+            "travelTime": "{min} хвилин",
+            "walking": "Пішки",
+            "cycling": "На велосипеді",
+            "driving": "На машині",
+            "searchMode": "Пошук",
+            "isochroneMode": "Ізохрона",
+            "radiusMode": "Радіус",
+            "drawMode": "Малювання",
+            "selectedLocations": "Обрані локації",
+            "walkingMinutes": "{min} хв пішки",
+            "radiusKm": "Радіус {km} км",
+            "drawnArea": "Намальована область",
+            "all": "Всі",
+            "notViewed": "Не переглянуто",
+            "liked": "Сподобалось",
+            "rejected": "Відхилено",
+            "new": "Нове",
+            "likedStatus": "Сподобалось",
+            "rejectedStatus": "Відхилено"
+        }
     },
-    "delete": {
-      "title": "Видалити оголошення",
-      "confirmation": "Ви впевнені, що хочете видалити це оголошення?",
-      "button": "Видалити",
-      "success": "Оголошення видалено"
+    "pricing": {
+        "title": "Тарифні плани",
+        "subtitle": "Виберіть план, який підходить саме вам",
+        "monthly": "Щомісячна оплата",
+        "yearly": "Річна оплата",
+        "yearlyDiscount": "Заощадьте до 20%",
+        "free": {
+            "name": "Безкоштовний",
+            "price": "0",
+            "period": "назавжди",
+            "description": "Для приватних користувачів",
+            "features": {
+                "searches": "Необмежений пошук",
+                "saved": "До 5 збережених оголошень",
+                "contacts": "1 контакт на день",
+                "support": "Базова підтримка"
+            },
+            "button": "Почати безкоштовно"
+        },
+        "basic": {
+            "name": "Базовий",
+            "price": "9.99",
+            "period": "на місяць",
+            "description": "Для активних користувачів",
+            "features": {
+                "searches": "Необмежений пошук",
+                "saved": "Необмежені збереження",
+                "contacts": "10 контактів на день",
+                "priority": "Пріоритетна підтримка",
+                "alerts": "Email-сповіщення",
+                "noAds": "Без реклами"
+            },
+            "button": "Вибрати план",
+            "popular": "Популярний"
+        },
+        "premium": {
+            "name": "Преміум",
+            "price": "29.99",
+            "period": "на місяць",
+            "description": "Для професіоналів",
+            "features": {
+                "searches": "Необмежений пошук",
+                "saved": "Необмежені збереження",
+                "contacts": "Необмежені контакти",
+                "priority": "Пріоритетна підтримка 24/7",
+                "alerts": "Миттєві сповіщення",
+                "noAds": "Без реклами",
+                "analytics": "Аналітика ринку",
+                "earlyAccess": "Ранній доступ до нових оголошень"
+            },
+            "button": "Вибрати план"
+        },
+        "faq": {
+            "title": "Часті питання",
+            "questions": {
+                "q1": {
+                    "question": "Чи можу я змінити план пізніше?",
+                    "answer": "Так, ви можете змінити свій план в будь-який момент. Різниця в оплаті буде перерахована пропорційно."
+                },
+                "q2": {
+                    "question": "Як скасувати підписку?",
+                    "answer": "Ви можете скасувати підписку в особистому кабінеті в будь-який момент. Доступ буде збережено до кінця оплаченого періоду."
+                },
+                "q3": {
+                    "question": "Які способи оплати прийняті?",
+                    "answer": "Ми приймаємо всі основні кредитні картки, PayPal та банківські перекази."
+                },
+                "q4": {
+                    "question": "Чи є знижки для річної підписки?",
+                    "answer": "Так, при оплаті річної підписки ви отримуєте знижку до 20%."
+                }
+            }
+        },
+        "plans": {
+            "free": {
+                "name": "Безкоштовний",
+                "description": "Для знайомства з платформою"
+            },
+            "trial": {
+                "name": "Пробний",
+                "description": "Спробуйте всі функції"
+            },
+            "standard": {
+                "name": "Стандартний",
+                "description": "Для активного пошуку"
+            },
+            "maximum": {
+                "name": "Максимальний",
+                "description": "Максимум можливостей"
+            }
+        },
+        "features": {
+            "database": "Доступ до найбільшої бази об'єктів",
+            "filtering": "Зручна фільтрація",
+            "tabsUnlimited": "До {count} вкладок пошуку",
+            "ownersLimited": "Обмежений доступ до власників",
+            "aiSearchNo": "Без пошуку AI-агентом",
+            "duration": "Тривалість: {days} днів",
+            "ownersMultiplier": "Доступ до власників ×{count}",
+            "aiSearch": "Персональний пошук AI",
+            "aiFilters": "До {count} фільтрів для агента"
+        },
+        "selectPlan": "Обрати план",
+        "popular": "Популярний"
     },
-    "status": {
-      "active": "Активне",
-      "inactive": "Неактивне",
-      "pending": "На модерації",
-      "rejected": "Відхилено",
-      "expired": "Закінчився термін"
-    },
-    "aiStoriesSubtitle": "Нові пропозиції від AI агента",
-    "aiStoriesTitle": "Нові пропозиції",
-    "emptySubtitle": "Спробуйте змінити фільтри",
-    "emptyTitle": "Нічого не знайдено",
-    "onMap": "На карті",
-    "showOnMap": "Показати на карті",
-    "subtitle": "Знайдено {count} об'єктів",
-    "viewModeGrid": "Сітка",
-    "viewModeList": "Список",
-    "title": "Оренда нерухомості у Барселоні",
-    "metaDescription": "Пошук житла в оренду у Барселоні з AI-агентом"
-  },
-  "search": {
-    "title": "Результати пошуку",
-    "resultsCount": "{count} оголошень знайдено",
-    "noResults": "Нічого не знайдено",
-    "noResultsDescription": "Спробуйте змінити фільтри або розширити зону пошуку",
-    "sortBy": {
-      "title": "Сортувати за",
-      "newest": "Найновіші",
-      "oldest": "Найстаріші",
-      "priceAsc": "Ціна: від низької до високої",
-      "priceDesc": "Ціна: від високої до низької",
-      "areaAsc": "Площа: від меншої до більшої",
-      "areaDesc": "Площа: від більшої до меншої",
-      "relevance": "Релевантність"
-    },
-    "viewMode": {
-      "grid": "Сітка",
-      "list": "Список",
-      "map": "Карта"
-    },
-    "pagination": {
-      "previous": "Попередня",
-      "next": "Наступна",
-      "page": "Сторінка {page} з {total}"
-    },
-    "savedSearch": {
-      "title": "Зберегти пошук",
-      "description": "Отримуйте сповіщення про нові оголошення",
-      "name": "Назва пошуку",
-      "namePlaceholder": "Наприклад: Квартири в Eixample",
-      "frequency": "Частота сповіщень",
-      "immediately": "Миттєво",
-      "daily": "Щодня",
-      "weekly": "Щотижня",
-      "save": "Зберегти пошук",
-      "saved": "Пошук збережено"
-    }
-  },
-  "contact": {
-    "title": "Зв'яжіться з нами",
-    "subtitle": "Є питання? Ми готові допомогти",
-    "form": {
-      "name": "Ім'я",
-      "namePlaceholder": "Ваше ім'я",
-      "email": "Email",
-      "emailPlaceholder": "Ваш email",
-      "subject": "Тема",
-      "subjectPlaceholder": "Тема повідомлення",
-      "message": "Повідомлення",
-      "messagePlaceholder": "Ваше повідомлення...",
-      "send": "Відправити",
-      "sending": "Відправка...",
-      "sent": "Повідомлення відправлено"
-    },
-    "info": {
-      "email": "Email",
-      "phone": "Телефон",
-      "address": "Адреса",
-      "hours": "Години роботи",
-      "hoursValue": "Пн-Пт: 9:00-18:00"
-    },
-    "validation": {
-      "nameRequired": "Ім'я обов'язкове",
-      "emailRequired": "Email обов'язковий",
-      "emailInvalid": "Невірний формат email",
-      "subjectRequired": "Тема обов'язкова",
-      "messageRequired": "Повідомлення обов'язкове"
-    },
-    "agency": "Агентство",
-    "agencyProfile": "Профіль агентства",
-    "agent": "Агент",
-    "authRequiredDescription": "Увійдіть, щоб побачити контакти",
-    "authRequiredOwnerDescription": "Увійдіть, щоб зв'язатися з власником",
-    "authRequiredTitle": "Потрібен вхід",
-    "call": "Зателефонувати",
-    "closeButton": "Закрити",
-    "copySuccess": "Скопійовано успішно",
-    "limitExceededDescription": "Ліміт переглядів перевищено",
-    "limitExceededTitle": "Ліміт перевищено",
-    "loadingTitle": "Завантаження...",
-    "loginButton": "Увійти",
-    "owner": "Власник",
-    "showPhone": "Показати телефон",
-    "telegram": "Telegram",
-    "upgradeButton": "Покращити план",
-    "website": "Вебсайт",
-    "whatsapp": "WhatsApp",
-    "phone": "Телефон",
-    "email": "Email",
-    "limitInfo": "{current} з {max} використано"
-  },
-  "about": {
-    "title": "Про нас",
-    "subtitle": "Робимо пошук житла простим та зручним",
-    "mission": {
-      "title": "Наша місія",
-      "description": "Ми прагнемо спростити процес пошуку житла, надаючи найкращу платформу для пошуку квартир та будинків в оренду."
-    },
-    "vision": {
-      "title": "Наше бачення",
-      "description": "Стати найпопулярнішою платформою для пошуку житла в Європі."
-    },
-    "values": {
-      "title": "Наші цінності",
-      "transparency": {
-        "title": "Прозорість",
-        "description": "Чесність у всіх наших взаємодіях"
-      },
-      "innovation": {
-        "title": "Інновації",
-        "description": "Постійне вдосконалення наших послуг"
-      },
-      "support": {
-        "title": "Підтримка",
-        "description": "Завжди готові допомогти нашим користувачам"
-      }
-    },
-    "team": {
-      "title": "Наша команда",
-      "description": "Команда професіоналів, які працюють над покращенням сервісу"
-    },
-    "stats": {
-      "users": "Користувачів",
-      "properties": "Оголошень",
-      "cities": "Міст",
-      "satisfied": "Задоволених клієнтів"
-    }
-  },
-  "blog": {
-    "title": "Блог",
-    "subtitle": "Корисні поради та новини про нерухомість",
-    "readMore": "Читати далі",
-    "readTime": "{minutes} хв читання",
-    "author": "Автор",
-    "publishedOn": "Опубліковано",
-    "category": "Категорія",
-    "categories": {
-      "all": "Всі категорії",
-      "tips": "Поради",
-      "news": "Новини",
-      "guides": "Гайди",
-      "market": "Ринок"
-    },
-    "relatedPosts": "Схожі статті",
-    "share": "Поділитися статтею",
-    "comments": {
-      "title": "Коментарі",
-      "leave": "Залишити коментар",
-      "name": "Ім'я",
-      "comment": "Коментар",
-      "submit": "Відправити",
-      "noComments": "Поки немає коментарів"
-    }
-  },
-  "newsletter": {
-    "title": "Підпишіться на розсилку",
-    "description": "Отримуйте останні новини та пропозиції",
-    "email": "Email",
-    "emailPlaceholder": "Ваш email",
-    "subscribe": "Підписатися",
-    "subscribing": "Підписка...",
-    "subscribed": "Ви підписані!",
-    "error": "Помилка підписки",
-    "validation": {
-      "emailRequired": "Email обов'язковий",
-      "emailInvalid": "Невірний формат email"
-    }
-  },
-  "cookies": {
-    "title": "Ми використовуємо файли cookie",
-    "description": "Ми використовуємо файли cookie для покращення вашого досвіду на сайті. Продовжуючи використовувати сайт, ви погоджуєтесь з нашою політикою використання файлів cookie.",
-    "accept": "Прийняти",
-    "decline": "Відхилити",
-    "settings": "Налаштування",
-    "learnMore": "Дізнатися більше",
-    "preferences": {
-      "title": "Налаштування cookie",
-      "necessary": {
-        "title": "Необхідні",
-        "description": "Необхідні для роботи сайту"
-      },
-      "analytics": {
-        "title": "Аналітичні",
-        "description": "Допомагають нам покращувати сайт"
-      },
-      "marketing": {
-        "title": "Маркетингові",
-        "description": "Використовуються для персоналізації реклами"
-      },
-      "save": "Зберегти налаштування"
-    }
-  },
-  "legal": {
-    "termsOfService": {
-      "title": "Умови використання",
-      "lastUpdated": "Останнє оновлення: {date}"
-    },
-    "privacyPolicy": {
-      "title": "Політика конфіденційності",
-      "lastUpdated": "Останнє оновлення: {date}"
-    },
-    "cookiePolicy": {
-      "title": "Політика використання cookie",
-      "lastUpdated": "Останнє оновлення: {date}"
-    }
-  },
-  "notifications": {
-    "title": "Сповіщення",
-    "markAllRead": "Позначити все як прочитане",
-    "clearAll": "Очистити все",
-    "noNotifications": "Немає сповіщень",
-    "types": {
-      "newProperty": "Нова нерухомість",
-      "priceChange": "Зміна ціни",
-      "message": "Нове повідомлення",
-      "savedSearch": "Збережений пошук",
-      "system": "Системне"
-    },
-    "settings": {
-      "title": "Налаштування сповіщень",
-      "email": "Email-сповіщення",
-      "push": "Push-сповіщення",
-      "sms": "SMS-сповіщення",
-      "categories": {
-        "newProperties": "Нові оголошення",
-        "priceChanges": "Зміни цін",
+    "navigation": {
+        "home": "Головна",
+        "search": "Пошук",
+        "saved": "Збережені",
+        "profile": "Профіль",
+        "login": "Вхід",
+        "register": "Реєстрація",
+        "logout": "Вихід",
+        "menu": "Меню",
+        "closeMenu": "Закрити меню",
+        "myListings": "Мої оголошення",
+        "addListing": "Додати оголошення",
         "messages": "Повідомлення",
-        "updates": "Оновлення системи"
-      }
-    }
-  },
-  "messages": {
-    "title": "Повідомлення",
-    "newMessage": "Нове повідомлення",
-    "compose": "Написати",
-    "inbox": "Вхідні",
-    "sent": "Відправлені",
-    "archived": "Архів",
-    "noMessages": "Немає повідомлень",
-    "search": "Шукати повідомлення",
-    "to": "Кому",
-    "from": "Від",
-    "subject": "Тема",
-    "message": "Повідомлення",
-    "send": "Відправити",
-    "reply": "Відповісти",
-    "forward": "Переслати",
-    "delete": "Видалити",
-    "archive": "Архівувати",
-    "markRead": "Позначити як прочитане",
-    "markUnread": "Позначити як непрочитане"
-  },
-  "validation": {
-    "required": "Це поле обов'язкове",
-    "email": "Введіть дійсну адресу email",
-    "minLength": "Мінімальна довжина: {length} символів",
-    "maxLength": "Максимальна довжина: {length} символів",
-    "minValue": "Мінімальне значення: {value}",
-    "maxValue": "Максимальне значення: {value}",
-    "pattern": "Невірний формат",
-    "url": "Введіть дійсний URL",
-    "phone": "Введіть дійсний номер телефону",
-    "date": "Введіть дійсну дату",
-    "number": "Введіть число",
-    "integer": "Введіть ціле число",
-    "positive": "Значення повинно бути позитивним",
-    "fileSize": "Файл занадто великий. Максимальний розмір: {size}",
-    "fileType": "Непідтримуваний тип файлу"
-  },
-  "actions": {
-    "addNote": "Додати нотатку",
-    "copyLink": "Копіювати посилання",
-    "dislike": "Не подобається",
-    "disliked": "Не сподобалось",
-    "downloadPdf": "Завантажити PDF",
-    "editNote": "Редагувати нотатку",
-    "like": "Вподобати",
-    "liked": "Вподобано",
-    "more": "Більше",
-    "noteModal": {
-      "cancelButton": "Скасувати",
-      "closeButton": "Закрити",
-      "description": "Додайте нотатку до цього об'єкта",
-      "placeholder": "Напишіть вашу нотатку тут...",
-      "saveButton": "Зберегти",
-      "title": "Нотатка",
-      "characterCount": "{current}/{max}"
+        "settings": "Налаштування",
+        "help": "Допомога",
+        "about": "Про нас",
+        "contact": "Контакти",
+        "blog": "Блог",
+        "pricing": "Тарифи",
+        "theme": {
+            "light": "Світла тема",
+            "dark": "Темна тема",
+            "system": "Системна"
+        }
     },
-    "noteSaved": "Нотатку збережено",
-    "report": "Поскаржитись",
-    "share": "Поділитися",
-    "linkCopied": "Посилання скопійовано",
-    "linkCopyError": "Не вдалося скопіювати посилання"
-  },
-  "agency": {
-    "aboutAgency": "Про агентство",
-    "agencyProperties": "Об'єкти агентства",
-    "agencyReviews": "Відгуки про агентство",
-    "agentsCount": "Кількість агентів",
-    "description": "Опис",
-    "filterByLanguage": "Фільтрувати за мовою",
-    "filterByPropertyType": "Фільтрувати за типом нерухомості",
-    "founded": "Засновано",
-    "languages": "Мови",
-    "loadMore": "Завантажити ще",
-    "mainOffice": "Головний офіс",
-    "namePlaceholder": "Назва агентства",
-    "noAgenciesFound": "Агентств не знайдено",
-    "noAgentsFound": "Агентів не знайдено",
-    "noPropertiesFound": "Об'єктів не знайдено",
-    "objects": "об'єктів",
-    "objectsCount": "{count} об'єктів",
-    "offices": "Офіси",
-    "phonePlaceholder": "Телефон",
-    "premium": "Преміум",
-    "propertyTypes": "Типи нерухомості",
-    "reply": "Відповісти",
-    "reviewsCount": "{count} відгуків",
-    "rooms": "Кімнати",
-    "searchAgencies": "Пошук агентств",
-    "services": "Послуги",
-    "showPhone": "Показати телефон",
-    "sortBy": "Сортувати за",
-    "sortName": "Назва",
-    "sortObjects": "Кількість об'єктів",
-    "sortRating": "Рейтинг",
-    "sortReviews": "Кількість відгуків",
-    "sqm": "м²",
-    "team": "Команда",
-    "tryChangeFilters": "Спробуйте змінити фільтри",
-    "writeMessage": "Написати повідомлення",
-    "agencies": "Агентства нерухомості",
-    "propertyTypesLabels": {
-      "residential": "Житлова",
-      "commercial": "Комерційна",
-      "luxury": "Люкс",
-      "newBuilding": "Новобудова",
-      "secondary": "Вторинна",
-      "rental": "Оренда",
-      "sale": "Продаж"
-    },
-    "verified": "Перевірено",
-    "recommendedAgencies": "Рекомендовані агентства",
-    "propertiesCount": "{count} properties found",
-    "filterPropertiesDescription": "Filter properties by price, rooms and agent",
-    "noPropertiesMatchFilters": "No properties found matching selected filters",
-    "agent": "Agent",
-    "selectAgent": "Select agent",
-    "allAgents": "All agents"
-  },
-  "chat": {
-    "aiAgent": {
-      "foundProperties": "{count} нових об'єктів знайдено",
-      "noProperties": "Об'єктів не знайдено",
-      "searching": "Пошук об'єктів...",
-      "settings": "Налаштування Агента",
-      "title": "AI Агент"
-    },
-    "empty": {
-      "subtitle": "Почніть розмову",
-      "title": "Повідомлень немає"
+    "property": {
+        "title": "Назва",
+        "description": "Опис",
+        "price": "Ціна",
+        "pricePerMonth": "Ціна за місяць",
+        "deposit": "Застава",
+        "utilities": "Комунальні послуги",
+        "utilitiesIncluded": "Комунальні послуги включені",
+        "utilitiesNotIncluded": "Комунальні послуги не включені",
+        "type": "Тип нерухомості",
+        "types": {
+            "apartment": "Квартира",
+            "house": "Будинок",
+            "studio": "Студія",
+            "room": "Кімната",
+            "penthouse": "Пентхаус",
+            "duplex": "Дуплекс",
+            "loft": "Лофт"
+        },
+        "bedrooms": "Спальні",
+        "bathrooms": "Ванні кімнати",
+        "area": "Площа",
+        "areaValue": "{area} м²",
+        "floor": "Поверх",
+        "totalFloors": "Всього поверхів",
+        "floorInfo": "{floor} з {total}",
+        "furnished": "Мебльована",
+        "unfurnished": "Без меблів",
+        "partiallyFurnished": "Частково мебльована",
+        "availableFrom": "Доступна з",
+        "availableNow": "Доступна зараз",
+        "minRentalPeriod": "Мінімальний термін оренди",
+        "months": "{count} міс.",
+        "features": "Зручності",
+        "featuresList": {
+            "wifi": "Wi-Fi",
+            "parking": "Паркування",
+            "elevator": "Ліфт",
+            "balcony": "Балкон",
+            "terrace": "Тераса",
+            "garden": "Сад",
+            "pool": "Басейн",
+            "gym": "Тренажерний зал",
+            "security": "Охорона",
+            "airConditioning": "Кондиціонер",
+            "heating": "Опалення",
+            "washer": "Пральна машина",
+            "dryer": "Сушарка",
+            "dishwasher": "Посудомийна машина",
+            "pets": "Дозволено тварини",
+            "smoking": "Дозволено паління",
+            "accessible": "Доступність для інвалідів"
+        },
+        "location": "Розташування",
+        "address": "Адреса",
+        "neighborhood": "Район",
+        "city": "Місто",
+        "zipCode": "Поштовий індекс",
+        "nearbyPlaces": "Поряд знаходиться",
+        "transportLinks": "Транспортне сполучення",
+        "metro": "Метро",
+        "bus": "Автобус",
+        "train": "Поїзд",
+        "walkingDistance": "Пішки {minutes} хв",
+        "photos": "Фотографії",
+        "video": "Відео",
+        "virtualTour": "Віртуальний тур",
+        "floorPlan": "План поверху",
+        "contact": {
+            "title": "Зв'язатися з власником",
+            "name": "Ваше ім'я",
+            "email": "Ваш email",
+            "phone": "Ваш телефон",
+            "message": "Повідомлення",
+            "messagePlaceholder": "Я зацікавлений у цій нерухомості...",
+            "send": "Відправити запит",
+            "callNow": "Зателефонувати зараз",
+            "whatsapp": "Написати в WhatsApp"
+        },
+        "owner": "Власник",
+        "share": "Поділитися",
+        "report": "Поскаржитись",
+        "similarProperties": "Схожі пропозиції",
+        "viewAllProperties": "Дивитися всі пропозиції",
+        "updated": "Оновлено",
+        "views": "Переглядів",
+        "saved": "Збережено",
+        "saveProperty": "Зберегти",
+        "unsaveProperty": "Видалити зі збережених",
+        "noPropertiesFound": "Жодної нерухомості не знайдено",
+        "tryAdjustingFilters": "Спробуйте змінити фільтри пошуку",
+        "addNote": "Додати нотатку",
+        "agency": "Агентство",
+        "agent": "Агент",
+        "daysAgo": "{count}д тому",
+        "dislike": "Не подобається",
+        "floorOf": "{floor}/{total} пов.",
+        "hoursAgo": "{count}год тому",
+        "justNow": "щойно",
+        "like": "Вподобати",
+        "minutesAgo": "{count}хв тому",
+        "pricePerMeter": "€/м²",
+        "roomsShort": "кімн.",
+        "bathroomsShort": "сан.",
+        "verified": "Перевірено",
+        "viewMore": "Переглянути більше",
+        "walkMin": "{min} хв пішки",
+        "top": "ТОП",
+        "new": "Нове",
+        "found": "found",
+        "minPrice": "Minimum price",
+        "maxPrice": "Maximum price",
+        "selectRooms": "Select number of rooms",
+        "room": "room",
+        "bedroomsShort": "спал."
     },
     "filters": {
-      "allFilters": "Всі фільтри",
-      "allTime": "Весь час",
-      "selectFilter": "Оберіть фільтр",
-      "thisMonth": "Цей місяць",
-      "thisWeek": "Цей тиждень",
-      "today": "Сьогодні",
-      "yesterday": "Вчора"
+        "title": "Фільтри",
+        "applyFilters": "Застосувати фільтри",
+        "clearFilters": "Очистити все",
+        "showResults": "Показати результати ({count})",
+        "price": "Ціна",
+        "propertyType": {
+            "title": "Тип нерухомості",
+            "all": "Всі типи"
+        },
+        "rooms": {
+            "title": "Кількість кімнат",
+            "bedrooms": "Спальні",
+            "bathrooms": "Ванні кімнати",
+            "any": "Будь-яка",
+            "studio": "Студія",
+            "orMore": "{count}+"
+        },
+        "area": "Площа",
+        "floor": {
+            "title": "Поверх",
+            "any": "Будь-який",
+            "ground": "Перший",
+            "last": "Останній",
+            "notGround": "Не перший",
+            "notLast": "Не останній"
+        },
+        "furnished": {
+            "title": "Мебльована",
+            "any": "Будь-яка",
+            "yes": "Так",
+            "no": "Ні",
+            "partial": "Частково"
+        },
+        "features": {
+            "title": "Зручності",
+            "selectFeatures": "Виберіть зручності"
+        },
+        "availability": {
+            "title": "Доступність",
+            "availableNow": "Доступна зараз",
+            "from": "Від дати"
+        },
+        "moreFilters": "Більше фільтрів",
+        "lessFilters": "Менше фільтрів",
+        "advanced": "Розширені",
+        "deposit": {
+            "title": "Застава",
+            "required": "Потрібна застава",
+            "notRequired": "Без застави"
+        },
+        "utilities": {
+            "title": "Комунальні послуги",
+            "included": "Включені",
+            "notIncluded": "Не включені"
+        },
+        "pets": {
+            "title": "Тварини",
+            "allowed": "Дозволено",
+            "notAllowed": "Не дозволено"
+        },
+        "minRentalPeriod": {
+            "title": "Мінімальний термін оренди",
+            "months": "місяців"
+        },
+        "activeFilters": "{count} активних фільтрів",
+        "aiAgent": "AI Агент",
+        "allFilters": "Всі фільтри",
+        "areaRange": "Діапазон площі",
+        "cancel": "Скасувати",
+        "categories": {
+            "area": "Площа",
+            "location": "Розташування",
+            "price": "Ціна",
+            "rooms": "Кімнати",
+            "bathrooms": "Ванні кімнати"
+        },
+        "category": "Категорія",
+        "subcategory": "Підкатегорія",
+        "clear": "Очистити",
+        "clearAll": "Очистити все",
+        "loading": "Завантаження...",
+        "locationDraw": "Малювати область",
+        "locationRadius": "Радіус",
+        "locationSearch": "Пошук локації",
+        "locationTimeFrom": "Час у дорозі",
+        "markerAll": "Всі",
+        "markerDisliked": "Не сподобалось",
+        "markerLiked": "Сподобалось",
+        "markerNoView": "Не переглянуто",
+        "markerNotViewed": "Не оброблено",
+        "markerTypeLabel": "Тип маркерів",
+        "maxArea": "Макс. площа",
+        "maxPrice": "Макс. ціна",
+        "minArea": "Мін. площа",
+        "minPrice": "Мін. ціна",
+        "newSearch": "Новий пошук",
+        "presets": "Пресет",
+        "priceRange": "Діапазон цін",
+        "quickSelect": "Швидкий вибір",
+        "saveConfirmTitle": "Зберегти фільтр?",
+        "saveFilter": "Зберегти фільтр",
+        "dealType": "Тип угоди",
+        "dealTypeRent": "Оренда",
+        "dealTypeSale": "Продаж",
+        "propertyClass": "Тип нерухомості",
+        "propertyClassResidential": "Житлова",
+        "propertyClassCommercial": "Комерційна",
+        "propertyClassLand": "Земельні ділянки",
+        "propertyCategories": "Категорія",
+        "propertyCategoryApartment": "Квартира",
+        "propertyCategoryRoom": "Кімната",
+        "propertyCategoryHouse": "Будинок",
+        "propertyCategoryVilla": "Вілла",
+        "propertyCategoryPenthouse": "Пентхаус",
+        "propertyCategoryTownhouse": "Таунхаус",
+        "propertyCategoryStudio": "Студія",
+        "propertyCategoryOffice": "Офіс",
+        "propertyCategoryRetail": "Торгове приміщення",
+        "propertyCategoryWarehouse": "Склад",
+        "propertyCategoryRestaurant": "Ресторан",
+        "propertyCategoryHotel": "Готель",
+        "propertyCategoryLand": "Земельна ділянка",
+        "selectPoint": "Оберіть точку",
+        "sortDate": "За датою",
+        "studio": "Студія",
+        "viewList": "Список",
+        "viewMap": "Карта",
+        "min": "Мін",
+        "max": "Макс",
+        "bathrooms": "Ванні кімнати",
+        "bathroomsMin": "Ванних мін.",
+        "bathroomCount": "Кількість ванних кімнат",
+        "findMe": "Знайди мені",
+        "show": "Показати",
+        "resultsFound": "Знайдено <b>{count}</b>",
+        "resultsFoundLabel": "Знайдено",
+        "savedFilter": "Збережений фільтр",
+        "markerType": {
+            "all": "Всі об'єкти",
+            "like": "Сподобались",
+            "dislike": "Не сподобались",
+            "view": "Переглянуто",
+            "noView": "Не переглянуто",
+            "saved": "Збережені",
+            "toReview": "На розгляд",
+            "toThink": "Подумати"
+        }
     },
-    "message": {
-      "placeholder": "Введіть повідомлення..."
+    "map": {
+        "title": "Карта",
+        "searchThisArea": "Шукати в цій зоні",
+        "searchAsIMoveMap": "Шукати при переміщенні карти",
+        "zoom": {
+            "in": "Наблизити",
+            "out": "Віддалити"
+        },
+        "fullscreen": "На весь екран",
+        "exitFullscreen": "Вийти з повноекранного режиму",
+        "currentLocation": "Моє місцезнаходження",
+        "clusteredProperties": "{count} оголошень",
+        "loading": "Завантаження карти...",
+        "error": "Помилка завантаження карти",
+        "noPropertiesInArea": "В цій зоні немає оголошень",
+        "expandArea": "Розширте зону пошуку",
+        "layers": {
+            "title": "Шари",
+            "satellite": "Супутник",
+            "streets": "Вулиці",
+            "transit": "Транспорт"
+        },
+        "legend": {
+            "title": "Легенда",
+            "priceRange": "Діапазон цін",
+            "low": "Низька",
+            "medium": "Середня",
+            "high": "Висока"
+        },
+        "showMap": "Показати карту"
     },
-    "propertyCard": {
-      "bathrooms": "ванні",
-      "bedrooms": "спальні",
-      "contact": "Контакт",
-      "floor": "пов.",
-      "live": "LIVE",
-      "notViewed": "Не переглянуто",
-      "notViewedGroup": "Не переглянуто",
-      "objects": "об'єктів",
-      "perMonth": "/міс",
-      "rooms": "кімн.",
-      "today": "Сьогодні",
-      "viewedGroup": "Переглянуто",
-      "walkMin": "хв пішки",
-      "yesterday": "Вчора"
+    "auth": {
+        "login": {
+            "title": "Вхід",
+            "subtitle": "Увійдіть до свого облікового запису",
+            "email": "Email",
+            "emailPlaceholder": "Введіть ваш email",
+            "password": "Пароль",
+            "passwordPlaceholder": "Введіть ваш пароль",
+            "rememberMe": "Запам'ятати мене",
+            "forgotPassword": "Забули пароль?",
+            "loginButton": "Увійти",
+            "noAccount": "Немає облікового запису?",
+            "registerLink": "Зареєструватися",
+            "orContinueWith": "Або продовжити через",
+            "google": "Google",
+            "facebook": "Facebook"
+        },
+        "register": {
+            "title": "Реєстрація",
+            "subtitle": "Створіть обліковий запис",
+            "firstName": "Ім'я",
+            "firstNamePlaceholder": "Введіть ваше ім'я",
+            "lastName": "Прізвище",
+            "lastNamePlaceholder": "Введіть ваше прізвище",
+            "email": "Email",
+            "emailPlaceholder": "Введіть ваш email",
+            "password": "Пароль",
+            "passwordPlaceholder": "Створіть пароль",
+            "confirmPassword": "Підтвердіть пароль",
+            "confirmPasswordPlaceholder": "Підтвердіть пароль",
+            "acceptTerms": "Я приймаю",
+            "termsLink": "умови використання",
+            "and": "та",
+            "privacyLink": "політику конфіденційності",
+            "registerButton": "Зареєструватися",
+            "haveAccount": "Вже є обліковий запис?",
+            "loginLink": "Увійти",
+            "orContinueWith": "Або продовжити через"
+        },
+        "forgotPassword": {
+            "title": "Відновлення пароля",
+            "subtitle": "Введіть ваш email для відновлення пароля",
+            "email": "Email",
+            "emailPlaceholder": "Введіть ваш email",
+            "sendButton": "Відправити інструкції",
+            "backToLogin": "Повернутися до входу",
+            "successMessage": "Інструкції відправлені на ваш email"
+        },
+        "resetPassword": "Скинути пароль",
+        "errors": {
+            "invalidCredentials": "Невірний email або пароль",
+            "emailRequired": "Email обов'язковий",
+            "emailInvalid": "Невірний формат email",
+            "passwordRequired": "Пароль обов'язковий",
+            "passwordTooShort": "Пароль повинен містити мінімум 8 символів",
+            "passwordsNotMatch": "Паролі не співпадають",
+            "firstNameRequired": "Ім'я обов'язкове",
+            "lastNameRequired": "Прізвище обов'язкове",
+            "termsRequired": "Ви повинні прийняти умови використання",
+            "emailExists": "Email вже використовується",
+            "userNotFound": "Користувача не знайдено",
+            "tokenExpired": "Термін дії токена закінчився",
+            "networkError": "Помилка з'єднання. Спробуйте ще раз"
+        },
+        "backToLogin": "Повернутися до входу",
+        "checkEmail": "Перевірте вашу пошту",
+        "confirmPassword": "Підтвердити пароль",
+        "createAccount": "Створити акаунт",
+        "enterCredentials": "Введіть ваші дані",
+        "enterDetails": "Введіть деталі",
+        "loading": "Завантаження...",
+        "orContinueWith": "Або увійти через",
+        "passwordRequirements": "Мінімум 8 символів",
+        "resetLinkSent": "Посилання для скидання надіслано",
+        "resetPasswordDescription": "Введіть ваш email для скидання пароля",
+        "sendResetLink": "Надіслати посилання",
+        "signIn": "Увійти",
+        "signOut": "Вийти",
+        "welcomeBack": "З поверненням",
+        "email": "Email",
+        "signUp": "Зареєструватися",
+        "tabRequiresAuth": "Увійдіть, щоб створити вкладки пошуку"
     },
-    "searchPlaceholder": "Пошук чатів...",
-    "selectConversation": "Оберіть чат",
-    "settings": {
-      "active": "Активний",
-      "activeFilters": "Активні фільтри",
-      "activeHours": "Активні години",
-      "agentStatus": "Статус агента",
-      "editFilter": "Редагувати",
-      "every15min": "Кожні 15 хв",
-      "every1hour": "Кожну 1 годину",
-      "every2hours": "Кожні 2 години",
-      "every30min": "Кожні 30 хв",
-      "frequency": "Частота",
-      "from": "З",
-      "immediately": "Негайно",
-      "linkFilter": "Прив'язати фільтр",
-      "paused": "На паузі",
-      "runningFor": "Працює {days} днів",
-      "searchParams": "Параметри пошуку",
-      "title": "Налаштування",
-      "to": "До",
-      "totalFound": "Всього знайдено: {count}"
+    "profile": {
+        "title": "Профіль",
+        "editProfile": "Редагувати профіль",
+        "personalInfo": "Особиста інформація",
+        "photo": {
+            "title": "Фото профілю",
+            "upload": "Завантажити фото",
+            "remove": "Видалити фото",
+            "maxSize": "Максимальний розмір: 5 МБ"
+        },
+        "address": {
+            "title": "Адреса",
+            "street": "Вулиця",
+            "city": "Місто",
+            "zipCode": "Поштовий індекс",
+            "country": "Країна"
+        },
+        "preferences": {
+            "title": "Налаштування",
+            "language": "Мова",
+            "currency": "Валюта",
+            "notifications": "Сповіщення",
+            "emailNotifications": "Email-сповіщення",
+            "pushNotifications": "Push-сповіщення",
+            "smsNotifications": "SMS-сповіщення"
+        },
+        "security": "Безпека",
+        "subscription": {
+            "title": "Підписка",
+            "currentPlan": "Поточний план",
+            "planDetails": "Деталі плану",
+            "upgradePlan": "Покращити план",
+            "cancelSubscription": "Скасувати підписку",
+            "renewalDate": "Дата оновлення",
+            "billingHistory": "Історія платежів",
+            "active": "Активна",
+            "aiFilters": "AI фільтри",
+            "cancelAtPeriodEnd": "Скасувати в кінці періоду",
+            "cancelConfirmDescription": "Ви можете користуватися до кінця періоду.",
+            "cancelConfirmTitle": "Скасувати?",
+            "canceled": "Скасовано",
+            "canceledOn": "Скасовано",
+            "changePlan": "Змінити план",
+            "comparePlans": "Порівняти плани",
+            "currentPlanBadge": "Поточний",
+            "expired": "Термін дії минув",
+            "features": "Функції",
+            "noPlan": "Немає плану",
+            "ownerAccess": "Доступ до власників",
+            "pastDue": "Прострочено",
+            "renewsOn": "Оновлюється",
+            "searchTabs": "Вкладки пошуку",
+            "selectPlan": "Обрати план"
+        },
+        "myListings": {
+            "title": "Мої оголошення",
+            "active": "Активні",
+            "inactive": "Неактивні",
+            "draft": "Чернетки",
+            "addNew": "Додати нове",
+            "noListings": "У вас поки немає оголошень"
+        },
+        "savedProperties": "Збережені об'єкти",
+        "messages": {
+            "title": "Повідомлення",
+            "inbox": "Вхідні",
+            "sent": "Відправлені",
+            "archived": "Архів",
+            "noMessages": "У вас немає повідомлень"
+        },
+        "deleteAccount": "Видалити акаунт",
+        "saveChanges": "Зберегти зміни",
+        "changesSaved": "Зміни збережено",
+        "uploadPhoto": "Завантажити фото",
+        "removePhoto": "Видалити фото",
+        "accountStats": "Статистика акаунту",
+        "activeSessions": "Активні сесії",
+        "confirmDelete": "Підтвердити видалення",
+        "confirmDeleteDescription": "Цю дію неможливо скасувати.",
+        "confirmDeleteTitle": "Видалити акаунт?",
+        "confirmNewPassword": "Підтвердіть новий пароль",
+        "currentPassword": "Поточний пароль",
+        "dangerZone": "Небезпечна зона",
+        "deleteAccountWarning": "Всі ваші дані будуть видалені.",
+        "displayName": "Ім'я",
+        "displayNamePlaceholder": "Ваше ім'я",
+        "errorSaving": "Помилка збереження",
+        "errors": {
+            "passwordMismatch": "Паролі не співпадають"
+        },
+        "language": "Мова",
+        "logoutAll": "Вийти з усіх пристроїв",
+        "memberSince": "Учасник з",
+        "notificationSettings": {
+            "email": {
+                "accountUpdates": "Оновлення акаунту",
+                "newProperties": "Нові об'єкти",
+                "priceChanges": "Зміни цін",
+                "promotions": "Акції",
+                "savedSearches": "Збережені пошуки",
+                "title": "Email"
+            },
+            "push": {
+                "messages": "Повідомлення",
+                "newProperties": "Нові об'єкти",
+                "priceChanges": "Зміни цін",
+                "savedSearches": "Збережені пошуки",
+                "title": "Push"
+            },
+            "telegram": {
+                "connect": "Підключити",
+                "connected": "Підключено",
+                "disconnect": "Відключити",
+                "enabled": "Увімкнено",
+                "newProperties": "Нові об'єкти",
+                "priceChanges": "Зміни цін",
+                "title": "Telegram"
+            }
+        },
+        "notifications": "Сповіщення",
+        "passwordChanged": "Пароль успішно змінено",
+        "passwordRequirements": "Мінімум 8 символів",
+        "payments": {
+            "failed": "Помилка",
+            "noPayments": "Немає платежів",
+            "pending": "В очікуванні",
+            "refunded": "Повернуто",
+            "succeeded": "Успішно",
+            "title": "Платежі"
+        },
+        "pushNotifications": "Push-сповіщення",
+        "saved": "Збережено",
+        "sessions": {
+            "current": "Поточна сесія",
+            "lastActive": "Остання активність",
+            "terminateOther": "Завершити інші",
+            "title": "Сесії"
+        },
+        "tabs": {
+            "appearance": "Вигляд",
+            "general": "Загальні",
+            "notifications": "Сповіщення",
+            "security": "Безпека",
+            "subscription": "Підписка"
+        },
+        "theme": "Тема",
+        "themeDark": "Темна",
+        "themeLight": "Світла",
+        "themeSystem": "Системна",
+        "viewedProperties": "Переглянуті об'єкти"
     },
-    "tabs": {
-      "aiAgent": "AI Агент",
-      "all": "Всі",
-      "support": "Підтримка",
-      "users": "Користувачі"
+    "errors": {
+        "404": {
+            "title": "Сторінка не знайдена",
+            "description": "Схоже, що ця сторінка не існує або була переміщена.",
+            "button": "Повернутися на головну"
+        },
+        "500": {
+            "title": "Помилка сервера",
+            "description": "Щось пішло не так на нашому сервері. Ми вже працюємо над виправленням.",
+            "button": "Спробувати ще раз"
+        },
+        "generic": {
+            "title": "Щось пішло не так",
+            "description": "Сталася помилка. Будь ласка, спробуйте ще раз.",
+            "button": "Спробувати ще раз"
+        },
+        "network": {
+            "title": "Немає з'єднання",
+            "description": "Перевірте підключення до інтернету та спробуйте знову.",
+            "button": "Повторити"
+        },
+        "unauthorized": {
+            "title": "Доступ заборонено",
+            "description": "Для доступу до цієї сторінки необхідно увійти.",
+            "button": "Увійти"
+        },
+        "forbidden": {
+            "title": "Доступ заборонено",
+            "description": "У вас немає прав для доступу до цієї сторінки.",
+            "button": "Повернутися назад"
+        }
     },
-    "toast": {
-      "newProperty": "Знайдено новий об'єкт",
-      "view": "Переглянути"
+    "sidebar": {
+        "title": "Фільтри",
+        "close": "Закрити",
+        "apply": "Застосувати",
+        "reset": "Скинути все",
+        "aiAgent": "AI Агент",
+        "area": "Площа",
+        "category": "Категорія",
+        "newSearch": "Новий пошук",
+        "price": "Ціна",
+        "rooms": "Кімнати",
+        "saveFilter": "Зберегти фільтр",
+        "search": "Пошук",
+        "selectSearch": "Оберіть пошук",
+        "sortDate": "За датою",
+        "viewList": "Список",
+        "viewMap": "Карта",
+        "favorites": "Вибране",
+        "chat": "Чат",
+        "profile": "Профіль",
+        "tabLimit": "Ліміт вкладок досягнуто",
+        "tabLimitDescription": "Ви досягли максимуму в {max} вкладок. Розширте тариф або відредагуйте існуючі.",
+        "upgradePlan": "Розширити тариф",
+        "editTab": "Редагувати вкладку",
+        "clearFilters": "Очистити фільтри",
+        "assignAiAgent": "Дати завдання ІІ-агенту",
+        "agentSearching": "Агент шукає...",
+        "agentNotifications": "Сповіщення з {startHour} до {endHour}",
+        "goToChat": "Перейти в чат з агентом",
+        "continueSearch": "Продовжити пошук",
+        "distanceToPoint": "Відстань до точки",
+        "loginRequired": "Для збереження фільтрів необхідна авторизація",
+        "loginToSave": "Увійти",
+        "searchTabs": "Пошукові вкладки",
+        "noTabs": "Натисніть +, щоб створити вкладку пошуку",
+        "tooltip": {
+            "search": "Пошук",
+            "favorites": "Обране",
+            "chat": "Повідомлення",
+            "profile": "Профіль",
+            "newSearch": "Створити вкладку",
+            "theme": "Тема",
+            "language": "Мова"
+        }
+    },
+    "listing": {
+        "create": {
+            "title": "Додати оголошення",
+            "subtitle": "Заповніть інформацію про вашу нерухомість",
+            "steps": {
+                "basic": "Основна інформація",
+                "details": "Деталі",
+                "features": "Зручності",
+                "photos": "Фотографії",
+                "location": "Розташування",
+                "preview": "Попередній перегляд"
+            },
+            "basicInfo": {
+                "title": "Основна інформація",
+                "propertyTitle": "Назва оголошення",
+                "propertyTitlePlaceholder": "Наприклад: Затишна квартира в центрі Барселони",
+                "propertyType": "Тип нерухомості",
+                "description": "Опис",
+                "descriptionPlaceholder": "Опишіть вашу нерухомість...",
+                "price": "Ціна за місяць",
+                "pricePlaceholder": "0",
+                "deposit": "Застава",
+                "depositPlaceholder": "0",
+                "utilities": "Комунальні послуги",
+                "utilitiesIncluded": "Включені в ціну",
+                "utilitiesNotIncluded": "Не включені"
+            },
+            "details": {
+                "title": "Деталі нерухомості",
+                "bedrooms": "Кількість спалень",
+                "bathrooms": "Кількість ванних кімнат",
+                "area": "Площа (м²)",
+                "areaPlaceholder": "0",
+                "floor": "Поверх",
+                "floorPlaceholder": "0",
+                "totalFloors": "Всього поверхів",
+                "totalFloorsPlaceholder": "0",
+                "furnished": "Мебльована",
+                "availableFrom": "Доступна з",
+                "minRentalPeriod": "Мінімальний термін оренди (місяців)"
+            },
+            "features": {
+                "title": "Зручності та особливості",
+                "selectFeatures": "Виберіть доступні зручності"
+            },
+            "photos": {
+                "title": "Фотографії",
+                "description": "Додайте фотографії вашої нерухомості (мінімум 3, максимум 20)",
+                "upload": "Завантажити фотографії",
+                "maxSize": "Максимальний розмір файлу: 10 МБ",
+                "dragDrop": "Перетягніть фотографії сюди або натисніть для вибору",
+                "reorder": "Перетягніть для зміни порядку"
+            },
+            "location": {
+                "title": "Розташування",
+                "address": "Адреса",
+                "addressPlaceholder": "Вулиця, номер будинку",
+                "neighborhood": "Район",
+                "neighborhoodPlaceholder": "Наприклад: Eixample",
+                "city": "Місто",
+                "cityPlaceholder": "Барселона",
+                "zipCode": "Поштовий індекс",
+                "zipCodePlaceholder": "08001",
+                "showMap": "Показати на карті",
+                "dragMarker": "Перетягніть маркер для точного розташування"
+            },
+            "preview": {
+                "title": "Попередній перегляд",
+                "description": "Перевірте, як виглядатиме ваше оголошення",
+                "edit": "Редагувати"
+            },
+            "buttons": {
+                "back": "Назад",
+                "next": "Далі",
+                "save": "Зберегти як чернетку",
+                "publish": "Опублікувати",
+                "cancel": "Скасувати"
+            },
+            "validation": {
+                "titleRequired": "Назва обов'язкова",
+                "typeRequired": "Виберіть тип нерухомості",
+                "descriptionRequired": "Опис обов'язковий",
+                "priceRequired": "Вкажіть ціну",
+                "priceInvalid": "Невірна ціна",
+                "bedroomsRequired": "Вкажіть кількість спалень",
+                "bathroomsRequired": "Вкажіть кількість ванних кімнат",
+                "areaRequired": "Вкажіть площу",
+                "areaInvalid": "Невірна площа",
+                "photosRequired": "Додайте мінімум 3 фотографії",
+                "addressRequired": "Адреса обов'язкова",
+                "neighborhoodRequired": "Вкажіть район",
+                "cityRequired": "Місто обов'язкове",
+                "zipCodeRequired": "Поштовий індекс обов'язковий"
+            },
+            "success": {
+                "title": "Оголошення створено!",
+                "description": "Ваше оголошення буде опубліковано після модерації",
+                "viewListing": "Переглянути оголошення",
+                "addAnother": "Додати ще одне"
+            }
+        },
+        "edit": {
+            "title": "Редагувати оголошення",
+            "save": "Зберегти зміни",
+            "success": "Зміни збережено"
+        },
+        "delete": {
+            "title": "Видалити оголошення",
+            "confirmation": "Ви впевнені, що хочете видалити це оголошення?",
+            "button": "Видалити",
+            "success": "Оголошення видалено"
+        },
+        "status": {
+            "active": "Активне",
+            "inactive": "Неактивне",
+            "pending": "На модерації",
+            "rejected": "Відхилено",
+            "expired": "Закінчився термін"
+        },
+        "aiStoriesSubtitle": "Нові пропозиції від AI агента",
+        "aiStoriesTitle": "Нові пропозиції",
+        "emptySubtitle": "Спробуйте змінити фільтри",
+        "emptyTitle": "Нічого не знайдено",
+        "onMap": "На карті",
+        "showOnMap": "Показати на карті",
+        "subtitle": "Знайдено {count} об'єктів",
+        "viewModeGrid": "Сітка",
+        "viewModeList": "Список",
+        "title": "Оренда нерухомості у Барселоні",
+        "metaDescription": "Пошук житла в оренду у Барселоні з AI-агентом"
+    },
+    "search": {
+        "title": "Результати пошуку",
+        "resultsCount": "{count} оголошень знайдено",
+        "noResults": "Нічого не знайдено",
+        "noResultsDescription": "Спробуйте змінити фільтри або розширити зону пошуку",
+        "sortBy": {
+            "title": "Сортувати за",
+            "newest": "Найновіші",
+            "oldest": "Найстаріші",
+            "priceAsc": "Ціна: від низької до високої",
+            "priceDesc": "Ціна: від високої до низької",
+            "areaAsc": "Площа: від меншої до більшої",
+            "areaDesc": "Площа: від більшої до меншої",
+            "relevance": "Релевантність"
+        },
+        "viewMode": {
+            "grid": "Сітка",
+            "list": "Список",
+            "map": "Карта"
+        },
+        "pagination": {
+            "previous": "Попередня",
+            "next": "Наступна",
+            "page": "Сторінка {page} з {total}"
+        },
+        "savedSearch": {
+            "title": "Зберегти пошук",
+            "description": "Отримуйте сповіщення про нові оголошення",
+            "name": "Назва пошуку",
+            "namePlaceholder": "Наприклад: Квартири в Eixample",
+            "frequency": "Частота сповіщень",
+            "immediately": "Миттєво",
+            "daily": "Щодня",
+            "weekly": "Щотижня",
+            "save": "Зберегти пошук",
+            "saved": "Пошук збережено"
+        }
+    },
+    "contact": {
+        "title": "Зв'яжіться з нами",
+        "subtitle": "Є питання? Ми готові допомогти",
+        "form": {
+            "name": "Ім'я",
+            "namePlaceholder": "Ваше ім'я",
+            "email": "Email",
+            "emailPlaceholder": "Ваш email",
+            "subject": "Тема",
+            "subjectPlaceholder": "Тема повідомлення",
+            "message": "Повідомлення",
+            "messagePlaceholder": "Ваше повідомлення...",
+            "send": "Відправити",
+            "sending": "Відправка...",
+            "sent": "Повідомлення відправлено"
+        },
+        "info": {
+            "email": "Email",
+            "phone": "Телефон",
+            "address": "Адреса",
+            "hours": "Години роботи",
+            "hoursValue": "Пн-Пт: 9:00-18:00"
+        },
+        "validation": {
+            "nameRequired": "Ім'я обов'язкове",
+            "emailRequired": "Email обов'язковий",
+            "emailInvalid": "Невірний формат email",
+            "subjectRequired": "Тема обов'язкова",
+            "messageRequired": "Повідомлення обов'язкове"
+        },
+        "agency": "Агентство",
+        "agencyProfile": "Профіль агентства",
+        "agent": "Агент",
+        "authRequiredDescription": "Увійдіть, щоб побачити контакти",
+        "authRequiredOwnerDescription": "Увійдіть, щоб зв'язатися з власником",
+        "authRequiredTitle": "Потрібен вхід",
+        "call": "Зателефонувати",
+        "closeButton": "Закрити",
+        "copySuccess": "Скопійовано успішно",
+        "limitExceededDescription": "Ліміт переглядів перевищено",
+        "limitExceededTitle": "Ліміт перевищено",
+        "loadingTitle": "Завантаження...",
+        "loginButton": "Увійти",
+        "owner": "Власник",
+        "showPhone": "Показати телефон",
+        "telegram": "Telegram",
+        "upgradeButton": "Покращити план",
+        "website": "Вебсайт",
+        "whatsapp": "WhatsApp",
+        "phone": "Телефон",
+        "email": "Email",
+        "limitInfo": "{current} з {max} використано"
+    },
+    "about": {
+        "title": "Про нас",
+        "subtitle": "Робимо пошук житла простим та зручним",
+        "mission": {
+            "title": "Наша місія",
+            "description": "Ми прагнемо спростити процес пошуку житла, надаючи найкращу платформу для пошуку квартир та будинків в оренду."
+        },
+        "vision": {
+            "title": "Наше бачення",
+            "description": "Стати найпопулярнішою платформою для пошуку житла в Європі."
+        },
+        "values": {
+            "title": "Наші цінності",
+            "transparency": {
+                "title": "Прозорість",
+                "description": "Чесність у всіх наших взаємодіях"
+            },
+            "innovation": {
+                "title": "Інновації",
+                "description": "Постійне вдосконалення наших послуг"
+            },
+            "support": {
+                "title": "Підтримка",
+                "description": "Завжди готові допомогти нашим користувачам"
+            }
+        },
+        "team": {
+            "title": "Наша команда",
+            "description": "Команда професіоналів, які працюють над покращенням сервісу"
+        },
+        "stats": {
+            "users": "Користувачів",
+            "properties": "Оголошень",
+            "cities": "Міст",
+            "satisfied": "Задоволених клієнтів"
+        }
+    },
+    "blog": {
+        "title": "Блог",
+        "subtitle": "Корисні поради та новини про нерухомість",
+        "readMore": "Читати далі",
+        "readTime": "{minutes} хв читання",
+        "author": "Автор",
+        "publishedOn": "Опубліковано",
+        "category": "Категорія",
+        "categories": {
+            "all": "Всі категорії",
+            "tips": "Поради",
+            "news": "Новини",
+            "guides": "Гайди",
+            "market": "Ринок"
+        },
+        "relatedPosts": "Схожі статті",
+        "share": "Поділитися статтею",
+        "comments": {
+            "title": "Коментарі",
+            "leave": "Залишити коментар",
+            "name": "Ім'я",
+            "comment": "Коментар",
+            "submit": "Відправити",
+            "noComments": "Поки немає коментарів"
+        }
+    },
+    "newsletter": {
+        "title": "Підпишіться на розсилку",
+        "description": "Отримуйте останні новини та пропозиції",
+        "email": "Email",
+        "emailPlaceholder": "Ваш email",
+        "subscribe": "Підписатися",
+        "subscribing": "Підписка...",
+        "subscribed": "Ви підписані!",
+        "error": "Помилка підписки",
+        "validation": {
+            "emailRequired": "Email обов'язковий",
+            "emailInvalid": "Невірний формат email"
+        }
+    },
+    "cookies": {
+        "title": "Ми використовуємо файли cookie",
+        "description": "Ми використовуємо файли cookie для покращення вашого досвіду на сайті. Продовжуючи використовувати сайт, ви погоджуєтесь з нашою політикою використання файлів cookie.",
+        "accept": "Прийняти",
+        "decline": "Відхилити",
+        "settings": "Налаштування",
+        "learnMore": "Дізнатися більше",
+        "preferences": {
+            "title": "Налаштування cookie",
+            "necessary": {
+                "title": "Необхідні",
+                "description": "Необхідні для роботи сайту"
+            },
+            "analytics": {
+                "title": "Аналітичні",
+                "description": "Допомагають нам покращувати сайт"
+            },
+            "marketing": {
+                "title": "Маркетингові",
+                "description": "Використовуються для персоналізації реклами"
+            },
+            "save": "Зберегти налаштування"
+        }
+    },
+    "legal": {
+        "termsOfService": {
+            "title": "Умови використання",
+            "lastUpdated": "Останнє оновлення: {date}"
+        },
+        "privacyPolicy": {
+            "title": "Політика конфіденційності",
+            "lastUpdated": "Останнє оновлення: {date}"
+        },
+        "cookiePolicy": {
+            "title": "Політика використання cookie",
+            "lastUpdated": "Останнє оновлення: {date}"
+        }
+    },
+    "notifications": {
+        "title": "Сповіщення",
+        "markAllRead": "Позначити все як прочитане",
+        "clearAll": "Очистити все",
+        "noNotifications": "Немає сповіщень",
+        "types": {
+            "newProperty": "Нова нерухомість",
+            "priceChange": "Зміна ціни",
+            "message": "Нове повідомлення",
+            "savedSearch": "Збережений пошук",
+            "system": "Системне"
+        },
+        "settings": {
+            "title": "Налаштування сповіщень",
+            "email": "Email-сповіщення",
+            "push": "Push-сповіщення",
+            "sms": "SMS-сповіщення",
+            "categories": {
+                "newProperties": "Нові оголошення",
+                "priceChanges": "Зміни цін",
+                "messages": "Повідомлення",
+                "updates": "Оновлення системи"
+            }
+        }
+    },
+    "messages": {
+        "title": "Повідомлення",
+        "newMessage": "Нове повідомлення",
+        "compose": "Написати",
+        "inbox": "Вхідні",
+        "sent": "Відправлені",
+        "archived": "Архів",
+        "noMessages": "Немає повідомлень",
+        "search": "Шукати повідомлення",
+        "to": "Кому",
+        "from": "Від",
+        "subject": "Тема",
+        "message": "Повідомлення",
+        "send": "Відправити",
+        "reply": "Відповісти",
+        "forward": "Переслати",
+        "delete": "Видалити",
+        "archive": "Архівувати",
+        "markRead": "Позначити як прочитане",
+        "markUnread": "Позначити як непрочитане"
+    },
+    "validation": {
+        "required": "Це поле обов'язкове",
+        "email": "Введіть дійсну адресу email",
+        "minLength": "Мінімальна довжина: {length} символів",
+        "maxLength": "Максимальна довжина: {length} символів",
+        "minValue": "Мінімальне значення: {value}",
+        "maxValue": "Максимальне значення: {value}",
+        "pattern": "Невірний формат",
+        "url": "Введіть дійсний URL",
+        "phone": "Введіть дійсний номер телефону",
+        "date": "Введіть дійсну дату",
+        "number": "Введіть число",
+        "integer": "Введіть ціле число",
+        "positive": "Значення повинно бути позитивним",
+        "fileSize": "Файл занадто великий. Максимальний розмір: {size}",
+        "fileType": "Непідтримуваний тип файлу"
     },
     "actions": {
-      "like": "Подобається",
-      "dislike": "Не подобається",
-      "save": "Зберегти",
-      "saved": "Збережено",
-      "viewDetails": "Детальніше",
-      "share": "Поділитися"
+        "addNote": "Додати нотатку",
+        "copyLink": "Копіювати посилання",
+        "dislike": "Не подобається",
+        "disliked": "Не сподобалось",
+        "downloadPdf": "Завантажити PDF",
+        "editNote": "Редагувати нотатку",
+        "like": "Вподобати",
+        "liked": "Вподобано",
+        "more": "Більше",
+        "noteModal": {
+            "cancelButton": "Скасувати",
+            "closeButton": "Закрити",
+            "description": "Додайте нотатку до цього об'єкта",
+            "placeholder": "Напишіть вашу нотатку тут...",
+            "saveButton": "Зберегти",
+            "title": "Нотатка",
+            "characterCount": "{current}/{max}"
+        },
+        "noteSaved": "Нотатку збережено",
+        "report": "Поскаржитись",
+        "share": "Поділитися",
+        "linkCopied": "Посилання скопійовано",
+        "linkCopyError": "Не вдалося скопіювати посилання"
+    },
+    "agency": {
+        "aboutAgency": "Про агентство",
+        "agencyProperties": "Об'єкти агентства",
+        "agencyReviews": "Відгуки про агентство",
+        "agentsCount": "Кількість агентів",
+        "description": "Опис",
+        "filterByLanguage": "Фільтрувати за мовою",
+        "filterByPropertyType": "Фільтрувати за типом нерухомості",
+        "founded": "Засновано",
+        "languages": "Мови",
+        "loadMore": "Завантажити ще",
+        "mainOffice": "Головний офіс",
+        "namePlaceholder": "Назва агентства",
+        "noAgenciesFound": "Агентств не знайдено",
+        "noAgentsFound": "Агентів не знайдено",
+        "noPropertiesFound": "Об'єктів не знайдено",
+        "objects": "об'єктів",
+        "objectsCount": "{count} об'єктів",
+        "offices": "Офіси",
+        "phonePlaceholder": "Телефон",
+        "premium": "Преміум",
+        "propertyTypes": "Типи нерухомості",
+        "reply": "Відповісти",
+        "reviewsCount": "{count} відгуків",
+        "rooms": "Кімнати",
+        "searchAgencies": "Пошук агентств",
+        "services": "Послуги",
+        "showPhone": "Показати телефон",
+        "sortBy": "Сортувати за",
+        "sortName": "Назва",
+        "sortObjects": "Кількість об'єктів",
+        "sortRating": "Рейтинг",
+        "sortReviews": "Кількість відгуків",
+        "sqm": "м²",
+        "team": "Команда",
+        "tryChangeFilters": "Спробуйте змінити фільтри",
+        "writeMessage": "Написати повідомлення",
+        "agencies": "Агентства нерухомості",
+        "propertyTypesLabels": {
+            "residential": "Житлова",
+            "commercial": "Комерційна",
+            "luxury": "Люкс",
+            "newBuilding": "Новобудова",
+            "secondary": "Вторинна",
+            "rental": "Оренда",
+            "sale": "Продаж"
+        },
+        "verified": "Перевірено",
+        "recommendedAgencies": "Рекомендовані агентства",
+        "propertiesCount": "{count} properties found",
+        "filterPropertiesDescription": "Filter properties by price, rooms and agent",
+        "noPropertiesMatchFilters": "No properties found matching selected filters",
+        "agent": "Agent",
+        "selectAgent": "Select agent",
+        "allAgents": "All agents"
+    },
+    "chat": {
+        "aiAgent": {
+            "foundProperties": "{count} нових об'єктів знайдено",
+            "noProperties": "Об'єктів не знайдено",
+            "searching": "Пошук об'єктів...",
+            "settings": "Налаштування Агента",
+            "title": "AI Агент"
+        },
+        "empty": {
+            "subtitle": "Почніть розмову",
+            "title": "Повідомлень немає"
+        },
+        "filters": {
+            "allFilters": "Всі фільтри",
+            "allTime": "Весь час",
+            "selectFilter": "Оберіть фільтр",
+            "thisMonth": "Цей місяць",
+            "thisWeek": "Цей тиждень",
+            "today": "Сьогодні",
+            "yesterday": "Вчора"
+        },
+        "message": {
+            "placeholder": "Введіть повідомлення..."
+        },
+        "propertyCard": {
+            "bathrooms": "ванні",
+            "bedrooms": "спальні",
+            "contact": "Контакт",
+            "floor": "пов.",
+            "live": "LIVE",
+            "notViewed": "Не переглянуто",
+            "notViewedGroup": "Не переглянуто",
+            "objects": "об'єктів",
+            "perMonth": "/міс",
+            "rooms": "кімн.",
+            "today": "Сьогодні",
+            "viewedGroup": "Переглянуто",
+            "walkMin": "хв пішки",
+            "yesterday": "Вчора"
+        },
+        "searchPlaceholder": "Пошук чатів...",
+        "selectConversation": "Оберіть чат",
+        "settings": {
+            "active": "Активний",
+            "activeFilters": "Активні фільтри",
+            "activeHours": "Активні години",
+            "agentStatus": "Статус агента",
+            "editFilter": "Редагувати",
+            "every15min": "Кожні 15 хв",
+            "every1hour": "Кожну 1 годину",
+            "every2hours": "Кожні 2 години",
+            "every30min": "Кожні 30 хв",
+            "frequency": "Частота",
+            "from": "З",
+            "immediately": "Негайно",
+            "linkFilter": "Прив'язати фільтр",
+            "paused": "На паузі",
+            "runningFor": "Працює {days} днів",
+            "searchParams": "Параметри пошуку",
+            "title": "Налаштування",
+            "to": "До",
+            "totalFound": "Всього знайдено: {count}"
+        },
+        "tabs": {
+            "aiAgent": "AI Агент",
+            "all": "Всі",
+            "support": "Підтримка",
+            "users": "Користувачі"
+        },
+        "toast": {
+            "newProperty": "Знайдено новий об'єкт",
+            "view": "Переглянути"
+        },
+        "actions": {
+            "like": "Подобається",
+            "dislike": "Не подобається",
+            "save": "Зберегти",
+            "saved": "Збережено",
+            "viewDetails": "Детальніше",
+            "share": "Поділитися"
+        }
+    },
+    "comparison": {
+        "addMore": "Додати ще",
+        "airConditioning": "Кондиціонер",
+        "area": "Площа",
+        "back": "Назад",
+        "backToSearch": "Назад до пошуку",
+        "balcony": "Балкон",
+        "bathrooms": "Ванні кімнати",
+        "characteristics": "Характеристики",
+        "clearAll": "Очистити все",
+        "commission": "Комісія",
+        "deposit": "Застава",
+        "elevator": "Ліфт",
+        "emptySlot": "Порожнє місце",
+        "floor": "Поверх",
+        "furnished": "Мебльовано",
+        "heating": "Опалення",
+        "limitReached": "Ліміт досягнуто",
+        "minRentalPeriod": "Мін. термін оренди",
+        "months": "міс.",
+        "no": "Ні",
+        "notSpecified": "Не вказано",
+        "openComparison": "Відкрити порівняння",
+        "outOf": "з",
+        "parking": "Парковка",
+        "perMonth": "/міс",
+        "petFriendly": "Можна з тваринами",
+        "pool": "Басейн",
+        "price": "Ціна",
+        "pricePerMeter": "Ціна/м²",
+        "remove": "Видалити",
+        "rooms": "Кімнати",
+        "selected": "Обрано",
+        "sqm": "м²",
+        "subtitle": "Порівняння об'єктів",
+        "terrace": "Тераса",
+        "yes": "Так",
+        "compare": "Порівняти",
+        "title": "Порівняння об'єктів",
+        "inComparison": "У порівнянні"
+    },
+    "complaint": {
+        "cancel": "Скасувати",
+        "description": "Вкажіть причину скарги та опишіть проблему",
+        "descriptionLabel": "Опис",
+        "descriptionMinLength": "Опис має містити мінімум 10 символів",
+        "descriptionPlaceholder": "Опишіть проблему детальніше...",
+        "errorMessage": "Помилка при надсиланні скарги",
+        "reasonLabel": "Причина скарги",
+        "reasonPlaceholder": "Оберіть причину",
+        "reasonRequired": "Оберіть причину скарги",
+        "submit": "Надіслати скаргу",
+        "successMessage": "Скарга успішно надіслана",
+        "title": "Поскаржитись на оголошення",
+        "reasons": {
+            "spam": "Спам або небажана реклама",
+            "misleading": "Оманлива інформація",
+            "duplicate": "Дублікат оголошення",
+            "wrong_price": "Неправильна ціна",
+            "wrong_photos": "Неправильні фото",
+            "fraud": "Шахрайство або спроба шахрайства",
+            "offensive": "Образливий або неприйнятний контент",
+            "other": "Інша причина"
+        }
+    },
+    "draw": {
+        "addPolygon": "Додати полігон",
+        "cancel": "Скасувати",
+        "clickToAddPoint": "Клікніть, щоб додати точку",
+        "complete": "Завершити",
+        "delete": "Видалити",
+        "dragToMovePoint": "Перетягніть точку",
+        "drawingInstructions": "Інструкції малювання",
+        "drawnPolygons": "Намальовані полігони",
+        "edit": "Редагувати",
+        "emptyState": "Немає полігонів",
+        "emptyStateHint": "Почніть малювати на карті",
+        "maxPolygonsReached": "Ліміт полігонів досягнуто",
+        "minThreePoints": "Мінімум 3 точки",
+        "needMorePoints": "Потрібно більше точок",
+        "points": "точок",
+        "pointsCount": "{count} точок",
+        "polygonName": "Полігон {number}",
+        "tapToStart": "Натисніть для початку",
+        "undo": "Скасувати дію"
+    },
+    "favorites": {
+        "authPrompt": {
+            "description": "Увійдіть, щоб зберігати вибране",
+            "title": "Потрібен вхід"
+        },
+        "empty": {
+            "description": "Ваші улюблені об'єкти з'являться тут",
+            "filters": {
+                "description": "Зберігайте пошуки для швидкого доступу",
+                "title": "Збережені фільтри"
+            },
+            "notes": {
+                "description": "Додавайте нотатки до об'єктів",
+                "title": "Нотатки"
+            },
+            "professionals": {
+                "description": "Професіонали, за якими ви стежите, будуть тут",
+                "title": "Професіонали"
+            },
+            "title": "Немає вибраних"
+        },
+        "filters": {
+            "applyFilter": "Застосувати фільтр",
+            "lastUsed": "Останнє використання",
+            "propertiesCount": "{count} об'єктів",
+            "all": "Всі",
+            "liked": "Подобається",
+            "disliked": "Не подобається",
+            "unsorted": "Не розібрані",
+            "selectDateRange": "Вибрати період",
+            "advanced": "Розширені",
+            "advancedFilters": "Розширені фільтри",
+            "clearAll": "Очистити все",
+            "showing": "Показано {count} з {total}",
+            "noResults": "Немає результатів за заданими фільтрами",
+            "sort": {
+                "newestFirst": "Спочатку нові",
+                "oldestFirst": "Спочатку старі",
+                "priceLowToHigh": "Ціна: за зростанням",
+                "priceHighToLow": "Ціна: за спаданням",
+                "areaLargest": "Площа: найбільша",
+                "areaSmallest": "Площа: найменша"
+            }
+        },
+        "notes": {
+            "addNote": "Додати нотатку",
+            "apply": "Застосувати",
+            "cancel": "Скасувати",
+            "customDateTime": "Власна дата та час",
+            "date": "Дата",
+            "deleteNote": "Видалити нотатку",
+            "km": "км",
+            "minutes": "хв",
+            "placeholder": "Напишіть нотатку...",
+            "reminderPresets": {
+                "in1Hour": "Через 1 годину",
+                "in3Days": "Через 3 дні",
+                "in3Hours": "Через 3 години",
+                "inWeek": "Через тиждень",
+                "tomorrow": "Завтра"
+            },
+            "removeReminder": "Видалити нагадування",
+            "rooms": "кімнати",
+            "saveNote": "Зберегти нотатку",
+            "setReminder": "Встановити нагадування",
+            "time": "Час",
+            "today": "Сьогодні",
+            "tomorrowLabel": "Завтра",
+            "listView": "Список",
+            "calendarView": "Календар",
+            "filters": {
+                "allTypes": "Усі типи",
+                "propertyNotes": "Про об'єкти",
+                "agencyNotes": "Про агентства",
+                "generalNotes": "Загальні",
+                "all": "Усі",
+                "withReminder": "З нагадуванням",
+                "noReminder": "Без нагадування"
+            },
+            "sort": {
+                "recentlyUpdated": "Нещодавно оновлені",
+                "upcomingReminders": "Найближчі нагадування"
+            },
+            "noteText": "Текст нотатки",
+            "optional": "необов'язково",
+            "create": "Створити",
+            "deleteConfirm": "Видалити нотатку?",
+            "deleteDescription": "Цю дію не можна скасувати. Нотатку буде видалено назавжди.",
+            "delete": "Видалити",
+            "calendarViewComingSoon": "Вигляд календаря скоро буде доступний"
+        },
+        "professionals": {
+            "activeListings": "Активні оголошення",
+            "agency": "Агентство",
+            "agent": "Агент",
+            "contact": "Контакт",
+            "owner": "Власник",
+            "superAgent": "Супер Агент",
+            "yearsOnPlatform": "Років на платформі",
+            "filters": {
+                "all": "Всі",
+                "viewed": "Переглянуті",
+                "contacted": "Запитані контакти",
+                "messaged": "З листуванням",
+                "reviewed": "З відгуком"
+            },
+            "sort": {
+                "recentInteraction": "Останні взаємодії",
+                "mostMessages": "Більше повідомлень"
+            },
+            "viewed": "Переглянутий",
+            "contactRequested": "Контакти запитані",
+            "messages": "{count} повідомлень",
+            "reviewWritten": "Відгук написаний"
+        },
+        "tabs": {
+            "filters": "Фільтри",
+            "notes": "Нотатки",
+            "professionals": "Професіонали",
+            "properties": "Об'єкти"
+        },
+        "title": "Вибране"
+    },
+    "isochrone": {
+        "calculating": "Розрахунок...",
+        "clickOnMap": "Клікніть на карту",
+        "emptyStateHint": "Знайдіть адресу або клікніть на карту",
+        "pickPoint": "Оберіть точку",
+        "pointName": "Назва точки",
+        "profiles": {
+            "cycling": "Велосипед",
+            "driving": "Авто",
+            "drivingTraffic": "З заторами",
+            "walking": "Пішки"
+        },
+        "searchPlaceholder": "Пошук адреси...",
+        "selectedPoint": "Обрана точка",
+        "time": {
+            "minutes": "хв"
+        },
+        "travelMode": "Спосіб пересування"
+    },
+    "locationFilter": {
+        "actions": {
+            "clear": "Очистити",
+            "save": "Зберегти"
+        },
+        "modes": {
+            "draw": "Малювати",
+            "isochrone": "Ізохрона",
+            "radius": "Радіус",
+            "search": "Пошук"
+        },
+        "selectedPoint": "Обрана точка"
+    },
+    "locationSearch": {
+        "emptyState": "Локації не обрано",
+        "emptyStateHint": "Використовуйте пошук вище",
+        "remove": "Видалити",
+        "searchLabel": "Пошук локацій",
+        "searchPlaceholder": "Місто, район...",
+        "selectedLocations": "Обрані локації",
+        "title": "Пошук локації"
+    },
+    "mapSidebar": {
+        "changeSearchArea": "Змінити область пошуку",
+        "hidePanel": "Приховати панель",
+        "objectsCount": "{count} об'єктів",
+        "resetCluster": "Скинути кластер",
+        "showAsList": "Показати списком",
+        "showPanel": "Показати панель",
+        "sortArea": "За площею",
+        "sortAscending": "За зростанням",
+        "sortDate": "За датою",
+        "sortDescending": "За спаданням",
+        "sortPrice": "За ціною",
+        "expandPanel": "Відкрити",
+        "collapsePanel": "Згорнути"
+    },
+    "propertyDetail": {
+        "agent": "Агент",
+        "commission": "Комісія",
+        "deposit": "Застава",
+        "inFavorites": "У вибраному",
+        "kitchenArea": "Кухня",
+        "livingArea": "Житлова",
+        "locationSection": {
+            "categories": {
+                "attractions": "Пам'ятки",
+                "beauty": "Краса",
+                "entertainment": "Розваги",
+                "groceries": "Продукти",
+                "medical": "Медицина",
+                "parks": "Парки",
+                "restaurants": "Ресторани",
+                "schools": "Школи",
+                "shopping": "Шопінг",
+                "sports": "Спорт",
+                "transport": "Транспорт"
+            }
+        },
+        "map": "Карта",
+        "min": "хв",
+        "navPhotos": "Фото",
+        "noCommission": "Без комісії",
+        "objectsCount": "{count} об'єктів",
+        "objectsInWork": "Об'єкти в роботі",
+        "perMonth": "/міс",
+        "photos": "Фото",
+        "plan": "План",
+        "privateAgent": "Приватний маклер",
+        "reviews": "Відгуки",
+        "showPhone": "Показати телефон",
+        "sqm": "м²",
+        "superAgent": "Супер Агент",
+        "totalAtStart": "Всього при заїзді",
+        "tour3d": "3D тур",
+        "utilitiesIncluded": "Комунальні включено",
+        "utilitiesNotIncluded": "Комунальні не включено",
+        "video": "Відео",
+        "videoPresentation": "Відео презентація",
+        "walkMinutes": "{min} хв пішки",
+        "writeMessage": "Написати повідомлення",
+        "yearsOnPlatform": "{years} років на платформі",
+        "back": "Назад",
+        "navDescription": "Опис",
+        "navCharacteristics": "Характеристики",
+        "navMap": "Карта",
+        "navMedia": "Медіа",
+        "previous": "Попередній",
+        "next": "Наступний",
+        "updated": "Оновлено",
+        "views": "Переглядів",
+        "viewsToday": "сьогодні",
+        "showAllPhotos": "Всі {count} фото",
+        "floor": "Поверх",
+        "rooms": "Кімнати",
+        "roomsShort": "кімн.",
+        "ceilingHeight": "Висота стелі",
+        "bathrooms": "Ванні кімнати",
+        "area": "Площа",
+        "pricePerMeter": "€/м²",
+        "description": "Опис",
+        "showMore": "Показати повністю",
+        "showLess": "Згорнути",
+        "showOriginal": "Показати оригінал",
+        "showTranslation": "Показати переклад",
+        "translatedByAI": "Перекладено AI",
+        "characteristics": "Характеристики",
+        "aboutFlat": "Про квартиру",
+        "aboutBuilding": "Про будинок",
+        "amenities": "Зручності",
+        "showAllAmenities": "Ще {count} зручностей",
+        "location": "Розташування",
+        "infrastructure": "Інфраструктура",
+        "showOnMap": "Показати на карті",
+        "tenantPreferences": "Кого шукаємо",
+        "livingRules": "Умови проживання",
+        "roommates": "Сусіди по квартирі",
+        "aboutRoommates": "Про сусідів",
+        "petsAllowed": "Тварини дозволені",
+        "childrenAllowed": "Діти дозволені",
+        "couplesAllowed": "Пари дозволені",
+        "smokingAllowed": "Куріння дозволене",
+        "studentsAllowed": "Студенти дозволені",
+        "gender": "Стать",
+        "age": "Вік",
+        "atmosphere": "Атмосфера",
+        "occupation": "Професія",
+        "noSpecialConditions": "Без особливих умов",
+        "prepayment": "Передоплата",
+        "utilities": "Оплата комунальних",
+        "utilitiesIncludedFull": "включені (без лічильників)",
+        "utilitiesNotIncludedShort": "не включені",
+        "minRentalPeriod": "Від {months} міс.",
+        "term": "Термін оренди",
+        "rentalTerm": "Термін оренди",
+        "longTerm": "від року",
+        "months": "міс.",
+        "fromYear": "Від року",
+        "priceHistory": "Історія цін",
+        "trackPrice": "Відстежувати зміни ціни",
+        "offerYourPrice": "Запропонувати свою ціну",
+        "example": "Наприклад",
+        "agency": "Агентство",
+        "realtor": "Рієлтор",
+        "owner": "Власник",
+        "verified": "Перевірено",
+        "docsVerified": "Документи перевірені",
+        "onPlatform": "На Realbro",
+        "years_short": "років",
+        "call": "Зателефонувати",
+        "message": "Написати",
+        "writeOnline": "Пишіть, поки користувач онлайн",
+        "sendMessage": "Надіслати повідомлення",
+        "addToFavorites": "У вибране",
+        "share": "Поділитися",
+        "like": "Вподобати",
+        "dislike": "Не подобається",
+        "contact": "Зв'язатися",
+        "note": "Залишити нотатку",
+        "pdf": "PDF",
+        "report": "Поскаржитись",
+        "otherOffers": "Інші пропозиції",
+        "similarProperties": "Схожі оголошення",
+        "showAll": "Показати всі",
+        "from": "Від"
+    },
+    "propertyTypes": {
+        "townhouse": "Таунхаус",
+        "villa": "Вілла",
+        "room": "Кімната",
+        "apartment": "Квартира",
+        "house": "Будинок",
+        "studio": "Студія",
+        "penthouse": "Пентхаус",
+        "duplex": "Дуплекс"
+    },
+    "radius": {
+        "clickOnMap": "Клікніть на карту",
+        "distance": {
+            "km": "км"
+        },
+        "emptyStateHint": "Знайдіть місце або клікніть на карту",
+        "hint": "Радіус {radius} км",
+        "pickPoint": "Оберіть точку",
+        "pointName": "Назва точки",
+        "radiusDistance": "Радіус",
+        "searchPlaceholder": "Пошук місця...",
+        "selectedPoint": "Обрана точка"
+    },
+    "searchCategory": {
+        "professionals": "Професіонали",
+        "properties": "Об'єкти"
+    },
+    "amenities": {
+        "wifi": "Wi-Fi",
+        "internet": "Інтернет",
+        "tv": "ТВ",
+        "television": "Телебачення",
+        "airConditioning": "Кондиціонер",
+        "ac": "Кондиціонер",
+        "conditioner": "Кондиціонер",
+        "refrigerator": "Холодильник",
+        "fridge": "Холодильник",
+        "washingMachine": "Пральна машина",
+        "washer": "Пральна машина",
+        "dishwasher": "Посудомийна машина",
+        "microwave": "Мікрохвильовка",
+        "coffeeMachine": "Кавоварка",
+        "kitchen": "Кухня",
+        "kitchenEquipment": "Кухонне обладнання",
+        "bed": "Ліжко",
+        "sofa": "Диван",
+        "furniture": "Меблі",
+        "furnitureInRooms": "Меблі в кімнатах",
+        "furnitureInKitchen": "Кухонні меблі",
+        "bathtub": "Ванна",
+        "shower": "Душ",
+        "safe": "Сейф",
+        "ventilation": "Вентиляція",
+        "heating": "Опалення",
+        "intercom": "Домофон",
+        "parking": "Паркування",
+        "storage": "Склад",
+        "balcony": "Балкон",
+        "terrace": "Тераса",
+        "garden": "Сад",
+        "gym": "Тренажерний зал",
+        "pool": "Басейн",
+        "petsAllowed": "Дозволено тварини",
+        "childFriendly": "Для сімей з дітьми",
+        "smokingAllowed": "Дозволено паління",
+        "elevator": "Ліфт"
+    },
+    "characteristics": {
+        "propertyType": "Тип нерухомості",
+        "totalArea": "Загальна площа",
+        "livingArea": "Житлова площа",
+        "kitchenArea": "Площа кухні",
+        "rooms": "Кімнати",
+        "floor": "Поверх",
+        "of": "з",
+        "ceilingHeight": "Висота стелі",
+        "bathroom": "Ванна кімната",
+        "balcony": "Балкон",
+        "loggia": "Лоджія",
+        "renovation": "Ремонт",
+        "windowView": "Вид з вікна",
+        "residentialComplex": "Житловий комплекс",
+        "buildingType": "Тип будинку",
+        "buildingYear": "Рік будівництва",
+        "floorsTotal": "Всього поверхів",
+        "elevator": "Ліфт",
+        "parking": "Паркування",
+        "closedTerritory": "Закрита територія",
+        "concierge": "Консьєрж",
+        "garbageChute": "Сміттєпровід",
+        "rentalConditions": "Умови оренди",
+        "minRentalPeriod": "Мінімальний термін",
+        "prepayment": "Передоплата",
+        "petsAllowed": "Тварини",
+        "childrenAllowed": "Діти",
+        "yes": "Так",
+        "no": "Ні",
+        "male": "Чоловік",
+        "female": "Жінка",
+        "any": "Будь-який",
+        "mix": "Змішана",
+        "student": "Студент",
+        "worker": "Працівник",
+        "quiet": "Тиха",
+        "friendly": "Дружня",
+        "party": "Вечірки",
+        "ownerLivesIn": "Власник живе",
+        "visitsAllowed": "Дозволені візити",
+        "furnished": "Мебльована",
+        "bedType": "Тип ліжка",
+        "bedTypes": {
+            "single": "Односпальне",
+            "double": "Двоспальне",
+            "sofa": "Диван",
+            "bunk": "Двох'ярусне"
+        },
+        "types": {
+            "apartment": "Квартира",
+            "studio": "Студія",
+            "house": "Будинок",
+            "penthouse": "Пентхаус",
+            "duplex": "Дуплекс"
+        },
+        "bathroomTypes": {
+            "combined": "Суміщений",
+            "separate": "Роздільний",
+            "multiple": "Декілька"
+        },
+        "renovationTypes": {
+            "cosmetic": "Косметичний",
+            "euro": "Євроремонт",
+            "designer": "Дизайнерський",
+            "requires-repair": "Потребує ремонту",
+            "none": "Без ремонту"
+        },
+        "windowViews": {
+            "street": "На вулицю",
+            "yard": "На двір",
+            "both": "На обидві сторони"
+        },
+        "buildingTypes": {
+            "brick": "Цегляний",
+            "monolith": "Моноліт",
+            "panel": "Панельний",
+            "block": "Блочний",
+            "wood": "Дерев'яний"
+        },
+        "parkingTypes": {
+            "underground": "Підземний",
+            "ground": "Наземний",
+            "street": "Вуличний",
+            "none": "Немає"
+        }
+    },
+    "languages": {
+        "es": "Іспанська",
+        "ca": "Каталанська",
+        "en": "Англійська",
+        "ru": "Російська",
+        "fr": "Французька",
+        "de": "Німецька",
+        "it": "Італійська",
+        "pt": "Португальська",
+        "uk": "Українська",
+        "zh": "Китайська",
+        "ar": "Арабська"
+    },
+    "toasts": {
+        "likeAdded": "Додано до обраного",
+        "likeRemoved": "Видалено з обраного",
+        "dislikeAdded": "Додано до прихованих",
+        "dislikeRemoved": "Видалено з прихованих",
+        "noteSaved": "Нотатку збережено",
+        "noteDeleted": "Нотатку видалено",
+        "linkCopied": "Посилання скопійовано",
+        "linkCopyError": "Не вдалося скопіювати посилання",
+        "reportSent": "Скаргу надіслано",
+        "pdfDownloading": "Завантаження PDF...",
+        "reminderSet": "Нагадування встановлено",
+        "reminderRemoved": "Нагадування видалено",
+        "addedToComparison": "Додано до порівняння",
+        "removedFromComparison": "Видалено з порівняння",
+        "comparisonLimitReached": "Досягнуто ліміт порівняння",
+        "error": "Щось пішло не так",
+        "newPropertyFound": "Знайдено новий об'єкт"
+    },
+    "subscription": {
+        "choosePlan": "Оберіть тариф",
+        "free": "Безкоштовний",
+        "basic": "Базовий",
+        "pro": "Професійний",
+        "paymentSuccess": "Оплата виконана",
+        "noSubscription": "Потрібна активна підписка"
     }
-  },
-  "comparison": {
-    "addMore": "Додати ще",
-    "airConditioning": "Кондиціонер",
-    "area": "Площа",
-    "back": "Назад",
-    "backToSearch": "Назад до пошуку",
-    "balcony": "Балкон",
-    "bathrooms": "Ванні кімнати",
-    "characteristics": "Характеристики",
-    "clearAll": "Очистити все",
-    "commission": "Комісія",
-    "deposit": "Застава",
-    "elevator": "Ліфт",
-    "emptySlot": "Порожнє місце",
-    "floor": "Поверх",
-    "furnished": "Мебльовано",
-    "heating": "Опалення",
-    "limitReached": "Ліміт досягнуто",
-    "minRentalPeriod": "Мін. термін оренди",
-    "months": "міс.",
-    "no": "Ні",
-    "notSpecified": "Не вказано",
-    "openComparison": "Відкрити порівняння",
-    "outOf": "з",
-    "parking": "Парковка",
-    "perMonth": "/міс",
-    "petFriendly": "Можна з тваринами",
-    "pool": "Басейн",
-    "price": "Ціна",
-    "pricePerMeter": "Ціна/м²",
-    "remove": "Видалити",
-    "rooms": "Кімнати",
-    "selected": "Обрано",
-    "sqm": "м²",
-    "subtitle": "Порівняння об'єктів",
-    "terrace": "Тераса",
-    "yes": "Так",
-    "compare": "Порівняти",
-    "title": "Порівняння об'єктів",
-    "inComparison": "У порівнянні"
-  },
-  "complaint": {
-    "cancel": "Скасувати",
-    "description": "Вкажіть причину скарги та опишіть проблему",
-    "descriptionLabel": "Опис",
-    "descriptionMinLength": "Опис має містити мінімум 10 символів",
-    "descriptionPlaceholder": "Опишіть проблему детальніше...",
-    "errorMessage": "Помилка при надсиланні скарги",
-    "reasonLabel": "Причина скарги",
-    "reasonPlaceholder": "Оберіть причину",
-    "reasonRequired": "Оберіть причину скарги",
-    "submit": "Надіслати скаргу",
-    "successMessage": "Скарга успішно надіслана",
-    "title": "Поскаржитись на оголошення",
-    "reasons": {
-      "spam": "Спам або небажана реклама",
-      "misleading": "Оманлива інформація",
-      "duplicate": "Дублікат оголошення",
-      "wrong_price": "Неправильна ціна",
-      "wrong_photos": "Неправильні фото",
-      "fraud": "Шахрайство або спроба шахрайства",
-      "offensive": "Образливий або неприйнятний контент",
-      "other": "Інша причина"
-    }
-  },
-  "draw": {
-    "addPolygon": "Додати полігон",
-    "cancel": "Скасувати",
-    "clickToAddPoint": "Клікніть, щоб додати точку",
-    "complete": "Завершити",
-    "delete": "Видалити",
-    "dragToMovePoint": "Перетягніть точку",
-    "drawingInstructions": "Інструкції малювання",
-    "drawnPolygons": "Намальовані полігони",
-    "edit": "Редагувати",
-    "emptyState": "Немає полігонів",
-    "emptyStateHint": "Почніть малювати на карті",
-    "maxPolygonsReached": "Ліміт полігонів досягнуто",
-    "minThreePoints": "Мінімум 3 точки",
-    "needMorePoints": "Потрібно більше точок",
-    "points": "точок",
-    "pointsCount": "{count} точок",
-    "polygonName": "Полігон {number}",
-    "tapToStart": "Натисніть для початку",
-    "undo": "Скасувати дію"
-  },
-  "favorites": {
-    "authPrompt": {
-      "description": "Увійдіть, щоб зберігати вибране",
-      "title": "Потрібен вхід"
-    },
-    "empty": {
-      "description": "Ваші улюблені об'єкти з'являться тут",
-      "filters": {
-        "description": "Зберігайте пошуки для швидкого доступу",
-        "title": "Збережені фільтри"
-      },
-      "notes": {
-        "description": "Додавайте нотатки до об'єктів",
-        "title": "Нотатки"
-      },
-      "professionals": {
-        "description": "Професіонали, за якими ви стежите, будуть тут",
-        "title": "Професіонали"
-      },
-      "title": "Немає вибраних"
-    },
-    "filters": {
-      "applyFilter": "Застосувати фільтр",
-      "lastUsed": "Останнє використання",
-      "propertiesCount": "{count} об'єктів",
-      "all": "Всі",
-      "liked": "Подобається",
-      "disliked": "Не подобається",
-      "unsorted": "Не розібрані",
-      "selectDateRange": "Вибрати період",
-      "advanced": "Розширені",
-      "advancedFilters": "Розширені фільтри",
-      "clearAll": "Очистити все",
-      "showing": "Показано {count} з {total}",
-      "noResults": "Немає результатів за заданими фільтрами",
-      "sort": {
-        "newestFirst": "Спочатку нові",
-        "oldestFirst": "Спочатку старі",
-        "priceLowToHigh": "Ціна: за зростанням",
-        "priceHighToLow": "Ціна: за спаданням",
-        "areaLargest": "Площа: найбільша",
-        "areaSmallest": "Площа: найменша"
-      }
-    },
-    "notes": {
-      "addNote": "Додати нотатку",
-      "apply": "Застосувати",
-      "cancel": "Скасувати",
-      "customDateTime": "Власна дата та час",
-      "date": "Дата",
-      "deleteNote": "Видалити нотатку",
-      "km": "км",
-      "minutes": "хв",
-      "placeholder": "Напишіть нотатку...",
-      "reminderPresets": {
-        "in1Hour": "Через 1 годину",
-        "in3Days": "Через 3 дні",
-        "in3Hours": "Через 3 години",
-        "inWeek": "Через тиждень",
-        "tomorrow": "Завтра"
-      },
-      "removeReminder": "Видалити нагадування",
-      "rooms": "кімнати",
-      "saveNote": "Зберегти нотатку",
-      "setReminder": "Встановити нагадування",
-      "time": "Час",
-      "today": "Сьогодні",
-      "tomorrowLabel": "Завтра",
-      "listView": "Список",
-      "calendarView": "Календар",
-      "filters": {
-        "allTypes": "Усі типи",
-        "propertyNotes": "Про об'єкти",
-        "agencyNotes": "Про агентства",
-        "generalNotes": "Загальні",
-        "all": "Усі",
-        "withReminder": "З нагадуванням",
-        "noReminder": "Без нагадування"
-      },
-      "sort": {
-        "recentlyUpdated": "Нещодавно оновлені",
-        "upcomingReminders": "Найближчі нагадування"
-      },
-      "noteText": "Текст нотатки",
-      "optional": "необов'язково",
-      "create": "Створити",
-      "deleteConfirm": "Видалити нотатку?",
-      "deleteDescription": "Цю дію не можна скасувати. Нотатку буде видалено назавжди.",
-      "delete": "Видалити",
-      "calendarViewComingSoon": "Вигляд календаря скоро буде доступний"
-    },
-    "professionals": {
-      "activeListings": "Активні оголошення",
-      "agency": "Агентство",
-      "agent": "Агент",
-      "contact": "Контакт",
-      "owner": "Власник",
-      "superAgent": "Супер Агент",
-      "yearsOnPlatform": "Років на платформі",
-      "filters": {
-        "all": "Всі",
-        "viewed": "Переглянуті",
-        "contacted": "Запитані контакти",
-        "messaged": "З листуванням",
-        "reviewed": "З відгуком"
-      },
-      "sort": {
-        "recentInteraction": "Останні взаємодії",
-        "mostMessages": "Більше повідомлень"
-      },
-      "viewed": "Переглянутий",
-      "contactRequested": "Контакти запитані",
-      "messages": "{count} повідомлень",
-      "reviewWritten": "Відгук написаний"
-    },
-    "tabs": {
-      "filters": "Фільтри",
-      "notes": "Нотатки",
-      "professionals": "Професіонали",
-      "properties": "Об'єкти"
-    },
-    "title": "Вибране"
-  },
-  "isochrone": {
-    "calculating": "Розрахунок...",
-    "clickOnMap": "Клікніть на карту",
-    "emptyStateHint": "Знайдіть адресу або клікніть на карту",
-    "pickPoint": "Оберіть точку",
-    "pointName": "Назва точки",
-    "profiles": {
-      "cycling": "Велосипед",
-      "driving": "Авто",
-      "drivingTraffic": "З заторами",
-      "walking": "Пішки"
-    },
-    "searchPlaceholder": "Пошук адреси...",
-    "selectedPoint": "Обрана точка",
-    "time": {
-      "minutes": "хв"
-    },
-    "travelMode": "Спосіб пересування"
-  },
-  "locationFilter": {
-    "actions": {
-      "clear": "Очистити",
-      "save": "Зберегти"
-    },
-    "modes": {
-      "draw": "Малювати",
-      "isochrone": "Ізохрона",
-      "radius": "Радіус",
-      "search": "Пошук"
-    },
-    "selectedPoint": "Обрана точка"
-  },
-  "locationSearch": {
-    "emptyState": "Локації не обрано",
-    "emptyStateHint": "Використовуйте пошук вище",
-    "remove": "Видалити",
-    "searchLabel": "Пошук локацій",
-    "searchPlaceholder": "Місто, район...",
-    "selectedLocations": "Обрані локації",
-    "title": "Пошук локації"
-  },
-  "mapSidebar": {
-    "changeSearchArea": "Змінити область пошуку",
-    "hidePanel": "Приховати панель",
-    "objectsCount": "{count} об'єктів",
-    "resetCluster": "Скинути кластер",
-    "showAsList": "Показати списком",
-    "showPanel": "Показати панель",
-    "sortArea": "За площею",
-    "sortAscending": "За зростанням",
-    "sortDate": "За датою",
-    "sortDescending": "За спаданням",
-    "sortPrice": "За ціною",
-    "expandPanel": "Відкрити",
-    "collapsePanel": "Згорнути"
-  },
-  "propertyDetail": {
-    "agent": "Агент",
-    "commission": "Комісія",
-    "deposit": "Застава",
-    "inFavorites": "У вибраному",
-    "kitchenArea": "Кухня",
-    "livingArea": "Житлова",
-    "locationSection": {
-      "categories": {
-        "attractions": "Пам'ятки",
-        "beauty": "Краса",
-        "entertainment": "Розваги",
-        "groceries": "Продукти",
-        "medical": "Медицина",
-        "parks": "Парки",
-        "restaurants": "Ресторани",
-        "schools": "Школи",
-        "shopping": "Шопінг",
-        "sports": "Спорт",
-        "transport": "Транспорт"
-      }
-    },
-    "map": "Карта",
-    "min": "хв",
-    "navPhotos": "Фото",
-    "noCommission": "Без комісії",
-    "objectsCount": "{count} об'єктів",
-    "objectsInWork": "Об'єкти в роботі",
-    "perMonth": "/міс",
-    "photos": "Фото",
-    "plan": "План",
-    "privateAgent": "Приватний маклер",
-    "reviews": "Відгуки",
-    "showPhone": "Показати телефон",
-    "sqm": "м²",
-    "superAgent": "Супер Агент",
-    "totalAtStart": "Всього при заїзді",
-    "tour3d": "3D тур",
-    "utilitiesIncluded": "Комунальні включено",
-    "utilitiesNotIncluded": "Комунальні не включено",
-    "video": "Відео",
-    "videoPresentation": "Відео презентація",
-    "walkMinutes": "{min} хв пішки",
-    "writeMessage": "Написати повідомлення",
-    "yearsOnPlatform": "{years} років на платформі",
-    "back": "Назад",
-    "navDescription": "Опис",
-    "navCharacteristics": "Характеристики",
-    "navMap": "Карта",
-    "updated": "Оновлено",
-    "views": "Переглядів",
-    "viewsToday": "сьогодні",
-    "showAllPhotos": "Всі {count} фото",
-    "floor": "Поверх",
-    "rooms": "Кімнати",
-    "roomsShort": "кімн.",
-    "ceilingHeight": "Висота стелі",
-    "bathrooms": "Ванні кімнати",
-    "area": "Площа",
-    "pricePerMeter": "€/м²",
-    "description": "Опис",
-    "showMore": "Показати повністю",
-    "showLess": "Згорнути",
-    "showOriginal": "Показати оригінал",
-    "showTranslation": "Показати переклад",
-    "translatedByAI": "Перекладено AI",
-    "characteristics": "Характеристики",
-    "aboutFlat": "Про квартиру",
-    "aboutBuilding": "Про будинок",
-    "amenities": "Зручності",
-    "showAllAmenities": "Ще {count} зручностей",
-    "location": "Розташування",
-    "infrastructure": "Інфраструктура",
-    "showOnMap": "Показати на карті",
-    "tenantPreferences": "Кого шукаємо",
-    "livingRules": "Умови проживання",
-    "roommates": "Сусіди по квартирі",
-    "aboutRoommates": "Про сусідів",
-    "petsAllowed": "Тварини дозволені",
-    "childrenAllowed": "Діти дозволені",
-    "couplesAllowed": "Пари дозволені",
-    "smokingAllowed": "Куріння дозволене",
-    "studentsAllowed": "Студенти дозволені",
-    "gender": "Стать",
-    "age": "Вік",
-    "atmosphere": "Атмосфера",
-    "occupation": "Професія",
-    "noSpecialConditions": "Без особливих умов",
-    "prepayment": "Передоплата",
-    "utilities": "Оплата комунальних",
-    "utilitiesIncludedFull": "включені (без лічильників)",
-    "utilitiesNotIncludedShort": "не включені",
-    "minRentalPeriod": "Від {months} міс.",
-    "term": "Термін оренди",
-    "rentalTerm": "Термін оренди",
-    "longTerm": "від року",
-    "months": "міс.",
-    "fromYear": "Від року",
-    "priceHistory": "Історія цін",
-    "trackPrice": "Відстежувати зміни ціни",
-    "offerYourPrice": "Запропонувати свою ціну",
-    "example": "Наприклад",
-    "agency": "Агентство",
-    "realtor": "Рієлтор",
-    "owner": "Власник",
-    "verified": "Перевірено",
-    "docsVerified": "Документи перевірені",
-    "onPlatform": "На Realbro",
-    "years_short": "років",
-    "call": "Зателефонувати",
-    "message": "Написати",
-    "writeOnline": "Пишіть, поки користувач онлайн",
-    "sendMessage": "Надіслати повідомлення",
-    "addToFavorites": "У вибране",
-    "share": "Поділитися",
-    "like": "Вподобати",
-    "dislike": "Не подобається",
-    "contact": "Зв'язатися",
-    "note": "Залишити нотатку",
-    "pdf": "PDF",
-    "report": "Поскаржитись",
-    "otherOffers": "Інші пропозиції",
-    "similarProperties": "Схожі оголошення",
-    "showAll": "Показати всі",
-    "from": "Від",
-    "navMedia": "Медіа",
-    "previous": "Попередній",
-    "next": "Наступний"
-  },
-  "propertyTypes": {
-    "townhouse": "Таунхаус",
-    "villa": "Вілла",
-    "room": "Кімната",
-    "apartment": "Квартира",
-    "house": "Будинок",
-    "studio": "Студія",
-    "penthouse": "Пентхаус",
-    "duplex": "Дуплекс"
-  },
-  "radius": {
-    "clickOnMap": "Клікніть на карту",
-    "distance": {
-      "km": "км"
-    },
-    "emptyStateHint": "Знайдіть місце або клікніть на карту",
-    "hint": "Радіус {radius} км",
-    "pickPoint": "Оберіть точку",
-    "pointName": "Назва точки",
-    "radiusDistance": "Радіус",
-    "searchPlaceholder": "Пошук місця...",
-    "selectedPoint": "Обрана точка"
-  },
-  "searchCategory": {
-    "professionals": "Професіонали",
-    "properties": "Об'єкти"
-  },
-  "amenities": {
-    "wifi": "Wi-Fi",
-    "internet": "Інтернет",
-    "tv": "ТВ",
-    "television": "Телебачення",
-    "airConditioning": "Кондиціонер",
-    "ac": "Кондиціонер",
-    "conditioner": "Кондиціонер",
-    "refrigerator": "Холодильник",
-    "fridge": "Холодильник",
-    "washingMachine": "Пральна машина",
-    "washer": "Пральна машина",
-    "dishwasher": "Посудомийна машина",
-    "microwave": "Мікрохвильовка",
-    "coffeeMachine": "Кавоварка",
-    "kitchen": "Кухня",
-    "kitchenEquipment": "Кухонне обладнання",
-    "bed": "Ліжко",
-    "sofa": "Диван",
-    "furniture": "Меблі",
-    "furnitureInRooms": "Меблі в кімнатах",
-    "furnitureInKitchen": "Кухонні меблі",
-    "bathtub": "Ванна",
-    "shower": "Душ",
-    "safe": "Сейф",
-    "ventilation": "Вентиляція",
-    "heating": "Опалення",
-    "intercom": "Домофон",
-    "parking": "Паркування",
-    "storage": "Склад",
-    "balcony": "Балкон",
-    "terrace": "Тераса",
-    "garden": "Сад",
-    "gym": "Тренажерний зал",
-    "pool": "Басейн",
-    "petsAllowed": "Дозволено тварини",
-    "childFriendly": "Для сімей з дітьми",
-    "smokingAllowed": "Дозволено паління",
-    "elevator": "Ліфт"
-  },
-  "characteristics": {
-    "propertyType": "Тип нерухомості",
-    "totalArea": "Загальна площа",
-    "livingArea": "Житлова площа",
-    "kitchenArea": "Площа кухні",
-    "rooms": "Кімнати",
-    "floor": "Поверх",
-    "of": "з",
-    "ceilingHeight": "Висота стелі",
-    "bathroom": "Ванна кімната",
-    "balcony": "Балкон",
-    "loggia": "Лоджія",
-    "renovation": "Ремонт",
-    "windowView": "Вид з вікна",
-    "residentialComplex": "Житловий комплекс",
-    "buildingType": "Тип будинку",
-    "buildingYear": "Рік будівництва",
-    "floorsTotal": "Всього поверхів",
-    "elevator": "Ліфт",
-    "parking": "Паркування",
-    "closedTerritory": "Закрита територія",
-    "concierge": "Консьєрж",
-    "garbageChute": "Сміттєпровід",
-    "rentalConditions": "Умови оренди",
-    "minRentalPeriod": "Мінімальний термін",
-    "prepayment": "Передоплата",
-    "petsAllowed": "Тварини",
-    "childrenAllowed": "Діти",
-    "yes": "Так",
-    "no": "Ні",
-    "male": "Чоловік",
-    "female": "Жінка",
-    "any": "Будь-який",
-    "mix": "Змішана",
-    "student": "Студент",
-    "worker": "Працівник",
-    "quiet": "Тиха",
-    "friendly": "Дружня",
-    "party": "Вечірки",
-    "ownerLivesIn": "Власник живе",
-    "visitsAllowed": "Дозволені візити",
-    "furnished": "Мебльована",
-    "bedType": "Тип ліжка",
-    "bedTypes": {
-      "single": "Односпальне",
-      "double": "Двоспальне",
-      "sofa": "Диван",
-      "bunk": "Двох'ярусне"
-    },
-    "types": {
-      "apartment": "Квартира",
-      "studio": "Студія",
-      "house": "Будинок",
-      "penthouse": "Пентхаус",
-      "duplex": "Дуплекс"
-    },
-    "bathroomTypes": {
-      "combined": "Суміщений",
-      "separate": "Роздільний",
-      "multiple": "Декілька"
-    },
-    "renovationTypes": {
-      "cosmetic": "Косметичний",
-      "euro": "Євроремонт",
-      "designer": "Дизайнерський",
-      "requires-repair": "Потребує ремонту",
-      "none": "Без ремонту"
-    },
-    "windowViews": {
-      "street": "На вулицю",
-      "yard": "На двір",
-      "both": "На обидві сторони"
-    },
-    "buildingTypes": {
-      "brick": "Цегляний",
-      "monolith": "Моноліт",
-      "panel": "Панельний",
-      "block": "Блочний",
-      "wood": "Дерев'яний"
-    },
-    "parkingTypes": {
-      "underground": "Підземний",
-      "ground": "Наземний",
-      "street": "Вуличний",
-      "none": "Немає"
-    }
-  },
-  "languages": {
-    "es": "Іспанська",
-    "ca": "Каталанська",
-    "en": "Англійська",
-    "ru": "Російська",
-    "fr": "Французька",
-    "de": "Німецька",
-    "it": "Італійська",
-    "pt": "Португальська",
-    "uk": "Українська",
-    "zh": "Китайська",
-    "ar": "Арабська"
-  },
-  "toasts": {
-    "likeAdded": "Додано до обраного",
-    "likeRemoved": "Видалено з обраного",
-    "dislikeAdded": "Додано до прихованих",
-    "dislikeRemoved": "Видалено з прихованих",
-    "noteSaved": "Нотатку збережено",
-    "noteDeleted": "Нотатку видалено",
-    "linkCopied": "Посилання скопійовано",
-    "linkCopyError": "Не вдалося скопіювати посилання",
-    "reportSent": "Скаргу надіслано",
-    "pdfDownloading": "Завантаження PDF...",
-    "reminderSet": "Нагадування встановлено",
-    "reminderRemoved": "Нагадування видалено",
-    "addedToComparison": "Додано до порівняння",
-    "removedFromComparison": "Видалено з порівняння",
-    "comparisonLimitReached": "Досягнуто ліміт порівняння",
-    "error": "Щось пішло не так",
-    "newPropertyFound": "Знайдено новий об'єкт"
-  },
-  "subscription": {
-    "choosePlan": "Оберіть тариф",
-    "free": "Безкоштовний",
-    "basic": "Базовий",
-    "pro": "Професійний",
-    "paymentSuccess": "Оплата виконана",
-    "noSubscription": "Потрібна активна підписка"
-  }
 }
