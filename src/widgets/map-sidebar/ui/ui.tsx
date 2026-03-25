@@ -8,10 +8,8 @@ import {
     ArrowUpDown,
     List as ListIcon,
     ChevronLeft,
-    ChevronRight,
-    ChevronDown,
     MapPin,
-    X,
+    Map as MapIcon,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
@@ -430,7 +428,7 @@ export function MapSidebar({
 // Mobile Bottom Sheet Sidebar
 // =====================================
 
-export type MobileSnapState = 'collapsed' | 'expanded';
+export type MobileSnapState = 'collapsed' | 'half' | 'expanded';
 
 // Высота нижней навигации
 const BOTTOM_NAV_HEIGHT = 64;
@@ -444,16 +442,22 @@ const HEADER_HEIGHT = 56;
 // Высота блока с фильтрами (чипсами)
 const FILTERS_HEIGHT = 52;
 
+// Минимальный порог свайпа для перехода между состояниями (px)
+const DRAG_THRESHOLD = 60;
+
 /**
  * MobileMapSidebar - мобильный bottom sheet для карты
  *
- * Всегда виден на мобильном экране поверх карты.
- * Свёрнутое состояние: фиксированная высота (например 35%).
- * Развёрнутое состояние: полный экран (минус навигация и хедер).
+ * Три состояния:
+ * - collapsed: полностью скрыт, виден только floating-кнопка «Список» (рендерится родителем)
+ * - half: частично открыт (~45% экрана), drag handle сверху
+ * - expanded: полный экран, кнопка «Карта» для возврата в half
  *
- * Анимация через height.
- * Кнопка шеврона сворачивает/разворачивает.
- * Скролл доступен всегда.
+ * Переходы:
+ * - half → expanded: скролл вверх или свайп вверх
+ * - half → collapsed: свайп вниз
+ * - expanded → half: кнопка «Карта»
+ * - collapsed → expanded: кнопка «Список» (рендерится родителем)
  */
 export function MobileMapSidebar({
     onPropertyClick,
@@ -481,7 +485,7 @@ export function MobileMapSidebar({
     const loadingRef = useRef(false);
 
     // Состояние bottom sheet — controlled или uncontrolled
-    const [internalSnapState, setInternalSnapState] = useState<MobileSnapState>('collapsed');
+    const [internalSnapState, setInternalSnapState] = useState<MobileSnapState>('half');
     const snapState = externalSnapState ?? internalSnapState;
     const setSnapState = useCallback((state: MobileSnapState) => {
         if (onSnapStateChange) {
@@ -496,6 +500,38 @@ export function MobileMapSidebar({
     const [listHeight, setListHeight] = useState(0);
 
     const isExpanded = snapState === 'expanded';
+    const isHalf = snapState === 'half';
+    const isCollapsed = snapState === 'collapsed';
+
+    // Drag-обработка для жестов свайпа на drag handle
+    const dragStartY = useRef(0);
+    const isDragging = useRef(false);
+
+    const handleDragHandleTouchStart = useCallback((e: React.TouchEvent) => {
+        dragStartY.current = e.touches[0].clientY;
+        isDragging.current = true;
+    }, []);
+
+    const handleDragHandleTouchEnd = useCallback((e: React.TouchEvent) => {
+        if (!isDragging.current) return;
+        isDragging.current = false;
+        const deltaY = e.changedTouches[0].clientY - dragStartY.current;
+
+        if (isHalf) {
+            if (deltaY < -DRAG_THRESHOLD) {
+                // Свайп вверх → expanded
+                setSnapState('expanded');
+            } else if (deltaY > DRAG_THRESHOLD) {
+                // Свайп вниз → collapsed
+                setSnapState('collapsed');
+            }
+        } else if (isExpanded) {
+            if (deltaY > DRAG_THRESHOLD) {
+                // Свайп вниз → half
+                setSnapState('half');
+            }
+        }
+    }, [isHalf, isExpanded, setSnapState]);
 
     // Загрузка списка
     const fetchProperties = useCallback(
@@ -647,29 +683,38 @@ export function MobileMapSidebar({
         []
     );
 
-    // Toggle expand/collapse
-    const toggleSnapState = () => {
-        setSnapState(isExpanded ? 'collapsed' : 'expanded');
-    };
+    // Скрытое состояние — не рендерим содержимое
+    if (isCollapsed) {
+        return null;
+    }
 
     return (
         <div
             className={cn(
                 'fixed left-0 right-0 bg-background shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex flex-col transition-[height,bottom,border-radius] duration-300 ease-in-out',
                 isExpanded ? 'z-110' : 'z-30',
-                !isExpanded && 'rounded-t-lg',
+                !isExpanded && 'rounded-t-2xl',
                 className
             )}
             style={{
                 bottom: isExpanded ? 0 : `${BOTTOM_NAV_HEIGHT}px`,
                 height: isExpanded
                     ? '100dvh'
-                    : '35%',
+                    : '45%',
                 willChange: 'height, bottom',
             }}
         >
-            {/* Хедер со счётчиком + шеврон */}
-            <div className="px-4 py-3 shrink-0 flex items-center justify-between border-b border-border">
+            {/* Drag handle — область свайпа для переключения состояний */}
+            <div
+                className="flex justify-center pt-2 pb-1 cursor-grab active:cursor-grabbing shrink-0"
+                onTouchStart={handleDragHandleTouchStart}
+                onTouchEnd={handleDragHandleTouchEnd}
+            >
+                <div className="w-10 h-1 rounded-full bg-text-tertiary/40" />
+            </div>
+
+            {/* Хедер со счётчиком + кнопка «Карта» */}
+            <div className="px-4 py-2 shrink-0 flex items-center justify-between">
                 <div className="flex flex-col">
                     <span className="text-sm font-medium">
                         {clusterPropertyIds && clusterPropertyIds.length > 0
@@ -695,22 +740,18 @@ export function MobileMapSidebar({
                     )}
                 </div>
 
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={toggleSnapState}
-                    className="h-8 gap-1.5 px-2"
-                    aria-label={isExpanded ? tMapSidebar('collapsePanel') : tMapSidebar('expandPanel')}
-                >
-                    <span className="text-xs text-text-secondary">
-                        {isExpanded ? tMapSidebar('collapsePanel') : tMapSidebar('expandPanel')}
-                    </span>
-                    {isExpanded ? (
-                        <ChevronDown className="w-4 h-4" />
-                    ) : (
-                        <ChevronLeft className="w-4 h-4 rotate-90" />
-                    )}
-                </Button>
+                {/* Кнопка «Карта» — возврат из expanded в half */}
+                {isExpanded && (
+                    <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => setSnapState('half')}
+                        className="h-8 gap-1.5 px-3 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-lg"
+                    >
+                        <MapIcon className="w-4 h-4" />
+                        <span className="text-xs font-medium">{tMapSidebar('showOnMap')}</span>
+                    </Button>
+                )}
             </div>
 
             {/* Загрузка */}
