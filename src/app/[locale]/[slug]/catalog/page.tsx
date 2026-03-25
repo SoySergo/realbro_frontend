@@ -158,10 +158,10 @@ export default function CatalogPage() {
                     ) : (
                         <>
                             {/* Счётчик */}
-                            {pagination?.total != null && pagination.total > 0 && (
+                            {pagination?.total !== null && pagination?.total !== undefined && pagination.total > 0 && (
                                 <p className="text-sm text-text-secondary mb-3">
                                     {tListing('subtitle', {
-                                        count: pagination.total.toLocaleString('ru-RU'),
+                                        count: pagination.total.toLocaleString(locale),
                                     })}
                                 </p>
                             )}
