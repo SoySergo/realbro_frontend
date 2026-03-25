@@ -126,6 +126,8 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
         published_at_iso: dto.published_at,
 
         // Автор
+        // Бекенд отдаёт contact_id (AuthorEnrichedResponse), но старые DTO используют id.
+        // Фоллбек id ?? contact_id обеспечивает совместимость обоих форматов.
         author: {
             id: dto.author.id ?? dto.author.contact_id,
             name: dto.author.name,

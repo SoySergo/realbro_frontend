@@ -64,6 +64,9 @@ const getIntlLocale = (locale?: string): string => {
     }
 };
 
+// Порядок навигации по секциям
+const SECTION_IDS = ['photos', 'characteristics', 'description', 'map'] as const;
+
 export function PropertyDetailHeader({
     className,
     hasListingContext = true,
@@ -90,8 +93,7 @@ export function PropertyDetailHeader({
             setIsScrolled(scrollY > SCROLL_THRESHOLD);
 
             // Simple intersection detection
-            const sections = ['photos', 'characteristics', 'description', 'map'];
-            for (const section of sections) {
+            for (const section of SECTION_IDS) {
                 const el = document.getElementById(section);
                 if (el) {
                     const rect = el.getBoundingClientRect();
@@ -119,13 +121,14 @@ export function PropertyDetailHeader({
         }
     };
 
-    // Порядок навигации по скриншоту: Медиа, Характеристики, Описание, Карта
-    const navItems = [
-        { id: 'photos', label: t.navMedia },
-        { id: 'characteristics', label: t.navCharacteristics },
-        { id: 'description', label: t.navDescription },
-        { id: 'map', label: t.navMap },
-    ];
+    // Лейблы навигации по секциям, используя общий порядок SECTION_IDS
+    const sectionLabels: Record<string, string> = {
+        photos: t.navMedia,
+        characteristics: t.navCharacteristics,
+        description: t.navDescription,
+        map: t.navMap,
+    };
+    const navItems = SECTION_IDS.map(id => ({ id, label: sectionLabels[id] }));
 
 
     const intlLocale = getIntlLocale(locale);

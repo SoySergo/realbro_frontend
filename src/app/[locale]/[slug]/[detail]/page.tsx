@@ -1,8 +1,5 @@
-'use client';
-
-import { useTranslations, useLocale } from 'next-intl';
-import { PropertyDetailHeader } from '@/widgets/property-detail-header';
-import type { HeaderTranslations } from '@/widgets/property-detail-header/ui';
+import { getTranslations } from 'next-intl/server';
+import { DetailSubHeader } from './_detail-sub-header';
 
 /**
  * Страница деталей объекта недвижимости.
@@ -11,12 +8,12 @@ import type { HeaderTranslations } from '@/widgets/property-detail-header/ui';
  * Основной хедер (SearchPageHeader) рендерится в SlugLayoutClient.
  * Здесь добавляется второй уровень навигации (PropertyDetailHeader variant="subHeader").
  */
-export default function DetailPage() {
-    const t = useTranslations('propertyDetail');
-    const locale = useLocale();
+export default async function DetailPage({ params }: { params: Promise<{ locale: string }> }) {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'propertyDetail' });
 
     // Переводы для второго уровня навигации
-    const headerTranslations: HeaderTranslations = {
+    const headerTranslations = {
         back: t('back'),
         navPhotos: t('navPhotos'),
         navMedia: t('navMedia'),
@@ -43,14 +40,11 @@ export default function DetailPage() {
     return (
         <div className="flex flex-col h-full">
             {/* Второй уровень навигации (sub-header) */}
-            <div className="shrink-0 sticky top-0 z-40">
-                <PropertyDetailHeader
-                    translations={headerTranslations}
-                    mainInfoTranslations={mainInfoTranslations}
-                    locale={locale}
-                    variant="subHeader"
-                />
-            </div>
+            <DetailSubHeader
+                translations={headerTranslations}
+                mainInfoTranslations={mainInfoTranslations}
+                locale={locale}
+            />
 
             {/* Контент страницы деталей */}
             <main className="flex-1 overflow-auto bg-background">
