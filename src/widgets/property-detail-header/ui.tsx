@@ -139,31 +139,31 @@ export function PropertyDetailHeader({
     if (variant === 'subHeader') {
         return (
             <div className={cn(
-                "flex items-center justify-between w-full h-[44px] px-4 bg-background border-b border-border",
+                "flex items-center justify-between w-full h-[52px] px-4 bg-background border-b border-border",
                 className
             )}>
-                {/* Кнопка назад */}
+                {/* Островок «Назад» */}
                 <div className="flex items-center shrink-0">
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-colors"
+                        className="flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-background border border-border shadow-sm text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         {t.back}
                     </button>
                 </div>
 
-                {/* Навигация по секциям */}
-                <nav className="flex items-center gap-1">
+                {/* Островок навигации по секциям */}
+                <nav className="flex items-center gap-0.5 h-9 px-1 rounded-full bg-background border border-border shadow-sm">
                     {navItems.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => scrollToSection(item.id)}
                             className={cn(
-                                "px-3 py-1.5 text-sm font-medium transition-colors",
+                                "px-3.5 py-1 rounded-full text-sm font-medium transition-all",
                                 activeSection === item.id
-                                    ? "text-brand-primary"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "bg-brand-primary text-white shadow-sm"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                             )}
                         >
                             {item.label}
@@ -171,19 +171,20 @@ export function PropertyDetailHeader({
                     ))}
                 </nav>
 
-                {/* Навигация по листингу (Предыдущий / Следующий) */}
-                <div className="flex items-center gap-3 shrink-0">
+                {/* Островок «Предыдущий / Следующий» */}
+                <div className="flex items-center shrink-0">
                     {hasListingContext && (
-                        <>
-                            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        <div className="flex items-center h-9 px-1 rounded-full bg-background border border-border shadow-sm">
+                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
                                 <ChevronLeft className="w-4 h-4" />
                                 {t.previous}
                             </button>
-                            <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                            <div className="w-px h-4 bg-border" />
+                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
                                 {t.next}
                                 <ChevronRight className="w-4 h-4" />
                             </button>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
