@@ -586,6 +586,7 @@
         "sessionExpired": "Session expirée, veuillez vous reconnecter"
     },
     "sidebar": {
+        "home": "Accueil",
         "search": "Recherche",
         "chat": "Chat",
         "profile": "Profil",

@@ -598,6 +598,7 @@
         "sessionExpired": "Sitzung abgelaufen, bitte melden Sie sich erneut an"
     },
     "sidebar": {
+        "home": "Startseite",
         "search": "Suche",
         "chat": "Chat",
         "profile": "Profil",

@@ -733,6 +733,7 @@
         "goHome": "Tornar a l'inici"
     },
     "sidebar": {
+        "home": "Inici",
         "search": "Cerca",
         "chat": "Xat",
         "profile": "Perfil",

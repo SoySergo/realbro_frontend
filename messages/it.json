@@ -602,6 +602,7 @@
         "sessionExpired": "Sessione scaduta, accedi di nuovo"
     },
     "sidebar": {
+        "home": "Home",
         "search": "Ricerca",
         "chat": "Chat",
         "profile": "Profilo",

@@ -50,8 +50,8 @@ export function SearchMapPage() {
     // Синхронизация фильтров с URL-параметрами
     useFilterUrlSync();
 
-    // Состояние мобильного сайдбара (collapsed / expanded)
-    const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('collapsed');
+    // Состояние мобильного сайдбара (collapsed / half / expanded)
+    const [mobileSidebarSnapState, setMobileSidebarSnapState] = useState<MobileSnapState>('half');
 
     // Состояние выбранного маркера / кластера (для связи карта ↔ сайдбар)
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
