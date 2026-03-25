@@ -544,15 +544,17 @@ const FilterButtons = memo(function FilterButtons({
     return (
         <>
             {/* ИИ Агент */}
-            <Button
-                className={cn(
-                    'shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white h-9 px-4 touch-manipulation',
-                    shadowClass
-                )}
-            >
-                <FingerprintIcon className="w-4 h-4" />
-                <span className="text-sm font-medium whitespace-nowrap">{t('aiAgent')}</span>
-            </Button>
+            <Link href="/chat">
+                <Button
+                    className={cn(
+                        'shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white h-9 px-4 touch-manipulation',
+                        shadowClass
+                    )}
+                >
+                    <FingerprintIcon className="w-4 h-4" />
+                    <span className="text-sm font-medium whitespace-nowrap">{t('aiAgent')}</span>
+                </Button>
+            </Link>
 
             {/* Сортировка */}
             <div className={cn('flex items-center shrink-0', shadowClass && 'shadow-md rounded-lg')}>

@@ -43,7 +43,7 @@ export function ChatSettingsPanel({
             {/* Backdrop */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/30 z-50 transition-opacity"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity"
                     onClick={onClose}
                 />
             )}
@@ -51,29 +51,29 @@ export function ChatSettingsPanel({
             {/* Panel */}
             <div
                 className={cn(
-                    'fixed top-0 right-0 h-full w-[360px] max-w-[90vw] bg-background',
-                    'border-l border-border shadow-xl z-50',
+                    'fixed top-0 right-0 h-full w-[380px] max-w-[90vw] bg-background',
+                    'border-l border-border shadow-2xl z-50',
                     'transition-transform duration-300 ease-in-out',
                     isOpen ? 'translate-x-0' : 'translate-x-full',
                     className
                 )}
             >
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 h-16 border-b border-border shrink-0">
-                    <h3 className="text-base font-semibold text-text-primary">
+                {/* Заголовок */}
+                <div className="flex items-center justify-between px-5 h-14 border-b border-border/50 shrink-0">
+                    <h3 className="text-base font-bold text-text-primary">
                         {labels.settingsTitle}
                     </h3>
                     <button
                         onClick={onClose}
-                        className="p-1.5 rounded-lg hover:bg-background-tertiary transition-colors cursor-pointer"
+                        className="p-2 rounded-xl hover:bg-background-tertiary transition-colors cursor-pointer"
                     >
                         <X className="w-5 h-5 text-text-secondary" />
                     </button>
                 </div>
 
-                {/* Content */}
-                <div className="overflow-y-auto h-[calc(100%-4rem)] px-5 py-5 space-y-8 scrollbar-hide">
-                    {/* Search Parameters */}
+                {/* Содержимое */}
+                <div className="overflow-y-auto h-[calc(100%-3.5rem)] px-5 py-5 space-y-8 scrollbar-hide">
+                    {/* Параметры поиска */}
                     <SearchParamsLink
                         labels={{
                             searchParams: labels.searchParams,
@@ -83,9 +83,9 @@ export function ChatSettingsPanel({
                         }}
                     />
 
-                    <div className="h-px bg-border" />
+                    <div className="h-px bg-border/50" />
 
-                    {/* Notification Settings */}
+                    {/* Настройки уведомлений */}
                     <NotificationSettings
                         labels={{
                             activeHours: labels.activeHours,

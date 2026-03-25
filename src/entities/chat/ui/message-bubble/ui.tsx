@@ -15,7 +15,7 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
     if (message.type === 'system') {
         return (
             <div className={cn('flex justify-center py-2', className)}>
-                <span className="text-xs text-text-tertiary bg-background-tertiary px-3 py-1 rounded-full">
+                <span className="text-[11px] text-text-tertiary bg-background-tertiary/80 px-3 py-1 rounded-full font-medium">
                     {message.content}
                 </span>
             </div>
@@ -25,22 +25,22 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
     if (message.type === 'ai-status') {
         return (
             <div className={cn('flex items-start gap-2 py-2', className)}>
-                <div className="flex items-center gap-2 bg-brand-primary-light border border-brand-primary/20 rounded-lg px-3 py-2 max-w-[80%]">
-                    <Search className="w-4 h-4 text-brand-primary shrink-0" />
+                <div className="flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 rounded-2xl px-4 py-2.5 max-w-[80%]">
+                    <Search className="w-4 h-4 text-brand-primary shrink-0 animate-pulse" />
                     <span className="text-sm text-text-primary">{message.content}</span>
                 </div>
             </div>
         );
     }
 
-    const StatusIcon = () => {
+    const renderStatusIcon = () => {
         if (!isOwn) return null;
-        
+
         if (message.status === 'error') {
             return (
                 <button
                     onClick={() => onRetry?.(message.id)}
-                    className="flex items-center gap-1 text-error hover:text-error/80 transition-colors"
+                    className="flex items-center gap-1 text-red-500 hover:text-red-400 transition-colors cursor-pointer"
                     title="Retry sending"
                 >
                     <AlertCircle className="w-3 h-3" />
@@ -48,16 +48,16 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
                 </button>
             );
         }
-        
+
         switch (message.status) {
             case 'sending':
-                return <Clock className="w-3 h-3 text-text-tertiary" />;
+                return <Clock className="w-3 h-3 text-white/50" />;
             case 'sent':
-                return <Check className="w-3 h-3 text-text-tertiary" />;
+                return <Check className="w-3 h-3 text-white/60" />;
             case 'delivered':
-                return <CheckCheck className="w-3 h-3 text-text-tertiary" />;
+                return <CheckCheck className="w-3 h-3 text-white/60" />;
             case 'read':
-                return <CheckCheck className="w-3 h-3 text-brand-primary" />;
+                return <CheckCheck className="w-3 h-3 text-white" />;
             default:
                 return null;
         }
@@ -73,15 +73,17 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
             className={cn(
                 'flex',
                 isOwn ? 'justify-end' : 'justify-start',
+                'group',
                 className
             )}
         >
             <div
                 className={cn(
-                    'max-w-[75%] rounded-2xl px-4 py-2.5 relative',
+                    'max-w-[75%] rounded-2xl px-4 py-2.5 relative shadow-sm',
                     isOwn
                         ? 'bg-brand-primary text-white rounded-br-md'
-                        : 'bg-background-secondary text-text-primary rounded-bl-md'
+                        : 'bg-background-secondary text-text-primary rounded-bl-md',
+                    message.status === 'error' && 'opacity-70'
                 )}
             >
                 <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
@@ -101,8 +103,18 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
                     >
                         {time}
                     </span>
-                    <StatusIcon />
+                    {renderStatusIcon()}
                 </div>
+
+                {/* Кнопка повторной отправки при ошибке */}
+                {message.status === 'error' && onRetry && (
+                    <button
+                        onClick={() => onRetry(message.id)}
+                        className="absolute -bottom-6 right-0 text-[11px] text-red-500 hover:text-red-400 font-medium transition-colors cursor-pointer"
+                    >
+                        Retry
+                    </button>
+                )}
             </div>
         </div>
     );

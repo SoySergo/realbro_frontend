@@ -51,7 +51,7 @@ export function ChatWindow({
         (c) => c.id === activeConversationId
     );
 
-    // Empty state — no conversation selected
+    // Пустое состояние — беседа не выбрана
     if (!activeConversation || !activeConversationId) {
         return (
             <div
@@ -63,9 +63,12 @@ export function ChatWindow({
                 <div className="w-16 h-16 rounded-2xl bg-background-secondary flex items-center justify-center">
                     <MessageSquare className="w-8 h-8 text-text-tertiary" />
                 </div>
-                <div className="text-center space-y-1">
-                    <p className="text-sm font-medium text-text-secondary">
-                        {labels.selectConversation}
+                <div className="text-center space-y-1 px-6">
+                    <p className="text-base font-semibold text-text-primary">
+                        {labels.emptyTitle}
+                    </p>
+                    <p className="text-sm text-text-tertiary max-w-[280px]">
+                        {labels.emptySubtitle}
                     </p>
                 </div>
             </div>

@@ -134,7 +134,7 @@ function MapBottomNavigation() {
     const navItems = [
         { id: 'home', icon: Home, labelKey: 'home', href: '/' as const },
         { id: 'search', icon: Search, labelKey: 'search', href: '/search' as const },
-        { id: 'agent', icon: FingerprintIcon, labelKey: 'aiAgent', isCenter: true },
+        { id: 'agent', icon: FingerprintIcon, labelKey: 'aiAgent', isCenter: true, href: '/chat' as const },
         { id: 'favorites', icon: Heart, labelKey: 'favorites', href: '/favorites' as const },
         { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' as const },
     ];
@@ -147,15 +147,16 @@ function MapBottomNavigation() {
 
                     if (item.isCenter) {
                         return (
-                            <button
+                            <Link
                                 key={item.id}
+                                href={item.href!}
                                 aria-label={t(item.labelKey)}
                                 className="relative flex items-center justify-center -mt-3"
                             >
                                 <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center shadow-lg">
                                     <Icon className="w-6 h-6 text-white" />
                                 </div>
-                            </button>
+                            </Link>
                         );
                     }
 

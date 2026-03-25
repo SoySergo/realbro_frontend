@@ -72,11 +72,12 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
     };
 
     return (
-        <div className={cn('flex h-full', className)}>
-            {/* Sidebar — hidden on mobile when chat is open */}
+        <div className={cn('flex bg-background-secondary md:p-2 md:gap-2', className)}>
+            {/* Sidebar */}
             <div
                 className={cn(
-                    'w-full md:w-[320px] lg:w-[340px] shrink-0',
+                    'w-full md:w-[360px] lg:w-[380px] shrink-0',
+                    'md:rounded-2xl md:border md:border-border md:bg-background md:overflow-hidden',
                     showMobileChat ? 'hidden md:flex' : 'flex'
                 )}
             >
@@ -91,10 +92,11 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
                 />
             </div>
 
-            {/* Chat window — hidden on mobile when sidebar is shown */}
+            {/* Chat window */}
             <div
                 className={cn(
                     'flex-1 min-w-0',
+                    'md:rounded-2xl md:border md:border-border md:bg-background md:overflow-hidden',
                     showMobileChat ? 'flex' : 'hidden md:flex'
                 )}
             >
