@@ -445,6 +445,9 @@ const FILTERS_HEIGHT = 52;
 // Минимальный порог свайпа для перехода между состояниями (px)
 const DRAG_THRESHOLD = 60;
 
+// Высота bottom sheet в состоянии half (% от экрана)
+const HALF_STATE_HEIGHT = '45%';
+
 /**
  * MobileMapSidebar - мобильный bottom sheet для карты
  *
@@ -700,7 +703,7 @@ export function MobileMapSidebar({
                 bottom: isExpanded ? 0 : `${BOTTOM_NAV_HEIGHT}px`,
                 height: isExpanded
                     ? '100dvh'
-                    : '45%',
+                    : HALF_STATE_HEIGHT,
                 willChange: 'height, bottom',
             }}
         >
