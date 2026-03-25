@@ -23,6 +23,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
+import { Link } from '@/shared/config/routing';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 import type { MarkerType } from '@/entities/filter';
 
 const markerOptions: { value: MarkerType; labelKey: string }[] = [
@@ -86,7 +88,8 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
             >
                 <div className="flex items-center gap-1.5 px-3 whitespace-nowrap w-full">
                     {/* Отпечаток — AI Agent (всегда первый, синий) */}
-                    <button
+                    <Link
+                        href={AI_AGENT_CHAT_HREF}
                         className={cn(
                             'w-9 h-9 rounded-md flex items-center justify-center shrink-0',
                             'bg-brand-primary text-white',
@@ -94,7 +97,7 @@ export function CollapsedSidebarToolbar({ visible }: CollapsedSidebarToolbarProp
                         )}
                     >
                         <Fingerprint className="w-5 h-5" />
-                    </button>
+                    </Link>
 
                     {/* Сохранённые фильтры / маркеры (auth only) — >= 1366 в ряд, < 1366 скрыты */}
                     {isAuthenticated && (

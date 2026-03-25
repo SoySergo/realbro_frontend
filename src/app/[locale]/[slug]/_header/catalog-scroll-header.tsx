@@ -30,6 +30,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shared/ui/select';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 import type { MarkerType } from '@/entities/filter';
 
 const navItems = [
@@ -114,7 +115,8 @@ export function CatalogScrollHeader() {
                     {/* Центральная часть — фильтры (не растягиваются, естественная ширина) */}
                     <div className="flex items-center gap-1.5 min-w-0">
                         {/* AI Agent */}
-                        <button
+                        <Link
+                            href={AI_AGENT_CHAT_HREF}
                             className={cn(
                                 'w-9 h-9 rounded-md flex items-center justify-center shrink-0',
                                 'bg-brand-primary text-white',
@@ -122,7 +124,7 @@ export function CatalogScrollHeader() {
                             )}
                         >
                             <Fingerprint className="w-5 h-5" />
-                        </button>
+                        </Link>
 
                         {/* Маркеры (auth only) */}
                         {isAuthenticated && (

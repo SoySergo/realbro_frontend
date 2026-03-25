@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore, useChatUIStore } from '@/features/chat-messages';
 import { ChatSidebar } from '../chat-sidebar/ui';
 import { ChatWindow } from '../chat-window/ui';
 import { ChatSettingsPanel } from '../chat-settings-panel/ui';
+import { AI_AGENT_CONVERSATION_ID } from '@/entities/chat';
 import type { PropertyCardLabels } from '@/entities/chat';
 
 interface ChatLayoutProps {
@@ -53,10 +55,12 @@ interface ChatLayoutProps {
 }
 
 export function ChatLayout({ labels, className }: ChatLayoutProps) {
-    const { activeConversationId } = useChatStore();
+    const searchParams = useSearchParams();
+    const { conversations, activeConversationId, setActiveConversation } = useChatStore();
     const { setChatOpen } = useChatUIStore();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [showMobileChat, setShowMobileChat] = useState(false);
+    const requestedConversationId = searchParams.get('conversationId');
 
     // Синхронизируем состояние чата с глобальным стором для скрытия нижнего меню
     useEffect(() => {
@@ -64,19 +68,41 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
         return () => setChatOpen(false);
     }, [showMobileChat, setChatOpen]);
 
-    // Mobile: show chat only when user explicitly clicks a conversation
-    // (removed auto-trigger on activeConversationId change)
+    useEffect(() => {
+        if (!requestedConversationId) return;
+
+        const targetConversation = conversations.find(
+            (conversation) => conversation.id === requestedConversationId
+        );
+
+        if (!targetConversation) return;
+
+        if (activeConversationId !== targetConversation.id) {
+            setActiveConversation(targetConversation.id);
+        }
+
+        if (targetConversation.id === AI_AGENT_CONVERSATION_ID) {
+            setShowMobileChat(true);
+        }
+    }, [requestedConversationId, conversations, activeConversationId, setActiveConversation]);
 
     const handleBackToSidebar = () => {
         setShowMobileChat(false);
     };
 
     return (
-        <div className={cn('flex h-full', className)}>
+        <div
+            className={cn(
+                'flex h-full bg-background-secondary/40 overflow-hidden',
+                'md:rounded-[9px] md:border md:border-border',
+                'md:shadow-[0_12px_40px_rgba(15,23,42,0.08)]',
+                className
+            )}
+        >
             {/* Sidebar — hidden on mobile when chat is open */}
             <div
                 className={cn(
-                    'w-full md:w-[320px] lg:w-[340px] shrink-0',
+                    'w-full md:w-[360px] lg:w-[400px] shrink-0',
                     showMobileChat ? 'hidden md:flex' : 'flex'
                 )}
             >
@@ -94,7 +120,7 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
             {/* Chat window — hidden on mobile when sidebar is shown */}
             <div
                 className={cn(
-                    'flex-1 min-w-0',
+                    'flex-1 min-w-0 bg-background',
                     showMobileChat ? 'flex' : 'hidden md:flex'
                 )}
             >

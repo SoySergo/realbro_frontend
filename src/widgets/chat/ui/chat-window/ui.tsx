@@ -56,15 +56,15 @@ export function ChatWindow({
         return (
             <div
                 className={cn(
-                    'flex flex-col items-center justify-center h-full bg-background gap-4',
+                    'flex flex-col items-center justify-center h-full bg-background gap-4 px-6',
                     className
                 )}
             >
-                <div className="w-16 h-16 rounded-2xl bg-background-secondary flex items-center justify-center">
+                <div className="w-18 h-18 rounded-[28px] bg-background-secondary flex items-center justify-center shadow-sm">
                     <MessageSquare className="w-8 h-8 text-text-tertiary" />
                 </div>
                 <div className="text-center space-y-1">
-                    <p className="text-sm font-medium text-text-secondary">
+                    <p className="text-sm font-medium text-text-secondary max-w-xs">
                         {labels.selectConversation}
                     </p>
                 </div>
@@ -76,7 +76,12 @@ export function ChatWindow({
     const isAIAgent = activeConversation.type === 'ai-agent';
 
     return (
-        <div className={cn('flex flex-col h-full bg-background', className)}>
+        <div
+            className={cn(
+                'flex flex-col h-full bg-[radial-gradient(circle_at_top,_rgba(37,99,235,0.08),_transparent_28%)] bg-background',
+                className
+            )}
+        >
             <ChatHeader
                 conversation={activeConversation}
                 onSettingsClick={isAIAgent ? onSettingsClick : undefined}

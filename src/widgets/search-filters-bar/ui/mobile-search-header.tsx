@@ -27,6 +27,7 @@ import { useSidebarStore } from '@/widgets/sidebar/model';
 import { useAuth } from '@/features/auth';
 import { cn } from '@/shared/lib/utils';
 import { useReducedMotion, useDebouncedCallback } from '@/shared/hooks';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 import {
     Select,
     SelectContent,
@@ -545,13 +546,16 @@ const FilterButtons = memo(function FilterButtons({
         <>
             {/* ИИ Агент */}
             <Button
+                asChild
                 className={cn(
                     'shrink-0 gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white h-9 px-4 touch-manipulation',
                     shadowClass
                 )}
             >
-                <FingerprintIcon className="w-4 h-4" />
-                <span className="text-sm font-medium whitespace-nowrap">{t('aiAgent')}</span>
+                <Link href={AI_AGENT_CHAT_HREF}>
+                    <FingerprintIcon className="w-4 h-4" />
+                    <span className="text-sm font-medium whitespace-nowrap">{t('aiAgent')}</span>
+                </Link>
             </Button>
 
             {/* Сортировка */}

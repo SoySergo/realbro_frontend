@@ -25,6 +25,8 @@ import {
 } from '@/shared/ui/popover';
 import { useAuth } from '@/features/auth';
 import { useToast } from '@/shared/ui/toast';
+import { Link } from '@/shared/config/routing';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { useAgencyFilters } from '@/features/agency-filters';
@@ -446,12 +448,15 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
 
                     {/* Кнопка "Найди мне" (AI) — в конце */}
                     <Button
+                        asChild
                         variant="outline"
                         size="sm"
                         className="btn-ai-neon ml-3 shrink-0 gap-2"
                     >
-                        <FingerprintIcon className="w-4 h-4 text-brand-primary" />
-                        <span className="hidden sm:inline font-medium">{t('findMe')}</span>
+                        <Link href={AI_AGENT_CHAT_HREF}>
+                            <FingerprintIcon className="w-4 h-4 text-brand-primary" />
+                            <span className="hidden sm:inline font-medium">{t('findMe')}</span>
+                        </Link>
                     </Button>
                 </div>
             </div>

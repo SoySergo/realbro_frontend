@@ -6,7 +6,7 @@ const defaultSettings = {
     notificationStartHour: 7,
     notificationEndHour: 22,
     notificationFrequency: '30min' as const,
-    linkedFilterIds: ['filter_1', 'filter_2'],
+    linkedFilterIds: [],
 };
 
 export async function GET() {

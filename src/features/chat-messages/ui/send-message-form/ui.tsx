@@ -50,7 +50,8 @@ export function SendMessageForm({
         <form
             onSubmit={handleSubmit}
             className={cn(
-                'flex items-end gap-2 p-3 border-t border-border bg-background',
+                'flex items-end gap-2 p-3 md:p-4 border-t border-border/70',
+                'bg-linear-to-t from-background via-background to-background/95 backdrop-blur-xl',
                 className
             )}
         >
@@ -62,27 +63,27 @@ export function SendMessageForm({
                 placeholder={placeholder}
                 rows={1}
                 className={cn(
-                    'flex-1 resize-none rounded-xl border border-border bg-background-secondary',
-                    'px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary',
+                    'flex-1 resize-none rounded-[22px] border border-border bg-background-secondary/90 shadow-sm',
+                    'px-4 py-3 text-sm text-text-primary placeholder:text-text-tertiary',
                     'focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary',
                     'transition-all duration-200 max-h-32',
                     'scrollbar-hide'
                 )}
-                style={{ minHeight: '40px' }}
+                style={{ minHeight: '48px' }}
                 onInput={handleInput}
             />
             <button
                 type="submit"
                 disabled={!message.trim() || isSending}
                 className={cn(
-                    'w-10 h-10 rounded-xl flex items-center justify-center',
+                    'w-12 h-12 rounded-full flex items-center justify-center shadow-sm',
                     'transition-all duration-200 shrink-0 cursor-pointer',
                     message.trim()
                         ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
                         : 'bg-background-tertiary text-text-tertiary cursor-not-allowed'
                 )}
             >
-                <Send className="w-4 h-4" />
+                <Send className="w-4.5 h-4.5" />
             </button>
         </form>
     );

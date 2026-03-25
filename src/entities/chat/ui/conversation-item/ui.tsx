@@ -16,31 +16,20 @@ function formatTime(dateStr: string): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = diffMs / (1000 * 60 * 60);
-    const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
-    if (diffHours < 1) {
-        const mins = Math.floor(diffMs / (1000 * 60));
-        return mins < 1 ? 'now' : `${mins}m`;
-    }
     if (diffHours < 24) {
-        return `${Math.floor(diffHours)}h`;
+        return date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
     }
-    if (diffDays < 7) {
-        return `${Math.floor(diffDays)}d`;
-    }
+
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
 }
 
 function getLastMessagePreview(conversation: Conversation): string {
     const msg = conversation.lastMessage;
     if (!msg) return '';
-
-    if (msg.type === 'property' || msg.type === 'property-batch') {
-        const count = msg.properties?.length ?? 1;
-        return count > 1
-            ? `${count} new properties`
-            : 'New property found';
-    }
 
     return msg.content;
 }
@@ -67,11 +56,11 @@ export function ConversationItem({
         <button
             onClick={onClick}
             className={cn(
-                'w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer',
-                'transition-colors duration-150 text-left',
+                'w-full flex items-center gap-3 rounded-[24px] border p-3.5 cursor-pointer text-left',
+                'transition-all duration-200 bg-background/90 backdrop-blur-sm',
                 isActive
-                    ? 'bg-brand-primary-light border border-brand-primary/20'
-                    : 'hover:bg-background-tertiary',
+                    ? 'border-brand-primary/30 bg-brand-primary/6 shadow-sm'
+                    : 'border-border/70 hover:border-brand-primary/15 hover:shadow-sm',
                 className
             )}
         >
@@ -85,19 +74,19 @@ export function ConversationItem({
 
             <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium text-text-primary truncate">
+                    <span className="text-sm font-semibold text-text-primary truncate">
                         {conversation.title}
                     </span>
-                    <span className="text-[10px] text-text-tertiary shrink-0">
+                    <span className="text-[11px] text-text-tertiary shrink-0">
                         {time}
                     </span>
                 </div>
-                <div className="flex items-center justify-between gap-2 mt-0.5">
+                <div className="flex items-center justify-between gap-2 mt-1">
                     <p className="text-xs text-text-secondary truncate">
                         {preview}
                     </p>
                     {conversation.unreadCount > 0 && (
-                        <span className="w-5 h-5 rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-primary px-1.5 text-[10px] font-bold text-white shrink-0 shadow-sm">
                             {conversation.unreadCount > 9
                                 ? '9+'
                                 : conversation.unreadCount}

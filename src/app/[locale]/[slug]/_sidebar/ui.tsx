@@ -29,11 +29,13 @@ import { CategoryFilter } from '@/features/category-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
 import { useFilterStore } from '@/widgets/search-filters-bar';
+import { Link } from '@/shared/config/routing';
 import { PropertyCardGrid } from '@/entities/property';
 import type { PropertyGridCard } from '@/entities/property';
 import { getPropertiesListCursor, getPropertiesCount } from '@/shared/api';
 import { dtosToGridCards } from '@/entities/property/model/converters';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 import {
     Select,
     SelectContent,
@@ -330,7 +332,8 @@ export function SearchPageSidebar() {
             {/* === Фильтры: 1 ряд — отпечаток, [маркеры >= 1366], раздел, категория, локация, подробности === */}
             <div className="flex items-center gap-1.5 px-3 py-2">
                 {/* Отпечаток — AI Agent */}
-                <button
+                <Link
+                    href={AI_AGENT_CHAT_HREF}
                     className={cn(
                         'w-9 h-9 rounded-md flex items-center justify-center shrink-0',
                         'bg-brand-primary text-white',
@@ -338,7 +341,7 @@ export function SearchPageSidebar() {
                     )}
                 >
                     <Fingerprint className="w-5 h-5" />
-                </button>
+                </Link>
 
                 {/* Маркеры — встроены в общий ряд на >= 1366px, скрыты на < 1366px */}
                 {isAuthenticated && (

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { LayoutGrid, List as ListIcon, Home, Search, Heart, User, FingerprintIcon } from 'lucide-react';
 import { MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
@@ -10,6 +10,7 @@ import { MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters
 import { Button } from '@/shared/ui/button';
 import { Link } from '@/shared/config/routing';
 import { cn } from '@/shared/lib/utils';
+import { AI_AGENT_CHAT_HREF } from '@/entities/chat';
 import type { PropertyGridCard } from '@/entities/property';
 
 const SearchMap = dynamic(
@@ -28,6 +29,7 @@ export default function MapPage() {
     const t = useTranslations('filters');
     const tMapSidebar = useTranslations('mapSidebar');
     const router = useRouter();
+    const locale = useLocale();
     const params = useParams();
     const slug = params.slug as string;
 
@@ -147,15 +149,16 @@ function MapBottomNavigation() {
 
                     if (item.isCenter) {
                         return (
-                            <button
+                            <Link
                                 key={item.id}
+                                href={AI_AGENT_CHAT_HREF}
                                 aria-label={t(item.labelKey)}
                                 className="relative flex items-center justify-center -mt-3"
                             >
                                 <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center shadow-lg">
                                     <Icon className="w-6 h-6 text-white" />
                                 </div>
-                            </button>
+                            </Link>
                         );
                     }
 
