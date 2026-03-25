@@ -3,9 +3,12 @@
 import { type ReactNode, useState, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { useActiveLocationMode } from '@/features/search-filters/model/use-location-mode';
+import { usePathname } from '@/shared/config/routing';
 import { SearchPageHeader } from './_header/ui';
+import { CatalogScrollHeader } from './_header/catalog-scroll-header';
 import { SearchPageSidebar } from './_sidebar/ui';
 import { CollapsedSidebarToolbar } from './_sidebar/collapsed-toolbar';
+import { CatalogContext } from './_catalog-context';
 
 interface SlugLayoutClientProps {
     children: ReactNode;
@@ -23,13 +26,49 @@ interface SlugLayoutClientProps {
  * Mobile (< 900px):
  * Полноэкранный контейнер, children занимают весь экран.
  * Мобильные элементы (bottom sheet, кнопки) рендерятся внутри страниц.
+ * Два режима:
+ * 1. Карта (map) — горизонтальный flex: хедер + карта слева, сайдбар справа.
+ * 2. Каталог (catalog) — полноширинный контент без сайдбара.
+ *    При скролле фильтров из видимой области хедер подменяется на CatalogScrollHeader.
  */
 export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
+    const pathname = usePathname();
     const activeLocationMode = useActiveLocationMode();
     const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-    const isCollapsed = mounted && !!activeLocationMode;
+    const [catalogFiltersVisible, setCatalogFiltersVisible] = useState(true);
 
+    useEffect(() => setMounted(true), []);
+
+    const isCollapsed = mounted && !!activeLocationMode;
+    const isCatalog = pathname?.endsWith('/catalog');
+
+    // Каталог — полноширинный layout без сайдбара, работает и на мобильных
+    if (isCatalog) {
+        return (
+            <CatalogContext.Provider
+                value={{
+                    filtersVisible: catalogFiltersVisible,
+                    setFiltersVisible: setCatalogFiltersVisible,
+                }}
+            >
+                <div className="flex flex-col min-h-screen slug-desktop:h-screen slug-desktop:p-[5px] bg-background slug-desktop:bg-background-tertiary">
+                    {/* Desktop header — скрыт на мобильных */}
+                    <div className="hidden slug-desktop:block shrink-0">
+                        {catalogFiltersVisible ? (
+                            <SearchPageHeader />
+                        ) : (
+                            <CatalogScrollHeader />
+                        )}
+                    </div>
+                    <main className="flex-1 min-h-0 slug-desktop:mt-[5px]">
+                        {children}
+                    </main>
+                </div>
+            </CatalogContext.Provider>
+        );
+    }
+
+    // Карта — оригинальный layout с сайдбаром
     return (
         <>
             {/* Desktop layout */}

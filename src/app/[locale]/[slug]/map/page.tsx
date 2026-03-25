@@ -30,7 +30,6 @@ export default function MapPage() {
     const router = useRouter();
     const params = useParams();
     const slug = params.slug as string;
-    const locale = params.locale as string;
 
     // Состояние мобильного bottom sheet
     const [mobileSnapState, setMobileSnapState] = useState<MobileSnapState>('half');
@@ -75,15 +74,6 @@ export default function MapPage() {
                 onClusterClick={handleClusterClick}
             />
 
-            {/* Desktop: кнопка переключения на список */}
-            <button
-                onClick={() => router.push(`/${locale}/${slug}/catalog`)}
-                className="hidden slug-desktop:flex absolute top-3 right-3 z-10 items-center gap-2 h-9 px-3 rounded-md bg-background text-text-primary text-sm font-medium shadow-md hover:bg-background-secondary transition-colors"
-            >
-                <LayoutGrid className="w-4 h-4" />
-                {t('viewList')}
-            </button>
-
             {/* Mobile: хедер + фильтры + bottom sheet + навигация */}
             <div className="slug-desktop:hidden">
                 {/* Мобильный хедер с фильтрами */}
@@ -122,6 +112,14 @@ export default function MapPage() {
                 {/* Нижняя навигация — 5 элементов по макету */}
                 <MapBottomNavigation />
             </div>
+            {/* Кнопка переключения на список */}
+            <Link
+                href={`/${slug}/catalog`}
+                className="absolute top-3 right-3 z-10 flex items-center gap-2 h-9 px-3 rounded-md bg-background text-text-primary text-sm font-medium shadow-md hover:bg-background-secondary transition-colors"
+            >
+                <LayoutGrid className="w-4 h-4" />
+                {t('viewList')}
+            </Link>
         </div>
     );
 }
