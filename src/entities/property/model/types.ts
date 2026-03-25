@@ -123,6 +123,7 @@ export interface Property {
     type: PropertyType;
     price: number;
     rooms: number;
+    bedrooms?: number;
     bathrooms: number;
     area: number;
     floor?: number;

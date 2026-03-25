@@ -69,6 +69,23 @@ export interface LocationDetailsDTO {
     transport: NearestStationDTO[]; // все ближайшие станции
 }
 
+// === Компания (краткая) ===
+export interface CompanyShortDTO {
+    id: string;
+    name: string;
+    logo_url?: string;
+    is_premium: boolean;
+    slug?: string;
+}
+
+// === Компания (обогащённая) ===
+export interface CompanyEnrichedDTO extends CompanyShortDTO {
+    location?: unknown;
+    languages?: string[];
+    website?: string;
+    properties_count: number;
+}
+
 // === Автор (краткий — для списка) ===
 export interface AuthorShortDTO {
     id: string;
@@ -76,16 +93,31 @@ export interface AuthorShortDTO {
     contact_id: string;
     name: string;
     avatar?: string;
-    author_type: 'owner' | 'agent' | 'agency';
+    author_type: 'owner' | 'agent' | 'agency' | 'tenant';
+    is_verified: boolean;
+    company?: CompanyShortDTO;
+    // Плоские поля для обратной совместимости (legacy)
     company_id?: string;
     company_name?: string;
     company_logo?: string;
     company_url?: string;
+}
+
+// === Автор (обогащённый) ===
+export interface AuthorEnrichedDTO {
+    contact_id: string;
+    name: string;
+    author_type: 'owner' | 'agent' | 'agency' | 'tenant';
     is_verified: boolean;
+    company?: CompanyEnrichedDTO;
 }
 
 // === Автор (полный — для карточки объекта) ===
-export interface AuthorLongDTO extends AuthorShortDTO {
+export interface AuthorLongDTO extends AuthorEnrichedDTO {
+    // Поля из AuthorShortDTO для совместимости
+    id?: string;
+    slug?: string;
+    avatar?: string;
     object_count: number;
     rating: number;
     review_count: number;
@@ -171,11 +203,13 @@ export interface PropertyDetailsDTO {
     seo_description?: string;
     seo_keywords: string[];
     price: number;
+    price_per_m2?: number;
     price_per_month?: number;
     area: number;
     area_useful?: number;
     area_kitchen?: number;
     rooms: number | null;
+    bedrooms?: number | null;
     bathrooms: number | null;
     floor: number | null;
     total_floors: number | null;
@@ -185,6 +219,7 @@ export interface PropertyDetailsDTO {
     min_term?: number;
     max_term?: number;
     description: string;
+    description_language?: string;
     description_original: string;
     building_info: AttributeDTO[];
     estate_info: AttributeDTO[];

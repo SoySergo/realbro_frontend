@@ -11,13 +11,20 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
 const SCROLL_THRESHOLD = 50; // px to trigger header state change
 const INTERSECTION_OFFSET = 300; // px offset for section detection
 const HEADER_HEIGHT = 60; // px height of sticky header
+const SUB_HEADER_HEIGHT = 52; // px height of subHeader variant
 
-interface HeaderTranslations {
+// Общий стиль «островка» (парящая пилюля)
+const ISLAND_CLASS = "flex items-center h-9 rounded-full bg-background border border-border shadow-sm";
+
+export interface HeaderTranslations {
     back: string;
     navPhotos: string;
+    navMedia: string;
     navDescription: string;
     navCharacteristics: string;
     navMap: string;
+    previous: string;
+    next: string;
 }
 
 interface MainInfoTranslations {
@@ -47,8 +54,8 @@ interface PropertyDetailHeaderProps {
     translations: HeaderTranslations;
     mainInfoTranslations: MainInfoTranslations;
     locale?: string;
-    /** Режим рендера: по умолчанию — полный fixed header, 'headerSlot' — встроен в AppHeader */
-    variant?: 'default' | 'headerSlot';
+    /** Режим рендера: по умолчанию — полный fixed header, 'headerSlot' — встроен в AppHeader, 'subHeader' — второй уровень навигации */
+    variant?: 'default' | 'headerSlot' | 'subHeader';
 }
 
 // Get Intl locale from app locale
@@ -60,6 +67,9 @@ const getIntlLocale = (locale?: string): string => {
         default: return 'en-US';
     }
 };
+
+// Порядок навигации по секциям
+const SECTION_IDS = ['photos', 'characteristics', 'description', 'map'] as const;
 
 export function PropertyDetailHeader({
     className,
@@ -87,8 +97,7 @@ export function PropertyDetailHeader({
             setIsScrolled(scrollY > SCROLL_THRESHOLD);
 
             // Simple intersection detection
-            const sections = ['photos', 'description', 'characteristics', 'map'];
-            for (const section of sections) {
+            for (const section of SECTION_IDS) {
                 const el = document.getElementById(section);
                 if (el) {
                     const rect = el.getBoundingClientRect();
@@ -116,17 +125,75 @@ export function PropertyDetailHeader({
         }
     };
 
-    const navItems = [
-        { id: 'photos', label: t.navPhotos },
-        { id: 'description', label: t.navDescription },
-        { id: 'characteristics', label: t.navCharacteristics },
-        { id: 'map', label: t.navMap },
-    ];
+    // Лейблы навигации по секциям, используя общий порядок SECTION_IDS
+    const sectionLabels: Record<string, string> = {
+        photos: t.navMedia,
+        characteristics: t.navCharacteristics,
+        description: t.navDescription,
+        map: t.navMap,
+    };
+    const navItems = SECTION_IDS.map(id => ({ id, label: sectionLabels[id] }));
 
 
     const intlLocale = getIntlLocale(locale);
     const formattedPrice = price ? new Intl.NumberFormat(intlLocale).format(price) : '';
     const pricePerMeter = price && area ? Math.round(price / area) : null;
+
+    // Режим subHeader — второй уровень навигации под основным хедером
+    if (variant === 'subHeader') {
+        return (
+            <div className={cn(
+                `flex items-center justify-between w-full h-[${SUB_HEADER_HEIGHT}px] px-4 bg-background border-b border-border`,
+                className
+            )}>
+                {/* Островок «Назад» */}
+                <div className="flex items-center shrink-0">
+                    <button
+                        onClick={() => router.back()}
+                        className={cn(ISLAND_CLASS, "px-3.5 gap-1.5 text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95")}
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        {t.back}
+                    </button>
+                </div>
+
+                {/* Островок навигации по секциям (px-1 создаёт отступ вокруг внутренних кнопок) */}
+                <nav className={cn(ISLAND_CLASS, "px-1")}>
+                    {navItems.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => scrollToSection(item.id)}
+                            className={cn(
+                                "px-3.5 py-1 rounded-full text-sm font-medium transition-all",
+                                activeSection === item.id
+                                    ? "bg-brand-primary text-white shadow-sm"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                            )}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </nav>
+
+                {/* Островок «Предыдущий / Следующий» (px-1 — отступ вокруг кнопок) */}
+                <div className="flex items-center shrink-0">
+                    {hasListingContext && (
+                        <div className={cn(ISLAND_CLASS, "px-1")}>
+                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
+                                <ChevronLeft className="w-4 h-4" />
+                                {t.previous}
+                            </button>
+                            <div className="w-px h-4 bg-border" />
+                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
+                                {t.next}
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     // Режим headerSlot — встроенный контент без собственного fixed-обёртки
     if (variant === 'headerSlot') {
@@ -171,6 +238,7 @@ export function PropertyDetailHeader({
                                 variant="ghost"
                                 size="icon"
                                 className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                title={t.previous}
                             >
                                 <ChevronLeft className="w-5 h-5" strokeWidth={2.5} />
                             </Button>
@@ -178,6 +246,7 @@ export function PropertyDetailHeader({
                                 variant="ghost"
                                 size="icon"
                                 className="h-9 w-9 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                title={t.next}
                             >
                                 <ChevronRight className="w-5 h-5" strokeWidth={2.5} />
                             </Button>
@@ -275,6 +344,7 @@ export function PropertyDetailHeader({
                                  variant="ghost"
                                  size="icon"
                                  className="h-10 w-10 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                 title={t.previous}
                              >
                                  <ChevronLeft className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
@@ -282,6 +352,7 @@ export function PropertyDetailHeader({
                                  variant="ghost"
                                  size="icon"
                                  className="h-10 w-10 rounded-full hover:bg-brand-primary-light text-brand-primary active:scale-95 transition-all"
+                                 title={t.next}
                              >
                                  <ChevronRight className="w-7 h-7" strokeWidth={2.5} />
                              </Button>
@@ -299,5 +370,3 @@ export function PropertyDetailHeader({
         </header>
     );
 }
-
-

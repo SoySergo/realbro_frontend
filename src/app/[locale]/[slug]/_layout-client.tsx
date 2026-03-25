@@ -1,6 +1,7 @@
 'use client';
 
 import { type ReactNode, useState, useEffect } from 'react';
+import { useSelectedLayoutSegment } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
 import { useActiveLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { usePathname } from '@/shared/config/routing';
@@ -23,6 +24,8 @@ interface SlugLayoutClientProps {
  * вместо него справа вверху появляется компактная панель кнопок (CollapsedSidebarToolbar),
  * выровненная по высоте хедера.
  *
+ * На страницах деталей объектов ([detail]) — сайдбар скрыт,
+ * отображается SearchPageHeader (основной хедер) + контент на всю ширину.
  * Mobile (< 900px):
  * Полноэкранный контейнер, children занимают весь экран.
  * Мобильные элементы (bottom sheet, кнопки) рендерятся внутри страниц.
@@ -65,6 +68,27 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                     </main>
                 </div>
             </CatalogContext.Provider>
+        );
+    }
+
+    // Определяем, находимся ли на странице деталей объекта
+    const segment = useSelectedLayoutSegment();
+    const isDetailPage = segment !== null && segment !== 'map' && segment !== 'catalog';
+
+    // Страница деталей — без сайдбара, только хедер + второй уровень навигации + контент
+    if (isDetailPage) {
+        return (
+            <div className="relative hidden slug-desktop:flex flex-col h-screen bg-background-tertiary">
+                {/* Основной хедер (SearchPageHeader) */}
+                <div className="shrink-0 p-[5px] pb-0">
+                    <SearchPageHeader />
+                </div>
+
+                {/* Контент страницы деталей (включая PropertyDetailHeader как sub-header) */}
+                <main className="flex-1 min-h-0 overflow-auto">
+                    {children}
+                </main>
+            </div>
         );
     }
 
