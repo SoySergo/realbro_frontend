@@ -602,6 +602,7 @@
         "sessionExpired": "La sesión ha expirado, inicia sesión nuevamente"
     },
     "sidebar": {
+        "home": "Inicio",
         "search": "Buscar",
         "chat": "Chat",
         "profile": "Perfil",
