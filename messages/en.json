@@ -586,6 +586,7 @@
         "sessionExpired": "Session expired, please sign in again"
     },
     "sidebar": {
+        "home": "Home",
         "search": "Search",
         "chat": "Chat",
         "profile": "Profile",

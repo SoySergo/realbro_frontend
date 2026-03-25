@@ -4,10 +4,12 @@ import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
-import { LayoutGrid, List as ListIcon } from 'lucide-react';
+import { LayoutGrid, List as ListIcon, Home, Search, Heart, User, FingerprintIcon } from 'lucide-react';
 import { MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
-import { BottomNavigation } from '@/widgets/sidebar';
+import { MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters-bar';
 import { Button } from '@/shared/ui/button';
+import { Link } from '@/shared/config/routing';
+import { cn } from '@/shared/lib/utils';
 import type { PropertyGridCard } from '@/entities/property';
 
 const SearchMap = dynamic(
@@ -32,6 +34,9 @@ export default function MapPage() {
 
     // Состояние мобильного bottom sheet
     const [mobileSnapState, setMobileSnapState] = useState<MobileSnapState>('half');
+
+    // Состояние мобильных фильтров
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     // Состояние выбранного маркера / кластера
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
@@ -61,6 +66,7 @@ export default function MapPage() {
     }, []);
 
     const isCollapsed = mobileSnapState === 'collapsed';
+    const isExpanded = mobileSnapState === 'expanded';
 
     return (
         <div className="relative h-full slug-desktop:rounded-[9px] overflow-hidden">
@@ -78,8 +84,20 @@ export default function MapPage() {
                 {t('viewList')}
             </button>
 
-            {/* Mobile: MobileMapSidebar (bottom sheet) */}
+            {/* Mobile: хедер + фильтры + bottom sheet + навигация */}
             <div className="slug-desktop:hidden">
+                {/* Мобильный хедер с фильтрами */}
+                {!isExpanded && (
+                    <MobileSearchHeader onOpenFilters={() => setIsMobileFiltersOpen(true)} />
+                )}
+
+                {/* Мобильный sheet фильтров */}
+                <MobileFiltersSheet
+                    open={isMobileFiltersOpen}
+                    onOpenChange={setIsMobileFiltersOpen}
+                />
+
+                {/* Bottom sheet со списком */}
                 <MobileMapSidebar
                     onPropertyClick={handlePropertyClick}
                     selectedPropertyId={selectedPropertyId}
@@ -93,16 +111,72 @@ export default function MapPage() {
                 {isCollapsed && (
                     <Button
                         onClick={() => setMobileSnapState('expanded')}
-                        className="fixed left-4 bottom-20 z-40 gap-2 shadow-lg bg-brand-primary hover:bg-brand-primary/90 text-white h-10 px-4 rounded-lg"
+                        className="fixed left-4 z-40 gap-2 shadow-lg bg-brand-primary hover:bg-brand-primary/90 text-white h-10 px-4 rounded-lg"
+                        style={{ bottom: `${64 + 12}px` }}
                     >
                         <ListIcon className="w-5 h-5" />
                         <span className="font-medium">{tMapSidebar('showAsList')}</span>
                     </Button>
                 )}
 
-                {/* Нижняя навигация */}
-                <BottomNavigation />
+                {/* Нижняя навигация — 5 элементов по макету */}
+                <MapBottomNavigation />
             </div>
         </div>
+    );
+}
+
+/**
+ * Нижняя навигация для мобильной карты — 5 иконок по макету Figma:
+ * Home, Search, AI Agent (центральная), Favorites, Profile
+ */
+function MapBottomNavigation() {
+    const t = useTranslations('sidebar');
+
+    const navItems = [
+        { id: 'home', icon: Home, labelKey: 'home', href: '/' as const },
+        { id: 'search', icon: Search, labelKey: 'search', href: '/search' as const },
+        { id: 'agent', icon: FingerprintIcon, labelKey: 'aiAgent', isCenter: true },
+        { id: 'favorites', icon: Heart, labelKey: 'favorites', href: '/favorites' as const },
+        { id: 'profile', icon: User, labelKey: 'profile', href: '/profile' as const },
+    ];
+
+    return (
+        <nav aria-label="Main navigation" className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border pb-[env(safe-area-inset-bottom)]">
+            <div className="flex items-center justify-around h-16 px-2">
+                {navItems.map((item) => {
+                    const Icon = item.icon;
+
+                    if (item.isCenter) {
+                        return (
+                            <button
+                                key={item.id}
+                                aria-label={t(item.labelKey)}
+                                className="relative flex items-center justify-center -mt-3"
+                            >
+                                <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center shadow-lg">
+                                    <Icon className="w-6 h-6 text-white" />
+                                </div>
+                            </button>
+                        );
+                    }
+
+                    return (
+                        <Link
+                            key={item.id}
+                            href={item.href!}
+                            aria-label={t(item.labelKey)}
+                            className={cn(
+                                'relative flex flex-col items-center justify-center',
+                                'w-full h-full gap-1 rounded-lg transition-colors',
+                                'text-text-secondary hover:text-text-primary active:text-brand-primary'
+                            )}
+                        >
+                            <Icon className="w-6 h-6" />
+                        </Link>
+                    );
+                })}
+            </div>
+        </nav>
     );
 }
