@@ -16,8 +16,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Link, usePathname } from '@/shared/config/routing';
-import { ThemeSwitcher } from '@/features/theme-switcher';
-import { LanguageSwitcher } from '@/features/language-switcher';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
@@ -94,9 +92,9 @@ export function CatalogScrollHeader() {
             <TooltipProvider delayDuration={200}>
                 <header
                     className={cn(
-                        'flex h-[52px] items-center justify-between',
+                        'flex h-[52px] items-center',
                         'bg-background rounded-[9px]',
-                        'px-3'
+                        'px-3 gap-3'
                     )}
                 >
                     {/* Левая часть — лого */}
@@ -113,8 +111,8 @@ export function CatalogScrollHeader() {
                         </span>
                     </Link>
 
-                    {/* Центральная часть — фильтры */}
-                    <div className="flex items-center gap-1.5 flex-1 min-w-0 mx-3">
+                    {/* Центральная часть — фильтры (не растягиваются, естественная ширина) */}
+                    <div className="flex items-center gap-1.5 min-w-0">
                         {/* AI Agent */}
                         <button
                             className={cn(
@@ -152,15 +150,13 @@ export function CatalogScrollHeader() {
                         )}
 
                         {/* Раздел + категория */}
-                        <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                            <SearchCategorySwitcher
-                                currentCategory={currentCategory}
-                                locale={locale}
-                                className="h-9 min-w-0 flex-1"
-                            />
-                            <div className="min-w-0 flex-1">
-                                <CategoryFilter />
-                            </div>
+                        <SearchCategorySwitcher
+                            currentCategory={currentCategory}
+                            locale={locale}
+                            className="h-9 shrink-0"
+                        />
+                        <div className="shrink-0">
+                            <CategoryFilter />
                         </div>
 
                         {/* Кнопка «Смотреть на карте» */}
@@ -222,10 +218,13 @@ export function CatalogScrollHeader() {
                         </div>
                     </div>
 
-                    {/* Разделитель */}
-                    <div className="w-px h-6 bg-border shrink-0 mx-1" />
+                    {/* Пространство между фильтрами и навигацией */}
+                    <div className="flex-1" />
 
-                    {/* Навигация */}
+                    {/* Разделитель */}
+                    <div className="w-px h-6 bg-border shrink-0" />
+
+                    {/* Навигация (справа, без смены темы и языка) */}
                     <nav className="flex items-center gap-1 shrink-0">
                         {navItems.map((item) => {
                             const Icon = item.icon;
@@ -253,12 +252,6 @@ export function CatalogScrollHeader() {
                             );
                         })}
                     </nav>
-
-                    {/* Тема, язык */}
-                    <div className="flex items-center gap-1 shrink-0">
-                        <ThemeSwitcher />
-                        <LanguageSwitcher />
-                    </div>
                 </header>
             </TooltipProvider>
 
