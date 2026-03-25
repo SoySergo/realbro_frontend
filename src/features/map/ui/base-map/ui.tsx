@@ -3,12 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { mapboxConfig } from '@/shared/lib/mapbox';
+import { mapboxConfig, getMapStyleUrl } from '@/shared/lib/mapbox';
+import type { MapStyleVariant } from '@/shared/lib/mapbox';
 import { useTheme } from 'next-themes';
-
-// Стили карты
-const MAP_STYLE_LIGHT = 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq';
-const MAP_STYLE_DARK = 'mapbox://styles/serhii11/cmi1yrucv00oa01qu6ciub5td';
 
 type BaseMapProps = {
     /** Начальный центр карты [lng, lat] */
@@ -23,6 +20,8 @@ type BaseMapProps = {
     children?: React.ReactNode;
     /** Показать лоадер поверх карты (по умолчанию true) */
     showLoader?: boolean;
+    /** Вариант стиля карты (по умолчанию 'search') */
+    styleVariant?: MapStyleVariant;
 };
 
 /**
@@ -70,13 +69,17 @@ export function BaseMap({
     className = 'h-full w-full',
     children,
     showLoader = true,
+    styleVariant = 'search',
 }: BaseMapProps) {
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const [isMapReady, setIsMapReady] = useState(false);
     const { resolvedTheme } = useTheme();
 
-    const getMapStyle = () => resolvedTheme === 'dark' ? MAP_STYLE_DARK : MAP_STYLE_LIGHT;
+    const getMapStyle = () => {
+        const theme = resolvedTheme === 'dark' ? 'dark' : 'light';
+        return getMapStyleUrl(styleVariant, theme);
+    };
 
     // Инициализация карты
     useEffect(() => {
@@ -135,7 +138,7 @@ export function BaseMap({
     const onMapLoadRef = useRef(onMapLoad);
     onMapLoadRef.current = onMapLoad;
 
-    // Реакция на смену темы — меняем стиль карты
+    // Реакция на смену темы или варианта стиля — меняем стиль карты
     useEffect(() => {
         if (!map.current || !isMapReady) return;
 
@@ -147,14 +150,14 @@ export function BaseMap({
             // После setStyle все кастомные sources/layers удаляются
             // Ждём style.load и перевызываем onMapLoad для реинициализации слоёв
             mapRef.once('style.load', () => {
-                console.log('[BaseMap] Style changed to', resolvedTheme);
+                console.log('[BaseMap] Style changed to', resolvedTheme, styleVariant);
                 onMapLoadRef.current?.(mapRef);
             });
 
             mapRef.setStyle(newStyle);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resolvedTheme]);
+    }, [resolvedTheme, styleVariant]);
 
     return (
         <div className="relative h-full w-full">

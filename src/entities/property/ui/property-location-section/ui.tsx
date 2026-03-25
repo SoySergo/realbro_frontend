@@ -338,6 +338,7 @@ export function PropertyLocationSection({
                     initialZoom={14}
                     onMapLoad={handleMapLoad}
                     className="h-full w-full"
+                    styleVariant="propertyDetail"
                 />
             </div>
             

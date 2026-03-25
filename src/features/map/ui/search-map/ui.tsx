@@ -521,6 +521,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 initialCenter={initialCenter}
                 initialZoom={initialZoom}
                 onMapLoad={handleMapLoad}
+                styleVariant={activeLocationMode ? 'location' : 'search'}
             >
                 {/* Полоска загрузки тайлов при обновлении фильтров */}
                 {isTilesLoading && (
