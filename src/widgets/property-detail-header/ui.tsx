@@ -11,6 +11,10 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
 const SCROLL_THRESHOLD = 50; // px to trigger header state change
 const INTERSECTION_OFFSET = 300; // px offset for section detection
 const HEADER_HEIGHT = 60; // px height of sticky header
+const SUB_HEADER_HEIGHT = 52; // px height of subHeader variant
+
+// Общий стиль «островка» (парящая пилюля)
+const ISLAND_CLASS = "flex items-center h-9 rounded-full bg-background border border-border shadow-sm";
 
 export interface HeaderTranslations {
     back: string;
@@ -139,22 +143,22 @@ export function PropertyDetailHeader({
     if (variant === 'subHeader') {
         return (
             <div className={cn(
-                "flex items-center justify-between w-full h-[52px] px-4 bg-background border-b border-border",
+                `flex items-center justify-between w-full h-[${SUB_HEADER_HEIGHT}px] px-4 bg-background border-b border-border`,
                 className
             )}>
                 {/* Островок «Назад» */}
                 <div className="flex items-center shrink-0">
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-background border border-border shadow-sm text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95"
+                        className={cn(ISLAND_CLASS, "px-3.5 gap-1.5 text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95")}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         {t.back}
                     </button>
                 </div>
 
-                {/* Островок навигации по секциям */}
-                <nav className="flex items-center gap-0.5 h-9 px-1 rounded-full bg-background border border-border shadow-sm">
+                {/* Островок навигации по секциям (px-1 создаёт отступ вокруг внутренних кнопок) */}
+                <nav className={cn(ISLAND_CLASS, "px-1")}>
                     {navItems.map((item) => (
                         <button
                             key={item.id}
@@ -171,10 +175,10 @@ export function PropertyDetailHeader({
                     ))}
                 </nav>
 
-                {/* Островок «Предыдущий / Следующий» */}
+                {/* Островок «Предыдущий / Следующий» (px-1 — отступ вокруг кнопок) */}
                 <div className="flex items-center shrink-0">
                     {hasListingContext && (
-                        <div className="flex items-center h-9 px-1 rounded-full bg-background border border-border shadow-sm">
+                        <div className={cn(ISLAND_CLASS, "px-1")}>
                             <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
                                 <ChevronLeft className="w-4 h-4" />
                                 {t.previous}
