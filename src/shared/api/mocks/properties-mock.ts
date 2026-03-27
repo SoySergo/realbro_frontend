@@ -348,6 +348,13 @@ export function generateMockProperty(
     // Транспорт
     if (includeTransport) {
         property.nearbyTransport = MOCK_TRANSPORT[index % MOCK_TRANSPORT.length];
+        // Для детальных страниц — несколько станций
+        const startIdx = index % MOCK_TRANSPORT.length;
+        property.nearbyTransportList = [
+            MOCK_TRANSPORT[startIdx],
+            MOCK_TRANSPORT[(startIdx + 1) % MOCK_TRANSPORT.length],
+            MOCK_TRANSPORT[(startIdx + 2) % MOCK_TRANSPORT.length],
+        ];
     }
 
     // Условия аренды
@@ -408,6 +415,12 @@ export function generateMockProperty(
     // Поля для детальной карточки
     if (cardType === 'detail') {
         property.amenities = ['wifi', 'airConditioning', 'washingMachine', 'elevator', 'balcony', 'kitchen'];
+        property.publishedAt = new Date(Date.now() - (index % 14) * 24 * 60 * 60 * 1000);
+        property.viewsCount = 500 + (index * 37) % 2000;
+        property.viewsToday = 10 + (index * 3) % 80;
+        property.country = 'Spain';
+        property.region = 'Catalonia';
+        property.district = neighborhood;
         property.video = {
             url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             thumbnail: images[0]

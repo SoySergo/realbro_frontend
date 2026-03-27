@@ -111,7 +111,6 @@ export async function GET(
         viewsToday: 33 + (idx * 2) % 10,
         country: 'Spain',
         region: 'Catalonia',
-        province: 'Barcelona',
         district: neighborhood,
         
         // Extra fields

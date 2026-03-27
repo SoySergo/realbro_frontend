@@ -22,6 +22,7 @@ import type {
     SimilarPropertyCard,
     TransportStation
 } from './types';
+import { FEATURES } from '@/shared/config/features';
 
 // Re-export types for convenience
 export * from './types';
@@ -30,7 +31,7 @@ export * from './types';
 // Configuration
 // ============================================================================
 
-const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+const USE_MOCKS = FEATURES.USE_MOCK_PROPERTIES || process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 // URL реального API (основной бекенд)
 const API_BASE = `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '')}/api/v1`;
