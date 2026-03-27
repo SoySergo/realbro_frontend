@@ -824,7 +824,9 @@
             "send": "Enviar",
             "support": "Soporte",
             "supportGreeting": "¿En qué podemos ayudarte?",
-            "you": "Tú"
+            "you": "Tú",
+            "retry": "Reintentar",
+            "retrySending": "Reintentar envío"
         },
         "actions": {
             "like": "Me gusta",
@@ -836,7 +838,8 @@
         },
         "empty": {
             "title": "No hay mensajes todavía",
-            "subtitle": "Inicia una conversación o espera hallazgos del agente IA"
+            "subtitle": "Inicia una conversación o espera hallazgos del agente IA",
+            "noConversations": "No se encontraron conversaciones"
         },
         "time": {
             "justNow": "ahora mismo",
@@ -873,7 +876,8 @@
             "today": "Hoy",
             "yesterday": "Ayer",
             "live": "EN TIEMPO REAL",
-            "objects": "propiedades"
+            "objects": "propiedades",
+            "new": "NUEVO"
         },
         "thread": {
             "messagePlaceholder": "Pregunta sobre esta propiedad...",
@@ -894,7 +898,17 @@
             "noteTime": "Hora",
             "noteSave": "Guardar",
             "noteCancel": "Cancelar",
-            "discussed": "Discutido"
+            "discussed": "Discutido",
+            "loadingNearby": "Cargando lugares cercanos...",
+            "noteLabel": "Nota",
+            "categories": {
+                "transport": "Transporte",
+                "shops": "Tiendas",
+                "restaurants": "Restaurantes",
+                "parks": "Parques",
+                "schools": "Colegios",
+                "healthcare": "Sanidad"
+            }
         }
     },
     "propertyDetail": {

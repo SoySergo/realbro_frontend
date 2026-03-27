@@ -826,7 +826,9 @@
             "send": "Отправить",
             "support": "Поддержка",
             "supportGreeting": "Чем можем помочь?",
-            "you": "Вы"
+            "you": "Вы",
+            "retry": "Повторить",
+            "retrySending": "Повторить отправку"
         },
         "actions": {
             "like": "Нравится",
@@ -838,7 +840,8 @@
         },
         "empty": {
             "title": "Сообщений пока нет",
-            "subtitle": "Начните переписку или ожидайте находки ИИ Агента"
+            "subtitle": "Начните переписку или ожидайте находки ИИ Агента",
+            "noConversations": "Чаты не найдены"
         },
         "time": {
             "justNow": "только что",
@@ -875,7 +878,8 @@
             "today": "Сегодня",
             "yesterday": "Вчера",
             "live": "В РЕАЛЬНОМ ВРЕМЕНИ",
-            "objects": "объектов"
+            "objects": "объектов",
+            "new": "НОВОЕ"
         },
         "thread": {
             "messagePlaceholder": "Спросите об этом объекте...",
@@ -896,7 +900,17 @@
             "noteTime": "Время",
             "noteSave": "Сохранить",
             "noteCancel": "Отмена",
-            "discussed": "С обсуждением"
+            "discussed": "С обсуждением",
+            "loadingNearby": "Загрузка ближайших мест...",
+            "noteLabel": "Заметка",
+            "categories": {
+                "transport": "Транспорт",
+                "shops": "Магазины",
+                "restaurants": "Рестораны",
+                "parks": "Парки",
+                "schools": "Школы",
+                "healthcare": "Медицина"
+            }
         }
     },
     "propertyDetail": {

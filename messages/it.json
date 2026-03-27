@@ -824,7 +824,9 @@
             "send": "Invia",
             "support": "Assistenza",
             "supportGreeting": "Come possiamo aiutarti?",
-            "you": "Tu"
+            "you": "Tu",
+            "retry": "Riprova",
+            "retrySending": "Riprova invio"
         },
         "actions": {
             "like": "Mi piace",
@@ -836,7 +838,8 @@
         },
         "empty": {
             "title": "Nessun messaggio ancora",
-            "subtitle": "Inizia una conversazione o attendi le scoperte dell'agente AI"
+            "subtitle": "Inizia una conversazione o attendi le scoperte dell'agente AI",
+            "noConversations": "Nessuna conversazione trovata"
         },
         "time": {
             "justNow": "proprio ora",
@@ -873,7 +876,8 @@
             "today": "Oggi",
             "yesterday": "Ieri",
             "live": "IN TEMPO REALE",
-            "objects": "immobili"
+            "objects": "immobili",
+            "new": "NUOVO"
         },
         "thread": {
             "messagePlaceholder": "Chiedi informazioni su questa proprietà...",
@@ -894,7 +898,17 @@
             "noteTime": "Ora",
             "noteSave": "Salva",
             "noteCancel": "Annulla",
-            "discussed": "Discusso"
+            "discussed": "Discusso",
+            "loadingNearby": "Caricamento luoghi vicini...",
+            "noteLabel": "Nota",
+            "categories": {
+                "transport": "Trasporti",
+                "shops": "Negozi",
+                "restaurants": "Ristoranti",
+                "parks": "Parchi",
+                "schools": "Scuole",
+                "healthcare": "Salute"
+            }
         }
     },
     "propertyDetail": {
