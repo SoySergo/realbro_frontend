@@ -787,7 +787,8 @@
             "reviewedCount": "{reviewed} из {total} просмотрено",
             "noProperties": "Объекты по выбранным фильтрам не найдены",
             "settings": "Настройки агента",
-            "started": "ИИ Агент начал мониторинг ваших фильтров"
+            "started": "ИИ Агент начал мониторинг ваших фильтров",
+            "discussed": "С обсуждением"
         },
         "filters": {
             "today": "Сегодня",
@@ -875,6 +876,27 @@
             "yesterday": "Вчера",
             "live": "В РЕАЛЬНОМ ВРЕМЕНИ",
             "objects": "объектов"
+        },
+        "thread": {
+            "messagePlaceholder": "Спросите об этом объекте...",
+            "location": "Локация",
+            "contact": "Связаться",
+            "note": "Заметка",
+            "askQuestion": "Задать вопрос",
+            "showOnMap": "Показать на карте",
+            "expandMap": "Во весь экран",
+            "showPhone": "Показать телефон",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Перейти к владельцу",
+            "noteTitle": "Добавить заметку",
+            "noteContent": "Текст заметки",
+            "noteDate": "Дата",
+            "noteTime": "Время",
+            "noteSave": "Сохранить",
+            "noteCancel": "Отмена",
+            "discussed": "С обсуждением"
         }
     },
     "propertyDetail": {

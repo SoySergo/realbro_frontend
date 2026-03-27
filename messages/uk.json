@@ -1473,7 +1473,8 @@
             "noProperties": "Об'єктів не знайдено",
             "searching": "Пошук об'єктів...",
             "settings": "Налаштування Агента",
-            "title": "AI Агент"
+            "title": "AI Агент",
+            "discussed": "З обговоренням"
         },
         "empty": {
             "subtitle": "Почніть розмову",
@@ -1547,6 +1548,27 @@
             "saved": "Збережено",
             "viewDetails": "Детальніше",
             "share": "Поділитися"
+        },
+        "thread": {
+            "messagePlaceholder": "Запитайте про цей об'єкт...",
+            "location": "Локація",
+            "contact": "Зв'язатися",
+            "note": "Нотатка",
+            "askQuestion": "Задати питання",
+            "showOnMap": "Показати на карті",
+            "expandMap": "На весь екран",
+            "showPhone": "Показати телефон",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Перейти до власника",
+            "noteTitle": "Додати нотатку",
+            "noteContent": "Текст нотатки",
+            "noteDate": "Дата",
+            "noteTime": "Час",
+            "noteSave": "Зберегти",
+            "noteCancel": "Скасувати",
+            "discussed": "З обговоренням"
         }
     },
     "comparison": {

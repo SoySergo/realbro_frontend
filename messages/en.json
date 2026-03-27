@@ -769,7 +769,8 @@
             "reviewedCount": "{reviewed} of {total} reviewed",
             "noProperties": "No properties found for selected filters",
             "settings": "Agent Settings",
-            "started": "AI Agent started monitoring your search filters"
+            "started": "AI Agent started monitoring your search filters",
+            "discussed": "Discussed"
         },
         "filters": {
             "today": "Today",
@@ -853,6 +854,27 @@
             "yesterday": "Yesterday",
             "live": "LIVE",
             "objects": "properties"
+        },
+        "thread": {
+            "messagePlaceholder": "Ask about this property...",
+            "location": "Location",
+            "contact": "Contact",
+            "note": "Note",
+            "askQuestion": "Ask a question",
+            "showOnMap": "Show on map",
+            "expandMap": "Full screen",
+            "showPhone": "Show phone",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Go to owner",
+            "noteTitle": "Add note",
+            "noteContent": "Note text",
+            "noteDate": "Date",
+            "noteTime": "Time",
+            "noteSave": "Save",
+            "noteCancel": "Cancel",
+            "discussed": "Discussed"
         }
     },
     "propertyDetail": {

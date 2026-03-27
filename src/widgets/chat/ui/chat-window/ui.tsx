@@ -7,6 +7,7 @@ import { MessageList } from '@/features/chat-messages/ui/message-list';
 import { SendMessageForm } from '@/features/chat-messages/ui/send-message-form';
 import { ChatHeader } from '../chat-header/ui';
 import { AIAgentPropertyFeed } from '../ai-agent-property-feed/ui';
+import { PropertyThreadView } from '../property-thread-view/ui';
 import type { PropertyCardLabels } from '@/entities/chat';
 
 interface ChatWindowProps {
@@ -28,6 +29,7 @@ interface ChatWindowProps {
         allFilters: string;
         selectFilter: string;
         propertyCard?: PropertyCardLabels;
+        thread?: Record<string, string>;
     };
     className?: string;
 }
@@ -45,11 +47,46 @@ export function ChatWindow({
         messages,
         isLoadingMessages,
         retryMessage,
+        activePropertyThread,
+        closePropertyThread,
     } = useChatStore();
 
     const activeConversation = conversations.find(
         (c) => c.id === activeConversationId
     );
+
+    // Ветка обсуждения объекта — полноэкранное представление
+    if (activePropertyThread) {
+        return (
+            <PropertyThreadView
+                propertyId={activePropertyThread.propertyId}
+                property={activePropertyThread.property}
+                onBack={closePropertyThread}
+                labels={{
+                    messagePlaceholder: labels.thread?.messagePlaceholder || labels.messagePlaceholder,
+                    location: labels.thread?.location,
+                    contact: labels.thread?.contact,
+                    note: labels.thread?.note,
+                    perMonth: labels.propertyCard?.perMonth,
+                    walkMin: labels.propertyCard?.walkMin,
+                    showOnMap: labels.thread?.showOnMap,
+                    expandMap: labels.thread?.expandMap,
+                    showPhone: labels.thread?.showPhone,
+                    writeWhatsapp: labels.thread?.writeWhatsapp,
+                    writeEmail: labels.thread?.writeEmail,
+                    writeTelegram: labels.thread?.writeTelegram,
+                    goToOwner: labels.thread?.goToOwner,
+                    noteTitle: labels.thread?.noteTitle,
+                    noteContent: labels.thread?.noteContent,
+                    noteDate: labels.thread?.noteDate,
+                    noteTime: labels.thread?.noteTime,
+                    noteSave: labels.thread?.noteSave,
+                    noteCancel: labels.thread?.noteCancel,
+                }}
+                className={className}
+            />
+        );
+    }
 
     // Пустое состояние — беседа не выбрана
     if (!activeConversation || !activeConversationId) {

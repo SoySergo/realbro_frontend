@@ -956,7 +956,8 @@
             "reviewedCount": "{reviewed} de {total} revisats",
             "noProperties": "No s'han trobat immobles amb els filtres seleccionats",
             "settings": "Configuració de l'agent",
-            "started": "L'agent d'IA ha començat a monitoritzar els teus filtres"
+            "started": "L'agent d'IA ha començat a monitoritzar els teus filtres",
+            "discussed": "Discutit"
         },
         "filters": {
             "today": "Avui",
@@ -1071,7 +1072,28 @@
         "report": "Denunciar",
         "clearHistory": "Netejar historial",
         "noMessages": "No hi ha missatges",
-        "startConversation": "Començar conversa"
+        "startConversation": "Començar conversa",
+        "thread": {
+            "messagePlaceholder": "Pregunta sobre aquesta propietat...",
+            "location": "Ubicació",
+            "contact": "Contactar",
+            "note": "Nota",
+            "askQuestion": "Fer una pregunta",
+            "showOnMap": "Mostrar al mapa",
+            "expandMap": "Pantalla completa",
+            "showPhone": "Mostrar telèfon",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Anar al propietari",
+            "noteTitle": "Afegir nota",
+            "noteContent": "Text de la nota",
+            "noteDate": "Data",
+            "noteTime": "Hora",
+            "noteSave": "Desar",
+            "noteCancel": "Cancel·lar",
+            "discussed": "Discutit"
+        }
     },
     "propertyDetail": {
         "photos": "Fotos",
