@@ -8,7 +8,6 @@ import {
     getConversations,
     getMessages,
     sendMessage as sendMessageAPI,
-    generateMockProperty,
 } from '@/shared/api/chat';
 
 interface PropertyThreadState {
