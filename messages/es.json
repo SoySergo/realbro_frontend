@@ -785,7 +785,8 @@
             "reviewedCount": "{reviewed} de {total} revisadas",
             "noProperties": "No se encontraron propiedades con los filtros seleccionados",
             "settings": "Configuración del agente",
-            "started": "El agente IA comenzó a monitorear tus filtros"
+            "started": "El agente IA comenzó a monitorear tus filtros",
+            "discussed": "Discutido"
         },
         "filters": {
             "today": "Hoy",
@@ -873,6 +874,27 @@
             "yesterday": "Ayer",
             "live": "EN TIEMPO REAL",
             "objects": "propiedades"
+        },
+        "thread": {
+            "messagePlaceholder": "Pregunta sobre esta propiedad...",
+            "location": "Ubicación",
+            "contact": "Contactar",
+            "note": "Nota",
+            "askQuestion": "Hacer una pregunta",
+            "showOnMap": "Mostrar en mapa",
+            "expandMap": "Pantalla completa",
+            "showPhone": "Mostrar teléfono",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Ir al propietario",
+            "noteTitle": "Agregar nota",
+            "noteContent": "Texto de nota",
+            "noteDate": "Fecha",
+            "noteTime": "Hora",
+            "noteSave": "Guardar",
+            "noteCancel": "Cancelar",
+            "discussed": "Discutido"
         }
     },
     "propertyDetail": {

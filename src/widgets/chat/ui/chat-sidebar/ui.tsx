@@ -62,17 +62,17 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
     return (
         <div
             className={cn(
-                'flex flex-col h-full bg-background border-r border-border',
+                'flex flex-col h-full bg-background',
                 className
             )}
         >
-            {/* Header */}
+            {/* Заголовок */}
             <div className="px-4 pt-4 pb-2 space-y-3 shrink-0">
-                <h2 className="text-lg font-semibold text-text-primary">
+                <h2 className="text-xl font-bold text-text-primary tracking-tight">
                     {labels.title}
                 </h2>
 
-                {/* Search */}
+                {/* Поиск */}
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
                     <input
@@ -81,26 +81,26 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder={labels.searchPlaceholder}
                         className={cn(
-                            'w-full h-9 pl-9 pr-3 rounded-lg text-sm',
-                            'bg-background-secondary border border-border',
+                            'w-full h-10 pl-9 pr-3 rounded-xl text-sm',
+                            'bg-background-secondary border-none',
                             'text-text-primary placeholder:text-text-tertiary',
-                            'focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary',
+                            'focus:outline-none focus:ring-2 focus:ring-brand-primary/30',
                             'transition-all duration-200'
                         )}
                     />
                 </div>
 
-                {/* Tabs */}
-                <div className="flex items-center gap-1">
+                {/* Табы */}
+                <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
                     {tabs.map((tab) => (
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
                             className={cn(
-                                'px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer',
+                                'px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer',
                                 'transition-all duration-200 whitespace-nowrap',
                                 activeTab === tab.key
-                                    ? 'bg-brand-primary text-white'
+                                    ? 'bg-brand-primary text-white shadow-sm'
                                     : 'bg-background-tertiary text-text-secondary hover:text-text-primary'
                             )}
                         >
@@ -110,16 +110,16 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
                 </div>
             </div>
 
-            {/* Conversation list */}
+            {/* Список бесед */}
             <div className="flex-1 overflow-y-auto px-2 py-1 space-y-0.5 scrollbar-hide">
                 {isLoadingConversations ? (
-                    <div className="space-y-2 px-2">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="animate-pulse flex items-center gap-3 p-3">
-                                <div className="w-10 h-10 rounded-full bg-background-tertiary" />
+                    <div className="space-y-1 px-2">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <div key={i} className="animate-pulse flex items-center gap-3 p-3 rounded-xl">
+                                <div className="w-12 h-12 rounded-2xl bg-background-tertiary" />
                                 <div className="flex-1 space-y-2">
-                                    <div className="h-3 bg-background-tertiary rounded w-3/4" />
-                                    <div className="h-2.5 bg-background-tertiary rounded w-1/2" />
+                                    <div className="h-3.5 bg-background-tertiary rounded-lg w-3/4" />
+                                    <div className="h-2.5 bg-background-tertiary rounded-lg w-1/2" />
                                 </div>
                             </div>
                         ))}

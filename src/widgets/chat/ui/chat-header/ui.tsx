@@ -1,6 +1,6 @@
 'use client';
 
-import { Settings, ArrowLeft } from 'lucide-react';
+import { Settings, ArrowLeft, Bot } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { ChatAvatar } from '@/entities/chat';
 import type { Conversation } from '@/entities/chat';
@@ -46,14 +46,15 @@ export function ChatHeader({
     return (
         <div
             className={cn(
-                'flex items-center gap-3 px-4 h-16 border-b border-border bg-background shrink-0',
+                'flex items-center gap-3 px-4 h-14 border-b border-border/50',
+                'bg-background/80 backdrop-blur-sm shrink-0',
                 className
             )}
         >
             {showBack && (
                 <button
                     onClick={onBackClick}
-                    className="p-1.5 rounded-lg hover:bg-background-tertiary transition-colors cursor-pointer md:hidden"
+                    className="p-1.5 -ml-1 rounded-xl hover:bg-background-tertiary transition-colors cursor-pointer md:hidden"
                 >
                     <ArrowLeft className="w-5 h-5 text-text-secondary" />
                 </button>
@@ -72,7 +73,12 @@ export function ChatHeader({
                     {conversation.title}
                 </h3>
                 {subtitle && (
-                    <p className="text-xs text-text-secondary">{subtitle}</p>
+                    <p className={cn(
+                        'text-xs font-medium',
+                        isOnline ? 'text-emerald-500' : 'text-text-tertiary'
+                    )}>
+                        {subtitle}
+                    </p>
                 )}
             </div>
 
@@ -80,7 +86,7 @@ export function ChatHeader({
                 <button
                     onClick={onSettingsClick}
                     className={cn(
-                        'p-2 rounded-lg cursor-pointer',
+                        'p-2 rounded-xl cursor-pointer',
                         'hover:bg-background-tertiary transition-colors',
                         'text-text-secondary hover:text-text-primary'
                     )}

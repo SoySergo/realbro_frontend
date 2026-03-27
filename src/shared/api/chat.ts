@@ -230,6 +230,25 @@ export function generateMockConversations(): Conversation[] {
     const now = new Date();
     return [
         {
+            id: 'conv_ai_agent',
+            type: 'ai-agent' as const,
+            title: 'Bro (AI Agent)',
+            participants: ['current_user', 'ai_agent'],
+            lastMessage: {
+                id: 'msg_ai_last',
+                conversationId: 'conv_ai_agent',
+                senderId: 'ai_agent',
+                type: 'text' as const,
+                content: 'Found 3 new properties matching your filters',
+                status: 'delivered' as const,
+                createdAt: new Date(now.getTime() - 600000).toISOString(),
+            },
+            unreadCount: 3,
+            isPinned: true,
+            createdAt: '2026-01-01T00:00:00Z',
+            updatedAt: new Date(now.getTime() - 600000).toISOString(),
+        },
+        {
             id: 'conv_support',
             type: 'support',
             title: 'Support',
@@ -247,6 +266,25 @@ export function generateMockConversations(): Conversation[] {
             isPinned: true,
             createdAt: '2026-01-01T00:00:00Z',
             updatedAt: new Date(now.getTime() - 2 * 3600000).toISOString(),
+        },
+        {
+            id: 'conv_suggestions',
+            type: 'p2p' as const,
+            title: 'Suggestions & Feedback',
+            participants: ['current_user', 'suggestions'],
+            lastMessage: {
+                id: 'msg_suggestions_last',
+                conversationId: 'conv_suggestions',
+                senderId: 'suggestions',
+                type: 'text' as const,
+                content: 'Thank you for your feedback!',
+                status: 'delivered' as const,
+                createdAt: new Date(now.getTime() - 12 * 3600000).toISOString(),
+            },
+            unreadCount: 0,
+            isPinned: false,
+            createdAt: '2026-01-01T00:00:00Z',
+            updatedAt: new Date(now.getTime() - 12 * 3600000).toISOString(),
         },
         {
             id: 'conv_user_1',
@@ -313,6 +351,126 @@ export function generateMockConversations(): Conversation[] {
 
 export function generateMockMessages(conversationId: string): ChatMessage[] {
     const now = new Date();
+
+    if (conversationId === 'conv_ai_agent') {
+        return [
+            {
+                id: 'msg_ai_1',
+                conversationId,
+                senderId: 'ai_agent',
+                type: 'system',
+                content: 'Bro AI Agent activated. I will search for properties matching your filters.',
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 7 * 24 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_ai_2',
+                conversationId,
+                senderId: 'ai_agent',
+                type: 'text',
+                content: 'I found some great options in Eixample for you!',
+                status: 'read',
+                createdAt: new Date(now.getTime() - 3 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_ai_3',
+                conversationId,
+                senderId: 'ai_agent',
+                type: 'property-batch',
+                content: 'Here are 3 properties matching "Eixample, 2BR, max 1500€"',
+                properties: [
+                    generateMockProperty(10),
+                    generateMockProperty(11),
+                    generateMockProperty(12),
+                ],
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 2 * 3600000).toISOString(),
+                metadata: {
+                    filterName: 'Eixample 2BR',
+                    filterId: 'filter_1',
+                    batchId: 'batch_001',
+                },
+            },
+            {
+                id: 'msg_ai_4',
+                conversationId,
+                senderId: 'current_user',
+                type: 'text',
+                content: 'Thanks! The second one looks interesting.',
+                status: 'read',
+                createdAt: new Date(now.getTime() - 1.5 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_ai_5',
+                conversationId,
+                senderId: 'ai_agent',
+                type: 'property-batch',
+                content: 'Found 3 new properties matching your filters',
+                properties: [
+                    generateMockProperty(20),
+                    generateMockProperty(21),
+                    generateMockProperty(22),
+                ],
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 600000).toISOString(),
+                metadata: {
+                    filterName: 'Gracia Studio',
+                    filterId: 'filter_2',
+                    batchId: 'batch_002',
+                },
+            },
+        ];
+    }
+
+    if (conversationId === 'conv_suggestions') {
+        return [
+            {
+                id: 'msg_sug_1',
+                conversationId,
+                senderId: 'suggestions',
+                type: 'system',
+                content: 'Welcome! Share your suggestions and feedback here.',
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 7 * 24 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_sug_2',
+                conversationId,
+                senderId: 'current_user',
+                type: 'text',
+                content: 'It would be great to have a dark mode option!',
+                status: 'read',
+                createdAt: new Date(now.getTime() - 24 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_sug_3',
+                conversationId,
+                senderId: 'suggestions',
+                type: 'text',
+                content: 'Great idea! We have added it to our roadmap.',
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 20 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_sug_4',
+                conversationId,
+                senderId: 'current_user',
+                type: 'text',
+                content: 'Also, the map search is really useful. Love the filter integration!',
+                status: 'read',
+                createdAt: new Date(now.getTime() - 14 * 3600000).toISOString(),
+            },
+            {
+                id: 'msg_sug_5',
+                conversationId,
+                senderId: 'suggestions',
+                type: 'text',
+                content: 'Thank you for your feedback!',
+                status: 'delivered',
+                createdAt: new Date(now.getTime() - 12 * 3600000).toISOString(),
+            },
+        ];
+    }
 
     if (conversationId === 'conv_support') {
         return [

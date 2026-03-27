@@ -771,7 +771,8 @@
             "noProperties": "Nenhum imóvel encontrado",
             "searching": "Buscando imóveis...",
             "settings": "Configurações do Agente",
-            "title": "Agente IA"
+            "title": "Agente IA",
+            "discussed": "Discutido"
         },
         "empty": {
             "subtitle": "Comece uma conversa",
@@ -845,6 +846,27 @@
             "saved": "Guardado",
             "viewDetails": "Ver detalhes",
             "share": "Partilhar"
+        },
+        "thread": {
+            "messagePlaceholder": "Pergunte sobre este imóvel...",
+            "location": "Localização",
+            "contact": "Contactar",
+            "note": "Nota",
+            "askQuestion": "Fazer uma pergunta",
+            "showOnMap": "Mostrar no mapa",
+            "expandMap": "Ecrã inteiro",
+            "showPhone": "Mostrar telefone",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Ir para o proprietário",
+            "noteTitle": "Adicionar nota",
+            "noteContent": "Texto da nota",
+            "noteDate": "Data",
+            "noteTime": "Hora",
+            "noteSave": "Guardar",
+            "noteCancel": "Cancelar",
+            "discussed": "Discutido"
         }
     },
     "propertyDetail": {

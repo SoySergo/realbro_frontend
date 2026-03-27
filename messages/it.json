@@ -785,7 +785,8 @@
             "reviewedCount": "{reviewed} di {total} visualizzati",
             "noProperties": "Nessun immobile trovato con i filtri selezionati",
             "settings": "Impostazioni agente",
-            "started": "L'agente AI ha iniziato il monitoraggio dei tuoi filtri"
+            "started": "L'agente AI ha iniziato il monitoraggio dei tuoi filtri",
+            "discussed": "Discusso"
         },
         "filters": {
             "today": "Oggi",
@@ -873,6 +874,27 @@
             "yesterday": "Ieri",
             "live": "IN TEMPO REALE",
             "objects": "immobili"
+        },
+        "thread": {
+            "messagePlaceholder": "Chiedi informazioni su questa proprietà...",
+            "location": "Posizione",
+            "contact": "Contattare",
+            "note": "Nota",
+            "askQuestion": "Fai una domanda",
+            "showOnMap": "Mostra sulla mappa",
+            "expandMap": "Schermo intero",
+            "showPhone": "Mostra telefono",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Vai al proprietario",
+            "noteTitle": "Aggiungi nota",
+            "noteContent": "Testo della nota",
+            "noteDate": "Data",
+            "noteTime": "Ora",
+            "noteSave": "Salva",
+            "noteCancel": "Annulla",
+            "discussed": "Discusso"
         }
     },
     "propertyDetail": {

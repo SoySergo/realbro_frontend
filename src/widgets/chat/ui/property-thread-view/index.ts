@@ -1,0 +1,1 @@
+export { PropertyThreadView } from './ui';

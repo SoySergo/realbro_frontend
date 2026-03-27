@@ -781,7 +781,8 @@
             "reviewedCount": "{reviewed} von {total} angesehen",
             "noProperties": "Keine Objekte mit den gewählten Filtern gefunden",
             "settings": "Agent-Einstellungen",
-            "started": "KI-Agent hat die Überwachung Ihrer Filter gestartet"
+            "started": "KI-Agent hat die Überwachung Ihrer Filter gestartet",
+            "discussed": "Diskutiert"
         },
         "filters": {
             "today": "Heute",
@@ -869,6 +870,27 @@
             "yesterday": "Gestern",
             "live": "IN ECHTZEIT",
             "objects": "Objekte"
+        },
+        "thread": {
+            "messagePlaceholder": "Fragen Sie zu dieser Immobilie...",
+            "location": "Standort",
+            "contact": "Kontaktieren",
+            "note": "Notiz",
+            "askQuestion": "Eine Frage stellen",
+            "showOnMap": "Auf Karte anzeigen",
+            "expandMap": "Vollbild",
+            "showPhone": "Telefon anzeigen",
+            "writeWhatsapp": "WhatsApp",
+            "writeEmail": "Email",
+            "writeTelegram": "Telegram",
+            "goToOwner": "Zum Eigentümer",
+            "noteTitle": "Notiz hinzufügen",
+            "noteContent": "Notiztext",
+            "noteDate": "Datum",
+            "noteTime": "Zeit",
+            "noteSave": "Speichern",
+            "noteCancel": "Abbrechen",
+            "discussed": "Diskutiert"
         }
     },
     "propertyDetail": {

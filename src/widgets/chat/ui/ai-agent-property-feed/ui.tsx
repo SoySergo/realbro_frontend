@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { Bot, Clock, Eye, EyeOff } from 'lucide-react';
+import { Bot, Clock, Eye, EyeOff, MessageSquareText } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useChatStore } from '@/features/chat-messages';
 import { useChatFilterStore } from '@/features/chat-filters';
@@ -89,11 +89,12 @@ export function AIAgentPropertyFeed({
     const prevMessageCountRef = useRef(0);
     const observerRef = useRef<IntersectionObserver | null>(null);
 
-    const { messages, isLoadingMessages } = useChatStore();
-    const { dayFilter, selectedFilterIds, showAllFilters } = useChatFilterStore();
+    const { messages, isLoadingMessages, propertyDiscussionIds } = useChatStore();
+    const { dayFilter, selectedFilterIds, showAllFilters, showDiscussedOnly, setShowDiscussedOnly } = useChatFilterStore();
     const { viewedIds } = usePropertyActionsStore();
     // Memoize viewedSet to prevent recreating Set on every render
     const viewedSet = useMemo(() => new Set(viewedIds), [viewedIds]);
+    const discussedSet = useMemo(() => new Set(propertyDiscussionIds), [propertyDiscussionIds]);
 
     // Локализованные метки
     const todayLabel = labels.propertyCard?.today || labels.filters?.today || 'Сегодня';
@@ -213,9 +214,17 @@ export function AIAgentPropertyFeed({
                 }
             }
 
+            // Фильтр по обсуждённым объектам
+            if (showDiscussedOnly) {
+                const hasDiscussed = msg.properties?.some(
+                    (p) => discussedSet.has(p.id)
+                );
+                if (!hasDiscussed) return false;
+            }
+
             return true;
         });
-    }, [conversationMessages, dayFilter, selectedFilterIds, showAllFilters]);
+    }, [conversationMessages, dayFilter, selectedFilterIds, showAllFilters, showDiscussedOnly, discussedSet]);
 
     // Separate real-time (WebSocket) messages from API-loaded ones
     // Group by date AND by viewed/not-viewed status
@@ -352,18 +361,26 @@ export function AIAgentPropertyFeed({
         };
     }, [unseenIds, realTimeMessages.length]);
 
+    const { openPropertyThread } = useChatStore();
+
+    // Клик по карточке объекта — открываем ветку обсуждения
+    const handlePropertyClick = useCallback((property: PropertyChatCard) => {
+        openPropertyThread(property.id, property);
+    }, [openPropertyThread]);
+
     // Memoize renderPropertyCard to prevent function recreation on every render
     const renderPropertyCard = useCallback((property: PropertyChatCard) => (
         <PropertyBatchCard
             property={property}
+            onClick={() => handlePropertyClick(property)}
             actions={
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                     <PropertyCompareButton property={property} size="sm" />
                     <PropertyActionButtons propertyId={property.id} />
                 </div>
             }
         />
-    ), []);
+    ), [handlePropertyClick]);
 
     // Рендер группы объектов
     const renderGroup = useCallback((group: PropertyGroup, showViewedBadge = false) => (
@@ -392,8 +409,9 @@ export function AIAgentPropertyFeed({
                 <PropertyBatchCard
                     property={group.properties[0]}
                     filterName={group.filterName}
+                    onClick={() => handlePropertyClick(group.properties[0])}
                     actions={
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                             <PropertyCompareButton property={group.properties[0]} size="sm" />
                             <PropertyActionButtons propertyId={group.properties[0].id} />
                         </div>
@@ -409,7 +427,7 @@ export function AIAgentPropertyFeed({
                 />
             )}
         </div>
-    ), [objectsLabel, viewedSet, renderPropertyCard]);
+    ), [objectsLabel, viewedSet, renderPropertyCard, handlePropertyClick]);
 
     if (isLoadingMessages) {
         return <AIAgentPropertyFeedSkeleton className={className} />;
@@ -425,13 +443,38 @@ export function AIAgentPropertyFeed({
             {/* Filter bar */}
             <div className="px-3 md:px-4 py-2 space-y-2 border-b border-border bg-background shrink-0">
                 <DayFilter labels={labels.filters} />
-                {availableFilters.length > 0 && (
-                    <SearchFilterSelector
-                        filters={availableFilters}
-                        allFiltersLabel={labels.allFilters}
-                        selectFilterLabel={labels.selectFilter}
-                    />
-                )}
+                <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+                    {availableFilters.length > 0 && (
+                        <SearchFilterSelector
+                            filters={availableFilters}
+                            allFiltersLabel={labels.allFilters}
+                            selectFilterLabel={labels.selectFilter}
+                            className="flex-1"
+                        />
+                    )}
+                    {/* Фильтр по обсуждённым объектам */}
+                    {propertyDiscussionIds.length > 0 && (
+                        <button
+                            onClick={() => setShowDiscussedOnly(!showDiscussedOnly)}
+                            className={cn(
+                                'px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap shrink-0',
+                                'transition-all duration-200 flex items-center gap-1.5 cursor-pointer',
+                                showDiscussedOnly
+                                    ? 'bg-brand-primary text-white'
+                                    : 'bg-background-tertiary text-text-secondary hover:text-text-primary'
+                            )}
+                        >
+                            <MessageSquareText className="w-3 h-3" />
+                            {labels.aiAgent?.discussed || 'Discussed'}
+                            <span className={cn(
+                                'text-[10px] px-1.5 py-0.5 rounded-full',
+                                showDiscussedOnly ? 'bg-white/20' : 'bg-background-secondary'
+                            )}>
+                                {propertyDiscussionIds.length}
+                            </span>
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Messages */}
@@ -505,8 +548,9 @@ export function AIAgentPropertyFeed({
                                     filterName={msg.metadata?.filterName}
                                     isNew={true}
                                     labels={labels.propertyCard}
+                                    onContact={() => handlePropertyClick(property)}
                                     actions={
-                                        <div className="flex items-center gap-1">
+                                        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                                             <PropertyCompareButton property={property} size="sm" />
                                             <PropertyActionButtons propertyId={property.id} />
                                         </div>

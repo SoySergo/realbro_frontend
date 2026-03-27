@@ -7,10 +7,12 @@ interface ChatFilterStore {
     dayFilter: DayFilter;
     selectedFilterIds: string[];
     showAllFilters: boolean;
+    showDiscussedOnly: boolean;
 
     setDayFilter: (filter: DayFilter) => void;
     toggleFilterId: (filterId: string) => void;
     setShowAllFilters: (show: boolean) => void;
+    setShowDiscussedOnly: (show: boolean) => void;
     resetFilters: () => void;
 }
 
@@ -18,6 +20,7 @@ export const useChatFilterStore = create<ChatFilterStore>()((set) => ({
     dayFilter: 'all',
     selectedFilterIds: [],
     showAllFilters: true,
+    showDiscussedOnly: false,
 
     setDayFilter: (dayFilter) => set({ dayFilter }),
 
@@ -36,10 +39,14 @@ export const useChatFilterStore = create<ChatFilterStore>()((set) => ({
     setShowAllFilters: (showAllFilters) =>
         set({ showAllFilters, selectedFilterIds: [] }),
 
+    setShowDiscussedOnly: (showDiscussedOnly) =>
+        set({ showDiscussedOnly }),
+
     resetFilters: () =>
         set({
             dayFilter: 'all',
             selectedFilterIds: [],
             showAllFilters: true,
+            showDiscussedOnly: false,
         }),
 }));

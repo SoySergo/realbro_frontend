@@ -18,6 +18,7 @@ import { useFilterStore } from '../model/store';
 import { useSidebarStore } from '@/widgets/sidebar';
 import { getPropertiesCount, getAgenciesCount } from '@/shared/api';
 import { cn } from '@/shared/lib/utils';
+import { Link } from '@/shared/config/routing';
 import {
     Popover,
     PopoverContent,
@@ -445,14 +446,16 @@ function SearchFiltersBarContent({ currentCategory = 'properties' }: SearchFilte
                     )}
 
                     {/* Кнопка "Найди мне" (AI) — в конце */}
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="btn-ai-neon ml-3 shrink-0 gap-2"
-                    >
-                        <FingerprintIcon className="w-4 h-4 text-brand-primary" />
-                        <span className="hidden sm:inline font-medium">{t('findMe')}</span>
-                    </Button>
+                    <Link href="/chat">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="btn-ai-neon ml-3 shrink-0 gap-2"
+                        >
+                            <FingerprintIcon className="w-4 h-4 text-brand-primary" />
+                            <span className="hidden sm:inline font-medium">{t('findMe')}</span>
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
