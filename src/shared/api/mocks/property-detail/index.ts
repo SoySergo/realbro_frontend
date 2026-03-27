@@ -39,6 +39,57 @@ const API_BASE = `${(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8
 // URL сервиса локаций (boundaries / nearby / transport / POI)
 const LOCATION_SERVICE_URL = `${(process.env.NEXT_PUBLIC_BOUNDARIES_SERVICE_URL || 'http://localhost:8085').replace(/\/$/, '')}/api/v1`;
 
+// Скорость пешехода ~5 км/ч = 83 м/мин, округляем до 80 м/мин
+const WALK_SPEED_METERS_PER_MIN = 80;
+
+// ============================================================================
+// Backend API response types (location_microservice)
+// ============================================================================
+
+/** POISimple из location_microservice (dto/response.go) */
+interface POISimple {
+    id: string;
+    name: string;
+    category: string;
+    subcategory: string;
+    lat: number;
+    lon: number;
+    distance: number;
+}
+
+/** NearbyPOIResponse из location_microservice */
+interface NearbyPOIResponse {
+    category: string;
+    items: POISimple[];
+    total: number;
+}
+
+/** TransportLineSimple из location_microservice */
+interface TransportLineSimple {
+    ref?: string;
+    id?: string;
+    name?: string;
+    color?: string;
+    to?: string;
+    destination?: string;
+}
+
+/** TransportStationWithLines из location_microservice */
+interface TransportStationWithLines {
+    id: string;
+    name: string;
+    type: string;
+    lat: number;
+    lon: number;
+    distance: number;
+    lines: TransportLineSimple[];
+}
+
+/** PriorityTransportResponse из location_microservice */
+interface PriorityTransportResponse {
+    stations: TransportStationWithLines[];
+}
+
 // ============================================================================
 // Mock Data Loaders
 // ============================================================================
@@ -157,7 +208,7 @@ export async function getNearbyPlaces(
 
 /**
  * Fetch a single nearby category from location service
- * GET /api/v1/nearby/:category?lat=X&lng=Y&radius=Z
+ * GET /api/v1/nearby/:category?lat=X&lon=Y&radius=Z
  */
 async function fetchNearbyCategory(
     category: string,
@@ -167,7 +218,7 @@ async function fetchNearbyCategory(
     try {
         const params = new URLSearchParams({
             lat: String(coordinates.lat),
-            lng: String(coordinates.lng),
+            lon: String(coordinates.lng),
             radius: String(radius),
         });
 
@@ -182,11 +233,71 @@ async function fetchNearbyCategory(
         }
 
         const json = await response.json();
-        return json.data ?? json;
+        const data = json.data ?? json;
+
+        if (category === 'transport') {
+            // Бекенд возвращает PriorityTransportResponse: { stations: TransportStationWithLines[] }
+            const stations: TransportStationWithLines[] = (data as PriorityTransportResponse).stations ?? (data as TransportStationWithLines[]) ?? [];
+            return stations.map(mapTransportStationFromAPI);
+        }
+
+        // Бекенд возвращает NearbyPOIResponse: { category, items: POISimple[], total }
+        const items: POISimple[] = (data as NearbyPOIResponse).items ?? (data as POISimple[]) ?? [];
+        return items.map(mapPOISimpleToNearbyPlace);
     } catch (error) {
         console.error(`[LocationService] Failed to fetch /nearby/${category}:`, error);
         return [];
     }
+}
+
+/**
+ * Конвертирует POISimple (бекенд) в NearbyPlace (фронтенд).
+ * Маппит flat lat/lon → nested coordinates, category → type, рассчитывает walkTime.
+ */
+function mapPOISimpleToNearbyPlace(poi: POISimple): NearbyPlace {
+    const distance = poi.distance ?? 0;
+    return {
+        id: poi.id ?? '',
+        name: poi.name ?? '',
+        type: poi.category ?? poi.subcategory ?? '',
+        distance,
+        walkTime: Math.round(distance / WALK_SPEED_METERS_PER_MIN),
+        coordinates: {
+            lat: poi.lat ?? 0,
+            lng: poi.lon ?? 0,
+        },
+    };
+}
+
+/**
+ * Конвертирует TransportStationWithLines (бекенд) в TransportStation (фронтенд).
+ * Маппит flat lat/lon → nested coordinates, рассчитывает walkTime и isWalk.
+ */
+function mapTransportStationFromAPI(station: TransportStationWithLines): TransportStation {
+    const distance = station.distance ?? 0;
+    const walkTime = Math.round(distance / WALK_SPEED_METERS_PER_MIN);
+    const lines = Array.isArray(station.lines)
+        ? station.lines.map((line: TransportLineSimple) => ({
+              id: line.ref ?? line.id ?? '',
+              type: (station.type ?? 'bus') as TransportStation['type'],
+              name: line.ref ?? line.name ?? '',
+              color: line.color ?? undefined,
+              destination: line.to ?? line.destination ?? undefined,
+          }))
+        : [];
+    return {
+        id: station.id ?? '',
+        name: station.name ?? '',
+        type: (station.type ?? 'bus') as TransportStation['type'],
+        lines,
+        distance,
+        walkTime,
+        isWalk: distance <= 1000,
+        coordinates: {
+            lat: station.lat ?? 0,
+            lng: station.lon ?? 0,
+        },
+    };
 }
 
 /** Пустая структура nearbyPlaces для фоллбэка */
