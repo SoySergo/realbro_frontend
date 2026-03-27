@@ -32,7 +32,8 @@ type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
 
 interface MapSidebarProps {
-    onPropertyClick?: (property: PropertyGridCard) => void;
+    /** Функция для формирования href объекта */
+    getPropertyHref?: (property: PropertyGridCard) => string;
     onPropertyHover?: (property: PropertyGridCard | null) => void;
     selectedPropertyId?: string | null;
     clusterId?: string | null;
@@ -44,7 +45,8 @@ interface MapSidebarProps {
 }
 
 interface MobileMapSidebarProps {
-    onPropertyClick?: (property: PropertyGridCard) => void;
+    /** Функция для формирования href объекта */
+    getPropertyHref?: (property: PropertyGridCard) => string;
     selectedPropertyId?: string | null;
     clusterId?: string | null;
     onClusterReset?: () => void;
@@ -64,7 +66,7 @@ const ITEM_HEIGHT = 440;
 type PropertyRowProps = {
     properties: PropertyGridCard[];
     selectedPropertyId: string | null;
-    onPropertyClick: (property: PropertyGridCard) => void;
+    getPropertyHref: (property: PropertyGridCard) => string;
     onPropertyHover: (property: PropertyGridCard | null) => void;
 };
 
@@ -76,7 +78,7 @@ function PropertyRow({
     style,
     properties,
     selectedPropertyId,
-    onPropertyClick,
+    getPropertyHref,
     onPropertyHover,
 }: {
     ariaAttributes: { 'aria-posinset': number; 'aria-setsize': number; role: 'listitem' };
@@ -100,7 +102,7 @@ function PropertyRow({
         >
             <PropertyCardGrid
                 property={property}
-                onClick={() => onPropertyClick(property)}
+                href={getPropertyHref(property)}
                 actions={<PropertyCompareButton property={property} />}
                 menuItems={<PropertyCompareMenuItem property={property} />}
             />
@@ -115,7 +117,7 @@ function PropertyRow({
  * Поддерживает кластеры, сортировку, виртуализацию и infinite scroll
  */
 export function MapSidebar({
-    onPropertyClick,
+    getPropertyHref,
     onPropertyHover,
     selectedPropertyId,
     clusterId,
@@ -258,12 +260,11 @@ export function MapSidebar({
         router.push('/search/properties/list');
     };
 
-    const handlePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            onPropertyClick?.(property);
-        },
-        [onPropertyClick]
+    const defaultGetPropertyHref = useCallback(
+        (property: PropertyGridCard) => `/property/${property.slug || property.id}`,
+        []
     );
+    const resolvedGetPropertyHref = getPropertyHref ?? defaultGetPropertyHref;
 
     const handlePropertyHover = useCallback(
         (property: PropertyGridCard | null) => {
@@ -381,7 +382,7 @@ export function MapSidebar({
                     rowProps={{
                         properties,
                         selectedPropertyId: selectedPropertyId ?? null,
-                        onPropertyClick: handlePropertyClick,
+                        getPropertyHref: resolvedGetPropertyHref,
                         onPropertyHover: handlePropertyHover,
                     }}
                     onScroll={(e: React.UIEvent<HTMLDivElement>) => {
@@ -463,7 +464,7 @@ const HALF_STATE_HEIGHT = '45%';
  * - collapsed → expanded: кнопка «Список» (рендерится родителем)
  */
 export function MobileMapSidebar({
-    onPropertyClick,
+    getPropertyHref,
     selectedPropertyId,
     clusterId,
     onClusterReset,
@@ -671,13 +672,12 @@ export function MobileMapSidebar({
         [hasMore, isLoading, page, fetchProperties]
     );
 
-    // Обработчики для мобильного PropertyRow
-    const handleMobilePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            onPropertyClick?.(property);
-        },
-        [onPropertyClick]
+    // Дефолтный getPropertyHref для мобильного сайдбара
+    const defaultGetPropertyHref = useCallback(
+        (property: PropertyGridCard) => `/${locale}/property/${property.slug || property.id}`,
+        [locale]
     );
+    const resolvedGetPropertyHref = getPropertyHref ?? defaultGetPropertyHref;
 
     const handleMobilePropertyHover = useCallback(
         (_property: PropertyGridCard | null) => {
@@ -780,7 +780,7 @@ export function MobileMapSidebar({
                         rowProps={{
                             properties,
                             selectedPropertyId: selectedPropertyId ?? null,
-                            onPropertyClick: handleMobilePropertyClick,
+                            getPropertyHref: resolvedGetPropertyHref,
                             onPropertyHover: handleMobilePropertyHover,
                         }}
                         onScroll={handleVirtualListScroll}

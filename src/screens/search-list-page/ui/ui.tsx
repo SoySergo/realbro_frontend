@@ -169,11 +169,11 @@ export function SearchListPage({
         router.push(`/search/properties/map?${params.toString()}`);
     };
 
-    const handlePropertyClick = useCallback(
+    const getPropertyHref = useCallback(
         (property: PropertyGridCard) => {
-            router.push(`/property/${property.slug || property.id}`);
+            return `/property/${property.slug || property.id}`;
         },
-        [router]
+        []
     );
 
     return (
@@ -230,22 +230,22 @@ export function SearchListPage({
                     {listingViewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
                             {properties.map((property) => (
-                                <PropertyCardGrid
+                            <PropertyCardGrid
                                     key={property.id}
                                     property={property}
-                                    onClick={() => handlePropertyClick(property)}
+                                    href={getPropertyHref(property)}
                                     actions={<PropertyCompareButton property={property} />}
                                     menuItems={<PropertyCompareMenuItem property={property} />}
                                 />
-                            ))}
+                        ))}
                         </div>
                     ) : (
                         <div className="flex flex-col">
                             {properties.map((property) => (
-                                <PropertyCardHorizontal
+                            <PropertyCardHorizontal
                                     key={property.id}
                                     property={property}
-                                    onClick={() => handlePropertyClick(property)}
+                                    href={getPropertyHref(property)}
                                     actions={<PropertyCompareButton property={property} size="md" />}
                                 />
                             ))}

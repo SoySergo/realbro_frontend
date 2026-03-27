@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { LayoutGrid, List as ListIcon, Home, Search, Heart, User, FingerprintIcon } from 'lucide-react';
 import { MobileMapSidebar, type MobileSnapState } from '@/widgets/map-sidebar';
 import { MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters-bar';
@@ -27,9 +27,9 @@ const SearchMap = dynamic(
 export default function MapPage() {
     const t = useTranslations('filters');
     const tMapSidebar = useTranslations('mapSidebar');
-    const router = useRouter();
     const params = useParams();
-    const slug = params.slug as string;
+    const type = params.type as string;
+    const locale = params.locale as string;
 
     // Состояние мобильного bottom sheet
     const [mobileSnapState, setMobileSnapState] = useState<MobileSnapState>('half');
@@ -41,10 +41,10 @@ export default function MapPage() {
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
     const [clusterPropertyIds, setClusterPropertyIds] = useState<string[] | undefined>(undefined);
 
-    // Клик по объекту
-    const handlePropertyClick = useCallback((property: PropertyGridCard) => {
-        router.push(`/${locale}/property/${property.slug || property.id}`);
-    }, [router, locale]);
+    // Формирование href для карточки объекта
+    const getPropertyHref = useCallback((property: PropertyGridCard) => {
+        return `/${locale}/${type}/${property.slug || property.id}`;
+    }, [locale, type]);
 
     // Клик по маркеру на карте
     const handleMarkerClick = useCallback((propertyId: string) => {
@@ -89,7 +89,7 @@ export default function MapPage() {
 
                 {/* Bottom sheet со списком */}
                 <MobileMapSidebar
-                    onPropertyClick={handlePropertyClick}
+                    getPropertyHref={getPropertyHref}
                     selectedPropertyId={selectedPropertyId}
                     clusterPropertyIds={clusterPropertyIds}
                     onClusterReset={handleClusterReset}
@@ -114,7 +114,7 @@ export default function MapPage() {
             </div>
             {/* Кнопка переключения на список */}
             <Link
-                href={`/${slug}/catalog`}
+                href={`/${type}/catalog`}
                 className="absolute top-3 right-3 z-10 flex items-center gap-2 h-9 px-3 rounded-md bg-background text-text-primary text-sm font-medium shadow-md hover:bg-background-secondary transition-colors"
             >
                 <LayoutGrid className="w-4 h-4" />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo, type CSSProperties, type ReactElement } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 // Polyfill ResizeObserver for SSR (react-window v2 calls `new ResizeObserver` at hook init)
 if (typeof globalThis.ResizeObserver === 'undefined') {
@@ -59,7 +59,7 @@ const SIDEBAR_PAGE_LIMIT = 10;
 /** Props, передаваемые в rowComponent через rowProps */
 interface PropertyRowData {
     properties: PropertyGridCard[];
-    onPropertyClick: (p: PropertyGridCard) => void;
+    getPropertyHref: (p: PropertyGridCard) => string;
     columns: 1 | 2;
 }
 
@@ -71,7 +71,7 @@ function PropertyRow({
     index,
     style,
     properties,
-    onPropertyClick,
+    getPropertyHref,
     columns,
 }: {
     ariaAttributes: Record<string, unknown>;
@@ -87,14 +87,14 @@ function PropertyRow({
                 <div className="grid grid-cols-2 gap-2 px-3 py-2.5">
                     <PropertyCardGrid
                         property={leftProperty}
-                        onClick={() => onPropertyClick(leftProperty)}
+                        href={getPropertyHref(leftProperty)}
                         actions={<PropertyCompareButton property={leftProperty} />}
                         menuItems={<PropertyCompareMenuItem property={leftProperty} />}
                     />
                     {rightProperty && (
                         <PropertyCardGrid
                             property={rightProperty}
-                            onClick={() => onPropertyClick(rightProperty)}
+                            href={getPropertyHref(rightProperty)}
                             actions={<PropertyCompareButton property={rightProperty} />}
                             menuItems={<PropertyCompareMenuItem property={rightProperty} />}
                         />
@@ -113,7 +113,7 @@ function PropertyRow({
             <div className="px-3 py-2.5">
                 <PropertyCardGrid
                     property={property}
-                    onClick={() => onPropertyClick(property)}
+                    href={getPropertyHref(property)}
                     actions={<PropertyCompareButton property={property} />}
                     menuItems={<PropertyCompareMenuItem property={property} />}
                 />
@@ -136,7 +136,8 @@ export function SearchPageSidebar() {
     const t = useTranslations('filters');
     const tSidebar = useTranslations('mapSidebar');
     const locale = useLocale();
-    const router = useRouter();
+    const params = useParams();
+    const type = params.type as string;
     const { isAuthenticated } = useAuth();
     const { filters, setFilters, filtersCount } = useFilters();
     const { isReady: geometriesReady } = useEnsureGeometries(filters, setFilters);
@@ -275,17 +276,15 @@ export function SearchPageSidebar() {
         [] // стабильный колбэк — все данные через refs
     );
 
-    const handlePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            router.push(`/property/${property.slug || property.id}`);
-        },
-        [router]
+    const getPropertyHref = useCallback(
+        (property: PropertyGridCard) => `/${locale}/${type}/${property.slug || property.id}`,
+        [locale, type]
     );
 
     // Мемоизированные rowProps для react-window
     const rowProps = useMemo<PropertyRowData>(
-        () => ({ properties, onPropertyClick: handlePropertyClick, columns }),
-        [properties, handlePropertyClick, columns]
+        () => ({ properties, getPropertyHref, columns }),
+        [properties, getPropertyHref, columns]
     );
 
     // Кол-во рядов виртуального списка (при 2-х колонках — вдвое меньше)

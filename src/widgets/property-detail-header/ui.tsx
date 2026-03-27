@@ -143,14 +143,14 @@ export function PropertyDetailHeader({
     if (variant === 'subHeader') {
         return (
             <div className={cn(
-                `flex items-center justify-between w-full h-[${SUB_HEADER_HEIGHT}px] px-4 bg-background border-b border-border`,
+                `grid grid-cols-[1fr_auto_1fr] items-center w-full h-[${SUB_HEADER_HEIGHT}px] px-4 bg-background border-b border-border`,
                 className
             )}>
                 {/* Островок «Назад» */}
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center shrink-0 justify-self-start">
                     <button
                         onClick={() => router.back()}
-                        className={cn(ISLAND_CLASS, "px-3.5 gap-1.5 text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95")}
+                        className={cn( " flex items-center px-3.5 gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-all ")}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         {t.back}
@@ -176,15 +176,14 @@ export function PropertyDetailHeader({
                 </nav>
 
                 {/* Островок «Предыдущий / Следующий» (px-1 — отступ вокруг кнопок) */}
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center shrink-0 justify-self-end">
                     {hasListingContext && (
-                        <div className={cn(ISLAND_CLASS, "px-1")}>
-                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
+                        <div className={"flex px-1"}>
+                            <button className="flex items-center px-3.5 gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-all">
                                 <ChevronLeft className="w-4 h-4" />
                                 {t.previous}
                             </button>
-                            <div className="w-px h-4 bg-border" />
-                            <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
+                            <button className="flex items-center px-3.5 gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-all">
                                 {t.next}
                                 <ChevronRight className="w-4 h-4" />
                             </button>

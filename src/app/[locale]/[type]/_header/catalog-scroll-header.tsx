@@ -57,14 +57,19 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
  * Объединяет элементы SearchPageHeader (лого + навигация) и
  * инструменты фильтрации (AI агент, маркеры, категории, локация, фильтры).
  */
-export function CatalogScrollHeader() {
+interface CatalogScrollHeaderProps {
+    /** Убирает скругления и делает хедер вплотную к краям */
+    flush?: boolean;
+}
+
+export function CatalogScrollHeader({ flush }: CatalogScrollHeaderProps) {
     const t = useTranslations('filters');
     const tSidebar = useTranslations('sidebar');
     const tListing = useTranslations('listing');
     const locale = useLocale();
     const pathname = usePathname();
     const params = useParams();
-    const slug = params.slug as string;
+    const type = params.type as string;
 
     const { isAuthenticated } = useAuth();
     const { filters, setFilters, filtersCount } = useFilters();
@@ -93,7 +98,8 @@ export function CatalogScrollHeader() {
                 <header
                     className={cn(
                         'flex h-[52px] items-center',
-                        'bg-background rounded-[9px]',
+                        'bg-background',
+                        !flush && 'rounded-[9px]',
                         'px-3 gap-3'
                     )}
                 >
@@ -161,7 +167,7 @@ export function CatalogScrollHeader() {
 
                         {/* Кнопка «Смотреть на карте» */}
                         <Link
-                            href={`/${slug}/map`}
+                            href={`/${type}/map`}
                             className={cn(
                                 'flex items-center gap-1.5 h-9 px-3 rounded-md shrink-0',
                                 'bg-brand-primary text-white text-sm font-medium',

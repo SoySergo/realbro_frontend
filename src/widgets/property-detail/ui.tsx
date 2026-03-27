@@ -8,6 +8,8 @@ import { DynamicIcon } from '@/shared/ui/dynamic-icon';
 import type { PropertyPageTranslations } from '@/shared/lib/get-property-translations';
 import type { NearbyPlaces, AgentPropertyCard, SimilarPropertyCard } from '@/shared/api';
 import { usePropertyActions } from '@/entities/user-actions';
+import type { TransportStation } from '@/entities/property/ui/property-address-transport/transport-stations';
+import type { NearbyTransport } from '@/entities/property/model/types';
 
 // Entity components
 import {
@@ -72,6 +74,66 @@ interface PropertyDetailWidgetProps {
     nearbyPlaces?: NearbyPlaces;
     agentProperties?: AgentPropertyCard[];
     similarProperties?: SimilarPropertyCard[];
+}
+
+/**
+ * Конвертация nearbyPlaces.transport или property.nearbyTransportList
+ * в формат TransportStation[] для PropertyHeader / PropertyAddressWithTransport
+ */
+function buildTransportStations(
+    nearbyPlaces?: NearbyPlaces,
+    nearbyTransportList?: NearbyTransport[],
+): TransportStation[] {
+    // Приоритет: nearbyPlaces.transport (полные данные от API)
+    if (nearbyPlaces?.transport && nearbyPlaces.transport.length > 0) {
+        return nearbyPlaces.transport.map(station => ({
+            id: station.id,
+            name: station.name,
+            lines: station.lines.map(line => ({
+                id: line.id,
+                type: line.type as 'metro' | 'train' | 'tram' | 'bus',
+                name: line.name,
+                color: line.color,
+                destination: line.destination,
+            })),
+            distance: station.walkTime,
+            isWalk: station.isWalk ?? true,
+        }));
+    }
+
+    // Фоллбек: nearbyTransportList из Property (legacy формат — один объект = одна линия)
+    // Группируем по имени станции
+    if (nearbyTransportList && nearbyTransportList.length > 0) {
+        const stationMap = new Map<string, TransportStation>();
+        nearbyTransportList.forEach((t, i) => {
+            const key = t.name;
+            const existing = stationMap.get(key);
+            if (existing) {
+                existing.lines.push({
+                    id: `line-${i}`,
+                    type: t.type as 'metro' | 'train' | 'tram' | 'bus',
+                    name: t.line ?? t.name,
+                    color: t.color,
+                });
+            } else {
+                stationMap.set(key, {
+                    id: `station-${i}`,
+                    name: t.name,
+                    lines: [{
+                        id: `line-${i}`,
+                        type: t.type as 'metro' | 'train' | 'tram' | 'bus',
+                        name: t.line ?? t.name,
+                        color: t.color,
+                    }],
+                    distance: t.walkMinutes,
+                    isWalk: true,
+                });
+            }
+        });
+        return Array.from(stationMap.values());
+    }
+
+    return [];
 }
 
 
@@ -290,6 +352,12 @@ export function PropertyDetailWidget({
         mixed: t.tenant.atmosphere,
     };
 
+    // Конвертация транспортных станций для PropertyHeader
+    const headerStations = buildTransportStations(
+        nearbyPlaces,
+        property.nearbyTransportList,
+    );
+
     return (
         <div className={cn('min-h-screen pb-24 pt-[60px] lg:pt-8 lg:pb-0', className)}>
 
@@ -365,11 +433,21 @@ export function PropertyDetailWidget({
                                 rating={mockRating}
                                 stats={{
                                     updatedAt: property.updatedAt || new Date(),
+                                    publishedAt: property.publishedAt || property.createdAt,
                                     viewsCount: property.viewsCount,
                                     viewsToday: property.viewsToday
                                 }}
+                                location={{
+                                    country: property.country,
+                                    region: property.region,
+                                    province: property.province,
+                                    city: property.city,
+                                    district: property.district,
+                                }}
+                                stations={headerStations}
                                 translations={{
                                     updated: t.header.updated,
+                                    added: t.header.added,
                                     views: t.header.views,
                                     viewsToday: t.header.viewsToday,
                                 }}

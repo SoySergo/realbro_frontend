@@ -5,6 +5,9 @@ import { PropertyDetailPage } from '@/screens/property-detail-page';
 import { getPropertyByIdServer, getPropertyBySlugServer, getPropertiesListServer } from '@/shared/api/properties-server';
 import { getPropertyPageTranslations } from '@/shared/lib/get-property-translations';
 import { getNearbyPlaces, getAgentProperties, getSimilarProperties } from '@/shared/api';
+import { FEATURES } from '@/shared/config/features';
+import { generateMockGridCardsPage } from '@/shared/api/mocks/properties-mock';
+import { Link } from 'lucide-react';
 
 interface PropertyPageProps {
     params: Promise<{
@@ -29,11 +32,24 @@ async function fetchProperty(slugOrId: string, locale: string) {
 
 export async function generateStaticParams() {
     try {
-        const { data } = await getPropertiesListServer({
-            filters: {},
-            page: 1,
-            limit: 24,
-        });
+        // Используем моки если включен флаг
+        let data;
+        if (FEATURES.USE_MOCK_PROPERTIES) {
+            console.log('[StaticParams] Using mock mode for properties');
+            const mockPage = generateMockGridCardsPage(1, 24, 500, {
+                cardType: 'grid',
+                includeAuthor: true,
+                includeTransport: true
+            });
+            data = mockPage.data;
+        } else {
+            const response = await getPropertiesListServer({
+                filters: {},
+                page: 1,
+                limit: 24,
+            });
+            data = response.data;
+        }
 
         return data
             .filter((property) => property.slug)
@@ -41,7 +57,7 @@ export async function generateStaticParams() {
                 slug: property.slug!,
             }));
     } catch (e) {
-        console.error('Failed to generate static params', e);
+        console.error('[StaticParams] Failed to generate static params', e);
         return [];
     }
 }

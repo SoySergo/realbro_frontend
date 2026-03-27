@@ -36,14 +36,15 @@ const DEFAULT_METRO_LINE_COLOR = '#E50914';
 
 interface PropertyCardGridProps {
     property: PropertyGridCard;
-    onClick?: () => void;
+    /** URL для навигации — рендерит <Link> для SEO и prefetch */
+    href?: string;
     // Слот для дополнительных действий (например, кнопка сравнения)
     actions?: React.ReactNode;
     // Слот для пунктов меню
     menuItems?: React.ReactNode;
 }
 
-export function PropertyCardGrid({ property, onClick, actions, menuItems }: PropertyCardGridProps) {
+export function PropertyCardGrid({ property, href, actions, menuItems }: PropertyCardGridProps) {
     const t = useTranslations('property');
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -163,7 +164,14 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         return price.toLocaleString('ru-RU') + ' \u20ac';
     };
 
+    const Wrapper = href ? Link : 'div';
+    const wrapperProps = href
+        ? { href, className: 'block no-underline text-inherit' }
+        : {};
+
     return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Wrapper {...wrapperProps as any}>
         <div
             className={cn(
                 'bg-card rounded-xl overflow-hidden border border-transparent',
@@ -171,7 +179,6 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 'cursor-pointer group touch-manipulation',
                 'min-w-0'
             )}
-            onClick={onClick}
             onMouseEnter={() => {
                 setIsHovering(true);
                 const coords = property.location?.coordinates;
@@ -487,5 +494,6 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
                 onClose={() => setIsNoteDialogOpen(false)}
             />
         </div>
+        </Wrapper>
     );
 }

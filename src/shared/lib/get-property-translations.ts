@@ -34,6 +34,7 @@ export async function getPropertyPageTranslations(locale: string) {
             previous: t('previous'),
             next: t('next'),
             updated: t('updated'),
+            added: t('added'),
             views: t('views'),
             viewsToday: t('viewsToday'),
         },

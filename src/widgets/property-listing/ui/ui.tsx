@@ -29,7 +29,8 @@ type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
 
 type PropertyListingProps = {
-    onPropertyClick?: (property: PropertyGridCard) => void;
+    /** Функция для формирования href объекта */
+    getPropertyHref?: (property: PropertyGridCard) => string;
     className?: string;
 };
 
@@ -37,7 +38,7 @@ type PropertyListingProps = {
  * PropertyListing - full-screen property listing
  * Used in list mode (without map)
  */
-export function PropertyListing({ onPropertyClick, className }: PropertyListingProps) {
+export function PropertyListing({ getPropertyHref, className }: PropertyListingProps) {
     const tCommon = useTranslations('common');
     const tFilters = useTranslations('filters');
     const tMap = useTranslations('map');
@@ -210,7 +211,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                             <PropertyCardGrid
                                 key={property.id}
                                 property={property}
-                                onClick={() => onPropertyClick?.(property)}
+                                href={getPropertyHref?.(property)}
                                 actions={<PropertyCompareButton property={property} />}
                                 menuItems={<PropertyCompareMenuItem property={property} />}
                             />
@@ -222,7 +223,7 @@ export function PropertyListing({ onPropertyClick, className }: PropertyListingP
                             <PropertyCardHorizontal
                                 key={property.id}
                                 property={property}
-                                onClick={() => onPropertyClick?.(property)}
+                                href={getPropertyHref?.(property)}
                                 actions={<PropertyCompareButton property={property} size="md" />}
                             />
                         ))}

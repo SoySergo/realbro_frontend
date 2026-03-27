@@ -5,6 +5,7 @@ import type { TransportStation } from '../property-address-transport/transport-s
 
 interface PropertyHeaderTranslations {
     updated: string;
+    added: string;
     views: string;
     viewsToday: string;
 }
@@ -26,6 +27,7 @@ interface PropertyHeaderProps {
     className?: string;
     stats?: {
         updatedAt: string | Date;
+        publishedAt?: string | Date;
         viewsCount?: number;
         viewsToday?: number;
     };
@@ -64,19 +66,25 @@ export function PropertyHeader({
     translations
 }: PropertyHeaderProps) {
     const updatedStr = stats?.updatedAt ? formatUpdatedTime(stats.updatedAt) : '';
+    const publishedStr = stats?.publishedAt ? formatUpdatedTime(stats.publishedAt) : '';
     const viewsLabel = translations?.views ?? 'views';
     const viewsTodayLabel = translations?.viewsToday ?? 'today';
     const updatedLabel = translations?.updated ?? 'Updated';
+    const addedLabel = translations?.added ?? 'Added';
 
     const viewsStr = stats?.viewsCount
         ? `${stats.viewsCount} ${viewsLabel}, ${stats.viewsToday ?? 0} ${viewsTodayLabel}`
         : '';
 
     return (
-        <div className={cn('space-y-2 mt-12', className)}>
+        <div className={cn('space-y-2 ', className)}>
             {/* Metadata Line */}
-            {(updatedStr || viewsStr) && (
+            {(updatedStr || publishedStr || viewsStr) && (
                 <div className="flex items-center gap-2 text-[13px] text-muted-foreground/80 leading-none mb-1">
+                    {publishedStr && <span>{addedLabel}: {publishedStr}</span>}
+                    {updatedStr && publishedStr && (
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                    )}
                     {updatedStr && <span>{updatedLabel}: {updatedStr}</span>}
                     {viewsStr && (
                         <>

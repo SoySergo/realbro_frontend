@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import dynamic from 'next/dynamic';
 
 import {
@@ -35,6 +36,7 @@ const SearchMap = dynamic(
  */
 export function SearchMapPage() {
     const searchParams = useSearchParams();
+    const locale = useLocale();
     const { activeQueryId, queries } = useSidebarStore();
     const {
         loadFiltersFromQuery,
@@ -86,10 +88,10 @@ export function SearchMapPage() {
 
     const router = useRouter();
 
-    // Обработчик клика на объект - центрировать карту
-    const handlePropertyClick = useCallback((property: PropertyGridCard) => {
-        router.push(`/property/${property.slug || property.id}`);
-    }, [router]);
+    // Формирование href для карточки объекта
+    const getPropertyHref = useCallback((property: PropertyGridCard) => {
+        return `/${locale}/property/${property.slug || property.id}`;
+    }, [locale]);
 
     // Обработчик наведения — подсветить на карте
     const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
@@ -160,7 +162,7 @@ export function SearchMapPage() {
                 {!activeLocationMode && (
                     <div className="md:hidden">
                         <MobileMapSidebar
-                            onPropertyClick={handlePropertyClick}
+                            getPropertyHref={getPropertyHref}
                             selectedPropertyId={selectedPropertyId}
                             clusterPropertyIds={clusterPropertyIds}
                             onClusterReset={handleClusterReset}
@@ -174,7 +176,7 @@ export function SearchMapPage() {
                 {!activeLocationMode && (
                     <div className="hidden md:block shrink-0 h-screen pt-[52px] z-40">
                         <MapSidebar
-                            onPropertyClick={handlePropertyClick}
+                            getPropertyHref={getPropertyHref}
                             onPropertyHover={handlePropertyHover}
                             selectedPropertyId={selectedPropertyId}
                             clusterPropertyIds={clusterPropertyIds}

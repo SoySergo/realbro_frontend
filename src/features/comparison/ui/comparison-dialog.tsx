@@ -19,7 +19,7 @@ interface ComparisonDialogProps {
     locale: string;
     isOpen: boolean;
     onClose: () => void;
-    onPropertyClick?: (property: import('@/entities/property').Property) => void;
+    getPropertyHref?: (property: import('@/entities/property').Property) => string;
     onAddMore?: () => void;
     className?: string;
 }
@@ -34,7 +34,7 @@ export function ComparisonDialog({
     locale,
     isOpen,
     onClose,
-    onPropertyClick,
+    getPropertyHref,
     onAddMore,
     className,
 }: ComparisonDialogProps) {
@@ -89,10 +89,7 @@ export function ComparisonDialog({
                         translations={t}
                         locale={locale}
                         onBack={onClose}
-                        onPropertyClick={(property) => {
-                            onPropertyClick?.(property);
-                            onClose();
-                        }}
+                        getPropertyHref={getPropertyHref}
                         onAddMore={() => {
                             onAddMore?.();
                             onClose();

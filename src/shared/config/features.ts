@@ -5,13 +5,16 @@
  * При false → работают моки, при true → реальный бекенд.
  */
 
+const USE_REAL_PROPERTIES = process.env.NEXT_PUBLIC_USE_REAL_PROPERTIES === 'true';
+
 export const FEATURES = {
     // === Legacy флаги (обратная совместимость) ===
 
     // Использовать моки для недвижимости когда включен флаг
     USE_MOCK_PROPERTIES:
         process.env.NEXT_PUBLIC_USE_MOCK_PROPERTIES === 'true' ||
-        process.env.NEXT_PUBLIC_USE_MOCKS === 'true',
+        process.env.NEXT_PUBLIC_USE_MOCKS === 'true' ||
+        !USE_REAL_PROPERTIES,
     
     /**
      * Мок авторизации для тестирования UI
@@ -24,7 +27,7 @@ export const FEATURES = {
 
     /** Properties listing, detail, count */
     USE_REAL_PROPERTIES:
-        process.env.NEXT_PUBLIC_USE_REAL_PROPERTIES === 'true',
+        USE_REAL_PROPERTIES,
 
     /** Auth + user profile */
     USE_REAL_AUTH:

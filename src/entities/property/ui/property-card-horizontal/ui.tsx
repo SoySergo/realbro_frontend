@@ -36,7 +36,8 @@ import { useUserActionsStore } from '@/entities/user-actions';
 
 interface PropertyCardHorizontalProps {
     property: PropertyHorizontalCard;
-    onClick?: () => void;
+    /** URL для навигации — рендерит <Link> для SEO и prefetch */
+    href?: string;
     // Слот для дополнительных действий (например, кнопка сравнения)
     actions?: React.ReactNode;
 }
@@ -47,7 +48,7 @@ interface PropertyCardHorizontalProps {
  * Используется в режиме списка для отображения объектов с расширенными деталями.
  * Показывает галерею, описание, информацию об агентстве и контакты.
  */
-export function PropertyCardHorizontal({ property, onClick, actions }: PropertyCardHorizontalProps) {
+export function PropertyCardHorizontal({ property, href, actions }: PropertyCardHorizontalProps) {
     const t = useTranslations('property');
     const tTypes = useTranslations('propertyTypes');
     const tTransport = useTranslations('transport');
@@ -139,8 +140,15 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
         }
     };
 
+    // Обёртка: <Link> для SEO/prefetch или <div> как fallback
+    const Wrapper = href ? Link : 'div';
+    const wrapperProps = href
+        ? { href, className: 'flex gap-6 py-6 border-b border-border cursor-pointer hover:bg-accent/5 transition-colors px-4' }
+        : { className: 'flex gap-6 py-6 border-b border-border cursor-pointer hover:bg-accent/5 transition-colors px-4' };
+
     return (
-        <div className="flex gap-6 py-6 border-b border-border cursor-pointer hover:bg-accent/5 transition-colors px-4" onClick={onClick}>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Wrapper {...wrapperProps as any}>
             {/* Галерея изображений */}
             <div className="flex-shrink-0 w-[375px]">
                 <div
@@ -395,7 +403,7 @@ export function PropertyCardHorizontal({ property, onClick, actions }: PropertyC
 
                 <p className="text-[11px] text-muted-foreground text-right mt-2">{timeAgo}</p>
             </div>
-        </div>
+        </Wrapper>
     );
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, Suspense, useCallback, useState } from 'react';
+import { useLocale } from 'next-intl';
 
 import { SearchMap } from '@/features/map';
 import {
@@ -29,6 +30,7 @@ import type { PropertyGridCard } from '@/entities/property';
  * - В PropertyListing есть кнопка "На карте"
  */
 function SearchPageContent() {
+    const locale = useLocale();
     const { activeQueryId, queries } = useSidebarStore();
     const {
         loadFiltersFromQuery,
@@ -54,13 +56,10 @@ function SearchPageContent() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Обработчик клика на объект - центрировать карту
-    const handlePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            console.log('Property clicked:', property.id);
-            // TODO: Центрировать карту на координатах объекта
-        },
-        []
+    // Формирование href для карточки объекта
+    const getPropertyHref = useCallback(
+        (property: PropertyGridCard) => `/${locale}/property/${property.slug || property.id}`,
+        [locale]
     );
 
     // Обработчик наведения - подсветить на карте
@@ -116,7 +115,7 @@ function SearchPageContent() {
                         {/* Сайдбар со списком объектов - только на desktop */}
                         <div className="hidden md:block">
                             <MapSidebar
-                                onPropertyClick={handlePropertyClick}
+                                getPropertyHref={getPropertyHref}
                                 onPropertyHover={handlePropertyHover}
                                 className="fixed right-0 h-screen z-40 mt-[52px]"
                             />
@@ -128,7 +127,7 @@ function SearchPageContent() {
                         {/* Листинг объектов */}
                         <div className="flex-1 overflow-hidden">
                             <PropertyListing
-                                onPropertyClick={handlePropertyClick}
+                                getPropertyHref={getPropertyHref}
                                 className="h-full"
                             />
                         </div>

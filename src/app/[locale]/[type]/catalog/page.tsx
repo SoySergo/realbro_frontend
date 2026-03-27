@@ -28,7 +28,7 @@ import { CatalogFiltersToolbar } from './_catalog-filters';
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
     const params = useParams();
-    const slug = params.slug as string;
+    const type = params.type as string;
     const locale = params.locale as string;
 
     const { currentFilters } = useFilterStore();

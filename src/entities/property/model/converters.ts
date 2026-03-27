@@ -165,6 +165,26 @@ export function detailsDtoToProperty(dto: PropertyDetailsDTO, id: string): Prope
         energy_efficiency: dto.energy_efficiency,
         house_rules: dto.house_rules,
 
+        // Транспорт (из location.transport → nearbyTransportList)
+        // Разворачиваем: одна станция с несколькими линиями → один NearbyTransport на линию
+        nearbyTransportList: dto.location.transport?.flatMap(station => {
+            const walkMin = station.walking_duration ?? Math.round(station.distance / 80);
+            if (station.lines && station.lines.length > 0) {
+                return station.lines.map(line => ({
+                    type: (line.type ?? station.type) as 'metro' | 'train' | 'bus',
+                    name: station.name,
+                    line: line.name,
+                    color: line.color,
+                    walkMinutes: walkMin,
+                }));
+            }
+            return [{
+                type: station.type as 'metro' | 'train' | 'bus',
+                name: station.name,
+                walkMinutes: walkMin,
+            }];
+        }),
+
         // SEO
         seo_title: dto.seo_title,
         seo_description: dto.seo_description,

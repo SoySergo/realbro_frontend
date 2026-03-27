@@ -23,7 +23,12 @@ const navItems = [
  * - 900–1300px (slug-desktop до slug-wide): только иконки с тултипами, без текста
  * - > 1300px (slug-wide): иконки + текстовые подписи
  */
-export function SearchPageHeader() {
+interface SearchPageHeaderProps {
+    /** Убирает скругления и делает хедер вплотную к краям */
+    flush?: boolean;
+}
+
+export function SearchPageHeader({ flush }: SearchPageHeaderProps) {
     const t = useTranslations('sidebar');
     const pathname = usePathname();
 
@@ -31,13 +36,14 @@ export function SearchPageHeader() {
         <TooltipProvider delayDuration={200}>
             <header
                 className={cn(
-                    'flex h-[52px] items-center justify-between',
-                    'bg-background rounded-[9px]',
+                    'grid grid-cols-[1fr_auto_1fr] h-[52px] items-center',
+                    'bg-background',
+                    !flush && 'rounded-[9px]',
                     'px-3'
                 )}
             >
                 {/* Левая часть — лого */}
-                <Link href="/" className="flex items-center gap-2 shrink-0 px-2">
+                <Link href="/" className="flex items-center gap-2 shrink-0 px-2 justify-self-start">
                     <Image
                         src="/Logo keys.svg"
                         alt="RealBro"
@@ -84,7 +90,7 @@ export function SearchPageHeader() {
                 </nav>
 
                 {/* Правая часть — тема, язык */}
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-1 shrink-0 justify-self-end">
                     <ThemeSwitcher />
                     <LanguageSwitcher />
                 </div>

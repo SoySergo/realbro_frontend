@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { FloatingComparisonBar, ComparisonDialog } from '@/features/comparison';
@@ -75,9 +75,10 @@ export function ComparisonBarProvider() {
         setIsDialogOpen(true);
     };
 
-    const handlePropertyClick = (property: { id: string; slug?: string }) => {
-        router.push(`/${locale}/property/${property.slug || property.id}`);
-    };
+    const getPropertyHref = useCallback(
+        (property: { id: string; slug?: string }) => `/${locale}/property/${property.slug || property.id}`,
+        [locale]
+    );
 
     const handleAddMore = () => {
         router.push(`/${locale}/search/properties/list`);
@@ -94,7 +95,7 @@ export function ComparisonBarProvider() {
                 locale={locale}
                 isOpen={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
-                onPropertyClick={handlePropertyClick}
+                getPropertyHref={getPropertyHref}
                 onAddMore={handleAddMore}
             />
         </>

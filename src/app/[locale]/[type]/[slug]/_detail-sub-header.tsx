@@ -18,6 +18,11 @@ interface DetailSubHeaderProps {
         pricePerMeter: string;
     };
     locale: string;
+    price?: number;
+    area?: number;
+    rooms?: number;
+    title?: string;
+    floor?: number;
 }
 
 /**
@@ -25,13 +30,18 @@ interface DetailSubHeaderProps {
  * Содержит навигацию по секциям (Медиа, Характеристики, Описание, Карта)
  * и кнопки Предыдущий/Следующий.
  */
-export function DetailSubHeader({ translations, mainInfoTranslations, locale }: DetailSubHeaderProps) {
+export function DetailSubHeader({ translations, mainInfoTranslations, locale, price, area, rooms, title, floor }: DetailSubHeaderProps) {
     return (
         <div className="shrink-0 sticky top-0 z-40">
             <PropertyDetailHeader
                 translations={translations}
                 mainInfoTranslations={mainInfoTranslations}
                 locale={locale}
+                price={price}
+                area={area}
+                rooms={rooms}
+                title={title}
+                floor={floor}
                 variant="subHeader"
             />
         </div>

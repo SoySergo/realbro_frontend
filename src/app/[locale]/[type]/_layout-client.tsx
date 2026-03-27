@@ -54,16 +54,16 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                     setFiltersVisible: setCatalogFiltersVisible,
                 }}
             >
-                <div className="flex flex-col min-h-screen slug-desktop:h-screen slug-desktop:p-[5px] bg-background slug-desktop:bg-background-tertiary">
+                <div className="flex flex-col min-h-screen slug-desktop:h-screen bg-background slug-desktop:bg-background-tertiary">
                     {/* Desktop header — скрыт на мобильных */}
                     <div className="hidden slug-desktop:block shrink-0">
                         {catalogFiltersVisible ? (
-                            <SearchPageHeader />
+                            <SearchPageHeader flush />
                         ) : (
-                            <CatalogScrollHeader />
+                            <CatalogScrollHeader flush />
                         )}
                     </div>
-                    <main className="flex-1 min-h-0 slug-desktop:mt-[5px]">
+                    <main className="flex-1 min-h-0">
                         {children}
                     </main>
                 </div>
@@ -80,8 +80,8 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
         return (
             <div className="relative hidden slug-desktop:flex flex-col h-screen bg-background-tertiary">
                 {/* Основной хедер (SearchPageHeader) */}
-                <div className="shrink-0 p-[5px] pb-0">
-                    <SearchPageHeader />
+                <div className="shrink-0">
+                    <SearchPageHeader flush />
                 </div>
 
                 {/* Контент страницы деталей (включая PropertyDetailHeader как sub-header) */}

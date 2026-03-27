@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Building2, SlidersHorizontal } from 'lucide-react';
 import { PropertyCardGrid } from '@/entities/property';
@@ -60,7 +59,6 @@ export function AgencyPropertiesSection({
     const t = useTranslations('agency');
     const tCommon = useTranslations('common');
     const tProperty = useTranslations('property');
-    const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -133,14 +131,10 @@ export function AgencyPropertiesSection({
         }));
     }, []);
 
-    // Обработчик клика на карточку
-    const handlePropertyClick = useCallback(
-        (property: PropertyGridCard) => {
-            startTransition(() => {
-                router.push(`/${locale}/property/${property.slug || property.id}`);
-            });
-        },
-        [router, locale]
+    // Формирование href для карточки объекта
+    const getPropertyHref = useCallback(
+        (property: PropertyGridCard) => `/${locale}/property/${property.slug || property.id}`,
+        [locale]
     );
 
     // Сброс фильтров
@@ -309,7 +303,7 @@ export function AgencyPropertiesSection({
                     <PropertyCardGrid
                         key={property.id}
                         property={property}
-                        onClick={() => handlePropertyClick(property)}
+                        href={getPropertyHref(property)}
                         actions={<PropertyCompareButton property={property} />}
                         menuItems={<PropertyCompareMenuItem property={property} />}
                     />

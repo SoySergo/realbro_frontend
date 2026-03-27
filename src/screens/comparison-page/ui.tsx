@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ComparisonPanel } from '@/widgets/comparison-panel';
@@ -58,9 +59,10 @@ export function ComparisonPage({ locale }: ComparisonPageProps) {
         router.back();
     };
 
-    const handlePropertyClick = (property: Property) => {
-        router.push(`/${locale}/property/${property.slug || property.id}`);
-    };
+    const getPropertyHref = useCallback(
+        (property: Property) => `/${locale}/property/${property.slug || property.id}`,
+        [locale]
+    );
 
     const handleAddMore = () => {
         router.push(`/${locale}/search/properties/map`);
@@ -72,7 +74,7 @@ export function ComparisonPage({ locale }: ComparisonPageProps) {
                 translations={translations}
                 locale={locale}
                 onBack={handleBack}
-                onPropertyClick={handlePropertyClick}
+                getPropertyHref={getPropertyHref}
                 onAddMore={handleAddMore}
                 className="h-screen"
             />

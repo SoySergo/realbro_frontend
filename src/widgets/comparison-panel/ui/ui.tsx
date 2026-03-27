@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { X, MapPin, Scale, Trash2, Check, Minus, ArrowLeft, Info, Plus } from 'lucide-react';
 import { cn, safeImageSrc } from '@/shared/lib/utils';
+import { Link } from '@/shared/config/routing';
 import { Button } from '@/shared/ui/button';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import {
@@ -58,8 +59,9 @@ interface ComparisonPanelProps {
     translations: ComparisonPanelTranslations;
     locale: string;
     onBack?: () => void;
+    /** Функция для формирования href объекта */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onPropertyClick?: (property: any) => void;
+    getPropertyHref?: (property: any) => string;
     onAddMore?: () => void;
     className?: string;
 }
@@ -85,7 +87,7 @@ export function ComparisonPanel({
     translations,
     locale,
     onBack,
-    onPropertyClick,
+    getPropertyHref,
     onAddMore,
     className,
 }: ComparisonPanelProps) {
@@ -356,7 +358,7 @@ export function ComparisonPanel({
                                     key={property.id}
                                     property={property}
                                     onRemove={() => removeFromComparison(property.id)}
-                                    onClick={() => onPropertyClick?.(property)}
+                                    href={getPropertyHref?.(property)}
                                     removeLabel={t.remove}
                                     locale={locale}
                                 />
@@ -428,14 +430,14 @@ export function ComparisonPanel({
 function PropertyComparisonCard({
     property,
     onRemove,
-    onClick,
+    href,
     removeLabel,
     locale,
 }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     property: any;
     onRemove: () => void;
-    onClick?: () => void;
+    href?: string;
     removeLabel: string;
     locale: string;
 }) {
@@ -443,12 +445,18 @@ function PropertyComparisonCard({
         return new Intl.NumberFormat(locale === 'ru' ? 'ru-RU' : locale).format(price);
     };
 
+    const Wrapper = href ? Link : 'div';
+    const wrapperProps = href
+        ? { href, className: cn('rounded-xl overflow-hidden border-2 border-border', 'hover:border-brand-primary transition-colors cursor-pointer', 'bg-card'), prefetch: true }
+        : { className: cn('rounded-xl overflow-hidden border-2 border-border', 'hover:border-brand-primary transition-colors cursor-pointer', 'bg-card') };
+
     return (
         <div className="relative group">
             {/* Кнопка удаления */}
             <button
                 onClick={(e) => {
                     e.stopPropagation();
+                    e.preventDefault();
                     onRemove();
                 }}
                 className={cn(
@@ -462,14 +470,7 @@ function PropertyComparisonCard({
                 <X className="w-4 h-4" />
             </button>
 
-            <div
-                onClick={onClick}
-                className={cn(
-                    'rounded-xl overflow-hidden border-2 border-border',
-                    'hover:border-brand-primary transition-colors cursor-pointer',
-                    'bg-card'
-                )}
-            >
+            <Wrapper {...wrapperProps as React.ComponentProps<typeof Wrapper>}>
                 {/* Изображение */}
                 <div className="relative aspect-[4/3]">
                     {property.images[0] ? (
@@ -499,7 +500,7 @@ function PropertyComparisonCard({
                         <span className="line-clamp-1">{property.address}</span>
                     </div>
                 </div>
-            </div>
+            </Wrapper>
         </div>
     );
 }

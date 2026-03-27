@@ -91,6 +91,8 @@ export async function GET(
         isVerified: idx % 3 !== 0,
         nearbyTransportList: [
              { type: 'metro', name: 'Diagonal', line: 'L3', color: '#33A02C', walkMinutes: 5 },
+             { type: 'metro', name: 'Diagonal', line: 'L5', color: '#0055A4', walkMinutes: 5 },
+             { type: 'train', name: 'Passeig de Gràcia', line: 'R2', color: '#E1251B', walkMinutes: 8 },
              { type: 'bus', name: 'V15', walkMinutes: 2 }
         ],
         author: {
@@ -104,8 +106,13 @@ export async function GET(
         },
         createdAt: new Date(Date.now() - (idx * 3600000) % (7 * 86400000)).toISOString(),
         updatedAt: new Date().toISOString(), // Always updated "now" for "today" look
+        publishedAt: new Date(Date.now() - (idx * 3600000) % (7 * 86400000)).toISOString(),
         viewsCount: 1216 + (idx * 15) % 500,
         viewsToday: 33 + (idx * 2) % 10,
+        country: 'Spain',
+        region: 'Catalonia',
+        province: 'Barcelona',
+        district: neighborhood,
         
         // Extra fields
         rentalConditions: {
