@@ -4,3 +4,4 @@ export { ChatWindow } from './chat-window/ui';
 export { AIAgentPropertyFeed } from './ai-agent-property-feed/ui';
 export { ChatSettingsPanel } from './chat-settings-panel/ui';
 export { ChatLayout } from './chat-layout/ui';
+export { PropertyThreadView } from './property-thread-view/ui';
