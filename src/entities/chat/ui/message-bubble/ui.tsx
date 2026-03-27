@@ -47,7 +47,7 @@ export function MessageBubble({ message, isOwn, onRetry, labels = {}, className 
                 <button
                     onClick={() => onRetry?.(message.id)}
                     className="flex items-center gap-1 text-red-500 hover:text-red-400 transition-colors cursor-pointer"
-                    title={labels.retrySending}
+                    title={labels.retrySending || 'Retry sending'}
                 >
                     <AlertCircle className="w-3 h-3" />
                     <RefreshCw className="w-3 h-3" />
@@ -118,7 +118,7 @@ export function MessageBubble({ message, isOwn, onRetry, labels = {}, className 
                         onClick={() => onRetry(message.id)}
                         className="absolute -bottom-6 right-0 text-[11px] text-red-500 hover:text-red-400 font-medium transition-colors cursor-pointer"
                     >
-                        {labels.retry}
+                        {labels.retry || 'Retry'}
                     </button>
                 )}
             </div>

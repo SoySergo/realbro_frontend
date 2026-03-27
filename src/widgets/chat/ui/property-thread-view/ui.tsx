@@ -81,21 +81,21 @@ export function PropertyThreadView({
     const prevLengthRef = useRef(threadMessages.length);
 
     const {
-        messagePlaceholder = '',
-        location = '',
-        contact = '',
-        note = '',
-        perMonth = '',
-        walkMin = '',
-        showOnMap = '',
-        goToOwner = '',
-        noteTitle = '',
-        noteContent = '',
-        noteDate = '',
-        noteTime = '',
-        noteSave = '',
-        noteCancel = '',
-        newBadge = '',
+        messagePlaceholder = 'Ask about this property...',
+        location = 'Location',
+        contact = 'Contact',
+        note = 'Note',
+        perMonth = '/mo',
+        walkMin = 'min walk',
+        showOnMap = 'Show on map',
+        goToOwner = 'Go to owner',
+        noteTitle = 'Add note',
+        noteContent = 'Note text',
+        noteDate = 'Date',
+        noteTime = 'Time',
+        noteSave = 'Save',
+        noteCancel = 'Cancel',
+        newBadge = 'NEW',
     } = labels;
 
     // Прокрутка вниз при добавлении новых сообщений
@@ -622,11 +622,11 @@ function ContactCard({
     const contactData: ContactInfo = {};
 
     const {
-        showPhone = '',
-        writeWhatsapp = '',
-        writeEmail = '',
-        writeTelegram = '',
-        goToOwner = '',
+        showPhone = 'Show phone',
+        writeWhatsapp = 'WhatsApp',
+        writeEmail = 'Email',
+        writeTelegram = 'Telegram',
+        goToOwner = 'Go to owner',
     } = labels;
 
     const contactItems = [
