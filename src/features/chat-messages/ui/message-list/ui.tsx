@@ -16,11 +16,17 @@ interface MessageListProps {
     isTyping?: boolean;
     typingLabel?: string;
     onRetryMessage?: (messageId: string) => void;
+    labels?: {
+        today?: string;
+        yesterday?: string;
+        retry?: string;
+        retrySending?: string;
+    };
     className?: string;
 }
 
 // Мемоизация DateSeparator для предотвращения ререндеров
-const DateSeparator = ({ date }: { date: string }) => {
+const DateSeparator = ({ date, todayLabel, yesterdayLabel }: { date: string; todayLabel?: string; yesterdayLabel?: string }) => {
     const d = new Date(date);
     const now = new Date();
     const isToday = d.toDateString() === now.toDateString();
@@ -28,8 +34,8 @@ const DateSeparator = ({ date }: { date: string }) => {
         d.toDateString() === new Date(now.getTime() - 86400000).toDateString();
 
     let label = d.toLocaleDateString([], { month: 'long', day: 'numeric' });
-    if (isToday) label = 'Today';
-    if (isYesterday) label = 'Yesterday';
+    if (isToday) label = todayLabel || 'Today';
+    if (isYesterday) label = yesterdayLabel || 'Yesterday';
 
     return (
         <div className="flex items-center gap-3 py-3">
@@ -48,6 +54,7 @@ export function MessageList({
     isTyping,
     typingLabel,
     onRetryMessage,
+    labels = {},
     className,
 }: MessageListProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -134,7 +141,7 @@ export function MessageList({
                 return (
                     <div key={message.id}>
                         {showDateSeparator && (
-                            <DateSeparator date={message.createdAt} />
+                            <DateSeparator date={message.createdAt} todayLabel={labels.today} yesterdayLabel={labels.yesterday} />
                         )}
                         {message.type === 'property' || message.type === 'property-batch' ? (
                             renderPropertyMessage(message)
@@ -143,6 +150,7 @@ export function MessageList({
                                 message={message} 
                                 isOwn={isOwn}
                                 onRetry={onRetryMessage}
+                                labels={{ retry: labels.retry, retrySending: labels.retrySending }}
                             />
                         )}
                     </div>

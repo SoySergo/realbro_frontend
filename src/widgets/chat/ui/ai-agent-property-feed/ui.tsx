@@ -50,12 +50,11 @@ function getGroupKey(date: Date, dayFilter: string): string {
 function formatGroupLabel(
     date: Date,
     dayFilter: string,
-    locale = 'ru',
-    todayLabel = 'Сегодня',
-    yesterdayLabel = 'Вчера'
+    todayLabel: string,
+    yesterdayLabel: string
 ): string {
     if (dayFilter === 'today' || dayFilter === 'yesterday') {
-        return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     const now = new Date();
@@ -65,7 +64,7 @@ function formatGroupLabel(
     if (isToday) return todayLabel;
     if (isYesterday) return yesterdayLabel;
 
-    return date.toLocaleDateString(locale, { day: 'numeric', month: 'long' });
+    return date.toLocaleDateString([], { day: 'numeric', month: 'long' });
 }
 
 interface PropertyGroup {
@@ -97,11 +96,11 @@ export function AIAgentPropertyFeed({
     const discussedSet = useMemo(() => new Set(propertyDiscussionIds), [propertyDiscussionIds]);
 
     // Локализованные метки
-    const todayLabel = labels.propertyCard?.today || labels.filters?.today || 'Сегодня';
-    const yesterdayLabel = labels.propertyCard?.yesterday || labels.filters?.yesterday || 'Вчера';
-    const objectsLabel = labels.propertyCard?.objects || 'объектов';
+    const todayLabel = labels.propertyCard?.today || labels.filters?.today || 'Today';
+    const yesterdayLabel = labels.propertyCard?.yesterday || labels.filters?.yesterday || 'Yesterday';
+    const objectsLabel = labels.propertyCard?.objects || 'properties';
     const liveFeedLabel = labels.propertyCard?.live || labels.aiAgent?.liveFeed || 'LIVE';
-    const notViewedLabel = labels.propertyCard?.notViewedGroup || 'Не просмотрено';
+    const notViewedLabel = labels.propertyCard?.notViewedGroup || 'Not viewed';
 
     const conversationMessages = useMemo(
         () => messages[conversationId] || [],
@@ -252,7 +251,7 @@ export function AIAgentPropertyFeed({
                     } else {
                         targetMap.set(key, {
                             key,
-                            label: formatGroupLabel(date, dayFilter, 'ru', todayLabel, yesterdayLabel),
+                            label: formatGroupLabel(date, dayFilter, todayLabel, yesterdayLabel),
                             date,
                             properties: [prop],
                             filterName: msg.metadata?.filterName,

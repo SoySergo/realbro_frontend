@@ -21,6 +21,8 @@ interface ChatSidebarProps {
         title: string;
         searchPlaceholder: string;
         tabs: Record<string, string>;
+        noConversations?: string;
+        yesterday?: string;
     };
     onSelectConversation?: () => void;
     className?: string;
@@ -126,7 +128,7 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
                     </div>
                 ) : filteredConversations.length === 0 ? (
                     <div className="flex items-center justify-center h-20 text-sm text-text-tertiary">
-                        No conversations found
+                        {labels.noConversations || 'No conversations found'}
                     </div>
                 ) : (
                     filteredConversations.map((conversation) => (
@@ -134,6 +136,7 @@ export function ChatSidebar({ labels, onSelectConversation, className }: ChatSid
                             key={conversation.id}
                             conversation={conversation}
                             isActive={activeConversationId === conversation.id}
+                            labels={{ yesterday: labels.yesterday }}
                             onClick={() => {
                                 setActiveConversation(conversation.id);
                                 onSelectConversation?.();

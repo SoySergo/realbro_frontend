@@ -4,14 +4,20 @@ import { Check, CheckCheck, Clock, AlertCircle, Search, RefreshCw } from 'lucide
 import { cn } from '@/shared/lib/utils';
 import type { ChatMessage } from '../../model/types';
 
+interface MessageBubbleLabels {
+    retry?: string;
+    retrySending?: string;
+}
+
 interface MessageBubbleProps {
     message: ChatMessage;
     isOwn: boolean;
     onRetry?: (messageId: string) => void;
+    labels?: MessageBubbleLabels;
     className?: string;
 }
 
-export function MessageBubble({ message, isOwn, onRetry, className }: MessageBubbleProps) {
+export function MessageBubble({ message, isOwn, onRetry, labels = {}, className }: MessageBubbleProps) {
     if (message.type === 'system') {
         return (
             <div className={cn('flex justify-center py-2', className)}>
@@ -41,7 +47,7 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
                 <button
                     onClick={() => onRetry?.(message.id)}
                     className="flex items-center gap-1 text-red-500 hover:text-red-400 transition-colors cursor-pointer"
-                    title="Retry sending"
+                    title={labels.retrySending}
                 >
                     <AlertCircle className="w-3 h-3" />
                     <RefreshCw className="w-3 h-3" />
@@ -112,7 +118,7 @@ export function MessageBubble({ message, isOwn, onRetry, className }: MessageBub
                         onClick={() => onRetry(message.id)}
                         className="absolute -bottom-6 right-0 text-[11px] text-red-500 hover:text-red-400 font-medium transition-colors cursor-pointer"
                     >
-                        Retry
+                        {labels.retry}
                     </button>
                 )}
             </div>

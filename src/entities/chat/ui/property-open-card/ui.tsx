@@ -27,6 +27,7 @@ export interface PropertyCardLabels {
     yesterday?: string;
     live?: string;
     objects?: string;
+    new?: string;
 }
 
 interface PropertyOpenCardProps {
@@ -66,14 +67,14 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const images = property.images || [];
 
-    // Значения по умолчанию для меток
+    // Значения из i18n (переданные как labels)
     const {
-        perMonth = '/мес',
-        bedrooms = 'спальни',
-        bathrooms = 'ванные',
-        floor = 'эт.',
-        walkMin = 'мин пешком',
-        contact = 'Связаться',
+        perMonth = '/mo',
+        bedrooms = 'bedrooms',
+        bathrooms = 'bathrooms',
+        floor = 'fl.',
+        walkMin = 'min walk',
+        contact = 'Contact',
     } = labels;
 
     const scrollImages = (direction: 'left' | 'right') => {
@@ -151,7 +152,7 @@ export const PropertyOpenCard = React.memo(function PropertyOpenCard({
                             {/* NEW badge on first image */}
                             {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-3 left-3 shadow-lg">
-                                    NEW
+                                    {labels.new || 'NEW'}
                                 </Badge>
                             )}
 

@@ -74,6 +74,11 @@ export function ChatPage() {
         selectConversation: t('selectConversation'),
         emptyTitle: t('empty.title'),
         emptySubtitle: t('empty.subtitle'),
+        noConversations: t('empty.noConversations'),
+        retry: t('message.retry'),
+        retrySending: t('message.retrySending'),
+        yesterday: t('time.yesterday'),
+        today: t('propertyCard.today'),
         filters: {
             today: t('filters.today'),
             yesterday: t('filters.yesterday'),
@@ -109,6 +114,7 @@ export function ChatPage() {
             yesterday: t('propertyCard.yesterday'),
             live: t('propertyCard.live'),
             objects: t('propertyCard.objects'),
+            new: t('propertyCard.new'),
         },
         settingsPanel: {
             settingsTitle: t('settings.title'),
@@ -150,6 +156,14 @@ export function ChatPage() {
             noteTime: t('thread.noteTime'),
             noteSave: t('thread.noteSave'),
             noteCancel: t('thread.noteCancel'),
+            noteLabel: t('thread.noteLabel'),
+            loadingNearby: t('thread.loadingNearby'),
+            categories_transport: t('thread.categories.transport'),
+            categories_shops: t('thread.categories.shops'),
+            categories_restaurants: t('thread.categories.restaurants'),
+            categories_parks: t('thread.categories.parks'),
+            categories_schools: t('thread.categories.schools'),
+            categories_healthcare: t('thread.categories.healthcare'),
         },
     };
 

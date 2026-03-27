@@ -7,11 +7,18 @@ import { Badge } from '@/shared/ui/badge';
 import type { PropertyChatCard } from '@/entities/property';
 import { getImageAlt, getImageThumbnailUrl } from '@/entities/property/model/card-types';
 
+interface PropertyBatchCardLabels {
+    new?: string;
+    floor?: string;
+    walkMin?: string;
+}
+
 interface PropertyBatchCardProps {
     property: PropertyChatCard;
     filterName?: string;
     actions?: React.ReactNode;
     onClick?: () => void;
+    labels?: PropertyBatchCardLabels;
     className?: string;
 }
 
@@ -24,6 +31,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
     filterName,
     actions,
     onClick,
+    labels = {},
     className,
 }: PropertyBatchCardProps) {
     const mainImage = property.images?.[0];
@@ -58,7 +66,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                 <div className="absolute top-2 left-2 flex gap-1.5">
                     {property.is_new && (
                         <Badge variant="primary" className="text-[10px] px-1.5 py-0.5">
-                            NEW
+                            {labels.new || 'NEW'}
                         </Badge>
                     )}
                     {filterName && (
@@ -104,7 +112,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                     </span>
                     {property.floor && (
                         <span className="text-text-tertiary">
-                            {property.floor}/{property.total_floors} fl.
+                            {property.floor}/{property.total_floors} {labels.floor || 'fl.'}
                         </span>
                     )}
                 </div>
@@ -126,7 +134,7 @@ export const PropertyBatchCard = React.memo(function PropertyBatchCard({
                             />
                         )}
                         <span className="truncate">{property.transport_station.station_name}</span>
-                        <span>{property.transport_station.walk_minutes} min</span>
+                        <span>{property.transport_station.walk_minutes} {labels.walkMin || 'min'}</span>
                     </div>
                 )}
 

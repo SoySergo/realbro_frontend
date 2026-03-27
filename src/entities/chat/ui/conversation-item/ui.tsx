@@ -8,12 +8,16 @@ interface ConversationItemProps {
     conversation: Conversation;
     isActive: boolean;
     onClick: () => void;
+    labels?: {
+        yesterday?: string;
+    };
 }
 
 export function ConversationItem({
     conversation,
     isActive,
     onClick,
+    labels = {},
 }: ConversationItemProps) {
     const { title, lastMessage, unreadCount, type } = conversation;
 
@@ -30,7 +34,7 @@ export function ConversationItem({
         if (diff < oneDay && date.getDate() === now.getDate()) {
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
-        if (diff < 2 * oneDay) return 'Yesterday';
+        if (diff < 2 * oneDay) return labels.yesterday || 'Yesterday';
         return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     };
 

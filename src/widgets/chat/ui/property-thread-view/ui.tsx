@@ -81,20 +81,21 @@ export function PropertyThreadView({
     const prevLengthRef = useRef(threadMessages.length);
 
     const {
-        messagePlaceholder = 'Ask about this property...',
-        location = 'Location',
-        contact = 'Contact',
-        note = 'Note',
-        perMonth = '/mo',
-        walkMin = 'min walk',
-        showOnMap = 'Show on map',
-        goToOwner = 'Go to owner',
-        noteTitle = 'Add note',
-        noteContent = 'Note text',
-        noteDate = 'Date',
-        noteTime = 'Time',
-        noteSave = 'Save',
-        noteCancel = 'Cancel',
+        messagePlaceholder = '',
+        location = '',
+        contact = '',
+        note = '',
+        perMonth = '',
+        walkMin = '',
+        showOnMap = '',
+        goToOwner = '',
+        noteTitle = '',
+        noteContent = '',
+        noteDate = '',
+        noteTime = '',
+        noteSave = '',
+        noteCancel = '',
+        newBadge = '',
     } = labels;
 
     // Прокрутка вниз при добавлении новых сообщений
@@ -617,27 +618,22 @@ function ContactCard({
     property: PropertyChatCard;
     labels: PropertyThreadLabels;
 }) {
-    // Мок контактных данных
-    const mockContact: ContactInfo = {
-        phone: '+34 612 345 678',
-        whatsapp: '+34 612 345 678',
-        email: 'owner@example.com',
-        telegram: '@owner_barcelona',
-    };
+    // Контактные данные будут поступать с бекенда через property или store
+    const contactData: ContactInfo = {};
 
     const {
-        showPhone = 'Show phone',
-        writeWhatsapp = 'WhatsApp',
-        writeEmail = 'Email',
-        writeTelegram = 'Telegram',
-        goToOwner = 'Go to owner',
+        showPhone = '',
+        writeWhatsapp = '',
+        writeEmail = '',
+        writeTelegram = '',
+        goToOwner = '',
     } = labels;
 
     const contactItems = [
-        { key: 'phone', icon: Phone, label: showPhone, value: mockContact.phone, href: `tel:${mockContact.phone}` },
-        { key: 'whatsapp', icon: MessageCircle, label: writeWhatsapp, value: mockContact.whatsapp, href: `https://wa.me/${mockContact.whatsapp?.replace(/\D/g, '')}` },
-        { key: 'email', icon: Send, label: writeEmail, value: mockContact.email, href: `mailto:${mockContact.email}` },
-        { key: 'telegram', icon: Send, label: writeTelegram, value: mockContact.telegram, href: `https://t.me/${mockContact.telegram?.replace('@', '')}` },
+        { key: 'phone', icon: Phone, label: showPhone, value: contactData.phone, href: `tel:${contactData.phone}` },
+        { key: 'whatsapp', icon: MessageCircle, label: writeWhatsapp, value: contactData.whatsapp, href: `https://wa.me/${contactData.whatsapp?.replace(/\D/g, '')}` },
+        { key: 'email', icon: Send, label: writeEmail, value: contactData.email, href: `mailto:${contactData.email}` },
+        { key: 'telegram', icon: Send, label: writeTelegram, value: contactData.telegram, href: `https://t.me/${contactData.telegram?.replace('@', '')}` },
     ].filter(item => item.value);
 
     return (

@@ -17,6 +17,13 @@ interface PropertyExpandedCardProps {
     actions?: React.ReactNode;
     className?: string;
     isNew?: boolean;
+    labels?: {
+        perMonth?: string;
+        rooms?: string;
+        floor?: string;
+        walkMin?: string;
+        new?: string;
+    };
 }
 
 const featureIcons: Partial<Record<PropertyFeature, React.ElementType>> = {
@@ -29,14 +36,14 @@ const featureIcons: Partial<Record<PropertyFeature, React.ElementType>> = {
 };
 
 const featureLabels: Partial<Record<PropertyFeature, string>> = {
-    airConditioning: 'Кондиционер',
-    parking: 'Парковка',
-    furnished: 'Мебель',
-    elevator: 'Лифт',
-    pool: 'Бассейн',
-    garden: 'Сад',
-    balcony: 'Балкон',
-    terrace: 'Терраса',
+    airConditioning: 'Air conditioning',
+    parking: 'Parking',
+    furnished: 'Furnished',
+    elevator: 'Elevator',
+    pool: 'Pool',
+    garden: 'Garden',
+    balcony: 'Balcony',
+    terrace: 'Terrace',
 };
 
 /**
@@ -49,6 +56,7 @@ export function PropertyExpandedCard({
     actions,
     className,
     isNew = false,
+    labels = {},
 }: PropertyExpandedCardProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -113,7 +121,7 @@ export function PropertyExpandedCard({
                             {/* NEW badge on first image */}
                             {index === 0 && (isNew || property.is_new) && (
                                 <Badge variant="primary" className="absolute top-2 left-2 text-xs">
-                                    NEW
+                                    {labels.new || 'NEW'}
                                 </Badge>
                             )}
                         </div>
@@ -189,7 +197,7 @@ export function PropertyExpandedCard({
                 {/* Price */}
                 <div className="flex items-baseline justify-between">
                     <span className="text-2xl font-bold text-brand-primary">
-                        {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">/мес</span>
+                        {property.price.toLocaleString()} €<span className="text-sm font-normal text-text-tertiary">{labels.perMonth || '/mo'}</span>
                     </span>
                     {property.price_per_m2 && (
                         <span className="text-xs text-text-tertiary">
@@ -203,7 +211,7 @@ export function PropertyExpandedCard({
                     {property.rooms > 0 && (
                         <span className="flex items-center gap-1.5">
                             <Bed className="w-4 h-4" />
-                            {property.rooms} комн.
+                            {property.rooms} {labels.rooms || 'rooms'}
                         </span>
                     )}
                     {property.bathrooms > 0 && (
@@ -218,7 +226,7 @@ export function PropertyExpandedCard({
                     </span>
                     {property.floor && (
                         <span className="text-text-tertiary">
-                            {property.floor}/{property.total_floors} эт.
+                            {property.floor}/{property.total_floors} {labels.floor || 'fl.'}
                         </span>
                     )}
                 </div>
@@ -240,7 +248,7 @@ export function PropertyExpandedCard({
                             />
                         )}
                         <span>{property.transport_station.station_name}</span>
-                        <span>• {property.transport_station.walk_minutes} мин пешком</span>
+                        <span>• {property.transport_station.walk_minutes} {labels.walkMin || 'min walk'}</span>
                     </div>
                 )}
 
