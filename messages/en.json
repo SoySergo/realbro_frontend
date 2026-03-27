@@ -808,7 +808,9 @@
             "send": "Send",
             "support": "Support",
             "supportGreeting": "How can we help you?",
-            "you": "You"
+            "you": "You",
+            "retry": "Retry",
+            "retrySending": "Retry sending"
         },
         "actions": {
             "like": "Like",
@@ -820,7 +822,8 @@
         },
         "empty": {
             "title": "No messages yet",
-            "subtitle": "Start a conversation or wait for AI Agent to find properties"
+            "subtitle": "Start a conversation or wait for AI Agent to find properties",
+            "noConversations": "No conversations found"
         },
         "time": {
             "justNow": "just now",
@@ -853,7 +856,8 @@
             "today": "Today",
             "yesterday": "Yesterday",
             "live": "LIVE",
-            "objects": "properties"
+            "objects": "properties",
+            "new": "NEW"
         },
         "thread": {
             "messagePlaceholder": "Ask about this property...",
@@ -874,7 +878,17 @@
             "noteTime": "Time",
             "noteSave": "Save",
             "noteCancel": "Cancel",
-            "discussed": "Discussed"
+            "discussed": "Discussed",
+            "loadingNearby": "Loading nearby places...",
+            "noteLabel": "Note",
+            "categories": {
+                "transport": "Transport",
+                "shops": "Shops",
+                "restaurants": "Restaurants",
+                "parks": "Parks",
+                "schools": "Schools",
+                "healthcare": "Healthcare"
+            }
         }
     },
     "propertyDetail": {

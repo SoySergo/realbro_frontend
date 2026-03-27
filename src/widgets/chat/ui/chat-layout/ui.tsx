@@ -21,12 +21,18 @@ interface ChatLayoutProps {
         selectConversation: string;
         emptyTitle: string;
         emptySubtitle: string;
+        noConversations?: string;
+        retry?: string;
+        retrySending?: string;
+        yesterday?: string;
+        today?: string;
         filters: Record<string, string>;
         aiAgent: Record<string, string>;
         noProperties: string;
         allFilters: string;
         selectFilter: string;
         propertyCard?: PropertyCardLabels;
+        thread?: Record<string, string>;
         settingsPanel: {
             settingsTitle: string;
             searchParams: string;
@@ -86,6 +92,8 @@ export function ChatLayout({ labels, className }: ChatLayoutProps) {
                         title: labels.title,
                         searchPlaceholder: labels.searchPlaceholder,
                         tabs: labels.tabs,
+                        noConversations: labels.noConversations,
+                        yesterday: labels.yesterday,
                     }}
                     onSelectConversation={() => setShowMobileChat(true)}
                     className="w-full"

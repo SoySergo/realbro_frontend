@@ -995,7 +995,9 @@
             "send": "Enviar",
             "support": "Suport",
             "supportGreeting": "En què podem ajudar?",
-            "you": "Tu"
+            "you": "Tu",
+            "retry": "Reintentar",
+            "retrySending": "Reintentar enviament"
         },
         "actions": {
             "like": "M'agrada",
@@ -1007,7 +1009,8 @@
         },
         "empty": {
             "title": "Encara no hi ha missatges",
-            "subtitle": "Comença una conversa o espera les trobades de l'agent d'IA"
+            "subtitle": "Comença una conversa o espera les trobades de l'agent d'IA",
+            "noConversations": "No s'han trobat converses"
         },
         "time": {
             "justNow": "ara mateix",
@@ -1044,7 +1047,8 @@
             "today": "Avui",
             "yesterday": "Ahir",
             "live": "EN TEMPS REAL",
-            "objects": "immobles"
+            "objects": "immobles",
+            "new": "NOU"
         },
         "newMessage": "Nou missatge",
         "typeMessage": "Escriu un missatge...",
@@ -1092,7 +1096,17 @@
             "noteTime": "Hora",
             "noteSave": "Desar",
             "noteCancel": "Cancel·lar",
-            "discussed": "Discutit"
+            "discussed": "Discutit",
+            "loadingNearby": "Carregant llocs propers...",
+            "noteLabel": "Nota",
+            "categories": {
+                "transport": "Transport",
+                "shops": "Botigues",
+                "restaurants": "Restaurants",
+                "parks": "Parcs",
+                "schools": "Escoles",
+                "healthcare": "Sanitat"
+            }
         }
     },
     "propertyDetail": {

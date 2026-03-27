@@ -134,21 +134,6 @@ export const useChatStore = create<ChatStore>()(
                         },
                         isSending: false,
                     }));
-
-                    const conv = get().conversations.find((c) => c.id === conversationId);
-                    if (conv && conv.type === 'support') {
-                        setTimeout(() => {
-                            get().addIncomingMessage({
-                                id: `msg_reply_${Date.now()}`,
-                                conversationId,
-                                senderId: 'support',
-                                type: 'text',
-                                content: 'Thank you for your message! Our team will review it shortly.',
-                                status: 'delivered',
-                                createdAt: new Date().toISOString(),
-                            });
-                        }, 1500);
-                    }
                 } catch (error) {
                     console.error('[Chat] Failed to send message', error);
                     set((state) => ({
@@ -311,33 +296,6 @@ export const useChatStore = create<ChatStore>()(
                         ],
                     },
                 }));
-
-                // Имитация ответа агента
-                setTimeout(() => {
-                    const thread = get().activePropertyThread;
-                    if (!thread || thread.propertyId !== propertyId) return;
-
-                    const prop = thread.property;
-                    const aiReply: ChatMessage = {
-                        id: `thread_reply_${Date.now()}`,
-                        conversationId: `thread_${propertyId}`,
-                        senderId: 'ai_agent',
-                        type: 'text',
-                        content: `This ${prop.type || 'property'} at ${prop.address} has ${prop.area}m² with ${prop.rooms} rooms. The monthly rent is ${prop.price.toLocaleString()}€. Would you like to know more about the neighborhood or contact the owner?`,
-                        status: 'delivered',
-                        createdAt: new Date().toISOString(),
-                    };
-
-                    set((state) => ({
-                        propertyThreadMessages: {
-                            ...state.propertyThreadMessages,
-                            [propertyId]: [
-                                ...(state.propertyThreadMessages[propertyId] || []),
-                                aiReply,
-                            ],
-                        },
-                    }));
-                }, 1200);
             },
 
             requestLocation: (propertyId, label) => {
@@ -347,7 +305,7 @@ export const useChatStore = create<ChatStore>()(
                     conversationId: `thread_${propertyId}`,
                     senderId: 'current_user',
                     type: 'text',
-                    content: `📍 ${label || 'Location'}`,
+                    content: label || 'Location',
                     status: 'sent',
                     createdAt: new Date().toISOString(),
                 };
@@ -361,35 +319,6 @@ export const useChatStore = create<ChatStore>()(
                         ],
                     },
                 }));
-
-                // Агент отправляет карту
-                setTimeout(() => {
-                    const thread = get().activePropertyThread;
-                    if (!thread || thread.propertyId !== propertyId) return;
-
-                    const locationMsg: ChatMessage = {
-                        id: `thread_loc_resp_${Date.now()}`,
-                        conversationId: `thread_${propertyId}`,
-                        senderId: 'ai_agent',
-                        type: 'ai-status',
-                        content: 'location_map',
-                        status: 'delivered',
-                        createdAt: new Date().toISOString(),
-                        metadata: {
-                            filterName: thread.property.address,
-                        },
-                    };
-
-                    set((state) => ({
-                        propertyThreadMessages: {
-                            ...state.propertyThreadMessages,
-                            [propertyId]: [
-                                ...(state.propertyThreadMessages[propertyId] || []),
-                                locationMsg,
-                            ],
-                        },
-                    }));
-                }, 800);
             },
 
             requestContact: (propertyId, label) => {
@@ -399,7 +328,7 @@ export const useChatStore = create<ChatStore>()(
                     conversationId: `thread_${propertyId}`,
                     senderId: 'current_user',
                     type: 'text',
-                    content: `📞 ${label || 'Contact'}`,
+                    content: label || 'Contact',
                     status: 'sent',
                     createdAt: new Date().toISOString(),
                 };
@@ -413,32 +342,6 @@ export const useChatStore = create<ChatStore>()(
                         ],
                     },
                 }));
-
-                // Агент отвечает контактной формой
-                setTimeout(() => {
-                    const contactMsg: ChatMessage = {
-                        id: `thread_contact_resp_${Date.now()}`,
-                        conversationId: `thread_${propertyId}`,
-                        senderId: 'ai_agent',
-                        type: 'ai-status',
-                        content: 'contact_card',
-                        status: 'delivered',
-                        createdAt: new Date().toISOString(),
-                        metadata: {
-                            filterName: 'contact',
-                        },
-                    };
-
-                    set((state) => ({
-                        propertyThreadMessages: {
-                            ...state.propertyThreadMessages,
-                            [propertyId]: [
-                                ...(state.propertyThreadMessages[propertyId] || []),
-                                contactMsg,
-                            ],
-                        },
-                    }));
-                }, 800);
             },
 
             addThreadNote: (propertyId, note) => {

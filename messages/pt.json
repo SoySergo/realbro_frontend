@@ -776,7 +776,8 @@
         },
         "empty": {
             "subtitle": "Comece uma conversa",
-            "title": "Sem mensagens"
+            "title": "Sem mensagens",
+            "noConversations": "Nenhuma conversa encontrada"
         },
         "filters": {
             "allFilters": "Todos os filtros",
@@ -788,7 +789,9 @@
             "yesterday": "Ontem"
         },
         "message": {
-            "placeholder": "Digite uma mensagem..."
+            "placeholder": "Digite uma mensagem...",
+            "retry": "Repetir",
+            "retrySending": "Repetir envio"
         },
         "propertyCard": {
             "bathrooms": "banheiros",
@@ -804,7 +807,8 @@
             "today": "Hoje",
             "viewedGroup": "Visto",
             "walkMin": "min a pé",
-            "yesterday": "Ontem"
+            "yesterday": "Ontem",
+            "new": "NOVO"
         },
         "searchPlaceholder": "Buscar conversas...",
         "selectConversation": "Selecione uma conversa",
@@ -866,7 +870,17 @@
             "noteTime": "Hora",
             "noteSave": "Guardar",
             "noteCancel": "Cancelar",
-            "discussed": "Discutido"
+            "discussed": "Discutido",
+            "loadingNearby": "A carregar locais próximos...",
+            "noteLabel": "Nota",
+            "categories": {
+                "transport": "Transportes",
+                "shops": "Lojas",
+                "restaurants": "Restaurantes",
+                "parks": "Parques",
+                "schools": "Escolas",
+                "healthcare": "Saúde"
+            }
         }
     },
     "propertyDetail": {

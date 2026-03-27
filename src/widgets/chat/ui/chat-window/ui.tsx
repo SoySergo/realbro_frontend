@@ -23,6 +23,10 @@ interface ChatWindowProps {
         selectConversation: string;
         emptyTitle: string;
         emptySubtitle: string;
+        retry?: string;
+        retrySending?: string;
+        today?: string;
+        yesterday?: string;
         filters: Record<string, string>;
         aiAgent: Record<string, string>;
         noProperties: string;
@@ -67,6 +71,9 @@ export function ChatWindow({
                     location: labels.thread?.location,
                     contact: labels.thread?.contact,
                     note: labels.thread?.note,
+                    noteLabel: labels.thread?.noteLabel,
+                    newBadge: labels.propertyCard?.new,
+                    loadingNearby: labels.thread?.loadingNearby,
                     perMonth: labels.propertyCard?.perMonth,
                     walkMin: labels.propertyCard?.walkMin,
                     showOnMap: labels.thread?.showOnMap,
@@ -82,6 +89,14 @@ export function ChatWindow({
                     noteTime: labels.thread?.noteTime,
                     noteSave: labels.thread?.noteSave,
                     noteCancel: labels.thread?.noteCancel,
+                    categories: labels.thread ? {
+                        transport: labels.thread.categories_transport,
+                        shops: labels.thread.categories_shops,
+                        restaurants: labels.thread.categories_restaurants,
+                        parks: labels.thread.categories_parks,
+                        schools: labels.thread.categories_schools,
+                        healthcare: labels.thread.categories_healthcare,
+                    } : undefined,
                 }}
                 className={className}
             />
@@ -135,6 +150,12 @@ export function ChatWindow({
                     messages={conversationMessages}
                     isLoading={isLoadingMessages}
                     onRetryMessage={(messageId) => retryMessage(messageId, activeConversationId)}
+                    labels={{
+                        today: labels.today,
+                        yesterday: labels.yesterday,
+                        retry: labels.retry,
+                        retrySending: labels.retrySending,
+                    }}
                     className="flex-1"
                 />
             )}
