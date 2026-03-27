@@ -85,15 +85,9 @@ export function PropertyThreadView({
         location = 'Location',
         contact = 'Contact',
         note = 'Note',
-        noteLabel = 'Note',
-        newBadge = 'NEW',
-        loadingNearby = 'Loading nearby places...',
         perMonth = '/mo',
         walkMin = 'min walk',
-        showPhone = 'Show phone',
-        writeWhatsapp = 'WhatsApp',
-        writeEmail = 'Email',
-        writeTelegram = 'Telegram',
+        showOnMap = 'Show on map',
         goToOwner = 'Go to owner',
         noteTitle = 'Add note',
         noteContent = 'Note text',
@@ -167,12 +161,12 @@ export function PropertyThreadView({
                     <QuickActionButton
                         icon={MapPin}
                         label={location}
-                        onClick={() => requestLocation(propertyId)}
+                        onClick={() => requestLocation(propertyId, showOnMap)}
                     />
                     <QuickActionButton
                         icon={Phone}
                         label={contact}
-                        onClick={() => requestContact(propertyId)}
+                        onClick={() => requestContact(propertyId, contact)}
                     />
                     <QuickActionButton
                         icon={StickyNote}
@@ -701,11 +695,11 @@ function NoteCard({ message, noteLabel }: { message: ChatMessage; noteLabel?: st
                     <StickyNote className="w-3.5 h-3.5" />
                     <span className="text-xs font-semibold">{noteLabel || 'Note'}</span>
                 </div>
-                <p className="text-sm text-text-primary whitespace-pre-wrap">{message.metadata?.filterId}</p>
-                {message.metadata?.filterName && (
+                <p className="text-sm text-text-primary whitespace-pre-wrap">{message.metadata?.noteContent}</p>
+                {message.metadata?.noteDateTime && (
                     <div className="flex items-center gap-2 text-[10px] text-text-tertiary">
                         <Calendar className="w-3 h-3" />
-                        <span>{message.metadata.filterName}</span>
+                        <span>{message.metadata.noteDateTime}</span>
                     </div>
                 )}
             </div>

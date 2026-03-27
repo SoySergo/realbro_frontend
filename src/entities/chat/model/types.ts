@@ -42,6 +42,10 @@ export interface ChatMessage {
         batchId?: string;
         matchedFilters?: Array<{ id: string; name: string }>;
         actionTaken?: PropertyAction;
+        /** Содержимое заметки */
+        noteContent?: string;
+        /** Дата и время заметки */
+        noteDateTime?: string;
     };
 }
 

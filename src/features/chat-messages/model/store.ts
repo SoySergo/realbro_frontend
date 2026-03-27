@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ChatMessage, Conversation, ContactInfo, PropertyNote } from '@/entities/chat';
+import type { ChatMessage, Conversation } from '@/entities/chat';
 import type { PropertyChatCard } from '@/entities/property';
 import {
     getConversations,
@@ -41,8 +41,8 @@ interface ChatStore {
     openPropertyThread: (propertyId: string, property: PropertyChatCard) => void;
     closePropertyThread: () => void;
     sendThreadMessage: (propertyId: string, content: string) => void;
-    requestLocation: (propertyId: string) => void;
-    requestContact: (propertyId: string) => void;
+    requestLocation: (propertyId: string, label?: string) => void;
+    requestContact: (propertyId: string, label?: string) => void;
     addThreadNote: (propertyId: string, note: { content: string; date: string; time: string }) => void;
 }
 
@@ -340,14 +340,14 @@ export const useChatStore = create<ChatStore>()(
                 }, 1200);
             },
 
-            requestLocation: (propertyId) => {
+            requestLocation: (propertyId, label) => {
                 // Пользователь запросил локацию
                 const userMsg: ChatMessage = {
                     id: `thread_loc_req_${Date.now()}`,
                     conversationId: `thread_${propertyId}`,
                     senderId: 'current_user',
                     type: 'text',
-                    content: '📍 Show location on map',
+                    content: `📍 ${label || 'Location'}`,
                     status: 'sent',
                     createdAt: new Date().toISOString(),
                 };
@@ -392,14 +392,14 @@ export const useChatStore = create<ChatStore>()(
                 }, 800);
             },
 
-            requestContact: (propertyId) => {
+            requestContact: (propertyId, label) => {
                 // Пользователь запросил контакт
                 const userMsg: ChatMessage = {
                     id: `thread_contact_req_${Date.now()}`,
                     conversationId: `thread_${propertyId}`,
                     senderId: 'current_user',
                     type: 'text',
-                    content: '📞 Show contact info',
+                    content: `📞 ${label || 'Contact'}`,
                     status: 'sent',
                     createdAt: new Date().toISOString(),
                 };
@@ -451,8 +451,8 @@ export const useChatStore = create<ChatStore>()(
                     status: 'sent',
                     createdAt: new Date().toISOString(),
                     metadata: {
-                        filterName: `${note.date} ${note.time}`,
-                        filterId: note.content,
+                        noteContent: note.content,
+                        noteDateTime: `${note.date} ${note.time}`,
                     },
                 };
 

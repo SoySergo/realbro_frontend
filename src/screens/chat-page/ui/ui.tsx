@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { ChatLayout } from '@/widgets/chat';
 import { useAuth } from '@/features/auth';
 import { AuthRequired } from '@/shared/ui/auth-required';
-import { Loader2, MessageSquare } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 /**
  * Скелетон для неавторизованных пользователей
