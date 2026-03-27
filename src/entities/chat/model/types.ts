@@ -79,3 +79,32 @@ export interface AIAgentSettings {
     notificationFrequency: NotificationFrequency;
     linkedFilterIds: string[];
 }
+
+// === Property Thread Types ===
+
+export type QuickActionType = 'location' | 'contact' | 'note';
+
+export interface PropertyThread {
+    propertyId: string;
+    property: import('@/entities/property').PropertyChatCard;
+    messages: ChatMessage[];
+    createdAt: string;
+    hasDiscussion: boolean;
+}
+
+export interface ContactInfo {
+    phone?: string;
+    whatsapp?: string;
+    email?: string;
+    telegram?: string;
+    ownerUrl?: string;
+}
+
+export interface PropertyNote {
+    id: string;
+    propertyId: string;
+    content: string;
+    date: string;
+    time: string;
+    createdAt: string;
+}
