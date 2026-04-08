@@ -3,8 +3,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Map as MapIcon, Loader2 } from 'lucide-react';
-import { Link, useRouter } from '@/shared/config/routing';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from '@/shared/config/routing';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
@@ -20,7 +20,6 @@ import {
     useListingViewMode,
     useViewModeActions,
 } from '@/widgets/search-filters-bar';
-import { cn } from '@/shared/lib/utils';
 import {
     Select,
     SelectContent,
@@ -177,7 +176,7 @@ export default function CatalogPage() {
 
     return (
         <>
-            <div className="flex flex-col h-full bg-background rounded-[9px] overflow-auto">
+            <div className="flex flex-col min-h-full bg-background rounded-[9px]">
                 {/* Mobile header */}
                 <div className="slug-desktop:hidden sticky top-0 z-30">
                     <MobileSearchHeader onOpenFilters={() => setIsMobileFiltersOpen(true)} />
@@ -186,66 +185,55 @@ export default function CatalogPage() {
                 {/* Панель фильтров (desktop) — sticky, прилипает вверху при скролле */}
                 <CatalogFiltersToolbar />
 
-                {/* Desktop: Title row — заголовок слева, "Смотреть на карте" справа */}
-                <div className="hidden slug-desktop:flex items-start justify-between px-6 pt-6 pb-2">
-                    <div>
-                        <h1 className="text-2xl font-bold text-text-primary">
-                            {tListing('title')}
-                        </h1>
-                    </div>
-                    <Link
-                        href={`/${type}/map`}
-                        className={cn(
-                            'flex items-center gap-2 px-4 py-2 shrink-0',
-                            'bg-background border border-border rounded-lg',
-                            'text-text-primary text-sm font-medium',
-                            'hover:bg-background-secondary transition-colors'
+                {/* Desktop: Title + Map + Sort row */}
+                <div className="hidden slug-desktop:flex items-start gap-6 px-6 pt-6 pb-4">
+                    <div className="flex flex-col gap-1 min-w-0 flex-1">
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-2xl font-bold text-text-primary truncate">
+                                {tListing('title')}
+                            </h1>
+                            <Select value={sortBy} onValueChange={handleSortChange}>
+                                <SelectTrigger className="w-[160px] h-8 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {sortOptions.map((option) => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                            {tListing(option.labelKey)}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
+                            <span className="text-sm text-text-secondary">
+                                {tListing('subtitle', {
+                                    count: pagination.total.toLocaleString(locale),
+                                })}
+                            </span>
                         )}
-                    >
-                        <MapIcon className="w-4 h-4" />
-                        {tListing('showOnMap')}
-                    </Link>
-                </div>
-
-                {/* Desktop: Count + Sort row */}
-                <div className="hidden slug-desktop:flex items-center gap-4 px-6 pb-4">
-                    <span className="text-sm text-text-secondary">
-                        {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0
-                            ? tListing('subtitle', {
-                                  count: pagination.total.toLocaleString(locale),
-                              })
-                            : ''}
-                    </span>
-
-                    <div className="flex items-center gap-2">
-                        <Select value={sortBy} onValueChange={handleSortChange}>
-                            <SelectTrigger className="w-[160px] h-8 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {sortOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                        {tListing(option.labelKey)}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
                     </div>
+                    <MapPreview onOpenMap={handleShowOnMap} variant="inline" />
                 </div>
 
-                {/* Mobile counter */}
-                {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
-                    <div className="slug-desktop:hidden px-3 pt-2 pb-1">
+                {/* Mobile: Title + Count */}
+                <div className="slug-desktop:hidden px-3 pt-4 pb-2">
+                    <h1 className="text-lg font-bold text-text-primary">
+                        {tListing('title')}
+                    </h1>
+                    {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
                         <span className="text-sm text-text-secondary">
                             {tListing('subtitle', {
                                 count: pagination.total.toLocaleString(locale),
                             })}
                         </span>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                {/* Map Preview (mobile only) */}
-                <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
+                {/* Mobile: Map Preview */}
+                <div className="slug-desktop:hidden">
+                    <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
+                </div>
 
                 {/* AI Agent Stories */}
                 <AiAgentStories properties={properties.slice(0, 10)} />

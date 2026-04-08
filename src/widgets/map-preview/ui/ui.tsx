@@ -8,32 +8,68 @@ import { Button } from '@/shared/ui/button';
 
 interface MapPreviewProps {
     onOpenMap: () => void;
+    /** 'inline' renders a compact card for desktop inline placement */
+    variant?: 'default' | 'inline';
 }
 
 /**
- * Компонент превью карты для мобильных устройств
- * Показывает статичное изображение карты с кнопкой "На карте"
+ * Компонент превью карты
+ * default — полноширинный блок (мобильная версия)
+ * inline — компактная карточка для встраивания рядом с заголовком (desktop)
  */
 export const MapPreview = forwardRef<HTMLDivElement, MapPreviewProps>(
-    function MapPreview({ onOpenMap }, ref) {
+    function MapPreview({ onOpenMap, variant = 'default' }, ref) {
         const t = useTranslations('listing');
 
+        if (variant === 'inline') {
+            return (
+                <div
+                    ref={ref}
+                    className="shrink-0 w-[320px] cursor-pointer group"
+                    onClick={onOpenMap}
+                >
+                    <div className="relative rounded-xl overflow-hidden bg-muted">
+                        <div className="relative h-[120px]">
+                            <Image
+                                src="/images/template_map.webp"
+                                alt="Map preview"
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                sizes="320px"
+                            />
+                        </div>
+                        <div className="absolute bottom-2.5 right-2.5">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                className="bg-background/95 backdrop-blur-sm hover:bg-background shadow-lg rounded-lg h-8 px-3 text-xs font-medium"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpenMap();
+                                }}
+                            >
+                                <Map className="h-3.5 w-3.5 mr-1.5" />
+                                {t('showOnMap')}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
-            <div ref={ref} className="md:hidden mx-3 my-4">
+            <div ref={ref} className="mx-3 my-4">
                 <div className="relative rounded-xl overflow-hidden bg-muted">
-                    {/* Map background image */}
                     <div className="relative h-40">
                         <Image
                             src="/images/template_map.webp"
                             alt="Map preview"
                             fill
                             className="object-cover"
-                            sizes="(max-width: 768px) 100vw"
+                            sizes="100vw"
                             priority
                         />
                     </div>
-
-                    {/* Open Map Button */}
                     <div className="absolute bottom-3 left-3 right-3">
                         <Button
                             variant="secondary"

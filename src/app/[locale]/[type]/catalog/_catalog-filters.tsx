@@ -12,6 +12,12 @@ import { useAuth } from '@/features/auth';
 import { useFilters } from '@/features/search-filters/model/use-filters';
 import { useActiveLocationMode, useSetLocationMode, resolveLocationMode } from '@/features/search-filters/model/use-location-mode';
 import { CategoryFilter } from '@/features/category-filter';
+import { SubcategoryFilter } from '@/features/subcategory-filter';
+import { PriceFilter } from '@/features/price-filter';
+import { RoomsFilter } from '@/features/rooms-filter';
+import { BathroomsFilter } from '@/features/bathrooms-filter';
+import { AreaFilter } from '@/features/area-filter';
+import { LocationFilterButton } from '@/features/location-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
 import {
@@ -37,8 +43,9 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
 /**
  * CatalogFiltersToolbar — горизонтальная панель фильтров для каталога.
  *
- * Располагается под карточками AI-агента (stories).
- * При скролле из видимой области — фильтры переезжают в хедер.
+ * Sticky-панель с адаптивным набором фильтров:
+ * - На узких desktop-экранах: категория + кнопки локации/фильтров
+ * - На широких: категория, подкатегория, цена, комнаты, ванные, площадь
  */
 export function CatalogFiltersToolbar() {
     const t = useTranslations('filters');
@@ -103,15 +110,40 @@ export function CatalogFiltersToolbar() {
                     </div>
                 )}
 
-                {/* Раздел + категория */}
-                <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                    <SearchCategorySwitcher
-                        currentCategory={currentCategory}
-                        locale={locale}
-                        className="h-9 min-w-0"
-                    />
-                    <div className="min-w-0">
+                {/* Раздел + адаптивные фильтры */}
+                <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
+                    <div className="shrink-0 w-[180px]">
+                        <SearchCategorySwitcher
+                            currentCategory={currentCategory}
+                            locale={locale}
+                            className="h-9"
+                        />
+                    </div>
+                    {/* Локация — с 900px */}
+                    <div className="hidden filters-1:block shrink-0">
+                        <LocationFilterButton />
+                    </div>
+                    {/* Категория — с 1100px */}
+                    <div className="hidden filters-2:block shrink-0">
                         <CategoryFilter />
+                    </div>
+                    {/* Подкатегория — с 1100px */}
+                    <SubcategoryFilter className="hidden filters-2:block shrink-0" />
+                    {/* Цена — с 1200px */}
+                    <div className="hidden filters-3:block shrink-0">
+                        <PriceFilter />
+                    </div>
+                    {/* Комнаты — с 1300px */}
+                    <div className="hidden filters-4:block shrink-0">
+                        <RoomsFilter />
+                    </div>
+                    {/* Ванные — с 1300px */}
+                    <div className="hidden filters-4:block shrink-0">
+                        <BathroomsFilter />
+                    </div>
+                    {/* Площадь — с 1536px */}
+                    <div className="hidden 2xl:block shrink-0">
+                        <AreaFilter />
                     </div>
                 </div>
 
@@ -127,6 +159,7 @@ export function CatalogFiltersToolbar() {
                         }}
                         className={cn(
                             'relative w-9 h-9 rounded-md flex items-center justify-center shrink-0 transition-all duration-200',
+                            'filters-1:hidden',
                             activeLocationMode
                                 ? 'bg-brand-primary text-white border border-brand-primary hover:bg-brand-primary-hover'
                                 : 'border border-border bg-background text-text-secondary hover:text-brand-primary hover:bg-background-secondary'
