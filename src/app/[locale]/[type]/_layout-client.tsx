@@ -54,8 +54,8 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                     setFiltersVisible: setCatalogFiltersVisible,
                 }}
             >
-                <div className="flex flex-col min-h-screen slug-desktop:h-screen slug-desktop:p-[5px] bg-background slug-desktop:bg-background-tertiary">
-                    {/* Desktop header — скрыт на мобильных */}
+                <div className="flex flex-col min-h-screen slug-desktop:h-screen bg-background slug-desktop:bg-background-tertiary">
+                    {/* Desktop header — full-width */}
                     <div className="hidden slug-desktop:block shrink-0">
                         {catalogFiltersVisible ? (
                             <SearchPageHeader />
@@ -63,7 +63,7 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                             <CatalogScrollHeader />
                         )}
                     </div>
-                    <main className="flex-1 min-h-0 slug-desktop:mt-[5px]">
+                    <main className="flex-1 min-h-0 slug-desktop:mt-[5px] slug-desktop:px-[5px] slug-desktop:pb-[5px]">
                         {children}
                     </main>
                 </div>
@@ -79,12 +79,12 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
     if (isDetailPage) {
         return (
             <div className="relative hidden slug-desktop:flex flex-col h-screen bg-background-tertiary">
-                {/* Основной хедер (SearchPageHeader) */}
-                <div className="shrink-0 p-[5px] pb-0">
+                {/* Основной хедер — full-width */}
+                <div className="shrink-0">
                     <SearchPageHeader />
                 </div>
 
-                {/* Контент страницы деталей (включая PropertyDetailHeader как sub-header) */}
+                {/* Контент страницы деталей */}
                 <main className="flex-1 min-h-0 overflow-auto">
                     {children}
                 </main>
@@ -102,7 +102,7 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                     {/* Строка хедера + collapsed toolbar */}
                     <div className="flex shrink-0">
                         <div className="flex-1 min-w-0">
-                            <SearchPageHeader />
+                            <SearchPageHeader floating />
                         </div>
                         <CollapsedSidebarToolbar visible={isCollapsed} />
                     </div>

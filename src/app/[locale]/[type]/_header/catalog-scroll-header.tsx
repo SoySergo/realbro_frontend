@@ -57,7 +57,11 @@ const markerOptions: { value: MarkerType; labelKey: string }[] = [
  * Объединяет элементы SearchPageHeader (лого + навигация) и
  * инструменты фильтрации (AI агент, маркеры, категории, локация, фильтры).
  */
-export function CatalogScrollHeader() {
+interface CatalogScrollHeaderProps {
+    floating?: boolean;
+}
+
+export function CatalogScrollHeader({ floating = false }: CatalogScrollHeaderProps) {
     const t = useTranslations('filters');
     const tSidebar = useTranslations('sidebar');
     const tListing = useTranslations('listing');
@@ -93,7 +97,8 @@ export function CatalogScrollHeader() {
                 <header
                     className={cn(
                         'flex h-[52px] items-center',
-                        'bg-background rounded-[9px]',
+                        'bg-background',
+                        floating && 'rounded-[9px]',
                         'px-3 gap-3'
                     )}
                 >

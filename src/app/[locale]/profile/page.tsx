@@ -21,7 +21,7 @@ export default async function ProfilePage({ params }: Props) {
 
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-14 pb-16 md:pb-0 md:pt-[52px]">
+            <main className="flex-1 pb-16 md:pb-0">
                 <ProfileWidget />
             </main>
         </div>

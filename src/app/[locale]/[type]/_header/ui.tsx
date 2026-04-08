@@ -23,7 +23,11 @@ const navItems = [
  * - 900–1300px (slug-desktop до slug-wide): только иконки с тултипами, без текста
  * - > 1300px (slug-wide): иконки + текстовые подписи
  */
-export function SearchPageHeader() {
+interface SearchPageHeaderProps {
+    floating?: boolean;
+}
+
+export function SearchPageHeader({ floating = false }: SearchPageHeaderProps) {
     const t = useTranslations('sidebar');
     const pathname = usePathname();
 
@@ -32,7 +36,8 @@ export function SearchPageHeader() {
             <header
                 className={cn(
                     'flex h-[52px] items-center justify-between',
-                    'bg-background rounded-[9px]',
+                    'bg-background',
+                    floating && 'rounded-[9px]',
                     'px-3'
                 )}
             >

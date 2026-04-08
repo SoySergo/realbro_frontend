@@ -10,7 +10,7 @@ export default async function SettingsPage({ params }: Props) {
 
     return (
         <div className="flex min-h-screen bg-background">
-            <main className="flex-1 md:ml-14 pb-16 md:pb-0 md:pt-[52px]">
+            <main className="flex-1 pb-16 md:pb-0">
                 <div className="p-6">
                     <h1 className="text-3xl font-bold text-text-primary mb-4">
                         ⚙️ Settings Page

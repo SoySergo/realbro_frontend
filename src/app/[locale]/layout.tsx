@@ -9,6 +9,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '../globals.css';
 import { SidebarWrapper as Sidebar } from '@/widgets/sidebar';
 import { AppHeader } from '@/widgets/app-header';
+import { RootHeader } from '@/widgets/root-header';
 import { AuthModals } from '@/widgets/auth-modals';
 import { Toaster } from '@/shared/ui/sonner';
 
@@ -81,6 +82,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                                     {/* <div className="hidden md:block">
                                         <AppHeader />
                                     </div> */}
+                                    <RootHeader />
                                     {children}
                                     {/* Auth Modals */}
                                     <AuthModals />
