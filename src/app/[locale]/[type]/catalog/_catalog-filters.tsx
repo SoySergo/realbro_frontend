@@ -112,7 +112,7 @@ export function CatalogFiltersToolbar() {
 
                 {/* Раздел + адаптивные фильтры */}
                 <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
-                    <div className="shrink-0 w-[180px]">
+                    <div className="shrink-0">
                         <SearchCategorySwitcher
                             currentCategory={currentCategory}
                             locale={locale}

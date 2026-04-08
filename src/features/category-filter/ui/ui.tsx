@@ -108,11 +108,12 @@ export function CategoryFilter() {
             <DropdownMenuTrigger asChild>
                 <button
                     className={cn(
-                        'w-full cursor-pointer',
-                        'bg-background-secondary',
+                        'cursor-pointer',
+                        'bg-background',
+                        'border border-border dark:border-transparent',
                         'text-text-primary hover:text-text-primary',
                         'h-9 px-3 py-2 rounded-md text-sm',
-                        'flex items-center justify-between gap-1',
+                        'flex items-center justify-between gap-2',
                         'transition-all duration-200',
                         selectedCount > 0 && 'text-text-primary'
                     )}

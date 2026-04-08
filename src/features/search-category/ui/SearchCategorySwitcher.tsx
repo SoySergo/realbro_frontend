@@ -48,8 +48,8 @@ export function SearchCategorySwitcher({
         <Select value={currentCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger
                 className={cn(
-                    'h-9 w-full gap-2 text-sm px-3',
-                    'border-0 shadow-none bg-background-secondary',
+                    'h-9 w-auto gap-2 text-sm px-3',
+                    'shadow-none bg-background border border-border dark:border-transparent',
                     className
                 )}
             >
