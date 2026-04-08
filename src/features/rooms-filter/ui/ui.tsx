@@ -59,7 +59,7 @@ export const RoomsFilter = memo(() => {
                 <button
                     className={cn(
                         'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm max-w-[140px] transition-all duration-200',
+                        'px-3 py-2 text-sm w-[130px] transition-all duration-200',
                         // Светлая тема: белый фон
                         'bg-background',
                         // Тёмная тема: без бордера

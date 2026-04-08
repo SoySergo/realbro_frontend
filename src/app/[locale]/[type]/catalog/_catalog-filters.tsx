@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import {
     Fingerprint,
     SlidersHorizontal,
     MapPin,
-    Search,
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { useFilters } from '@/features/search-filters/model/use-filters';
@@ -17,7 +16,7 @@ import { PriceFilter } from '@/features/price-filter';
 import { RoomsFilter } from '@/features/rooms-filter';
 import { BathroomsFilter } from '@/features/bathrooms-filter';
 import { AreaFilter } from '@/features/area-filter';
-import { LocationFilterButton } from '@/features/location-filter';
+import { LocationFilterButton, LocationSearch } from '@/features/location-filter';
 import { SearchCategorySwitcher, type SearchCategory } from '@/features/search-category';
 import { FiltersDesktopPanel } from '@/widgets/search-filters-bar/ui/filters-desktop-panel';
 
@@ -37,6 +36,22 @@ export function CatalogFiltersToolbar() {
 
     const [currentCategory, setCurrentCategory] = useState<SearchCategory>('properties');
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState<{
+        coordinates: [number, number];
+        name: string;
+        address?: string;
+    } | null>(null);
+
+    const handleLocationSelect = useCallback(
+        (coordinates: [number, number], name: string, fullAddress?: string) => {
+            setSelectedLocation({ coordinates, name, address: fullAddress });
+        },
+        []
+    );
+
+    const handleLocationClear = useCallback(() => {
+        setSelectedLocation(null);
+    }, []);
 
     const locationCount = useMemo(() => {
         return (filters.polygonIds?.length ?? 0)
@@ -74,22 +89,16 @@ export function CatalogFiltersToolbar() {
                     />
                 </div>
 
-                {/* Строка адреса — растягивается */}
+                {/* Поиск адреса — растягивается */}
                 <div className="flex-1 min-w-[120px]">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" />
-                        <input
-                            type="text"
-                            placeholder={t('searchPlaceholder')}
-                            className={cn(
-                                'w-full h-9 pl-9 pr-3 text-sm rounded-md',
-                                'bg-background border border-border dark:border-transparent',
-                                'text-text-primary placeholder:text-text-tertiary',
-                                'focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary',
-                                'transition-colors'
-                            )}
-                        />
-                    </div>
+                    <LocationSearch
+                        onLocationSelect={handleLocationSelect}
+                        selectedCoordinates={selectedLocation?.coordinates}
+                        selectedName={selectedLocation?.name}
+                        fullAddress={selectedLocation?.address}
+                        onClear={handleLocationClear}
+                        className="[&_input]:h-9 [&_input]:text-sm"
+                    />
                 </div>
 
                 {/* Фильтры — shrink-0 фиксированной ширины */}

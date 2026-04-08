@@ -192,13 +192,13 @@ export default function CatalogPage() {
                             {tListing('title')}
                         </h1>
                         <div className="flex items-center gap-3">
-                            <span className="text-sm text-text-secondary">
-                                {pagination?.total != null && pagination.total >= 0
-                                    ? tListing('subtitle', {
-                                          count: pagination.total.toLocaleString(locale),
-                                      })
-                                    : '\u00A0'}
-                            </span>
+                            {!isLoading && pagination != null && (
+                                <span className="text-sm text-text-secondary">
+                                    {tListing('subtitle', {
+                                        count: String(pagination.total ?? 0),
+                                    })}
+                                </span>
+                            )}
                             <Select value={sortBy} onValueChange={handleSortChange}>
                                 <SelectTrigger className="w-[140px] h-7 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
                                     <SelectValue />
@@ -223,10 +223,10 @@ export default function CatalogPage() {
                     <h1 className="text-lg font-bold text-text-primary">
                         {tListing('title')}
                     </h1>
-                    {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
+                    {!isLoading && pagination != null && (
                         <span className="text-sm text-text-secondary">
                             {tListing('subtitle', {
-                                count: pagination.total.toLocaleString(locale),
+                                count: String(pagination.total ?? 0),
                             })}
                         </span>
                     )}

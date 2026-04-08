@@ -62,7 +62,7 @@ export const BathroomsFilter = memo(() => {
                 <button
                     className={cn(
                         'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm max-w-[160px] transition-all duration-200',
+                        'px-3 py-2 text-sm w-[150px] transition-all duration-200',
                         'bg-background',
                         'border border-border dark:border-transparent',
                         'text-text-primary hover:text-text-primary',

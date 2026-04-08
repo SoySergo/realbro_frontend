@@ -238,7 +238,7 @@ export const PriceFilter = memo(() => {
                 <button
                     className={cn(
                         'flex h-9 items-center justify-between gap-2 rounded-md cursor-pointer',
-                        'px-3 py-2 text-sm max-w-[200px] transition-all duration-200',
+                        'px-3 py-2 text-sm w-[120px] transition-all duration-200',
                         // Светлая тема: белый фон
                         'bg-background',
                         // Тёмная тема: без бордера
