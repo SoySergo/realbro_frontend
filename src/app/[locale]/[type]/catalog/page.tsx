@@ -199,35 +199,40 @@ export default function CatalogPage() {
                 <CatalogFiltersToolbar />
 
                 {/* Desktop: Title + Map row */}
-                <div className="hidden slug-desktop:flex items-start gap-6 px-6 pt-6 pb-4">
-                    <div className="flex flex-col gap-1.5 min-w-0">
-                        <h1 className="text-2xl font-bold text-text-primary">
-                            {tListing('title')}
-                        </h1>
-                        <div className="flex items-center gap-3">
-                            {!isLoading && pagination != null && (
-                                <span className="text-sm text-text-secondary">
-                                    {tListing('subtitle', {
-                                        count: String(pagination.total ?? 0),
-                                    })}
-                                </span>
-                            )}
-                            <Select value={sortBy} onValueChange={handleSortChange}>
-                                <SelectTrigger className="w-[140px] h-7 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {sortOptions.map((option) => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                            {tListing(option.labelKey)}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                <div className="hidden slug-desktop:flex items-stretch justify-between gap-8 px-6 pt-8 pb-6">
+                    <div className="flex flex-col justify-between flex-1 min-w-0 py-1">
+                        <div className="space-y-3 mt-1">
+                            <h1 className="text-3xl font-extrabold text-text-primary tracking-tight">
+                                {tListing('title')}
+                            </h1>
+                            <div className="flex items-center gap-4">
+                                {!isLoading && pagination != null && (
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-[15px] font-medium text-text-secondary">
+                                            {tListing('subtitle', {
+                                                count: String(pagination.total ?? 0),
+                                            })}
+                                        </span>
+                                        <div className="w-1 h-1 rounded-full bg-border" />
+                                    </div>
+                                )}
+                                <Select value={sortBy} onValueChange={handleSortChange}>
+                                    <SelectTrigger className="w-auto h-auto text-[15px] border-0 shadow-none text-brand-primary font-medium p-0 gap-1.5 focus:ring-0 hover:text-brand-primary/80 transition-colors bg-transparent">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {sortOptions.map((option) => (
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {tListing(option.labelKey)}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
 
                         {/* Marker type chips */}
-                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 mt-6">
                             {markerChips.map((chip) => {
                                 const isActive = (filters.markerType || 'all') === chip.value;
                                 return (
@@ -235,10 +240,10 @@ export default function CatalogPage() {
                                         key={chip.value}
                                         onClick={() => setFilters({ markerType: chip.value })}
                                         className={cn(
-                                            'h-7 px-3 rounded-full text-xs font-medium transition-colors cursor-pointer',
+                                            'h-9 px-4 rounded-full text-[13px] font-medium transition-all cursor-pointer border',
                                             isActive
-                                                ? 'bg-brand-primary text-white'
-                                                : 'bg-background-secondary text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
+                                                ? 'bg-brand-primary text-white border-brand-primary shadow-sm'
+                                                : 'bg-background border-border/60 text-text-secondary hover:text-text-primary hover:border-text-secondary/40 hover:bg-background-secondary'
                                         )}
                                     >
                                         {tFilters(`markerType.${chip.labelKey}`)}
@@ -247,7 +252,7 @@ export default function CatalogPage() {
                             })}
                         </div>
                     </div>
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex items-center xl:w-[480px] lg:w-[400px]">
                         <MapPreview onOpenMap={handleShowOnMap} variant="inline" />
                     </div>
                 </div>
