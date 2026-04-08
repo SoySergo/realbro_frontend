@@ -453,11 +453,11 @@ export function PropertyDetailWidget({
                             <section className="border-t border-border/50 pt-6">
                                 <div className="bg-secondary rounded-2xl p-6 space-y-3">
                                     <h3 className="font-semibold text-foreground text-lg">{t.characteristics.houseRules || 'House Rules'}</h3>
-                                    <div className="space-y-2">
+                                    <div className="flex flex-wrap gap-2">
                                         {property.house_rules.map((attr, index) => (
                                             <div
                                                 key={`${attr.value}-${index}`}
-                                                className="flex items-center gap-3 text-sm py-2 border-b border-border/40 last:border-0"
+                                                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-background border border-border/60 text-sm"
                                             >
                                                 <DynamicIcon name={attr.icon_type} size={16} className="shrink-0 text-muted-foreground" />
                                                 <span className="text-foreground">{attr.label}</span>

@@ -18,12 +18,15 @@ import {
 } from 'lucide-react';
 import { BaseMap } from '@/features/map';
 import mapboxgl from 'mapbox-gl';
+import env from '@/shared/config/env';
 import type { NearbyTransport } from '../../model/types';
 import type { NearbyPlaces, NearbyPlace, TransportStation } from '@/shared/api';
 import { PropertyAddressWithTransport } from '../property-address-transport';
 import { LocationCategoryList } from './location-category-list';
 import { TransportStationsDetailed } from '../property-address-transport/transport-stations';
 import { HorizontalScroll } from '@/shared/ui/horizontal-scroll';
+
+const LOCATION_SERVICE_URL = (env.NEXT_PUBLIC_BOUNDARIES_SERVICE_URL || 'http://localhost:8085').replace(/\/$/, '');
 
 // Цвета маркеров для каждой категории
 const CATEGORY_COLORS: Record<string, string> = {
@@ -40,24 +43,56 @@ const CATEGORY_COLORS: Record<string, string> = {
     attractions: '#eab308',
 };
 
+/**
+ * Маппинг фронтенд-категорий на параметры PBF тайл-эндпоинтов.
+ * POI: GET /api/v1/tiles/poi/{z}/{x}/{y}.pbf?categories=...&subcategories=...
+ * Transport: GET /api/v1/tiles/transport/{z}/{x}/{y}.pbf?types=...
+ */
+const CATEGORY_TILE_PARAMS: Record<string, { type: 'poi' | 'transport'; categories?: string; subcategories?: string; types?: string }> = {
+    transport:     { type: 'transport', types: 'metro,tram,cercania,bus' },
+    schools:       { type: 'poi', categories: 'education', subcategories: 'school,kindergarten,college,university,library,language_school' },
+    medical:       { type: 'poi', categories: 'healthcare', subcategories: 'pharmacy,hospital,clinic,doctors,dentist' },
+    groceries:     { type: 'poi', categories: 'shopping', subcategories: 'supermarket,convenience,grocery,bakery,butcher,greengrocer' },
+    shopping:      { type: 'poi', categories: 'shopping', subcategories: 'mall,department_store' },
+    restaurants:   { type: 'poi', categories: 'food_drink' },
+    sports:        { type: 'poi', categories: 'leisure', subcategories: 'sports_centre' },
+    entertainment: { type: 'poi', categories: 'leisure', subcategories: 'attraction,viewpoint,museum,monument' },
+    parks:         { type: 'poi', categories: 'leisure', subcategories: 'park,garden,playground' },
+    beauty:        { type: 'poi', categories: 'shopping', subcategories: 'hairdresser' },
+    attractions:   { type: 'poi', categories: 'leisure', subcategories: 'attraction,viewpoint,museum,gallery,monument,castle' },
+};
+
+/** Собрать URL шаблон для тайлового источника */
+function buildTileUrl(filter: string): string {
+    const params = CATEGORY_TILE_PARAMS[filter];
+    if (!params) return '';
+
+    if (params.type === 'transport') {
+        const qs = params.types ? `?types=${params.types}` : '';
+        return `${LOCATION_SERVICE_URL}/api/v1/tiles/transport/{z}/{x}/{y}.pbf${qs}`;
+    }
+
+    const qsParts: string[] = [];
+    if (params.categories) qsParts.push(`categories=${params.categories}`);
+    if (params.subcategories) qsParts.push(`subcategories=${params.subcategories}`);
+    const qs = qsParts.length ? `?${qsParts.join('&')}` : '';
+    return `${LOCATION_SERVICE_URL}/api/v1/tiles/poi/{z}/{x}/{y}.pbf${qs}`;
+}
+
+/** Получить имя слоя в PBF тайле */
+function getLayerName(filter: string): string {
+    return CATEGORY_TILE_PARAMS[filter]?.type === 'transport' ? 'transport_stations' : 'pois';
+}
+
+/** Имена source/layer на карте */
+const POI_SOURCE = 'poi-tile-source';
+const POI_LAYER = 'poi-tile-layer';
+
 /** Экранирование HTML для безопасной вставки в popup */
 function escapeHtml(text: string): string {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
-
-/** Создание DOM-элемента маркера POI */
-function createPoiMarkerElement(color: string): HTMLDivElement {
-    const el = document.createElement('div');
-    el.style.width = '24px';
-    el.style.height = '24px';
-    el.style.borderRadius = '50%';
-    el.style.background = color;
-    el.style.border = '2.5px solid #fff';
-    el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)';
-    el.style.cursor = 'pointer';
-    return el;
 }
 
 interface PropertyLocationSectionProps {
@@ -81,10 +116,10 @@ export function PropertyLocationSection({
     const t = useTranslations('propertyDetail.locationSection');
     const tDetail = useTranslations('propertyDetail');
 
-    // Ссылки на карту и POI-маркеры
+    // Ссылки на карту
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const propertyMarkerRef = useRef<mapboxgl.Marker | null>(null);
-    const poiMarkersRef = useRef<mapboxgl.Marker[]>([]);
+    const popupRef = useRef<mapboxgl.Popup | null>(null);
 
     // Категории фильтров с переводами
     const filterCategories = [
@@ -124,78 +159,73 @@ export function PropertyLocationSection({
             zoom: 14,
             duration: 0
         });
+
+        // Popup для POI-маркеров на тайловом слое
+        map.on('click', POI_LAYER, (e) => {
+            if (!e.features?.length) return;
+            const feature = e.features[0];
+            const coords = (feature.geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+            const props = feature.properties || {};
+            const name = escapeHtml(String(props.name || ''));
+            const subInfo = escapeHtml(String(props.subcategory || props.type || props.category || ''));
+
+            if (popupRef.current) popupRef.current.remove();
+            popupRef.current = new mapboxgl.Popup({ offset: 16, closeButton: false })
+                .setLngLat(coords)
+                .setHTML(`<div style="font-size:13px;font-weight:600;max-width:180px;">${name}</div>${subInfo ? `<div style="font-size:11px;color:#666;margin-top:2px;">${subInfo}</div>` : ''}`)
+                .addTo(map);
+        });
+
+        map.on('mouseenter', POI_LAYER, () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', POI_LAYER, () => { map.getCanvas().style.cursor = ''; });
     }, [coordinates]);
 
-    // Получаем координаты POI для активной категории
-    const getPlacesForCategory = useCallback((category: string): Array<{ lat: number; lng: number; name: string; type: string }> => {
-        if (!nearbyPlaces) return [];
-
-        if (category === 'transport') {
-            return (nearbyPlaces.transport || [])
-                .filter((s: TransportStation) => s.coordinates?.lat && s.coordinates?.lng)
-                .map((s: TransportStation) => ({
-                    lat: s.coordinates.lat,
-                    lng: s.coordinates.lng,
-                    name: s.name,
-                    type: s.type
-                }));
-        }
-
-        const categoryData = nearbyPlaces[category as keyof Omit<NearbyPlaces, 'transport'>] as NearbyPlace[] | undefined;
-        if (!categoryData) return [];
-
-        return categoryData
-            .filter((p: NearbyPlace) => p.coordinates?.lat && p.coordinates?.lng)
-            .map((p: NearbyPlace) => ({
-                lat: p.coordinates.lat,
-                lng: p.coordinates.lng,
-                name: p.name,
-                type: p.type
-            }));
-    }, [nearbyPlaces]);
-
-    // Обновляем POI-маркеры при смене категории
+    // Обновляем PBF тайловый слой при смене категории
     useEffect(() => {
         const map = mapRef.current;
         if (!map) return;
 
-        // Удаляем предыдущие маркеры
-        poiMarkersRef.current.forEach(m => m.remove());
-        poiMarkersRef.current = [];
+        // Удаляем предыдущий слой и источник
+        if (map.getLayer(POI_LAYER)) map.removeLayer(POI_LAYER);
+        if (map.getSource(POI_SOURCE)) map.removeSource(POI_SOURCE);
+        if (popupRef.current) { popupRef.current.remove(); popupRef.current = null; }
 
-        const places = getPlacesForCategory(activeFilter);
-        if (places.length === 0) return;
+        const tileUrl = buildTileUrl(activeFilter);
+        if (!tileUrl) return;
 
-        const markerColor = CATEGORY_COLORS[activeFilter] || '#6b7280';
+        const color = CATEGORY_COLORS[activeFilter] || '#6b7280';
+        const layerName = getLayerName(activeFilter);
 
-        // Добавляем маркеры POI
-        places.forEach(place => {
-            const el = createPoiMarkerElement(markerColor);
-
-            const safeName = escapeHtml(place.name);
-            const safeType = escapeHtml(place.type);
-            const popup = new mapboxgl.Popup({ offset: 16, closeButton: false })
-                .setHTML(`<div style="font-size:13px;font-weight:600;max-width:180px;">${safeName}</div><div style="font-size:11px;color:#666;margin-top:2px;">${safeType}</div>`);
-
-            const marker = new mapboxgl.Marker({ element: el })
-                .setLngLat([place.lng, place.lat])
-                .setPopup(popup)
-                .addTo(map);
-
-            poiMarkersRef.current.push(marker);
+        // Добавляем PBF vector source
+        map.addSource(POI_SOURCE, {
+            type: 'vector',
+            tiles: [tileUrl],
+            minzoom: 10,
+            maxzoom: 16,
         });
 
-        // Подгоняем карту, чтобы были видны все маркеры + объект
-        const bounds = new mapboxgl.LngLatBounds();
-        bounds.extend([coordinates.lng, coordinates.lat]);
-        places.forEach(p => bounds.extend([p.lng, p.lat]));
-
-        map.fitBounds(bounds, {
-            padding: 50,
-            maxZoom: 15,
-            duration: 500
+        // Добавляем circle layer для отображения POI
+        map.addLayer({
+            id: POI_LAYER,
+            type: 'circle',
+            source: POI_SOURCE,
+            'source-layer': layerName,
+            paint: {
+                'circle-radius': 7,
+                'circle-color': color,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 2,
+                'circle-opacity': 0.9,
+            },
         });
-    }, [activeFilter, getPlacesForCategory, coordinates]);
+
+        // Центрируем на координатах объекта
+        map.flyTo({
+            center: [coordinates.lng, coordinates.lat],
+            zoom: 14,
+            duration: 500,
+        });
+    }, [activeFilter, coordinates]);
 
     // Конвертация transport из nearbyPlaces или nearbyTransport в формат компонента
     const transportStations = nearbyPlaces?.transport

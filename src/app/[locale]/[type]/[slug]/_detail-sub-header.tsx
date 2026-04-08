@@ -27,13 +27,15 @@ interface DetailSubHeaderProps {
  */
 export function DetailSubHeader({ translations, mainInfoTranslations, locale }: DetailSubHeaderProps) {
     return (
-        <div className="shrink-0 fixed w-full top-[60px] md:px-6 z-40">
-            <PropertyDetailHeader
-                translations={translations}
-                mainInfoTranslations={mainInfoTranslations}
-                locale={locale}
-                variant="subHeader"
-            />
+        <div className="shrink-0 hidden md:block fixed w-full top-[60px] z-40 bg-background/95 backdrop-blur-sm border-b border-border/50 shadow-sm">
+            <div className="max-w-screen-2xl mx-auto px-6">
+                <PropertyDetailHeader
+                    translations={translations}
+                    mainInfoTranslations={mainInfoTranslations}
+                    locale={locale}
+                    variant="subHeader"
+                />
+            </div>
         </div>
     );
 }

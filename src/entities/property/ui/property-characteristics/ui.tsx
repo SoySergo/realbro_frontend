@@ -43,8 +43,8 @@ interface CharacteristicsTranslations {
     parkingTypes: Record<string, string>;
 }
 
-// Таблица атрибутов из бекенда (AttributeDTO[])
-function AttributesTable({
+// Таблица атрибутов из бекенда (AttributeDTO[]) — отображаются как тег-чипы с иконкой
+function AttributesGrid({
     title,
     attributes
 }: {
@@ -56,19 +56,14 @@ function AttributesTable({
     return (
         <div className="space-y-3">
             <h3 className="font-semibold text-foreground text-lg">{title}</h3>
-            <div className="space-y-2">
+            <div className="flex flex-wrap gap-2">
                 {attributes.map((attr, index) => (
                     <div
                         key={`${attr.value}-${index}`}
-                        className="flex justify-between gap-4 text-sm py-2 border-b border-border/40 last:border-0"
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-background border border-border/60 text-sm"
                     >
-                        <span className="flex items-center gap-2 text-muted-foreground">
-                            <DynamicIcon name={attr.icon_type} size={16} className="shrink-0" />
-                            {attr.label}
-                        </span>
-                        <span className="font-medium text-foreground text-right">
-                            {attr.value}
-                        </span>
+                        <DynamicIcon name={attr.icon_type} size={16} className="shrink-0 text-muted-foreground" />
+                        <span className="text-foreground">{attr.label}</span>
                     </div>
                 ))}
             </div>
@@ -260,43 +255,54 @@ export function PropertyCharacteristics({
     };
 
 
+    const hasStaticFlat = flatCharacteristics.length > 0;
+    const hasStaticBuilding = buildingCharacteristics.length > 0;
+    const hasDtoCharacteristics = !!(property.characteristics && property.characteristics.length > 0);
+    const hasDtoEstateInfo = !!(property.estate_info && property.estate_info.length > 0);
+    const hasDtoEnergy = !!(property.energy_efficiency && property.energy_efficiency.length > 0);
+    const hasAnyContent = hasStaticFlat || hasStaticBuilding || hasDtoCharacteristics || hasDtoEstateInfo || hasDtoEnergy;
+
+    if (!hasAnyContent) return null;
+
     return (
-        <div className={cn('flex flex-col gap-10 bg-secondary rounded-2xl p-6', className)}>
-            {/* Top Section: Flat & Building Characteristics */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                {flatCharacteristics.length > 0 && (
-                    <CharacteristicsTable
-                        title={t.aboutFlat}
-                        items={flatCharacteristics}
-                    />
-                )}
-                {buildingCharacteristics.length > 0 && (
-                    <CharacteristicsTable
-                        title={t.aboutBuilding}
-                        items={buildingCharacteristics}
-                    />
-                )}
-            </div>
+        <div className={cn('flex flex-col gap-8 bg-secondary rounded-2xl p-6', className)}>
+            {/* Top Section: Flat & Building Characteristics (key-value table) */}
+            {(hasStaticFlat || hasStaticBuilding) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                    {hasStaticFlat && (
+                        <CharacteristicsTable
+                            title={t.aboutFlat}
+                            items={flatCharacteristics}
+                        />
+                    )}
+                    {hasStaticBuilding && (
+                        <CharacteristicsTable
+                            title={t.aboutBuilding}
+                            items={buildingCharacteristics}
+                        />
+                    )}
+                </div>
+            )}
 
-            {/* Атрибуты из бекенда (AttributeDTO[]) */}
-            {property.characteristics && property.characteristics.length > 0 && (
-                <AttributesTable
+            {/* Атрибуты из бекенда — чипы с иконками */}
+            {hasDtoCharacteristics && (
+                <AttributesGrid
                     title={t.aboutFlat}
-                    attributes={property.characteristics}
+                    attributes={property.characteristics!}
                 />
             )}
 
-            {property.estate_info && property.estate_info.length > 0 && (
-                <AttributesTable
+            {hasDtoEstateInfo && (
+                <AttributesGrid
                     title={t.aboutBuilding}
-                    attributes={property.estate_info}
+                    attributes={property.estate_info!}
                 />
             )}
 
-            {property.energy_efficiency && property.energy_efficiency.length > 0 && (
-                <AttributesTable
+            {hasDtoEnergy && (
+                <AttributesGrid
                     title="Energy Efficiency"
-                    attributes={property.energy_efficiency}
+                    attributes={property.energy_efficiency!}
                 />
             )}
         </div>

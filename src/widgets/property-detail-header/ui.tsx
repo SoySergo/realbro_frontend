@@ -143,11 +143,11 @@ export function PropertyDetailHeader({
     if (variant === 'subHeader') {
         return (
             <div className={cn(
-                `grid grid-cols-3 items-center w-full h-[${SUB_HEADER_HEIGHT}px] px-4`,
+                'flex items-center justify-between w-full h-[52px]',
                 className
             )}>
                 {/* Островок «Назад» */}
-                <div className="flex items-center justify-self-start">
+                <div className="flex items-center shrink-0">
                     <button
                         onClick={() => router.back()}
                         className={cn(ISLAND_CLASS, "px-3.5 gap-1.5 text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95")}
@@ -157,8 +157,8 @@ export function PropertyDetailHeader({
                     </button>
                 </div>
 
-                {/* Островок навигации по секциям (px-1 создаёт отступ вокруг внутренних кнопок) */}
-                <nav className={cn(ISLAND_CLASS, "px-1 justify-self-center")}>
+                {/* Островок навигации по секциям */}
+                <nav className={cn(ISLAND_CLASS, "px-1")}>
                     {navItems.map((item) => (
                         <button
                             key={item.id}
@@ -175,8 +175,8 @@ export function PropertyDetailHeader({
                     ))}
                 </nav>
 
-                {/* Островок «Предыдущий / Следующий» (px-1 — отступ вокруг кнопок) */}
-                <div className="flex items-center justify-self-end">
+                {/* Островок «Предыдущий / Следующий» */}
+                <div className="flex items-center shrink-0">
                     {hasListingContext && (
                         <div className={cn(ISLAND_CLASS, "px-1")}>
                             <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
