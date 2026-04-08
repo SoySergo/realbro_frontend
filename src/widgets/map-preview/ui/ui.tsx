@@ -25,17 +25,17 @@ export const MapPreview = forwardRef<HTMLDivElement, MapPreviewProps>(
             return (
                 <div
                     ref={ref}
-                    className="shrink-0 w-[280px] cursor-pointer group"
+                    className="shrink-0 w-[320px] cursor-pointer group"
                     onClick={onOpenMap}
                 >
-                    <div className="relative rounded-xl overflow-hidden bg-muted">
-                        <div className="relative h-[110px]">
+                    <div className="relative rounded-xl overflow-hidden bg-muted shadow-sm">
+                        <div className="relative h-[140px]">
                             <Image
                                 src="/images/template_map.webp"
                                 alt="Map preview"
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                sizes="280px"
+                                sizes="320px"
                             />
                         </div>
                         <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">

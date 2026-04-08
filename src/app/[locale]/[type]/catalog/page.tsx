@@ -20,6 +20,8 @@ import {
     useListingViewMode,
     useViewModeActions,
 } from '@/widgets/search-filters-bar';
+import { useFilters } from '@/features/search-filters/model/use-filters';
+import { cn } from '@/shared/lib/utils';
 import {
     Select,
     SelectContent,
@@ -28,6 +30,7 @@ import {
     SelectValue,
 } from '@/shared/ui/select';
 import { CatalogFiltersToolbar } from './_catalog-filters';
+import type { MarkerType } from '@/entities/filter';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
@@ -36,6 +39,14 @@ const sortOptions: { value: PropertySortBy; labelKey: string }[] = [
     { value: 'createdAt', labelKey: 'sortByDate' },
     { value: 'price', labelKey: 'sortByPrice' },
     { value: 'area', labelKey: 'sortByArea' },
+];
+
+const markerChips: { value: MarkerType; labelKey: string }[] = [
+    { value: 'all', labelKey: 'all' },
+    { value: 'like', labelKey: 'like' },
+    { value: 'dislike', labelKey: 'dislike' },
+    { value: 'no_view', labelKey: 'noView' },
+    { value: 'view', labelKey: 'view' },
 ];
 
 /**
@@ -51,12 +62,14 @@ const sortOptions: { value: PropertySortBy; labelKey: string }[] = [
  */
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
+    const tFilters = useTranslations('filters');
     const params = useParams();
     const router = useRouter();
     const type = params.type as string;
     const locale = params.locale as string;
 
     const { currentFilters } = useFilterStore();
+    const { filters, setFilters } = useFilters();
 
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [pagination, setPagination] = useState<PropertiesListResponse['pagination'] | null>(null);
@@ -186,7 +199,7 @@ export default function CatalogPage() {
                 <CatalogFiltersToolbar />
 
                 {/* Desktop: Title + Map row */}
-                <div className="hidden slug-desktop:grid grid-cols-[1fr_auto] gap-6 px-6 pt-6 pb-4">
+                <div className="hidden slug-desktop:flex items-start gap-6 px-6 pt-6 pb-4">
                     <div className="flex flex-col gap-1.5 min-w-0">
                         <h1 className="text-2xl font-bold text-text-primary">
                             {tListing('title')}
@@ -212,8 +225,29 @@ export default function CatalogPage() {
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        {/* Marker type chips */}
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                            {markerChips.map((chip) => {
+                                const isActive = (filters.markerType || 'all') === chip.value;
+                                return (
+                                    <button
+                                        key={chip.value}
+                                        onClick={() => setFilters({ markerType: chip.value })}
+                                        className={cn(
+                                            'h-7 px-3 rounded-full text-xs font-medium transition-colors cursor-pointer',
+                                            isActive
+                                                ? 'bg-brand-primary text-white'
+                                                : 'bg-background-secondary text-text-secondary hover:text-text-primary hover:bg-background-tertiary'
+                                        )}
+                                    >
+                                        {tFilters(`markerType.${chip.labelKey}`)}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
-                    <div className="self-start">
+                    <div className="shrink-0">
                         <MapPreview onOpenMap={handleShowOnMap} variant="inline" />
                     </div>
                 </div>
