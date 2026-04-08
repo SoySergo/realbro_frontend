@@ -2,18 +2,13 @@ import env from '@/shared/config/env';
 
 /**
  * Варианты стилей карты:
- * - location: режим фильтрации локаций (поиск по границам, тайлы с бекенда)
  * - search: обычный поиск объектов, страницы .../[locale]/[slug]/map
  * - propertyDetail: детали объекта (карточка недвижимости)
  */
-export type MapStyleVariant = 'location' | 'search' | 'propertyDetail';
+export type MapStyleVariant = 'search' | 'propertyDetail';
 
 // Стили карты для каждого варианта и темы
 export const mapStyles: Record<MapStyleVariant, { light: string; dark: string }> = {
-    location: {
-        light: 'mapbox://styles/serhii11/cmi1xomdn00o801quespmffuq',
-        dark: 'mapbox://styles/serhii11/cmn4dr55u000901sa6ej1crw3',
-    },
     search: {
         light: 'mapbox://styles/serhii11/cmn4gpadr000i01sa4svqec7w',
         dark: 'mapbox://styles/serhii11/cmn4eb9eg00m501s96egx35re',

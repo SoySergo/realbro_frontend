@@ -494,7 +494,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 </svg>
             </div>`;
         el.style.cssText = `
-            animation: highlight-marker-in 200ms ease-out;
+            opacity: 0;
             pointer-events: none;
         `;
 
@@ -521,7 +521,7 @@ export function SearchMap({ initialCenter, initialZoom, onClusterClick, onMarker
                 initialCenter={initialCenter}
                 initialZoom={initialZoom}
                 onMapLoad={handleMapLoad}
-                styleVariant={activeLocationMode ? 'location' : 'search'}
+                styleVariant="search"
             >
                 {/* Полоска загрузки тайлов при обновлении фильтров */}
                 {isTilesLoading && (

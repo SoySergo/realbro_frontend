@@ -27,7 +27,7 @@ interface DetailSubHeaderProps {
  */
 export function DetailSubHeader({ translations, mainInfoTranslations, locale }: DetailSubHeaderProps) {
     return (
-        <div className="shrink-0 sticky top-0 z-40">
+        <div className="shrink-0 fixed w-full top-[60px] md:px-6 z-40">
             <PropertyDetailHeader
                 translations={translations}
                 mainInfoTranslations={mainInfoTranslations}

@@ -29,7 +29,8 @@ export default function MapPage() {
     const tMapSidebar = useTranslations('mapSidebar');
     const router = useRouter();
     const params = useParams();
-    const slug = params.slug as string;
+    const locale = params.locale as string;
+    const type = params.type as string;
 
     // Состояние мобильного bottom sheet
     const [mobileSnapState, setMobileSnapState] = useState<MobileSnapState>('half');
@@ -43,8 +44,8 @@ export default function MapPage() {
 
     // Клик по объекту
     const handlePropertyClick = useCallback((property: PropertyGridCard) => {
-        router.push(`/${locale}/property/${property.slug || property.id}`);
-    }, [router, locale]);
+        router.push(`/${locale}/${type}/${property.slug || property.id}`);
+    }, [router, locale, type]);
 
     // Клик по маркеру на карте
     const handleMarkerClick = useCallback((propertyId: string) => {
@@ -114,7 +115,7 @@ export default function MapPage() {
             </div>
             {/* Кнопка переключения на список */}
             <Link
-                href={`/${slug}/catalog`}
+                href={`/${type}/catalog`}
                 className="absolute top-3 right-3 z-10 flex items-center gap-2 h-9 px-3 rounded-md bg-background text-text-primary text-sm font-medium shadow-md hover:bg-background-secondary transition-colors"
             >
                 <LayoutGrid className="w-4 h-4" />

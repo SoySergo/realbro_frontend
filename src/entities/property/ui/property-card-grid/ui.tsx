@@ -93,8 +93,9 @@ export function PropertyCardGrid({ property, onClick, actions, menuItems }: Prop
         else setTimeAgo(t('daysAgo', { count: diffDays }));
     }, [property.published_at, property.updated_at, property.created_at, t]);
 
-    const displayImages = property.images.slice(0, MAX_HOVER_IMAGES);
-    const extraImagesCount = property.images.length - MAX_HOVER_IMAGES;
+    const images = property.images ?? [];
+    const displayImages = images.slice(0, MAX_HOVER_IMAGES);
+    const extraImagesCount = images.length - MAX_HOVER_IMAGES;
 
     const handleMouseMove = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {

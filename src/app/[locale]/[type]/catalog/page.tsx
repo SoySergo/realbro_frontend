@@ -28,7 +28,7 @@ import { CatalogFiltersToolbar } from './_catalog-filters';
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
     const params = useParams();
-    const slug = params.slug as string;
+    const type = params.type as string;
     const locale = params.locale as string;
 
     const { currentFilters } = useFilterStore();
@@ -159,7 +159,7 @@ export default function CatalogPage() {
                                 {properties.map((property) => (
                                     <Link
                                         key={property.id}
-                                        href={`/property/${property.slug || property.id}`}
+                                        href={`/${type}/${property.slug || property.id}`}
                                         className="block"
                                     >
                                         <PropertyCardGrid

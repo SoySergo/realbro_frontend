@@ -13,7 +13,7 @@ const INTERSECTION_OFFSET = 300; // px offset for section detection
 const HEADER_HEIGHT = 60; // px height of sticky header
 const SUB_HEADER_HEIGHT = 52; // px height of subHeader variant
 
-// Общий стиль «островка» (парящая пилюля)
+// Общий стиль «островка»
 const ISLAND_CLASS = "flex items-center h-9 rounded-full bg-background border border-border shadow-sm";
 
 export interface HeaderTranslations {
@@ -143,11 +143,11 @@ export function PropertyDetailHeader({
     if (variant === 'subHeader') {
         return (
             <div className={cn(
-                `flex items-center justify-between w-full h-[${SUB_HEADER_HEIGHT}px] px-4 bg-background border-b border-border`,
+                `grid grid-cols-3 items-center w-full h-[${SUB_HEADER_HEIGHT}px] px-4`,
                 className
             )}>
                 {/* Островок «Назад» */}
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center justify-self-start">
                     <button
                         onClick={() => router.back()}
                         className={cn(ISLAND_CLASS, "px-3.5 gap-1.5 text-sm font-medium text-foreground hover:bg-muted hover:shadow-md transition-all active:scale-95")}
@@ -158,7 +158,7 @@ export function PropertyDetailHeader({
                 </div>
 
                 {/* Островок навигации по секциям (px-1 создаёт отступ вокруг внутренних кнопок) */}
-                <nav className={cn(ISLAND_CLASS, "px-1")}>
+                <nav className={cn(ISLAND_CLASS, "px-1 justify-self-center")}>
                     {navItems.map((item) => (
                         <button
                             key={item.id}
@@ -176,7 +176,7 @@ export function PropertyDetailHeader({
                 </nav>
 
                 {/* Островок «Предыдущий / Следующий» (px-1 — отступ вокруг кнопок) */}
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center justify-self-end">
                     {hasListingContext && (
                         <div className={cn(ISLAND_CLASS, "px-1")}>
                             <button className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all active:scale-95">
@@ -198,9 +198,9 @@ export function PropertyDetailHeader({
     // Режим headerSlot — встроенный контент без собственного fixed-обёртки
     if (variant === 'headerSlot') {
         return (
-            <div className={cn("flex items-center justify-between w-full h-full gap-2 px-2", className)}>
+            <div className={cn("grid grid-cols-3 items-center w-full h-full px-2", className)}>
                 {/* Кнопка назад */}
-                <div className="flex items-center shrink-0">
+                <div className="flex items-center justify-self-start">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -213,7 +213,7 @@ export function PropertyDetailHeader({
                 </div>
 
                 {/* Навигация по секциям */}
-                <nav className="flex items-center gap-1 bg-background/50 backdrop-blur-sm p-1 rounded-full border border-border/10 shadow-sm">
+                <nav className="flex items-center gap-1 bg-background/50 backdrop-blur-sm p-1 rounded-full border border-border/10 shadow-sm justify-self-center">
                     {navItems.map((item) => (
                         <button
                             key={item.id}
@@ -231,7 +231,7 @@ export function PropertyDetailHeader({
                 </nav>
 
                 {/* Навигация по листингу */}
-                <div className="flex items-center justify-end shrink-0">
+                <div className="flex items-center justify-self-end">
                     {hasListingContext ? (
                         <div className="flex items-center gap-2 p-1 rounded-full transition-all">
                             <Button

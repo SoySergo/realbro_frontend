@@ -26,21 +26,7 @@ export function PropertyDetailPage({
     similarProperties
 }: PropertyDetailPageProps) {
     return (
-        <main className="min-h-screen bg-background md:ml-14">
-            {/* Контент хедера через портал — только desktop */}
-            <HeaderSlot>
-                <PropertyDetailHeader
-                    price={property.price}
-                    area={property.area}
-                    rooms={property.rooms}
-                    title={property.title}
-                    floor={property.floor}
-                    translations={translations.header}
-                    mainInfoTranslations={translations.mainInfo}
-                    locale={locale}
-                    variant="headerSlot"
-                />
-            </HeaderSlot>
+        <main className="min-h-screen">
 
             {/* Мобильный хедер — рендерится отдельно на мобильных */}
             <div className="md:hidden">

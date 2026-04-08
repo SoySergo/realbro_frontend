@@ -305,7 +305,7 @@ export function PropertyDetailWidget({
                 />
             </div>
 
-            <div className="container mx-auto px-4 md:px-6">
+            <div className="container mx-auto px-4 md:px-0">
                 {/* Desktop Layout: Grid with Sidebar */}
                 <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 relative items-start">
 

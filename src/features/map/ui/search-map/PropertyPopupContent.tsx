@@ -7,6 +7,7 @@ import { Loader2, X, Image as ImageIcon } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { getImageUrl } from '@/entities/property';
 
 interface PropertyPopupContentProps {
@@ -17,6 +18,8 @@ interface PropertyPopupContentProps {
 export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupContentProps) {
     const t = useTranslations('property');
     const locale = useLocale();
+    const params = useParams();
+    const type = (params.type as string) || 'rent';
     const [property, setProperty] = useState<PropertyGridCard | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -183,7 +186,7 @@ export function PropertyPopupContent({ propertyId, onClose }: PropertyPopupConte
             </div>
 
             {/* Link overlay */}
-            <Link href={`/property/${property.slug || property.id}`} className="absolute inset-0 z-0" aria-label={title} target="_blank" />
+            <Link href={`/${locale}/${type}/${property.slug || property.id}`} className="absolute inset-0 z-0" aria-label={title} target="_blank" />
         </div>
     );
 }
