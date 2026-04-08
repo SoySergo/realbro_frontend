@@ -185,20 +185,20 @@ export default function CatalogPage() {
                 {/* Панель фильтров (desktop) — sticky, прилипает вверху при скролле */}
                 <CatalogFiltersToolbar />
 
-                {/* Desktop: Title + Map + Sort row */}
-                <div className="hidden slug-desktop:flex items-start gap-6 px-6 pt-6 pb-4">
-                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                {/* Desktop: Title + Map row */}
+                <div className="hidden slug-desktop:grid grid-cols-[1fr_auto] gap-6 px-6 pt-6 pb-4">
+                    <div className="flex flex-col gap-1.5 min-w-0">
                         <h1 className="text-2xl font-bold text-text-primary">
                             {tListing('title')}
                         </h1>
                         <div className="flex items-center gap-3">
-                            {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
-                                <span className="text-sm text-text-secondary">
-                                    {tListing('subtitle', {
-                                        count: pagination.total.toLocaleString(locale),
-                                    })}
-                                </span>
-                            )}
+                            <span className="text-sm text-text-secondary">
+                                {pagination?.total != null && pagination.total >= 0
+                                    ? tListing('subtitle', {
+                                          count: pagination.total.toLocaleString(locale),
+                                      })
+                                    : '\u00A0'}
+                            </span>
                             <Select value={sortBy} onValueChange={handleSortChange}>
                                 <SelectTrigger className="w-[140px] h-7 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
                                     <SelectValue />
@@ -213,7 +213,9 @@ export default function CatalogPage() {
                             </Select>
                         </div>
                     </div>
-                    <MapPreview onOpenMap={handleShowOnMap} variant="inline" />
+                    <div className="self-start">
+                        <MapPreview onOpenMap={handleShowOnMap} variant="inline" />
+                    </div>
                 </div>
 
                 {/* Mobile: Title + Count */}

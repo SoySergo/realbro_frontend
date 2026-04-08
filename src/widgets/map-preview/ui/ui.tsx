@@ -25,24 +25,24 @@ export const MapPreview = forwardRef<HTMLDivElement, MapPreviewProps>(
             return (
                 <div
                     ref={ref}
-                    className="shrink-0 w-[320px] cursor-pointer group"
+                    className="shrink-0 w-[280px] cursor-pointer group"
                     onClick={onOpenMap}
                 >
                     <div className="relative rounded-xl overflow-hidden bg-muted">
-                        <div className="relative h-[120px]">
+                        <div className="relative h-[110px]">
                             <Image
                                 src="/images/template_map.webp"
                                 alt="Map preview"
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                sizes="320px"
+                                sizes="280px"
                             />
                         </div>
-                        <div className="absolute bottom-2.5 right-2.5">
+                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
                             <Button
                                 variant="secondary"
                                 size="sm"
-                                className="bg-background/95 backdrop-blur-sm hover:bg-background shadow-lg rounded-lg h-8 px-3 text-xs font-medium"
+                                className="bg-background/95 backdrop-blur-sm hover:bg-background shadow-lg rounded-lg h-8 px-4 text-xs font-medium whitespace-nowrap"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     onOpenMap();
