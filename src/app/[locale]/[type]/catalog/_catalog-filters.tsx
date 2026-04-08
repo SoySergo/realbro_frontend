@@ -80,15 +80,6 @@ export function CatalogFiltersToolbar() {
                     <Fingerprint className="w-5 h-5" />
                 </button>
 
-                {/* Раздел */}
-                <div className="shrink-0">
-                    <SearchCategorySwitcher
-                        currentCategory={currentCategory}
-                        locale={locale}
-                        className="h-9"
-                    />
-                </div>
-
                 {/* Поиск адреса — растягивается */}
                 <div className="flex-1 min-w-[120px]">
                     <LocationSearch
@@ -98,6 +89,15 @@ export function CatalogFiltersToolbar() {
                         fullAddress={selectedLocation?.address}
                         onClear={handleLocationClear}
                         className="[&_input]:h-9 [&_input]:text-sm"
+                    />
+                </div>
+
+                {/* Раздел */}
+                <div className="shrink-0">
+                    <SearchCategorySwitcher
+                        currentCategory={currentCategory}
+                        locale={locale}
+                        className="h-9"
                     />
                 </div>
 

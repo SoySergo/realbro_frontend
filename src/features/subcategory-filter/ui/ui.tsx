@@ -102,7 +102,7 @@ export function SubcategoryFilter({ className }: SubcategoryFilterProps) {
                 <PopoverTrigger asChild>
                     <button
                         className={cn(
-                            'max-w-[160px] cursor-pointer',
+                            'w-[140px] cursor-pointer',
                         'bg-background',
                         'border border-border dark:border-transparent',
                         'text-text-primary hover:text-text-primary',
