@@ -66,7 +66,7 @@ export function CatalogFiltersToolbar() {
 
     return (
         <>
-            <div className="hidden slug-desktop:flex items-center gap-1.5 px-4 py-3 border-b border-border bg-background rounded-[9px]">
+            <div className="hidden slug-desktop:flex items-center gap-1.5 px-4 py-3 border-b border-border bg-background sticky top-0 z-40">
                 {/* AI Agent */}
                 <button
                     className={cn(

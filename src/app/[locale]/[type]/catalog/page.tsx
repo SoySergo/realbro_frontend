@@ -8,7 +8,6 @@ import { Link, useRouter } from '@/shared/config/routing';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
 import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
-import { ListingControls } from '@/widgets/listing-controls';
 import { MapPreview } from '@/widgets/map-preview';
 import { getPropertiesList } from '@/shared/api';
 import type { PropertyGridCard } from '@/entities/property';
@@ -22,21 +21,34 @@ import {
     useViewModeActions,
 } from '@/widgets/search-filters-bar';
 import { cn } from '@/shared/lib/utils';
-import { useCatalogContext } from '../_catalog-context';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/shared/ui/select';
 import { CatalogFiltersToolbar } from './_catalog-filters';
 
 type PropertySortBy = 'price' | 'area' | 'createdAt';
 type PropertySortOrder = 'asc' | 'desc';
 
+const sortOptions: { value: PropertySortBy; labelKey: string }[] = [
+    { value: 'createdAt', labelKey: 'sortByDate' },
+    { value: 'price', labelKey: 'sortByPrice' },
+    { value: 'area', labelKey: 'sortByArea' },
+];
+
 /**
  * CatalogPage — страница каталога объектов.
  *
- * Структура:
- * 1. AI Agent Stories (карусель мини-карточек от агента)
- * 2. Панель фильтров (CatalogFiltersToolbar)
- * 3. ListingControls (сортировка, переключатель вида, кнопка карты)
- * 4. Сетка/список карточек объектов с infinite scroll
- * 5. Плавающая кнопка «Смотреть на карте» (появляется при скролле фильтров из viewport)
+ * Desktop-структура (сверху вниз):
+ * 1. Хедер (не фиксированный, скроллится)
+ * 2. Панель фильтров (CatalogFiltersToolbar) — sticky top
+ * 3. Заголовок слева + «Смотреть на карте» справа
+ * 4. Количество + сортировка
+ * 5. AI Agent Stories
+ * 6. Сетка/список карточек объектов с infinite scroll
  */
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
@@ -46,7 +58,6 @@ export default function CatalogPage() {
     const locale = params.locale as string;
 
     const { currentFilters } = useFilterStore();
-    const { filtersVisible, setFiltersVisible } = useCatalogContext();
 
     const [properties, setProperties] = useState<PropertyGridCard[]>([]);
     const [pagination, setPagination] = useState<PropertiesListResponse['pagination'] | null>(null);
@@ -61,7 +72,6 @@ export default function CatalogPage() {
     const { listingViewMode, setListingViewMode } = useListingViewMode();
     const { setSearchViewMode } = useViewModeActions();
 
-    const filtersRef = useRef<HTMLDivElement>(null);
     const sentinelRef = useRef<HTMLDivElement>(null);
     const loadingRef = useRef(false);
     const mapPreviewRef = useRef<HTMLDivElement>(null);
@@ -107,22 +117,6 @@ export default function CatalogPage() {
     useEffect(() => {
         fetchProperties();
     }, [fetchProperties]);
-
-    // Отслеживание видимости фильтров для смены хедера (desktop)
-    useEffect(() => {
-        const el = filtersRef.current;
-        if (!el) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setFiltersVisible(entry.isIntersecting);
-            },
-            { threshold: 0 }
-        );
-
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, [setFiltersVisible]);
 
     // Infinite scroll
     const totalPages = pagination?.totalPages ?? 1;
@@ -170,10 +164,6 @@ export default function CatalogPage() {
         setSortBy(value as PropertySortBy);
     };
 
-    const toggleSortOrder = () => {
-        setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
-    };
-
     const handleShowOnMap = () => {
         router.push(`/${type}/map`);
     };
@@ -193,25 +183,55 @@ export default function CatalogPage() {
                     <MobileSearchHeader onOpenFilters={() => setIsMobileFiltersOpen(true)} />
                 </div>
 
-                {/* AI Agent Stories */}
-                <AiAgentStories properties={properties.slice(0, 10)} />
+                {/* Панель фильтров (desktop) — sticky, прилипает вверху при скролле */}
+                <CatalogFiltersToolbar />
 
-                {/* Панель фильтров (desktop) — отслеживается IntersectionObserver */}
-                <div ref={filtersRef}>
-                    <CatalogFiltersToolbar />
+                {/* Desktop: Title row — заголовок слева, "Смотреть на карте" справа */}
+                <div className="hidden slug-desktop:flex items-start justify-between px-6 pt-6 pb-2">
+                    <div>
+                        <h1 className="text-2xl font-bold text-text-primary">
+                            {tListing('title')}
+                        </h1>
+                    </div>
+                    <Link
+                        href={`/${type}/map`}
+                        className={cn(
+                            'flex items-center gap-2 px-4 py-2 shrink-0',
+                            'bg-background border border-border rounded-lg',
+                            'text-text-primary text-sm font-medium',
+                            'hover:bg-background-secondary transition-colors'
+                        )}
+                    >
+                        <MapIcon className="w-4 h-4" />
+                        {tListing('showOnMap')}
+                    </Link>
                 </div>
 
-                {/* Controls bar (sort, view toggle, map button) — desktop only */}
-                <ListingControls
-                    totalCount={pagination?.total}
-                    sortBy={sortBy}
-                    sortOrder={sortOrder}
-                    viewMode={listingViewMode}
-                    onSortByChange={handleSortChange}
-                    onSortOrderToggle={toggleSortOrder}
-                    onViewModeChange={setListingViewMode}
-                    onShowOnMap={handleShowOnMap}
-                />
+                {/* Desktop: Count + Sort row */}
+                <div className="hidden slug-desktop:flex items-center gap-4 px-6 pb-4">
+                    <span className="text-sm text-text-secondary">
+                        {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0
+                            ? tListing('subtitle', {
+                                  count: pagination.total.toLocaleString(locale),
+                              })
+                            : ''}
+                    </span>
+
+                    <div className="flex items-center gap-2">
+                        <Select value={sortBy} onValueChange={handleSortChange}>
+                            <SelectTrigger className="w-[160px] h-8 text-sm border-0 shadow-none text-brand-primary font-medium p-0 gap-1">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {sortOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {tListing(option.labelKey)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
 
                 {/* Mobile counter */}
                 {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
@@ -226,6 +246,9 @@ export default function CatalogPage() {
 
                 {/* Map Preview (mobile only) */}
                 <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
+
+                {/* AI Agent Stories */}
+                <AiAgentStories properties={properties.slice(0, 10)} />
 
                 {/* Properties grid / list */}
                 <div className="flex-1 p-3 md:p-6 pt-1 md:pt-4 min-w-0 overflow-hidden">
@@ -277,24 +300,6 @@ export default function CatalogPage() {
                     )}
                 </div>
             </div>
-
-            {/* Плавающая кнопка «Смотреть на карте» — появляется когда фильтры вне viewport */}
-            {!filtersVisible && (
-                <div className="hidden slug-desktop:block fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-                    <Link
-                        href={`/${type}/map`}
-                        className={cn(
-                            'flex items-center gap-2 px-5 py-3',
-                            'bg-brand-primary text-white rounded-full shadow-lg',
-                            'hover:bg-brand-primary-hover transition-colors',
-                            'text-sm font-medium'
-                        )}
-                    >
-                        <MapIcon className="w-5 h-5" />
-                        {tListing('showOnMap')}
-                    </Link>
-                </div>
-            )}
 
             {/* Floating Map Button — mobile, visible when MapPreview scrolled out */}
             {!isMapVisible && !isMobileFiltersOpen && (

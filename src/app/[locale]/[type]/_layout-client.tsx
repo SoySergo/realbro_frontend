@@ -54,16 +54,12 @@ export function SlugLayoutClient({ children }: SlugLayoutClientProps) {
                     setFiltersVisible: setCatalogFiltersVisible,
                 }}
             >
-                <div className="flex flex-col min-h-screen slug-desktop:h-screen bg-background slug-desktop:bg-background-tertiary">
-                    {/* Desktop header — full-width */}
+                <div className="flex flex-col min-h-screen bg-background slug-desktop:bg-background-tertiary">
+                    {/* Desktop header — scrolls with page, not fixed */}
                     <div className="hidden slug-desktop:block shrink-0">
-                        {catalogFiltersVisible ? (
-                            <SearchPageHeader />
-                        ) : (
-                            <CatalogScrollHeader />
-                        )}
+                        <SearchPageHeader />
                     </div>
-                    <main className="flex-1 min-h-0 slug-desktop:mt-[5px] slug-desktop:px-[5px] slug-desktop:pb-[5px]">
+                    <main className="flex-1 min-h-0 slug-desktop:px-[5px] slug-desktop:pb-[5px]">
                         {children}
                     </main>
                 </div>
