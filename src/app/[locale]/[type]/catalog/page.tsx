@@ -4,17 +4,29 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Map as MapIcon, Loader2 } from 'lucide-react';
-import { Link } from '@/shared/config/routing';
+import { Link, useRouter } from '@/shared/config/routing';
 import { AiAgentStories } from '@/widgets/ai-agent-stories';
-import { PropertyCardGrid } from '@/entities/property';
+import { PropertyCardGrid, PropertyCardHorizontal } from '@/entities/property';
 import { PropertyCompareButton, PropertyCompareMenuItem } from '@/features/comparison';
+import { ListingControls } from '@/widgets/listing-controls';
+import { MapPreview } from '@/widgets/map-preview';
 import { getPropertiesList } from '@/shared/api';
 import type { PropertyGridCard } from '@/entities/property';
 import type { PropertiesListResponse } from '@/shared/api/properties-server';
-import { useFilterStore, MobileSearchHeader, MobileFiltersSheet } from '@/widgets/search-filters-bar';
+import {
+    useFilterStore,
+    MobileSearchHeader,
+    MobileFiltersSheet,
+    MobileViewToggle,
+    useListingViewMode,
+    useViewModeActions,
+} from '@/widgets/search-filters-bar';
 import { cn } from '@/shared/lib/utils';
 import { useCatalogContext } from '../_catalog-context';
 import { CatalogFiltersToolbar } from './_catalog-filters';
+
+type PropertySortBy = 'price' | 'area' | 'createdAt';
+type PropertySortOrder = 'asc' | 'desc';
 
 /**
  * CatalogPage — страница каталога объектов.
@@ -22,12 +34,14 @@ import { CatalogFiltersToolbar } from './_catalog-filters';
  * Структура:
  * 1. AI Agent Stories (карусель мини-карточек от агента)
  * 2. Панель фильтров (CatalogFiltersToolbar)
- * 3. Сетка карточек объектов с infinite scroll
- * 4. Плавающая кнопка «Смотреть на карте» (появляется при скролле фильтров из viewport)
+ * 3. ListingControls (сортировка, переключатель вида, кнопка карты)
+ * 4. Сетка/список карточек объектов с infinite scroll
+ * 5. Плавающая кнопка «Смотреть на карте» (появляется при скролле фильтров из viewport)
  */
 export default function CatalogPage() {
     const tListing = useTranslations('listing');
     const params = useParams();
+    const router = useRouter();
     const type = params.type as string;
     const locale = params.locale as string;
 
@@ -40,10 +54,34 @@ export default function CatalogPage() {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [page, setPage] = useState(1);
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+    const [sortBy, setSortBy] = useState<PropertySortBy>('createdAt');
+    const [sortOrder, setSortOrder] = useState<PropertySortOrder>('desc');
+    const [isMapVisible, setIsMapVisible] = useState(true);
+
+    const { listingViewMode, setListingViewMode } = useListingViewMode();
+    const { setSearchViewMode } = useViewModeActions();
 
     const filtersRef = useRef<HTMLDivElement>(null);
     const sentinelRef = useRef<HTMLDivElement>(null);
     const loadingRef = useRef(false);
+    const mapPreviewRef = useRef<HTMLDivElement>(null);
+
+    // Sync searchViewMode to 'list' on mount (this page is list/catalog mode)
+    useEffect(() => {
+        setSearchViewMode('list');
+    }, [setSearchViewMode]);
+
+    // Track MapPreview visibility
+    useEffect(() => {
+        const mapElement = mapPreviewRef.current;
+        if (!mapElement) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsMapVisible(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+        observer.observe(mapElement);
+        return () => observer.disconnect();
+    }, []);
 
     // Загрузка объектов
     const fetchProperties = useCallback(async () => {
@@ -53,6 +91,8 @@ export default function CatalogPage() {
                 filters: currentFilters,
                 page: 1,
                 limit: 24,
+                sortBy,
+                sortOrder,
             });
             setProperties(response.data);
             setPagination(response.pagination);
@@ -62,7 +102,7 @@ export default function CatalogPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [currentFilters]);
+    }, [currentFilters, sortBy, sortOrder]);
 
     useEffect(() => {
         fetchProperties();
@@ -98,6 +138,8 @@ export default function CatalogPage() {
                 filters: currentFilters,
                 page: nextPage,
                 limit: 24,
+                sortBy,
+                sortOrder,
             });
             setProperties(prev => [...prev, ...response.data]);
             setPagination(response.pagination);
@@ -108,7 +150,7 @@ export default function CatalogPage() {
             setIsLoadingMore(false);
             loadingRef.current = false;
         }
-    }, [page, hasMore, currentFilters]);
+    }, [page, hasMore, currentFilters, sortBy, sortOrder]);
 
     useEffect(() => {
         if (!sentinelRef.current || !hasMore) return;
@@ -123,6 +165,25 @@ export default function CatalogPage() {
         observer.observe(sentinelRef.current);
         return () => observer.disconnect();
     }, [hasMore, loadMore]);
+
+    const handleSortChange = (value: string) => {
+        setSortBy(value as PropertySortBy);
+    };
+
+    const toggleSortOrder = () => {
+        setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handleShowOnMap = () => {
+        router.push(`/${type}/map`);
+    };
+
+    const handlePropertyClick = useCallback(
+        (property: PropertyGridCard) => {
+            router.push(`/${type}/${property.slug || property.id}`);
+        },
+        [router, type]
+    );
 
     return (
         <>
@@ -140,36 +201,62 @@ export default function CatalogPage() {
                     <CatalogFiltersToolbar />
                 </div>
 
-                {/* Сетка карточек */}
-                <div className="flex-1 p-3 slug-desktop:p-6 pt-2 slug-desktop:pt-4 min-w-0">
+                {/* Controls bar (sort, view toggle, map button) — desktop only */}
+                <ListingControls
+                    totalCount={pagination?.total}
+                    sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    viewMode={listingViewMode}
+                    onSortByChange={handleSortChange}
+                    onSortOrderToggle={toggleSortOrder}
+                    onViewModeChange={setListingViewMode}
+                    onShowOnMap={handleShowOnMap}
+                />
+
+                {/* Mobile counter */}
+                {pagination?.total != null && !isNaN(pagination.total) && pagination.total > 0 && (
+                    <div className="slug-desktop:hidden px-3 pt-2 pb-1">
+                        <span className="text-sm text-text-secondary">
+                            {tListing('subtitle', {
+                                count: pagination.total.toLocaleString(locale),
+                            })}
+                        </span>
+                    </div>
+                )}
+
+                {/* Map Preview (mobile only) */}
+                <MapPreview ref={mapPreviewRef} onOpenMap={handleShowOnMap} />
+
+                {/* Properties grid / list */}
+                <div className="flex-1 p-3 md:p-6 pt-1 md:pt-4 min-w-0 overflow-hidden">
                     {isLoading ? (
                         <CatalogGridSkeleton />
                     ) : (
                         <>
-                            {/* Счётчик */}
-                            {pagination?.total !== null && pagination?.total !== undefined && pagination.total > 0 && (
-                                <p className="text-sm text-text-secondary mb-3">
-                                    {tListing('subtitle', {
-                                        count: pagination.total.toLocaleString(locale),
-                                    })}
-                                </p>
-                            )}
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 slug-desktop:grid-cols-3 gap-2 sm:gap-3 slug-desktop:gap-4">
-                                {properties.map((property) => (
-                                    <Link
-                                        key={property.id}
-                                        href={`/${type}/${property.slug || property.id}`}
-                                        className="block"
-                                    >
+                            {listingViewMode === 'grid' ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+                                    {properties.map((property) => (
                                         <PropertyCardGrid
+                                            key={property.id}
                                             property={property}
+                                            onClick={() => handlePropertyClick(property)}
                                             actions={<PropertyCompareButton property={property} />}
                                             menuItems={<PropertyCompareMenuItem property={property} />}
                                         />
-                                    </Link>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col">
+                                    {properties.map((property) => (
+                                        <PropertyCardHorizontal
+                                            key={property.id}
+                                            property={property}
+                                            onClick={() => handlePropertyClick(property)}
+                                            actions={<PropertyCompareButton property={property} size="md" />}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </>
                     )}
 
@@ -193,9 +280,9 @@ export default function CatalogPage() {
 
             {/* Плавающая кнопка «Смотреть на карте» — появляется когда фильтры вне viewport */}
             {!filtersVisible && (
-                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+                <div className="hidden slug-desktop:block fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
                     <Link
-                        href={`/${slug}/map`}
+                        href={`/${type}/map`}
                         className={cn(
                             'flex items-center gap-2 px-5 py-3',
                             'bg-brand-primary text-white rounded-full shadow-lg',
@@ -206,6 +293,13 @@ export default function CatalogPage() {
                         <MapIcon className="w-5 h-5" />
                         {tListing('showOnMap')}
                     </Link>
+                </div>
+            )}
+
+            {/* Floating Map Button — mobile, visible when MapPreview scrolled out */}
+            {!isMapVisible && !isMobileFiltersOpen && (
+                <div className="slug-desktop:hidden">
+                    <MobileViewToggle />
                 </div>
             )}
 
@@ -221,8 +315,8 @@ export default function CatalogPage() {
 /** Скелетон сетки карточек */
 function CatalogGridSkeleton() {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 slug-desktop:grid-cols-3 gap-2 sm:gap-3 slug-desktop:gap-4">
-            {Array.from({ length: 9 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+            {Array.from({ length: 10 }).map((_, i) => (
                 <div
                     key={i}
                     className="bg-card rounded-xl overflow-hidden border border-border"
